@@ -1,0 +1,78 @@
+# Filename:      .fluxbox/keys
+# Purpose:       configuration file for keybindings for fluxbox
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Sun May 14 15:01:40 CEST 2006 [mika]
+################################################################################
+
+# Mod1 = Alt key
+# Control = Ctrl Key
+# plus = +,*,~ key (german keyboard)
+# numbersign = #,' key (german keyboard)
+
+Mod1 Tab       :NextWindow
+Mod1 Shift Tab :PrevWindow
+Control Right  :NextWorkspace
+Mod1 Right     :NextWorkspace
+Control Left   :PrevWorkspace
+Mod1 Left      :PrevWorkspace
+
+Mod1 q   :PrevWindow
+Mod1 w   :NextWindow
+Mod1 a   :PrevTab
+Mod1 s   :NextTab
+
+Mod1 1   :Workspace 1
+Mod1 2   :Workspace 2
+Mod1 3   :Workspace 3
+Mod1 4   :Workspace 4
+Mod1 5   :Workspace 5
+Mod1 6   :Workspace 6
+Mod1 7   :Workspace 7
+Mod1 8   :Workspace 8
+Mod1 9   :Workspace 9
+
+Mod1 F1  :SendToWorkspace 1
+Mod1 F2  :SendToWorkspace 2
+Mod1 F3  :SendToWorkspace 3
+Mod1 F4  :SendToWorkspace 4
+Mod1 F5  :SendToWorkspace 5
+Mod1 F6  :SendToWorkspace 6
+Mod1 F7  :SendToWorkspace 7
+Mod1 F8  :SendToWorkspace 8
+Mod1 F9  :SendToWorkspace 9
+
+Mod1 plus       :MaximizeWindow
+Mod1 numbersign :Minimize
+Mod1 space      :RootMenu
+Control Mod1 a :ArrangeWindows
+# Mod1 m :Minimize
+# Mod1 d :DeIconify
+
+# keymappings for programs
+Control Mod1 l :ExecCommand xlock
+Control Mod1 d :ExecCommand xrandr -s 1024x768
+Control Mod1 f :ExecCommand mozilla-firefox
+
+Control Mod1 v :ExecCommand /usr/bin/xsay
+
+# screenshot
+Control Shift s :ExecCommand import -window root `date +shot-%Y-%m-%d-%H%M%S.jpg`
+
+Mod1 c         :ExecCommand fbrun
+
+# terminals:
+Mod1 Escape    :ExecCommand xterm
+Mod1 t         :ExecCommand xterm -fn '-misc-fixed-medium-r-semicondensed-*-*-120-*-*-*-*-iso8859-15'
+Control Mod1 t :ExecCommand xterm -fn '-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-15'
+
+# None F13                  :ExecCommand x-terminal-emulator -T "aumix" -e aumix
+# None F14                  :ExecCommand mozilla-firefox
+# None F15                  :ExecCommand xterm
+None XF86AudioMedia       :ExecCommand xsay
+None XF86AudioRaiseVolume :ExecCommand XF86AudioRaiseVolume
+None XF86AudioLowerVolume :ExecCommand XF86AudioLowerVolume
+None XF86AudioMute        :ExecCommand XF86AudioMute
+
+## END OF FILE #################################################################

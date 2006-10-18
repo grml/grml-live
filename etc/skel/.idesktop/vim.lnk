@@ -1,0 +1,8 @@
+table Icon
+  Caption: gvim
+  Command: /usr/bin/gvim
+  Icon: /home/grml/.idesktop/icons/l33t_TXT_vim.png
+  X: 424
+  Y: 13
+end
+

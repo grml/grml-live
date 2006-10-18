@@ -1,0 +1,8 @@
+table Icon
+  Caption: grml-config-root
+  Command: /usr/bin/x-terminal-emulator -T "grml-config-root" -e sudo /usr/sbin/grml-config-root
+  Icon: /home/grml/.idesktop/icons/l33t_DEV_kcontrol.png
+  X: 318
+  Y: 331
+end
+

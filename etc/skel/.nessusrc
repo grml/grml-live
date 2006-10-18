@@ -1,0 +1,36 @@
+# This file was automagically created by nessus
+nessusd_host = localhost
+port_range = 1-8000
+max_threads = 15
+begin(SCANNER_SET)
+ Ping the remote host = yes
+ TCP SYN scan = no
+ FTP bounce scan = no
+ Nmap tcp connect() scan = no
+ Nmap = yes
+end(SCANNER_SET)
+
+begin(SERVER_PREFS)
+ plugins_folder = /usr/lib/nessus/plugins
+ email = root
+ max_threads = 15
+ logfile = syslog
+ rules = /etc/nessus/nessusd.rules
+ users = /etc/nessus/nessusd.users
+ test_file = /etc/passwd
+ ping_hosts = yes
+ reverse_lookup = no
+ host_expansion = ip
+ port_range = 1-8000
+ max_hosts = 1
+ scan_level = normal
+ outside_firewall = no
+ language = english
+ config_file = /etc/nessus/nessusd.conf
+ track_iothreads = no
+ optimize_test = yes
+end(SERVER_PREFS)
+
+begin(RULES)
+end(RULES)
+

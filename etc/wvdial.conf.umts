@@ -1,0 +1,105 @@
+# Filename:      /etc/wvdial.conf.umts
+# Purpose:       configuration file for mobile UMTS cards
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>, (c) Andreas Gredler <jimmy@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Mon Jun 12 13:55:42 CEST 2006 [mika]
+################################################################################
+
+# Usage examples:
+# ================
+# gcom -d /dev/ttyUSB0
+# wvdial --config /etc/wvdial.conf.umts a1usb
+#
+# gcom -d /dev/noz0
+# wvdial --config /etc/wvdial.conf.umts tmnozomi
+
+# Default settings - do not modify but create own profile if needed:
+[Dialer Defaults]
+Init1 = ATZ
+Init2 = ATQ0 V1 E1 S0=0 &C1 &D2
+Init3 = AT+CGDCONT=1,"IP","internet"
+Area Code =
+Phone = *99***1#
+Username = grml
+Password = grml
+Ask Password = 0
+Dial Command = ATD
+Stupid Mode = 1
+Compuserve = 0
+Force Address =
+Idle Seconds = 3000
+DialMessage1 =
+DialMessage2 =
+ISDN = 0
+
+# older A1 vodafone cards using plain usbserial mode:
+[Dialer a1usb]
+Modem = /dev/ttyUSB0
+Username = ppp@A1plus.at
+Password = ppp
+Init3 = AT+CGDCONT=1,"IP","A1.net"
+Dial Attempts = 3
+
+# newer A1 vodafone cards using nozomi:
+[Dialer a1nozomi]
+Modem = /dev/noz0
+Username = ppp@A1plus.at
+Password = ppp
+Init3 = AT+CGDCONT=1,"IP","A1.net"
+Dial Attempts = 3
+
+# T-Mobile vodafone cards using nozomi:
+[Dialer tmnozomi]
+Modem = /dev/noz0
+
+# 3 vodafone cards:
+[Dialer dreiusb]
+Modem = /dev/ttyUSB0
+Username = somethingniftybutnotused
+Password = thesamethisisnotused
+Init3 = AT+CGDCONT=1,"IP","drei.at"
+Dial Attempts = 3
+
+# one
+# parts extracted from http://www.insync.za.net/3g_docs/wvdial.conf
+[Dialer oneusb]
+Phone = *99***1#
+Username = web
+Password = web
+Stupid Mode = 1
+Dial Command = ATDT
+Modem = /dev/ttyUSB0
+Modem Type = Analog Modem
+Baud = 460800
+# Init1 = AT+CPIN=1234
+Init2 = ATZ
+Init3 = ATQ0 V1 E1 S0=0 &C1 &D2 +FCLASS=0
+# Init3 = ATE0V1&D2&C1S0=0+IFC=2,2
+Init5 = AT+CGDCONT=1,"IP","internet";
+ISDN = 0
+# [Dialer 2gonly]
+# Init4 = AT+COPS=0,0,"web.one.at",0
+#
+# [Dialer 3gonly]
+# Init4 = AT+COPS=0,0,"web.one.at",2
+#
+# [Dialer internet]
+# Init5 = AT+CGDCONT=1,"IP","internet";
+#
+# [Dialer 384k]
+# Init6 = AT+CGEQMIN=1,4,64,384,64,384
+# Init7 = AT+CGEQREQ=1,4,64,384,64,384
+#
+# [Dialer 144k]
+# Init6 = AT+CGEQMIN=1,4,64,144,64,144
+# Init7 = AT+CGEQREQ=1,4,64,144,64,144
+#
+# [Dialer 64k]
+# Init6 = AT+CGEQMIN=1,4,64,64,64,64
+# Init7 = AT+CGEQREQ=1,4,64,64,64,64
+
+[Dialer onenozomi]
+Modem = /dev/noz0
+
+## END OF FILE ##################################################################

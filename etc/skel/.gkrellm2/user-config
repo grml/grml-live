@@ -1,0 +1,136 @@
+### GKrellM user config.  Auto written, do not edit (usually) ###
+### Version 2.2.7 ###
+enable_hostname 1
+hostname_short 0
+enable_sysname 0
+mbmon_port 0
+sticky_state 1
+dock_type 0
+decorated 0
+skip_taskbar 1
+skip_pager 1
+above 0
+below 0
+track_gtk_theme_name 0
+default_track_theme "Default"
+save_position 0
+chart_width 60
+update_HZ 10
+allow_multiple_instances 0
+float_factor 1000
+hostname sysname_mode 1
+clock_cal clock_launch 
+clock_cal clock_tooltip 
+clock_cal cal_launch 
+clock_cal cal_tooltip 
+clock_cal hour_chime_command 
+clock_cal quarter_chime_command 
+clock_cal loop_chime_enable 0
+clock_cal clock_options 1 1 0 1
+clock_cal cal_options 1
+cpu extra_info cpu 1
+cpu chart_config cpu 40 20 0 0 0 0 : 0 0 0 0 500 : 0 0 0 0 500 : 0 0 0 0 500
+cpu enable 1
+cpu smp_mode 0
+cpu omit_nice_mode 0
+cpu config_tracking 0
+cpu sensor_mode 0
+cpu text_format $T
+proc enable 1 1
+proc launch 
+proc tooltip_comment 
+proc sensor_mode 0
+proc text_format \w88\a$p\f procs\n\e$u\f users
+proc chart_config 40 100 0 0 0 0 : 1 0 0 0 500 : 0 0 0 0 500
+disk assign_method 2
+disk device Disk 0 0 0 1 0 0 0
+disk chart_config Disk 40 10 0 1 0 0 : 0 0 0 0 500 : 0 0 0 0 500
+disk device hda 0 0 1 0 1 -1 0
+disk device hdb 0 0 1 0 1 -1 0
+disk device hdc 0 0 2 0 1 -1 0
+disk device md0 0 0 15 0 1 -1 0
+disk device fd0 0 0 40 0 1 -1 0
+disk text_format $T
+inet text_format all \t$a\f $l\N$A\f $L
+inet update_interval 1
+net enables eth0 1 1 0
+net chart_config eth0 40 3000 0 1 0 0 : 0 0 0 0 500 : 0 0 0 0 500
+net enables eth1 1 1 0
+net enables eth2 1 1 0
+net enables lo 0 1 0
+net enables ppp0 1 1 0
+net chart_config ppp0 40 2000 0 1 0 0 : 0 0 0 0 500 : 0 0 0 0 500
+net enables sit0 1 1 0
+net timer_enabled 1
+net timer_seconds 1
+net timer_iface ppp0
+net timer_on 
+net timer_off 
+net text_format $T\b\c\f$L
+net reset_mday 1
+net net_stats_window_height 200
+meminfo mem_meter 1 0 0
+meminfo swap_meter 1 0
+meminfo swap_chart 0 1
+meminfo mem_launch 
+meminfo mem_tooltip 
+meminfo mem_data_format $t - $f free
+meminfo swap_launch 
+meminfo swap_tooltip 
+meminfo swap_data_format $t - $f free
+meminfo text_format $T
+fs fs_check_timeout 2
+fs nfs_check_timeout 16
+fs auto_eject 0
+fs binary_units 0
+fs data_format $t - $f free
+mail mailbox-local mbox /var/mail/grml
+mail mua 
+mail notify 
+mail fetch_command 
+mail remote_check_timeout 5
+mail local_check_timeout 4
+mail fetch_check_is_local 0
+mail msg_count_mode 0
+mail animation_select_mode 3
+mail fetch_check_only_mode 0
+mail reset_remote_mode 0
+mail unseen_is_new 0
+mail enable 1 0 0 0
+mail animation_continuous 0
+mail show_tooltip 1
+mail mh_seq_ignore 0
+volume_plugin_config RIGHT_CLICK_CMD 
+battery enable 1
+battery enable_composite 1
+battery estimate_time 0
+battery estimate_time_discharge 1500
+battery estimate_time_charge 3000
+battery estimate_time_charge_model 0
+battery full_cap_fallback 5000
+battery poll_interval 5
+battery launch1 
+battery tooltip_comment 
+battery alert_units_percent 0
+battery display_mode 0 0
+# gkrellshoot xlock_cmd xscreensaver-command -lock
+gkrellshoot xlock_cmd xterm -e grml-lock
+gkrellshoot active_panels 1
+gkrellshoot window_or_full 1
+gkrellshoot view_image 1
+gkrellshoot wait_seconds 0
+gkrellshoot view_cmd display
+gkrellshoot image_format jpg
+gkrellshoot with_frame 0
+gkrellshoot grayscale 0
+gkrellshoot save_dir /home/grml
+gkrellshoot lock_shoot_select 0
+gkrellshoot anim_select0 Mesh
+gkrellshoot cycle_anim0 0
+gkrellshoot anim_select1 Radar
+gkrellshoot cycle_anim1 0
+gkrellshoot anim_select2 Sine Curve
+gkrellshoot cycle_anim2 0
+uptime enable 1
+uptime launch 
+uptime tooltip 

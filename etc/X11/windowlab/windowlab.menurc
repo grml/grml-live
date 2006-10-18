@@ -1,0 +1,8 @@
+# make sure each line ends in LF not CRLF!
+xterm:xterm
+gvim:gvim
+firefox:mozilla-firefox
+grml-info:grml-info
+Edit menu:sudo gvim /etc/X10/windowlab/windowlab.menurc
+About:windowlab -about | xmessage -file -
+Quit:skill windowlab

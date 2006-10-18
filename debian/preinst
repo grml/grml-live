@@ -1,0 +1,93 @@
+#!/bin/sh
+# Filename:      preinst
+# Purpose:       preinst script for package grml-etc
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Don Okt 12 17:39:16 CEST 2006 [mika]
+################################################################################
+
+set -e
+
+TO_DIVERT1="login.config mgetty.config"
+TO_DIVERT2="ssh"
+TO_DIVERT3="kismet.conf"
+TO_DIVERT4="wlan-ng.conf"
+TO_DIVERT5="smb.conf"
+TO_DIVERT6="windowlab.menurc"
+
+divert_gen() {
+    DEXT=${3:-original}
+    dpkg-divert --add --rename --package grml-etc \
+        --divert $2/$1.$DEXT $2/$1 > /dev/null
+}
+
+# move files from package grml-etc to grml-etc-core
+# and make sure we do not lose any files...
+rm_conffile() {
+    CONFFILE="$1"
+
+    if [ -e "$CONFFILE" ]; then
+        md5sum="`md5sum \"$CONFFILE\" | sed -e \"s/ .*//\"`"
+        old_md5sum="`sed -n -e \"/^Conffiles:/,/^[^ ]/{\\\\' $CONFFILE'{s/.* //;p}}\" /var/lib/dpkg/status`"
+        if [ "$md5sum" != "$old_md5sum" ]; then
+            echo "Conffile $CONFFILE has been modified, temporary moving to $CONFFILE.dpkg-bak ..."
+            mv -f "$CONFFILE" "$CONFFILE".dpkg-bak
+        fi
+    fi
+}
+
+case "$1" in
+   install|upgrade)
+        for cmd in $TO_DIVERT1; do
+                divert_gen $cmd /etc/mgetty
+        done
+        for cmd in $TO_DIVERT2; do
+                divert_gen $cmd /etc/init.d
+        done
+        for cmd in $TO_DIVERT3; do
+                divert_gen $cmd /etc/kismet
+        done
+        for cmd in $TO_DIVERT4; do
+                divert_gen $cmd /etc/pcmcia
+        done
+        for cmd in $TO_DIVERT5; do
+                divert_gen $cmd /etc/samba
+        done
+        for cmd in $TO_DIVERT6; do
+                divert_gen $cmd /etc/X11/windowlab
+        done
+
+        # did I mention that dpkg-divert sucks?
+        if [ -n "$2" ] ; then
+           if dpkg --compare-versions "${2}" lt 0.8 ; then
+              if dpkg-divert --list | grep -q /etc/init.d/postgresql-8.0 ; then
+                 rm -f /etc/init.d/postgresql-8.0
+                 dpkg-divert --quiet --package grml-etc --remove --rename --divert /etc/init.d/postgresql-8.0.original /etc/init.d/postgresql-8.0
+              fi
+           fi
+        fi
+
+        # move files from package grml-etc to grml-etc-core
+        for file in /etc/zsh/zlogin /etc/zsh/zprofile /etc/zsh/zshenv /etc/zsh/zshrc \
+                    /etc/zsh/zshrc  /etc/zsh/zlogout  /etc/vim/vimrc ; do
+            if dpkg-divert --list $file | grep -q 'grml-etc$' ; then
+               rm_conffile $file
+               dpkg-divert --quiet --package grml-etc --remove --rename --divert $file.original $file
+            fi
+        done
+
+        if dpkg-divert --list /etc/skel/.zshrc | grep -q 'grml-etc$' ; then
+           [ -f /etc/skel/.zshrc.original ] && rm /etc/skel/.zshrc
+           dpkg-divert --quiet --package grml-etc --remove --rename --divert /etc/skel/.zshrc.original /etc/skel/.zshrc
+        fi
+
+     ;;
+   *)
+     echo "preinst called with unknown argument $1" >&2
+     exit 1
+esac
+
+exit 0
+
+## END OF FILE #################################################################

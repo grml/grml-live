@@ -1,0 +1,80 @@
+# Filename:      a2psrc
+# Purpose:       config file for a2ps (GNU a2ps 'Anything to PostScript' converter and pretty-printer)
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Sam Jän 29 14:16:59 CET 2005 [mika]
+################################################################################
+# Example:
+# a2ps -R --highlight-level=heavy --pretty-print -P display --prologue=color * -o filename.ps
+#
+# Define how to send to a printer
+# (start with `|' to pipe, and `>' to save)
+# First, the default printer (option -d, no argument)
+# DefaultPrinter: | lpr
+# DefaultPrinter: | display
+#
+# Second, a printer unkown to a2ps (option -P, argument is %s)
+# UnknownPrinter: | lpr -P %s
+# Then, special printers you might want to define
+# Printer: dominique | lp -d dominique
+
+# Default encoding
+  Options: --encoding=latin1
+
+# Default media
+  Options: --media=A4
+
+# Two virtual pages per sheet
+  Options: -2
+
+# By default, single sided printing
+  Options: -s1
+
+#  Options: -R
+  Options: --highlight-level=heavy
+  Options: --pretty-print
+  Options: --prologue=color
+  Options: -P display
+
+# Header is the client of the job
+  Options: '--header=%a'
+
+# Name of the document is the list of files
+# (Don't put too many of them: it breaks some PS interpreters)
+  Options: --title='#10!f|$n|, |'
+
+# Right Header is the client of the job
+  Variable: h.header.right %a
+
+# Center header is the list of the files on this page
+  Variable: h.header.center #!s|$f|, |
+
+# Title of the page is the (short) name of the current file
+# or the first taged text if there is
+  Variable: h.title.center #?1|$t1|$n|
+
+# Left part of the title is the mod. date of the file
+# or empty is there is a tag2
+#  Variable: h.title.left #?2||$e $T|
+
+# Right part of the title is the page number
+# or tag2 if there is
+  Variable: h.title.right #?2|$t2|$Q|
+
+# If in landscape, print date on the left hand side
+# If portrait, then print date on recto, and sheet # on verso
+  Variable: h.footer.left #?l!%E!#?v|%E|%s./%s#|!
+
+# Center footer is the list of files on this sheet if landscape
+  Variable: h.footer.center #?l|#!s-$f-, -||
+
+# If in landscape, print date on the right hand side
+# If portrait, then print date on verso, and sheet # on recto
+  Variable: h.footer.right #?l!%s./%s#!#?v|%s./%s#|%E|!
+
+# We want the %%Page comments to be instructive.
+# There are two predefined choices: #{pl.short} and #{pl.long}
+  PageLabelFormat: #{pl.short}
+
+## END OF FILE #################################################################

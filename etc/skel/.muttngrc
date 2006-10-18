@@ -1,0 +1,89 @@
+# Filename:      .muttngrc
+# Purpose:       minimal setup file for mail program muttng
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Die Mai 10 00:24:29 CEST 2005 [mika]
+################################################################################
+# Thanks to Sven Guckes for his template!
+################################################################################
+
+    set allow_8bit           # send data as it is.  no conversion.
+  unset arrow_cursor         #  Show current mail with an inverse bar.
+    set ascii_chars          # set: use ASCII characters to build the thread tree
+    set autoedit             # call editor without prompting for To: and Subject:
+  unset confirmappend        # set: prompt for confirmation on appending mail to folder
+    set confirmcreate        # set: prompt for confirmation on creation of folders
+    set copy                 # Always keep a copy of my mails!
+    set delete=ask-yes       # ask before deleting any messages
+    set edit_headers         # edit all headers lines in the editor
+    set editor=vim           # use Vim as the editor (Vi IMproved www.vim.org)
+    set folder=~/Mail        # directory with all mail folders
+  unset followup_to          # do not generate a Followup-To header
+    set force_name           # set: save outbound mail by username
+    set hidden_host          # do not use a hostname in the address - PROBLEMATIC!
+    set history=100          # number of input lines for prompts to remember
+    set include              # set: include mail as quoted text in replies
+  unset mark_old             # set: make distinction between New mail and Old mail.
+    set mime_forward=ask-yes # ask: attach message - or just quote it?
+  unset move                 # do not move read mails from mailbox to $mbox (was: "set hold")
+    set pager_context=1      # number of lines that overlap on paging
+#   set pager_index_lines=0  # number of lines to see from the index
+    set pager_stop           # "next_page" won't jump to next message at end of messages
+#   set print_command="mp|lpr" # pipe message to "mp" for formattting - then on to "lpr"
+  unset prompt_after         # set: gives you a prompt when pager exits
+    set quote_regexp="^>"    # some people just use '>' - *sigh*
+    set read_inc=10          # '10': show count number for every tenth mail
+    set recall=ask-yes       # do not prompt for recalling postponed mails with 'm'
+    set reply_to=ask-yes     # "reply":          set:  Use address in Reply-To?
+    set reverse_alias        # show the name of sender as set with my alias for him
+    set reverse_name         # reply as the user to whom the mail was sent to
+    set save_name            # set: save outbound mail to =username if it exists
+#   set shell=zsh            # use the zsh for shell commands
+    set sort=threads         # sorting method - I definitely like "threads" best
+    set status_on_top        # set: present the status bar at top, ie before the index
+    set strict_threads       # set: use references: for threading only, ie do not
+                             # thread by subject or in-reply-to
+    set tilde                # show non-existant lines of text with a tilde at begin-of-line
+    set tmpdir="/tmp"        # directory where temporary files are to be placed
+    set to_chars="X+TCF"     # message flags: non-personal,personal,To:,Cc:,From:
+    set write_inc=10         # update number after each tenth read mail
+
+# Options with a long value:
+#   set alternates=...
+    set attribution="* %n <%a> [%(%y%m%d %H:%M)]:"              # how to cite the author
+    set reply_regexp="^((aw|antw.?|antwort|re|r e|r?f|sv):[ \t]*)*"
+
+# Format Options
+    set forward_format="(forw) %s"
+    set index_format="%4C %Z %[!%y%m%d] %-17.17F (%3l) %s"
+    set pager_format="%S [%C/%T] %n (%l) %s"
+    set status_format="%v: %f (%s) [%M/%m] [N=%n,*=%t,new=%b]"
+
+# Show the "text/plain" part *before* the "text/html" part:
+  alternative_order text/plain text/html
+  auto_view text/html
+
+# KEY BINDINGS
+  bind index zt current-top
+  bind index zz current-middle
+  bind index zb current-bottom
+
+# HEADER DISPLAY
+  ignore *
+  unignore from: date: subject: to: cc: reply-to:
+  unignore sender:
+  unignore priority: importance:
+  unignore organization organisation
+  unignore mail-followup-to:
+  unignore resent- x-resent
+# unignore user-agent: x-agent: x-mailer: x-newsreader: x-mailing-list:
+# unignore x-editor
+# unignore message-id: newsgroups: posted-to: posted-and-mailed:
+# unignore x-also-posted-to: x-newsgroups:
+# unignore delivered-to x-envelope-to:
+# unignore x-accept-language
+  unhdr_order *
+  hdr_order Sender: From From: Reply-To: Subject: Organization: Date: Message-Id: User-Agent: X-Editor: X-Mailer: X-Newsreader: X-Agent: To: Cc: Newsgroups: X-Resent Followup-To: Mail-Followup-To:
+
+## END OF FILE #################################################################

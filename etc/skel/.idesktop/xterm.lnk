@@ -1,0 +1,8 @@
+table Icon
+  Caption: xterm
+  Command: /usr/bin/x-terminal-emulator
+  Icon: /home/grml/.idesktop/icons/l33t_TER_Eterm.png
+  X: 24
+  Y: 13
+end
+

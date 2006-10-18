@@ -1,0 +1,8 @@
+table Icon
+  Caption: rox
+  Command: /usr/bin/rox ~/
+  Icon: /home/grml/.idesktop/icons/l33t_UNK_rox.png
+  X: 324
+  Y: 13
+end
+

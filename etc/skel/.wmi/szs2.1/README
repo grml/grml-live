@@ -1,0 +1,28 @@
+Welcome to the README of szs2.1.
+
+This is the first (and last) dot release of the second release of szs, a script
+for the WMI statusbar.  The name 'szs' is an abbreviation of
+Statuszeilenskript, german for statusbar script.
+
+Against szs1st, this release has many more features through its modules.
+Now it can show:
+* the bandwidth usage of network interfaces     (bandwidth.py)
+* the chargingstate of your (laptop-)battery    (battery.py)
+* the usage of partitions or diskimages         (diskusage.py)
+* if there are mails in an pop or imap account  (biff.py)
+* the load average, cpu usage and i/o           (load.py)
+* the memory and swap usage                     (memory.py)
+* a `date`-like formatted time string           (clock.py)
+* freely self configurable bars and texts       (text.py)
+
+To use all this features, look in the good commented config file.
+It's named szs.cfg and must be in ~/.wmi or in the same directory as szs.py.
+
+If you want to build own modules read the following files:
+ module-developer-reference.txt contains a description how to make modules
+ szstoolbox-developer-reference.txt contains the classes/globals of szstoolbox
+
+I hope the script is usable.
+
+Much fun,
+Norman Köhring

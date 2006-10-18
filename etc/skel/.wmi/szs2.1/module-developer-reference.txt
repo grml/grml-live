@@ -1,0 +1,54 @@
+                     Module Developer Reference
+                     ==========================
+
+CONTRIBUTIONS
+=============
+
+Contributions are always welcomed. The main communication happens in the #szs
+channel at irc.freenode.org. There is also a mailinglist at szs-devel@wegi.net.
+To subscribe send a mail to minimalist@wegi.net with the following Subject:
+subscribe szs-devel
+
+
+
+SOURCE
+======
+
+We use the darcs (http://www.darcs.net) Version Control System for the
+developement of szs. The main repository is at http://darcs.wegi.net/szs
+To get the source run 'darcs get http://darcs.wegi.net/szs'. To stay up-to-date
+run 'darcs pull'.  
+
+If you want to submit patches please run the following 2 commands in the szs
+source directory: 
+
+$ echo Yourname <youruser@server.com> > _darcs/prefs/author
+$ echo szs-darcs@wegi.net > _darcs/prefs/email
+
+Make yourself familiar with darcs, a good manual is at http://darcs.net/manual/
+To send us the patch simple run 'darcs send', the patch will be automatically
+forwarded to the szs-devel@wegi.net mailinglist. 
+
+
+
+HOWTO MAKE A MODULE
+===================
+
+A szs module is a simple python script which has a main() function returning a
+list. The first item must be a statustext or ''. All other items are bars. Bars
+are those colored gauges at the right side of your statusbar. the following
+syntax applies to bars:
+
+<value>%<label> 
+
+where <value> must be between 0 and 100 and <label> is optional.
+
+szstoolbox.py provides some usefull tools, especially for reading the config
+from szs.cfg. 
+
+In szs.cfg you can configure your module, The following rules apply:
+
+  -- the config key has to start with: <modulname>.
+  -- if you need to separate values you must use ','
+  -- if you need a sub separator use ':'
+  -- if you need more separators you could use anything except ',', '%' and ':'

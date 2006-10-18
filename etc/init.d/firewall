@@ -1,0 +1,212 @@
+#!/bin/sh
+# Filename:      /etc/init.d/firewall
+# Purpose:       simple [example] configuration script for iptables
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Don Jul 20 09:53:31 CEST 2006 [mika]
+################################################################################
+
+  LANG=C
+  LC_ALL=C
+  IPTABLES="iptables"
+
+  if [ -r /etc/grml/lsb-functions ] ; then
+     source /etc/grml/lsb-functions
+  else
+     alias einfo='echo -n'
+     alias eend='echo '
+  fi
+
+# IFACE='eth0'
+# IFACE=$(ifconfig -a | awk '/^ppp/ {print $1}')
+# IPADDR=$(ifconfig "$IFACE" | awk -F: /"inet addr"/'{print $2}' | gawk '{print $1}')
+# NETMASK=$(ifconfig "$IFACE" | awk -F: /"Mask"/'{print $4}' | gawk '{print $1}')
+# BROADCAST=$(ifconfig "$IFACE" | awk -F: /"inet"/'{print $3}' | gawk '{print $1}')
+# LOOPBACK='127.0.0.0/8'
+
+###################################################################################
+startup(){
+
+einfo "Starting firewall."
+
+# Remove al chains
+  $IPTABLES -F
+  $IPTABLES -X
+  $IPTABLES -Z
+
+# Set up a default policy for the built-in chains. -> DROP
+  $IPTABLES -P INPUT DROP
+  $IPTABLES -P OUTPUT DROP
+  $IPTABLES -P FORWARD DROP
+
+# allow all already established connections
+  $IPTABLES -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Allow unlimited traffic on the loopback interface.
+  $IPTABLES -A INPUT  -i lo -j ACCEPT
+  $IPTABLES -A OUTPUT -o lo -j ACCEPT
+
+# syn-flooding protection
+  $IPTABLES -N syn-flood
+  $IPTABLES -A INPUT -p tcp --syn -j syn-flood
+  $IPTABLES -A syn-flood -m limit --limit 5/s --limit-burst 10 -j RETURN
+  $IPTABLES -A syn-flood -j REJECT
+
+# Make sure, NEW TCP Connections are SYN packets
+  $IPTABLES -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
+
+# Refuse broadcast address packets.
+#  $IPTABLES -A INPUT -d $BROADCAST -j DROP
+  $IPTABLES -A INPUT -s 0.0.0.0 -d 255.255.255.255 -j DROP
+
+# AUTH server: Reject ident probes with a tcp reset.
+# This may be usefull for a broken mailhost that won't accept the
+# mails if you just drop its ident probe.
+# $IPTABLES -A INPUT -i $IFACE -p tcp --dport 113 -j REJECT --reject-with tcp-reset
+
+# allow *all* output - simplifies life and keeps load low ;-)
+  $IPTABLES -A OUTPUT -j ACCEPT
+
+# example for NAT/MASQUERADE (eth0: lan; eth1: to ppp0; ppp0: external):
+#
+#  echo 1     > /proc/sys/net/ipv4/ip_forward
+#    or
+#  put 'ip_forward=yes' to /etc/network/options
+#
+#  $IPTABLES -A INPUT -i eth1 -s 192.168.0.2   -d 192.168.0.1 -j ACCEPT
+#  $IPTABLES -A INPUT -i eth1 -s 192.168.0.150 -d 192.168.0.1 -j ACCEPT
+#  $IPTABLES -t nat -A POSTROUTING -s 192.168.0.0/24 -o ppp0  -j MASQUERADE
+#  $IPTABLES -A FORWARD -i eth1 -o ppp0 -s 192.168.0.0/24 -d $IP_OF_ETH1 -j ACCEPT
+#  $IPTABLES -A FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT
+#  $IPTABLES -A FORWARD -i ppp0 -o eth1 -d $IP_OF_PPP0 -j ACCEPT
+#  $IPTABLES -A FORWARD -j LOG --log-prefix "$LOGID ERROR in FORWARD: "
+#  $IPTABLES -A FORWARD -j DROP
+
+# example for Source Network Address Translation (SNAT):
+# the strict way:
+# $IPTABLES -t nat -A POSTROUTING -o ppp0 -j SNAT --to $PPPIP
+# the liberal way:
+# $IPTABLES -t nat -A POSTROUTING -o ppp0 -j MASQUERADE
+
+# example for DNAT:
+# $IPTABLES -t nat -A PREROUTING -d 10.0.0.1 -j DNAT --to-destination 192.168.0.1
+# $IPTABLES -t nat -A PREROUTING -d 10.0.0.2 -j DNAT --to-destination 192.168.0.2
+
+# allow ssh incoming
+  $IPTABLES -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT
+
+# create new chains
+  $IPTABLES -N INPUTLOG
+  $IPTABLES -N OUTPUTLOG
+  $IPTABLES -A INPUT  -m limit --limit 1/second --limit-burst 5 -j INPUTLOG
+  $IPTABLES -A INPUT  -m limit --limit 1/second --limit-burst 5 -j OUTPUTLOG
+
+# Any udp not already allowed is logged and then dropped.
+  $IPTABLES -A INPUTLOG  -p udp -j LOG --log-prefix "IPTABLES UDP-IN: "
+  $IPTABLES -A INPUTLOG  -p udp -j REJECT
+  $IPTABLES -A OUTPUTLOG -p udp -j LOG --log-prefix "IPTABLES UDP-OUT: "
+  $IPTABLES -A OUTPUTLOG -p udp -j REJECT
+# Any icmp not already allowed is logged and then dropped.
+  $IPTABLES -A INPUTLOG  -p icmp -j LOG --log-prefix "IPTABLES ICMP-IN: "
+  $IPTABLES -A INPUTLOG  -p icmp -j REJECT
+  $IPTABLES -A OUTPUTLOG -p icmp -j LOG --log-prefix "IPTABLES ICMP-OUT: "
+  $IPTABLES -A OUTPUTLOG -p icmp -j REJECT
+# Any tcp not already allowed is logged and then dropped.
+  $IPTABLES -A INPUTLOG  -p tcp -j LOG --log-prefix "IPTABLES TCP-IN: "
+  $IPTABLES -A INPUTLOG  -p tcp -j REJECT
+  $IPTABLES -A OUTPUTLOG -p tcp -j LOG --log-prefix "IPTABLES TCP-OUT: "
+  $IPTABLES -A OUTPUTLOG -p tcp -j REJECT
+# Anything else not already allowed is logged and then dropped.
+# It will be dropped by the default policy anyway... but let's be paranoid.
+  $IPTABLES -A INPUTLOG  -j LOG --log-prefix "IPTABLES PROTOCOL-X-IN: "
+  $IPTABLES -A INPUTLOG  -j REJECT
+  $IPTABLES -A OUTPUTLOG -j LOG --log-prefix "IPTABLES PROTOCOL-X-OUT: "
+  $IPTABLES -A OUTPUTLOG -j REJECT
+
+# end of script
+  eend $?
+}
+###################################################################################
+
+case "$1" in
+  stop)
+    einfo "Shutting down Firewall."
+    $IPTABLES -F
+    $IPTABLES -t nat -F
+    $IPTABLES -t mangle -F
+    $IPTABLES -t filter -F
+    $IPTABLES -P INPUT ACCEPT
+    $IPTABLES -P OUTPUT ACCEPT
+    $IPTABLES -P FORWARD ACCEPT
+    $IPTABLES -X
+    eend $?
+    ;;
+
+  panic)
+    einfo "Setting Firewall to modus panic."
+    $IPTABLES -F
+    $IPTABLES -t nat -F
+    $IPTABLES -t mangle -F
+    $IPTABLES -t filter -F
+    $IPTABLES -P INPUT DROP
+    $IPTABLES -P OUTPUT DROP
+    $IPTABLES -P FORWARD DROP
+    $IPTABLES -X
+    eend $?
+    ;;
+
+  status)
+    $IPTABLES -L -n -v
+    ;;
+
+  restart)
+    $0 stop
+    $0 start
+    ;;
+
+  analyse)
+    echo "------------------------------------------------------------------------------------"
+    echo "Program:  $0                                   $(date)"
+    echo "PID:      $$                                           grml-team [mika] (c) 2004++"
+    echo "$(iptables --version)"
+    echo "Identity: whoami: $(whoami)"
+    echo "          id:     $(id)"
+    echo "          groups: $(groups)"
+    echo "Uptime: $(uptime)"
+    echo "------------------------------------------------------------------------------------"
+    echo "$(vmstat)"
+    echo "------------------------------------------------------------------------------------"
+    echo "# ifconfig -a"
+    ifconfig -a
+    echo "------------------------------------------------------------------------------------"
+    echo "# route -n"
+    route -n
+    echo "------------------------------------------------------------------------------------"
+    echo "# ip a s"
+    ip a s
+    echo "------------------------------------------------------------------------------------"
+    echo "# $IPTABLES -L -n -v"
+    $IPTABLES -L -n -v
+    echo "------------------------------------------------------------------------------------"
+    echo 'for i in /proc/sys/net/*/*; do echo -n "$i: " ; cat $i; done 2>/dev/null'
+    for i in /proc/sys/net/*/*; do
+      echo -n "$i: "
+      cat $i;
+    done 2>/dev/null
+    echo "------------------------------------------------------------------------------------"
+    echo "# lsmod | grep '^ip'"
+    lsmod | grep '^ip'
+    ;;
+
+  start)
+    startup
+    ;;
+
+  *)
+    echo "Usage: $0 [start|stop|restart|panic|status|analyse]";
+    exit 1;
+    ;;
+esac
+
+## END OF FILE #################################################################

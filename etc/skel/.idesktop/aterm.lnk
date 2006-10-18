@@ -1,0 +1,8 @@
+table Icon
+  Caption: aterm
+  Command: /usr/bin/aterm -tr
+  Icon: /home/grml/.idesktop/icons/l33t_TER_eterm.png
+  X: 224
+  Y: 13
+end
+

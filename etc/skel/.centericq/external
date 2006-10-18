@@ -1,0 +1,168 @@
+# Filename:      $HOME/.centericq/external
+# Purpose:       call [external] centericq actions (www.centericq.de)
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Don Dez 23 11:07:31 CET 2004 [mika]
+################################################################################
+# Ressources:
+#
+# man centericq :-)
+# http://konst.org.ua/centericq/
+# http://centericq.de/docs/
+# http://centericq.de/docs/readme.php?mode=1&chapter=9.3 or ->
+# http://centericq.de/docs/readme.php?mode=2#9.3 - External actions 
+#                                                  and auto-responses
+# http://www.centericq.de/archive/contrib/external-actions/external.wschlich
+##############################################################################
+
+# Autoresponder for Occupied-Modus
+%action Simple occupied auto-responder
+event msg
+proto icq
+status occupied
+options stdin stdout
+%exec
+#!/bin/sh
+fname=`head -n 2 $CONTACT_INFODIR/info | tail -n 1`
+lname=`head -n 3 $CONTACT_INFODIR/info | tail -n 1`
+cat <<EOF
+Hello, $fname $lname!
+Unfortunatelly, I'm not near my box now, but I'll certainly contact you as soon as I get here.
+EOF
+
+# Autoresponder for NotAvailable-Modus
+#%action Simple na away auto-responder
+#event msg
+#proto icq
+#status na away
+#options stdin stdout
+#%exec
+#echo "hi! I am currently *not* available but I received your message."
+#msg=`cat`
+#echo "$msg"
+
+# log all messages arriving when online
+# -> then process them for example in vim [very usefull if receiving some source!]
+# put the following into your "~/.vimrc":
+# map   ##i :e ~/.centericq/icq_log_<C-R>=strftime("%y%m%d")<CR>
+#%action Simple ICQ-Online-Logger
+#event msg
+#proto icq
+#status online
+#options stdin stdout
+#%exec
+#msg=`cat`
+#date=`date +'%A %d %B %k:%M:%S'`
+#date_log=`date +'%y%m%d'`
+#echo "*$CONTACT_NICK* - $date:" >> $HOME/.centericq/icq_log_"$date_log"
+#echo -e "$msg\n" >> $HOME/.centericq/icq_log_"$date_log"
+
+# auto-responding chat robot :-)
+# Get Eliza -> http://elizatalk.sourceforge.net
+#%action Eliza
+#event msg
+#proto icq
+#status dnd
+#options stdin stdout
+#%exec
+#msg=`cat`
+#echo $msg | elizatalk
+
+# remote control
+#%action remote control
+#event msg
+#proto icq
+#status online away na
+#options stdin stdout
+#%exec
+##!/bin/bash
+#case "$(cat)" in
+#  df) df -h;;
+#  uptime) uptime;;
+#  date) date;;
+#  uname) uname -a;;
+#  #sensors) sudo sensors;;
+#  #w) sudo w;;
+#  #who) sudo who;;
+#  #dmesg) sudo dmesg;;
+#esac
+
+# fortune cookies
+#%action fortune cookies
+#event msg
+#proto icq
+#status ffc
+#options stdout
+#%exec
+#fortune
+
+# icq message forwarding to my mobile phone
+#%action icq message forwarding to my mobile phone
+#event msg
+#proto icq
+#status dnd
+#options stdin
+#%exec
+#cat | centericq -s sms -p icq -t <enter_your_icq_number>
+
+#%pre-receive rot13-receive
+#event msg
+#proto all
+#status all
+#options stdin stdout
+#%exec
+##!/bin/bash
+#msg="$(cat)"
+#echo "$msg" | head -n1 | grep rot13-SEND >/dev/null && {
+#  echo -n "rot13-RECV:"
+#  echo "$msg" | sed s/rot13-SEND//1 | tr "[a-m][n-z][A-M][N-Z]" "[n-z][a-m][N-Z][A-M]"
+#} || {
+#  echo "$msg"
+#} 
+#
+#%pre-send rot13-send
+#event msg
+#proto all
+#status all
+#options stdin stdout
+#%exec
+##!/bin/sh
+#msg="$(cat)"
+#echo "$msg" | head -n1 | grep rot13: >/dev/null && {
+#  echo -n "rot13-SEND:"
+#  echo "$msg" | sed s/rot13://1 | tr "[a-m][n-z][A-M][N-Z]" "[n-z][a-m][N-Z][A-M]"
+#} || {
+#  echo "$msg"
+#}
+
+#%action pgpkey
+#event msg
+#proto icq
+#status online
+#options stdin stdout
+#%exec
+#msg=`cat`
+#fmail=`head -n 4 $CONTACT_INFODIR/info | tail -n 1`
+#check=`grep pgpkey $msg && gpg --export --armor YOURKEYID | mail -s "Public Key of Your Name" $fmail
+
+#%action Ignore empty auth-messages
+#event   auth
+#proto   icq
+#status  all
+#options stdin stdout
+#%exec
+##!/bin/sh
+#std="Please accept my authorization to add you to my contact list."
+#msg=`cat`
+#prefix="* Authorization request : "
+#reply="You didn't type a reason, your auth request is automatically ignored.";
+#if [ "$msg" = "$prefix$std" ]; then
+#        echo "$reply"
+#        exit 1
+#elif [ "$msg" = "$prefix" ]; then
+#        echo "$reply"
+#        exit 1
+#fi
+
+## END OF FILE #################################################################

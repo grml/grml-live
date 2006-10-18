@@ -1,0 +1,79 @@
+# Filename:      $HOME/.asoundrc.example
+# Purpose:       example configuration file for ALSA (Advanced Linux Sound Architecture)
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Son Aug 27 12:52:05 CEST 2006 [mika]
+################################################################################
+
+# Syntax example:
+# pcm.NAME {
+#     type hw # Kernel PCM
+#     card INT/STR # Card name or number
+#     [device] INT # Device number (default 0)
+#     [subdevice] INT # Subdevice number, -1 first available (default -1)
+#     mmap_emulation BOOL # enable mmap emulation for ro/wo devices
+# }
+
+# Default example:
+# pcm.card0 {
+#     type hw
+#     card 0
+# }
+# ctl.card0 {
+#     type hw
+#     card 0
+# }
+
+# Splitting front and rear outputs:
+# pcm.dshare {
+#     type dmix
+#     ipc_key 2048
+#     slave {
+#         pcm "hw:0"
+#         rate 44100
+#         period_time 0
+#         period_size 1024
+#         buffer_size 8192
+#         channels 4
+#     }
+#     bindings {
+#         0 0
+#         1 1
+#         2 2
+#         3 3
+#     }
+# }
+# pcm.frontx {
+#     type plug
+#     slave {
+#         pcm "dshare"
+#         channels 4
+#     }
+#     ttable.0.0 1
+#     ttable.1.1 1
+# }
+# pcm.rearx {
+#     type plug
+#     slave {
+#         pcm "dshare"
+#         channels 4
+#     }
+#     ttable.0.2 1
+#     ttable.1.3 1
+# }
+
+# The dmix plugin provides for direct mixing of multiple streams.
+# See: http://alsa.opensrc.org/index.php?page=DmixPlugin
+# NOTE: For ALSA 1.0.9rc2 and higher you don't need to setup dmix.
+# Dmix is enabled as default for soundcards which don't support hw mixing.
+pcm.dsp0 {
+    type plug
+    slave.pcm "dmix"
+}
+ctl.mixer0 {
+    type hw
+    card 0
+}
+
+## END OF FILE #################################################################

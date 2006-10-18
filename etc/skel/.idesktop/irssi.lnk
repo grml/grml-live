@@ -1,0 +1,8 @@
+table Icon
+  Caption: run irssi and connect to channel #grml
+  Command: x-terminal-emulator -T "irssi" -e /usr/bin/irssi
+  Icon: /home/grml/.idesktop/icons/l33t_IMS_irssi.png
+  X: 124
+  Y: 131
+end
+

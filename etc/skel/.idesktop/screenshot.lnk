@@ -1,0 +1,8 @@
+table Icon
+  Caption: screenshot
+  Command: import -window root ~/`date +shot-%Y-%m-%d-%H%M%S.jpg`
+  Icon: /home/grml/.idesktop/icons/l33t_DES_screenshot.png
+  X: 158
+  Y: 451
+end
+

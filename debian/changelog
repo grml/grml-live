@@ -1,0 +1,2362 @@
+grml-etc (0.8-24) unstable; urgency=low
+
+  * Make sure we (un)divert /etc/skel/.zshrc only if diversion
+    is held by package grml-etc.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 12 Oct 2006 17:39:19 +0200
+
+grml-etc (0.8-23) unstable; urgency=low
+
+  * /etc/runlevel.conf.hdinstall: update to current grml's package selection
+    (updated/modified/added initscripts for: libnss-ldap, libnss-ldap,
+     codeville, reniced, kexec-load, aoetools, apcupsd, installation-report,
+     kexec)
+  * /etc/inittab.grml: use grml-iptstate instead of iptstate (due to
+    changes in upstream of iptstate which don't allow us to autostart
+    it), depend on grml-scripts (>= 0.8-24) therefore.
+
+ -- Michael Prokop <mika@grml.org>  Mon,  2 Oct 2006 23:28:17 +0200
+
+grml-etc (0.8-22) unstable; urgency=low
+
+  * /etc/skel/.kshrc: updated corresponding to tests with wuehlmaus
+  * /etc/init.d/grml-reboot: run 'ln -snf /proc/mounts /etc/mtab'
+    only in live-cd mode
+
+ -- Michael Prokop <mika@grml.org>  Sat, 30 Sep 2006 11:03:53 +0200
+
+grml-etc (0.8-21) unstable; urgency=low
+
+  * /etc/runlevel.conf*: move sendsigs to 37 as done with
+    sysvinit >=2.86.ds1-21.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 29 Sep 2006 16:42:27 +0200
+
+grml-etc (0.8-20) unstable; urgency=low
+
+  * /etc/skel/.Xresources: applied nedit-stuff from
+    http://www.nedit.org/technotes/looks-1.php - thanks, Mark! 
+
+ -- Michael Prokop <mika@grml.org>  Thu, 28 Sep 2006 23:10:48 +0200
+
+grml-etc (0.8-19) unstable; urgency=low
+
+  * /etc/init.d/grml-home: check for user with UID 1000 and use
+    'chown $USER:' instead of 'chown grml.grml'.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 28 Sep 2006 16:36:15 +0200
+
+grml-etc (0.8-18) unstable; urgency=low
+
+  * Added /etc/skel/.irbrc (configuration file for irb).
+  * /etc/skel/.kshrc: adjusted mailadress of wuehlmaus.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 26 Sep 2006 10:29:16 +0200
+
+grml-etc (0.8-17) unstable; urgency=low
+
+  * Add stunnel4 to /etc/runlevel.conf.hdinstall.
+  * Update /etc/locale.gen.grml.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 22 Sep 2006 17:21:47 +0200
+
+grml-etc (0.8-16) unstable; urgency=low
+
+  * Remove /etc/init.d/mydql from /etc/runlevel.conf.*.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 17 Sep 2006 16:54:25 +0200
+
+grml-etc (0.8-15) unstable; urgency=low
+
+  * /etc/init.d/grml-reboot: move truecrypt code to an earlier
+    state in the reboot process.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 17 Sep 2006 15:04:23 +0200
+
+grml-etc (0.8-14) unstable; urgency=low
+
+  * /etc/init.d/grml-reboot:
+    - added support for unmapping truecrypt volumes.
+    - use "log_end_msg $?" instead of
+      "foo && log_end_msg 0 || log_end_msg 1".
+
+ -- Michael Prokop <mika@grml.org>  Sun, 17 Sep 2006 13:09:21 +0200
+
+grml-etc (0.8-13) unstable; urgency=low
+
+  * Add resolv.conf to /etc/runlevel.conf.livecd and
+    /etc/runlevel.conf.hdinstall.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 16 Sep 2006 12:42:38 +0200
+
+grml-etc (0.8-12) unstable; urgency=low
+
+  * /etc/skel/.Xmodmap*: add add4 as Multi_key
+
+ -- Michael Prokop <mika@grml.org>  Fri, 15 Sep 2006 17:34:52 +0200
+
+grml-etc (0.8-11) unstable; urgency=low
+
+  * Created extra package named grml-etc-core which contains
+    configuration files for zsh, vim and some more core files
+    meant for use on plain Debian (stable/testing/unstable)
+    system. Moved some "dpkg-divert"ed files to grml-etc-core,
+    if you notice any problems please inform me!
+  * Added NEWS entry to inform people about the move of files.
+  * Removed grml-firefox from Suggests.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 12 Sep 2006 15:54:57 +0200
+
+grml-etc (0.8-10) unstable; urgency=low
+
+  * /etc/runlevel.conf.hdinstall:
+    - added /etc/init.d/libnss-ldap, /etc/init.d/openbsd-inetd,
+      /etc/init.d/xend and /etc/init.d/xendomains
+    - removed /etc/init.d/inetd
+
+ -- Michael Prokop <mika@grml.org>  Mon, 11 Sep 2006 15:46:31 +0200
+
+grml-etc (0.8-9) unstable; urgency=low
+
+  * /etc/zsh/zshrc:
+    - support "persistent history" via ~/.important_commands
+    - added check for symlink to cdrecord-alias.
+  * /etc/skel/.zshrc: put all stuff in vim's {{{-}}} environment.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  7 Sep 2006 17:07:47 +0200
+
+grml-etc (0.8-8) unstable; urgency=low
+
+  * /etc/zsh/zshrc: 'NOCOR=1 zsh' now also sets 'setopt nocorrect'.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  7 Sep 2006 14:52:16 +0200
+
+grml-etc (0.8-7) unstable; urgency=low
+
+  * Update /etc/runlevel.conf.hdinstall to current initscripts,
+    sysvinit,...
+
+ -- Michael Prokop <mika@grml.org>  Thu,  7 Sep 2006 11:36:32 +0200
+
+grml-etc (0.8-6) unstable; urgency=low
+
+  * /etc/skel/.zshrc: upps, forgot to close wodep-function with '}'
+
+ -- Michael Prokop <mika@grml.org>  Tue,  5 Sep 2006 21:32:16 +0200
+
+grml-etc (0.8-5) unstable; urgency=low
+
+  * /etc/skel/.asoundrc.example: added info regarding dmix
+  * /etc/skel/.zshrc: added function wodeb (thanks, wuehlmaus!)
+    and viless (based on Ulrich Dangel's blog entry, see
+    http://das.ist.mein.blog.und.der.spamt.net/), export
+    $JIKESPATH, added alias for cdrecord (check for wodim)
+
+ -- Michael Prokop <mika@grml.org>  Wed, 30 Aug 2006 18:45:09 +0200
+
+grml-etc (0.8-4) unstable; urgency=low
+
+  * Updated /etc/skel/.kshrc according to request and contribution
+    of wuehlmaus, thanks!
+
+ -- Michael Prokop <mika@grml.org>  Sat, 26 Aug 2006 16:05:48 +0200
+
+grml-etc (0.8-3) unstable; urgency=low
+
+  * Added one to /etc/wvdial.conf.umts.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 11 Aug 2006 23:17:38 +0200
+
+grml-etc (0.8-2) unstable; urgency=low
+
+  * Added some more examples to /etc/network/interfaces.examples.
+  * Added alias grml-rebuildfstab to /etc/zsh/zshrc.
+  * Ma[r]k /etc/skel/.config/rox.sourceforge.net/MIME-types/image as
+    executable.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 11 Aug 2006 19:18:42 +0200
+
+grml-etc (0.8-1) unstable; urgency=low
+
+  * Bumb version, grml 0.8 is coming closer...
+
+ -- Michael Prokop <mika@grml.org>  Fri, 11 Aug 2006 11:45:28 +0200
+
+grml-etc (0.7-69) unstable; urgency=low
+
+  * /etc/skel/.zshrc: upps, forgot a "'" in last change.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 10 Aug 2006 08:42:13 +0200
+
+grml-etc (0.7-68) unstable; urgency=low
+
+  * /etc/skel/.zshrc: let's drop the
+    -o "PreferredAuthentications=keyboard-interactive" 
+    in insecssh causing problems in some situations like:
+    | Permission denied (publickey,password).
+
+ -- Michael Prokop <mika@grml.org>  Wed,  9 Aug 2006 21:11:59 +0200
+
+grml-etc (0.7-67) unstable; urgency=low
+
+  * /etc/zsh/zshrc: check for
+    /usr/share/zsh/$ZSH_VERSION/functions/Zle/url-quote-magic
+
+ -- Michael Prokop <mika@grml.org>  Tue,  8 Aug 2006 12:10:08 +0200
+
+grml-etc (0.7-66) unstable; urgency=low
+
+  * /etc/runlevel.conf.livecd: remove hibernate, as the message
+    "Clearing Software Suspend 2 signatures... " is quite confusing
+    (thanks for hint, Spida!)
+
+ -- Michael Prokop <mika@grml.org>  Mon,  7 Aug 2006 19:33:29 +0200
+
+grml-etc (0.7-65) unstable; urgency=low
+
+  * /etc/skel/.zshrc: added function fir (firefox with new tab) and
+    updated man2() once more (thanks for contacting upstream,
+    wuehlmaus).
+  * /etc/zsh/zshrc: updated manzsh() (thanks, wuehlmaus).
+  * /etc/skel/.idesktop/wireshark.lnk: shrinked description...
+
+ -- Michael Prokop <mika@grml.org>  Sat,  5 Aug 2006 08:29:39 +0200
+
+grml-etc (0.7-64) unstable; urgency=low
+
+  * Use checkbootparam instead of 'grep ... /proc/cmdline' in
+    /etc/init.d/bootsplash_start.sh and /etc/init.d/bootsplash_end.sh
+
+ -- Michael Prokop <mika@grml.org>  Fri,  4 Aug 2006 12:19:58 +0200
+
+grml-etc (0.7-63) unstable; urgency=low
+
+  * /etc/zsh/zshrc: updated edfun function (thanks, wuehlmaus).
+  * Added /etc/skel/.config/rox.sourceforge.net/MIME-types/image
+    (thanks, gebi).
+  * /etc/zsh/zshenv: check for /etc/gentoo-release and source
+    /etc/profile.env then (thanks, Spida).
+  * /etc/skel/.zshrc: updated man2 (thanks, wuehlmaus).
+
+ -- Michael Prokop <mika@grml.org>  Fri,  4 Aug 2006 09:15:24 +0200
+
+grml-etc (0.7-62) unstable; urgency=low
+
+  * /etc/runlevel.conf.hdinstall: updated again (via running all
+    postinst and some preinst scripts in a clean environment and
+    merging relevant stuff).
+
+ -- Michael Prokop <mika@grml.org>  Wed,  2 Aug 2006 20:21:12 +0200
+
+grml-etc (0.7-61) unstable; urgency=low
+
+  * /etc/zsh/zshrc: support /etc/debian_chroot.
+
+ -- Michael Prokop <mika@grml.org>  Wed,  2 Aug 2006 18:12:36 +0200
+
+grml-etc (0.7-60) unstable; urgency=low
+
+  * /etc/apt/sources.list.grml: updated to current status,
+    added several deb-src entries.
+  * /etc/skel/.zshrc: added "alias -g LL='|& less -r'", thanks
+    wuehlmaus!
+
+ -- Michael Prokop <mika@grml.org>  Tue,  1 Aug 2006 22:42:50 +0200
+
+grml-etc (0.7-59) unstable; urgency=low
+
+  * Renamed /etc/skel/.idesktop/ethereal.lnk to
+    /etc/skel/.idesktop/wireshark.lnk and adjusted text and command
+    in the file as ethereal has been renamed to wireshark.
+
+ -- Michael Prokop <mika@grml.org>  Tue,  1 Aug 2006 11:13:55 +0200
+
+grml-etc (0.7-58) unstable; urgency=low
+
+  * /etc/zsh/zshrc: added functions edalias (edit alias via zle)
+    and edfun (edit function via zle), thanks, Wuehlmaus!
+
+ -- Michael Prokop <mika@grml.org>  Tue,  1 Aug 2006 11:08:50 +0200
+
+grml-etc (0.7-57) unstable; urgency=low
+
+  * /etc/skel/.zshrc: replaced ${(z)BROWSER} with ${=BROWSER} (thanks,
+    wuehlmaus).
+
+ -- Michael Prokop <mika@grml.org>  Thu, 27 Jul 2006 19:07:44 +0200
+
+grml-etc (0.7-56) unstable; urgency=low
+
+  * source /etc/environment before sourcing /etc/default/locale
+    as the latter one is Debian's default now and supported
+    with grml-setlang.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 27 Jul 2006 18:52:58 +0200
+
+grml-etc (0.7-55) unstable; urgency=low
+
+  * /etc/runlevel.conf.hdinstall: added open-iscsi.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 26 Jul 2006 21:15:53 +0200
+
+grml-etc (0.7-54) unstable; urgency=low
+
+  * /etc/runlevel.conf.hdinstall: remove pcmciautils in runlevels
+    0 and 6.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 25 Jul 2006 21:47:26 +0200
+
+grml-etc (0.7-53) unstable; urgency=low
+
+  * Updated Start/Stop/Reload/Restart function in /etc/zsh/zshrc:
+    support $2 to allow something like 'Start openvpn vpnconfigname'
+    as well, thanks for hint - Kevin Krammer!
+
+ -- Michael Prokop <mika@grml.org>  Mon, 24 Jul 2006 22:55:17 +0200
+
+grml-etc (0.7-52) unstable; urgency=low
+
+  * Updated /etc/init.d/firewall once again (thanks Gebi and Jimmy).
+
+ -- Michael Prokop <mika@grml.org>  Sat, 22 Jul 2006 10:01:04 +0200
+
+grml-etc (0.7-51) unstable; urgency=low
+
+  * Also read-in /etc/default/locale in /etc/zsh/zshenv as
+    Debian decided not to touch /etc/environment anymore.
+  * Updated /etc/init.d/firewall - some cleanups, addons,
+    improved look'n'feel...
+
+ -- Michael Prokop <mika@grml.org>  Wed, 19 Jul 2006 20:15:44 +0200
+
+grml-etc (0.7-50) unstable; urgency=low
+
+  * Added /etc/locale.gen.minimal (provide a common minimal setup
+    for german and english users) and updated /etc/locale.gen.grml.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 19 Jul 2006 03:23:06 +0200
+
+grml-etc (0.7-49) unstable; urgency=low
+
+  * Fixed very long line in /etc/skel/.zshrc.
+  * Removed deprecated /etc/init.d/ppp from
+    /etc/runlevel.conf.livecd and /etc/runlevel.conf.hdinstall,
+    added wpa-ifupdown, cryptdisks-early and linuxlogo.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 10 Jul 2006 19:47:00 +0200
+
+grml-etc (0.7-48) unstable; urgency=low
+
+  * Added osd.pl, queryresume.pl and screen_away.pl to
+    /etc/skel/.irssi/scripts/.
+  * Added /etc/policy-rc.d.conf and /etc/zg-policy-rc.d.conf
+    as configuration files for grml-policy-rc.d and
+    policyrcd-script-zg2.
+
+ -- Michael Prokop <mika@grml.org>  Fri,  7 Jul 2006 23:11:06 +0200
+
+grml-etc (0.7-47) unstable; urgency=low
+
+  * /etc/vim/vimrc: activate "set background=dark"
+  * /etc/zsh/zshrc:
+    - activate url-quote-magic; set xterm-title via preexec() and precmd()
+    - set specific prompt when $GRML_CHROOT is set
+  * /etc/zsh/zshenv: set $HOME only in live-cd mode
+  * /etc/skel/.zshrc:
+    - updated alias man2, thanks to wuehlmaus and sqweek in #zsh.
+    - added alias getskypebeta (get beta version of skype)
+    - added alias check_dpkg_running (sudo dpkg_running)
+
+ -- Michael Prokop <mika@grml.org>  Mon, 26 Jun 2006 14:41:21 +0200
+
+grml-etc (0.7-46) unstable; urgency=low
+
+  * /etc/runlevel.conf.hdinstall: updated 915resolution and added
+    ajaxterm
+
+ -- Michael Prokop <mika@grml.org>  Sat, 24 Jun 2006 10:03:30 +0200
+
+grml-etc (0.7-45) unstable; urgency=low
+
+  * Added initscripts from package acpi-support to
+    /etc/runlevel.conf.hdinstall (run vbesave, disable other ones).
+  * /etc/apt/sources.list.grml: update nerim repos (new
+    URL debian-multimedia.org)
+
+ -- Michael Prokop <mika@grml.org>  Wed, 14 Jun 2006 18:40:44 +0200
+
+grml-etc (0.7-44) unstable; urgency=low
+
+  * Added /etc/skel/.fvwm-crystal for new fvwm-crystal version,
+    adjusted for fvwm-crystal-minimal.
+  * /etc/skel/.fvwm[-crystal]/userconfig: added some more configuration
+  * /etc/skel/.Xresources: added presentation mode for terminals
+
+ -- Michael Prokop <mika@grml.org>  Mon, 12 Jun 2006 18:42:45 +0200
+
+grml-etc (0.7-43) unstable; urgency=low
+
+  * Disable xauth call in /etc/skel/.xinitrc - let's see whether
+    it breaks anything; using [xkg]dm with this command causes
+    problems so let's try to skip it
+  * /etc/wvdial.conf.umts: added entry for provider 3, contributed
+    by Wolfgang Karall, thanks!
+  * /etc/skel/.xsession: run ". ~/.xinitrc" instead of xterm.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 12 Jun 2006 13:56:33 +0200
+
+grml-etc (0.7-42) unstable; urgency=low
+
+  * /etc/zsh/zshenv: dropped the "if [[ -z "$PATH"..." check
+    because /etc/profile might set $PATH already and therefore
+    setting $PATH in zsh might fail then.
+
+ -- Michael Prokop <mika@grml.org>  Fri,  9 Jun 2006 23:43:04 +0200
+
+grml-etc (0.7-41) unstable; urgency=low
+
+  * /etc/zsh/completion.d/iwconfig: updated for essid completion,
+    thanks to Thomas Ulz!
+
+ -- Michael Prokop <mika@grml.org>  Thu,  8 Jun 2006 22:05:09 +0200
+
+grml-etc (0.7-40) unstable; urgency=low
+
+  * /etc/skel/.vimrc: updated ci-stuff of vim7
+  * /etc/skel/.zshrc: added debbugm (run "bts show --mbox $1").
+  * /etc/zsh/completion.d/iwconfig: added support for completion
+    of essid, contributed by Thomas Ulz - thanks. Needs some
+    more work though.
+
+ -- Michael Prokop <mika@grml.org>  Mon,  5 Jun 2006 16:30:33 +0200
+
+grml-etc (0.7-39) unstable; urgency=low
+
+  * Added /etc/zsh/completion.d/iwconfig to complete network
+    devices supporting wireless extensions only. Thanks, Julius!
+  * Deleted /etc/zsh/completion.d/pump and
+    /etc/zsh/completion.d/dhclient as current zsh version ship
+    the files as well.
+  * Updated /etc/apt/sources.list.grml.
+
+ -- Michael Prokop <mika@grml.org>  Mon,  5 Jun 2006 00:32:53 +0200
+
+grml-etc (0.7-38) unstable; urgency=low
+
+  * /etc/skel/.zshrc
+    - updated function wikide as requested by Matthias Kopfermann.
+    - added function exirename to rename jpg files based on their
+      exif header using jhead
+    - check whether compinit is already available before loading
+      it, otherwise our own completion does not work anymore
+  * /etc/runlevel.conf*: updated for /etc/init.d/bootlocal* stuff.
+    /etc/runlevel.conf.livecd has been adapted to current
+    /var/lib/dpkg/info/initscripts.postinst version.
+  * /etc/zsh/zshenv: set PATH only if $PATH is empty or is "/bin:/usr/bin".
+
+ -- Michael Prokop <mika@grml.org>  Sun,  4 Jun 2006 15:07:16 +0200
+
+grml-etc (0.7-37) unstable; urgency=low
+
+  * /etc/zsh/zshrc: use '-la' instead of '-lA' in la alias.
+    Too confusing for human brains, sorry Matthias. :)
+
+ -- Michael Prokop <mika@grml.org>  Tue, 30 May 2006 00:10:05 +0200
+
+grml-etc (0.7-36) unstable; urgency=low
+
+  * /etc/skel/.zshrc: support /.zshrc.global.
+  * /etc/skel/.vimrc: improved vim7 section comments.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 29 May 2006 12:58:36 +0200
+
+grml-etc (0.7-35) unstable; urgency=low
+
+  * The "oh, btw - zsh rocks as well" update:
+  * /etc/zsh/zshrc
+    - added function zsh-help which prints useful information
+      regarding zsh configuration/setup/....
+    - added support for 'NOMENU=1 zsh' to disable menus in zsh at all;
+      thanks to Julius Plenz for 'setopt no_auto_menu'. :)
+  * /etc/skel/.zshrc:
+    - load compinit even though we load it in /etc/zsh/zshrc as well,
+      prevents errror when using /etc/skel/.zshrc only
+    - replaced $BROWSER with ${(z)BROWSER} as requested by Matthias
+      so we can provide something like BROWSER="dog --links".
+    - set alias la to 'ls -Al' (we don't need the . and .. directories),
+      again on request by Matthias
+    - source ~/.zshrc.local if file is present so people can stay in
+      sync with /etc/skel/.zshrc through a symlink to ~/.zshrc
+
+ -- Michael Prokop <mika@grml.org>  Sun, 28 May 2006 11:58:23 +0200
+
+grml-etc (0.7-34) unstable; urgency=low
+
+  * The "vim 7 rocks" update:
+    - 'set hidden' in /etc/vim/vimrc as I require undo to work
+      even as root with multiple buffers
+    - big update of /etc/skel/.vimrc with check for version7
+      and appropriate configuration and even some cool tips
+    - added /etc/skel/.vim/spellfile.add so we can add our own
+      words to a spelling file
+
+ -- Michael Prokop <mika@grml.org>  Sun, 28 May 2006 01:20:46 +0200
+
+grml-etc (0.7-33) unstable; urgency=low
+
+  * Deactivated the "Prepend/append register [/] to the paste if ^a^]
+    is pressed." hack in /etc/grml/screenrc.
+  * Added 'autoload promptinit ; promptinit' to /etc/zsh/zshrc as
+    suggested by Matthias Kopfermann.
+  * Source ~/.zshrc.global if file is present. This provides the feature
+    to use /etc/zsh/zshrc in your $HOME as well.
+  * Added /etc/skel/.kshrc as suggested by Matthias Kopfermann, thanks!
+  * Added deactivated "print $'\e[?96;0;64c'" to /etc/skel/.zshrc, cool
+    feature by Matthias Kopfermann, thanks!
+  * Set $WRITE_ON_UDEV in /etc/zsh/zshenv to prevent people from
+    confusion when running MAKEDEV on /dev provided by udev.
+  * Let's try to use single click in /etc/skel/.ideskrc as some people
+    are confused when pressing double click on *nix systems.
+  * Removed $CURDIR occurencies in debian/rules.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 27 May 2006 23:29:42 +0200
+
+grml-etc (0.7-32) unstable; urgency=low
+
+  * Updated /etc/grml/screenrc_acpi to state of main screenrc.
+  * Removed deprecated /etc/grml/zshrc, main configuration
+    happens in /etc/zsh as usual.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 27 May 2006 23:17:09 +0200
+
+grml-etc (0.7-31) unstable; urgency=low
+
+  * Added keybindings for home/end for rxvt terminal.
+  * Added *.deb completion for lintian to /etc/zsh/zshrc.
+  * Added /etc/skel/.mrxvtrc.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 27 May 2006 19:10:40 +0200
+
+grml-etc (0.7-30) unstable; urgency=low
+
+  * Adjusted splash stuff in /etc/runlevel*.
+  * Added /etc/init.d/bootsplash_end.sh and
+    /etc/init.d/bootsplash_start.sh.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 27 May 2006 14:46:28 +0200
+
+grml-etc (0.7-29) unstable; urgency=low
+
+  * Added keybindings for Ctrl-<left|right-cursor> to
+    /etc/skel/.fvwm/userconfig.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 14 May 2006 21:43:10 +0200
+
+grml-etc (0.7-28) unstable; urgency=low
+
+  * Fixed keycode 174 and 176 for Targus Presenter in Xmodmap files.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 14 May 2006 15:58:29 +0200
+
+grml-etc (0.7-27) unstable; urgency=low
+
+  * Added urxvt-style to /etc/skel/.Xresources.
+  * Updated /etc/skel/.fvwm/userconfig and /etc/skel/.fluxbox/keys:
+    execute xsay on action XF86AudioMedia
+
+ -- Michael Prokop <mika@grml.org>  Sun, 14 May 2006 15:00:32 +0200
+
+grml-etc (0.7-26) unstable; urgency=low
+
+  * Added /etc/skel/.fvwm/userconfig.
+  * Updated Xmodmap[.german] for use with Targus Presenter.
+  * Updated /etc/skel/.fluxbox/keys: bind XF86Audio* and don't
+    use full path for executables.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 14 May 2006 02:51:03 +0200
+
+grml-etc (0.7-25) unstable; urgency=low
+
+  * Added /etc/wvdial.conf.umts.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 14 May 2006 02:00:58 +0200
+
+grml-etc (0.7-24) unstable; urgency=low
+
+  * Removed xprint and cpudyn from and added powertweakd to
+    /etc/runlevel.conf.hdinstall and /etc/runlevel.conf.livecd.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 13 May 2006 19:15:44 +0200
+
+grml-etc (0.7-23) unstable; urgency=low
+
+  * The 'now we have a long overrides to be lintian-clean' release.
+  * Install /etc/grml_nocolors and /etc/grml_colors with permissions
+    644.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 12 May 2006 22:05:20 +0200
+
+grml-etc (0.7-22) unstable; urgency=low
+
+  * Added /etc/lynx.cfg with SHOW_CURSOR:TRUE as suggested by
+    Mario Lang.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 12 May 2006 21:57:02 +0200
+
+grml-etc (0.7-21) unstable; urgency=low
+
+  * Added /etc/rc{0..6}.d/ /etc/rcS.d directories with
+    important_notice to inform users about file-rc.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 12 May 2006 18:01:40 +0200
+
+grml-etc (0.7-20) unstable; urgency=low
+
+  * Added vim (>= 7.0) to Recommends.
+  * Updated /etc/vim/vimrc for use with vim 7.0.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 12 May 2006 11:35:16 +0200
+
+grml-etc (0.7-19) unstable; urgency=low
+
+  * Added /etc/skel/.fvwm for fvwm-crystal.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 10 May 2006 23:55:33 +0200
+
+grml-etc (0.7-18) unstable; urgency=low
+
+  * Added /etc/init.d/knockd to /etc/runlevel.conf.hdinstall.small
+    and /etc/runlevel.conf.livecd.small.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  7 May 2006 18:39:36 +0200
+
+grml-etc (0.7-17) unstable; urgency=low
+
+  * /etc/skel/.zshrc: updated function debbug and alias medium.
+    Added function limg (list images).
+  * /etc/zsh/zshrc: add alias rd='rmdir' and alias md='mkdir'.
+
+ -- Michael Prokop <mika@grml.org>  Mon,  1 May 2006 16:39:05 +0200
+
+grml-etc (0.7-16) unstable; urgency=low
+
+  * Remove the X11R6 from xinit/startx alias as they are available
+    in /usr/bin/ now.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 30 Apr 2006 13:37:47 +0200
+
+grml-etc (0.7-15) unstable; urgency=low
+
+  * Check for nocolor in /proc/cmdline in /etc/init.d/grml-misc
+    and source lsb-functions with RC_NOCOLOR=yes then.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 30 Apr 2006 11:51:56 +0200
+
+grml-etc (0.7-14) unstable; urgency=low
+
+  * Switch order of udev and mountdevsubfs.sh in
+    /etc/runlevel.conf.livecd.small so error message
+    'Mountpoint /dev/shm does not exist' disappears.
+  * Move rmnologin from 20 to 99 in /etc/runlevel.conf.livecd
+    as intended by postinst script of package initscripts.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 28 Apr 2006 01:14:08 +0200
+
+grml-etc (0.7-13) unstable; urgency=low
+
+  * Move some icons in ~/.idesktop/*.lnk so it better fitts for
+    the LinuxUser release.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 24 Apr 2006 23:49:52 +0200
+
+grml-etc (0.7-12) unstable; urgency=low
+
+  * Updated font definition in fluxbox's default theme
+    /etc/skel/.fluxbox/styles/Sn33z/theme.cfg
+    as the font wasn't capable of display german umlauts.
+    Thanks for reporting, Andreas Bohle!
+
+ -- Michael Prokop <mika@grml.org>  Fri, 21 Apr 2006 21:26:31 +0200
+
+grml-etc (0.7-11) unstable; urgency=low
+
+  * /etc/zsh/zshenv: reworked language handling
+
+ -- Michael Prokop <mika@grml.org>  Fri, 21 Apr 2006 15:30:09 +0200
+
+grml-etc (0.7-10) unstable; urgency=low
+
+  * /etc/zsh/completion.d/grml-lang: complete 'us' instead of 'en'.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 19 Apr 2006 10:33:26 +0200
+
+grml-etc (0.7-9) unstable; urgency=low
+
+  * Added dbus and apt-index-watcher to /etc/runlevel.conf.hdinstall
+    and /etc/runlevel.conf.livecd.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 16 Apr 2006 12:03:04 +0200
+
+grml-etc (0.7-8) unstable; urgency=low
+
+  * Adjusted /etc/runlevel.conf.livecd.small and
+    /etc/runlevel.conf.hdinstall.small as well (removed not present
+    initscripts from runlevel.conf).
+
+ -- Michael Prokop <mika@grml.org>  Sun, 16 Apr 2006 11:47:13 +0200
+
+grml-etc (0.7-7) unstable; urgency=low
+
+  * Adjust /etc/runlevel.conf.hdinstall and /etc/runlevel.conf.livecd
+    for current package selection (remove not present init scripts
+    from runlevel.conf).
+
+ -- Michael Prokop <mika@grml.org>  Sun, 16 Apr 2006 11:43:17 +0200
+
+grml-etc (0.7-6) unstable; urgency=low
+
+  * Don't source /etc/sysconfig/i18n but /etc/environment via
+    /etc/zsh/zshenv.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  8 Apr 2006 14:27:25 +0200
+
+grml-etc (0.7-5) unstable; urgency=low
+
+  * Use white color in /etc/skel/.xinitrc for osd_cat.
+
+ -- Michael Prokop <mika@grml.org>  Fri,  7 Apr 2006 12:06:29 +0200
+
+grml-etc (0.7-4) unstable; urgency=low
+
+  * It's grml-shlib and not grmlsh-lib. Adjusted depends.
+    Thanks, Gebi.
+
+ -- Michael Prokop <mika@grml.org>  Fri,  7 Apr 2006 09:41:27 +0200
+
+grml-etc (0.7-3) unstable; urgency=low
+
+  * Added /etc/grml_nocolors (thanks for hint, Gebi).
+
+ -- Michael Prokop <mika@grml.org>  Fri,  7 Apr 2006 00:15:59 +0200
+
+grml-etc (0.7-2) unstable; urgency=low
+
+  * Remove initscripts grml-halt and grml-reboot from runlevels 0
+    and 6 in /etc/runlevel.conf.hdinstall.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  6 Apr 2006 18:05:50 +0200
+
+grml-etc (0.7-1) unstable; urgency=low
+
+  * New grml version! Hurray!
+
+ -- Michael Prokop <mika@grml.org>  Thu,  6 Apr 2006 16:15:08 +0200
+
+grml-etc (0.6-28) unstable; urgency=low
+
+  * Don't bind XF86Audio* keys by default in /etc/skel/.fluxbox/keys.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  6 Apr 2006 12:21:23 +0200
+
+grml-etc (0.6-27) unstable; urgency=low
+
+  * Don't run dmraid and multipath-tools-boot by default on harddisk
+    installations.
+
+ -- Michael Prokop <mika@grml.org>  Wed,  5 Apr 2006 23:08:05 +0200
+
+grml-etc (0.6-26) unstable; urgency=low
+
+  * Adjust color for grml 0.7 wallpaper in /etc/skel/.ideskrc
+
+ -- Michael Prokop <mika@grml.org>  Wed,  5 Apr 2006 16:54:09 +0200
+
+grml-etc (0.6-25) unstable; urgency=low
+
+  * Updated /etc/apt/sources.list.grml.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  2 Apr 2006 20:46:01 +0200
+
+grml-etc (0.6-24) unstable; urgency=low
+
+  * Let's increase HISTSIZE and SAVEHIST in /etc/zsh/zsrc when
+    not running in live-cd mode.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 30 Mar 2006 00:59:26 +0200
+
+grml-etc (0.6-23) unstable; urgency=low
+
+  * Oops, arranging windows with "Control Mod1 f" conflicts with
+    running firefox. Changed it to "Control Mod1 a" therefore.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 26 Mar 2006 15:05:48 +0200
+
+grml-etc (0.6-22) unstable; urgency=low
+
+  * Updated /etc/skel/.fluxbox/keys.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 23 Mar 2006 12:13:59 +0100
+
+grml-etc (0.6-21) unstable; urgency=low
+
+  * Added alias swspeak to /etc/zsh/zshrc so software synth.
+    works with zsh as well.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 13 Mar 2006 17:53:20 +0100
+
+grml-etc (0.6-20) unstable; urgency=low
+
+  * Don't print "Please remove CD..." if booting with 'toram'
+    option. Thanks for suggestion, Benjamin Bock!
+  * Added 'OK' to "/etc/init.d/rc #" text.
+  * Updated /etc/runlevel.conf.hdinstall and
+    /etc/runlevel.conf.hdinstall.small corresponding to current
+    /var/lib/dpkg/info/initscripts.postinst version.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 12 Mar 2006 22:45:45 +0100
+
+grml-etc (0.6-19) unstable; urgency=low
+
+  * Don't use the F11/F12 keys by default in GNU screen as it
+    conflicts for example with vim's toggle-paste keybinding.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 11 Mar 2006 00:00:07 +0100
+
+grml-etc (0.6-18) unstable; urgency=low
+
+  * Use mountkernfs.sh and mountdevsubfs.sh in
+    /etc/runlevel.conf.livecd.small.
+  * Added 'setopt nobeep' to /etc/zsh/zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 10 Mar 2006 16:22:25 +0100
+
+grml-etc (0.6-17) unstable; urgency=low
+
+  * Updated /etc/grml/screenrc, use the function keys F11 and F12
+    to cycle backwards/forwards in the list of existing windows.
+    Contributed by Spida, thx!
+
+ -- Michael Prokop <mika@grml.org>  Sun,  5 Mar 2006 17:12:01 +0100
+
+grml-etc (0.6-16) unstable; urgency=low
+
+  * Don't use 'vim -X' as editor because 'esc-e' of zsh and
+    visudo don't like that (thanks for hint, Spida!).
+
+ -- Michael Prokop <mika@grml.org>  Mon, 27 Feb 2006 15:19:10 +0100
+
+grml-etc (0.6-15) unstable; urgency=low
+
+  * Don't source /etc/sysconfig/grml anymore in /etc/zsh/zshenv.
+    Source /etc/sysconfig/i18n only if $LANG is not set already.
+  * Removed the grml-lang alias in /etc/zsh/zshrc as the script
+    grml-setlang has been renamed to grml-lang.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 25 Feb 2006 17:57:08 +0100
+
+grml-etc (0.6-14) unstable; urgency=low
+
+  * Use grml-lock as gkrellshoot's xlock_cmd in
+    /etc/skel/.gkrellm2/user-config.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 23 Feb 2006 16:06:50 +0100
+
+grml-etc (0.6-13) unstable; urgency=low
+
+  * Add mpt-statusd and speech-dispatcher to
+    /etc/runlevel.conf.hdinstall.
+  * Fixed typo in listchars in /etc/skel/.vimrc.
+  * Updated /etc/apt/sources.list.grml.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 23 Feb 2006 12:26:28 +0100
+
+grml-etc (0.6-12) unstable; urgency=low
+
+  * Modified listchars setting for tab in /etc/skel/.vimrc.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 22 Feb 2006 17:19:48 +0100
+
+grml-etc (0.6-11) unstable; urgency=low
+
+  * Export QTDIR if directory is present (required for
+    Robocup project).
+
+ -- Michael Prokop <mika@grml.org>  Tue, 21 Feb 2006 20:00:43 +0100
+
+grml-etc (0.6-10) unstable; urgency=low
+
+  * Updated /etc/skel/.gkrellm2/user-config, use battery plugin
+    by default. Closes: #19
+
+ -- Michael Prokop <mika@grml.org>  Sun, 19 Feb 2006 20:20:01 +0100
+
+grml-etc (0.6-9) unstable; urgency=low
+
+  * Don't check for set $HISTFILE, $HISTSIZE and $SAVEHIST - just
+    set it. Otherwise zsh history does not work as expected.
+  * Changed 'checkBootParam' in /etc/init.d/grml-reboot to simple
+    grep command so we don't depend on grml-shlib currently.
+  * Updated /etc/skel/.fluxbox/keys, added some key bindings.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 18 Feb 2006 17:48:10 +0100
+
+grml-etc (0.6-8) unstable; urgency=low
+
+  * Big update of zsh setup via /etc/zsh/zshrc:
+    - improved detection of ssh hashing in known_hosts file
+    - don't do *any* error correction on rm and mv commands
+    - some cleanups, ordering,...
+    - updated completion system
+
+ -- Michael Prokop <mika@grml.org>  Thu, 16 Feb 2006 00:40:28 +0100
+
+grml-etc (0.6-7) unstable; urgency=low
+
+  * Added function smart-indent to /etc/skel/.zshrc.
+  * Adjusted keymapping for firefox in fluxbox via
+    /etc/skel/.fluxbox/keys - use ctrl-alt-f instead of alt-f.
+  * Don't set list by default for vim.
+  * Fix the '/etc/grml/sh-lib: line 622: `force-reloadService': not
+    valid identifier' problem through not sourcing /etc/grml/sh-lib
+    in /etc/init.d/grml-reboot.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 11 Feb 2006 21:51:23 +0100
+
+grml-etc (0.6-6) unstable; urgency=low
+
+  * Updated /etc/runlevel.conf.livecd and /etc/runlevel.conf.hdinstall
+    corresponding to latest sysvinit package.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 11 Feb 2006 01:19:56 +0100
+
+grml-etc (0.6-5) unstable; urgency=low
+
+  * Don't correct anything in rm command (/etc/zsh/zshrc).
+  * Don't use mountvirtfs in /etc/runlevel.conf* anymore by default.
+  * Updated listchars setting /etc/vim/vimrc (improve copy/paste).
+
+ -- Michael Prokop <mika@grml.org>  Fri, 10 Feb 2006 23:24:38 +0100
+
+grml-etc (0.6-4) unstable; urgency=low
+
+  * Added mmake function to /etc/skel/.zshrc (taken from strcat).
+
+ -- Michael Prokop <mika@grml.org>  Fri, 27 Jan 2006 21:00:20 +0100
+
+grml-etc (0.6-3) unstable; urgency=low
+
+  * Updated /etc/runlevel.conf.hdinstall.small. Fixes the
+    '/etc/init.d/grml-reboot and /etc/init.d/grml-halt are executed
+    twice on reboot/halt on hard disk installations' problem.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 24 Jan 2006 23:40:57 +0100
+
+grml-etc (0.6-2) unstable; urgency=low
+
+  * Added alias screen to /etc/zsh/zshrc.
+  * Fixed missing '$' in $UID check.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 22 Jan 2006 14:55:32 +0100
+
+grml-etc (0.6-1) unstable; urgency=low
+
+  * The 'hey, get your winterschlapfn' release.
+  * Adjusted getskype function in /etc/skel/.zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 21 Jan 2006 13:06:12 +0100
+
+grml-etc (0.5-50) unstable; urgency=low
+
+  * Add osd_cat overlay text to /etc/skel/.xinitrc.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 20 Jan 2006 15:49:56 +0100
+
+grml-etc (0.5-49) unstable; urgency=low
+
+  * Updated alsa-utils in /etc/runlevel.conf.hdinstall.
+  * Added /etc/init.d/rc-support to /etc/init.d/grml-reboot.
+  * Use wm-ng as default window manager.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 20 Jan 2006 10:32:13 +0100
+
+grml-etc (0.5-48) unstable; urgency=low
+
+  * Start ssh by default on hd-installation.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 19 Jan 2006 09:51:26 +0100
+
+grml-etc (0.5-47) unstable; urgency=low
+
+  * Added alias insecssh to /etc/skel/.zshrc (thanks, Gebi!).
+
+ -- Michael Prokop <mika@grml.org>  Mon, 16 Jan 2006 18:02:30 +0100
+
+grml-etc (0.5-46) unstable; urgency=low
+
+  * Adjusted /etc/apt/sources.list.grml.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Jan 2006 23:56:11 +0100
+
+grml-etc (0.5-45) unstable; urgency=low
+
+  * Upps, fixed missing '.install' in function getskype in
+    /etc/skel/.zshrc. Updated function getgizmo as well, as it
+    requires gconf2-common and libgconf2-4 now.
+  * Updated /etc/runlevel* because bluez-utils is bluetooth now.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Jan 2006 21:10:41 +0100
+
+grml-etc (0.5-44) unstable; urgency=low
+
+  * Adjusted path for directory skype in getskype function in
+    /etc/skel/.zshrc.
+  * Added keybinding to switch resolution via xrandr to 1024x768,
+    mapped to 'Control Mod1 d' to /etc/skel/.fluxbox/keys.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 12 Jan 2006 22:51:56 +0100
+
+grml-etc (0.5-43) unstable; urgency=low
+
+  * Use orange as cursor color in x-terminals to avoid problems with
+    dialog interfaces.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 12 Jan 2006 21:26:04 +0100
+
+grml-etc (0.5-42) unstable; urgency=low
+
+  * Fixed usage info text of function git-get-diff in /etc/skel/.zshrc.
+  * Added git-get-plaindiff (thanks, tklauser!).
+
+ -- Michael Prokop <mika@grml.org>  Mon,  9 Jan 2006 22:27:12 +0100
+
+grml-etc (0.5-41) unstable; urgency=low
+
+  * Added functions git-get-commit and git-get-diff to /etc/skel/.zshrc.
+  * Added irssi idesktop icon.
+
+ -- Michael Prokop <mika@grml.org>  Mon,  9 Jan 2006 22:14:52 +0100
+
+grml-etc (0.5-40) unstable; urgency=low
+
+  * Oh, /etc/skel/.Xresources had one line containing '#' instead
+    of '!' for a comment.
+  * Set 'XTerm*utf8: 0' in /etc/skel/.Xresources to fix terminal
+    problems of xterm with zsh.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  8 Jan 2006 15:37:18 +0100
+
+grml-etc (0.5-39) unstable; urgency=low
+
+  * Updated runlevel.conf for proftp and postgresql-8.1.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  5 Jan 2006 18:53:44 +0100
+
+grml-etc (0.5-38) unstable; urgency=low
+
+  * Adjust path to xterm in /etc/skel/.xsession and /etc/skel/.pekwm/menu
+    as starting with xterm 204-0pre1 it does not reside in /usr/X11R6/bin
+    anymore but in /usr/bin.
+  * Use specific xterm font settings in fluxbox when pressing alt-t,
+    alt-escape still uses the default grml xterm of course.
+  * Added alias semifont to /etc/skel/.zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  5 Jan 2006 11:00:36 +0100
+
+grml-etc (0.5-37) unstable; urgency=low
+
+  * Run x-terminal-emulator in fluxbox when pressing alt-t.
+
+ -- Michael Prokop <mika@grml.org>  Wed,  4 Jan 2006 14:36:52 +0100
+
+grml-etc (0.5-36) unstable; urgency=low
+
+  * Don't start apcupsd in runlevel 1.
+  * Added (deactivated) secvpnmon entry to /etc/inittab.grml.
+
+ -- Michael Prokop <mika@grml.org>  Tue,  3 Jan 2006 22:32:07 +0100
+
+grml-etc (0.5-35) unstable; urgency=low
+
+  * Deactivate (comment) 'term linux' in /etc/grml/screenrc as
+    it breaks dialog interface withing GNU screen.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  1 Jan 2006 14:08:27 +0100
+
+grml-etc (0.5-34) unstable; urgency=low
+
+  * Switched log_* to e* in /etc/init.d/grml-misc.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  1 Jan 2006 13:49:08 +0100
+
+grml-etc (0.5-33) unstable; urgency=low
+
+  * Run 'su -s /bin/sh ...' to prevent startup of the new
+    zsh/newuser module (provided starting with zsh 4.3.0-dev-2-1).
+
+ -- Michael Prokop <mika@grml.org>  Thu, 29 Dec 2005 14:56:19 +0100
+
+grml-etc (0.5-32) unstable; urgency=low
+
+  * It's Filename and not Frlename in /etc/zsh/zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 28 Dec 2005 20:52:30 +0100
+
+grml-etc (0.5-31) unstable; urgency=low
+
+  * Use 'vim -X' as $EDITOR in /etc/zsh/zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 27 Dec 2005 16:57:36 +0100
+
+grml-etc (0.5-30) unstable; urgency=low
+
+  * Fix the screen.linux terminal problem of GNU screen (thanks,
+    Wolfgang Karall!) in /etc/grml/screenrc.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 22 Dec 2005 12:40:06 +0100
+
+grml-etc (0.5-29) unstable; urgency=low
+
+  * Updated /etc/apt/sources.list.grml for 22c3 release.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 21 Dec 2005 22:43:19 +0100
+
+grml-etc (0.5-28) unstable; urgency=low
+
+  * Added getgizmo and adjusted getskype and getxlite in
+    /etc/skel/.zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 20 Dec 2005 18:32:25 +0100
+
+grml-etc (0.5-27) unstable; urgency=low
+
+  * Adjust Xresources for x-terminal-emulator (use same settings
+    as for xterm).
+
+ -- Michael Prokop <mika@grml.org>  Tue, 20 Dec 2005 01:04:18 +0100
+
+grml-etc (0.5-26) unstable; urgency=low
+
+  * Added function 'getxlite' to /etc/skel/.zshrc (get
+    x-lite voip software).
+  * Added function 'getskype' to /etc/skel/.zshrc (get
+    skype debian package and adjust dependencies).
+  * Don't use 'alias ls' in /etc/skel/.zshrc and /etc/zsh/zshrc
+    at the same time, define it in /etc/zsh/zshrc only.
+  * Some small improvements and checks in zsh setup so config
+    is usable on e.g. FreeBSD as well.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 18 Dec 2005 16:27:15 +0100
+
+grml-etc (0.5-25) unstable; urgency=low
+
+  * Removed highlighting settings in /etc/skel/.vimrc so
+    we don't use bold colors by default anymore.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 18 Dec 2005 13:20:02 +0100
+
+grml-etc (0.5-24) unstable; urgency=low
+
+  * Updated /etc/runlevel.conf.hdinstall
+    - added all initscripts (/etc/init.d/*)
+    - deactivated all the ones not really necessary on clean grml2hd
+      installation
+    - important: activate cryptdisks by default
+
+ -- Michael Prokop <mika@grml.org>  Sat, 17 Dec 2005 21:58:03 +0100
+
+grml-etc (0.5-23) unstable; urgency=low
+
+  * Set gps=true (thanks, Timo Boettcher!) and waypoint_essid=false
+    in kismet.conf.
+  * Added zsh completion for dhclient and pump (thanks, Feh!).
+
+ -- Michael Prokop <mika@grml.org>  Fri, 16 Dec 2005 00:37:55 +0100
+
+grml-etc (0.5-22) unstable; urgency=low
+
+  * Moved grml-tips related stuff to package grml-tips.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 11 Dec 2005 22:24:04 +0100
+
+grml-etc (0.5-21) unstable; urgency=low
+
+  * Updated info text of grml-tips.
+  * Initial version of grml-tips-file.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 10 Dec 2005 16:53:45 +0100
+
+grml-etc (0.5-20) unstable; urgency=low
+
+  * Added function grml-tips to zshrc.
+  * Added /etc/grml/grml_tips (currently empty).
+  * Added support for /etc/zsh/completion.d and moved special
+    completion stuff from zshrc to /etc/zsh/completion.d/.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 10 Dec 2005 11:13:23 +0100
+
+grml-etc (0.5-19) unstable; urgency=low
+
+  * Fixed command line in /etc/skel/.idesktop/grmlconfiguser.lnk.
+  * Updated /etc/init.d/grml-reboot (added sync to make sure filesystem
+    is "ok" on hd-installations, thx gebi!).
+
+ -- Michael Prokop <mika@grml.org>  Tue,  6 Dec 2005 14:59:12 +0100
+
+grml-etc (0.5-18) unstable; urgency=low
+
+  * Updated gkrellm2-config (activated gkrellshot).
+  * Updated idesk-setup (added grml-config*).
+
+ -- Michael Prokop <mika@grml.org>  Mon,  5 Dec 2005 12:30:27 +0100
+
+grml-etc (0.5-17) unstable; urgency=low
+
+  * Added alias for 855resolution if 915resolution is present (not everyone
+    knows 915resolution already - drop a messages therefor).
+
+ -- Michael Prokop <mika@grml.org>  Sat,  3 Dec 2005 12:38:04 +0100
+
+grml-etc (0.5-16) unstable; urgency=low
+
+  * Updated /etc/runlevel.conf*-files:
+    - merged order from grml-large to grml-small
+    - activate networking and module-init-tools
+
+ -- Michael Prokop <mika@grml.org>  Thu,  1 Dec 2005 11:12:05 +0100
+
+grml-etc (0.5-15) unstable; urgency=low
+
+  * Suggest grml-shlib in debian/control, sh-lib does not exist anymore.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 30 Nov 2005 00:48:07 +0100
+
+grml-etc (0.5-14) unstable; urgency=low
+
+  * Updated /etc/skel/.zshrc and /etc/grml/screenrc for integration
+    of ip-screen in GNU screen.
+  * Update /etc/apt/sources.list.grml.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 30 Nov 2005 00:14:16 +0100
+
+grml-etc (0.5-13) unstable; urgency=low
+
+  * Updated /etc/apt/sources.lists.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 26 Nov 2005 20:10:43 +0100
+
+grml-etc (0.5-12) unstable; urgency=low
+
+  * Added bindkey '\ei' menu-complete and bindkey "^Os" sudo-command-line
+    to /etc/zsh/zshrc. Activate setopt auto_pushd (important for function
+    'd' defined in /etc/skel/.zshrc).
+  * Added function 'd' for fast directory switching to /etc/skel/.zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 20 Nov 2005 17:35:26 +0100
+
+grml-etc (0.5-11) unstable; urgency=low
+
+  * Adjust initscript for new postgresql version (8.1).
+
+ -- Michael Prokop <mika@grml.org>  Wed, 16 Nov 2005 17:12:19 +0100
+
+grml-etc (0.5-10) unstable; urgency=low
+
+  * added environment variable NOCOR to zshrc so you can
+    deactivate "error completion" in zsh.
+  * added rehash hack for new installed programs to zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 13 Nov 2005 17:04:05 +0100
+
+grml-etc (0.5-9) unstable; urgency=low
+
+  * Let's use colors in /etc/init.d/grml-misc.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 12 Nov 2005 20:33:30 +0100
+
+grml-etc (0.5-8) unstable; urgency=low
+
+  * Updated /etc/runlevel.conf*.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 12 Nov 2005 20:29:37 +0100
+
+grml-etc (0.5-7) unstable; urgency=low
+
+  * Updated /etc/inittab.grml for use with new login settings (no
+    w3m anymore by default but zsh-login).
+  * Updated /etc/init.d/grml-misc.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 10 Nov 2005 23:27:48 +0100
+
+grml-etc (0.5-6) unstable; urgency=low
+
+  * Updated init-script grml-reboot to support script 'noprompt'.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 10 Nov 2005 23:23:28 +0100
+
+grml-etc (0.5-5) unstable; urgency=low
+
+  * Added function urlencode (RFC 2396 URL encoding in Z-Shell)
+    to /etc/skel/.zshrc
+
+ -- Michael Prokop <mika@grml.org>  Sun,  6 Nov 2005 23:35:51 +0100
+
+grml-etc (0.5-4) unstable; urgency=low
+
+  * Set 'Background.File: /usr/share/grml/desktop.jpg' and
+   'Background.Mode: Scale' in /etc/skel/.ideskrc
+
+ -- Michael Prokop <mika@grml.org>  Fri,  4 Nov 2005 16:01:16 +0100
+
+grml-etc (0.5-3) unstable; urgency=low
+
+  * Remove old fluxbox config and use the new one instead.
+  * Updated gkrellm2 config.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  3 Nov 2005 17:18:29 +0100
+
+grml-etc (0.5-2) unstable; urgency=low
+
+  * Added skeleton files for idesk.
+  * Adjusted /etc/skel/.xinitrc
+  * Adjusted /etc/skel/.gkrellm2
+
+ -- Michael Prokop <mika@grml.org>  Thu,  3 Nov 2005 15:38:07 +0100
+
+grml-etc (0.5-1) unstable; urgency=low
+
+  * Bump version number for grml 0.5.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 23 Oct 2005 19:23:44 +0200
+
+grml-etc (0.4-56) unstable; urgency=low
+
+  * Added /etc/init.d/ifupdown-clean and /etc/init.d/ifupdown to
+    /etc/runlevel.conf.*.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 23 Oct 2005 16:42:09 +0200
+
+grml-etc (0.4-55) unstable; urgency=low
+
+  * Ok, moving a diversion to another package sucks that awfull
+    that someone has to pay me to do this...
+
+ -- Michael Prokop <mika@grml.org>  Fri, 21 Oct 2005 17:26:59 +0200
+
+grml-etc (0.4-54) unstable; urgency=low
+
+  * Moved /etc/init.d/postgresql-8.0 to package grml-fixes.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 21 Oct 2005 14:14:23 +0200
+
+grml-etc (0.4-53) unstable; urgency=low
+
+  * Added function doc to /etc/skel/.zshrc, inspired by
+    http://www.livejournal.com/users/go_team_ari/9790.html
+
+ -- Michael Prokop <mika@grml.org>  Fri, 21 Oct 2005 00:15:49 +0200
+
+grml-etc (0.4-52) unstable; urgency=low
+
+  * Updated /etc/init.d/grml-home - important fix for bootparam
+    home=/dev/ice.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 18 Oct 2005 21:46:40 +0200
+
+grml-etc (0.4-51) unstable; urgency=low
+
+  * Updated man2 function in /etc/skel/.zshrc.
+  * Updated /etc/vim/vimrc for usage with vim64. If you are using
+    an older version of vim and notice problems with syntax
+    highlighting adjust the runtime-path in this file.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 15 Oct 2005 12:28:56 +0200
+
+grml-etc (0.4-50) unstable; urgency=low
+
+  * Added /etc/resolv.conf.template - a list of free available DNS-servers.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 11 Oct 2005 20:11:52 +0200
+
+grml-etc (0.4-49) unstable; urgency=low
+
+  * Updated /etc/runlevel* for default usage of cron and postfix
+    on harddisk installations.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  9 Oct 2005 17:20:24 +0200
+
+grml-etc (0.4-48) unstable; urgency=low
+
+  * Added /etc/X11/windowlab/windowlab.menurc.
+  * Added $MAIL to /etc/zsh/zshrc (fixes ion3-issues...) Also "export"
+    $EDITOR and $SHELL.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  9 Oct 2005 13:02:56 +0200
+
+grml-etc (0.4-47) unstable; urgency=low
+
+  * Added (not yet activated) failsafe entry to /etc/skel/.xinitrc.
+  * Removed zsh completion for grml-x as it is provided in
+    /etc/zsh/grml-x.completion by package grml-x.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  8 Oct 2005 22:52:17 +0200
+
+grml-etc (0.4-46) unstable; urgency=low
+
+  * Added '-nousb' to zsh-completion of grml-x in /etc/zsh/zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Wed,  5 Oct 2005 22:51:16 +0200
+
+grml-etc (0.4-45) unstable; urgency=low
+
+  * Updated /etc/zsh/zshrc: use 'NOPRECMD=1 zsh' to disable prexec
+    and precmd functions which update screen-title.
+    Also added alias similar to startx for xinit to avoid use of
+    xinit on live-cd if /etc/X11/xorg.conf is not yet present.
+  * Removed root-command in /etc/skel/.fluxbox/styles/grml/theme.cfg
+    as wallpaper is set in ~/.xinitrc already.
+
+ -- Michael Prokop <mika@grml.org>  Wed,  5 Oct 2005 19:13:21 +0200
+
+grml-etc (0.4-44) unstable; urgency=low
+
+  * Added /etc/locale.gen.grml
+
+ -- Michael Prokop <mika@grml.org>  Sat,  1 Oct 2005 00:46:48 +0200
+
+grml-etc (0.4-43) unstable; urgency=low
+
+  * Added zsh completion for '-noddc' of grml-x.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 30 Sep 2005 13:12:38 +0200
+
+grml-etc (0.4-42) unstable; urgency=low
+
+  * Updated "Shutting down..."-sequence in /etc/init.d/grml-reboot.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 28 Sep 2005 23:57:11 +0200
+
+grml-etc (0.4-41) unstable; urgency=low
+
+  * Added 'ch' to supported values of zsh completion of grml-lang
+    in /etc/zsh/zshrc.
+  * Added function swiki to /etc/skel/.zshrc (thanks, wuehlmaus!).
+
+ -- Michael Prokop <mika@grml.org>  Sat, 24 Sep 2005 23:28:48 +0200
+
+grml-etc (0.4-40) unstable; urgency=low
+
+  * Added /etc/runlevel.conf.livecd, /etc/runlevel.conf.livecd.small,
+    /etc/runlevel.conf.hdinstall.small and /etc/runlevel.conf.hdinstall
+    as we now use file-rc instead of sysv-rc.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 23 Sep 2005 18:56:49 +0200
+
+grml-etc (0.4-39) unstable; urgency=low
+
+  * Updated completion for grml-x.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 22 Sep 2005 16:16:39 +0200
+
+grml-etc (0.4-38) unstable; urgency=low
+
+  * Updated /etc/apt/sources.list.grml.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 21 Sep 2005 22:59:00 +0200
+
+grml-etc (0.4-37) unstable; urgency=low
+
+  * Updated /etc/init.d/grml-reboot for usage with debian's sysvinit.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 20 Sep 2005 00:32:20 +0200
+
+grml-etc (0.4-36) unstable; urgency=low
+
+  * Added /etc/skel/.signature
+  * Added /etc/skel/.fluxbox/styles/Sn33z
+  * Added new and empty directory /etc/skel/News
+
+ -- Michael Prokop <mika@grml.org>  Sun, 18 Sep 2005 23:01:34 +0200
+
+grml-etc (0.4-35) unstable; urgency=low
+
+  * Added /etc/motd.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 16 Sep 2005 23:08:06 +0200
+
+grml-etc (0.4-34) unstable; urgency=low
+
+  * Removed /etc/init.d/hotplug-light.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 16 Sep 2005 18:14:37 +0200
+
+grml-etc (0.4-33) unstable; urgency=low
+
+  * Added some nice ideas of zshrc of Joey Hess to /etc/skel/.zshrc.
+  * Some small addons on /etc/zsh/zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 16 Sep 2005 17:53:19 +0200
+
+grml-etc (0.4-32) unstable; urgency=low
+
+  * Added "Conflicts: smbconf-pfeifle".
+  * Bumbed Standards-Version to 3.6.2.
+  * Added /usr/lib/cups/backend/pdf and /usr/share/cups/model/PS2PDF.ppd
+    based on package smbconf-pfeifle by Klaus Knopper <knoppix@knopper.net>
+    and Kurt Pfeifle <pfeifle@danka.de>.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 11 Sep 2005 12:46:37 +0200
+
+grml-etc (0.4-31) unstable; urgency=low
+
+  * Added /etc/samba/smb.conf (thanks for performance tip, Andi Krennmair!).
+
+ -- Michael Prokop <mika@grml.org>  Sun, 11 Sep 2005 12:25:08 +0200
+
+grml-etc (0.4-30) unstable; urgency=low
+
+  * Added /etc/pcmcia/wlan-ng.conf.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 11 Sep 2005 11:49:08 +0200
+
+grml-etc (0.4-29) unstable; urgency=low
+
+  * Added mapping ',e' and ',l' to /etc/skel/.vimrc.
+  * Updated /etc/apt/sources.list.grml
+
+ -- Michael Prokop <mika@grml.org>  Thu,  1 Sep 2005 15:05:37 +0200
+
+grml-etc (0.4-28) unstable; urgency=low
+
+  * Updated /etc/init.d/postgresql-8.0 (use $VERSION and not '8.0').
+
+ -- Michael Prokop <mika@grml.org>  Tue, 30 Aug 2005 10:24:58 +0200
+
+grml-etc (0.4-27) unstable; urgency=low
+
+  * Added mapping via F7 for handling x-clipboard via xclip to
+    /etc/skel/.vimrc.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 26 Aug 2005 10:53:58 +0200
+
+grml-etc (0.4-26) unstable; urgency=low
+
+  * Deactivated 'setopt NO_clobber' in /etc/zsh/zshrc, it's
+    confusing to many users, especially in /proc-filesystem.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 17 Aug 2005 22:19:07 +0200
+
+grml-etc (0.4-25) unstable; urgency=low
+
+  * Switched from $LOGNAME to 'export HOME=/home/$USER' because
+    of problems with rungetty and autologin.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 14 Aug 2005 14:28:08 +0200
+
+grml-etc (0.4-24) unstable; urgency=low
+
+  * Added /etc/kismet/kismet.conf (providing some more examples).
+
+ -- Michael Prokop <mika@grml.org>  Wed, 10 Aug 2005 14:01:58 +0200
+
+grml-etc (0.4-23) unstable; urgency=low
+
+  * Added /etc/skel/.asoundrc.example (contains example for usage
+    with dmix for direct mixing of multiple streams).
+
+ -- Michael Prokop <mika@grml.org>  Mon,  8 Aug 2005 23:00:57 +0200
+
+grml-etc (0.4-22) unstable; urgency=low
+
+  * Modified /etc/init.d/grml-reboot for usage with script noeject.
+
+ -- Michael Prokop <mika@grml.org>  Mon,  8 Aug 2005 21:10:00 +0200
+
+grml-etc (0.4-21) unstable; urgency=low
+
+  * Renamed function 'leo' to 'oleo' in /etc/skel/.zshrc as leo
+    is a separate program now.
+  * Updated /etc/grml/screenrc_acpi (renamed acpi-screen
+    to 'yacpi -t').
+
+ -- Michael Prokop <mika@grml.org>  Sun,  7 Aug 2005 21:44:36 +0200
+
+grml-etc (0.4-20) unstable; urgency=low
+
+  * Added /etc/skel/.xsession.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 31 Jul 2005 18:29:30 +0200
+
+grml-etc (0.4-19) unstable; urgency=low
+
+  * Updated /etc/apt/sources.list.grml
+  * Added /etc/network/interfaces.examples
+  * Another try to remove /usr/X11R6/lib/X11/xkb/rules/, now it
+    should be really fixed upstream. 8-)
+
+ -- Michael Prokop <mika@grml.org>  Sun, 31 Jul 2005 11:22:41 +0200
+
+grml-etc (0.4-18) unstable; urgency=low
+
+  * Updated /etc/skel/.zsrhc (function suidfind) [thanks, Feh!].
+  * Improved symlink-handling in debian/rules.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 26 Jul 2005 19:44:49 +0200
+
+grml-etc (0.4-17) unstable; urgency=low
+
+  * Added /etc/exports.grml
+  * Added /etc/init.d/postgresql-8.0
+
+ -- Michael Prokop <mika@grml.org>  Tue, 26 Jul 2005 10:43:20 +0200
+
+grml-etc (0.4-16) unstable; urgency=low
+
+  * Let's readd /usr/X11R6/lib/X11/xkb/rules/, should fix the
+    non-working ctrl-alt-f# again.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 21 Jul 2005 19:27:59 +0200
+
+grml-etc (0.4-15) unstable; urgency=low
+
+  * Fix permissions of /etc/mgetty/*.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 16 Jul 2005 11:32:29 +0200
+
+grml-etc (0.4-14) unstable; urgency=low
+
+  * Some cleanups in debian/rules.
+  * Removed empty directory /usr/X11R6/lib/X11/xkb/rules/,
+    should be fixed upstream.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 13 Jul 2005 20:58:39 +0200
+
+grml-etc (0.4-13) unstable; urgency=low
+
+  * Added files which have been fixed without being packaged
+    till now.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 11 Jul 2005 01:28:41 +0200
+
+grml-etc (0.4-12) unstable; urgency=low
+
+  * Added '-nodpms' to zsh's completion of grml-x.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  9 Jul 2005 19:57:50 +0200
+
+grml-etc (0.4-11) unstable; urgency=low
+
+  * Updated /etc/apt/sources.list.grml.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  9 Jul 2005 19:24:37 +0200
+
+grml-etc (0.4-10) unstable; urgency=low
+
+  * Updated /etc/inittab.* for use with mgetty.
+
+ -- Michael Prokop <mika@grml.org>  Tue,  5 Jul 2005 01:07:50 +0200
+
+grml-etc (0.4-9) unstable; urgency=low
+
+  * Added dillo and eterm to Recommends (for xinitrc).
+
+ -- Michael Prokop <mika@grml.org>  Sat, 25 Jun 2005 13:20:24 +0200
+
+grml-etc (0.4-8) unstable; urgency=low
+
+  * Added /etc/skel/.hardcopy (for GNU screen's hardcopy-feature).
+  * Added /etc/inittab.small.
+  * Updated /etc/apt/sources.list.grml.
+  * Removed /etc/skel/.mozilla - it's provided in a separate package
+    from now on: grml-firefox.
+  * Removed /etc/grml/lsb-functions to package grml-autoconfig.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 25 Jun 2005 00:29:16 +0200
+
+grml-etc (0.4-7) unstable; urgency=low
+
+  * Added function dmoz to /etc/skel/.zshrc [thanks, wuehlmaus!].
+
+ -- Michael Prokop <mika@grml.org>  Thu, 23 Jun 2005 10:46:54 +0200
+
+grml-etc (0.4-6) unstable; urgency=low
+
+  * Removed /etc/init.d/grml-autoconfig and put it in it's own package called
+    grml-autoconfig.
+  * Added functions dwicti and ewicti to /etc/skel/.zshrc [thanks, wuehlmaus!].
+
+ -- Michael Prokop <mika@grml.org>  Sun,  5 Jun 2005 18:50:42 +0200
+
+grml-etc (0.4-5) unstable; urgency=low
+
+  * Removed smcup from /etc/skel/.terminfo/mostlike.txt and updated terminfo
+    file [thanks, wuehlmaus!].
+  * Updated /etc/zsh/zshrc - added $MYLESS to check for ~/.terminfo [thanks for
+    help, wuehlmaus!].
+
+ -- Michael Prokop <mika@grml.org>  Tue, 31 May 2005 15:28:52 +0200
+
+grml-etc (0.4-4) unstable; urgency=low
+
+  * Added aliases fbmplayer (:= cmplayer) and fblinks to /etc/skel/.zshrc
+    [thanks, wuehlmaus!].
+
+ -- Michael Prokop <mika@grml.org>  Wed, 25 May 2005 00:02:34 +0200
+
+grml-etc (0.4-3) unstable; urgency=low
+
+  * Removed grml-x-related stuff, placed it in package grml-x.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 24 May 2005 00:01:40 +0200
+
+grml-etc (0.4-2) unstable; urgency=low
+
+  * Updated function mcd in /etc/skel/.zshrc [thanks, Feh!].
+  * Updated /etc/apt/sources.list.grml.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 22 May 2005 14:43:14 +0200
+
+grml-etc (0.4-1) unstable; urgency=low
+
+  * We have a new release.
+
+ -- Michael Prokop <mika@grml.org>  Mon,  9 May 2005 14:45:31 +0200
+
+grml-etc (0.3-40) unstable; urgency=low
+
+  * Updated /etc/init.d/grml-autoconfig and /etc/grml/lsb-functions.
+
+ -- Michael Prokop <mika@grml.org>  Mon,  9 May 2005 09:21:25 +0200
+
+grml-etc (0.3-39) unstable; urgency=low
+
+  * Fixed $PAGER in /etc/skel/.zshrc.
+  * Updated pekwm config (adjusted for pekwm-cvs.deb).
+  * Updated /etc/init.d/grml-reboot, /etc/init.d/grml-autoconfig
+    and /etc/apt/sources.list.grml.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  8 May 2005 23:17:54 +0200
+
+grml-etc (0.3-38) unstable; urgency=low
+
+  * Several fixes in /etc/skel/.zshrc and /etc/zsh/zshrc (merged with grml
+    zsh refcard).
+
+ -- Michael Prokop <mika@grml.org>  Sun,  8 May 2005 20:43:35 +0200
+
+grml-etc (0.3-37) unstable; urgency=low
+
+  * Updated /etc/skel/.zshrc (improved sudo-setup) and /etc/zsh/zshrc
+    (improved also sudo-setup).
+
+ -- Michael Prokop <mika@grml.org>  Sun,  8 May 2005 12:41:21 +0200
+
+grml-etc (0.3-36) unstable; urgency=low
+
+  * Adjusted xset in /etc/skel/.xinitrc.
+  * Updated /etc/zsh/zshrc (use alias su only on grml-cd).
+  * Added theme pwm_beos-pekwm-0.1.4pre1 to /etc/skel/.pekwm/themes (requires
+    latest pekwm-build) [thanks, marcel!].
+
+ -- Michael Prokop <mika@grml.org>  Sat,  7 May 2005 12:11:02 +0200
+
+grml-etc (0.3-35) unstable; urgency=low
+
+  * Added class light to /etc/skel/.Xresources (use via 'xterm -name light').
+  * Added file /etc/skel/.xlocktext.
+  * Added keybinding for xsay to /etc/skel/.fluxbox/keys [thanks, nico!].
+  * Added keybinding for xsay to /etc/skel/.pekwm/keys [thanks, nico!].
+  * Cleaned up /etc/skel/.mozilla.
+
+ -- Michael Prokop <mika@grml.org>  Fri,  6 May 2005 00:54:28 +0200
+
+grml-etc (0.3-34) unstable; urgency=low
+
+  * Added /etc/skel/.w3m/config.
+  * Updated /etc/skel/.Xresources (added rxvt + aterm properties).
+  * Updated /etc/skel/.vimrc (added pastetoggle - f11)
+
+ -- Michael Prokop <mika@grml.org>  Mon,  2 May 2005 18:44:46 +0200
+
+grml-etc (0.3-33) unstable; urgency=low
+
+  * Added simple fbset-completion to /etc/zsh/zshrc.
+  * Added /etc/grml/lsb-functions.
+  * Updated /etc/init.d/grml-reboot und /etc/init.d/grml-autoconfig.
+  * Removed /etc/grml/sh-lib-0.1 [gebi provides it as a debian-package].
+
+ -- Michael Prokop <mika@grml.org>  Mon,  2 May 2005 12:09:53 +0200
+
+grml-etc (0.3-32) unstable; urgency=low
+
+  * Added /etc/vim/vimrc.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 25 Apr 2005 22:55:58 +0200
+
+grml-etc (0.3-31) unstable; urgency=low
+
+  * Moved global aliases from /etc/zsh/zshrc to /etc/skel/.zshrc.
+  * Use alias for startx only when running from CD and if file
+    /etc/X11/xorg.conf does not exist.
+  * Removed /etc/skel/.qt-directory.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 25 Apr 2005 18:31:46 +0200
+
+grml-etc (0.3-30) unstable; urgency=low
+
+  * Added .jackdrc to /etc/skel/.
+  * Added "some useful commands often hard to remember" to /etc/skel/.zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 24 Apr 2005 23:17:59 +0200
+
+grml-etc (0.3-29) unstable; urgency=low
+
+  * Added color-completion in /etc/zsh/zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 24 Apr 2005 19:23:19 +0200
+
+grml-etc (0.3-28) unstable; urgency=low
+
+  * zsh function google should use 'num=100' as default (in
+    /etc/skel/.zshrc).
+  * Updated /etc/apt/sources.list.grml
+
+ -- Michael Prokop <mika@grml.org>  Sat, 23 Apr 2005 14:19:23 +0200
+
+grml-etc (0.3-27) unstable; urgency=low
+
+  * Added compdef for /etc/init.d/-stuff to /etc/zsh/zshrc [thanks,
+    wuehlmaus!].
+  * Moved debian-aliases from /etc/skel/.zshrc to /etc/zsh/zshrc.
+  * Updated manzsh-funtion in /etc/zsh/zshrc [thanks, wuehlmaus!].
+
+ -- Michael Prokop <mika@grml.org>  Fri, 22 Apr 2005 14:20:26 +0200
+
+grml-etc (0.3-26) unstable; urgency=low
+
+  * Fixed wrong path in /etc/skel/.wmi/actions.conf.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 21 Apr 2005 12:30:21 +0200
+
+grml-etc (0.3-25) unstable; urgency=low
+
+  * Integrated xsay into wmi (bound to ctrl-alt-v). Added key-
+    bindings for firefox (alt+f2) and xterm-screen (alt+f1).
+  * Updated /etc/init.d/grml-autoconfig.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 20 Apr 2005 22:42:46 +0200
+
+grml-etc (0.3-24) unstable; urgency=low
+
+  * Added the following files from package xfree86-common
+    so we can remove the package but still have working x.org
+    (which requires some xfree86-files):
+
+     /etc/X11/Xresources/xfree86-common
+     /etc/X11/Xsession.d/20xfree86-common_process-args
+     /etc/X11/Xsession.d/30xfree86-common_xresources
+     /etc/X11/Xsession.d/50xfree86-common_determine-startup
+     /etc/X11/Xsession.d/90xfree86-common_ssh-agent
+     /etc/X11/Xsession.d/99xfree86-common_start
+     /etc/init.d/xfree86-common
+
+ -- Michael Prokop <mika@grml.org>  Wed, 20 Apr 2005 01:03:05 +0200
+
+grml-etc (0.3-23) unstable; urgency=low
+
+  * Updated /etc/skel/.Xmodmap[german].
+  * Removed cdpath from /etc/zsh/zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 19 Apr 2005 23:45:13 +0200
+
+grml-etc (0.3-22) unstable; urgency=low
+
+  * Updated /etc/init.d/grml-reboot (improve output when running grml on
+    harddisk).
+
+ -- Michael Prokop <mika@grml.org>  Tue, 19 Apr 2005 15:19:37 +0200
+
+grml-etc (0.3-21) unstable; urgency=low
+
+  * Added /etc/init.d-function [thanks, wuehlmaus and Julius!].
+
+ -- Michael Prokop <mika@grml.org>  Tue, 19 Apr 2005 13:53:06 +0200
+
+grml-etc (0.3-20) unstable; urgency=low
+
+  * Added /usr/X11R6/lib/X11/xkb/rules/xorg*-files.
+  * Added /etc/skel/.Xmodmap.german and added xmodmap for 'de'
+    to /etc/skel/.xinitrc.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 19 Apr 2005 11:20:42 +0200
+
+grml-etc (0.3-19) unstable; urgency=low
+
+  * Added DISTCC_HOSTS to /etc/zsh/zshenv [thanks, gebi!].
+
+ -- Michael Prokop <mika@grml.org>  Mon, 18 Apr 2005 23:03:34 +0200
+
+grml-etc (0.3-18) unstable; urgency=low
+
+  * Added function manzsh to /etc/zsh/zshrc [thanks, wuehlmaus!].
+  * Added nostart-completion for grml-x in /etc/zsh/zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 17 Apr 2005 20:01:13 +0200
+
+grml-etc (0.3-17) unstable; urgency=low
+
+  * Updated /etc/zsh/zshrc (adjusted grml-wallpaper, don't use
+    ignored-patterns [which might confuse people]).
+
+ -- Michael Prokop <mika@grml.org>  Fri, 15 Apr 2005 17:59:48 +0200
+
+grml-etc (0.3-16) unstable; urgency=low
+
+  * Fixed dynamic module completion of grml-x [/etc/zsh/zshrc].
+
+ -- Michael Prokop <mika@grml.org>  Tue, 12 Apr 2005 20:47:51 +0200
+
+grml-etc (0.3-15) unstable; urgency=low
+
+  * Added "all-in-one gesture"-extension to Mozilla Firefox.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 10 Apr 2005 20:53:12 +0200
+
+grml-etc (0.3-14) unstable; urgency=low
+
+  * Added several extensions for Mozilla Firefox to
+    /etc/skel/.mozilla. Added alias for conkeror.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 10 Apr 2005 17:19:23 +0200
+
+grml-etc (0.3-13) unstable; urgency=low
+
+  * Removed /etc/grml/sh-lib (gebi provides it as an own package).
+
+ -- Michael Prokop <mika@grml.org>  Sat,  9 Apr 2005 20:28:51 +0200
+
+grml-etc (0.3-12) unstable; urgency=low
+
+  * Add Ctrl+Alt+L as keybinding for xlock to the window
+    managers (thanks for ideas, tklauser!):
+      - /etc/skel/.wmi/actions.conf
+      - /etc/skel/.fluxbox/keys
+      - /etc/skel/.pekwm/keys
+  * Complete rewrite of pekwm-config (/etc/skel/.pekwm)
+    due to old config did not work with pekwm-dev-package.
+  * Added pwm2 and pwm3 (part of ion) to zsh-completion of grml-x.
+
+ -- Michael Prokop <mika@grml.org>  Fri,  8 Apr 2005 14:14:20 +0200
+
+grml-etc (0.3-11) unstable; urgency=low
+
+  * Updated /etc/skel/.terminfo/m/mostlike and
+    /etc/skel/.terminfo/mostlike.txt (don't clear screen after
+    running cls - thanks for notice - riesebie; thanks for
+    fix - wuehlmaus!]
+
+ -- Michael Prokop <mika@grml.org>  Mon,  4 Apr 2005 08:18:28 +0200
+
+grml-etc (0.3-10) unstable; urgency=low
+
+  * Updated /etc/zsh/zshrc (new grml-x completion!).
+
+ -- Michael Prokop <mika@grml.org>  Sun,  3 Apr 2005 16:06:55 +0200
+
+grml-etc (0.3-9) unstable; urgency=low
+
+  * Updated /etc/zsh/zshenv (removed 'LESS=C') and /etc/skel/.zshrc (fixed
+    man2) [thanks wuehlmaus!].
+
+ -- Michael Prokop <mika@grml.org>  Sun, 27 Mar 2005 21:41:43 +0200
+
+grml-etc (0.3-8) unstable; urgency=low
+
+  * Updated /etc/inittab.grml.
+  * Updated /etc/init.d/grml-autoconfig.
+  * Updated /etc/init.d/grml-reboot [for use with unionfs].
+
+ -- Michael Prokop <mika@grml.org>  Sun, 20 Mar 2005 22:18:08 +0100
+
+grml-etc (0.3-7) unstable; urgency=low
+
+  * Another zshrc-update.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 19 Mar 2005 23:17:47 +0100
+
+grml-etc (0.3-6) unstable; urgency=low
+
+  * Fixed bug in /etc/zsh/zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 19 Mar 2005 18:20:30 +0100
+
+grml-etc (0.3-5) unstable; urgency=low
+
+  * Changed Architecture to all in debian/rules.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 19 Mar 2005 17:31:43 +0100
+
+grml-etc (0.3-4) unstable; urgency=low
+
+  * Updated /etc/zsh/zshrc (zsh_clear_env and more) and
+    /etc/skel/.zshrc (ogg2mp3_192 and more).
+
+ -- Michael Prokop <mika@grml.org>  Sat, 19 Mar 2005 15:34:50 +0100
+
+grml-etc (0.3-3) unstable; urgency=low
+
+  * Added conkeror-firefox-0.18.xpi to /etc/skel/.mozilla.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 12 Mar 2005 16:34:54 +0100
+
+grml-etc (0.3-2) unstable; urgency=low
+
+  * Removed /etc/skel/.xscreensaver (xscreensaver isn't part of grml).
+    [thanks, nico!]
+
+ -- Michael Prokop <mika@grml.org>  Tue,  8 Mar 2005 22:01:15 +0100
+
+grml-etc (0.3-1) unstable; urgency=low
+
+  * Let's go upstream: /etc/init.d/grml-autoconfig updated.
+  * Updated /etc/zsh/.zshrc (addon by gebi).
+
+ -- Michael Prokop <mika@grml.org>  Thu,  3 Mar 2005 22:57:08 +0100
+
+grml-etc (0.2-19) unstable; urgency=low
+
+  * Another patch for /etc/skel/.wmi/szs2.1/memory.py
+    (thanks, wegi!).
+  * Updated /etc/skel/.screenrc.
+
+ -- Michael Prokop <mika@grml.org>  Wed,  2 Mar 2005 19:48:08 +0100
+
+grml-etc (0.2-18) unstable; urgency=low
+
+  * Adjusted patch for /etc/skel/.wmi/szs2.1/memory.py.
+
+ -- Michael Prokop <mika@grml.org>  Wed,  2 Mar 2005 14:48:37 +0100
+
+grml-etc (0.2-17) unstable; urgency=low
+
+  * Set global.debuglevel=0 in
+    /etc/skel/.wmi/szs2.1/szs.cfg (thanks, wegi!)
+  * Added patch from Christoph Wegscheider to
+    /etc/skel/.wmi/szs2.1/memory.py.
+
+ -- Michael Prokop <mika@grml.org>  Tue,  1 Mar 2005 15:01:19 +0100
+
+grml-etc (0.2-16) unstable; urgency=low
+
+  * Added /etc/skel/.vim/klammerpaare.vim.
+  * Added /etc/skel/.muttngrc.
+  * Updated /etc/skel/.wmi/theme.conf (use absolute path for exec-cmd).
+
+ -- Michael Prokop <mika@grml.org>  Tue,  1 Mar 2005 00:23:12 +0100
+
+grml-etc (0.2-15) unstable; urgency=low
+
+  * Removed /etc/skel/GNUstep (wmaker is no longer part of grml).
+  * Updated /etc/skel/.screenrc [use blue instead of red color].
+  * Updated /etc/zsh/zshrc and /etc/skel/.zshrc.
+  * Updated /etc/skel/.xinitrc (run Xmodmap only if XKEYBOARD == us).
+
+ -- Michael Prokop <mika@grml.org>  Mon, 28 Feb 2005 15:23:43 +0100
+
+grml-etc (0.2-14) unstable; urgency=low
+
+  * Updated /etc/skel/.zshrc and /etc/zsh/zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 26 Feb 2005 23:33:21 +0100
+
+grml-etc (0.2-13) unstable; urgency=low
+
+  * Updated /etc/skel/.wmi.
+  * Updated /etc/skel/.zshrc and /etc/zsh/zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 26 Feb 2005 12:55:38 +0100
+
+grml-etc (0.2-12) unstable; urgency=low
+
+  * Updated /etc/init.d/firewall.
+  * Updated /etc/skel/.screenrc.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 11 Feb 2005 12:07:15 +0100
+
+grml-etc (0.2-11) unstable; urgency=low
+
+  * Another sh-lib update (by gebi).
+  * Updated /etc/skel/.xinitrc (use desktop.jpg instead of desktop.png)
+  * Updated /etc/zsh/zshrc (added hash 'slog').
+
+ -- Michael Prokop <mika@grml.org>  Thu, 10 Feb 2005 09:32:28 +0100
+
+grml-etc (0.2-10) unstable; urgency=low
+
+  * Fixed /etc/grml/sh-lib (thanks to gebi).
+
+ -- Michael Prokop <mika@grml.org>  Thu, 10 Feb 2005 04:13:41 +0100
+
+grml-etc (0.2-9) unstable; urgency=low
+
+  * Updated /etc/zsh/zshrc.
+  * Updated /etc/grml/sh-lib.
+
+ -- Michael Prokop <mika@grml.org>  Wed,  9 Feb 2005 13:04:28 +0100
+
+grml-etc (0.2-8) unstable; urgency=low
+
+  * Updated /etc/skel/.zshrc and /etc/zsh/zshrc.
+  * Updated /etc/init.d/firewall.
+  * Updated /etc/skel/.fluxbox/keys [SendToWorkspace -> Workspace].
+
+ -- Michael Prokop <mika@grml.org>  Mon,  7 Feb 2005 11:46:12 +0100
+
+grml-etc (0.2-7) unstable; urgency=low
+
+  * Removed backtick for acpi in /etc/grml/screenrc.
+  * Added /etc/grml/screenrc_acpi.
+  * Set ~/.fluxbox/styles/grml as default in /etc/skel/.fluxbox/init.
+
+ -- Michael Prokop <mika@grml.org>  Fri,  4 Feb 2005 11:36:05 +0100
+
+grml-etc (0.2-6) unstable; urgency=low
+
+  * Again fixes in /etc/grml/screenrc and /etc/skel/.screenrc.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  3 Feb 2005 18:39:42 +0100
+
+grml-etc (0.2-5) unstable; urgency=low
+
+  * Removed /etc/grml/screenrc_grml (orphan).
+  * Fixed /etc/grml/screenrc.
+  * Updated /etc/grml/sh-lib. [thanks, gebi]
+
+ -- Michael Prokop <mika@grml.org>  Wed,  2 Feb 2005 19:02:36 +0100
+
+grml-etc (0.2-4) unstable; urgency=low
+
+  * Added a2ps config to /etc/skel.
+  * Updated /etc/skel/.Xresources.
+  * Updated /etc/grml/screenrc (backtick commands).
+  * Updated /etc/init.d/grml-reboot (NOEJECT, NOPROMPT, `seq 1 40`).
+  * Updated /etc/skel/.vimrc.
+  * Updated /etc/zsh/zsh{rc,env} and /etc/skel/.zshrc.
+  * Added 'Suggests: grml-scripts' to debian/control (for screen's
+    acpi-screen).
+
+ -- Michael Prokop <mika@grml.org>  Sat, 29 Jan 2005 14:20:31 +0100
+
+grml-etc (0.2-3) unstable; urgency=low
+
+  * Updated /etc/zsh/zshrc and /etc/zsh/zshenv.
+  * Fixed symlink /etc/skel/.irssi/scripts/autorun/scriptassist.pl
+    which points now to /usr/share/irssi/scripts/scriptassist.pl
+    instead of /GRML/..... [thanks, Jimmy!]
+  * Fixed /etc/skel/.terminfo/mostlike-stuff (changed 'smul=\E[32m'
+    to 'smul=\E[1;32m') [thanks, Matthias!]
+
+ -- Michael Prokop <mika@grml.org>  Thu, 27 Jan 2005 16:12:33 +0100
+
+grml-etc (0.2-2) unstable; urgency=low
+
+  * Fixed some stuff in grml-autoconfig to be able to release grml 0.2.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  9 Jan 2005 22:16:33 +0100
+
+grml-etc (0.2-1) unstable; urgency=low
+
+  * Update of /etc/init.d/grml-reboot (sysvinit-fix).
+  * Update of /etc/init.d/grml-misc.
+  * Update of /etc/init.d/grml-home.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  9 Jan 2005 19:30:50 +0100
+
+grml-etc (0.1-25) unstable; urgency=low
+
+  * Update of zshrc:
+    - using "e" glob qualifier by Peter Stephenson via function nt
+    - make zshrc more compatible to older zsh versions
+
+ -- Michael Prokop <mika@grml.org>  Sun,  9 Jan 2005 12:36:04 +0100
+
+grml-etc (0.1-24) unstable; urgency=low
+
+  * Removed .xpm files out of debian/conffiles.
+  * Removed /etc/grml_version [adjust it in chroot].
+
+ -- Michael Prokop <mika@grml.org>  Sun,  9 Jan 2005 11:06:50 +0100
+
+grml-etc (0.1-23) unstable; urgency=low
+
+  * Fixed several bugs in /etc/skel/.fluxbox.
+  * Removed fluxbox-styles: Calabi, Nuevat3k-Glacier,
+    Magraxx, sea and Nuevat3k-Glacier.
+  * Updated /etc/grml/screenrc and /etc/skel.screenrc (changed
+    static entries 'root' and 'grml' to $USER).
+  * Fixed zshrc (removed setopt in precmd), otherwise
+    you'll get zsh parse error when running (unreal)
+    commands like:
+       FOO=mika test' "$FOO" = "mika" ; echo "FOO = $FOO"
+
+ -- Michael Prokop <mika@grml.org>  Sat,  8 Jan 2005 14:53:49 +0100
+
+grml-etc (0.1-22) unstable; urgency=low
+
+  * Updated /etc/skel/.pekwm/keys.
+
+ -- Michael Prokop <mika@grml.org>  Fri,  7 Jan 2005 11:31:29 +0100
+
+grml-etc (0.1-21) unstable; urgency=low
+
+  * Added /etc/skel/.pekwm.
+  * Changed first visible workspace of ion2 to workspace1 in
+    /etc/skel/.ion2/default-session--0.
+  * Added ion3-configuration default-session--0 to /etc/skel/.ion3.
+  * Updated compdef grml-x in /etc/zsh/zshrc.
+  * Added /etc/grml_colors.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  6 Jan 2005 15:54:23 +0100
+
+grml-etc (0.1-20) unstable; urgency=low
+
+  * Moved /etc/inittab to /etc/inittab.grml so people can use
+    their own sources.list but still can see what grml uses.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  6 Jan 2005 11:54:13 +0100
+
+grml-etc (0.1-19) unstable; urgency=low
+
+  * Added .snownews to /etc/skel.
+  * Moved /etc/apt/sources.list to /etc/apt/sources.list.grml
+    so people can use their own sources.list but still can see
+    what grml uses.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  6 Jan 2005 11:08:08 +0100
+
+grml-etc (0.1-18) unstable; urgency=low
+
+  * Added 'xset -m'-command to /etc/skel/.xinitrc.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 29 Dec 2004 23:52:27 +0100
+
+grml-etc (0.1-17) unstable; urgency=low
+
+  * Added dpkg-divert for /etc/skel/.zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 29 Dec 2004 12:13:38 +0100
+
+grml-etc (0.1-16) unstable; urgency=low
+
+  * Updated /etc/apt/sources.list.
+  * Added /etc/skel/.centericq/external.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 22 Dec 2004 22:34:56 +0100
+
+grml-etc (0.1-15) unstable; urgency=low
+
+  * Fixed tty6-entry in /etc/inittab (grml-screen does not work
+    with kernel 2.6.9-grml via inittab due to PTY-problems).
+
+ -- Michael Prokop <mika@grml.org>  Wed, 22 Dec 2004 22:14:56 +0100
+
+grml-etc (0.1-14) unstable; urgency=low
+
+  * Added rawdog-configuration to skeleton-files.
+  * Updated zshrc ("keep"-hack).
+  * Updated /etc/apt/sources.list.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 18 Dec 2004 15:31:21 +0100
+
+grml-etc (0.1-13) unstable; urgency=low
+
+  * Changed discover-setup.
+    -> Devel-release!
+
+ -- Michael Prokop <mika@grml.org>  Sun, 12 Dec 2004 17:35:06 +0100
+
+grml-etc (0.1-12) unstable; urgency=low
+
+  * Added hardware detection via discover to grml-autoconfig.
+    -> Devel-release!
+
+ -- Michael Prokop <mika@grml.org>  Sun, 12 Dec 2004 12:26:58 +0100
+
+grml-etc (0.1-11) unstable; urgency=low
+
+  * Improved cpu-detection in grml-autoconfig.
+  * Changed shebang-line from /bin/sh to /bin/zsh in grml-autoconfig.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 11 Dec 2004 20:14:39 +0100
+
+grml-etc (0.1-10) unstable; urgency=low
+
+  * Updated zshrc (precmd/preexec).
+
+ -- Michael Prokop <mika@grml.org>  Thu,  9 Dec 2004 13:01:36 +0100
+
+grml-etc (0.1-9) unstable; urgency=low
+
+  * Fixed grml-autoconfig error (here-document).
+
+ -- Michael Prokop <mika@grml.org>  Thu,  9 Dec 2004 12:29:30 +0100
+
+grml-etc (0.1-8) unstable; urgency=low
+
+  * Added /etc/grml/screen_multisession.
+
+ -- Michael Prokop <mika@grml.org>  Wed,  8 Dec 2004 14:28:20 +0100
+
+grml-etc (0.1-7) unstable; urgency=low
+
+  * Removed console-log, added 'less +F' on tty12 to inittab.
+  * Updated zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  5 Dec 2004 13:39:10 +0100
+
+grml-etc (0.1-6) unstable; urgency=low
+
+  * Added cpu-detection to grml-autoconfig.
+  * Added .msmtprc to skeleton-files.
+  * Updated zshrc.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  4 Dec 2004 15:45:21 +0100
+
+grml-etc (0.1-5) unstable; urgency=low
+
+  * Updated screenrc (nethack on), zshrc, /etc/inittab.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 16 Nov 2004 13:16:35 +0100
+
+grml-etc (0.1-4) unstable; urgency=low
+
+  * Fixed grml-autoconfig error.
+
+ -- Michael Prokop <mika@grml.org>  Mon,  8 Nov 2004 09:52:30 +0100
+
+grml-etc (0.1-3) unstable; urgency=low
+
+  * Updated /etc/grml_version and /etc/apt/sources.list.
+
+ -- Michael Prokop <mika@grml.org>  Fri,  5 Nov 2004 13:24:20 +0100
+
+grml-etc (0.1-2) unstable; urgency=low
+
+  * Updated /etc/apt/sources.list.
+  * Update of grml-autoconfig and grml-home.
+  * Added auto.master and automount.sh from automount-knoppix-0.5.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  4 Nov 2004 20:43:59 +0100
+
+grml-etc (0.1-1) unstable; urgency=low
+
+  * fixed /etc/skel/.fluxbox/init
+  * updated /etc/apt/sources.list
+
+ -- Michael Prokop <mika@grml.org>  Thu, 28 Oct 2004 13:41:23 +0200
+
+grml-etc (0.1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 28 Sep 2004 11:18:03 +0200
+

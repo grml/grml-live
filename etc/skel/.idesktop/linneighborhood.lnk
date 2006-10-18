@@ -1,0 +1,8 @@
+table Icon
+  Caption: LinNeighborhood
+  Command: /usr/bin/LinNeighborhood
+  Icon: /home/grml/.idesktop/icons/l33t_DES_samba.png
+  X: 774
+  Y: 13
+end
+

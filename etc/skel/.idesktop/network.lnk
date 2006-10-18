@@ -1,0 +1,8 @@
+table Icon
+  Caption: configure network
+  Command: /usr/bin/x-terminal-emulator -T "grml-network" -e sudo /usr/sbin/grml-network
+  Icon: /home/grml/.idesktop/icons/l33t_DEV_network.png
+  X: 158
+  Y: 331
+end
+

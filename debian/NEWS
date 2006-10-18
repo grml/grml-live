@@ -1,0 +1,12 @@
+grml-etc (0.8-11) unstable; urgency=low
+
+  Notice: the files in /etc/zsh/, /etc/grml/, /etc/apt/, /etc/vim/,
+  /etc/grml_*, /etc/network/, /etc/skel/.vim/, /etc/vim/vimrc,
+  /etc/skel/.zsh/ and  /etc/skel/.zshrc have been moved to the
+  package named grml-etc-core. The package grml-etc-core is meant
+  for installation on plain Debian (stable/testing/unstable) systems.
+  You don't have to do anything at all, grml-etc depends on package
+  grml-etc-core so it will be installed automatically right now.
+  If you notice any problems with the move please report it!
+
+ -- Michael Prokop <mika@grml.org>  Fri, 15 Sep 2006 14:43:22 +0200

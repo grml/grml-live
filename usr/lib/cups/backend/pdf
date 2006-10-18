@@ -1,0 +1,169 @@
+#!/bin/sh
+# originally written by Michael Goffioul; modified & adapted by Kurt 
+# Pfeifle as part of is "Learning Shell Scripting" efforts. (WARNING:
+# THIS WAS MY FIRST SHELL SCRIPT!) 
+#
+# This script is intended to be used as a CUPS backend, to create
+# PDFs file on-the-fly. Just create a printer using the device URI
+# 'pdf:/path/to/dir/. When printing to this printer, a PDF file will
+# be generated in the directory specified. The file name will either
+# be "<jobname>-<some-other-info>.pdf" or "unknown-<printtime>.pdf", 
+# depending wether the jobname is empty or not.
+#
+# Attention: CUPS backends run with root privileges -- and so does
+# ---------- this script! Use at your own risk!
+#
+# To use it, simply copy this script to your backend directory, and
+# create a printer with the correct URI. That's it.
+#
+# In case you don't know how to create the PDF creating " printer",
+# here is a reminder (you need the ps2pdf.ppd' in the CUPS default
+# 'model' directory "/usr/share/cups/model/", and it needs to be
+# a generic PostScript-PPD such as the distiller.ppd from Adobe)::
+#
+#  "lpdmin -p pdfwriter -v pdf:/home/grml/PDFs -E -m ps2pdf.ppd"
+#
+# Copyright (C) Michael Goffioul (goffioul@imec.be) 2001
+#           (C) Kurt Pfeifle <kpfeifle@danka.de> 2002
+
+
+# debug off by default; comment in if you desire debugging info....
+#DEBUG="yes"
+
+if [ x"${DEBUG}" = x"yes" ]; then
+	set -x
+	LOGFILE="/tmp/pdf.log"
+else
+	# debug off:
+	LOGFILE="/dev/null"
+fi
+
+PDFBIN=`which ps2pdf`
+FILENAME= 
+PRINTTIME=`date +%b%d-%H%M%S`
+
+# first log a few things into the log file....
+echo " "   >> ${LOGFILE}
+echo  "####################################" >> ${LOGFILE}
+echo  "print and log time is ${PRINTTIME}" >> ${LOGFILE}
+echo  arg0  $0 >> ${LOGFILE}  # printer
+echo  arg1  $1 >> ${LOGFILE}  # job
+echo  arg2  $2 >> ${LOGFILE}  # user
+echo  arg3  $3 >> ${LOGFILE}  # title
+echo  arg4  $4 >> ${LOGFILE}  # options
+echo  arg5  $5 >> ${LOGFILE}  # copies
+echo  arg6  $6 >> ${LOGFILE}  # <filename>; empty if taken from 'stdin'
+echo  args no. is '$#' = $# 		>> ${LOGFILE}
+echo  PRINTTIME   ${PRINTTIME} 		>> ${LOGFILE}
+echo  PATH   ${PATH}  			>> ${LOGFILE}
+echo  SOFTWARE   ${SOFTWARE}  		>> ${LOGFILE}
+echo  USER   ${USER}  			>> ${LOGFILE}
+echo  CHARSET   ${CHARSET}  		>> ${LOGFILE}
+echo  LANG   ${LANG}  			>> ${LOGFILE}
+echo  TZ   ${TZ}  			>> ${LOGFILE}
+echo  PPD   ${PPD}  			>> ${LOGFILE}
+echo  CUPS_SERVERROOT  ${CUPS_SERVERROOT}  >> ${LOGFILE}
+echo  RIP_MAX_CACHE   ${RIP_MAX_CACHE}  >> ${LOGFILE}
+echo  TMPDIR   $TMPDIR  		>> ${LOGFILE}
+echo  CONTENT_TYPE   $CONTENT_TYPE  	>> ${LOGFILE}
+echo  DEVICE_URI   ${DEVICE_URI}  	>> ${LOGFILE}
+echo  PRINTER   ${PRINTER}  		>> ${LOGFILE}
+echo  CUPS_DATADIR   ${CUPS_DATADIR}  	>> ${LOGFILE}
+echo  CUPS_FONTPATH   ${CUPS_FONTPATH}  >> ${LOGFILE}
+echo  "Executable: ${PDFBIN}" 		>> ${LOGFILE}
+echo  "Arguments: | 1: $1 | 2: $2 | 3: $3 | 4: $4 | 5: $5 | 6: $6 |" >> ${LOGFILE}
+echo " "   				>> ${LOGFILE}
+echo "Executable: ${PDFBIN}" 		>> ${LOGFILE}
+echo " "   				>> ${LOGFILE}
+
+# case of no argument, *MUST* print available URI to satisfy cupsd's
+# startup query and test for backend availability
+if [ $# -eq 0 ]; then
+	if [ ! -x "$PDFBIN" ]; then
+		exit 0
+	fi
+	echo "direct pdf \"Unknown\" \"PDF Writing\""
+	exit 0
+fi 
+
+# case of wrong number of arguments
+if [ $# -ne 5 -a $# -ne 6 ]; then
+	echo "Usage: pdf job-id user title copies options [file]"
+	exit 1
+fi 
+
+# get PDF directory from device URI, and check write status
+PDFDIR=${DEVICE_URI#pdf:}
+if [ ! -d "${PDFDIR}" -o ! -w "${PDFDIR}" ]; then
+	echo "ERROR: directory ${PDFDIR} not writable"
+	exit 1
+fi 
+
+echo "PDF directory: ${PDFDIR}" >> ${LOGFILE} 
+
+
+# sanitize the job-title (may contain weird characters if printed fromm
+# browser...)
+TITLE=${3}
+
+
+# first the spaces.....
+TITLE=`echo ${TITLE} | tr [:blank:] _`;
+
+[ x"${DEBUG}" = x"yes" ] && echo "removed all spaces from original name of jobfile. Name is now ${TITLE}"           >> ${LOGFILE};
+
+# next the colons....
+TITLE=`echo ${TITLE} | tr : _`;
+[ x"${DEBUG}" = x"yes" ] && echo "removed all colons from original name of jobfile. Name is now ${TITLE}"           >> ${LOGFILE};
+
+# then the slashes....
+TITLE=`echo ${TITLE} | tr / _`;
+[ x"${DEBUG}" = x"yes" ] && echo "removed all slashes from original name of jobfile. Name is now ${TITLE}"          >> ${LOGFILE};
+
+# then the question-marks....
+TITLE=`echo ${TITLE} | tr ? _`;
+[ x"${DEBUG}" = x"yes" ] && echo "removed all question marks from original name of jobfile. Name is now ${TITLE}"   >> ${LOGFILE};
+
+# last the backslashes....
+TITLE=`echo ${TITLE} | tr "\134" _`;
+[ x"${DEBUG}" = x"yes" ] && echo "removed all backslashes from original name of jobfile. Name is now ${TITLE}"      >> ${LOGFILE};
+
+# we should now have a sanitized ${TITLE} to use with less danger of screwing things up....
+
+SANITIZED_TITLE=${TITLE}
+
+# generate output filename
+OUTPUTFILENAME=
+if [ "$3" = "" ]; then
+	OUTPUTFILENAME="${PDFDIR}/unknown-${PRINTTIME}.pdf"
+else
+	# OUTPUTFILENAME="${PDFDIR}/${3//[^[:alnum:]]/_}.pdf"
+	# I changed this to user name, and the printtime to track down who
+	# printed the PDF and when; Samba printing possibly uses 'nobody'...
+
+	OUTPUTFILENAME="${PDFDIR}/${SANITIZED_TITLE}-${PRINTTIME}-${USER}-${2}.pdf"
+	echo "PDF file: $OUTPUTFILENAME placed in: ${PDFDIR}" >> ${LOGFILE}
+fi 
+
+echo "Output file name: $OUTPUTFILENAME" >> ${LOGFILE} 
+
+# run ghostscript
+if [ $# -eq 6 ]; then
+	$PDFBIN $6 "$OUTPUTFILENAME"
+#>& /dev/null
+else
+	$PDFBIN - "$OUTPUTFILENAME"  
+#  >& /dev/null
+fi
+
+sleep 10
+
+# modify ownership and permissions on the file
+#  - world readable
+#  - owns to user specified in argument
+chmod a+r "$OUTPUTFILENAME"
+if [ "$2" != "" ]; then
+	chown $2 "$OUTPUTFILENAME"
+fi 
+
+exit 0

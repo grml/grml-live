@@ -1,0 +1,8 @@
+table Icon
+  Caption: emacs
+  Command: /usr/bin/emacs
+  Icon: /home/grml/.idesktop/icons/l33t_TXT_emacs.png
+  X: 534
+  Y: 13
+end
+

@@ -1,0 +1,73 @@
+#!/bin/sh
+# Filename:      /etc/init.d/ssh
+# Purpose:       start and stop the OpenBSD "secure shell(tm)" daemon including keyeneration
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Mon Jul 11 01:26:29 CEST 2005 [mika]
+################################################################################
+
+test -x /usr/sbin/sshd || exit 0
+( /usr/sbin/sshd -\? 2>&1 | grep -q OpenSSH ) 2>/dev/null || exit 0
+
+# forget it if we're trying to start, and /etc/ssh/NOSERVER exists
+if expr "$1" : '.*start$' >/dev/null && [ -e /etc/ssh/NOSERVER ]; then
+    echo "Not starting OpenBSD Secure Shell server (/etc/ssh/NOSERVER)"
+    exit 0
+fi
+
+# Configurable options:
+KEYGEN=/usr/bin/ssh-keygen
+RSA1_KEY=/etc/ssh/ssh_host_key
+RSA_KEY=/etc/ssh/ssh_host_rsa_key
+DSA_KEY=/etc/ssh/ssh_host_dsa_key
+
+case "$1" in
+  start)
+        test -f /etc/ssh/sshd_not_to_be_run && exit 0
+    if ! test -f $RSA1_KEY ; then
+        echo "Generating SSH1 RSA host key..."
+        $KEYGEN -t rsa1 -f $RSA1_KEY -C '' -N '' || exit 1
+    fi
+    if ! test -f $RSA_KEY ; then
+        echo "Generating SSH RSA host key..."
+        $KEYGEN -t rsa -f $RSA_KEY -C '' -N '' || exit 1
+    fi
+    if ! test -f $DSA_KEY ; then
+        echo "Generating SSH2 DSA host key..."
+        $KEYGEN -t dsa -f $DSA_KEY -C '' -N '' || exit 1
+    fi
+        echo -n "Starting OpenBSD Secure Shell server: sshd"
+        start-stop-daemon --start --quiet --pidfile /var/run/sshd.pid --exec /usr/sbin/sshd
+        echo "."
+        ;;
+  stop)
+        echo -n "Stopping OpenBSD Secure Shell server: sshd"
+        start-stop-daemon --stop --quiet --oknodo --pidfile /var/run/sshd.pid --exec /usr/sbin/sshd
+        echo "."
+        ;;
+
+  reload|force-reload)
+        test -f /etc/ssh/sshd_not_to_be_run && exit 0
+        echo -n "Reloading OpenBSD Secure Shell server's configuration"
+        start-stop-daemon --stop --signal 1 --quiet --oknodo --pidfile /var/run/sshd.pid --exec /usr/sbin/sshd
+        echo "."
+        ;;
+
+  restart)
+        test -f /etc/ssh/sshd_not_to_be_run && exit 0
+        echo -n "Restarting OpenBSD Secure Shell server: sshd"
+        start-stop-daemon --stop --quiet --oknodo --pidfile /var/run/sshd.pid --exec /usr/sbin/sshd
+        sleep 10
+        start-stop-daemon --start --quiet --pidfile /var/run/sshd.pid --exec /usr/sbin/sshd
+        echo "."
+        ;;
+
+  *)
+        echo "Usage: /etc/init.d/ssh {start|stop|reload|force-reload|restart}"
+        exit 1
+esac
+
+exit 0
+
+## END OF FILE #################################################################

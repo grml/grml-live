@@ -1,0 +1,193 @@
+# Filename:      ~/.rawdog/config
+# Purpose:       config file for rawdog
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Don Dez 16 15:30:09 CET 2004 [mika]
+################################################################################
+
+# All paths in this file should be either absolute, or relative to your .rawdog
+# directory.
+# If you want to include another config file, then use "include FILENAME".
+
+# Times in this file are specified as a value and a unit (for instance,
+# "4h").  Units available are "s" (seconds), "m" (minutes), "h" (hours),
+# "d" (days) and "w" (weeks). If no unit is specified, rawdog will
+# assume minutes.
+# Boolean (yes/no) values in this file are specified as "true" or "false".
+
+# The maximum number of articles to show on the generated page.
+# Set this to 0 for no limit.
+maxarticles 200
+
+# The maximum age of articles to show on the generated page.
+# Set this to 0 for no limit.
+maxage 0
+
+# The age after which articles will be discarded if they do not appear
+# in a feed. Set this to a larger value if you want your rawdog output
+# to cover more than a day's worth of articles.
+expireage 1d
+
+# Whether to only display articles that are currently included in a feed
+# (useful for "planet" pages where you only want to display the current
+# articles from several feeds). If this is false, rawdog will keep a
+# history of older articles.
+currentonly false
+
+# Whether to divide the articles up by day, writing a "dayformat" heading
+# before each set.
+daysections true
+
+# The format to write day headings in. See "man strftime" for more
+# information; for example:
+# %A, %d %B           Wednesday, 21 January
+# %Y-%m-%d            2004-01-21 (ISO 8601 format)
+dayformat %A, %d %B
+
+# Whether to divide the articles up by time, writing a "timeformat" heading
+# before each set.
+timesections true
+
+# The format to write time headings in. For example:
+# %H:%M               06:07 (ISO 8601 format)
+# %I:%M %p            18:07 PM
+timeformat %H:%M
+
+# The format to display feed update and article times in. For example:
+# %H:%M, %A, %d %B    18:07, Wednesday, 21 January
+# %Y-%m-%d %H:%M      2004-01-21 18:07 (ISO 8601 format)
+datetimeformat %H:%M, %A, %d %B
+
+# The template file to use, or "default" to use the built-in template
+# (which is probably sufficient for most users). Use "rawdog -t" to show
+# the template currently in use as a starting-point for customisation.
+# The following strings will be replaced in the output:
+# __version__         The rawdog version in use
+# __refresh__         The HTML 4 <meta http-equiv="refresh" ...> header
+# __items__           The aggregated items
+# __num_items__       The number of items on the page
+# __feeds__           The listing of feeds
+# __num_feeds__       The number of feeds listed
+template default
+
+# Similarly, the template used for each item shown. Use "rawdog -T" to
+# show the template currently in use as a starting-point for
+# customisation. The following strings will be replaced in the output:
+# __title__           The item title (as an HTML link, if possible)
+# __title_no_link__   The item title (as text)
+# __url__             The item's URL, or the empty string if it doesn't
+#                     have one
+# __description__     The item's descriptive text, or the empty string
+#                     if it doesn't have a description
+# __date__            The item's date as provided by the feed
+# __added__           The date the article was received by rawdog
+# __hash__            A hash of the article (useful for summary pages)
+# __feed_title__      The feed title (as an HTML link, if possible)
+# __feed_title_no_link__
+#                     The feed title (as text)
+# __feed_url__        The feed URL
+# __feed_hash__       A hash of the feed URL (useful for per-feed styles)
+# Simple conditional expansion is possible by saying something like
+# "__if_items__ hello __endif__"; the text between the if and endif will
+# only be included if __items__ would expand to something other than
+# the empty string. Ifs can be nested, and __else__ is supported. (This also
+# works for the "template" option, but it's only really useful for item
+# templates.)
+itemtemplate default
+
+# Where to write the output HTML to. You should place style.css in the same
+# directory. Specify this as "-" to write the HTML to stdout.
+outputfile /home/mika/rawdog.html
+
+# Whether to use a <meta http-equiv="Refresh" ...> tag in the generated
+# HTML to indicate that the page should be refreshed automatically. If
+# this is turned on, then the page will refresh every N minutes, where N
+# is the shortest feed period value specified below.
+# (This works by controlling whether the default template includes
+# __refresh__; if you use a custom template, __refresh__ is always
+# available.)
+userefresh true
+
+# Whether to show the list of active feeds in the generated HTML.
+# (This works by controlling whether the default template includes
+# __feeds__; if you use a custom template, __feeds__ is always
+# available.)
+showfeeds true
+
+# The time that rawdog will wait before considering a feed unreachable
+# when trying to connect. If you're getting lots of timeout errors and
+# are on a slow connection, increase this.
+# (Unlike other times in this file, this will be assumed to be in
+# seconds if no unit is specified.)
+timeout 30s
+
+# Whether to ignore timeouts. If this is false, timeouts will be reported as
+# errors; if this is true, rawdog will silently ignore them.
+ignoretimeouts false
+
+# Whether to display verbose status messages saying what rawdog's doing
+# while it runs. Specifying -v or --verbose on the command line is
+# equivalent to saying "verbose true" here.
+verbose false
+
+# Whether to attempt to turn feed-provided HTML into valid HTML.
+# The most common problem that this solves is a non-closed element in an
+# article causing formatting problems for the rest of the page.
+# If this option is turned on, you must have the mx.Tidy Python module
+# installed.
+tidyhtml false
+
+# Whether the articles displayed should be sorted first by the date
+# provided in the feed (useful for "planet" pages, where you're
+# displaying several feeds and want new articles to appear in the right
+# chronological place). If this is false, then articles will first be
+# sorted by the time that rawdog first saw them.
+sortbyfeeddate false
+
+# The fields to use when detecting duplicate articles: "id" is the article's
+# unique ID or GUID; "link" is the article's link. rawdog will find the first
+# one of these that's present in the article, and ignore the article if it's
+# seen an article before (in any feed) that had the same value.  For example,
+# specifying "hideduplicates id link" will first look for id/guid, then for
+# link.
+# Note that some feeds use the same link for all their articles; if you specify
+# "link" here, you will probably want to specify the "allowduplicates" feed
+# argument (see below) for those feeds.
+hideduplicates id
+
+# The period to use for new feeds added to the config file via the -a|--add
+# option.
+newfeedperiod 3h
+
+# Whether rawdog should automatically update this config file (and its
+# internal state) if feed URLs change (for instance, if a feed URL
+# results in a permanent HTTP redirect). If this is false, then rawdog
+# will ask you to make the necessary change by hand.
+changeconfig true
+
+# The feeds you want to watch, in the format "feed period url [args]".
+# The period is the minimum time between updates; if less than period
+# minutes have passed, "rawdog update" will skip that feed. Specifying
+# a period less than 30 minutes is considered to be bad manners; it is
+# suggested that you make the period as long as possible.
+# Arguments are optional, and are of the form "key=value", seperated by spaces;
+# possible arguments are:
+# user                User for HTTP basic authentication
+# password            Password for HTTP basic authentication
+# format              "text" to indicate that the descriptions in this feed
+#                     are unescaped plain text (rather than the usual HTML),
+#                     and should be escaped and wrapped in a <pre> element
+# X_proxy             Proxy URL for protocol X (for instance, "http_proxy")
+# proxyuser           User for proxy basic authentication
+# proxypassword       Password for proxy basic authentication
+# allowduplicates     "true" to disable duplicate detection for this feed
+# You can specify as many feeds as you like.
+#feed 1h http://www.advogato.org/rss/articles.xml
+#feed 30m http://news.bbc.co.uk/rss/newsonline_uk_edition/front_page/rss091.xml
+#feed 3h http://diveintomark.org/xml/rss.xml
+#feed 3h http://secretfeed.example.com/secret.rss user=bob password=secret
+#feed 3h http://brokenfeeds.com/my.rss format=text
+#feed 3h http://proxyfeed.example.com/proxied.rss http_proxy=http://localhost:1234/
+#feed 3h http://dupsfeed.example.com/duplicated.rss allowduplicates=true
+feed 12h http://www.grml.org/index.rss

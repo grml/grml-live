@@ -1,0 +1,8 @@
+table Icon
+  Caption: OpenOffice2
+  Command: /usr/bin/ooffice2
+  Icon: /home/grml/.idesktop/icons/l33t_OFF_openoffice.png
+  X: 1174
+  Y: 493
+end
+

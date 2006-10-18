@@ -1,0 +1,120 @@
+cookie_accept_domains 
+cookie_reject_domains 
+accept_bad_cookie 0
+accept_cookie 0
+use_cookie 0
+ssl_ca_file 
+ssl_ca_path 
+ssl_key_file 
+ssl_cert_file 
+ssl_verify_server 0
+ssl_forbid_method 
+no_cache 0
+noproxy_netaddr 1
+no_proxy 
+ftp_proxy 
+gopher_proxy 
+https_proxy 
+http_proxy 
+use_proxy 1
+max_news 50
+nntpmode 
+nntpserver 
+dns_order 0
+meta_refresh 0
+follow_redirection 10
+default_url 0
+retry_http 1
+argv_is_url 0
+accept_media text/*, image/*, application/*, video/*, message/*, audio/*
+accept_encoding gzip, compress, bzip, bzip2, deflate
+accept_language en;q=1.0
+no_referer 0
+user_agent 
+pre_form_file ~/.w3m/pre_form
+ftppass_hostnamegen 1
+ftppasswd 
+disable_secret_security_check 0
+passwd_file ~/.w3m/passwd
+use_lessopen 0
+bgextviewer 1
+extbrowser3 
+extbrowser2 
+extbrowser /usr/bin/lynx
+mailer 
+editor /usr/local/bin/vim
+urimethodmap ~/.w3m/urimethodmap, /usr/local/etc/w3m/urimethodmap
+mailcap ~/.w3m/mailcap, /etc/mailcap
+mime_types ~/.mime.types, /etc/mime.types
+index_file 
+cgi_bin 
+personal_document_root 
+document_root 
+keymap_file keymap
+preserve_timestamp 1
+decode_cte 0
+clear_buffer 1
+fixed_wheel_scroll_count 5
+relative_wheel_scroll_ratio 30
+relative_wheel_scroll 0
+reverse_mouse 0
+use_mouse 1
+migemo_command migemo -t egrep /usr/share/migemo/migemo-dict
+use_migemo 1
+ignorecase_search 1
+wrap_search 0
+mark_all_pages 0
+vi_prec_num 1
+emacs_like_lineedit 1
+mark 1
+close_tab_back 0
+confirm_qq 1
+save_hist 1
+history 100
+use_history 1
+pagerline 10000
+visited_color magenta
+visited_anchor 0
+active_color white
+active_style 0
+bg_color terminal
+mark_color cyan
+form_color red
+image_color green
+anchor_color cyan
+basic_color terminal
+color 1
+nextpage_topline 0
+label_topline 0
+show_srch_str 1
+show_lnum 0
+fold_line 0
+image_map_list 1
+imgdisplay /usr/lib/w3m/w3mimgdisplay
+# imgdisplay /usr/bin/fbview
+image_scale 100
+ext_image_viewer 1
+max_load_image 4
+auto_image 1
+display_image 1
+view_unseenobject 1
+ignore_null_img_alt 1
+display_ins_del 1
+fold_textarea 0
+graphic_char 1
+alt_entity 0
+multicol 0
+dictcommand file:///$LIB/w3mdict.cgi
+use_dictcommand 0
+dirlist_cmd file:///$LIB/dirlist.cgi
+ext_dirlist 1
+display_lineinfo 0
+decode_url 0
+display_link 1
+open_tab_dl_list 0
+open_tab_blank 0
+target_self 0
+frame 1
+pixel_per_line 14
+pixel_per_char 8
+tabstop 8
