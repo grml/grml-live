@@ -30,8 +30,6 @@ install: build
 	# Add here commands to install the package into debian/grml-etc.
 	cp -a etc/                       debian/grml-etc/
 	cp -a usr/                       debian/grml-etc/
-	ln -s /usr/share/irssi/scripts/scriptassist.pl \
-	debian/grml-etc/etc/skel/.irssi/scripts/autorun/scriptassist.pl 
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -50,6 +48,7 @@ binary-arch: build install
 	dh_link /etc/rcS.d/important_notice /etc/rc4.d/important_notice
 	dh_link /etc/rcS.d/important_notice /etc/rc5.d/important_notice
 	dh_link /etc/rcS.d/important_notice /etc/rc6.d/important_notice
+	dh_link /usr/share/irssi/scripts/scriptassist.pl /etc/skel/.irssi/scripts/autorun/scriptassist.pl
 	dh_compress
 	mkdir -p debian/grml-etc/usr/share/lintian/overrides/ 
 	cp -av debian/overrides debian/grml-etc/usr/share/lintian/overrides/grml-etc
