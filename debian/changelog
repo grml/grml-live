@@ -1,3 +1,9 @@
+grml-etc (0.8-25) unstable; urgency=low
+
+  * Don't ship /etc/auto.master and /etc/automount.sh anymore.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 18 Oct 2006 22:53:07 +0200
+
 grml-etc (0.8-24) unstable; urgency=low
 
   * Make sure we (un)divert /etc/skel/.zshrc only if diversion
