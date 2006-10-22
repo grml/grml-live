@@ -1,0 +1,1231 @@
+grml-autoconfig (0.5-15) unstable; urgency=low
+
+  * config_language: duplicate the getbootparam keyboard code to make
+    sure /etc/grml/language-functions does not overwrite our values...
+
+ -- Michael Prokop <mika@grml.org>  Thu, 12 Oct 2006 13:00:17 +0200
+
+grml-autoconfig (0.5-14) unstable; urgency=low
+
+  * Check for existence of
+    /usr/share/consolefonts/Lat15-Terminus16.psf.gz
+
+ -- Michael Prokop <mika@grml.org>  Sat,  7 Oct 2006 23:37:28 +0200
+
+grml-autoconfig (0.5-13) unstable; urgency=low
+
+  * Don't export $COUNTRY and $CHARSET anymore.
+
+ -- Michael Prokop <mika@grml.org>  Wed,  4 Oct 2006 10:39:24 +0200
+
+grml-autoconfig (0.5-12) unstable; urgency=low
+
+  * Change 'chown grml.grml ...' into 'chown grml: ...'. Thanks, Worf!
+  * Remove /etc/sysconfig/.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 28 Sep 2006 16:30:42 +0200
+
+grml-autoconfig (0.5-11) unstable; urgency=low
+
+  * Use KEYTABLE="gr-utf8" for greek-utf8.
+  * grml-autoconfig script: change keyboard into language.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 25 Sep 2006 10:23:04 +0200
+
+grml-autoconfig (0.5-10) unstable; urgency=low
+
+  * Rewrote language code:
+    - support $LANG-utf8
+    - use the script grml-setlang instead of output variable to
+      /etc/environment and /etc/sysconfig/*
+    - use CHARSET="iso8859-15" by default, support some new languages
+    - config_environment, config_running_from and config_keyboard
+      are deprecate now
+  * Removed discover from Suggests and added alsa-utils instead.
+  * Check for presence of aumix and amixer binaries in config_mixer.
+  * Cleanup of "doubled logic checks" like
+    "if ! [ -z ..." => "if [ -n ..."].
+  * Check whether a swap partition is used already and inform user
+    about it. Support LABELs as well.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 23 Sep 2006 12:10:32 +0200
+
+grml-autoconfig (0.5-9) unstable; urgency=low
+
+  * Use "amixer get Front" in config_mixer so the IBM notebooks
+    have sound by default as well. Thanks Jimmy for debugging
+    and code-base!
+
+ -- Michael Prokop <mika@grml.org>  Sun, 17 Sep 2006 16:29:28 +0200
+
+grml-autoconfig (0.5-8) unstable; urgency=low
+
+  * Check for lo device in /etc/network/run/ifstate before
+    running "ifup lo".
+  * Clean /etc/network/status/ before writing into it.
+  * Change { pump... } into ( pump... ).
+
+ -- Michael Prokop <mika@grml.org>  Sat, 16 Sep 2006 15:08:30 +0200
+
+grml-autoconfig (0.5-7) unstable; urgency=low
+
+  * Move /etc/grml/lsb-functions to package grml-etc-core.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 16 Sep 2006 11:03:43 +0200
+
+grml-autoconfig (0.5-6) unstable; urgency=low
+
+  * Write status of pump into /etc/network/status/$DEVICE.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 15 Sep 2006 18:44:35 +0200
+
+grml-autoconfig (0.5-5) unstable; urgency=low
+
+  * Set CONFIG_CREATE_MNT_DIRS=no and warn when create_mnt_dirs()
+    is executed as grml-rebuildfstab does all we need from now on.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 11 Sep 2006 21:39:56 +0200
+
+grml-autoconfig (0.5-4) unstable; urgency=low
+
+  * Deactivate creation of /mnt/*-directories as grml-rebuildfstab
+    >= 0.3-1 takes care of it. Depend on grml-rebuildfstab package
+    >= 0.3-1 therefore.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 11 Sep 2006 15:51:22 +0200
+
+grml-autoconfig (0.5-3) unstable; urgency=low
+
+  * Run chpasswd with '-m' option.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 15 Aug 2006 12:35:54 +0200
+
+grml-autoconfig (0.5-2) unstable; urgency=low
+
+  * Run 'ifup lo' only in live-cd mode...
+
+ -- Michael Prokop <mika@grml.org>  Sat, 12 Aug 2006 14:08:32 +0200
+
+grml-autoconfig (0.5-1) unstable; urgency=low
+
+  * Bumb version, grml 0.8 is coming closer...
+
+ -- Michael Prokop <mika@grml.org>  Fri, 11 Aug 2006 11:48:44 +0200
+
+grml-autoconfig (0.4-33) unstable; urgency=low
+
+  * Use ifup instead of ifconfig for bringing up lo in
+    config_local_net().
+
+ -- Michael Prokop <mika@grml.org>  Thu, 10 Aug 2006 09:14:51 +0200
+
+grml-autoconfig (0.4-32) unstable; urgency=low
+
+  * Drop unused config_splash().
+
+ -- Michael Prokop <mika@grml.org>  Fri,  4 Aug 2006 12:14:50 +0200
+
+grml-autoconfig (0.4-31) unstable; urgency=low
+
+  * Use "timeout 4" when running dd on floppy drive. Thanks, Gebi!
+
+ -- Michael Prokop <mika@grml.org>  Fri,  4 Aug 2006 10:12:34 +0200
+
+grml-autoconfig (0.4-30) unstable; urgency=low
+
+  * Check for running hal/d-bus and warn in acpid sequence then.
+  * Improved apm-stuff in config_acpi_apm.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 21 Jul 2006 13:06:52 +0200
+
+grml-autoconfig (0.4-29) unstable; urgency=low
+
+  * Moved generic $LANGUAGE stuff into its own file named
+    /etc/grml/language-functions so we can source the file
+    in grml-autoconfig and grml-scripts without having to
+    maintain it in several places.
+  * Write $LANG-stuff in config_environment to /etc/default/locales
+    if the file does not exist yet.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 18 Jul 2006 19:59:47 +0200
+
+grml-autoconfig (0.4-28) unstable; urgency=low
+
+  * Send errors to $DEBUG in checkgrmlsmall() and checkgrmlusb()
+    as there are people out there using grml-autoconfig on plain
+    Debian systems where /etc/grml_version does not exist. :)
+
+ -- Michael Prokop <mika@grml.org>  Tue, 18 Jul 2006 18:41:51 +0200
+
+grml-autoconfig (0.4-27) unstable; urgency=low
+
+  * The "oh, I love GNU" Release.
+  * Adjusted tail command to get rid of the "Warning: "+number" syntax is
+    deprecated, please use "-n +number"".
+  * Added $CONFIG_BLANKING to disable console blanking (on request
+    by Marc 'Zugschlus' Haber).
+  * Added header to be Init Script LSB-compliant, see
+    http://wiki.debian.org/LSBInitScripts for details.
+
+ -- Michael Prokop <mika@grml.org>  Fri,  7 Jul 2006 21:58:57 +0200
+
+grml-autoconfig (0.4-26) unstable; urgency=low
+
+  * Added support for /etc/init.d/boolocal.{pre,middle,post}.
+  * Added manpage grml-bootsplash.1.
+  * grml-bootsplash: switched to /bin/bash to make lintian happy,
+    improved error handling as well.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  4 Jun 2006 14:03:00 +0200
+
+grml-autoconfig (0.4-25) unstable; urgency=low
+
+  * Added textbased bootsplash support based on contribution
+    by Florian Keller <Florian.Keller@zuerich.ch>, thanks!
+  * Run language stuff at the beginning so the fonts are
+    switched earlier.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 27 May 2006 11:23:15 +0200
+
+grml-autoconfig (0.4-24) unstable; urgency=low
+
+  * Reorderd $KEYTABLE check in config_environment.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 14 May 2006 21:30:47 +0200
+
+grml-autoconfig (0.4-23) unstable; urgency=low
+
+  * Added '-m' option to consolechars call.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 14 May 2006 17:13:40 +0200
+
+grml-autoconfig (0.4-22) unstable; urgency=low
+
+  * Moved check for bootoption [x]keyboard=... to config_environment.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 14 May 2006 16:59:34 +0200
+
+grml-autoconfig (0.4-21) unstable; urgency=low
+
+  * Adjust KEYTABLE of bootoption keyboard=de/at via
+    /etc/sysconfig/keyboard, otherwise we've a racecondition.
+  * Reworked charset code to run it on all tty's.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 14 May 2006 12:18:24 +0200
+
+grml-autoconfig (0.4-20) unstable; urgency=low
+
+  * The 'oh, we are lintian-clean again even though #360534' Release.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 12 May 2006 21:48:30 +0200
+
+grml-autoconfig (0.4-19) unstable; urgency=low
+
+  * Take KEYTABLE="de-latin1-nodeadkeys" for bootoptions keyboard=de
+    and keyboard=at.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 12 May 2006 21:32:21 +0200
+
+grml-autoconfig (0.4-18) unstable; urgency=low
+
+  * Added pump to depends. Thanks, Florian Keller!
+
+ -- Michael Prokop <mika@grml.org>  Fri,  5 May 2006 13:01:11 +0200
+
+grml-autoconfig (0.4-17) unstable; urgency=low
+
+  * Support multiline settings in /cdrom/bootparams/*. Patch
+    contributed by Florian Keller, thanks!
+
+ -- Michael Prokop <mika@grml.org>  Thu,  4 May 2006 22:48:43 +0200
+
+grml-autoconfig (0.4-16) unstable; urgency=low
+
+  * Adjusted $XKEYBOARD and $KDEKEYBOARD as suggested by
+    Florian Keller, thanks!
+
+ -- Michael Prokop <mika@grml.org>  Wed,  3 May 2006 09:37:44 +0200
+
+grml-autoconfig (0.4-15) unstable; urgency=low
+
+  * Move $CMDLINE before the checkbootparam "nocolor" code.
+    Switch order of display and sourcing lsb-functions.
+  * Don't run bootlogd via initscript as startup might be
+    prevented via /etc/default/bootlogd.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 30 Apr 2006 16:10:29 +0200
+
+grml-autoconfig (0.4-14) unstable; urgency=low
+
+  * grml-autoconfig script reads in current state of options now.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 30 Apr 2006 14:55:57 +0200
+
+grml-autoconfig (0.4-13) unstable; urgency=low
+
+  * Removed config_color as it is handled when sourcing lsb-functions.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 30 Apr 2006 13:01:54 +0200
+
+grml-autoconfig (0.4-12) unstable; urgency=low
+
+  * Use consolechars instead of charset for $CHARMAP.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 30 Apr 2006 12:02:39 +0200
+
+grml-autoconfig (0.4-11) unstable; urgency=low
+
+  * Fixed wrong logic of nocolor check.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 30 Apr 2006 11:49:46 +0200
+
+grml-autoconfig (0.4-10) unstable; urgency=low
+
+  * Check for bootoption nocolor and source
+    /etc/grml/lsb-functions with RC_NOCOLOR=yes then.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 30 Apr 2006 01:00:03 +0200
+
+grml-autoconfig (0.4-9) unstable; urgency=low
+
+  * Fixed bootlogd problems, now we are starting it through the
+    init script.
+  * Fixed problem with loading charset because of using the
+    wrong variable. Thanks to Maciej 'harnir' Delmanowski!
+
+ -- Michael Prokop <mika@grml.org>  Sun, 30 Apr 2006 00:01:49 +0200
+
+grml-autoconfig (0.4-8) unstable; urgency=low
+
+  * reworked language section
+    - improve indenting of case $LANGUAGE code...
+    - use Lat15-Terminus16 as default console font if
+      bootoption "nodefaultfont" isn't used, depend on
+      package console-terminus therefore
+    - use console font Lat2-Terminus16 instead of iso02g,
+      reported by Maciej 'harnir' Delmanowski, thanks!
+    - rename "Activating keyboard settings" to "Activating
+      language settings"
+    - add (deactivated) CONSOLEFONT to /etc/grml/autoconfig[.small]
+  * removed time-stuff from grml-autoconfig interface
+  * fixed name of keyboard code in grml-autoconfig interface
+  * added support for iso02 charmaps in config_keyboard, thanks to
+    Maciej 'harnir' Delmanowski!
+
+ -- Michael Prokop <mika@grml.org>  Fri, 28 Apr 2006 22:35:34 +0200
+
+grml-autoconfig (0.4-7) unstable; urgency=low
+
+  * Run config_time and config_timezone only in live-mode.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 23 Apr 2006 20:05:51 +0200
+
+grml-autoconfig (0.4-6) unstable; urgency=low
+
+  * We must use $LANG for LC_ALL and LC_MESSAGES.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 22 Apr 2006 00:06:54 +0200
+
+grml-autoconfig (0.4-5) unstable; urgency=low
+
+  * config_environment: set LC_MESSAGES to $LANGUAGE
+    and LC_ALL to $LANGUAGE in /etc/environment
+
+ -- Michael Prokop <mika@grml.org>  Fri, 21 Apr 2006 15:32:05 +0200
+
+grml-autoconfig (0.4-4) unstable; urgency=low
+
+  * Use /bin/ls instead of ls to prevent alias errors when
+    running interactive.
+  * Check for mounted /mnt/grml before unmounting.
+  * Always set returncode for variable $RC, avoid race conditions.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 21 Apr 2006 00:39:18 +0200
+
+grml-autoconfig (0.4-3) unstable; urgency=low
+
+  * Reworked config_fwtimeout for low default firmware timeout
+    of kernel.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  9 Apr 2006 12:28:39 +0200
+
+grml-autoconfig (0.4-2) unstable; urgency=low
+
+  * Don't run code from config_environment on hd-installation.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  8 Apr 2006 14:06:07 +0200
+
+grml-autoconfig (0.4-1) unstable; urgency=low
+
+  *  New grml version.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  6 Apr 2006 16:18:43 +0200
+
+grml-autoconfig (0.3-14) unstable; urgency=low
+
+  * config_fstab: don't try to create empty dirs in /mnt/.
+
+ -- Michael Prokop <mika@grml.org>  Wed,  5 Apr 2006 23:56:50 +0200
+
+grml-autoconfig (0.3-13) unstable; urgency=low
+
+  * Removed discover from grml-autoconfig interface. Nobody
+    needs that nowadays anymore...
+  * Activate config_fstab by default again in grml-autoconfig
+    interface.
+  * Reordered execution of $UID check and mktemp in grml-autoconfig
+    interface.
+
+ -- Michael Prokop <mika@grml.org>  Mon,  3 Apr 2006 00:36:58 +0200
+
+grml-autoconfig (0.3-12) unstable; urgency=low
+
+  * Updated manpage.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 30 Mar 2006 00:25:14 +0200
+
+grml-autoconfig (0.3-11) unstable; urgency=low
+
+  * Reworked config_cpu(). Don't let the kernel decide what
+    cpufrequency modules we want but do it on our own using
+    the new cpufreq-detect.sh from grml-scripts.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 24 Mar 2006 11:25:38 +0100
+
+grml-autoconfig (0.3-10) unstable; urgency=low
+
+  * Improved config_swspeak (added sound output).
+
+ -- Michael Prokop <mika@grml.org>  Thu, 23 Mar 2006 12:04:46 +0100
+
+grml-autoconfig (0.3-9) unstable; urgency=low
+
+  * Don't run rebuildfstab by default on hd-install's anymore via
+    grml-autoconfig script.
+  * Renamed CONFIG_FSTABUSER to CONFIG_USERFSTAB so adjusting
+    values via grml-autoconfig does not conflict with CONFIG_FSTAB.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 25 Feb 2006 20:02:58 +0100
+
+grml-autoconfig (0.3-8) unstable; urgency=low
+
+  * Added detection of software-suspend swap partitions to
+    config_fstab. Support use of ANYSWAP as well.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 19 Feb 2006 14:42:49 +0100
+
+grml-autoconfig (0.3-7) unstable; urgency=low
+
+  * Print $CMDLINE when in debug mode.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 16 Feb 2006 22:26:24 +0100
+
+grml-autoconfig (0.3-6) unstable; urgency=low
+
+  * Deactivated the 'not running under zsh' warning.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 10 Feb 2006 23:42:28 +0100
+
+grml-autoconfig (0.3-5) unstable; urgency=low
+
+  * Added an additional check for label on floppy disks via blkid
+    if running dd was successful to config_automount. Hopefully this
+    fixes the annoying 'GRMLCFG does not work with floppy disk'
+    problem. Needs some testing on real, problematic hardware though.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 31 Jan 2006 01:05:15 +0100
+
+grml-autoconfig (0.3-4) unstable; urgency=low
+
+  * Switched some einfo messages to ewarn
+    ("Skipping .. as requested" stuff).
+
+ -- Michael Prokop <mika@grml.org>  Sun, 22 Jan 2006 15:11:12 +0100
+
+grml-autoconfig (0.3-3) unstable; urgency=low
+
+  * Adjusted $MEM variables in config_small to better react on low
+    memory systems.
+  * Bumbed required udev version in depends to version 0.080-1.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 21 Jan 2006 23:19:11 +0100
+
+grml-autoconfig (0.3-2) unstable; urgency=low
+
+  * Moved discover from depends to suggests. Added check for /sbin/discover
+    to config_discover.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 21 Jan 2006 20:12:01 +0100
+
+grml-autoconfig (0.3-1) unstable; urgency=low
+
+  * The 'hey, get your winterschlapfn' release.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 21 Jan 2006 13:43:30 +0100
+
+grml-autoconfig (0.2-49) unstable; urgency=low
+
+  * Oh, I forgot to print the 'no $IP'-code in config_distcc
+    only if bootparam distcc is set. Nothing serious, fixed anyway.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 20 Jan 2006 21:50:09 +0100
+
+grml-autoconfig (0.2-48) unstable; urgency=low
+
+  * Improved info messages in config_distcc. Don't try to start
+    distcc if no valid ip address or interface is available.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 20 Jan 2006 20:43:53 +0100
+
+grml-autoconfig (0.2-47) unstable; urgency=low
+
+  * Fixed volume handling in config_mixer (empty default variable).
+  * Wait until $IP is set in config_distcc or continue after 10 tries.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 20 Jan 2006 14:09:32 +0100
+
+grml-autoconfig (0.2-46) unstable; urgency=low
+
+  * Switched order of execution of config_kernel and config_vmware.
+  * Added bootoption novmware to skip execution of vmware specific
+    stuff.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 16 Jan 2006 22:02:57 +0100
+
+grml-autoconfig (0.2-45) unstable; urgency=low
+
+  * Fixed racecondition with unquoted $VARIABLES (thanks, Gebi!).
+
+ -- Michael Prokop <mika@grml.org>  Sun, 15 Jan 2006 22:39:16 +0100
+
+grml-autoconfig (0.2-44) unstable; urgency=low
+
+  * Improved output of config_modem.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Jan 2006 23:28:52 +0100
+
+grml-autoconfig (0.2-43) unstable; urgency=low
+
+  * speechd-up does not start through grml-autoconfig, so start
+    it manually after booting. Changed an einfo to eend as well.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Jan 2006 22:51:07 +0100
+
+grml-autoconfig (0.2-42) unstable; urgency=low
+
+  * Run speechd-up in daemon mode.
+  * Disable config_pcmcia by default now (cardmgr is obsolete
+    with current kernel and udev).
+  * Removed pcmcia and firewirefix from grml-autoconfig interface.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Jan 2006 18:34:50 +0100
+
+grml-autoconfig (0.2-41) unstable; urgency=low
+
+  * Added - experimental - config_swspeak / CONFIG_SWSPEAK
+    (run software synthesizer via speakup).
+
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Jan 2006 14:47:48 +0100
+
+grml-autoconfig (0.2-40) unstable; urgency=low
+
+  * Removed config_keyboard_cmdline and moved code from there to
+    config_language to avoid racecondition. Now using bootoptions
+    lang, keyboard and xkeyboard should work at the same time.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 12 Jan 2006 21:23:54 +0100
+
+grml-autoconfig (0.2-39) unstable; urgency=low
+
+  * Updated config_pcmcia so it works with new pcmciautils package,
+    where cardmgr isn't present anymore. Needs some tests, though.
+  * Install autoconfig.functions with permissions 755 so it can
+    be executed.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 12 Jan 2006 18:09:06 +0100
+
+grml-autoconfig (0.2-38) unstable; urgency=low
+
+  * Updated config_ipv6.
+
+ -- Michael Prokop <mika@grml.org>  Mon,  9 Jan 2006 22:19:21 +0100
+
+grml-autoconfig (0.2-37) unstable; urgency=low
+
+  * Added ipv6 bootoption (thanks, Stephan Peijnik!). Needs
+    some testing though.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  8 Jan 2006 22:57:22 +0100
+
+grml-autoconfig (0.2-36) unstable; urgency=low
+
+  * Improved config_cpu:
+    - removed UUOL
+    - check for cpudyn-support (thanks, Stephan Peijnik!)
+  * Warn if running not under zsh.
+  * Switched 'eend 0 || eend 1' statements to 'eend $?'.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  8 Jan 2006 16:54:22 +0100
+
+grml-autoconfig (0.2-35) unstable; urgency=low
+
+  * Oh, wrong logic for $VOL in config_mixer. Fixed.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  8 Jan 2006 00:29:14 +0100
+
+grml-autoconfig (0.2-34) unstable; urgency=low
+
+  * Modified $NOSWAP logic in config_fstab for infotext.
+  * Add bootoption nofirewiredev in config_firewire_dev.
+  * Set CONFIG_FIREWIRE_DEV to no by default.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  8 Jan 2006 00:08:57 +0100
+
+grml-autoconfig (0.2-33) unstable; urgency=low
+
+  * Check for return codes in interface (thanks for hint, Gebi).
+
+ -- Michael Prokop <mika@grml.org>  Sat,  7 Jan 2006 14:19:44 +0100
+
+grml-autoconfig (0.2-32) unstable; urgency=low
+
+  * Don't try to create stuff like /proc/bus/usb in config_fstab.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  7 Jan 2006 12:26:53 +0100
+
+grml-autoconfig (0.2-31) unstable; urgency=low
+
+  * Use wm-ng (fluxbox with addons) as default window manager for
+    bootoption startx.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  7 Jan 2006 11:53:14 +0100
+
+grml-autoconfig (0.2-30) unstable; urgency=low
+
+  * Added bootoption vol for setting volumes via aumix to config_mixer.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  5 Jan 2006 19:45:54 +0100
+
+grml-autoconfig (0.2-29) unstable; urgency=low
+
+  * Add function iszsh to autoconfig.functions and use setopt only
+    if running with zsh.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  5 Jan 2006 17:37:20 +0100
+
+grml-autoconfig (0.2-28) unstable; urgency=low
+
+  * Call rmnologin with start-option (thx4hint, Marc!).
+  * Don't output the 'overall' text in RAM-info.
+
+ -- Michael Prokop <mika@grml.org>  Wed,  4 Jan 2006 14:29:18 +0100
+
+grml-autoconfig (0.2-27) unstable; urgency=low
+
+  * Improved output of RAM-info.
+
+ -- Michael Prokop <mika@grml.org>  Tue,  3 Jan 2006 23:10:54 +0100
+
+grml-autoconfig (0.2-26) unstable; urgency=low
+
+  * Don't use discover by default anymore (udev does that now).
+  * Rewrote config_blacklist:
+    - run it only on live-cd
+    - use /etc/modprobe.d/grml
+  * Removed hotplug-light from grml-autoconfig interface and
+    set default for discover to 'off'.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 31 Dec 2005 18:22:25 +0100
+
+grml-autoconfig (0.2-25) unstable; urgency=low
+
+  * Some small changes in look'n'feel.
+  * Run config_small earlier.
+  * Rewrote output code of discover function.
+  * Rewrote code of config_acpi_apm.
+  * Added CONFIG_SETKEYCODES.
+  * Lot's of code cleanups.
+  * Rewrote bootoptions passwd and ssh.
+  * Implemented bootoption blacklist (notice: not used currently).
+
+ -- Michael Prokop <mika@grml.org>  Tue, 27 Dec 2005 19:37:48 +0100
+
+grml-autoconfig (0.2-24) unstable; urgency=low
+
+  * Added check for RAM to config_small.
+  * Switched log_* lsb-functions to e* stuff.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 27 Dec 2005 17:17:49 +0100
+
+grml-autoconfig (0.2-23) unstable; urgency=low
+
+  * Fixed typo in config_fstab.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 21 Dec 2005 10:26:32 +0100
+
+grml-autoconfig (0.2-22) unstable; urgency=low
+
+  * Don't use static values for grml-autoconfig interface.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 18 Dec 2005 21:55:06 +0100
+
+grml-autoconfig (0.2-21) unstable; urgency=low
+
+  * Use 'harddisk' instead of 'Harddisk' as infotext (thx4hint,
+    Jens Kubieziel!).
+
+ -- Michael Prokop <mika@grml.org>  Sat, 17 Dec 2005 23:16:39 +0100
+
+grml-autoconfig (0.2-20) unstable; urgency=low
+
+  * Added config_debnet (thanks, Marc Haber!).
+
+ -- Michael Prokop <mika@grml.org>  Sat, 17 Dec 2005 18:54:25 +0100
+
+grml-autoconfig (0.2-19) unstable; urgency=low
+
+  * Fixed bug in config_cdrom_scripts which prevented
+    execution of files in /cdrom/scripts/.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 13 Dec 2005 19:16:45 +0100
+
+grml-autoconfig (0.2-18) unstable; urgency=low
+
+  * Run grml2hd-noninteractive inside GNU screen.
+  * Deactivate hotplug(-light) as udev handles this stuff
+    already.
+  * Added config_vmware (creates xorg.conf based on template).
+
+ -- Michael Prokop <mika@grml.org>  Sun, 11 Dec 2005 12:39:34 +0100
+
+grml-autoconfig (0.2-17) unstable; urgency=low
+
+  * Some clean ups in lsb-functions.
+
+ -- Michael Prokop <mika@grml.org>  Mon,  5 Dec 2005 11:21:11 +0100
+
+grml-autoconfig (0.2-16) unstable; urgency=low
+
+  * Adjusted hotplug-system for use with udev >=0.076-4.
+  * Merged gentoo-functions into lsb-functions.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  4 Dec 2005 23:31:38 +0100
+
+grml-autoconfig (0.2-15) unstable; urgency=low
+
+  * Added bootoption 'nomodules' to disable loading of modules
+    defined in /etc/grml/modules.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  3 Dec 2005 15:31:00 +0100
+
+grml-autoconfig (0.2-14) unstable; urgency=low
+
+  * Support module-init-tools-style of loading specific modules
+    through /etc/grml/modules - only available when running from
+    CD.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  3 Dec 2005 12:42:03 +0100
+
+grml-autoconfig (0.2-13) unstable; urgency=low
+
+  * Adjust /etc/hosts when using bootparam 'hostname=...' as well.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  1 Dec 2005 13:23:10 +0100
+
+grml-autoconfig (0.2-12) unstable; urgency=low
+
+  * Use getent for getting fstabuser.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 26 Nov 2005 19:58:02 +0100
+
+grml-autoconfig (0.2-11) unstable; urgency=low
+
+  * Upps, spelling error in fstab infotext - fixed that.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 21 Nov 2005 22:45:52 +0100
+
+grml-autoconfig (0.2-10) unstable; urgency=low
+
+  * Added infotext to config_fstab how to disable fstab generation.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 21 Nov 2005 15:58:59 +0100
+
+grml-autoconfig (0.2-9) unstable; urgency=low
+
+  * 855resolution is now 915resolution.
+  * Added support for setting hostname via bootparam 'hostname=...'.
+  * Added bootparam distcc, set via distcc=$NETWORK,$LISTENER.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 16 Nov 2005 18:31:41 +0100
+
+grml-autoconfig (0.2-8) unstable; urgency=low
+
+  * Just a small cosmetic fix in GRMLCFG-code.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 10 Nov 2005 23:38:16 +0100
+
+grml-autoconfig (0.2-7) unstable; urgency=low
+
+  * Adjusted output of floppy mount of GRMLCFG device.
+  * Removed debug output in language code.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 10 Nov 2005 10:51:23 +0100
+
+grml-autoconfig (0.2-6) unstable; urgency=low
+
+  * Some small bugfixes in config_swap.
+  * Improved language settings. Setting LANGUAGE is now also possible
+    via configuring $LANGUAGE in /etc/grml/autoconfig.
+
+ -- Michael Prokop <mika@grml.org>  Tue,  8 Nov 2005 13:49:23 +0100
+
+grml-autoconfig (0.2-5) unstable; urgency=low
+
+  * Added CONFIG_FAST for skipping startup of w3m via bootparam
+    'fast'.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  6 Nov 2005 16:25:12 +0100
+
+grml-autoconfig (0.2-4) unstable; urgency=low
+
+  * Added /etc/init.d/grml-autoconfig.strace
+
+ -- Michael Prokop <mika@grml.org>  Thu,  3 Nov 2005 17:03:37 +0100
+
+grml-autoconfig (0.2-3) unstable; urgency=low
+
+  * Added check for existence of /usr/X11R6/bin/X in startx
+    bootparam.
+
+ -- Michael Prokop <mika@grml.org>  Tue,  1 Nov 2005 19:32:44 +0100
+
+grml-autoconfig (0.2-2) unstable; urgency=low
+
+  * Fixed message of accessing floppy disk in config_automount.
+
+ -- Michael Prokop <mika@grml.org>  Tue,  1 Nov 2005 18:46:11 +0100
+
+grml-autoconfig (0.2-1) unstable; urgency=low
+
+  * Let's bumb version to 0.2 as grml-autoconfig is already shipped
+    with grml 0.5.
+  * Let's drop /etc/init.d/grml-autoconfig.old
+  * Changed access to floppy device from mount command to dd
+    in config_automount (thanks for idea, gebi!).
+
+ -- Michael Prokop <mika@grml.org>  Tue,  1 Nov 2005 18:35:50 +0100
+
+grml-autoconfig (0.1-56) unstable; urgency=low
+
+  * Added infotext in config_automount.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 23 Oct 2005 16:35:37 +0200
+
+grml-autoconfig (0.1-55) unstable; urgency=low
+
+  * Improved device handling in config_automount.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 23 Oct 2005 15:25:26 +0200
+
+grml-autoconfig (0.1-54) unstable; urgency=low
+
+  * Automounting works so added CONFIG_AUTOMOUNT to autoconfig
+    and autoconfig.small.
+  * Improved config_debug so we can use screen with full featured
+    shell (providing job handling).
+  * We have to use directory /cdrom/bootparams/ and not a single
+    file for multisessions.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 23 Oct 2005 12:45:09 +0200
+
+grml-autoconfig (0.1-53) unstable; urgency=low
+
+  * Invoke a /bin/zsh after running grml2hd in non-interactive
+    mode in any case.
+  * We do need check for /cdrom/bootparams in /etc/init.d/grml-autoconfig
+    of course.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 23 Oct 2005 00:40:13 +0200
+
+grml-autoconfig (0.1-52) unstable; urgency=low
+
+  * Finished documentation in /etc/grml/autoconfig[.small].
+
+ -- Michael Prokop <mika@grml.org>  Thu, 20 Oct 2005 11:42:26 +0200
+
+grml-autoconfig (0.1-51) unstable; urgency=low
+
+  * Only a small clean up of info message in config_homedir.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 18 Oct 2005 21:52:31 +0200
+
+grml-autoconfig (0.1-50) unstable; urgency=low
+
+  * Updated config_modem (don't start if it sl-modem is not present).
+
+ -- Michael Prokop <mika@grml.org>  Mon, 17 Oct 2005 16:16:31 +0200
+
+grml-autoconfig (0.1-49) unstable; urgency=low
+
+  * Added partconf to CONFIG_MYCONFIG.
+  * Fixed problem in script grml-autoconfig with exit status
+    of set_values-function.
+  * Added wlan to strings of /proc/net/dev in config_dhcp (thanks to
+    Martin 'mabu' Buchleitner!).
+  * Fixed architecure specific things.
+    - This package is an architecture all file
+    - acpid is i386, amd64 only, so added apmd as alternative
+    -> Thanks Alexander Wirt <formorer@debian.org>!
+  * Use /cdrom/bootparams for additional bootparams.
+  * Oh, it's /var/log/boot and not bootlogd - adjusted infotext.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 12 Oct 2005 16:29:20 +0200
+
+grml-autoconfig (0.1-48) unstable; urgency=low
+
+  * Rewrote CONFIG_MYCONFIG.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 11 Oct 2005 18:30:06 +0200
+
+grml-autoconfig (0.1-47) unstable; urgency=low
+
+  * Removed CONFIG_RNETCONFIG and rewrote functions for
+    CONFIG_NETCONFIG.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  6 Oct 2005 17:26:08 +0200
+
+grml-autoconfig (0.1-46) unstable; urgency=low
+
+  * Deprecated CONFIG_REMOUNT_ROOT.
+
+ -- Michael Prokop <mika@grml.org>  Wed,  5 Oct 2005 23:11:57 +0200
+
+grml-autoconfig (0.1-45) unstable; urgency=low
+
+  * Oh, NONINTERACTIVE does not work as expected for hotplug-light.
+    Changed back to old behaviour therefore.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  2 Oct 2005 17:35:17 +0200
+
+grml-autoconfig (0.1-44) unstable; urgency=low
+
+  * Updated finish langauge settings (merged from knoppix mailing
+    list).
+
+ -- Michael Prokop <mika@grml.org>  Sat,  1 Oct 2005 21:41:13 +0200
+
+grml-autoconfig (0.1-43) unstable; urgency=low
+
+  * Adjusted BOOTDEBUG with printk-settings.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  1 Oct 2005 16:16:47 +0200
+
+grml-autoconfig (0.1-42) unstable; urgency=low
+
+  * Fixed rebuildfstab command.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  1 Oct 2005 14:44:39 +0200
+
+grml-autoconfig (0.1-41) unstable; urgency=low
+
+  * Run hotplug-light with NONINTERACTIVE=yes so we supress
+    error messages while booting...
+  * Upps, hotplug-light was already in depends, removed again.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  1 Oct 2005 12:11:10 +0200
+
+grml-autoconfig (0.1-40) unstable; urgency=low
+
+  * Moved kernel ring buffer settings behind color-stuff.
+  * Added hotplug-light to depends.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  1 Oct 2005 02:08:48 +0200
+
+grml-autoconfig (0.1-39) unstable; urgency=low
+
+  * Use grml-autoconfig in runlevel 2: modified postinstall script.
+  * Added syslog-ng to depends.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  1 Oct 2005 02:03:17 +0200
+
+grml-autoconfig (0.1-38) unstable; urgency=low
+
+  * Added gpm to depends.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  1 Oct 2005 00:51:52 +0200
+
+grml-autoconfig (0.1-37) unstable; urgency=low
+
+  * Added check if rebuildfstab binary is present.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  1 Oct 2005 00:34:33 +0200
+
+grml-autoconfig (0.1-36) unstable; urgency=low
+
+  * Added /etc/sysconfig-directory with empty files to make sure
+    the files exist.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  1 Oct 2005 00:15:53 +0200
+
+grml-autoconfig (0.1-35) unstable; urgency=low
+
+  * Modified gpm-startup (thanks, gebi!) - this should fix the
+    "missing /dev/psaux" problem.
+  * Added CONFIG_855RESOLUTION.
+  * Updated manpage.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 27 Sep 2005 22:34:13 +0200
+
+grml-autoconfig (0.1-34) unstable; urgency=low
+
+  * Adjusted infotext in grml-autonconfig for dhcp-option
+    (s/dhclient/pump/) [thanks for reporting, hecka!].
+  * Added cf (French Canadian version) to suppported languages
+    (taken from knoppix mailinglist).
+
+ -- Michael Prokop <mika@grml.org>  Tue, 27 Sep 2005 13:10:33 +0200
+
+grml-autoconfig (0.1-33) unstable; urgency=low
+
+  * Implemented boot options for automatic grml2hd-installation:
+    - user
+    - filesystem
+    - partition
+    - bootpartition
+  * Adjust kernel ring buffer at beginng of grml-autoconfig.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 25 Sep 2005 00:53:32 +0200
+
+grml-autoconfig (0.1-32) unstable; urgency=low
+
+  * Added check for root-permissions to script grml-autoconfig.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 24 Sep 2005 23:15:49 +0200
+
+grml-autoconfig (0.1-31) unstable; urgency=low
+
+  * Added CONFIG_GRML2HD for automatic installation via bootoption
+    grml2hd.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 21 Sep 2005 22:25:13 +0200
+
+grml-autoconfig (0.1-30) unstable; urgency=low
+
+  * No, let's drop the /proc/bus/usb code, we should handle this via
+    /etc/init.d/mountvirtfs.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 21 Sep 2005 18:45:42 +0200
+
+grml-autoconfig (0.1-29) unstable; urgency=low
+
+  * Let's mount /proc/bus/usb in mount_proc if not booting with 'nousb'.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 21 Sep 2005 18:38:43 +0200
+
+grml-autoconfig (0.1-28) unstable; urgency=low
+
+  * Let's drop config_checkfs -> CONFIG_CHECKFS='no', we should
+    handle this via update-rc.d / runlevels.
+  * Use 'hostname --file /etc/hostname' instead of 'hostname grml'
+    and use it also on harddisk installations.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 20 Sep 2005 14:55:21 +0200
+
+grml-autoconfig (0.1-27) unstable; urgency=low
+
+  * Let's use 'xorgcfg -textmode' for interactive setup.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 17 Sep 2005 12:05:18 +0200
+
+grml-autoconfig (0.1-26) unstable; urgency=low
+
+  * Redirect output of check_partitions to /dev/null.
+  * Moved startup of syslog to an earlier place.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 16 Sep 2005 13:50:58 +0200
+
+grml-autoconfig (0.1-25) unstable; urgency=low
+
+  * Modified bootoption 'log'; bootlogd is broken with sysvinit_2.86.ds1-2_i386.deb
+    but works with sysvinit_2.86.ds1-1.1_i386.deb, hmpf.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 12 Sep 2005 10:22:25 +0200
+
+grml-autoconfig (0.1-24) unstable; urgency=low
+
+  * Let's make autoconfig.functions executable and use /usr/bin/zsh.
+  * Fixed bootoption 'log' (missing a variable export).
+
+ -- Michael Prokop <mika@grml.org>  Mon, 12 Sep 2005 02:53:15 +0200
+
+grml-autoconfig (0.1-23) unstable; urgency=low
+
+  * Added new bootoption CONFIG_FWTIMEOUT for setting timeout
+    for firmware loading (via /sys/class/firmware/timeout).
+
+ -- Michael Prokop <mika@grml.org>  Mon, 12 Sep 2005 01:57:59 +0200
+
+grml-autoconfig (0.1-22) unstable; urgency=low
+
+  * Adjusted options for use with new config framework (CONFIG_NETCONFIG /
+    CONFIG_RNETCONFIG). (Thanks for reporting, Marc Haber!)
+
+ -- Michael Prokop <mika@grml.org>  Sat, 10 Sep 2005 11:47:38 +0200
+
+grml-autoconfig (0.1-21) unstable; urgency=low
+
+  * Some small eye-candy-improvements in script grml-autoconfig.
+    Output message if adjusting values worked, error message on failure.
+
+ -- Michael Prokop <mika@grml.org>  Mon,  5 Sep 2005 01:49:23 +0200
+
+grml-autoconfig (0.1-20) unstable; urgency=low
+
+  * Renamed config_config to config_netconfig, config_rconfig to
+    config_rnetconfig.
+  * Added config_scripts, config_debs, config_config.
+  * Some more cleanups (changed some more echo-ing stuff
+    to lsb-functions).
+
+ -- Michael Prokop <mika@grml.org>  Mon,  5 Sep 2005 01:23:59 +0200
+
+grml-autoconfig (0.1-19) unstable; urgency=low
+
+  * The 'now we have an interface and are lintian-clean' release.
+  * Added script grml-autoconfig (interface to configuration
+    file /etc/grml/autoconfig).
+  * Renamed CONFIG_HOTPLUG to CONFIG_HOTPLUG_MAIN.
+  * Made package lintian-clean (use /usr/bin/zsh as zsh path,
+    added dependency to zsh, let's use update-rc.d for
+    /etc/init.d/grml-autoconfig).
+
+ -- Michael Prokop <mika@grml.org>  Mon,  5 Sep 2005 00:26:20 +0200
+
+grml-autoconfig (0.1-18) unstable; urgency=low
+
+  * Added config_fix_passwd (fix passwd-problem).
+
+ -- Michael Prokop <mika@grml.org>  Wed, 17 Aug 2005 21:23:09 +0200
+
+grml-autoconfig (0.1-17) unstable; urgency=low
+
+  * Added small hint to config_x_startup.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 14 Aug 2005 17:58:57 +0200
+
+grml-autoconfig (0.1-16) unstable; urgency=low
+
+  * Let's support startx only on live-cd-systems (because of
+    the init-hack). Prompt useful message instead on harddisk-systems.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 14 Aug 2005 14:32:15 +0200
+
+grml-autoconfig (0.1-15) unstable; urgency=low
+
+  * Fixed value for cs/cz-keyboard-layout.
+  * Added checkgrmlusb.
+  * Added config_x_startup for bootparam 'startx[=windowmanager]'.
+  * Improved handling of DEBUG=.....
+  * Let's run loadkeys in background.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  7 Aug 2005 21:22:54 +0200
+
+grml-autoconfig (0.1-14) unstable; urgency=low
+
+  * Improved language support for grml-small (let's use LANG=C there) via
+    function checkgrmlsmall.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 28 Jul 2005 10:13:15 +0200
+
+grml-autoconfig (0.1-13) unstable; urgency=low
+
+  * We don't want to use mouseconfig anymore.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 14 Jul 2005 11:49:53 +0200
+
+grml-autoconfig (0.1-12) unstable; urgency=low
+
+  * We don't need kbdconfig anymore, now we call
+    /usr/sbin/dpkg-reconfigure console-data.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 14 Jul 2005 11:33:10 +0200
+
+grml-autoconfig (0.1-11) unstable; urgency=low
+
+  * Added support for bootsplash.
+  * Reordered execution of grml-autoconfig functions.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 10 Jul 2005 12:37:52 +0200
+
+grml-autoconfig (0.1-10) unstable; urgency=low
+
+  * Adjusted black-bootparam for use with hotplug-light.
+  * Fixed passwd and ssh bootparams (problems with chpasswd).
+  * Added CONFIG_CONSOLE for use with mgetty.
+  * Slightly improved CONFIG_CREATE_MNT_DIRS.
+
+ -- Michael Prokop <mika@grml.org>  Tue,  5 Jul 2005 00:10:38 +0200
+
+grml-autoconfig (0.1-9) unstable; urgency=low
+
+  * Fixed 'grml testcd'-cheatcode (md5sum-handling).
+
+ -- Michael Prokop <mika@grml.org>  Mon,  4 Jul 2005 01:29:08 +0200
+
+grml-autoconfig (0.1-8) unstable; urgency=low
+
+  * Let's always activate check_partitions.
+  * Fixed debug bootparam handling.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  3 Jul 2005 23:28:39 +0200
+
+grml-autoconfig (0.1-7) unstable; urgency=low
+
+  * Adjusted hotplug for use with hotplug-light (but still works
+    with hotplug anyway).
+
+ -- Michael Prokop <mika@grml.org>  Sun,  3 Jul 2005 21:06:09 +0200
+
+grml-autoconfig (0.1-6) unstable; urgency=low
+
+  * Added CONFIG_CREATE_MNT_DIRS for creating all directories defined
+    as mounting target in /etc/fstab.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  2 Jul 2005 23:07:31 +0200
+
+grml-autoconfig (0.1-5) unstable; urgency=low
+
+  * Added workaround/fix for unionfs ('apt-...' segfaults cause
+    of problems with /var/cache/apt/*.bin): CONFIG_FIX_UNIONFS
+  * Let's create firewire devices not only with kernel 2.6.11.
+  * Improved CONFIG_LD_MOD.
+
+ -- Michael Prokop <mika@grml.org>  Fri,  1 Jul 2005 01:09:31 +0200
+
+grml-autoconfig (0.1-4) unstable; urgency=low
+
+  * Updated conflicts (for installation without conflicts with grml-etc).
+
+ -- Michael Prokop <mika@grml.org>  Sat, 25 Jun 2005 22:55:23 +0200
+
+grml-autoconfig (0.1-3) unstable; urgency=low
+
+  * Included new grml-autoconfig-framework. Now it's possible to
+    control grml-autoconfig behaviour via /etc/grml/autoconfig.
+    Notice that you can fall back to /etc/init.d/grml-autoconfig.old
+    if you consider any problems at the moment.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 25 Jun 2005 00:51:16 +0200
+
+grml-autoconfig (0.1-2) unstable; urgency=low
+
+  * Added conflicts to debian/control.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  9 Jun 2005 00:49:48 +0200
+
+grml-autoconfig (0.1-1) unstable; urgency=low
+
+  * Initial release.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  5 Jun 2005 18:47:51 +0200
+

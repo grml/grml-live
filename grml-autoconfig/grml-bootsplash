@@ -1,0 +1,87 @@
+#!/bin/bash
+# Filename:      grml-bootsplash
+# Purpose:       simple text based bootsplash
+# Authors:       (c) Florian Keller <Florian.Keller@zuerich.ch>, (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Son Jun 04 16:05:26 CEST 2006 [mika]
+################################################################################
+
+if [ -z "$1" ] ; then
+  STATUS='| not set ||'
+else
+  STATUS="$1" # maximum: 12 '|'
+fi
+
+COUNT=$(echo -n "$STATUS" | wc -c)
+
+if [ "$COUNT" -gt 12 ] ; then
+  COUNT=12 # more than 12 characters are not supported
+  STATUS="||||||||||||"
+fi
+
+PLACEHOLDER=""
+BOOTSPLASH=$(mktemp)
+
+/usr/bin/clear
+cat > $BOOTSPLASH << 'EOTA'
+
+
+
+
+ .----------------.  .----------------.  .----------------.  .----------------.
+| .--------------. || .--------------. || .--------------. || .--------------. |
+| |    ______    | || |  _______     | || | ____    ____ | || |   _____      | |
+| |  .' ___  |   | || | |_   __ \    | || ||_   \  /   _|| || |  |_   _|     | |
+| | / .'   \_|   | || |   | |__) |   | || |  |   \/   |  | || |    | |       | |
+| | | |    ____  | || |   |  __ /    | || |  | |\  /| |  | || |    | |   _   | |
+| | \ `.___]  _| | || |  _| |  \ \_  | || | _| |_\/_| |_ | || |   _| |__/ |  | |
+| |  `._____.'   | || | |____| |___| | || ||_____||_____|| || |  |________|  | |
+| |              | || |              | || |              | || |              | |
+| '--------------' || '--------------' || '--------------' || '--------------' |
+ '----------------'  '----------------'  '----------------'  '----------------'
+
+     _______________________________________________________________________
+    |                                                                       |
+    |                     .''''.                                            |
+    |                 _.-'/  |  \                                           |
+    |    ,        _.-"  ,|  /  a `-.                                        |
+    |    |\    .-"       `--""-.__.'==========================-,            |
+    |    \ '-'`        .___.--._)==============================|            |
+    |     \            .'      |                               |            |
+    |      |     /,_.-'        |    Loading grml system ...    |            |
+    |    _/   _.'(             | (press alt+f1 to exit splash) |            |
+    |   /  ,-' \  \            |                               |            |
+EOTA
+
+
+
+echo -n "    |   \  \    \`-'            |    0% -[" >> $BOOTSPLASH
+echo -en "[1;32m$STATUS[0;39m" >> $BOOTSPLASH
+
+COUNT=$(expr 13 - $COUNT)
+for (( i=1 ; i < ${COUNT} ; i++ )); do
+  PLACEHOLDER="$PLACEHOLDER "
+done
+
+echo -n "$PLACEHOLDER" >> $BOOTSPLASH
+echo "]- 100%   |            |" >> $BOOTSPLASH
+
+cat >> $BOOTSPLASH << 'EOTA'
+    |    `-'                   '-------------------------------'            |
+    |                                                                       |
+    |                                                                       |
+    |                                                                       |
+    |_______________________________________________________________________|
+
+
+
+
+
+
+EOTA
+
+cat $BOOTSPLASH
+rm -f $BOOTSPLASH &>/dev/null
+
+## END OF FILE #################################################################

@@ -1,0 +1,268 @@
+#!/bin/zsh
+# Filename:      /etc/init.d/grml-autoconfig
+# Purpose:       basic system configuration and hardware setup for grml system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Fre Aug 04 12:13:13 CEST 2006 [mika]
+################################################################################
+
+# http://wiki.debian.org/LSBInitScripts =>
+### BEGIN INIT INFO
+# Provides:          grml-autoconfig
+# Required-Start:
+# Required-Stop:
+# Should-Start:      udev
+# Default-Start:     S 2 3 4 5
+# Default-Stop:
+### END INIT INFO
+
+if [[ $1 == "restart" ]] ; then
+  echo "$0 restart - empty placeholder. Doing nothing but running."
+fi
+
+if [[ $1 == "force-reload" ]] ; then
+  echo "$0 force-reload - empty placeholder. Doing nothing but running."
+fi
+
+if [[ $1 == "stop" ]] ; then
+  echo "$0 stop - empty placeholder. Doing nothing but exiting."
+  exit 1
+fi
+
+# {{{ path, signals, umask, zsh, colors
+export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin"
+umask 022
+# Ignore these signals: INT, TERM, SEGV
+trap "" 2 3 11
+
+# zsh stuff
+setopt no_nomatch # avoid 'no matches found: ...'
+# }}}
+
+# {{{ source main files
+source /etc/grml/autoconfig            # configuration file
+source /etc/grml/autoconfig.functions  # functions
+source /etc/grml/lsb-functions
+# }}}
+
+# {{{ mount important directories
+mount_proc
+mount_pts
+mount_sys
+# }}}
+
+# {{{ Read in boot parameters
+CMDLINE="$(cat /proc/cmdline)"
+[ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/* | tr '\n' ' ')"
+# }}}
+
+# {{{ main grml-autoconfig
+checkvalue $CONFIG_DEBUG && config_debug
+
+SPLASH=''
+if checkbootparam "splash" ; then
+  SPLASH=1
+fi
+
+if [ -z "$SPLASH" ] ; then
+  stage=5
+  rundebugshell
+fi
+
+if [ -z "$BOOTDEBUG" ] ; then
+  einfo "Setting kernel ring buffer to level 2."
+  echo "2" > /proc/sys/kernel/printk ; eend $?
+else
+  einfo "Setting kernel ring buffer to level 6. Adjust manually via running dmesg -n \$VALUE."
+  echo "6" > /proc/sys/kernel/printk ; eend $?
+fi
+
+[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|">/dev/tty7
+
+checkvalue $CONFIG_LANGUAGE && config_language
+
+checkvalue $CONFIG_LOG && config_log
+
+checkvalue $CONFIG_SWSPEAK && config_swspeak
+
+checkvalue $CONFIG_FWTIMEOUT && config_fwtimeout
+
+checkvalue $CONFIG_FIX_PASSWD && config_fix_passwd
+
+[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||">/dev/tty7
+
+checkvalue $CONFIG_HOSTNAME && config_hostname
+
+checkvalue $CONFIG_USERFSTAB && config_userfstab
+
+checkvalue $CONFIG_TIME && config_time
+
+checkvalue $CONFIG_KERNEL &&  config_kernel
+
+checkvalue $CONFIG_VMWARE &&  config_vmware
+
+checkvalue $CONFIG_SMALL && config_small
+
+checkvalue $CONFIG_LD_MOD && config_ld_mod
+
+checkvalue $CONFIG_TIMEZONE && config_timezone
+
+checkvalue $CONFIG_FAST && config_fast
+
+[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||">/dev/tty7
+
+checkvalue $CONFIG_ENVIRONMENT && config_environment
+
+# No kernel messages while probing modules
+echo "0" > /proc/sys/kernel/printk
+
+checkvalue $CONFIG_CDROM_PERM && config_cdrom_perm
+
+checkvalue $CONFIG_LOCAL_NET && config_local_net
+
+checkvalue $CONFIG_FIREWIRE_DEV && config_firewire_dev
+
+checkvalue $CONFIG_TESTCD && config_testcd
+
+[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||||">/dev/tty7
+
+checkvalue $CONFIG_DISCOVER && config_discover
+
+checkvalue $CONFIG_HWINFO && config_hwinfo
+
+checkvalue $CONFIG_HOTPLUG_AGENT && config_hotplug_agent
+
+checkvalue $CONFIG_HOTPLUG_BLACKLIST && config_hotplug_blacklist
+
+checkvalue $CONFIG_HOTPLUG_MAIN && config_hotplug
+
+checkvalue $CONFIG_MODULES && config_modules
+
+checkvalue $CONFIG_ACPI_APM && config_acpi_apm
+
+[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||||">/dev/tty7
+
+checkvalue $CONFIG_PCMCIA && config_pcmcia
+
+# {{{ Read in what hwsetup has found
+[ -f /etc/sysconfig/grml ] && . /etc/sysconfig/grml
+# }}}
+
+checkvalue $CONFIG_KEYBOARD && config_keyboard
+
+[ -n "$SPLASH" ] &&  /usr/bin/grml-bootsplash "||||||">/dev/tty7
+
+checkvalue $CONFIG_BLIND && config_blind
+
+checkvalue $CONFIG_INTERACTIVE && config_interactive
+
+checkvalue $CONFIG_AGP && config_agp
+
+[ -f /etc/sysconfig/grml ] && . /etc/sysconfig/grml
+
+checkvalue $CONFIG_AUTOMOUNTER && config_automounter
+
+checkvalue $CONFIG_DMA && config_dma
+
+checkvalue $CONFIG_FSTAB && config_fstab
+
+checkvalue $CONFIG_MOUSE && config_mouse
+
+checkvalue $CONFIG_DHCP && config_dhcp
+
+[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||||||">/dev/tty7
+
+checkvalue $CONFIG_SYSLOG && config_syslog
+
+checkvalue $CONFIG_CPU && config_cpu
+
+checkvalue $CONFIG_SSH && config_ssh
+
+checkvalue $CONFIG_PASSWD && config_passwd
+
+checkvalue $CONFIG_EXTRACT  && config_extract
+
+checkvalue $CONFIG_HOMEDIR && config_homedir
+
+checkvalue $CONFIG_MYCONFIG && config_myconfig
+
+[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||||||||">/dev/tty7
+
+checkvalue $CONFIG_CDROM_SCRIPTS && config_cdrom_scripts
+
+# device symlinks {{{
+  [ -r /mnt/floppy ] || mkdir /mnt/floppy
+  [ -r /mnt/cdrom ]  || mkdir /mnt/cdrom
+  [ -r /mnt/test ]   || mkdir /mnt/test
+# }}}
+
+checkvalue $CONFIG_MIXER && config_mixer
+
+checkvalue $CONFIG_MODEM && config_modem
+
+checkvalue $CONFIG_WONDERSHAPER && config_wondershaper
+
+checkvalue $CONFIG_GPM && config_gpm
+
+[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||||||||">/dev/tty7
+
+checkvalue $CONFIG_SERVICES && config_services
+
+checkvalue $CONFIG_NETCONFIG && config_netconfig
+
+checkvalue $CONFIG_NETIPV6 && config_ipv6
+
+checkvalue $CONFIG_DEBNET && config_debnet
+
+[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||||||||||">/dev/tty7
+
+checkvalue $CONFIG_CONSOLE && config_console
+
+checkvalue $CONFIG_SETKEYCODES && config_setkeycodes
+
+checkvalue $CONFIG_BLINDSOUND && config_blindsound
+
+checkvalue $CONFIG_WELCOME && config_welcome
+
+checkvalue $CONFIG_FIX_UNIONFS && fix_unionfs
+
+checkvalue $CONFIG_CREATE_MNT_DIRS && create_mnt_dirs
+
+checkvalue $CONFIG_915RESOLUTION && config_915resolution
+
+checkvalue $CONFIG_AUTOMOUNT && config_automount
+
+checkvalue $CONFIG_DISTCC && config_distcc
+
+checkvalue $CONFIG_BLANKING && config_blanking
+
+[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||||||||||">/dev/tty7
+
+checkvalue $CONFIG_GRML2HD && config_grml2hd
+
+checkvalue $CONFIG_XSTARTUP && config_x_startup
+# }}}
+
+# {{{ debug
+if [ -z "$SPLASH" ] ; then
+  stage=6
+  rundebugshell
+fi
+# }}}
+
+if [ -n "$BOOTDEBUG" ] ; then
+  CMDLINE="$(cat /proc/cmdline)"
+  [ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/*)"
+  einfo "Bootoption debug detected. Printing kernel command line:"
+  echo "$CMDLINE"
+fi
+
+# {{{ Re-enable signals
+trap 2 3 11
+# }}}
+
+exit 0
+
+## END OF FILE #################################################################
+# vim:foldmethod=marker

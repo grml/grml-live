@@ -1,0 +1,2 @@
+grml-autoconfig: unknown-section grml
+grml-autoconfig: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/grml-autoconfig.strace
