@@ -73,6 +73,7 @@ CONFIG_CDROM_SCRIPTS='yes'    # run scripts from /cdrom/scripts
 CONFIG_CONSOLE='yes'          # activate mgetty when using console=... as bootparam
 CONFIG_CREATE_MNT_DIRS='no'   # create /mnt-directories
 CONFIG_DEBNET='yes'           # search for /etc/network/interfaces on partitions and set up network afterwards
+CONFIG_DEBS='yes'             # check for bootoption debs for installing .debs
 CONFIG_DEBUG='yes'            # activate start of shells during startup at several stages
 CONFIG_DISCOVER='no'          # use discover for hardware detection
 CONFIG_DISTCC='yes'           # activate and setup distcc through bootparam distcc=$NETWORK,$INTERFACE
