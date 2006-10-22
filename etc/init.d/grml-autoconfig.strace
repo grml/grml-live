@@ -1,0 +1,12 @@
+#!/bin/sh
+# Filename:      grml-autoconfig.strace
+# Purpose:       strace grml-autoconfig for use with mksquashfs/mkisos sort option
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Thu Nov 03 17:03:03 CET 2005 [mika]
+################################################################################
+
+/usr/bin/strace -f -eopen,stat64,execve -o /etc/grml/strace.autoconfig /etc/init.d/grml-autoconfig "$*" &
+
+## END OF FILE #################################################################

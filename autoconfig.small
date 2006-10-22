@@ -1,0 +1,119 @@
+# Filename:      /etc/grml/autoconfig.small
+# Purpose:       configuration for grml-autoconfig on grml-small-system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Sam Sep 23 20:06:34 CEST 2006 [mika]
+################################################################################
+
+################################################################################
+# Notice: you can configure grml-autoconfig via adjusting the following values.
+# Set them to 'yes' to activate them. But please notice that some options
+# require an additional bootparam ("cheatcode") anyway, some options just
+# de-/activate a check!
+#
+# If you want to deactivate an option just set it to 'no'.
+# 
+# Take a look at the script 'grml-autoconfig' as well!
+################################################################################
+
+## These are the options you might want to adjust: #############################
+
+# configure language - set keyboard layout
+# notice: overwriting this variable is still possible through
+#         bootparameter lang=...
+# See http://grml.org/faq/#language for more information.
+# default: us
+# LANGUAGE='de'
+
+# console font
+# default: Lat15-Terminus16
+# CONSOLEFONT='iso15graf-16'
+
+# display information on running kernel
+CONFIG_KERNEL='yes'
+
+# check for network devices and run dhclient
+CONFIG_DHCP='yes'
+
+# check for frequency-scalable CPU and activate cpydyn/powernowd
+CONFIG_CPU='no'
+
+# create /etc/fstab (this also de-/activates swap-partition)
+CONFIG_FSTAB='yes'
+
+# load ACPI/APM modules
+CONFIG_ACPI_APM='yes'
+
+# Enable DMA for all IDE drives - already done in initrd
+# but make sure it's done also on harddisk-installed systems
+CONFIG_DMA='yes'
+
+# set audio volumes
+CONFIG_MIXER='no'
+
+# start syslog-ng
+CONFIG_SYSLOG='yes'
+
+# start gpm
+CONFIG_GPM='yes'
+
+################################################################################
+# Notice! Do not touch the following options except you really know
+# what you are doing!
+CONFIG_915RESOLUTION='no'     # run 915resolution with specified options for adjusting resolution
+CONFIG_AGP='yes'              # check for bootparam forceagp
+CONFIG_AUTOMOUNTER='no'       # activate automounter
+CONFIG_AUTOMOUNT='yes'        # automounting of device labeled GRMLCFG
+CONFIG_BLANKING='yes'         # check for bootoption noblank to disable console blanking
+CONFIG_BLINDSOUND='yes'       # play 'beep' and play welcome message
+CONFIG_BLIND='yes'            # check for blind option or brltty
+CONFIG_CDROM_PERM='yes'       # for burning on IDE-CD-Roms, k3b (and others) check for special permissions
+CONFIG_CDROM_SCRIPTS='yes'    # run scripts from /cdrom/scripts
+CONFIG_CONSOLE='yes'          # activate mgetty when using console=... as bootparam
+CONFIG_CREATE_MNT_DIRS='no'   # create /mnt-directories
+CONFIG_DEBNET='yes'           # search for /etc/network/interfaces on partitions and set up network afterwards
+CONFIG_DEBUG='yes'            # activate start of shells during startup at several stages
+CONFIG_DISCOVER='no'          # use discover for hardware detection
+CONFIG_DISTCC='no'            # activate and setup distcc through bootparam distcc=$NETWORK,$INTERFACE
+CONFIG_EXTRACT='yes'          # specify which (only in combination with bootparam myconfig/netconfig useful)
+CONFIG_FAST='yes'             # skip startup of w3m on tty1
+CONFIG_FIREWIRE_DEV='no'      # bugfix for kernel >=2.6.11 - create some firewire-devices
+CONFIG_FIX_PASSWD='yes'       # fix unionfs-problem with passwd
+CONFIG_FIX_UNIONFS='yes'      # fix/workaround for unionfs
+CONFIG_USERFSTAB='yes'        # check for username of uid 1000
+CONFIG_FWTIMEOUT='yes'        # set timeout for firmware loading
+CONFIG_GRML2HD='yes'          # check for 'grml2hd' bootoption
+CONFIG_HOMEDIR='yes'          # check for persistent homedir option
+CONFIG_HOSTNAME='yes'         # set hostname to 'grml' on systems running from CD
+CONFIG_HOTPLUG_MAIN='no'      # start hotplug system [should be handled by udev now]
+CONFIG_HOTPLUG_AGENT='no'     # deactivate specific hotplug agent(s) via bootparam
+CONFIG_HOTPLUG_BLACKLIST='no' # check for blacklist bootparam
+CONFIG_HWINFO='no'            # run hwinfo for module-detection (requires bootparam 'hwinfo'!)
+CONFIG_INTERACTIVE='yes'      # check for expert-mode as bootparam
+CONFIG_LANGUAGE='yes'         # allow language specification via commandline
+CONFIG_LD_MOD='yes'           # run ldconfig and depmod on systems running from harddisk; remove /etc/grml.first.boot for forcing
+CONFIG_LOCAL_NET='yes'        # bring up loopback interface
+CONFIG_LOG='yes'              # DEBUG=/dev/null or logfile int /tmp/...
+CONFIG_MODEM='yes'            # check for AC'97 Modem Controller modem
+CONFIG_MODULES='yes'          # load modules specified in /etc/grml/modules
+CONFIG_MOUSE='yes'            # show mouse information (expert-mode)
+CONFIG_MYCONFIG='yes'         # check if we want the config floppy
+CONFIG_NETCONFIG='yes'        # download configuration archive provided by bootoption netconfig=...
+CONFIG_NETIPV6='yes'          # check for bootparam ipv6
+CONFIG_PASSWD='yes'           # set password via bootparam passwd
+CONFIG_PCMCIA='no'            # check for pcmcia and start cardmgr
+CONFIG_SERVICES='yes'         # check for services to run, provided via bootparam
+CONFIG_SETKEYCODES='yes'      # run setkeycodes when bootoption setkeycodes found
+CONFIG_SMALL='yes'            # use a less "bloat" /etc/inittab for small computer with less RAM
+CONFIG_SPLASH='no'            # bootsplash
+CONFIG_SSH='yes'              # check for bootparam ssh
+CONFIG_SWSPEAK='no'           # run software synthesizer via speakup
+CONFIG_TESTCD='yes'           # CD checker
+CONFIG_TIME='yes'             # set clock, check for bootparam utc/gmt [only in live-mode]
+CONFIG_TIMEZONE='yes'         # get bootparam 'tz' and set it as /etc/localtime [only in live-mode]
+CONFIG_VMWARE='no'            # vmware specific stuff (use xorg.conf.vmware)
+CONFIG_WELCOME='yes'          # play welcome sound (audio)
+CONFIG_WONDERSHAPER='yes'     # start wondershaper with options provided via bootparam
+CONFIG_XSTARTUP='no'          # start X window system via grml-x
+## END OF FILE #################################################################

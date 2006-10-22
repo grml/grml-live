@@ -1,0 +1,11 @@
+# /etc/grml/modules: kernel modules to load at boot time when running from CD.
+# If you want to load specific modules when running from harddisk configure
+# /etc/modules and make sure /etc/init.d/module-init-tools is activate
+# in /etc/runlevel.conf
+#
+# This file should contain the names of kernel modules that are
+# to be loaded at boot time, one per line.  Comments begin with
+# a `#', and everything on the line after them are ignored.
+
+evdev
+fuse

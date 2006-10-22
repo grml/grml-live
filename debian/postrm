@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "purge" ]; then
+  update-rc.d grml-autoconfig remove >/dev/null || exit 0
+
+# don't delete /etc/init.d/bootlocal* scripts, even not when purging - notice therefore:
+  . /etc/grml/lsb-functions
+  INITSCRIPT=bootlocal
+  INITNAME=/etc/init.d/$INITSCRIPT
+  if [ -r "${INITNAME}.first" ] ; then
+    ewarn "Notice: ${INITNAME}.{first,middle,last} won't be deleted automatically." ; eend 0
+    ewarn "If you want to remove them delete them manually and then run:"
+    echo "    update-rc.d ${INITSCRIPT}.first  remove"
+    echo "    update-rc.d ${INITSCRIPT}.middle remove"
+    echo "    update-rc.d ${INITSCRIPT}.last   remove"
+  fi
+fi
+
+exit 0
