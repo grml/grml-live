@@ -187,6 +187,8 @@ checkvalue $CONFIG_HOMEDIR && config_homedir
 
 checkvalue $CONFIG_MYCONFIG && config_myconfig
 
+checkvalue $CONFIG_DEBS && config_debs
+
 [ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||||||||">/dev/tty7
 
 checkvalue $CONFIG_CDROM_SCRIPTS && config_cdrom_scripts

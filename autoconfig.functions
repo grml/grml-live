@@ -1802,8 +1802,7 @@ fi
 config_debs(){
 if checkbootparam "debs" ; then
   DEBS="$(getbootparam 'debs' 2>>$DEBUG)"
-  [ -z "$CONFIG" ] && CONFIG="/cdrom/debs/*"
-  einfo "Tring to install debian package(s) ${DEBS}:"
+  einfo "Tring to install debian package(s) ${DEBS}"
   dpkg -i /cdrom/debs/$DEBS* ; eend $?
 fi
 }
