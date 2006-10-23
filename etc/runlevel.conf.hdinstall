@@ -71,6 +71,7 @@
 20	0,1,6	-		/etc/init.d/ipxripd
 20	0,1,6	-		/etc/init.d/isakmpd
 20	0,1,6	-		/etc/init.d/isdnutils
+20	0,1,6	-		/etc/init.d/iwatch
 20	0,1,6	-		/etc/init.d/jail
 20	0,1,6	-		/etc/init.d/jmon
 20	0,1,6	-		/etc/init.d/keepalived
