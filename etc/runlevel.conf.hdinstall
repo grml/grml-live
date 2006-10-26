@@ -81,6 +81,7 @@
 20	0,1,6	-		/etc/init.d/lpd
 20	0,1,6	-		/etc/init.d/makedev
 20	0,1,6	-		/etc/init.d/maradns
+20	0,1,6	-		/etc/init.d/mplayer
 20	0,1,6	-		/etc/init.d/mixmaster
 20	0,1,6	-		/etc/init.d/nethack-common
 20	0,1,6	-		/etc/init.d/netperf
