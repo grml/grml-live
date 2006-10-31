@@ -1451,7 +1451,13 @@ else
           amixer set Front 0% 1>/dev/null
        fi
     fi
-    aumix -w 0 -v 0 -p 0 -m 0 ; eend $?
+    ERROR=$(aumix -w 0 -v 0 -p 0 -m 0 2>&1) ; RC=$?
+    if [ -n "$ERROR" ] ; then
+       eindent
+       eerror "Problem muting sound devices: $ERROR"
+       eoutdent
+    fi
+    eend $RC
   elif [ -z "$INSTALLED" ]; then
       einfo "Setting mixer volumes to level ${WHITE}${VOL}${NORMAL}."
       # some IBM notebooks require the following stuff:
@@ -1461,7 +1467,13 @@ else
             amixer set Front ${VOL}% 1>/dev/null
          fi
       fi
-      aumix -w $VOL -v $VOL -p $VOL -m $VOL ; eend $?
+      ERROR=$(aumix -w $VOL -v $VOL -p $VOL -m $VOL 2>&1) ; RC=$?
+      if [ -n "$ERROR" ] ; then
+         eindent
+         eerror "Problem setting mixer volumes: $ERROR"
+         eoutdent
+      fi
+      eend $RC
   fi
 
 fi

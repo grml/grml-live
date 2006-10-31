@@ -1,3 +1,9 @@
+grml-autoconfig (0.5-17) unstable; urgency=low
+
+  * config_mixer: beautify error output of aumix.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 31 Oct 2006 12:38:52 +0100
+
 grml-autoconfig (0.5-16) unstable; urgency=low
 
   * Fix config_debs() and include it in config files, thanks for
