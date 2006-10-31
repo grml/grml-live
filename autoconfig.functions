@@ -1171,7 +1171,14 @@ else
   elif [ ! -e /lib/modules/${KERNEL}/kernel/arch/i386/kernel/cpu/cpufreq -o ! -e /lib/modules/${KERNEL}/kernel/drivers/cpufreq ] ; then
     ewarn "Skipping CPU detection as module dependencies are not fulfilled." ; eend 1
   else
-    einfo "Detecting CPU: `awk -F: '/^processor/{printf " Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG` " ; eend 0
+    if [[ `grep -c processor /proc/cpuinfo` -gt 1 ]] ; then
+      einfo "Detecting CPU:"
+      CPU=$(awk -F: '/^processor/{printf "	Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG)
+      echo $CPU | sed 's/ \{1,\}/ /g' 
+      eend 0
+    else
+      einfo "Detecting CPU: `awk -F: '/^processor/{printf " Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG` " ; eend 0
+    fi
     if /usr/sbin/laptop-detect ; then
     einfo "Detected Laptop - trying to use cpu frequency scaling:"
 #      loadcpumod() {
