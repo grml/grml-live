@@ -937,9 +937,13 @@ fi
 
 # {{{ Start creating /etc/fstab with HD partitions and USB SCSI devices now
 config_fstab(){
+
 NOSWAP=""
-checkbootparam "noswap" && NOSWAP="yes"
-if checkbootparam "nofstab"; then
+if checkbootparam "noswap" -o checkbootparam "forensic" ; then
+   NOSWAP="yes"
+fi
+
+if checkbootparam "nofstab" -o checkbootparam "forensic" ; then
   ewarn "Skipping /etc/fstab creation as requested on boot commandline." ; eend 0
 else
   checkbootparam "anyswap" && export ANYSWAP='yes' || export ANYSWAP=""
@@ -1708,7 +1712,7 @@ fi
 }
 
 config_automount(){
-if checkbootparam noautoconfig ; then
+if checkbootparam noautoconfig -o checkbootparam forensic ; then
   ewarn "Skipping running automount of device(s) labeled GRMLCFG as requested." ; eend 0
 else
  if [ -z "$INSTALLED" ] ; then
@@ -1989,14 +1993,15 @@ fi
 # {{{ SW-RAID
 config_swraid(){
   if [ -z "$INSTALLED" ] ; then
-  if checkbootparam "noraid" -o checkbootparam "forensic" ; then
+  # notice: checkbootparam "forensic" is just for users who don't know how to really use the bootoption
+  if checkbootparam "noraid" -o checkbootparam "forensic" -o checkbootparam "raid=noautodetect" ; then
      ewarn "Skipping search for SW-RAID as requested on boot commandline." ; eend 0
   else
     if ! [ -x /sbin/mdadm ] ; then
        eerror "mdadm not available, can not execute it." ; eend 1
     else
 
-       einfo "Searching for software RAID arrays:"
+       einfo "Searching for software RAID arrays (disable via bootoption noraid):"
        eindent
          IFSOLD=${IFS:-}
          IFS='

@@ -1,3 +1,13 @@
+grml-autoconfig (0.5-20) unstable; urgency=low
+
+  * config_swraid: add usage info how to disable it, check for
+    bootoption raid=noautodetect as well.
+  * Added some more checks for bootoption 'forensic' for users
+    who don't know that forensic should be the image name and not
+    an additional bootoption.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  2 Nov 2006 20:19:11 +0100
+
 grml-autoconfig (0.5-19) unstable; urgency=low
 
   * Added function config_swraid ($CONFIG_SWRAID) for detection
