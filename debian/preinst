@@ -64,9 +64,9 @@ case "$1" in
            fi
         fi
 
-        # move files from package grml-etc to grml-etc-core / remove them at all
+        # move files from package grml-etc to grml-etc-core
         for file in /etc/zsh/zlogin /etc/zsh/zprofile /etc/zsh/zshenv /etc/zsh/zshrc \
-                    /etc/zsh/zshrc  /etc/zsh/zlogout  /etc/vim/vimrc  /etc/samba/smb.conf ; do
+                    /etc/zsh/zshrc  /etc/zsh/zlogout  /etc/vim/vimrc ; do
             if dpkg-divert --list $file | grep -q 'grml-etc$' ; then
                rm_conffile $file
                dpkg-divert --quiet --package grml-etc --remove --rename --divert $file.original $file
@@ -76,6 +76,11 @@ case "$1" in
         if dpkg-divert --list /etc/skel/.zshrc | grep -q 'grml-etc$' ; then
            [ -f /etc/skel/.zshrc.original ] && rm /etc/skel/.zshrc
            dpkg-divert --quiet --package grml-etc --remove --rename --divert /etc/skel/.zshrc.original /etc/skel/.zshrc
+        fi
+
+        if dpkg-divert --list /etc/samba/smb.conf | grep -q 'grml-etc$' ; then
+           [ -f /etc/samba/smb.conf.original ] && rm /etc/samba/smb.conf.original
+           dpkg-divert --quiet --package grml-etc --remove --rename --divert /etc/samba/smb.conf.original /etc/samba/smb.conf
         fi
 
      ;;
