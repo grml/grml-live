@@ -109,6 +109,7 @@ CONFIG_SETKEYCODES='yes'      # run setkeycodes when bootoption setkeycodes foun
 CONFIG_SMALL='yes'            # use a less "bloat" /etc/inittab for small computer with less RAM
 CONFIG_SPLASH='yes'           # bootsplash
 CONFIG_SSH='yes'              # check for bootparam ssh
+CONFIG_SWRAID='yes'           # check for software raid devices [only in live-mode]
 CONFIG_SWSPEAK='yes'          # run software synthesizer via speakup
 CONFIG_TESTCD='yes'           # CD checker
 CONFIG_TIME='yes'             # set clock, check for bootparam utc/gmt [only in live-mode]

@@ -1174,7 +1174,7 @@ else
     if [[ `grep -c processor /proc/cpuinfo` -gt 1 ]] ; then
       einfo "Detecting CPU:"
       CPU=$(awk -F: '/^processor/{printf "	Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG)
-      echo $CPU | sed 's/ \{1,\}/ /g' 
+      echo $CPU | sed 's/ \{1,\}/ /g'
       eend 0
     else
       einfo "Detecting CPU: `awk -F: '/^processor/{printf " Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG` " ; eend 0
@@ -1983,6 +1983,57 @@ if checkbootparam "915resolution" ; then
     eend 0
   fi
 fi
+}
+# }}}
+
+# {{{ SW-RAID
+config_swraid(){
+  if [ -z "$INSTALLED" ] ; then
+  if checkbootparam "noraid" -o checkbootparam "forensic" ; then
+     ewarn "Skipping search for SW-RAID as requested on boot commandline." ; eend 0
+  else
+    if ! [ -x /sbin/mdadm ] ; then
+       eerror "mdadm not available, can not execute it." ; eend 1
+    else
+
+       einfo "Searching for software RAID arrays:"
+       eindent
+         IFSOLD=${IFS:-}
+         IFS='
+'
+         for line in $(mdadm --assemble --scan --auto=yes --symlink=no 2>&1) ; do
+             case $line in
+               *'No arrays found'*)
+                 ewarn "$line" ; eend 0
+                 ;;
+               *)
+                 einfo "$line" ; eend 0
+                 ;;
+             esac
+         done
+         IFS=$IFSOLD
+       eoutdent
+
+       if [ -r /proc/mdstat ] ; then
+          eindent
+          MDSTAT=$(grep '^md[0-9]' /proc/mdstat)
+          if [ -z "$MDSTAT" ] ; then
+             ewarn "No active arrays found" ; eend 0
+          else
+             IFSOLD=${IFS:-}
+             IFS='
+'
+             for line in $(grep '^md[0-9]' /proc/mdstat) ; do
+                 einfo "active arrays: $line" ; eend 0
+             done
+             IFS=$IFSOLD
+          fi
+          eoutdent
+       fi
+
+     fi # is /sbin/mdadm executable?
+  fi # check for bootoptions
+  fi # run only in live-cd mode
 }
 # }}}
 
