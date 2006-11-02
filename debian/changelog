@@ -1,3 +1,11 @@
+grml-etc (0.8-32) unstable; urgency=low
+
+  * /etc/samba.conf: deactivate 'printer admin' and 'passdb ...'
+    lines so current samba works without any problems.
+  * debian/preinst: remove /etc/samba/smb.conf from diversions...
+
+ -- Michael Prokop <mika@grml.org>  Thu,  2 Nov 2006 21:02:22 +0100
+
 grml-etc (0.8-31) unstable; urgency=low
 
   * Activate mdadm[-raid] in /etc/runlevel.conf.hdinstall*.

@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Don Okt 12 17:39:16 CEST 2006 [mika]
+# Latest change: Don Nov 02 20:58:57 CET 2006 [mika]
 ################################################################################
 
 set -e
@@ -13,8 +13,7 @@ TO_DIVERT1="login.config mgetty.config"
 TO_DIVERT2="ssh"
 TO_DIVERT3="kismet.conf"
 TO_DIVERT4="wlan-ng.conf"
-TO_DIVERT5="smb.conf"
-TO_DIVERT6="windowlab.menurc"
+TO_DIVERT5="windowlab.menurc"
 
 divert_gen() {
     DEXT=${3:-original}
@@ -52,9 +51,6 @@ case "$1" in
                 divert_gen $cmd /etc/pcmcia
         done
         for cmd in $TO_DIVERT5; do
-                divert_gen $cmd /etc/samba
-        done
-        for cmd in $TO_DIVERT6; do
                 divert_gen $cmd /etc/X11/windowlab
         done
 
