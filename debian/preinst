@@ -64,9 +64,9 @@ case "$1" in
            fi
         fi
 
-        # move files from package grml-etc to grml-etc-core
+        # move files from package grml-etc to grml-etc-core / remove them at all
         for file in /etc/zsh/zlogin /etc/zsh/zprofile /etc/zsh/zshenv /etc/zsh/zshrc \
-                    /etc/zsh/zshrc  /etc/zsh/zlogout  /etc/vim/vimrc ; do
+                    /etc/zsh/zshrc  /etc/zsh/zlogout  /etc/vim/vimrc  /etc/samba/smb.conf ; do
             if dpkg-divert --list $file | grep -q 'grml-etc$' ; then
                rm_conffile $file
                dpkg-divert --quiet --package grml-etc --remove --rename --divert $file.original $file
