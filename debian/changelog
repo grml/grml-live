@@ -1,3 +1,9 @@
+grml-etc (0.8-31) unstable; urgency=low
+
+  * Activate mdadm[-raid] in /etc/runlevel.conf.hdinstall*.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  2 Nov 2006 15:42:52 +0100
+
 grml-etc (0.8-30) unstable; urgency=low
 
   * Another cleanup of /etc/runlevel.conf.hdinstall.
