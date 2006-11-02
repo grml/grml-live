@@ -114,6 +114,8 @@ checkvalue $CONFIG_FAST && config_fast
 
 checkvalue $CONFIG_ENVIRONMENT && config_environment
 
+checkvalue $CONFIG_SWRAID && config_swraid
+
 # No kernel messages while probing modules
 echo "0" > /proc/sys/kernel/printk
 
