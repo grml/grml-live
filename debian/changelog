@@ -1,3 +1,11 @@
+grml-autoconfig (0.5-21) unstable; urgency=low
+
+  * grml-bootsplash: replace the clear command with
+    "echo -ne '\033[H\033[25l'" to avoid flickering.
+    Thanks a lot, Michael Schierl!
+
+ -- Michael Prokop <mika@grml.org>  Mon,  6 Nov 2006 23:11:36 +0100
+
 grml-autoconfig (0.5-20) unstable; urgency=low
 
   * config_swraid: add usage info how to disable it, check for
