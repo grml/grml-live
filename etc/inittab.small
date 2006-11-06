@@ -52,8 +52,18 @@ po::powerokwait:/etc/init.d/powerfail stop
 #  <id>:<runlevels>:<action>:<process>
 1:12345:respawn:/sbin/rungetty tty1 -u root -g root --autologin root /usr/bin/grml-init
 2:2345:respawn:/sbin/rungetty tty2 -u grml -g grml --autologin grml /usr/bin/grml-init
-3:2345:respawn:/sbin/rungetty tty3 -u grml -g grml --autologin grml /usr/bin/grml-init
+3:2345:respawn:/sbin/rungetty --prompt tty3 -u grml -g grml --autologin grml /usr/bin/grml-init
+4:2345:respawn:/sbin/rungetty --prompt tty4 -u grml -g grml --autologin grml /usr/bin/grml-init
+5:2345:respawn:/sbin/rungetty --prompt tty5 -u grml -g grml --autologin grml /usr/bin/grml-init
+6:2345:respawn:/sbin/rungetty --prompt tty6 -u grml -g grml --autologin grml /usr/bin/grml-init
 # Note that on most Debian systems tty7 is used by the X Window System.
+# Use tty8 for a second xserver.
+# 9:2345:respawn:/sbin/getty  38400 tty9
+# 10:2345:respawn:/bin/zsh --login -c "/usr/sbin/grml-iptstate ; /usr/bin/grml-init-screen" >/dev/tty10 2>&1 </dev/tty10
+# 11:2345:respawn:/bin/zsh --login -c "/usr/bin/htop ; /usr/bin/grml-init-screen" >/dev/tty11 2>&1 </dev/tty11
+# running console-log on 12 already
+# 12:2345:respawn:/bin/zsh --login -c "/usr/bin/less +F /var/log/syslog ; /usr/bin/grml-screen" >/dev/tty12 2>&1 </dev/tty12
+# 12:2345:respawn:/bin/zsh --login -c "/usr/bin/multitail /var/log/syslog ; /usr/bin/grml-init-screen" >/dev/tty12 2>&1 </dev/tty12
 
 # Restart init with new configuration?
 # kill -1 1
@@ -70,8 +80,11 @@ po::powerokwait:/etc/init.d/powerfail stop
 #
 # T0:23:respawn:/sbin/getty -L ttyS0 9600 vt100
 # T1:23:respawn:/sbin/getty -L ttyS1 9600 vt100
+
+# Important! Please do not remove the following 2 lines as the are important for cheatcode serial:
 #T0:2345:respawn:/bin/bash -c "/sbin/mgetty ttyS0 || sleep 30"
 #T1:2345:respawn:/bin/bash -c "/sbin/mgetty ttyS1 || sleep 30"
+# Important! #####################################################################################
 
 # Example how to put a getty on a modem line.
 #
@@ -89,3 +102,5 @@ po::powerokwait:/etc/init.d/powerfail stop
 # Run X Window session from CDROM in runlevel 5
 #w5:5:wait:/bin/sleep 2
 #x5:5:wait:/etc/init.d/xsession start
+# Use line below to use secvpnmon. Use init q to reread inittab.
+# SVPN:2345:respawn:/usr/sbin/secvpnmon
