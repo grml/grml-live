@@ -2001,6 +2001,14 @@ config_swraid(){
        eerror "mdadm not available, can not execute it." ; eend 1
     else
 
+       if ! grep -q ARRAY /etc/mdadm/mdadm.conf 2>>$DEBUG ; then
+	  einfo "Creating /etc/mdadm/mdadm.conf"
+	  [ -r /etc/mdadm/mdadm.conf ] && mv /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.old
+	  /usr/share/mdadm/mkconf > /etc/mdadm/mdadm.conf ; eend $?
+	else
+	  ewarn "/etc/mdadm/mdadm.conf looks like a configured mdadm setup, will not touch it." ; eend 0
+       fi
+
        einfo "Searching for software RAID arrays (disable via bootoption noraid):"
        eindent
          IFSOLD=${IFS:-}
