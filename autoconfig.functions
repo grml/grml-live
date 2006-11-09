@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Don Okt 12 13:00:04 CEST 2006 [mika]
+# Latest change: Fre Nov 10 00:33:15 CET 2006 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -358,24 +358,6 @@ fi
 }
 # }}}
 
-# {{{ installed on hd?
-config_checkfs(){
-if [ -n "$INSTALLED" ]; then
-  einfo "Running from HD, checking filesystems."
-# We are running from HD, so a file system check is recommended
-  [ -f /etc/init.d/checkroot.sh ] && /etc/init.d/checkroot.sh
-  [ -f /etc/init.d/checkfs.sh ]   && /etc/init.d/checkfs.sh
-  eend 0
-fi
-}
-# }}}
-
-# {{{ / must be read-write in any case, starting from here
-config_remount_root(){
-  mount -o remount,rw / 2>>$DEBUG
-}
-# }}}
-
 # {{{ ld.so.cache + depmod
 config_ld_mod(){
 if [ -n "$INSTALLED" ]; then
@@ -632,7 +614,7 @@ fi
 }
 # }}}
 
-# {{{ blacklist specific module
+# {{{ blacklist specific module [ used in /etc/init.d/udev ]
 config_blacklist(){
 if checkbootparam "blacklist" ; then
  if [ -z "$INSTALLED" ]; then
@@ -1341,91 +1323,6 @@ fi
 }
 # }}}
 
-# {{{ Check if we want the config floppy
-config_old_myconfig(){
-MYCONF=""
-case "$CMDLINE" in *\ myconfig*) MYCONF="yes"; ;; esac
-if [ -n "$MYCONF" ]; then
-  einfo "Bootoption myconfig detected." && eend 0
-# Check for given config directory
-  MYCONFDIR="$(getbootparam 'myconfig')"
-  [ -n "$MYCONFDIR" ] || MYCONFDIR="$(getbootparam 'myconfig')"
-fi
-
-# Check for configuration floppy add-on if not running from HD
-if [ -z "$INSTALLED" -a -n "$MYCONF" ]; then
-  FOUND_CONFIG=""
-  if [ -n "$MYCONFDIR" ]; then
-    case "$MYCONFDIR" in
-     /dev/*)
-       MYCONFDEVICE="${MYCONFDIR##/dev/}"
-       MYCONFDEVICE="/dev/${MYCONFDEVICE%%/*}"
-       MYCONFMOUNTPOINT="/mnt/${MYCONFDEVICE##/dev/}"
-       MYCONFDIR="/mnt/${MYCONFDIR##/dev/}"
-      ;;
-     /mnt/*)
-       MYCONFDEVICE="${MYCONFDIR##/mnt/}"
-       MYCONFDEVICE="/dev/${MYCONFDEVICE%%/*}"
-       MYCONFMOUNTPOINT="/mnt/${MYCONFDEVICE##/dev/}"
-      ;;
-     [Aa][Uu][Tt][Oo]|[Ss][Cc][Aa][Nn]|[Ff][Ii][Nn][Dd])
-       MYCONFDIR="$(findfile grml.sh)"
-       if [ -n "$MYCONFDIR" ]; then
-         MYCONFDEVICE="${MYCONFDIR##/mnt/}"
-         MYCONFDEVICE="/dev/${MYCONFDEVICE%%/*}"
-         MYCONFMOUNTPOINT="/mnt/${MYCONFDEVICE##/dev/}"
-         MYCONFDIR="${MYCONFMOUNTPOINT}"
-       else
-         FOUND_CONFIG="none"
-       fi
-      ;;
-     *)
-       eerror "Invalid configdir '$MYCONFDIR' specified (must start with /dev/ or /mnt/ or 'scan')." ; eend 1
-       eerror "Option ignored."
-       FOUND_CONFIG="invalid"
-      ;;
-    esac
-  else
-    MYCONFDEVICE="/dev/fd0"
-    MYCONFMOUNTPOINT="/mnt/floppy"
-    MYCONFDIR="/mnt/floppy"
-  fi
-
-  eindent
-  if [ -z "$FOUND_CONFIG" ]; then
-    einfo "Checking ${WHITE}${MYCONFDIR}${NORMAL} for grml configuration files...${NORMAL}"
-    [ -d $MYCONFMOUNTPOINT ] || mkdir $MYCONFMOUNTPOINT && chown grml: $MYCONFMOUNTPOINT
-    if trymount "$MYCONFDEVICE" "$MYCONFMOUNTPOINT"; then
-      MYCONFIG="$(/bin/ls -1d $MYCONFDIR/[Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
-      if [ -n "$MYCONFIG" -a -f "$MYCONFIG" ]; then
-        echo ""
-        FOUND_CONFIG="yes"
-        einfo "Found, now executing ${WHITE}${MYCONFIG}${NORMAL}."
-        echo "6" > /proc/sys/kernel/printk
-        . "$MYCONFIG" "$MYCONFDIR" || true
-        echo "0" > /proc/sys/kernel/printk
-      fi
-      umount "$MYCONFMOUNTPOINT" 2>>$DEBUG
-    fi
-  fi
-  [ -n "$FOUND_CONFIG" ] || eerror "Not present."
-  eoutdent
-fi
-# }}}
-
-# {{{ Check for extra shellscript on CD-ROM (/cdrom/GRML/grml.sh)
-MYCONFIG="$(/bin/ls -1d /cdrom/GRML/[Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
-if [ -n "$MYCONFIG" -a -f "$MYCONFIG" ]; then
-  echo ""
-  FOUND_CONFIG="yes"
-  einfo "grml script/configuration file found on CD, executing ${BLUE}${MYCONFIG}${NORMAL}:"
-  echo "6" > /proc/sys/kernel/printk
-  . "$MYCONFIG" /cdrom/GRML || true
-  echo "0" > /proc/sys/kernel/printk
-fi
-}
-# }}}
-
 # {{{ Check for scripts on CD-ROM
 config_cdrom_scripts(){
 if checkbootparam "script"; then
@@ -1759,6 +1656,17 @@ fi
 }
 
 config_myconfig(){
+
+if checkbootparam "config" ; then
+  CONFIG="$(getbootparam 'config' 2>>$DEBUG)"
+  [ -z "$CONFIG" ] && CONFIG='config.tbz'
+  einfo "Bootoption config found. config is set to: $CONFIG"
+  eindent
+    einfo "Trying to extract configuration file ${CONFIG}:"
+    cd / && unp /cdrom/config/$CONFIG $EXTRACTOPTIONS ; eend $?
+  eoutdent
+fi
+
 if checkbootparam myconfig ; then
  MOUNTDEVICE="$(getbootparam 'myconfig' 2>>$DEBUG)"
  if [ -n "$MOUNTDEVICE" ]; then
@@ -1827,18 +1735,6 @@ if checkbootparam "debs" ; then
   DEBS="$(getbootparam 'debs' 2>>$DEBUG)"
   einfo "Tring to install debian package(s) ${DEBS}"
   dpkg -i /cdrom/debs/$DEBS* ; eend $?
-fi
-}
-
-config_config(){
-if checkbootparam "config" ; then
-  CONFIG="$(getbootparam 'config' 2>>$DEBUG)"
-  [ -z "$CONFIG" ] && CONFIG='config.tbz'
-  einfo "Bootoption config found. config is set to: $CONFIG"
-  eindent
-    einfo "Trying to extract configuration file ${CONFIG}:"
-    cd / && unp /cdrom/config/$CONFIG $EXTRACTOPTIONS ; eend $?
-  eoutdent
 fi
 }
 
@@ -2157,9 +2053,6 @@ fi
 ### {{{ backwards compatible stuff
 config_environment(){
   ewarn "config_environment is deprecated. Please set CONFIG_ENVIRONMENT in /etc/grml/autoconfig to 'no'." ; eend 0
-}
-config_running_from() {
-  ewarn "config_running_from is deprecated. Please set CONFIG_RUNNING_FROM in /etc/grml/autoconfig to 'no'." ; eend 0
 }
 config_keyboard(){
   ewarn "config_keyboard is deprecated. Please set CONFIG_KEYBOARD in /etc/grml/autoconfig to 'no'." ; eend 0
