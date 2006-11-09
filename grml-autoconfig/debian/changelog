@@ -1,3 +1,15 @@
+grml-autoconfig (0.5-23) unstable; urgency=low
+
+  * The "we need a cleanup" release.
+  * Move checkbootparam "config" into myconfig function and
+    deprecate config_config therefor. (Thanks for the hint,
+    Marc Haber!)
+  * Deprecate unsued functions config_checkfs, config_remount_root,
+    config_old_myconfig and config_config.
+  * Remove unused $CONFIG_SPLASH from configuration files.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 10 Nov 2006 00:34:17 +0100
+
 grml-autoconfig (0.5-22) unstable; urgency=low
 
   * config_swraid: use mkconf for generation of mdadm.conf
