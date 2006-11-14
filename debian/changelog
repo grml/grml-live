@@ -1,3 +1,9 @@
+grml-etc (0.8-34) unstable; urgency=low
+
+  * /etc/skel/.kshrc: adjust header information, replace tabs
+
+ -- Michael Prokop <mika@grml.org>  Sun, 12 Nov 2006 11:58:43 +0100
+
 grml-etc (0.8-33) unstable; urgency=low
 
   * /etc/inittab.small: activate only two consoles by default and
