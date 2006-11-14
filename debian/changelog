@@ -1,3 +1,12 @@
+grml-etc (0.8-35) unstable; urgency=low
+
+  * /etc/skel/.xinitrc: run 'setxkbmap "$XKEYBOARD"' and drop
+    "[ $XKEYBOARD == "de" ] ... modmap $HOME/.Xmodmap.german",
+    this should fix our deadkeys problem for lang=de* and support
+    additional languages as well.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 14 Nov 2006 13:32:28 +0100
+
 grml-etc (0.8-34) unstable; urgency=low
 
   * /etc/skel/.kshrc: adjust header information, replace tabs

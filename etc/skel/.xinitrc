@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Jun 12 13:56:28 CEST 2006 [mika]
+# Latest change: Die Nov 14 13:32:00 CET 2006 [mika]
 ################################################################################
 
 # is something goes wrong fall back to plain xterm:
@@ -19,8 +19,8 @@
 
 # print info text
   if [ -x /usr/bin/osd_cat ] ; then
-    echo "Starting X window system and loading window manager..." | \
-    osd_cat -c white -A center -p middle -f "-misc-fixed-medium-r-normal-*-*-150-*-*-c-*-iso8859-15" &
+     echo "Starting X window system and loading window manager..." | \
+     osd_cat -c white -A center -p middle -f "-misc-fixed-medium-r-normal-*-*-150-*-*-c-*-iso8859-15" &
   fi
 
 # add at least one entry to xauth
@@ -46,20 +46,20 @@
 # keybindings
   . /etc/sysconfig/keyboard && \
   if [ $XKEYBOARD == "us" ] ; then
-    [ -r $HOME/.Xmodmap ] && xmodmap $HOME/.Xmodmap
+     [ -r $HOME/.Xmodmap ] && xmodmap $HOME/.Xmodmap
+  else
+     setxkbmap "$XKEYBOARD"
   fi
-  if [ $XKEYBOARD == "de" ] ; then
-    [ -r $HOME/.Xmodmap.german ] && xmodmap $HOME/.Xmodmap.german
-  fi
+
 # mouse for lefty:
 # xmodmap -e "pointer = 3 2 1"
 # mouse for right hander:
 # xmodmap -e "pointer = 1 2 3"
 
-# start browser with startpage.html
-  grml-info &
+# start browser with startpage.html, but only in live-cd mode
+  [ -r /etc/grml_cd ] && grml-info &
 
-# default entry, use e.g. 'grml-x windowmanager' for changing
+# default entry, use e.g. 'grml-x windowmanager' for changing or just adjust manually
   exec /usr/bin/wm-ng
 
 ## END OF FILE #################################################################
