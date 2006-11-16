@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika(at)grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Die Sep 26 12:26:05 CEST 2006 [mika]
+# Latest change: Don Nov 16 20:24:16 CET 2006 [mika]
 ################################################################################
 
 if [ "$UID" != 0 ];  then
@@ -39,15 +39,11 @@ check_setting()
 check_current_state()
 {
   grep -q '^CONFIG_DHCP=.*yes'     $AUTOCONFIG && DHCPSTATUS=ON     || DHCPSTATUS=OFF
-  grep -q '^CONFIG_ACPI_APM=.*yes' $AUTOCONFIG && ACPI_APMSTATUS=ON || ACPI_APMSTATUS=OFF
+  grep -q '^CONFIG_FSTAB=.*yes'    $AUTOCONFIG && FSTABSTATUS=ON    || FSTABSTATUS=OFF
   grep -q '^CONFIG_CPU=.*yes'      $AUTOCONFIG && CPUSTATUS=ON      || CPUSTATUS=OFF
+  grep -q '^CONFIG_ACPI_APM=.*yes' $AUTOCONFIG && ACPI_APMSTATUS=ON || ACPI_APMSTATUS=OFF
   grep -q '^CONFIG_SYSLOG=.*yes'   $AUTOCONFIG && SYSLOGSTATUS=ON   || SYSLOGSTATUS=OFF
   grep -q '^CONFIG_GPM=.*yes'      $AUTOCONFIG && GPMSTATUS=ON      || GPMSTATUS=OFF
-  grep -q '^CONFIG_KERNEL=.*yes'   $AUTOCONFIG && KERNELSTATUS=ON   || KERNELSTATUS=OFF
-  grep -q '^CONFIG_FSTAB=.*yes'    $AUTOCONFIG && FSTABSTATUS=ON    || FSTABSTATUS=OFF
-  grep -q '^CONFIG_LANGUAGE=.*yes' $AUTOCONFIG && LANGUAGESTATUS=ON || LANGUAGESTATUS=OFF
-  grep -q '^CONFIG_DMA=.*yes'      $AUTOCONFIG && DMASTATUS=ON      || DMASTATUS=OFF
-  grep -q '^CONFIG_MIXER=.*yes'    $AUTOCONFIG && MIXERSTATUS=ON    || MIXERSTATUS=OFF
 }
 
 # main program
@@ -64,30 +60,22 @@ All the configuration happens in the file /etc/grml/autoconfig - you can
 edit it manually as well.
 " 0 0 0 \
 dhcp "check for network devices and run pump (get ip-address via DHCP)" $DHCPSTATUS \
-acpi_apm "load ACPI/APM modules" $ACPI_APMSTATUS \
+fstab "update /etc/fstab entries (check for devices)" $FSTABSTATUS \
 cpufreq "activate cpydyn/powernowd for frequency-scalable CPUs" $CPUSTATUS \
+acpi_apm "load ACPI/APM modules" $ACPI_APMSTATUS \
 syslog "start syslog-ng" $SYSLOGSTATUS \
 gpm "start GPM (mouse on console)" $GPMSTATUS \
-kernel "display information on running kernel" $KERNELSTATUS \
-fstab "update /etc/fstab entries (check for devices)" $FSTABSTATUS \
-language "run loadkeys / consolechars" $LANGUAGESTATUS \
-dma "enable DMA for all IDE drives" $DMASTATUS \
-mixer "set audio volumes" $MIXERSTATUS \
   2>$TMPFILE
 }
 
 set_values()
 {
   check_setting dhcp        && activate_value CONFIG_DHCP         || deactivate_value CONFIG_DHCP
-  check_setting acpi_apm    && activate_value CONFIG_ACPI_APM     || deactivate_value CONFIG_ACPI_APM
+  check_setting fstab       && activate_value CONFIG_FSTAB        || deactivate_value CONFIG_FSTAB
   check_setting cpufreq     && activate_value CONFIG_CPU          || deactivate_value CONFIG_CPU
+  check_setting acpi_apm    && activate_value CONFIG_ACPI_APM     || deactivate_value CONFIG_ACPI_APM
   check_setting syslog      && activate_value CONFIG_SYSLOG       || deactivate_value CONFIG_SYSLOG
   check_setting gpm         && activate_value CONFIG_GPM          || deactivate_value CONFIG_GPM
-  check_setting kernel      && activate_value CONFIG_KERNEL       || deactivate_value CONFIG_KERNEL
-  check_setting fstab       && activate_value CONFIG_FSTAB        || deactivate_value CONFIG_FSTAB
-  check_setting language    && activate_value CONFIG_LANGUAGE     || deactivate_value CONFIG_LANGUAGE
-  check_setting dma         && activate_value CONFIG_DMA          || deactivate_value CONFIG_DMA
-  check_setting mixer       && activate_value CONFIG_MIXER        || deactivate_value CONFIG_MIXER
 }
 
 # and now run it:

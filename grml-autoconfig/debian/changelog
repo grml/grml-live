@@ -1,3 +1,15 @@
+grml-autoconfig (0.5-25) unstable; urgency=low
+
+  * grml-autoconfig script: deprecate CONFIG_KERNEL, CONFIG_LANGUAGE,
+    CONFIG_DMA and CONFIG_MIXER as they are not really relevant on hd
+    installations.
+  * Do not use swap by default anymore, thanks for feedback goes to
+    Wolfgang Karall!
+  * Set mailaddress when creating /etc/mdadm/mdadm.conf so mdadm's
+    initscripts do not report warnings anymore on hd-installations.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 16 Nov 2006 20:23:45 +0100
+
 grml-autoconfig (0.5-24) unstable; urgency=low
 
   * Added support for Norsk environment, thanks to Arnt Karlsen!
