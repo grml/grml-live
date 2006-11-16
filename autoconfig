@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Fre Nov 10 00:37:37 CET 2006 [mika]
+# Latest change: Don Nov 16 20:20:59 CET 2006 [mika]
 ################################################################################
 
 ################################################################################
@@ -13,7 +13,7 @@
 # de-/activate a check!
 #
 # If you want to deactivate an option just set it to 'no'.
-# 
+#
 # Take a look at the script 'grml-autoconfig' as well!
 ################################################################################
 
@@ -30,9 +30,6 @@
 # default: Lat15-Terminus16
 # CONSOLEFONT='iso15graf-16'
 
-# display information on running kernel
-CONFIG_KERNEL='yes'
-
 # check for network devices and run dhclient
 CONFIG_DHCP='yes'
 
@@ -44,13 +41,6 @@ CONFIG_FSTAB='yes'
 
 # load ACPI/APM modules
 CONFIG_ACPI_APM='yes'
-
-# Enable DMA for all IDE drives - already done in initrd
-# but make sure it's done also on harddisk-installed systems
-CONFIG_DMA='yes'
-
-# set audio volumes
-CONFIG_MIXER='yes'
 
 # start syslog-ng
 CONFIG_SYSLOG='yes'
@@ -71,6 +61,7 @@ CONFIG_BLIND='yes'            # check for blind option or brltty
 CONFIG_CDROM_PERM='yes'       # for burning on IDE-CD-Roms, k3b (and others) check for special permissions
 CONFIG_CDROM_SCRIPTS='yes'    # run scripts from /cdrom/scripts
 CONFIG_CONSOLE='yes'          # activate mgetty when using console=... as bootparam
+CONFIG_DMA='yes'              # Enable DMA for all IDE drives
 CONFIG_CREATE_MNT_DIRS='no'   # create /mnt-directories
 CONFIG_DEBNET='yes'           # search for /etc/network/interfaces on partitions and set up network afterwards
 CONFIG_DEBS='yes'             # check for bootoption debs for installing .debs
@@ -92,10 +83,12 @@ CONFIG_HOTPLUG_AGENT='no'     # deactivate specific hotplug agent(s) via bootpar
 CONFIG_HOTPLUG_BLACKLIST='no' # check for blacklist bootparam
 CONFIG_HWINFO='no'            # run hwinfo for module-detection (requires bootparam 'hwinfo'!)
 CONFIG_INTERACTIVE='yes'      # check for expert-mode as bootparam
+CONFIG_KERNEL='yes'           # display information on running kernel
 CONFIG_LANGUAGE='yes'         # allow language specification via commandline
 CONFIG_LD_MOD='yes'           # run ldconfig and depmod on systems running from harddisk; remove /etc/grml.first.boot for forcing
 CONFIG_LOCAL_NET='yes'        # bring up loopback interface
 CONFIG_LOG='yes'              # DEBUG=/dev/null or logfile int /tmp/...
+CONFIG_MIXER='yes'            # set audio volumes [only in live-cd mode relevant, except for bootoption nosound]
 CONFIG_MODEM='yes'            # check for AC'97 Modem Controller modem
 CONFIG_MODULES='yes'          # load modules specified in /etc/grml/modules
 CONFIG_MOUSE='yes'            # show mouse information (expert-mode)
