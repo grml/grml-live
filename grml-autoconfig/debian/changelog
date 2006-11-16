@@ -1,3 +1,10 @@
+grml-autoconfig (0.5-26) unstable; urgency=low
+
+  * autoconfig.functions: make sure we can access /proc/cmdline
+    when just sourcing this file too
+
+ -- Michael Prokop <mika@grml.org>  Thu, 16 Nov 2006 21:33:35 +0100
+
 grml-autoconfig (0.5-25) unstable; urgency=low
 
   * grml-autoconfig script: deprecate CONFIG_KERNEL, CONFIG_LANGUAGE,

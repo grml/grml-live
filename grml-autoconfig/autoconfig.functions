@@ -89,6 +89,7 @@ mount_sys(){
 # }}}
 
 # {{{ Read in boot parameters
+[ -f /proc/version ] || mount_proc # make sure we can access /proc/cmdline when sourcing this file too
 CMDLINE="$(cat /proc/cmdline)"
 [ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/* | tr '\n' ' ')"
 # }}}
