@@ -1,3 +1,10 @@
+grml-autoconfig (0.5-27) unstable; urgency=low
+
+  * Use LANGUAGE="en" instead of LANGUAGE="us" for lang=en*,
+    thanks for input - Dirk Deimeke!
+
+ -- Michael Prokop <mika@grml.org>  Tue, 21 Nov 2006 00:04:20 +0100
+
 grml-autoconfig (0.5-26) unstable; urgency=low
 
   * autoconfig.functions: make sure we can access /proc/cmdline
