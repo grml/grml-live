@@ -282,7 +282,8 @@ case "$LANGUAGE" in
                 ;;
         en)
                 # English in Austria [see us + uk for american and english version!]
-                LANGUAGE="us"
+                # LANGUAGE="en_US:en_GB:en"
+                LANGUAGE="en"
                 COUNTRY="at"
                 LANG="en_US.iso885915"
                 KEYTABLE="us"
@@ -294,7 +295,7 @@ case "$LANGUAGE" in
                 ;;
         en-utf8)
                 # English in Austria [see us + uk for american and english version!] (UTF8)
-                LANGUAGE="us"
+                LANGUAGE="en"
                 COUNTRY="at"
                 LANG="en_US.UTF-8"
                 KEYTABLE="us"
