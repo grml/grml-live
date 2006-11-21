@@ -1,3 +1,10 @@
+grml-etc (0.8-36) unstable; urgency=low
+
+  * /etc/skel/.Xmodmap: use Caps_Lock for keycode 66, thanks for
+    the hint - wuehlmaus!
+
+ -- Michael Prokop <mika@grml.org>  Tue, 21 Nov 2006 16:58:16 +0100
+
 grml-etc (0.8-35) unstable; urgency=low
 
   * /etc/skel/.xinitrc: run 'setxkbmap "$XKEYBOARD"' and drop
