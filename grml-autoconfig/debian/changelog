@@ -1,3 +1,12 @@
+grml-autoconfig (0.5-28) unstable; urgency=low
+
+  * config_userfstab: use new CONFIG_FSTAB_USER variable from
+    /etc/grml/autoconfig
+  * adjust configuration files for CONFIG_FSTAB_USER and
+    CONFIG_FSTAB_GROUP supported by grml-rebuildfstab (>= 0.3-16).
+
+ -- Michael Prokop <mika@grml.org>  Fri, 24 Nov 2006 21:24:40 +0100
+
 grml-autoconfig (0.5-27) unstable; urgency=low
 
   * Use LANGUAGE="en" instead of LANGUAGE="us" for lang=en*,

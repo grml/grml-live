@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Fre Nov 10 00:33:15 CET 2006 [mika]
+# Latest change: Fre Nov 24 21:24:22 CET 2006 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -316,7 +316,13 @@ config_hostname(){
 
 # fstabuser (needed when running from harddisk with username != grml {{{
 config_userfstab(){
-  fstabuser=$(getent passwd 1000 | cut -d: -f1)
+  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig
+  if [ -n "$CONFIG_FSTAB_USER" ] ; then
+     fstabuser="$CONFIG_FSTAB_USER"
+  else
+     fstabuser=$(getent passwd 1000 | cut -d: -f1)
+  fi
+  # if not yet set fall back to default 'grml' user
   [ -n "$fstabuser" ] || fstabuser='grml'
 }
 # }}}
