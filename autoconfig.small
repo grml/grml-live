@@ -3,49 +3,46 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Don Nov 16 20:20:59 CET 2006 [mika]
+# Latest change: Fre Nov 24 21:20:51 CET 2006 [mika]
 ################################################################################
 
 ################################################################################
 # Notice: you can configure grml-autoconfig via adjusting the following values.
-# Set them to 'yes' to activate them. But please notice that some options
-# require an additional bootparam ("cheatcode") anyway, some options just
-# de-/activate a check!
-#
-# If you want to deactivate an option just set it to 'no'.
+# Set them to 'yes' to activate them and to 'no' to deactivate them.
+# But please notice that some options might require an additional bootparam
+# ("cheatcode") anyway, some options just de-/activate a check!
 #
 # Take a look at the script 'grml-autoconfig' as well!
 ################################################################################
 
 ## These are the options you might want to adjust: #############################
 
-# configure language - set keyboard layout
-# notice: overwriting this variable is still possible through
-#         bootparameter lang=...
-# See http://grml.org/faq/#language for more information.
-# default: us
-# LANGUAGE='de'
-
-# console font
-# default: Lat15-Terminus16
+# set console font, default: Lat15-Terminus16
 # CONSOLEFONT='iso15graf-16'
 
-# check for network devices and run dhclient
+# check for network devices and run pump for every present network device?
+# use script grml-network for interactive configuration and
+# /etc/network/interfaces for persistent configuration
+# default: yes
 CONFIG_DHCP='yes'
 
-# check for frequency-scalable CPU and activate cpydyn/powernowd
+# check for frequency-scalable CPU and activate cpydyn/powernowd (default: no)
 CONFIG_CPU='no'
 
-# create /etc/fstab (this also de-/activates swap-partition)
+# create/regenerate /etc/fstab using [grml-]rebuildfstab?
 CONFIG_FSTAB='yes'
+# define uid for rebuildfstab used in /etc/fstab (default: 1000):
+CONFIG_FSTAB_USER='1000'
+# define guid for rebuildfstab used in /etc/fstab (default: users):
+CONFIG_FSTAB_GROUP='users'
 
-# load ACPI/APM modules
+# load ACPI/APM modules (default: yes)
 CONFIG_ACPI_APM='yes'
 
-# start syslog-ng
+# start syslog-ng (default: yes)
 CONFIG_SYSLOG='yes'
 
-# start gpm
+# start gpm (default: yes)
 CONFIG_GPM='yes'
 
 ################################################################################
