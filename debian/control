@@ -3,14 +3,14 @@ Section: grml
 Priority: optional
 Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends: debhelper (>= 4.0.0)
-Standards-Version: 3.6.2
+Standards-Version: 3.7.2
 
 Package: grml-etc
 Architecture: all
 Replaces: automount-knoppix
 Suggests: grml-shlib, grml-files, grml-docs, grml-sectools, grml-templates, grml-x, policyrcd-script-zg2
 Recommends: dillo, eterm, python, vim (>= 7.0)
-Depends: grml-autoconfig, grml-scripts (>= 0.8-24), grml-etc-core
+Depends: grml-autoconfig, grml-scripts (>= 0.9), grml-etc-core (>= 0.9)
 Conflicts: smbconf-pfeifle
 Description: ecetera files for the grml system
  This package includes some /etc files for the
