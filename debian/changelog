@@ -1,3 +1,10 @@
+grml-etc (0.9-2) unstable; urgency=low
+
+  * /etc/runlevel.conf.hdinstall: adjust sendsigs initscript
+    as done by sysvinit (2.86.ds1-35).
+
+ -- Michael Prokop <mika@grml.org>  Sun, 26 Nov 2006 22:24:07 +0100
+
 grml-etc (0.9-1) unstable; urgency=low
 
   * Update version number for new release, depend on
