@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Fre Nov 24 21:24:22 CET 2006 [mika]
+# Latest change: Mon Nov 27 21:02:23 CET 2006 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -964,7 +964,7 @@ if [ -n "$partitions" ]; then
   case "$f" in swap)
    eindent
    if [ -n "$NOSWAP" ]; then
-    ewarn "Ignoring swap partition ${WHITE}$p${NORMAL} as requested." ; eend 0
+    ewarn "Ignoring swap partition ${WHITE}$p${NORMAL}. (Force usage via boot option 'swap', or execute grml-swapon)" ; eend 0
    else
      case "$(dd if=$p bs=1 count=6 skip=4086 2>/dev/null)" in
              S1SUSP|S2SUSP|pmdisk|[zZ]*)
