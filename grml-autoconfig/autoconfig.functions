@@ -1909,7 +1909,7 @@ config_swraid(){
        if ! grep -q ARRAY /etc/mdadm/mdadm.conf 2>>$DEBUG ; then
 	  einfo "Creating /etc/mdadm/mdadm.conf"
 	  [ -r /etc/mdadm/mdadm.conf ] && mv /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.old
-	  MDADM_MAILADDR='root' /usr/share/mdadm/mkconf > /etc/mdadm/mdadm.conf ; eend $?
+	  MDADM_MAILADDR__='root' /usr/share/mdadm/mkconf > /etc/mdadm/mdadm.conf ; eend $?
 	else
 	  ewarn "/etc/mdadm/mdadm.conf looks like a configured mdadm setup, will not touch it." ; eend 0
        fi
