@@ -1,3 +1,10 @@
+grml-autoconfig (0.6-3) unstable; urgency=low
+
+  * Extend 'Ignoring swap partition'-message for new default
+    behaviour (do not use swap by default anymore).
+
+ -- Michael Prokop <mika@grml.org>  Mon, 27 Nov 2006 23:45:30 +0100
+
 grml-autoconfig (0.6-2) unstable; urgency=low
 
   * Use 'MDADM_MAILADDR__' for setting mailaddress in mdadm.conf.
