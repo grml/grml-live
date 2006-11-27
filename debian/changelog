@@ -1,3 +1,10 @@
+grml-autoconfig (0.6-2) unstable; urgency=low
+
+  * Use 'MDADM_MAILADDR__' for setting mailaddress in mdadm.conf.
+    (Closes: issue24)
+
+ -- Michael Prokop <mika@grml.org>  Mon, 27 Nov 2006 12:25:26 +0100
+
 grml-autoconfig (0.6-1) unstable; urgency=low
 
   * Bumb version to 0.6 for new release. 
