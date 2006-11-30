@@ -169,6 +169,7 @@
 20	0,1,6	-		/etc/init.d/codeville
 20	0,1,6	-		/etc/init.d/reniced
 20	-	0,6		/etc/init.d/sendsigs
+20	0,1,6	-		/etc/init.d/iscsi-target
 21	-	1		/etc/init.d/aumix
 21	0,1,6	-		/etc/init.d/capiutils
 22	-	-		/etc/init.d/scsitools.sh

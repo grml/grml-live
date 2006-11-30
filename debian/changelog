@@ -1,3 +1,9 @@
+grml-etc (0.9-3) unstable; urgency=low
+
+  * /etc/runlevel.conf.hdinstall: add /etc/init.d/iscsi-target
+
+ -- Michael Prokop <mika@grml.org>  Mon, 27 Nov 2006 23:57:40 +0100
+
 grml-etc (0.9-2) unstable; urgency=low
 
   * /etc/runlevel.conf.hdinstall: adjust sendsigs initscript
