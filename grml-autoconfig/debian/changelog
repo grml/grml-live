@@ -1,3 +1,13 @@
+grml-autoconfig (0.6-4) unstable; urgency=low
+
+  * Do *not* autoassemble sw-raid arrays any more, instead:
+    - create /etc/mdadm/mdadm.conf by default, boot using
+      noswraid to disable it
+    - assemble md arrays only if bootoption swraid is used,
+      otherwise display usage information how to enable it
+
+ -- Michael Prokop <mika@grml.org>  Sat,  2 Dec 2006 16:41:18 +0100
+
 grml-autoconfig (0.6-3) unstable; urgency=low
 
   * Extend 'Ignoring swap partition'-message for new default

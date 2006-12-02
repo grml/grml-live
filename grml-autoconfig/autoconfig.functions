@@ -1897,8 +1897,9 @@ fi
 config_swraid(){
   if [ -z "$INSTALLED" ] ; then
   # notice: checkbootparam "forensic" is just for users who don't know how to really use the bootoption
-  if checkbootparam "noraid" -o checkbootparam "forensic" -o checkbootparam "raid=noautodetect" ; then
-     ewarn "Skipping search for SW-RAID as requested on boot commandline." ; eend 0
+  if checkbootparam 'noraid'   -o checkbootparam 'noswraid' -o \
+     checkbootparam 'forensic' -o checkbootparam 'raid=noautodetect' ; then
+     ewarn "Skipping SW-RAID code as requested on boot commandline." ; eend 0
   else
     if ! [ -x /sbin/mdadm ] ; then
        eerror "mdadm not available, can not execute it." ; eend 1
@@ -1907,47 +1908,53 @@ config_swraid(){
        # if ! egrep -qv '^(MAILADDR.*|#.*|)$' /etc/mdadm/mdadm.conf 2>>$DEBUG ; then
        # find out whether we have a valid configuration file already
        if ! grep -q ARRAY /etc/mdadm/mdadm.conf 2>>$DEBUG ; then
-	  einfo "Creating /etc/mdadm/mdadm.conf"
-	  [ -r /etc/mdadm/mdadm.conf ] && mv /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.old
-	  MDADM_MAILADDR__='root' /usr/share/mdadm/mkconf > /etc/mdadm/mdadm.conf ; eend $?
-	else
-	  ewarn "/etc/mdadm/mdadm.conf looks like a configured mdadm setup, will not touch it." ; eend 0
+          einfo "Creating /etc/mdadm/mdadm.conf for use with mdadm."
+          [ -r /etc/mdadm/mdadm.conf ] && mv /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.old
+          MDADM_MAILADDR__='root' /usr/share/mdadm/mkconf > /etc/mdadm/mdadm.conf ; eend $?
+        else
+          ewarn "/etc/mdadm/mdadm.conf looks like a configured mdadm setup, will not touch it." ; eend 0
        fi
 
-       einfo "Searching for software RAID arrays (disable via bootoption noraid):"
-       eindent
-         IFSOLD=${IFS:-}
-         IFS='
-'
-         for line in $(mdadm --assemble --scan --auto=yes --symlink=no 2>&1) ; do
-             case $line in
-               *'No arrays found'*)
-                 ewarn "$line" ; eend 0
-                 ;;
-               *)
-                 einfo "$line" ; eend 0
-                 ;;
-             esac
-         done
-         IFS=$IFSOLD
-       eoutdent
-
-       if [ -r /proc/mdstat ] ; then
+       if ! checkbootparam 'swraid' ; then 
           eindent
-          MDSTAT=$(grep '^md[0-9]' /proc/mdstat)
-          if [ -z "$MDSTAT" ] ; then
-             ewarn "No active arrays found" ; eend 0
-          else
-             IFSOLD=${IFS:-}
-             IFS='
-'
-             for line in $(grep '^md[0-9]' /proc/mdstat) ; do
-                 einfo "active arrays: $line" ; eend 0
-             done
-             IFS=$IFSOLD
-          fi
+          einfo "Just run 'Start mdadm-raid' to assemble md arrays or boot using swraid bootoption for autostart."
           eoutdent
-       fi
+       else
+          einfo "Bootoption swraid found. Searching for software RAID arrays:"
+          eindent
+           IFSOLD=${IFS:-}
+           IFS='
+'
+           for line in $(mdadm --assemble --scan --auto=yes --symlink=no 2>&1) ; do
+               case $line in
+                 *'No arrays found'*)
+                   ewarn "$line" ; eend 0
+                   ;;
+                 *)
+                   einfo "$line" ; eend 0
+                   ;;
+               esac
+           done
+           IFS=$IFSOLD
+         eoutdent
+
+         if [ -r /proc/mdstat ] ; then
+            eindent
+            MDSTAT=$(grep '^md[0-9]' /proc/mdstat)
+            if [ -z "$MDSTAT" ] ; then
+               ewarn "No active arrays found" ; eend 0
+            else
+               IFSOLD=${IFS:-}
+               IFS='
+'
+               for line in $(grep '^md[0-9]' /proc/mdstat) ; do
+                   einfo "active arrays: $line" ; eend 0
+               done
+               IFS=$IFSOLD
+            fi
+            eoutdent
+         fi # /proc/mdstat
+       fi # bootoption swraid
 
      fi # is /sbin/mdadm executable?
   fi # check for bootoptions
