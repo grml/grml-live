@@ -5,6 +5,7 @@ grml-autoconfig (0.6-4) unstable; urgency=low
       noswraid to disable it
     - assemble md arrays only if bootoption swraid is used,
       otherwise display usage information how to enable it
+    (Closes: issue35)
 
  -- Michael Prokop <mika@grml.org>  Sat,  2 Dec 2006 16:41:18 +0100
 
