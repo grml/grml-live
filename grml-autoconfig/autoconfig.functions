@@ -335,7 +335,11 @@ config_time(){
   checkbootparam utc >>$DEBUG 2>&1 && UTC="-u"
   checkbootparam gmt >>$DEBUG 2>&1 && UTC="-u"
   # hwclock uses the TZ variable
-  . /etc/default/locale
+  if [ -r /etc/default/locale ] ; then
+     . /etc/default/locale
+  else
+     TZ=Europe/Vienna
+  fi
   ERROR=$(TZ="$TZ" hwclock $UTC -s 2>&1) ; RC=$?
   if [ -n "$ERROR" ] ; then
      eindent
