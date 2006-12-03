@@ -335,8 +335,16 @@ config_time(){
   checkbootparam utc >>$DEBUG 2>&1 && UTC="-u"
   checkbootparam gmt >>$DEBUG 2>&1 && UTC="-u"
   # hwclock uses the TZ variable
-  export TZ
-  hwclock $UTC -s
+  . /etc/default/locale
+  ERROR=$(TZ="$TZ" hwclock $UTC -s 2>&1) ; RC=$?
+  if [ -n "$ERROR" ] ; then
+     eindent
+     ERROR=$(TZ="$TZ" hwclock $UTC -s --directisa 2>&1)
+     if [ -n "$ERROR" ] ; then
+        eerror "Problem running hwclock: $ERROR" ; eend 1
+     fi
+     eoutdent
+  fi
  fi
 }
 # }}}
@@ -965,7 +973,7 @@ if [ -n "$partitions" ]; then
    eindent
    if [ -n "$NOSWAP" ]; then
       if [ -z "$INSTALLED" ] ; then
-	 ewarn "Ignoring swap partition ${WHITE}$p${NORMAL}. (Force usage via boot option 'swap', or execute grml-swapon)" ; eend 0
+         ewarn "Ignoring swap partition ${WHITE}$p${NORMAL}. (Force usage via boot option 'swap', or execute grml-swapon)" ; eend 0
       fi
    else
      case "$(dd if=$p bs=1 count=6 skip=4086 2>/dev/null)" in

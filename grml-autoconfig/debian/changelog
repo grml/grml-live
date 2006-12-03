@@ -1,3 +1,11 @@
+grml-autoconfig (0.6-7) unstable; urgency=low
+
+  * config_time: use option --directisa for hwclock if running hwclock
+    fails (work around the 'select() to /dev/rtc to wait for clock
+    tick timed out' problem).
+
+ -- Michael Prokop <mika@grml.org>  Sun,  3 Dec 2006 18:07:08 +0100
+
 grml-autoconfig (0.6-6) unstable; urgency=low
 
   * Display "not using swap partition" only in live-cd mode.
