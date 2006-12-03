@@ -1,3 +1,10 @@
+grml-autoconfig (0.6-8) unstable; urgency=low
+
+  * config_time: make sure /etc/default/locale can be accessed
+    before reading it (relevant basically only for booting via PXE).
+
+ -- Michael Prokop <mika@grml.org>  Sun,  3 Dec 2006 22:56:58 +0100
+
 grml-autoconfig (0.6-7) unstable; urgency=low
 
   * config_time: use option --directisa for hwclock if running hwclock
