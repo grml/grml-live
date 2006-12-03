@@ -1917,7 +1917,7 @@ config_swraid(){
 
        if ! checkbootparam 'swraid' ; then 
           eindent
-          einfo "Just run 'Start mdadm-raid' to assemble md arrays or boot using swraid bootoption for autostart."
+          einfo "Just run 'Start mdadm-raid' to assemble md arrays or boot using 'swraid' as bootoption for autostart."
           eoutdent
        else
           einfo "Bootoption swraid found. Searching for software RAID arrays:"
