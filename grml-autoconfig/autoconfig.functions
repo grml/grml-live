@@ -964,7 +964,9 @@ if [ -n "$partitions" ]; then
   case "$f" in swap)
    eindent
    if [ -n "$NOSWAP" ]; then
-    ewarn "Ignoring swap partition ${WHITE}$p${NORMAL}. (Force usage via boot option 'swap', or execute grml-swapon)" ; eend 0
+      if [ -z "$INSTALLED" ] ; then
+	 ewarn "Ignoring swap partition ${WHITE}$p${NORMAL}. (Force usage via boot option 'swap', or execute grml-swapon)" ; eend 0
+      fi
    else
      case "$(dd if=$p bs=1 count=6 skip=4086 2>/dev/null)" in
              S1SUSP|S2SUSP|pmdisk|[zZ]*)
