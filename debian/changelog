@@ -1,3 +1,10 @@
+grml-autoconfig (0.6.9) unstable; urgency=low
+
+  * Use Uni3-Terminus14 as default font to get utf8 support by default.
+  * Update language functions for 'get utf8 by default'.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 16 Dec 2006 18:24:11 +0100
+
 grml-autoconfig (0.6-8) unstable; urgency=low
 
   * config_time: make sure /etc/default/locale can be accessed

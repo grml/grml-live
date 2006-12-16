@@ -197,7 +197,7 @@ config_language(){
 
  # set default to 'en' in live-cd mode if $LANGUAGE is not yet set:
  if [ -z "$INSTALLED" ] ; then
-    [ -n "$LANGUAGE" ] || LANGUAGE='en'
+    [ -n "$LANGUAGE" ] || LANGUAGE='en-utf8'
  fi
 
  # if bootoption lang is used update /etc/default/locale, otherwise *not*!
@@ -209,10 +209,11 @@ config_language(){
  if [ -z "$CONSOLEFONT" ] ; then
     if ! checkbootparam "nodefaultfont" >>$DEBUG 2>&1 ; then
        # [ -n "$UTF8" ] && CONSOLEFONT='LatArCyrHeb-16' || CONSOLEFONT='Lat15-Terminus16'
-       if [ -r /usr/share/consolefonts/Lat15-Terminus16.psf.gz ] ; then
-          CONSOLEFONT='Lat15-Terminus16'
+       # if [ -r /usr/share/consolefonts/Lat15-Terminus16.psf.gz ] ; then
+       if [ -r /usr/share/consolefonts/Uni3-Terminus14.psf.gz ] ; then
+          CONSOLEFONT='Uni3-Terminus14'
        else
-          ewarn "/usr/share/consolefonts/Lat15-Terminus16.psf.gz not available. Please upgrade package console-terminus." ; eend 1
+          ewarn "/usr/share/consolefonts/Uni3-Terminus14.psf.gz not available. Please upgrade package console-terminus." ; eend 1
        fi
     fi
  fi
@@ -280,9 +281,9 @@ config_language(){
      consolechars -f $CONSOLEFONT || consolechars -d
      eend $?
 
-     if [ -n "$UTF8" ] ; then
-        einfo "Notice: run 'filterm - dynafont' in your shell to enable a unicode capable console."
-     fi
+#     if [ -n "$UTF8" ] ; then
+#        einfo "Notice: run 'filterm - dynafont' in your shell to enable a unicode capable console."
+#     fi
   fi
 
   # we have to set up all consoles, therefore loop it over all ttys:
