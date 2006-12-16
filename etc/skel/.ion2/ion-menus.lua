@@ -22,7 +22,7 @@ defmenu("mainmenu", {
 
 -- Application menu
 defmenu("appmenu", {
-    menuentry("XTerm", make_exec_fn("xterm")),
+    menuentry("XTerm", make_exec_fn("x-terminal-emulator")),
     menuentry("Mozilla Firefox", make_exec_fn("firefox")),
     -- The query module must also be loaded for this binding to work.
     menuentry("Run...", querylib.query_exec),

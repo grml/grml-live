@@ -1,3 +1,12 @@
+grml-etc (0.9-5) unstable; urgency=low
+
+  * Replace all xterm commands in configuration files with
+    x-terminal-emulator. Notice: /etc/alternatives/x-terminal-emulator
+    should point to /usr/bin/lxterm which is a locale-sensitive wrapper
+    for xterm. So let's get ready for utf8 as default...
+
+ -- Michael Prokop <mika@grml.org>  Sat, 16 Dec 2006 16:52:27 +0100
+
 grml-etc (0.9-4) unstable; urgency=low
 
   * /etc/runlevel.conf.hdinstall: add /etc/init.d/farpd

@@ -1,5 +1,5 @@
 [begin] (Fluxbox) {} <>
-    [exec] (xterm) {xterm} <>
+    [exec] (xterm) {x-terminal-emulator} <>
     [submenu] (handy stuff) {} <>
         [exec] (dillo webbrowser) {dillo} 
         [exec] (firefox webbrowser) {firefox} 

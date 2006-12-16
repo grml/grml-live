@@ -1,8 +1,8 @@
 # Menu config for pekwm
 
 # Variables
-$TERM = "xterm"
-#$TERM = "/usr/bin/xterm -bg black -fg yellow -fn -misc-fixed-medium-r-normal--14-140-75-75-c-90-iso8859-15 -ah"
+$TERM = "x-terminal-emulator"
+#$TERM = "x-terminal-emulator -bg black -fg yellow -fn -misc-fixed-medium-r-normal--14-140-75-75-c-90-iso8859-15 -ah"
 $XCONSOLE = "xconsole -daemon -notify -verbose -fn fixed -exitOnFail -file /dev/xconsole"
 
 RootMenu = "Pekwm @ grml" {

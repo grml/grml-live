@@ -114,7 +114,7 @@ battery tooltip_comment
 battery alert_units_percent 0
 battery display_mode 0 0
 # gkrellshoot xlock_cmd xscreensaver-command -lock
-gkrellshoot xlock_cmd xterm -e grml-lock
+gkrellshoot xlock_cmd x-terminal-emulator -e grml-lock
 gkrellshoot active_panels 1
 gkrellshoot window_or_full 1
 gkrellshoot view_image 1

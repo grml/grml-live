@@ -4,11 +4,11 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Die Nov 14 13:32:00 CET 2006 [mika]
+# Latest change: Sam Dez 16 16:45:54 CET 2006 [mika]
 ################################################################################
 
-# is something goes wrong fall back to plain xterm:
-#  failsafe="xterm -ls -T failsafe -geometry 80x24-0-0"
+# is something goes wrong fall back to plain x-terminal-emulator:
+#  failsafe="x-terminal-emulator -ls -T failsafe -geometry 80x24-0-0"
 #  trap "exec $failsafe" EXIT 1 2 13 15
 
 # set wallpaper

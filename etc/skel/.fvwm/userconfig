@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Jun 12 18:42:31 CEST 2006 [mika]
+# Latest change: Sam Dez 16 16:47:23 CET 2006 [mika]
 ################################################################################
 # Bind applications to specific desktop:
 # Style vmware StartsOnPage 3 0
@@ -13,15 +13,15 @@
 
 # Run default terminal emulator via ctrl-alt-x:
 Key X A MC Exec exec x-terminal-emulator
-# ctrl-alt-p - run xterm in presentation mode (set via ~/.Xresources):
-Key P A MC Exec exec xterm -name presentation -geometry 65
+# ctrl-alt-p - run x-terminal-emulator in presentation mode (set via ~/.Xresources):
+Key P A MC Exec exec x-terminal-emulator -name presentation -geometry 65
 
 # Start application with specific geometry:
 # Key M A MC Exec exec mrxvt -lk --geometry 148x65
 # Key F A MC Exec exec firefox --geometry 1332x997-68-27
 
 # Special keys
-Key XF86AudioMedia A N Exec xterm
+Key XF86AudioMedia A N Exec x-terminal-emulator
 Key XF86AudioMute A N Exec XF86AudioMute
 Key XF86AudioLowerVolume A N Exec XF86AudioLowerVolume
 Key XF86AudioRaiseVolume A N Exec XF86AudioRaiseVolume

@@ -1,5 +1,5 @@
 # make sure each line ends in LF not CRLF!
-xterm:xterm
+xterm:x-terminal-emulator
 gvim:gvim
 firefox:mozilla-firefox
 grml-info:grml-info

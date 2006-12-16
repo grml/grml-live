@@ -19,7 +19,7 @@ defmenu("mainmenu", {
 
 -- Application menu
 defmenu("appmenu", {
-    menuentry("XTerm", make_exec_fn("xterm")),
+    menuentry("XTerm", make_exec_fn("x-terminal-emulator")),
     menuentry("Mozilla Firefox", make_exec_fn("firefox")),
     menuentry("Xdvi", make_exec_fn("xdvi")),
     menuentry("GV", make_exec_fn("gv")),

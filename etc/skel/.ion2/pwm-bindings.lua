@@ -51,7 +51,7 @@ global_bindings{
                                       exec_in(scr, m.." pwm")
                                   end
                               end),
-    kpress("F2", make_exec_fn("xterm")),
+    kpress("F2", make_exec_fn("x-terminal-emulator")),
     
     -- Create a new workspace with a default name.
     kpress(DEFAULT_MOD.."F9", 

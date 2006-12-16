@@ -51,7 +51,7 @@ global_bindings{
                                       exec_in(scr, m.." ion")
                                   end
                               end),
-    kpress(SECOND_MOD.."F2", make_exec_fn("xterm -fg white -bg black")),
+    kpress(SECOND_MOD.."F2", make_exec_fn("x-terminal-emulator -fg white -bg black")),
     
     -- Create a new workspace with a default name.
     kpress(DEFAULT_MOD.."F9", 
@@ -71,7 +71,7 @@ global_bindings{
     --kpress(DEFAULT_MOD.."Menu", make_bigmenu_fn("mainmenu")),
     --kpress(SECOND_MOD..KEYF11, querylib.query_restart),
     --kpress(SECOND_MOD..KEYF12, querylib.query_exit),
-    kpress(DEFAULT_MOD.."Escape", make_exec_fn("xterm")),
+    kpress(DEFAULT_MOD.."Escape", make_exec_fn("x-terminal-emulator")),
 }
 
 

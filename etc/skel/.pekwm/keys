@@ -1,5 +1,5 @@
-$TERM="xterm"
-#$TERM="xterm -fn fixed +sb -bg white -fg black"
+$TERM="x-terminal-emulator"
+#$TERM="x-terminal-emulator -fn fixed +sb -bg white -fg black"
 
 Global {
 # - - ----------------------------------------------- - -
@@ -73,7 +73,7 @@ Global {
 	# KeyPress = "XF86AudioLowerVolume" { Actions = "Exec aumix -w-5" }
 	# KeyPress = "XF86AudioRaiseVolume" { Actions = "Exec aumix -w+5" }
 	# KeyPress = "XF86AudioMute" { Actions = "Exec aumix -w0" }
-	# KeyPress = "XF86AudioStop" { Actions = "Exec xterm" }
+	# KeyPress = "XF86AudioStop" { Actions = "Exec x-terminal-emulator" }
 	# Pekwm control
 	KeyPress = "Ctrl Mod1 Delete" { Actions = "Reload" }
 	KeyPress = "Mod4 D" { Actions = "ShowCmdDialog" }
