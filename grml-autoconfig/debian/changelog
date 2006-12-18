@@ -1,3 +1,9 @@
+grml-autoconfig (0.6.10) unstable; urgency=low
+
+  * Use Uni3-Terminus16 instead of Uni3-Terminus14 as default font.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 18 Dec 2006 01:35:32 +0100
+
 grml-autoconfig (0.6.9) unstable; urgency=low
 
   * Use Uni3-Terminus14 as default font to get utf8 support by default.
