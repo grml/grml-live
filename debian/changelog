@@ -1,3 +1,17 @@
+grml-etc (0.9-6) unstable; urgency=low
+
+  * Add hint regarding customization to /etc/runlevel.conf.livecd*
+  * Adjust place of networking script (I hate package updates without
+    the relevant notes in the changelog) - networking should not live
+    at '35' only but at '40' as well, otherwise we have problems with
+    resolvconf at '38'. To fix the issue on your box without using
+    /etc/runlevel.conf.* of this package invoke:
+
+      update-rc.d -f networking remove
+      update-rc.d networking start 40 S . start 35 0 6 .
+
+ -- Michael Prokop <mika@grml.org>  Mon,  8 Jan 2007 16:36:49 +0100
+
 grml-etc (0.9-5) unstable; urgency=low
 
   * Replace all xterm commands in configuration files with

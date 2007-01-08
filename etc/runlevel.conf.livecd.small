@@ -2,6 +2,16 @@
 # You can use your favourite editor or update-rc.d(8) to modify it.
 # Read runlevel.conf(5) man page for more information about this file.
 #
+############################################################################
+# *IMPORTANT* This is the file used in the live-cd mode of grml-small.
+# Please notice that customization of this file will not work with the
+# save-config mechanism, as init takes place (and reads the file
+# /etc/runlevel.conf) before restore-config can be executed at all.
+# If you want to customize the grml boot sequence please either
+# remaster the grml-ISO or (much simplier) just add your personal
+# stuff to the /etc/init.d/bootlocal.* scripts!
+############################################################################
+#
 # Format:
 # <sort> <off-> <on-levels>     <command>
 01	-	2		/etc/init.d/bootsplash_start.sh
@@ -30,11 +40,11 @@
 30	-	2,3,4,5		/etc/init.d/grml-autoconfig
 30	0,6	-		/etc/init.d/etc-setserial
 31	-	0,6		/etc/init.d/umountnfs.sh
-35	-	-		/etc/init.d/networking
 36	-	S		/etc/init.d/ifupdown
 36	-	-		/etc/init.d/mountvirtfs
 36	-	S		/etc/init.d/udev-mtab
 37	-	0,6		/etc/init.d/sendsigs
+40	-	-		/etc/init.d/networking
 40	-	0,6		/etc/init.d/umountfs
 50	-	0,6		/etc/init.d/lvm
 50	-	0,6		/etc/init.d/mdadm-raid
