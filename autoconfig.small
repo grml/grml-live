@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Fre Nov 24 21:20:51 CET 2006 [mika]
+# Latest change: Mit Jän 17 17:48:02 CET 2007 [mika]
 ################################################################################
 
 ################################################################################
@@ -31,8 +31,8 @@ CONFIG_CPU='no'
 
 # create/regenerate /etc/fstab using [grml-]rebuildfstab?
 CONFIG_FSTAB='yes'
-# define uid for rebuildfstab used in /etc/fstab (default: 1000):
-CONFIG_FSTAB_USER='1000'
+# define uid for rebuildfstab used in /etc/fstab (default: grml):
+CONFIG_FSTAB_USER='grml'
 # define guid for rebuildfstab used in /etc/fstab (default: users):
 CONFIG_FSTAB_GROUP='users'
 
