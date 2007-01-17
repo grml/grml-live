@@ -2,7 +2,11 @@ grml-autoconfig (0.6.11) unstable; urgency=low
 
   * config_x_startup(): make sure handling of /etc/inittab for
     bootoption startx works on grml-small too, thanks for
-    debugging and patch, Steffen Joeri!
+    debugging and patch, Steffen Joeris!
+  * autoconfig: change CONFIG_FSTAB_USER='1000' into
+    CONFIG_FSTAB_USER='grml', otherwise startx bootoption fails
+    due to use of sudo, thanks again - Steffen!
+    (Closes: issue79)
 
  -- Michael Prokop <mika@grml.org>  Wed, 17 Jan 2007 17:31:57 +0100
 
