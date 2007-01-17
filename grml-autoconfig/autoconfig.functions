@@ -1607,9 +1607,20 @@ if checkbootparam startx ; then
 sudo -u $fstabuser -i /usr/bin/grml-x $WINDOWMANAGER 1>>$DEBUG
 EOF
    chmod 755 /etc/init.d/xstartup
-   sed -i 's/^allowed_users=.*/allowed_users=anybody/' /etc/X11/Xwrapper.config
-   sed -i 's#^6.*#6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /bin/zsh"#'   /etc/inittab
+
+   if grep -q xstartup /etc/inittab ; then
+        sed -i 's#^6.*#6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /bin/zsh"#'   /etc/inittab
+   else
+        echo '6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /bin/zsh"' >> /etc/inittab
+   fi
    /sbin/telinit q ; eend $?
+
+   if grep -q '^allowed_users=' /etc/X11/Xwrapper.config ; then
+      sed -i 's/^allowed_users=.*/allowed_users=anybody/' /etc/X11/Xwrapper.config
+   else
+      echo 'allowed_users=anybody' >> /etc/X11/Xwrapper.config
+   fi
+
   else
     eerror "We are not running from CD - startx will not work, skipping it.
      Please use something like xdm, gdm or kdm for starting X on a harddisk system!" ; eend 1

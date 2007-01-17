@@ -1,3 +1,11 @@
+grml-autoconfig (0.6.11) unstable; urgency=low
+
+  * config_x_startup(): make sure handling of /etc/inittab for
+    bootoption startx works on grml-small too, thanks for
+    debugging and patch, Steffen Joeri!
+
+ -- Michael Prokop <mika@grml.org>  Wed, 17 Jan 2007 17:31:57 +0100
+
 grml-autoconfig (0.6.10) unstable; urgency=low
 
   * Use Uni3-Terminus16 instead of Uni3-Terminus14 as default font.
