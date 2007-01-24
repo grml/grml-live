@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Nov 27 21:02:23 CET 2006 [mika]
+# Latest change: Mit Jän 24 10:33:23 CET 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -358,6 +358,18 @@ config_time(){
 config_kernel(){
   vmware-detect &>/dev/null && VMWARE="inside ${WHITE}VMWare${NORMAL}"
   einfo "Running Linux Kernel $KERNEL $VMWARE" ; eend 0
+  if [ -r /proc/cpuinfo ] ; then
+     if egrep -q '^flags.*(vmx|svm)' /proc/cpuinfo ; then
+       eindent
+       einfo 'CPU(s) featuring virtualization technology detected' ; eend 0
+       eoutdent
+     fi
+  fi
+  if [ -d /proc/xen ] ; then
+     eindent
+     einfo 'Running kernel featuring support for Xen detected' ; eend 0
+     eoutdent
+  fi
 }
 # }}}
 
