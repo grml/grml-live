@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mit Jän 24 10:33:23 CET 2007 [mika]
+# Latest change: Mon Feb 05 12:37:33 CET 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -357,6 +357,7 @@ config_time(){
 # {{{ print kernel info
 config_kernel(){
   vmware-detect &>/dev/null && VMWARE="inside ${WHITE}VMWare${NORMAL}"
+  [ -d /proc/xen ] && VMWARE='' # vmware-detect returns '0' when running with a Xen-enabled kernel
   einfo "Running Linux Kernel $KERNEL $VMWARE" ; eend 0
   if [ -r /proc/cpuinfo ] ; then
      if egrep -q '^flags.*(vmx|svm)' /proc/cpuinfo ; then
