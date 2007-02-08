@@ -1,0 +1,23 @@
+grml - Linux for sysadmins and users of texttools                            09F507
+                                                                               
+70 The following options can be used at the boot:-prompt. [2/2]                  
+                                                                               
+ grml lang=at|da|de|es|fr|it|nl|pl|...|us[-utf8]      set keyboard + language  
+ grml keyboard=de xkeyboard=de                                   set keyboard  
+ grml gmt tz=Europe/Vienna   use GMT-based time and specified timezone for TZ  
+ grml ssh=password            set password for user grml and start ssh-server  
+ grml myconfig=/dev/fd0              load configuration from specified device  
+ grml home=/dev/sda1                   use specified device as home directory  
+ grml testcd                              check CD data integrity and md5sums  
+ grml toram                                 copy CD to RAM and run from there  
+ grml services=foo1[,foo2] start specified service(s) [/etc/init.d/name foo1]  
+ grml noautoconfig               disable searching for device labeled GRMLCFG  
+ grml noswraid                       disable search for software RAID devices  
+ grml nofstab / nolabel   disable generating of /etc/fstab / use of fs-labels  
+ grml nodhcp                     disable searching for network setup via DHCP  
+ grml startx[=windowmanager]   autostart X.org via grml-x (default WM: wm-ng)  
+ grml debnet        search local partitions for file /etc/network/interfaces,  
+                copy /etc/network then to local system and restart networking  
+                                                                               
+ A list with all supported boot options: /cdrom/GRML/grml-cheatcodes.txt       
+1f
