@@ -1,0 +1,16 @@
+Source: grml-live
+Section: grml
+Priority: optional
+Maintainer: Michael Prokop <mika@grml.org>
+Build-Depends: debhelper (>= 5)
+Standards-Version: 3.7.2
+S-X-Vcs-Hg: http://hg.grml.org/grml-live
+
+Package: grml-live
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, zsh
+Description: build scripts for creating grml live cd
+ This package provides build scripts for creating
+ a grml live cd.
+ .
+  Homepage: http://grml.org/grml-live/

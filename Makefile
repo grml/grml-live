@@ -24,3 +24,6 @@ man-stamp: grml-live.txt
 
 clean:
 	rm -rf grml-live.html grml-live.xml grml-live.8 html-stamp man-stamp
+
+online:
+	scp grml-live.html grml:/var/www/grml/grml-live/index.html
