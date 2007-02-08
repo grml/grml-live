@@ -1,0 +1,36 @@
+grml-live(8)
+============
+
+Name
+----
+grml-live - create grml-live ISO
+
+Synopsis
+--------
+grml-live
+
+Design decisions + Plans
+------------------------
+
+* support at least i386, amd64 and ppc as architectures
+* allow manual interaction within build-process (through hooks)
+* support template(s/ files) for all the files outside the squashfs image
+* support additional hooks
+* support user specified scripts
+* support creation of DVDs
+* support update-alternatives configuration via a file
+
+Why not use make-live/live-package?
+------------------------------------
+
+At the time of writing this lines (8th february 2007) mainly because of the following limitations:
+
+* does not support powerpc
+* does not support booting via usb/firewire (using initramfs => casper)
+* manual configuration of packages not really supported
+* overwrites several files in the chroot without checking for its existance before
+* supports only one so called $LIVE_MIRROR
+
+Author
+------
+Michael Prokop <mika@grml.org>
