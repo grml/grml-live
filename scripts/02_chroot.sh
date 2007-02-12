@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Tue Feb 13 00:16:27 CET 2007
+# Latest change: Tue Feb 13 00:37:19 CET 2007
 ################################################################################
 
 chroot_shell() {
@@ -56,6 +56,34 @@ EOF
           rm -f "${TARGET}"/usr/sbin/policy-rc.d
           ;;
   esac
+}
+
+chroot_live_prepare() {
+  debug "preparing grml-live directory in chroot"
+  if [ -n "$SOURCES_LIST" ] ; then
+     echo $SOURCES_LIST > "${TARGET}"/grml-live/files/sources.list
+  fi
+
+  cat > "${TARGET}"/grml-live/scripts/install_packages.sh << EOF
+#!/bin/sh
+
+if ! [ -f /etc/apt/grml.key ] ; then
+   gpg --keyserver subkeys.pgp.net --recv-keys F61E2E7CECDEA787
+   gpg --export F61E2E7CECDEA787 > /etc/apt/grml.key
+   apt-key add /etc/apt/grml.key
+fi
+
+apt-get update
+apt-get upgrade
+
+EOF
+
+  chmod 755 "${TARGET}"/grml-live/scripts/install_packages.sh
+}
+
+chroot_live_execute() {
+  debug "executing grml-live script in chroot"
+  chroot_exec /grml-live/scripts/install_packages.sh
 }
 
 ## END OF FILE #################################################################

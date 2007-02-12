@@ -76,6 +76,8 @@ bootstrap
 
 # 02_chroot.sh
 patch_chroot apply
+chroot_live_prepare
+chroot_live_execute
 chroot_shell
 patch_chroot deapply
 

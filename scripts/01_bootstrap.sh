@@ -14,6 +14,8 @@ bootstrap() {
   if ! [ -d "${TARGET}/grml-live/" ] ; then
      debug "bootstrap: creating ${TARGET}/grml-live/"
      mkdir "${TARGET}/grml-live/"
+     mkdir "${TARGET}/grml-live/scripts/"
+     mkdir "${TARGET}/grml-live/files/"
   fi
 
   # check whether chroot exists already 
