@@ -8,6 +8,7 @@
 
 bailout(){
   [ -n "$1" ] && EXIT="$1" || EXIT="1"
+  [ -n "$2" ] && echo "$2">&2
   exit "$EXIT"
 }
 
@@ -19,30 +20,36 @@ usage() {
 
 debug() {
   if [[ -n "$DEBUG" ]] ; then
-     print "grml-live: $*"
-     [[ -n "$DEBUG_SYSLOG" ]] && [ -x /usr/bin/logger ] && logger -t grml-live "$*"
+     einfo "grml-live: $*"
+     [[ -n "$DEBUG_SYSLOG" ]] && [ -x /usr/bin/logger ] && logger -t grml-live-info "$*"
   else
      return 0 # do nothing
   fi
 }
 
-cmdline_options () {
-        while true
-        do
-                case "${1}" in
-                        (-r|--root) LIVE_ROOT="${2}"
-                                shift 2 ;;
-                        (-v|--version) usage
-                                exit 1 ;;
-                        (--) shift
-                                break ;;
-                        (*) exit 0 ;;
-                esac
-        done
+debug_warn() {
+  if [[ -n "$DEBUG" ]] ; then
+     ewarn "grml-live: $*"
+     [[ -n "$DEBUG_SYSLOG" ]] && [ -x /usr/bin/logger ] && logger -t grml-live-warn "$*"
+  else
+     return 0 # do nothing
+  fi
 }
+
+debug_error() {
+  if [[ -n "$DEBUG" ]] ; then
+     eerror "grml-live: $*"
+     [[ -n "$DEBUG_SYSLOG" ]] && [ -x /usr/bin/logger ] && logger -t grml-live-error "$*"
+  else
+     return 0 # do nothing
+  fi
+}
+
 chroot_exec()
 {
-;
+  [ -n "$TARGET" ] || bailout 1 "\$TARGET unset, can not chroot_exec"
+  [ -n "$1" ] || bailout 1 "Error executing chroot_exec. Usage: chroot_exec <command>"
+  chroot "$TARGET" "$1"
 }
 
 ## END OF FILE #################################################################
