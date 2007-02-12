@@ -13,5 +13,9 @@ chroot_finalize() {
   fi
 }
 
+chroot_cleanup() {
+  rm -rf "${TARGET}"/grml-live
+}
+
 ## END OF FILE #################################################################
 # vim: ai tw=80 ft=sh expandtab

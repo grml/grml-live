@@ -1,0 +1,31 @@
+#!/usr/bin/perl
+
+use warnings;
+use strict;
+
+my $filename='/var/lib/dpkg/status';
+
+open FILE, $filename or
+die "Failed to open $filename\n";
+
+while (my $line=<FILE>) {
+
+    chomp($line);
+    my @section=();
+
+    while ($line ne "") {
+        push(@section,$line);
+        $line=<FILE>;
+        chomp($line);
+    }
+
+    if ($section[1] ne 'Status: purge ok not-installed') {
+
+        foreach (@section) {
+            $_ = $_ . "\n";
+            print;
+        }
+
+        print"\n";
+    }
+}

@@ -1,0 +1,55 @@
+. /etc/zsh/zshrc
+
+# PROMPT="$RED%n$NO_COLOUR@grml %40<...<%B%~%b%<< # "
+export LC_ALL=C
+# export LC_ALL=en_US.iso885915
+
+alias vim='vim -X'
+alias vimdiff='vimdiff -X'
+alias prepare="
+mount devpts /dev/pts -t devpts
+mount -t proc none /proc
+"
+
+alias up="
+unset PAGER
+apt-get update
+apt-get upgrade
+"
+#wajig new
+
+alias acs='apt-cache search'                                                                                   
+alias agi='apt-get install'                                                                                    
+alias acsh='apt-cache show'                                                                                    
+alias au='apt-get update'                                                                                      
+alias ag='apt-get upgrade'                                                                                     
+
+#alias grml-size="
+#  grep-status -n -sPackage,Installed-Size,Description -FStatus,Description 'install ok installed' | \
+#  grep -v '^ ' | while read package; do \
+#  read size; read desc; read; printf '%6d %-25s %s\n' \"\$size\" \"\$package\" \"\$desc\"; done | sort -rn"
+
+alias grml-size='grep-status -FStatus -sInstalled-Size,Package -n \
+           "install ok installed" | paste -sd "  \n" | sort -rn'
+
+# dpkg-query -W --showformat='${Installed-Size;10} ${Package}\n' | sort -gr | less
+
+alias online='
+echo generating package lists... && \
+dpkg --get-selections >| /tmp/dpkg_get_selections && \
+COLUMNS=200 dpkg -l >| /tmp/dpkg_list && \
+deborphan >| /tmp/deborphan && \
+deborphan -a >| /tmp/deborphan_a && \
+cp /tmp/dpkg_list /tmp/dpkg_list.tmp && \
+gzip -9 /tmp/dpkg_list.tmp && \
+mv /tmp/dpkg_list.tmp.gz /tmp/dpkg_list.gz && \
+grml-size >| /tmp/packages_by_size && \
+echo copying files to server: && \
+scp /tmp/dpkg_* /tmp/packages_by_size /tmp/deborphan* mika@grml.org:/var/www/grml/files/devel/ && \
+echo done.'
+# grml-size >| /tmp/packages_by_size && \
+
+#scp /tmp/dpkg_* /tmp/deborphan* web234@62.75.233.62:~/html/files/devel/ && \
+#scp /tmp/dpkg_* /tmp/deborphan* web234@grml.org:~/html/files/devel/ && \
+
+# find . -type f -not -name md5sums -not -name boot.cat -exec md5sum {} \; >| md5sums

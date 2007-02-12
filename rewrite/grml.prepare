@@ -1,0 +1,460 @@
+#!/bin/sh
+# Filename:      grml.clean
+# Purpose:       clean up grml chroot
+# Authors:       (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is copyright by Michael Prokop
+# Latest change: Sat Sep 16 16:43:05 CEST 2006 [mika]
+################################################################################
+
+# misc stuff
+  umask 022
+  . /etc/grml_colors        || exit 5
+  . /etc/grml/lsb-functions || exit 6
+
+# variables
+  grep -q small /etc/grml_version && GRML_SMALL=yes  || GRML_SMALL=''
+  [ -n "$GRML_SMALL" ] && KERNEL='2.6.17-grml-small' || KERNEL='2.6.19-grml'
+
+# important pre-checks
+if [ -f /usr/share/initramfs-tools/init ] ; then
+  ORIG=$(md5sum /usr/share/initramfs-tools/init | awk '{print $1}')
+  GRML=$(md5sum /usr/share/initramfs-tools/init.grml | awk '{print $1}')
+  if [ "$ORIG" != "$GRML" ] ; then
+     eerror "Please fix /usr/share/initramfs-tools/init[.grml]" ; eend 1
+     exit 1
+  fi
+  ORIG=$(md5sum /usr/share/initramfs-tools/scripts/functions | awk '{print $1}')
+  GRML=$(md5sum /usr/share/initramfs-tools/scripts/functions.grml | awk '{print $1}')
+  if [ "$ORIG" != "$GRML" ] ; then
+     eerror "Please fix /usr/share/initramfs-tools/scripts/functions[.grml]" ; eend 1
+     exit 1
+  fi
+  unset ORIG GRML
+fi
+
+if [ -f /usr/share/fonts/X11/misc/artwiz-cursor.pcf.gz ] ; then
+  if dpkg-divert --list artwiz-cursor | grep -q /usr/share/fonts/X11/misc/cursor.pcf.gz ; then
+     eerror "Broken diversion of artwiz-cursor, see #341397"
+     exit 1
+  fi
+fi
+
+# start of main cleanup process...
+if ! [ -r /boot/config-"$KERNEL" ] ; then
+  eerror "/boot/config-$KERNEL not available. \$KERNEL not set to correct value?"
+  eend 1
+  exit 9
+fi
+
+einfo "Preparing grml-system: `cat /etc/grml_version`." ; eend 0
+
+einfo "Do not forget to run the final check:"
+ eindent
+  einfo 'adjust grml-version: vim -X /etc/grml_version'
+  einfo 'is runlevel.conf ok: vimdiff -X /etc/runlevel.conf /etc/runlevel.conf.livecd'
+  einfo 'find old files:      find /etc -name \*dpkg\*'
+  einfo "delete conffiles:    dpkg --purge \`dpkg --list | grep '^rc' | awk '{print \$2}'\`"
+  einfo 'dangling symlinks:   ls **/*(-@)'
+ eoutdent
+
+einfo "Setting up /etc/modules: "
+cat>/etc/modules<<EOF
+# /etc/modules: kernel modules to load at boot time.
+#
+# This file should contain the names of kernel modules that are
+# to be loaded at boot time, one per line.  Comments begin with
+# a \`#', and everything on the line after them are ignored.
+EOF
+echo "" >> /etc/modules
+grep '^[a-z]' /etc/grml/modules >> /etc/modules
+eend 0
+
+if [ -z "$GRML_SMALL" ] ; then
+  if [ -L /usr/include/linux ] ; then
+    einfo "/usr/include/linux is ok" ; eend 0
+  else
+    eerror "/usr/include/linux is NOT a symlink to /usr/src/linux/include/linux/ - error"
+    eend 1
+    exit 10
+  fi
+fi
+
+einfo "Creating ~/.zshrc"
+  touch ~/.zshrc
+eend $?
+
+if [ -r /usr/share/lintian/overrides/ion3 ] ; then
+  einfo "Stripping ion3-stuff"
+  cat /usr/share/lintian/overrides/ion3 | sed 's#.*./usr#/usr#' | \
+  sed 's/.comment//' | xargs strip --strip-unneeded ; eend $?
+else
+  ewarn "ion3 not installed" ; eend 0
+fi
+
+if [ -d /usr/lib/valgrind/x86-linux/ ] ; then
+  einfo "Stripping /usr/lib/valgrind/x86-linux/"
+  strip  --strip-unneeded  /usr/lib/valgrind/x86-linux/*
+  eend $?
+else
+  ewarn "valgrind not installed" ; eend 0
+fi
+
+if [ -x /usr/sbin/localepurge ] ; then
+  einfo "Running localepurge"
+  localepurge ; eend $?
+else
+  ewarn "localepurg not available" ; eend 0
+fi
+
+if [ -d /var/lib/backuppc/pc/localhost/ ] ; then
+  einfo "Cleaning /var/lib/backuppc/pc/localhost/"
+  rm -rf /var/lib/backuppc/pc/localhost/* ; eend $?
+else
+  ewarn "backuppc not installed" ; eend 0
+fi
+
+if [ -d /var/lib/clamav/ ] ; then
+  einfo "Cleaning /var/lib/clamav/"
+  rm -f /var/lib/clamav/clamav-* ; eend $?
+  if [ -f /var/lib/clamav/daily.cvd ] ; then
+     ( cd /usr/share/doc/clamav-freshclam/examples/ && \
+     ln -sf /var/lib/clamav/daily.cvd . && \
+     ln -sf /var/lib/clamav/main.cvd  . )
+  fi
+else
+  ewarn "clamav[-freshclam] not installed" ; eend 0
+fi
+
+# find /var -name \*.pid
+einfo "Removing pid-files"
+# find /var/run -name \*.pid | xargs rm ; echo "done"
+  find /var/run -name \*.pid -exec rm {} \;
+eend $?
+
+einfo "Unmounting proc, /dev/pts, /dev/capi"
+  umount /proc    2>/dev/null
+  umount /dev/pts 2>/dev/null
+  umount /dev/capi 2>/dev/null
+  umount -a
+eend $?
+
+einfo "Removing initrd-images"
+  rm -f /boot/initrd.img-*
+eend $?
+
+einfo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
+  rm -f /var/lib/apt/lists/*Packages
+  rm -f /var/lib/apt/lists/*Release
+  rm -f /var/lib/apt/lists/*Sources
+  rm -f /var/lib/apt/lists/*.gpg
+  # :> /var/cache/apt/pkgcache.bin
+  # :> /var/cache/apt/srcpkgcache.bin
+  rm -f /var/lib/dpkg/status-old
+  rm -f /var/lib/dpkg/available-old
+  rm -f /var/cache/debconf/templates.dat-old
+  # for i in $(find /var/lib/apt/lists -type f \( -name \*Packages -o -name \*Sources \) 2>/dev/null); do  :>"$i"; done
+  # for i in /var/lib/apt/lists/*_{Release,Packages,Sources}; do :>$i; touch -t 198103190000.00 $i; done
+  apt-get check
+  dpkg --clear-avail
+  rm -f /var/cache/apt/*.bin
+  apt-cache gencaches
+  sync-available
+eend $?
+
+einfo "Copying original runlevel.conf to /etc/runlevel.conf"
+  if ! [ -z $GRML_SMALL ] ; then
+    cp /etc/runlevel.conf.livecd.small /etc/runlevel.conf
+  else
+    cp /etc/runlevel.conf.livecd /etc/runlevel.conf
+  fi
+eend $?
+
+einfo "Removing x-server-conffiles"
+  rm -f /etc/X11/xorg.conf /etc/X11/XF86Config-4 \
+        /etc/X11/XF86Config /etc/XF86Config /etc/XF86Config-4 
+eend $?
+
+einfo "Removing ssh-keys"
+  rm -f /etc/ssh/*key*
+eend $?
+
+if [ -r /usr/X11R6/lib/X11/fonts/misc/cursor.pcf.gz ] ; then
+  einfo "Fixing the broken artwiz-cursor"
+  ( cd /usr/X11R6/lib/X11/fonts/misc && \
+    dpkg-divert --remove /usr/X11R6/lib/X11/fonts/misc/cursor.pcf.gz && mkfontdir )
+  eend $?
+fi
+
+# remove only "temporary" or saved files in the given directories
+nuke(){
+  for i in `find "$@" -name \*.gz -o -name \*.bz2 -o -name \*.0 2>/dev/null`; do
+    rm -f "$i"
+  done
+}
+
+# set all files in the given directories to a length of zero
+zero(){
+  for i in `find "$@" -type f -size +0 -not -name \*.ini 2>/dev/null`; do
+    :> "$i"
+  done
+}
+
+#rmdir /mnt/cdrom?* /mnt/hd?* 2>/dev/null
+
+#for i in `find /usr/*/man -name \*.\[0-9ln\]` ; do
+#  [ -f "$i".gz -o -f "$i".bz2 ] && rm -f "$i"
+#done
+
+if [ -d /var/spool/squid/ ] ; then
+  einfo "Cleaning /var/spool/squid/0*"
+  rm -rf /var/spool/squid/0*
+  eend $?
+else
+  ewarn "update-ca-certificates not installed" ; eend 0
+fi
+
+# delete old dowloaded packages
+einfo "Running apt-get clean"
+  apt-get clean
+eend $?
+
+# remove files from packages which have been removed
+# COLUMNS=200 dpkg --purge `dpkg -l | grep '^rc' | awk '{ print $2 }'` 
+
+if [ -x /usr/bin/nvi ] ; then
+  if ! [ -d /var/tmp/vi.recover ] ; then
+    einfo "Creating nvi /var/tmp directory"
+    mkdir -p /var/tmp/vi.recover
+    chown root:root /var/tmp/vi.recover
+    chmod 1777 /var/tmp/vi.recover
+    eend $?
+  fi
+else
+  ewarn "nvi not installed" ; eend 0
+fi
+
+if [ -x /sbin/depmod ] ; then
+  if [ -r /lib/modules/$KERNEL ] ; then
+    einfo "Updating modules.dep for kernel $KERNEL"
+    depmod -a $KERNEL
+    eend $?
+  fi
+else
+  ewarn "depmod not installed" ; eend 0
+fi
+
+if [ -n "$NOONLINE" ] ; then
+   einfo "\$NOONLINE is set, skipping online tasks" ; eend 0
+else
+
+if [ -x /usr/bin/freshclam ] ; then
+  einfo "Updating clamav database via running freshclam"
+  /usr/bin/freshclam ; eend $?
+else
+  ewarn "freshclam not installed" ; eend 0
+fi
+
+if [ -x /usr/bin/update-pciids ] ; then
+  einfo "Updating PCI- and USB-ids"
+  update-pciids
+  update-usbids
+#  ls -la /usr/share/misc/*.ids* 
+#  ls -la /var/lib/usbutils/usb*
+  eend $?
+else
+  ewarn "update-pciids/update-usbids not installed" ; eend 0
+fi
+
+if [ -x /usr/sbin/nessus-update-plugins ] ; then
+   einfo "Updating nessus-plugins"
+   nessus-update-plugins
+   eend $?
+else
+  ewarn "nessus-update-plugins not installed" ; eend 0
+fi
+
+fi # end of $NOONLINE-check
+
+einfo "Cleaning and removing some misc files and directories"
+  rm -f  /etc/sysconfig/* /etc/motd.dpkg-new /etc/auto.master.distrib.dpkg-new    \
+         /etc/samba/*.SID /etc/samba/*.tdb /dev/mouse* /dev/cdrom* /dev/cdwriter* \
+         /var/run/*/* /var/run/* /var/log/ksymoops/* /var/lock/*/* /var/lock/*    \
+         /var/state/*/* /var/state/* /var/log/nessus/*                            \
+         /halt /reboot /ash.static /etc/dhcpc/*.info /etc/dhcpc/resolv*           \
+         /etc/resolv.conf /etc/*passwd- /etc/*shadow- /etc/*group-                \
+         /var/spool/postfix/maildrop/*                                            \
+         /etc/lvm/.cache 2>/dev/null
+  rm -rf /tmp/* /var/tmp/* /var/tmp/.* /var/backups/* /.ssh /root/.ssh /home/*/.ssh \
+         /home/grml/* /home/grml/.??* /var/lib/texmf/ls-R  /var/spool/texmf/ls-R    \
+         /var/lib/mysql 2>/dev/null
+  nuke   /var/log       /var/cache
+  zero   /var/local     /var/log /var/spool \
+         /var/lib/games /var/cache/man      \
+         /var/lib/nfs   /var/lib/xkb        \
+         /var/mail/grml /var/account/pacct
+  mkdir -p /etc/sysconfig/network-scripts /etc/sysconfig/provider
+  # Recreate empty utmp and wtmp
+  :>/var/run/utmp
+  :>/var/run/wtmp
+eend $?
+
+einfo "Setting up /etc/resolv.conf"
+  cat >/etc/dhcpc/resolv.conf <<EOT
+# insert nameservers here
+# nameserver 127.0.0.1
+EOT
+  chmod 644 /etc/dhcpc/resolv.conf
+  # is resolvconf available?
+  if [ -L /etc/resolvconf/run/resolv.conf ] ; then
+     ln -sf /etc/resolvconf/run/resolv.conf /etc/
+  else
+     ln -s /etc/dhcpc/resolv.conf /etc/
+  fi
+eend $?
+
+if [ -x /usr/sbin/update-ca-certificates ] ; then
+  einfo "Updating ca-certificates"
+  update-ca-certificates 1>/dev/null
+  eend $?
+else
+  ewarn "update-ca-certificates not installed" ; eend 0
+fi
+
+# some stuff does not have to run every single time...
+if [ -n "$FAST" ] ; then
+   einfo "\$FAST is set, skipping some tasks" ; eend 0
+else
+
+# regenerate module dependencies and ls.so.cache
+if [ -x /sbin/ldconfig ] ; then
+  einfo "Updating ld.so.cache"
+  ldconfig
+  eend $?
+else
+  ewarn "ldconfig not installed" ; eend 0
+fi
+
+if [ -r /lib/modules/$KERNEL/ ] ; then
+  einfo "Searching for modules not compiled against $KERNEL"
+  ( cd /lib/modules/$KERNEL/ && modinfo **/*.ko | grep vermagic | grep -v $KERNEL )
+  eend 0
+else
+  eerror "/lib/modules/$KERNEL/ not found" ; eend 1
+fi
+
+if [ -x /usr/bin/update-menus ] ; then
+  einfo "Updating windowmanager menus"
+  update-menus -v
+  eend $?
+else
+  ewarn "update-menus not installed" ; eend 0
+fi
+
+if [ -x /usr/bin/mktexlsr ] ; then
+  einfo "Updating texhash"
+  mktexlsr
+  eend $?
+else
+  ewarn "mktexlsr not installed" ; eend 0
+fi
+
+if [ -x /usr/bin/mandb ] ; then
+  einfo "Updating mandb"
+  mandb -c
+  man doesnotexist >/dev/null 2>&1
+  eend $?
+else
+  ewarn "mandb not installed" ; eend 0
+fi
+
+if [ -n "$GRML_SMALL" ] ; then
+  einfo "Cleaning up /etc/skel..."
+  rm -rf /etc/skel/.fluxbox 
+  rm -rf /etc/skel/.gkrellm2 
+  rm -rf /etc/skel/.idesktop 
+  rm -rf /etc/skel/.pekwm
+  eend $?
+
+  einfo "Cleaning documentation directories..."
+  mv /usr/share/doc/grml-docs /tmp/
+  rm -rf /usr/share/doc
+  mkdir /usr/share/doc
+  mv /tmp/grml-docs /usr/share/doc/grml-docs
+  rm -rf /usr/share/gtk-doc/
+  rm -rf /usr/share/man/
+  rm -rf /usr/man
+  rm -rf /usr/share/info
+  eend $?
+
+  einfo "Creating /usr/share/info/..."
+  mkdir -p /usr/share/info/
+  eend $?
+fi
+
+if ! [ -r /etc/ld.so.nohwcap ] ; then
+   einfo "Creating /etc/ld.so.nohwcap"
+   touch /etc/ld.so.nohwcap
+fi
+
+if [ -x /usr/bin/updatedb ] ; then
+  einfo "Updating locate-database"
+  mount -t proc none /proc
+  updatedb --prunepaths='/tmp /usr/tmp /var/tmp /grml /root /proc /sys'
+  umount /proc
+  eend $?
+else
+  ewarn "updatedb not installed" ; eend 0
+fi
+
+fi # end of $FAST-check
+
+einfo "Unmounting all filesystems"
+  umount -a
+eend $?
+
+################################################################################
+# MISC STUFF
+# ~~~~~~~~~~
+#
+# Security-audit:
+# find / \! -type l -perm -2000 -ls > audit/sgid-files 
+# find / \! -type l -perm -0002 -ls > audit/world-writeable-files
+# find / \! -type l -perm -4000 -ls > audit/suid-files
+# find / ( -perm 4000 -o -perm -2000 \) -exec ls -ld {} \;
+# find / -perm -0777 -type d -ls > audit/writeable-dirs
+# find / -size +3000k > audit/big_files.new
+# find /all_filesystems -name ".. " -print -xdev | cat -vet
+# find / -name ".*" -print -xdev | cat -v > audit/hidden-files
+# find / -name ".. " -print -xdev | cat -vet > audit/unusal-file-names
+#
+# list non-stripped files:
+# file /usr/sbin/* | grep -v ', stripped' | grep -v 'perl' | grep -v 'Bourne' | grep -v 'python' | grep -v 'symbolic link'
+#
+# einfo "Removing unused architecture Kernel sources: "
+#   for i in `ls -1 /usr/src/linux/arch/ | grep -v i386`; do
+#     echo -n "$i "; rm -rf /usr/src/linux/arch/"$i" /usr/src/linux/include/asm-"$i"
+#   done
+# eend $?
+#
+# Is software by grml-repos up2date?
+# grep-dctrl --field Maintainer 'Michael Prokop' /var/lib/apt/lists/grml.org_repos_._* | grep Package | awk '{print $2}' | xargs echo 
+#
+# runlevel.conf:
+# for file in /etc/init.d/* ; do grep $file -q /etc/runlevel.conf.hdinstall || echo $file not found ; done
+################################################################################
+# ISO
+# ~~~
+# /usr/bin/mksquashfs /home/mika/grml/chroot/grml_uncompressed.large/* \
+# /home/mika/grml/chroot/grml_cd.large/GRML/GRML  -noappend -sort /home/mika/grml/svn/grml/remastering/sort
+#
+# mkisofs -V "grml 0.8" -publisher 'Michael Prokop <mika@grml.org>' -l -r \
+# -J -no-emul-boot -boot-load-size 4 -boot-info-table -c boot/isolinux/boot.cat \
+# -b boot/isolinux/isolinux.bin -o /home/mika/grml/chroot/grml_0.8.iso .
+# 
+# vim grml_cd.large/GRML/grml-version
+# 
+# find . -type f -not -name md5sums -not -name boot.cat -exec md5sum {} \; > GRML/md5sums
+################################################################################
+#
+## END OF FILE #################################################################
