@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Feb 05 12:37:33 CET 2007 [mika]
+# Latest change: Sam Feb 17 13:59:43 CET 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -280,22 +280,27 @@ config_language(){
      einfo "Running consolechars using ${CONSOLEFONT}"
      consolechars -f $CONSOLEFONT || consolechars -d
      eend $?
-
-#     if [ -n "$UTF8" ] ; then
-#        einfo "Notice: run 'filterm - dynafont' in your shell to enable a unicode capable console."
-#     fi
   fi
 
   # we have to set up all consoles, therefore loop it over all ttys:
   if [ -n "$CHARMAP" ] ; then
-   einfo "Running consolechars for ${CHARMAP}"
-   NUM_CONSOLES=`fgconsole --next-available`
-   NUM_CONSOLES=`expr ${NUM_CONSOLES} - 1`
-   [ ${NUM_CONSOLES} -eq 1 ] && NUM_CONSOLES=6
-   for vc in `seq 0 ${NUM_CONSOLES}`  ; do
-     consolechars --tty=/dev/tty${vc} -m ${CHARMAP} ; RC=$?
-   done
-   eend ${RC}
+     einfo "Running consolechars for ${CHARMAP}"
+     NUM_CONSOLES=`fgconsole --next-available`
+     NUM_CONSOLES=`expr ${NUM_CONSOLES} - 1`
+     [ ${NUM_CONSOLES} -eq 1 ] && NUM_CONSOLES=6
+     for vc in `seq 0 ${NUM_CONSOLES}`  ; do
+       consolechars --tty=/dev/tty${vc} -m ${CHARMAP} ; RC=$?
+     done
+     eend ${RC}
+  fi
+
+  # activate unicode console if running within utf8 environment
+  if [ -r /etc/default/locale ] ; then
+     if grep -q "LANG=.*UTF" /etc/default/locale ; then
+        einfo "Setting up unicode environment."
+        unicode_start
+        eend $?
+     fi
   fi
 
  eoutdent
@@ -1954,7 +1959,7 @@ config_swraid(){
           ewarn "/etc/mdadm/mdadm.conf looks like a configured mdadm setup, will not touch it." ; eend 0
        fi
 
-       if ! checkbootparam 'swraid' ; then 
+       if ! checkbootparam 'swraid' ; then
           eindent
           einfo "Just run 'Start mdadm-raid' to assemble md arrays or boot using 'swraid' as bootoption for autostart."
           eoutdent
