@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sam Feb 17 13:59:43 CET 2007 [mika]
+# Latest change: Mon Feb 19 18:59:09 CET 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -1626,11 +1626,8 @@ sudo -u $fstabuser -i /usr/bin/grml-x $WINDOWMANAGER 1>>$DEBUG
 EOF
    chmod 755 /etc/init.d/xstartup
 
-   if grep -q xstartup /etc/inittab ; then
-        sed -i 's#^6.*#6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /bin/zsh"#'   /etc/inittab
-   else
-        echo '6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /bin/zsh"' >> /etc/inittab
-   fi
+   sed -i 's#^6:.*#6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /bin/zsh"#' /etc/inittab
+   
    /sbin/telinit q ; eend $?
 
    if grep -q '^allowed_users=' /etc/X11/Xwrapper.config ; then
