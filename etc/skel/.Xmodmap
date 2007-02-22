@@ -3,7 +3,7 @@
 ! Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 ! Bug-Reports:   see http://grml.org/bugs/
 ! License:       This file is licensed under the GPL v2.
-! Latest change: Fre Sep 15 17:34:12 CEST 2006 [mika]
+! Latest change: Fre Feb 23 00:00:36 CET 2007 [mika]
 !###############################################################################
 ! Clear the other modifiers:
 ! clear    Lock
@@ -65,10 +65,12 @@ add mod4 = Multi_key
 
 ! Euro-Symbols:
 ! keycode 26 = e E EuroSign cent
+! keycode 26 = e E currency cent
 ! keycode 54 = c C cent copyright
 ! Euro Sign:
 ! keycode 26 = e E 0x00a4 0x0080
 ! keycode 26 = e E EuroSign
+! keycode 26 = e E currency cent
 
 ! keycode 27 = r R registered
 
@@ -131,7 +133,7 @@ keycode  22 = BackSpace Terminate_Server
 keycode  23 = Tab ISO_Left_Tab
 keycode  24 = q Q at
 keycode  25 = w W lstroke Lstroke lstroke Lstroke
-keycode  26 = e E EuroSign cent
+keycode  26 = e E currency cent
 keycode  27 = r R
 keycode  28 = t T
 keycode  29 = y Y ydiaeresis
