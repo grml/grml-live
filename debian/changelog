@@ -1,3 +1,11 @@
+grml-etc (0.9-8) unstable; urgency=low
+
+  * Add ToolTip.Caption to all the /etc/skel/.idesktop/*.lnk files.
+    Use LANG=en_US.iso885915 for aterm so the terminal works in
+    utf8 mode as well.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 24 Feb 2007 15:14:24 +0100
+
 grml-etc (0.9-7) unstable; urgency=low
 
   * /etc/skel/.Xmodmap + /etc/skel/.Xmodmap.german: use 'currency'

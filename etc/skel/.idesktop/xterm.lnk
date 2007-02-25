@@ -1,5 +1,6 @@
 table Icon
   Caption: xterm
+  ToolTip.Caption: run x-terminal-emulator
   Command: /usr/bin/x-terminal-emulator
   Icon: /home/grml/.idesktop/icons/l33t_TER_Eterm.png
   X: 24
