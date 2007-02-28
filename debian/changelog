@@ -1,3 +1,12 @@
+grml-etc (0.9-9) unstable; urgency=low
+
+  * /etc/skel/.idesktop/irssi.lnk: run with LANG=en_US.iso885915
+    to avoid encoding problems with utf8 in IRC
+  * /etc/skel/.fluxbox/keys: map x-terminal-emulator in ISO mode
+    to Control Mod1 i
+
+ -- Michael Prokop <mika@grml.org>  Wed, 28 Feb 2007 09:54:50 +0100
+
 grml-etc (0.9-8) unstable; urgency=low
 
   * Add ToolTip.Caption to all the /etc/skel/.idesktop/*.lnk files.

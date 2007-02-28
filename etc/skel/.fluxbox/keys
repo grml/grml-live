@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sam Dez 16 16:45:20 CET 2006 [mika]
+# Latest change: Mit Feb 28 09:15:41 CET 2007 [mika]
 ################################################################################
 
 # Mod1 = Alt key
@@ -66,6 +66,7 @@ Mod1 c         :ExecCommand fbrun
 Mod1 Escape    :ExecCommand x-terminal-emulator
 Mod1 t         :ExecCommand x-terminal-emulator -fn '-misc-fixed-medium-r-semicondensed-*-*-120-*-*-*-*-iso8859-15'
 Control Mod1 t :ExecCommand x-terminal-emulator -fn '-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-15'
+Control Mod1 i :ExecCommand LANG=en_US.iso885915 x-terminal-emulator
 
 # None F13                  :ExecCommand x-terminal-emulator -T "aumix" -e aumix
 # None F14                  :ExecCommand mozilla-firefox
