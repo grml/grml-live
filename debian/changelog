@@ -1,3 +1,10 @@
+grml-etc (0.9-10) unstable; urgency=low
+
+  * Added /etc/skel/.channels, moved from package grml-etc-core.
+    - fix usage example in channels.conf-files
+
+ -- Michael Prokop <mika@grml.org>  Thu,  1 Mar 2007 15:01:23 +0100
+
 grml-etc (0.9-9) unstable; urgency=low
 
   * /etc/skel/.idesktop/irssi.lnk: run with LANG=en_US.iso885915
