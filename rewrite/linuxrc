@@ -2,7 +2,7 @@
 # Filename: /linuxrc
 # Purpose:  minirt for kernel 2.6 running on grml live-cd
 # Authors:  (c) Klaus Knopper <knoppix@knopper.net>, (c) Michael Prokop <mika@grml.org>
-# Latest change: Sat Dec  2 18:12:39 CET 2006 [mika]
+# Latest change: Sun Feb 25 20:02:36 CET 2007 [mika]
 #######################################################################################
 
 # hardcoded configurable options
@@ -808,11 +808,19 @@ then
 cat /GRML/etc/ld.so.cache > /etc/ld.so.cache
 
 UNIONFS=""
-$INSMOD /modules/unionfs.ko 1>/dev/null
-grep -q unionfs /proc/filesystems && UNIONFS=yes
-
-# Enable kernel messages
-echo "6" > /proc/sys/kernel/printk
+if checkbootparam "unionfs" ; then
+   $INSMOD /modules/unionfs.ko 1>/dev/null
+   grep -q unionfs /proc/filesystems && UNIONFS=yes
+   unionfs='unionfs'
+   UNIONFS_FILETYPE='unionfs'
+   AUFS=''
+else
+   $INSMOD /modules/aufs.ko 1>/dev/null
+   grep -q aufs /proc/filesystems && UNIONFS=yes
+   unionfs='unionfs (using aufs)'
+   UNIONFS_FILETYPE='aufs'
+   AUFS='yes'
+fi
 
 # Set paths
 log_begin_msg "Setting paths"
@@ -882,9 +890,9 @@ mkdir -p /ramdisk/tmp /ramdisk/home/grml && chmod 1777 /ramdisk/tmp && chown grm
 stage=3
 rundebugshell
 # unionfs
-log_begin_msg "Creating unionfs and symlinks on ramdisk"
+log_begin_msg "Creating $unionfs and symlinks on ramdisk"
 mkdir -p /UNIONFS
-if test -n "$UNIONFS" && /bin/mount -t unionfs -o noatime${SECURE},dirs=/ramdisk=rw:/GRML=ro /UNIONFS /UNIONFS; then
+if test -n "$UNIONFS" && /bin/mount -t $UNIONFS_FILETYPE -o noatime${SECURE},dirs=/ramdisk=rw:/GRML=ro /UNIONFS /UNIONFS ; then
  # We now have unionfs, copy some data from the initial ramdisk first
  cp -a /etc/fstab /etc/auto.mnt /etc/filesystems /etc/mtab /UNIONFS/etc/
  for i in bin boot etc sbin var lib opt root usr; do # Move directories to unionfs
@@ -896,7 +904,7 @@ if test -n "$UNIONFS" && /bin/mount -t unionfs -o noatime${SECURE},dirs=/ramdisk
    ln -snf /UNIONFS/$i /$i
   fi
  done
- echo "                 $SUCCESS"
+ [ -n "$AUFS" ] && echo "    $SUCCESS" || echo "                 $SUCCESS"
  log_begin_msg "Merging read-only system with read-writeable /ramdisk."
  for i in $(cd /UNIONFS; echo *); do # Create links for new stuff on /UNIONFS
    test "$i" = "home" -o "$i" = "tmp" && continue
@@ -906,8 +914,10 @@ else
  echo ""
  log_failure_msg "ERROR: CANNOT UNITE READ-ONLY MEDIA AND INITIAL RAMDISK!"
  echo "$FAILED"
- NOUNIONFS="yes"
- /GRML/sbin/halt -f -n
+ sleep 2
+ echo "Can not continue booting, dropping you to a busybox shell."
+ stage=4
+ rundebugshell
 fi
 
 chown grml.grml /home/grml
