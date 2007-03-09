@@ -1287,6 +1287,7 @@ fi
 
 # {{{ Check for persistent homedir option and eventually mount /home from there, or use a loopback file.
 config_homedir(){
+if checkbootparam home ; then
 HOMEDIR="$(getbootparam home)"
 MYHOMEDEVICE=""
 MYHOMEMOUNTPOINT=""
@@ -1360,6 +1361,7 @@ $(cat /proc/mounts)
 EOT
   fi
 fi
+fi # checkbootparam home
 }
 # }}}
 
