@@ -1,6 +1,7 @@
-grml-etc (0.9-11) unstable; urgency=low
+grml-etc (0.9.11) unstable; urgency=low
 
   * Update /etc/runlevel.conf.hdinstall and /etc/runlevel.conf.livecd.
+  * Change version schema from 'x.y-z' to 'x.y.z'.
 
  -- Michael Prokop <mika@grml.org>  Mon, 12 Mar 2007 10:01:32 +0100
 
