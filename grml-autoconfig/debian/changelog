@@ -1,6 +1,8 @@
 grml-autoconfig (0.6.16) unstable; urgency=low
 
   * Execute config_homedir() only if home-bootoption is set.
+  * Run the mount command inside config_fstab only if "$NOSWAP"
+    is not set.
 
  -- Michael Prokop <mika@grml.org>  Fri,  9 Mar 2007 15:08:25 +0100
 

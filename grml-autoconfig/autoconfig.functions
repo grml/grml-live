@@ -1038,9 +1038,11 @@ if [ -n "$partitions" ]; then
     *) continue ;;
     # *) NONEFOUND='1'; continue ;;
   esac
-  mount -o "$MOUNTOPTS" -t $f $p $m 2>>$DEBUG || continue
-  # Activate swapfile, if exists
-  SWAPFILE="$(/bin/ls -1d $m/[Gg][Rr][Mm][Ll].[Ss][Ww][Pp] 2>/dev/null)"
+  if [ -z "$NOSWAP" ] ; then
+     mount -o "$MOUNTOPTS" -t $f $p $m 2>>$DEBUG || continue
+     # Activate swapfile, if exists
+     SWAPFILE="$(/bin/ls -1d $m/[Gg][Rr][Mm][Ll].[Ss][Ww][Pp] 2>/dev/null)"
+  fi
   if [ -z "$NOSWAP" -a -n "$SWAPFILE" -a -f "$SWAPFILE" ]; then
    mount -o remount,rw $m
    if swapon "$SWAPFILE" 2>>$DEBUG ; then
@@ -1091,22 +1093,19 @@ if checkbootparam "ipv6"; then
   # we probably need some time until stateless autoconfiguration has happened
   sleep 2
   NETDEVICES="$(awk -F: '/eth.:|tr.:|wlan.:/{print $1}' /proc/net/dev 2>>$DEBUG)"
-  for DEVICE in `echo "$NETDEVICES"`
-  do
+  for DEVICE in `echo "$NETDEVICES"`; do
     eindent
-    einfo "$DEVICE:"
-    ADDRESSES="$(ifconfig $DEVICE | awk '/.*inet6 addr:.*/{print $3}')"
-    COUNT="$(ifconfig $DEVICE | awk '/.*inet6 addr:.*/{ sum += 1};END {print sum }')"
-    eindent
-    for ADDR in `echo "$ADDRESSES"`
-    do
-      einfo "$ADDR"
-    done
-    if [ "$COUNT" -eq "0" ]
-    then
-      einfo "(none)" ; eend 1
-    fi
-    eoutdent
+      einfo "$DEVICE:"
+      ADDRESSES="$(ifconfig $DEVICE | awk '/.*inet6 addr:.*/{print $3}')"
+      COUNT="$(ifconfig $DEVICE | awk '/.*inet6 addr:.*/{ sum += 1};END {print sum }')"
+      eindent
+        for ADDR in `echo "$ADDRESSES"` ; do
+            einfo "$ADDR"
+        done
+        if [ "$COUNT" -eq "0" ] ; then
+           einfo "(none)" ; eend 1
+        fi
+      eoutdent
     eoutdent
   done
   eend 0
