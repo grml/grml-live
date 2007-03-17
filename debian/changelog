@@ -1,3 +1,9 @@
+grml-autoconfig (0.6.19) unstable; urgency=low
+
+  * Add rungetty to depends.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 17 Mar 2007 23:32:39 +0100
+
 grml-autoconfig (0.6.18) unstable; urgency=low
 
   * Add gawk to depends.
