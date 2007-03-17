@@ -9,7 +9,7 @@ S-X-Vcs-Hg: http://hg.grml.org/grml-autoconfig
 Package: grml-autoconfig
 Architecture: all
 Conflicts: grml-etc (<= 0.4-7)
-Depends: ${shlibs:Depends}, ${misc:Depends}, acpid | apmd, laptop-detect, hotplug | hotplug-light | udev (>= 0.080-1), zsh, gpm, syslog-ng, console-terminus, pump, grml-rebuildfstab (>= 0.3-1), grml-etc-core (>= 0.1-3), grml-scripts (>= 0.8-14), gawk, rungetty
+Depends: ${shlibs:Depends}, ${misc:Depends}, acpid | apmd, laptop-detect, hotplug | hotplug-light | udev (>= 0.080-1), zsh, gpm, syslog-ng, console-terminus, pump, grml-rebuildfstab (>= 0.3-1), grml-etc-core (>= 0.1-3), grml-scripts (>= 0.8-14), gawk, rungetty, rsync
 Suggests: hwinfo, alsa-utils
 Description: main bootup process of a grml system
  grml-autoconfig is the main part of the bootup process of the
