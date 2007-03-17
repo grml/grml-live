@@ -1,3 +1,10 @@
+grml-etc (0.9.12) unstable; urgency=low
+
+  * Added /etc/skel/.idesktop/xterm-iso.lnk and updated irssi.lnk
+    to better fit on the screen.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 17 Mar 2007 20:01:09 +0100
+
 grml-etc (0.9.11) unstable; urgency=low
 
   * Update /etc/runlevel.conf.hdinstall and /etc/runlevel.conf.livecd.
