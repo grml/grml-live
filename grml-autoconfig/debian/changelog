@@ -1,6 +1,9 @@
 grml-autoconfig (0.6.20) unstable; urgency=low
 
   * Add rsync to depends.
+  * config_language(): make sure /etc/sysconfig exists
+  * config_local_net(): check for entry in /etc/network/interfaces
+    before using ifup, fall back to ifconfig otherwise
 
  -- Michael Prokop <mika@grml.org>  Sat, 17 Mar 2007 23:48:12 +0100
 

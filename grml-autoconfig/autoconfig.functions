@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Feb 19 18:59:09 CET 2007 [mika]
+# Latest change: Sam Mär 17 23:52:56 CET 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -261,6 +261,7 @@ config_language(){
    [[ "$KKEYBOARD" == 'at' ]] && KEYTABLE=de-latin1-nodeadkeys
 
    # write keyboard related variables to file for later use
+   [ -d /etc/sysconfig ] || mkdir /etc/sysconfig
    echo "KEYTABLE=\"$KEYTABLE\""          > /etc/sysconfig/keyboard
    echo "XKEYBOARD=\"$XKEYBOARD\""       >> /etc/sysconfig/keyboard
    echo "KDEKEYBOARD=\"$KDEKEYBOARD\""   >> /etc/sysconfig/keyboard
@@ -514,7 +515,11 @@ done
 # {{{ Bring up loopback interface now
 config_local_net(){
  if [ -z "$INSTALLED" ] ; then
-    grep -q lo=lo /etc/network/run/ifstate 2>/dev/null || ifup lo
+    if grep -q 'iface lo inet loopback' /etc/network/interfaces 2>/dev/null ; then
+       grep -q lo=lo /etc/network/run/ifstate 2>/dev/null || ifup lo
+    else
+       ifconfig lo up
+    fi
  fi
 }
 # }}}
