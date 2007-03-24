@@ -1,0 +1,738 @@
+################################################################################
+Get an initial chroot
+---------------------
+
+Used initial version of ~/grml-live/scripts/grml-live for this.
+
+Install essential software
+--------------------------
+
+# cat > /etc/apt/sources.list << EOF
+
+  deb     http://deb.grml.org/                    grml-stable   main
+  deb     http://deb.grml.org/                    grml-testing  main
+  deb     http://ftp.tu-graz.ac.at/mirror/debian  etch     main contrib non-free
+
+EOF
+
+# cat > /etc/apt/preferences << EOF
+// main grml-repository:
+Package: *
+Pin: origin deb.grml.org
+Pin-Priority: 996
+
+// fallback grml-repository:
+Package: *
+Pin: origin grml.org
+Pin-Priority: 995
+
+// debian unstable pool (default):
+Package: *
+Pin: release a=unstable,o=Debian
+Pin-Priority: 991
+
+EOF
+
+# mount /proc
+# apt-get update
+# apt-get install grml-etc grml-etc-core grml-scripts
+# rm /var/run/dbus/pid
+# umount /proc
+
+# cd /etc
+# mv inittab inittab.orig
+# cp inittab.grml inittab
+
+# touch /etc/ld.so.nohwcap
+# touch /etc/grml_cd
+# echo "0.00a Release Codename grml-etch [$(date +%Y-%m-%d)]" > /etc/grml_version
+# echo 'grml-etch' > /etc/hostname
+
+# cat > /etc/hosts << EOF
+127.0.0.1       grml-etch    localhost
+
+# The following lines are desirable for IPv6 capable hosts
+# (added automatically by netbase upgrade)
+
+::1     ip6-localhost ip6-loopback grml-etch
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+EOF
+
+# echo 'Yes, do as I say!' | apt-get --force-yes -y install file-rc
+# cp /etc/runlevel.conf /etc/runlevel.conf.orig
+# cp /etc/runlevel.conf.livecd /etc/runlevel.conf
+
+# cat >> /etc/network/interfaces << EOF
+# The loopback interface
+# automatically added when upgrading
+auto lo
+iface lo inet loopback
+EOF
+
+# addgroup --gid 1000 grml
+# adduser --uid 1000 --gid 1000 --disabled-password grml
+# sed -i 's/^root::/root:*:/' /etc/shadow
+
+# cat > /etc/sudoers << EOF
+# sudoers file.
+# This file MUST be edited with the "visudo" command as root.
+# See the man page for details on how to write a sudoers file.
+
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+
+# User privilege specification
+root    ALL=(ALL) ALL
+
+# WARNING: This allows the unprivileged grml user to start commands as root
+# WARNING: This is totally insecure and (almost) makes grml a second root account.
+# WARNING: Never allow external access to the grml user!!!
+grml    ALL=NOPASSWD: ALL
+
+# allow editing of files with editor:
+# grml ALL=NOPASSWD: sudoedit
+
+# usage examples:
+# grml ALL=NOPASSWD: /sbin/hdparm
+# grml ALL=NOPASSWD: /usr/sbin/hwinfo
+# Cmnd_Alias DEBIAN = /usr/bin/apt-get, /usr/bin/dpkg, /usr/bin/auto-apt, /usr/bin/apt-file
+# grml ALL=NOPASSWD: DEBIAN
+# chroot       ALL=NOPASSWD: /usr/sbin/chroot, /bin/su - chroot
+# chroot       ALL=NOPASSWD: /usr/sbin/chroot, /bin/su - chroot
+
+secvpn  ALL=NOPASSWD: /usr/sbin/secvpn, /usr/sbin/pppd
+EOF
+
+
+# apt-get install linux-image-2.6.20-grml
+# aptitude install powernowd aumix alsa-utils hwinfo mdadm locales
+# cp /etc/locale.gen.minimal /etc/locale.gen && locale-gen
+# mv /etc/motd.dpkg-new /var/run/motd
+
+# aptitude install dctrl-tools usbutils
+# apt-get clean
+# aptitude forget-new
+# umount /proc /sys 2>/dev/null
+# exit # finally leave chroot...
+
+Build ISO
+---------
+
+# mkdir /home/mika/grml/chroot/grml_cd.etch/
+# cd /home/mika/grml/chroot/grml_cd.etch/
+# cp -a /home/mika/grml/chroot/grml_cd.large/* .
+# mksquashfs /home/mika/grml/chroot/grml_uncompressed.etch/* /home/mika/grml/chroot/grml_cd.etch/GRML/GRML -noappend
+
+# cd /home/mika/grml/chroot/grml_cd.etch
+# mkisofs -V "grml-etch 0.00a" -publisher 'Michael Prokop <mika@grml.org>' -l \
+  -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -c boot/isolinux/boot.cat -b \
+  boot/isolinux/isolinux.bin -o /home/mika/grml/chroot/grml-etch_0.00a.iso . 
+
+
+Extend the software list
+------------------------
+
+# aptitude install grml-x xserver-xorg-input-vmmouse xterm xcursor-themes idesk
+# mv /etc/X11/xorg.conf /etc/X11/xorg.conf.debian
+
+# update-alternatives --set x-terminal-emulator /usr/bin/xterm
+# update-alternatives --set x-cursor-theme /etc/X11/cursors/whiteglass.theme
+# update-alternatives --set editor /usr/bin/vim.basic
+# chsh -s /bin/zsh root
+# chsh -s /bin/zsh grml
+
+# aptitude install deborphan
+# aptitude --purge remove $(deborphan)
+
+# aptitude install grml grml2usb grml2hd
+# aptitude install openssh-server
+
+# aptitude install iceweasel sane sane-utils  xsane cups
+# aptitude install wireless-tools wpasupplicant
+################################################################################
+
+################################################################################
+grml-ppc
+========
+
+"Old" system (WD-harddisk):
+---------------------------
+
+# debootstrap etch /data/chroot http://ftp.tu-graz.ac.at/mirror/debian
+# chroot /data/chroot
+
+# cat > /etc/apt/sources.list << EOF
+
+  deb     http://deb.grml.org/                    grml-stable   main
+  deb     http://deb.grml.org/                    grml-testing  main
+  deb     http://ftp.tu-graz.ac.at/mirror/debian  etch     main contrib non-free
+
+EOF
+
+# gpg --keyserver subkeys.pgp.net --recv-keys F61E2E7CECDEA787
+# gpg --export F61E2E7CECDEA787 > /etc/apt/grml.key
+# apt-key add /etc/apt/grml.key
+
+# apt-get update
+# apt-get install vim zsh
+# apt-get install grml-etc grml-etc-core grml-scripts
+
+System died :-/
+http://michael-prokop.at/blog/2007/03/22/sterbende-festplatte/
+
+Reinstalled it:
+http://michael-prokop.at/blog/2007/03/23/murphy-2/
+
+"New" system (Samsung-harddisk):
+--------------------------------
+
+Installed new system via USB-stick, d-i from efika.de. Now booting the system via USB­stick:
+
+  boot hd0:0 kernel_efika console=ttyPSC0 root=/dev/sda1
+
+Setup on main system:
+
+# apt-get update ; apt-get install zsh mercurial debootstrap screen devscripts fakeroot gcc debhelper bzip2 libc6-dev ntpdate
+
+% cat >> /etc/apt/sources.list << EOF
+deb http://deb.grml.org/ grml-stable  main
+deb http://deb.grml.org/ grml-testing main
+EOF
+
+# apt-get install grml-etc grml-etc-core grml-scripts
+# apt-get install vim zsh
+
+Install chroot:
+
+# mkdir /data
+# mount /dev/sda4 /data
+# mkdir /data/chroot
+
+# debootstrap etch /data/chroot http://ftp.tu-graz.ac.at/mirror/debian
+# chroot /data/chroot /bin/sh
+
+# cat > /etc/apt/sources.list << EOF
+
+  deb     http://deb.grml.org/                    grml-stable   main
+  deb     http://deb.grml.org/                    grml-testing  main
+  deb     http://ftp.tu-graz.ac.at/mirror/debian  etch     main contrib non-free
+
+EOF
+
+# gpg --keyserver subkeys.pgp.net --recv-keys F61E2E7CECDEA787
+# gpg --export F61E2E7CECDEA787 > /etc/apt/grml.key
+# apt-key add /etc/apt/grml.key
+
+# cat > /usr/bin/policy-rc.d << EOF
+> #!/bin/sh
+> exit 101
+> EOF
+# chmod 755 /usr/bin/policy-rc.d
+# mount -t proc none /proc
+# apt-get update
+# aptitude install vim zsh grml-etc grml-etc-core grml-scripts
+
+# cat > /etc/apt/preferences << EOF
+// main grml-repository:
+Package: *
+Pin: origin deb.grml.org
+Pin-Priority: 996
+
+// fallback grml-repository:
+Package: *
+Pin: origin grml.org
+Pin-Priority: 995
+
+// debian unstable pool (default):
+Package: *
+Pin: release a=unstable,o=Debian
+Pin-Priority: 991
+
+EOF
+
+# cd /etc
+# mv inittab inittab.orig
+# cp inittab.grml inittab
+# touch /etc/ld.so.nohwcap
+# touch /etc/grml_cd
+# echo "0.00a Release Codename grml-ppc [$(date +%Y-%m-%d)]" > /etc/grml_version
+# echo "0.00a Release Codename grml-etch [$(date +%Y-%m-%d)]" > /etc/grml_version
+# echo 'grml-ppc' > /etc/hostname
+
+# cat > /etc/hosts << EOF
+127.0.0.1       grml-ppch    localhost
+
+# The following lines are desirable for IPv6 capable hosts
+# (added automatically by netbase upgrade)
+
+::1     ip6-localhost ip6-loopback grml-ppch
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+EOF
+
+# echo 'Yes, do as I say!' | apt-get --force-yes -y install file-rc
+# cp /etc/runlevel.conf /etc/runlevel.conf.orig
+# cp /etc/runlevel.conf.livecd /etc/runlevel.conf
+
+# cat >> /etc/network/interfaces << EOF
+# The loopback interface
+# automatically added when upgrading
+auto lo
+iface lo inet loopback
+EOF
+
+# addgroup --gid 1000 grml
+# adduser --uid 1000 --gid 1000 --disabled-password grml
+# sed -i 's/^root::/root:*:/' /etc/shadow
+
+# cat > /etc/sudoers << EOF
+# sudoers file.
+# This file MUST be edited with the "visudo" command as root.
+# See the man page for details on how to write a sudoers file.
+
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+
+# User privilege specification
+root    ALL=(ALL) ALL
+
+# WARNING: This allows the unprivileged grml user to start commands as root
+# WARNING: This is totally insecure and (almost) makes grml a second root account.
+# WARNING: Never allow external access to the grml user!!!
+grml    ALL=NOPASSWD: ALL
+
+# allow editing of files with editor:
+# grml ALL=NOPASSWD: sudoedit
+
+# usage examples:
+# grml ALL=NOPASSWD: /sbin/hdparm
+# grml ALL=NOPASSWD: /usr/sbin/hwinfo
+# Cmnd_Alias DEBIAN = /usr/bin/apt-get, /usr/bin/dpkg, /usr/bin/auto-apt, /usr/bin/apt-file
+# grml ALL=NOPASSWD: DEBIAN
+# chroot       ALL=NOPASSWD: /usr/sbin/chroot, /bin/su - chroot
+# chroot       ALL=NOPASSWD: /usr/sbin/chroot, /bin/su - chroot
+
+secvpn  ALL=NOPASSWD: /usr/sbin/secvpn, /usr/sbin/pppd
+EOF
+
+# aptitude install powernowd aumix alsa-utils hwinfo mdadm locales dctrl-tools usbutils sudo
+# cp /etc/locale.gen.minimal /etc/locale.gen && locale-gen
+# mv /etc/motd.dpkg-new /var/run/motd
+
+mika@funkenzutzler ~/kernel % scp linux-image-2.6.19-grml_grml.02_powerpc.deb efika:/data/chroot/root/
+
+% cd ~/kernel
+% cvs -d:pserver:anonymous@aufs.cvs.sourceforge.net:/cvsroot/aufs login
+% cvs -z3 -d:pserver:anonymous@aufs.cvs.sourceforge.net:/cvsroot/aufs co aufs
+% cd aufs
+% export ARCH=powerpc
+% make GCC=powerpc-linux-gnu-gcc-4.1 KDIR=~/kernel/linux-2.6.19 -f local.mk
+
+# dpkg -i /root/linux-image-2.6.19-grml_grml.02_powerpc.deb
+
+# umount /proc
+# apt-get clean
+# aptitude forget-new
+# umount /proc /sys 2>/dev/null
+# exit # finally leave chroot...
+
+Build ISO
+---------
+
+# aptitude install squashfs-tools mkisofs
+# cd /data && mkdir grml_cd.ppc && mkdir grml_cd.ppc/GRML
+# mksquashfs /data/chroot/* /data/grml_cd.ppc/GRML/GRML -noappend
+
+# cd /data/grml_cd.ppc && mkdir -p boot/yaboot && cd boot/yaboot
+# cp /data/chroot/boot/vmlinux-2.6.19-grml linux
+# cat > yaboot.conf << EOF
+device=cd:
+default=grml
+
+message=/boot/yaboot/boot.msg
+
+image=/boot/yaboot/linux
+  label=grml
+  initrd=/boot/yaboot/minirt
+  append="quiet"
+  read-only
+
+image=/boot/yaboot/linux
+  label=debug
+  initrd=/boot/yaboot/minirt
+  append="debug"
+  read-only
+EOF
+
+# cat > boot.msg << EOF
+
+Welcome to grml-ppc.
+
+EOF
+
+# cd /tmp
+# dd if=/dev/zero of=minirt26 bs=6000k count=1
+# mke2fs -b 1024 -N 8192 -F -q -m 0 minirt26
+# mount -o loop /tmp/minirt26 /mnt/initrd
+# cd /mnt/initrd && rm -rf lost+found
+
+
+% mkdir busybox && cd busybox
+% wget http://www.busybox.net/downloads/busybox-1.5.0.tar.gz
+% tar zxf busybox-1.5.0.tar.gz
+% cd busybox-1.5.0
+% wget grml.org/tmp/busybox
+% cp busybox .config
+% make
+
+# cd /mnt/minirtd/
+# mkdir afs cdrom dev etc GRML media mnt modules proc selinux static swap sys
+# ln -s /GRML/bin bin
+# ln -s /GRML/boot boot
+# ln -s /GRML/lib lib
+# ln -s /GRML/opt opt
+# ln -s static sbin
+# ln -s /var/tmp tmp
+# ln -s /GRML/user usr
+
+# cd /mnt/initrd/dev && MAKEDEV generic
+
+# cd /mnt/initrd/GRML
+# ln -s /cdrom/GRML/bin  bin
+# ln -s /cdrom/GRML/boot boot
+# ln -s /cdrom/GRML/etc  etc
+# ln -s /cdrom/GRML/lib  lib
+# ln -s /cdrom/GRML/opt  opt
+# ln -s /cdrom/GRML/sbin sbin
+# ln -s /cdrom/GRML/usr  usr
+# ln -s /cdrom/GRML/var  var
+
+# cp /home/mika/busybox/busybox-1.5.0/busybox /mnt/initrd/static/
+
+# cd /mnt/initrd/static/
+# for i in \
+  \[ \[\[ addgroup adduser adjtimex ar arping ash awk basename bunzip2 bzcat cal cat chgrp chmod chown chroot chvt clear cmp \
+  cp cpio crond crontab cut date dc dd deallocvt delgroup deluser df dirname dmesg dos2unix dpkg dpkg-deb du dumpkmap echo \
+  egrep env expr false fbset fdflush fdisk fgrep find fold free freeramdisk fsck.minix ftpget ftpput getopt getty grep gunzip \
+  gzip halt head hexdump hostid hostname httpd hwclock id ifconfig ifdown ifup init insmod ip ipcalc kill killall klogd \
+  last length linuxrc ln loadfont loadkmap logger login logname logread losetup ls lsmod makedevs md5sum mesg mkdir mkfifo  \
+  mkfs.minix mknod mkswap mktemp modprobe more mount mt mv nameif nc netstat nslookup od openvt passwd patch pidof ping, \
+  ping6 pivot_root poweroff printf ps pwd rdate readlink realpath reboot renice reset rm rmdir rmmod route rpm rpm2cpio run-parts \
+  sed setkeycodes sh sha1sum sleep sort start-stop-daemon strings stty su sulogin swapoff swapon sync syslogd tail tar tee \
+  telnet telnetd test tftp time top touch tr traceroute true tty udhcpc udhcpd umount uname uncompress uniq unix2dos unzip \
+  uptime usleep uudecode uuencode vi vlock watch watchdog wc wget which who whoami xargs yes zcat ; \
+  do ln -s ./busybox $i ; done
+
+# cd /mnt/initrd/
+# cat > etc/fstab << EOF
+# /etc/fstab - static file system information
+# <filesystem> <mountpoint>   <type> <options>                             <dump> <pass>
+proc           /proc          proc   rw,nosuid,nodev,noexec                 0      0
+none           /proc/bus/usb  usbfs  defaults,noauto                        0      0
+sysfs          /sys           sysfs  rw,nosuid,nodev,noexec                 0      0
+devpts         /dev/pts       devpts mode=0622                              0      0
+/dev/fd0       /mnt/floppy    auto   users,noauto,exec                      0      0
+/dev/external  /mnt/external  auto   users,noauto,exec,rw,uid=grml,gid=grml 0      0
+/dev/external1 /mnt/external1 auto   users,noauto,exec,rw,uid=grml,gid=grml 0      0
+/dev/cdrom     /mnt/cdrom     auto   users,noauto,exec,ro                   0      0
+/dev/dvd       /mnt/dvd       auto   users,noauto,exec,ro                   0      0
+# some other examples:
+# /dev/hda1       /Grml        ext3    dev,suid,user,noauto 0  2
+# //1.2.3.4/pub   /smb/pub     smbfs   defaults,user,noauto,uid=grml,gid=grml 0 0
+# linux:/pub      /beer        nfs     defaults             0  0
+# tmpfs           /tmp         tmpfs   size=300M            0  0
+#
+# Warning! Please do *not* change any lines below because they are auto-generated by rebuildfstab!
+# If you want to disable rebuildfstab set CONFIG_FSTAB='no' in /etc/grml/autoconfig!
+# See 'man grml-rebuildfstab' for more details about the following entries.
+EOF
+
+# cat > etc/group << EOF
+root::0:root
+grml::1000:grml
+slocate::21:root
+nobody::-1:nobody
+EOF
+
+# cat > etc/mtab << EOF
+/dev/root / ext2 rw 0 0
+EOF
+
+# cat > etc/passwd << EOF
+root:*:0:0:grml Administrator:/root:/bin/zsh
+grml:*:1000:1000:grml User:/home/grml:/bin/zsh
+nobody:*:-1:-1:Nobody:/:/bin/true
+EOF
+
+# cat > etc/resolv.conf << EOF
+# Insert nameservers here
+# nameserver 127.0.0.1
+EOF
+
+# cat > etc/shadow << EOF
+root:*:11312:0:99999:7:::
+grml:*:11312:0:99999:7:::
+nobody:*:11312:0:99999:7:::
+EOF
+
+# cat > etc/init << EOF
+#!/static/ash
+# This script is called in case of loading this initrd image as
+# root-partition, so execute linuxrc first, then replace process
+# with the real init.
+# (C) Klaus Knopper May 2004, License: GPL
+
+# linuxrc will configure the ramdisk system, anc then copy a static
+# init from CD to ramdisk, after finishing the autoconfiguration.
+/linuxrc
+
+# Call the real init now
+exec /etc/init "$@" </dev/console >/dev/console 2>&1
+EOF
+
+# cd /mnt/initrd/etc && ln -s /GRML/etc/ld.so.conf ld.so.conf
+
+# cd /mnt/initrd
+# wget grml.org/files/devel/linuxrc
+# chmod 755 linuxrc
+
+mika@funkenzutzler ~ % scp kernel/aufs/fs/aufs/aufs.ko root@efika:/mnt/initrd/modules/
+
+# cd /mnt/initrd/modules
+# mkdir div && cd div
+# for mod in ehci-hcd.ko firmware_class.ko ieee1394.ko ntfs.ko ohci1394.ko ohci-hcd.ko \
+pcmcia_core.ko pcmcia.ko rsrc_nonstatic.ko sbp2.ko uhci-hcd.ko usbcore.ko usbhid.ko  \
+usb-storage.ko yenta_socket.ko ; do find /data/chroot/lib/modules -name "$mod" -exec cp {} . \; ; done
+
+# cd /tmp
+# umount /mnt/initrd
+# gzip -9 minirt26
+# mv minirt26.gz /data/grml_cd.ppc/boot/yaboot/
+
+# cp /usr/lib/yaboot/yaboot /data/grml_cd.ppc/boot/yaboot/
+
+# cd /data/grml_cd.ppc
+# mkisofs -V "grml-etch 0.00a" -publisher 'Michael Prokop <mika@grml.org>' -l \
+  -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -c boot/yaboot/boot.cat \
+  -b boot/yaboot/yaboot -o /data/grml-ppc_0.00a.iso .
+
+=> PROBLEMS :-/
+
+
+mkisofs -o /data/grml-ppc_0.00a.iso -part -hfs -r -l -J \
+-A "grml-ppc" \
+-P "Michael Prokop" \
+-p "Michael Prokop" \
+-abstract "grml-ppc" \
+-sysid "grml-ppc" \
+-V "grml-ppc 0.0" \
+-volset "grml-ppc" \
+-volset-size 2 \
+-volset-seqno 1 \
+-hfs-volid "grml-ppc" \
+-map `pwd`/mapping \
+-magic `pwd`/magic \
+-m "*.orig" \
+-hide '*.MacOS' -hide '*.DOS' \
+-hide-joliet '*.Unix' -hide-joliet '*.MacOS' \
+-hide-hfs '*.Unix' -hide-hfs '*.DOS' \
+-graft-points \
+install/yaboot.conf=boot/yaboot/yaboot.conf ./
+
+#Bless install folder so yaboot can boot
+hmount $2
+hattrib -b install
+#hattrib -t tbxi -c chrp :install:yaboot
+humount
+
+################################################################################
+
+grml64
+======
+
+debootstrap sid /grml/grml_uncompressed.grml64 http://ftp.tu-graz.ac.at/mirror/debian
+chroot /grml/grml_uncompressed.grml64 /bin/sh
+
+cat > /etc/apt/sources.list << EOF
+
+  deb     http://deb.grml.org/                    grml-stable   main
+  deb     http://deb.grml.org/                    grml-testing  main
+  deb     http://ftp.tu-graz.ac.at/mirror/debian  unstable      main contrib non-free
+
+EOF
+
+cat > /etc/apt/preferences << EOF
+// main grml-repository:
+Package: *
+Pin: origin deb.grml.org
+Pin-Priority: 996
+
+// fallback grml-repository:
+Package: *
+Pin: origin grml.org
+Pin-Priority: 995
+
+// debian unstable pool (default):
+Package: *
+Pin: release a=unstable,o=Debian
+Pin-Priority: 991
+
+EOF
+
+gpg --keyserver subkeys.pgp.net --recv-keys F61E2E7CECDEA787
+gpg --export F61E2E7CECDEA787 > /etc/apt/grml.key
+apt-key add /etc/apt/grml.key
+
+mount /proc
+apt-get update
+apt-get install grml-etc grml-etc-core grml-scripts
+umount /proc
+
+cd /etc
+mv inittab inittab.orig
+cp inittab.grml inittab
+
+touch /etc/ld.so.nohwcap
+touch /etc/grml_cd
+echo "0.01 Release Codename grml64 [$(date +%Y-%m-%d)]" > /etc/grml_version
+echo 'grml64' > /etc/hostname
+
+cat > /etc/hosts << EOF
+127.0.0.1       grml64    localhost
+
+# The following lines are desirable for IPv6 capable hosts
+# (added automatically by netbase upgrade)
+
+::1     ip6-localhost ip6-loopback grml64
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+EOF
+
+echo 'Yes, do as I say!' | apt-get --force-yes -y install file-rc
+cp /etc/runlevel.conf /etc/runlevel.conf.orig
+cp /etc/runlevel.conf.livecd /etc/runlevel.conf
+
+cat >> /etc/network/interfaces << EOF
+# The loopback interface
+# automatically added when upgrading
+auto lo
+iface lo inet loopback
+EOF
+
+addgroup --gid 1000 grml
+adduser --uid 1000 --gid 1000 --disabled-password --shell /bin/zsh grml
+sed -i 's/^root::/root:*:/' /etc/shadow
+sed -i 's#SHELL=.*#SHELL=/bin/zsh#' /etc/default/useradd
+sed -i 's#/bin/bash#/bin/zsh#' /etc/passwd
+
+cat > /etc/sudoers << EOF
+# sudoers file.
+# This file MUST be edited with the "visudo" command as root.
+# See the man page for details on how to write a sudoers file.
+
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+
+# User privilege specification
+root    ALL=(ALL) ALL
+
+# WARNING: This allows the unprivileged grml user to start commands as root
+# WARNING: This is totally insecure and (almost) makes grml a second root account.
+# WARNING: Never allow external access to the grml user!!!
+grml    ALL=NOPASSWD: ALL
+
+# allow editing of files with editor:
+# grml ALL=NOPASSWD: sudoedit
+
+# usage examples:
+# grml ALL=NOPASSWD: /sbin/hdparm
+# grml ALL=NOPASSWD: /usr/sbin/hwinfo
+# Cmnd_Alias DEBIAN = /usr/bin/apt-get, /usr/bin/dpkg, /usr/bin/auto-apt, /usr/bin/apt-file
+# grml ALL=NOPASSWD: DEBIAN
+# chroot       ALL=NOPASSWD: /usr/sbin/chroot, /bin/su - chroot
+# chroot       ALL=NOPASSWD: /usr/sbin/chroot, /bin/su - chroot
+
+secvpn  ALL=NOPASSWD: /usr/sbin/secvpn, /usr/sbin/pppd
+EOF
+
+aptitude install powernowd aumix alsa-utils hwinfo mdadm locales
+cp /etc/locale.gen.grml /etc/locale.gen && locale-gen
+mv /etc/motd.dpkg-new /var/run/motd
+aptitude install grml grml-x
+
+wget http://dufo.tugraz.at/~prokop/grml-kernel/2.6.20-grml/linux-image-2.6.20-grml64_grml.01_amd64.deb
+wget http://dufo.tugraz.at/~prokop/grml-kernel/2.6.20-grml/linux-headers-2.6.20-grml64_grml.01_amd64.deb
+
+aptitude install dctrl-tools usbutils
+
+aptitude install multitail htop iptstate idesk xserver-xorg-video-vmware
+
+wget http://grml.org/files/devel/create-scsi-mod-file.sh 
+chmod 755 ./create-scsi-mod-file.sh
+./create-scsi-mod-file.sh > scsi-modules.txt
+
+apt-get clean
+aptitude forget-new
+umount /proc /sys 2>/dev/null
+exit # finally leave chroot...
+
+Build ISO
+---------
+
+# cd /grml && mkdir grml_cd.grml64
+# scp -r mika@192.168.1.104:~/grml/chroot/grml_cd.large/boot grml_cd.grml64/
+# cd /grml/grml_cd.grml64/boot/isolinux
+# cp /grml/grml_uncompressed.grml64/boot/vmlinuz-2.6.20-grml64 linux26
+# mkdir /grml/grml_cd.grml64/GRML/
+# mksquashfs /grml/grml_uncompressed.grml64/* /grml/grml_cd.grml64/GRML/GRML -noappend
+
+$UPDATE-INITRD...
+for mod in *.ko ; do find /grml/grml_uncompressed.grml64/lib/modules/2.6.20-grml64 -name "$mod" -exec cp {} . \; ; done
+
+Important:
+  ln -s /GRML/emul/ia32-linux/lib emul
+  ln -s /GRML/lib64 lib64
+
+
+$BUILD_BUSYBOX
+
+scsi-modules not present in grml64:
+
+  53c700.ko advansys.ko aha152x_cs.ko aha152x.ko aha1542.ko aha1740.ko dpt_i2o.ko 
+  dtc.ko fd_mcs.ko g_NCR5380.ko g_NCR5380_mmio.ko ibmmca.ko in2000.ko NCR53c406a.ko
+  NCR_D700.ko NCR_Q720_mod.ko nsp32.ko nsp_cs.ko pas16.ko psi240i.ko qlogicfas.ko
+  sim710.ko sym53c416.ko t128.ko u14-34f.ko ultrastor.ko wd7000.ko
+
+% cd ~/kernel
+% cvs -d:pserver:anonymous@aufs.cvs.sourceforge.net:/cvsroot/aufs login
+% rehash
+% cvs -z3 -d:pserver:anonymous@aufs.cvs.sourceforge.net:/cvsroot/aufs co aufs
+% cd aufs
+% make KDIR=~/kernel/linux-2.6.20 -f local.mk
+
+# cp ~mika/kernel/aufs/fs/aufs/aufs.ko /mnt/initrd/modules/
+
+# cd /home/mika/grml/chroot/grml_cd.grml64
+# mkisofs -V "grml64 0.01" -publisher 'Michael Prokop <mika@grml.org>' -l \
+  -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -c boot/isolinux/boot.cat -b \
+  boot/isolinux/isolinux.bin -o /grml/grml64_0.01.iso .
+################################################################################

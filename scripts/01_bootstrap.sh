@@ -22,7 +22,8 @@ bootstrap() {
   if [ -f "${TARGET}/grml-live/bootstrap" ] ; then
      debug_warn "chroot exists already, skipping execution of $DEBOOTSTRAP and continuing"
   else
-     $DEBOOTSTRAP --arch $ARCH $RELEASE $TARGET $MIRROR && touch "${TARGET}/grml-live/bootstrap"
+     # $DEBOOTSTRAP --arch $ARCH $RELEASE $TARGET $MIRROR && touch "${TARGET}/grml-live/bootstrap"
+     $DEBOOTSTRAP $RELEASE $TARGET $MIRROR && touch "${TARGET}/grml-live/bootstrap"
   fi
 }
 
