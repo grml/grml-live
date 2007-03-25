@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sam Mär 17 23:52:56 CET 2007 [mika]
+# Latest change: Son Mär 25 12:32:37 CEST 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -338,24 +338,26 @@ config_userfstab(){
 config_time(){
  # don't touch the files if running from harddisk:
  if [ -z "$INSTALLED" ]; then
-  UTC=""
-  checkbootparam utc >>$DEBUG 2>&1 && UTC="-u"
-  checkbootparam gmt >>$DEBUG 2>&1 && UTC="-u"
-  # hwclock uses the TZ variable
-  if [ -r /etc/default/locale ] ; then
-     . /etc/default/locale
-  else
-     TZ=Europe/Vienna
-  fi
-  ERROR=$(TZ="$TZ" hwclock $UTC -s 2>&1) ; RC=$?
-  if [ -n "$ERROR" ] ; then
-     eindent
-     ERROR=$(TZ="$TZ" hwclock $UTC -s --directisa 2>&1)
-     if [ -n "$ERROR" ] ; then
-        eerror "Problem running hwclock: $ERROR" ; eend 1
-     fi
-     eoutdent
-  fi
+    UTC=""
+    checkbootparam utc >>$DEBUG 2>&1 && UTC="-u"
+    checkbootparam gmt >>$DEBUG 2>&1 && UTC="-u"
+    # hwclock uses the TZ variable
+    [ -r /etc/timezone ] && TZ=$(cat /etc/timezone)
+    [ -n "$TZ" ] || TZ=Europe/Vienna
+  
+    if ! [ -r /dev/rtc ] ; then
+      ewarn "Realtime clock not available, skipping execution of hwclock therefore." ; eend 0
+    else
+      ERROR=$(TZ="$TZ" hwclock $UTC -s 2>&1 | head -1) ; RC=$?
+      if [ -n "$ERROR" ] ; then
+         eindent
+         ERROR=$(TZ="$TZ" hwclock $UTC -s --directisa 2>&1 | head -1)
+         if [ -n "$ERROR" ] ; then
+            eerror "Problem running hwclock: $ERROR" ; eend 1
+         fi
+         eoutdent
+      fi
+    fi
  fi
 }
 # }}}
