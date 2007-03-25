@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mit Jän 17 17:48:05 CET 2007 [mika]
+# Latest change: Son Mär 25 12:45:13 CEST 2007 [mika]
 ################################################################################
 
 ################################################################################
@@ -94,6 +94,7 @@ CONFIG_NETCONFIG='yes'        # download configuration archive provided by booto
 CONFIG_NETIPV6='yes'          # check for bootparam ipv6
 CONFIG_PASSWD='yes'           # set password via bootparam passwd
 CONFIG_PCMCIA='no'            # check for pcmcia and start cardmgr
+CONFIG_QEMU='yes'             # qemu specific stuff
 CONFIG_SERVICES='yes'         # check for services to run, provided via bootparam
 CONFIG_SETKEYCODES='yes'      # run setkeycodes when bootoption setkeycodes found
 CONFIG_SMALL='yes'            # use a less "bloat" /etc/inittab for small computer with less RAM
