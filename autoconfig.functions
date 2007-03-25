@@ -1213,7 +1213,8 @@ if checkbootparam "nocpu"; then
 else
   if ! [ -x /etc/init.d/powernowd ] ; then
     ewarn "Skipping CPU detection as powernowd dependencies are not fulfilled." ; eend 1
-  elif [ ! -e /lib/modules/${KERNEL}/kernel/arch/i386/kernel/cpu/cpufreq -o ! -e /lib/modules/${KERNEL}/kernel/drivers/cpufreq ] ; then
+  elif [ ! -e /lib/modules/${KERNEL}/kernel/arch/i386/kernel/cpu/cpufreq -o ! -e /lib/modules/${KERNEL}/kernel/drivers/cpufreq -o ! -e \
+         /lib/modules/${KERNEL}/kernel/arch/x86_64/kernel/cpufreq ] ; then
     ewarn "Skipping CPU detection as module dependencies are not fulfilled." ; eend 1
   else
     if [[ `grep -c processor /proc/cpuinfo` -gt 1 ]] ; then
