@@ -1,6 +1,7 @@
 grml-autoconfig (0.6.24) unstable; urgency=low
 
   * config_vmware(): fix small syntax error.
+  * config_cpu(): support x86 in cpufreq detection
 
  -- Michael Prokop <mika@grml.org>  Sun, 25 Mar 2007 13:25:15 +0200
 
