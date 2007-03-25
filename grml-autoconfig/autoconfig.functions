@@ -1211,57 +1211,39 @@ config_cpu(){
 if checkbootparam "nocpu"; then
   ewarn "Skipping CPU detection as requested on boot commandline." ; eend 0
 else
-  if ! [ -x /etc/init.d/powernowd ] ; then
-    ewarn "Skipping CPU detection as powernowd dependencies are not fulfilled." ; eend 1
-  elif [ ! -e /lib/modules/${KERNEL}/kernel/arch/i386/kernel/cpu/cpufreq -o ! -e /lib/modules/${KERNEL}/kernel/drivers/cpufreq -o ! -e \
-         /lib/modules/${KERNEL}/kernel/arch/x86_64/kernel/cpufreq ] ; then
-    ewarn "Skipping CPU detection as module dependencies are not fulfilled." ; eend 1
-  else
-    if [[ `grep -c processor /proc/cpuinfo` -gt 1 ]] ; then
-      einfo "Detecting CPU:"
-      CPU=$(awk -F: '/^processor/{printf "	Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG)
-      echo $CPU | sed 's/ \{1,\}/ /g'
-      eend 0
-    else
-      einfo "Detecting CPU: `awk -F: '/^processor/{printf " Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG` " ; eend 0
-    fi
-    if /usr/sbin/laptop-detect ; then
-    einfo "Detected Laptop - trying to use cpu frequency scaling:"
-#      loadcpumod() {
-#      for module in /lib/modules/${KERNEL}/kernel/arch/i386/kernel/cpu/cpufreq/*.ko /lib/modules/${KERNEL}/kernel/drivers/cpufreq/*.ko ; do
-#    # modprobe ${${${${(f)"$(_call_program modules ${(M)words[1]##*/}modprobe -l | grep cpufreq 2>>$DEBUG)"}:#}##*/}%.*}
-#        modprobe `basename ${module%%\.ko}` 1>>$DEBUG 2>&1
-#      done
-#      }
-#    CPU=$(grep 'model name' /proc/cpuinfo | cut -b14- | head -1)
-#    eindent
-#    if [[ $CPU = *Intel* ]] ; then
-#      einfo "Detected CPU is of type Intel - loading modules and starting cpudyn."
-#      local DETECTED=1
-#      loadcpumod
-#      /etc/init.d/cpudyn start 1>>$DEBUG ; eend $?
-#    fi
-#    if [[ $CPU = *AMD* ]] ; then
-#      einfo "Detected CPU is of type AMD - loading modules and starting powernowd."
-#      local DETECTED=1
-#      loadcpumod
-#      /etc/init.d/powernowd start 1>>$DEBUG ; eend $?
-#    fi
-
-     eindent
-     if [ -r /usr/bin/cpufreq-detect.sh ] ; then
-       . /usr/bin/cpufreq-detect.sh
-       if [ -n "$MODULE" -a "$MODULE" != none ]; then
-         einfo "Loading module ${MODULE} and starting powernowd."
-         modprobe cpufreq_userspace 1>>$DEBUG
-         modprobe "$MODULE" 1>>$DEBUG || modprobe "$MODULE_FALLBACK" 1>>$DEBUG
-         /etc/init.d/powernowd start 1>>$DEBUG ; eend $?
-       else
-         ewarn "Could not detect an appropriate CPU for use with powernowd - skipping." && eend 1
-       fi
-     fi
-     eoutdent
+  # check module dependencies
+  cpufreq_check() {
+   if [ -e /lib64 ] ; then
+      [ -e /lib/modules/${KERNEL}/kernel/arch/x86_64/kernel/cpufreq ] || return 1
+   else
+      [ -e /lib/modules/${KERNEL}/kernel/arch/i386/kernel/cpu/cpufreq -o ! -e /lib/modules/${KERNEL}/kernel/drivers/cpufreq ] || return 1
    fi
+  }
+
+  if [[ `grep -c processor /proc/cpuinfo` -gt 1 ]] ; then
+     einfo "Detecting CPU:"
+     CPU=$(awk -F: '/^processor/{printf "	Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG)
+     echo $CPU | sed 's/ \{1,\}/ /g'
+     eend 0
+  else
+     einfo "Detecting CPU: `awk -F: '/^processor/{printf " Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG` " ; eend 0
+  fi
+
+  if ! cpufreq_check ; then
+    ewarn "Skipping cpufreq setup as module dependencies are not fulfilled." ; eend 1
+  else
+    if /usr/sbin/laptop-detect ; then
+       einfo "Detected Laptop - trying to use cpu frequency scaling:"
+       eindent
+         einfo "Loading module cpufreq_ondemand and adjusting scaling_governor."
+	 if modprobe cpufreq_ondemand && RC=0 || RC=1 ; then
+	    for file in $(find /sys/devices/system/cpu/ -name scaling_governor 2>/dev/null) ; do
+                echo ondemand > $file
+            done
+         fi
+	 eend $RC
+       eoutdent
+    fi
   fi
 fi
 }
