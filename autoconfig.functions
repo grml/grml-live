@@ -385,16 +385,29 @@ config_kernel(){
 # {{{ vmware specific stuff
 config_vmware(){
 if checkbootparam novmware ; then
- ewarn "Skipping running vmware specific stuff as requested on boot commandline." ; eend 0
+   ewarn "Skipping running vmware specific stuff as requested on boot commandline." ; eend 0
 else
- if [ -z "$INSTALLED" ]; then
-  if vmware-detect ; then
-    if [ -r /etc/X11/xorg.conf.vmware ] ; then
-      einfo "Copying /etc/X11/xorg.conf.vmware to /etc/X11/xorg.conf"
-      cp /etc/X11/xorg.conf.vmware /etc/X11/xorg.conf ; eend $?
-    fi
-  fi
- fi
+   if [ -z "$INSTALLED" ] ; then
+      if ! [ checkbootparam qemu ]; then
+         if vmware-detect ; then
+            if [ -r /etc/X11/xorg.conf.vmware ] ; then
+               einfo "Copying /etc/X11/xorg.conf.vmware to /etc/X11/xorg.conf"
+               cp /etc/X11/xorg.conf.vmware /etc/X11/xorg.conf ; eend $?
+            fi
+	 fi
+      fi
+   fi
+fi
+}
+# }}}
+
+# {{{ qemu specific stuff
+config_qemu(){
+if checkbootparam qemu ; then
+   if [ -r /etc/X11/xorg.conf.example ] ; then
+      einfo "Copying /etc/X11/xorg.conf.example to /etc/X11/xorg.conf"
+      cp /etc/X11/xorg.conf.example /etc/X11/xorg.conf ; eend $?
+   fi
 fi
 }
 # }}}

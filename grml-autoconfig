@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Fre Aug 04 12:13:13 CEST 2006 [mika]
+# Latest change: Son Mär 25 12:45:38 CEST 2007 [mika]
 ################################################################################
 
 # http://wiki.debian.org/LSBInitScripts =>
@@ -110,6 +110,8 @@ checkvalue $CONFIG_TIME && config_time
 checkvalue $CONFIG_KERNEL &&  config_kernel
 
 checkvalue $CONFIG_VMWARE &&  config_vmware
+
+checkvalue $CONFIG_QEMU && config_qemu
 
 checkvalue $CONFIG_SMALL && config_small
 
