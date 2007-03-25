@@ -364,7 +364,7 @@ config_time(){
 
 # {{{ print kernel info
 config_kernel(){
-  vmware-detect &>/dev/null && VMWARE="inside ${WHITE}VMWare${NORMAL}"
+  vmware-detect &>/dev/null && VMWARE="inside ${WHITE}VMware/Qemu${NORMAL}"
   [ -d /proc/xen ] && VMWARE='' # vmware-detect returns '0' when running with a Xen-enabled kernel
   einfo "Running Linux Kernel $KERNEL $VMWARE" ; eend 0
   if [ -r /proc/cpuinfo ] ; then
@@ -391,7 +391,7 @@ else
       if ! checkbootparam qemu ; then
          if vmware-detect ; then
             if [ -r /etc/X11/xorg.conf.vmware ] ; then
-               einfo "Copying /etc/X11/xorg.conf.vmware to /etc/X11/xorg.conf"
+               einfo "VMware: Copying /etc/X11/xorg.conf.vmware to /etc/X11/xorg.conf"
                cp /etc/X11/xorg.conf.vmware /etc/X11/xorg.conf ; eend $?
             fi
 	 fi
@@ -405,7 +405,7 @@ fi
 config_qemu(){
 if checkbootparam qemu ; then
    if [ -r /etc/X11/xorg.conf.example ] ; then
-      einfo "Copying /etc/X11/xorg.conf.example to /etc/X11/xorg.conf"
+      einfo "Qemu: Copying /etc/X11/xorg.conf.example to /etc/X11/xorg.conf"
       cp /etc/X11/xorg.conf.example /etc/X11/xorg.conf ; eend $?
    fi
 fi
