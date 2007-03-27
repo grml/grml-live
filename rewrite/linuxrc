@@ -2,7 +2,7 @@
 # Filename: /linuxrc
 # Purpose:  minirt for kernel 2.6 running on grml live-cd
 # Authors:  (c) Klaus Knopper <knoppix@knopper.net>, (c) Michael Prokop <mika@grml.org>
-# Latest change: Sun Feb 25 20:02:36 CET 2007 [mika]
+# Latest change: Tue Mar 27 23:05:51 CEST 2007
 #######################################################################################
 
 # hardcoded configurable options
@@ -183,7 +183,7 @@ echo ""
 echo "${WHITE}grml.org - Linux for users of texttools and sysadmins."
 echo "${NORMAL}"
 
-# We only need the builtin commands and /static at this point
+# We need the builtin commands and /static only starting at this point
 PATH=/static
 export PATH
 
@@ -287,7 +287,7 @@ loadmodules(){
  echo ""
  for i in "$@"; do
   echo -n "   Probing ${TYPE}... ${WHITE}$i${NORMAL}: "
-   if test -f /modules/scsi/$i.ko && $INSMOD -f /modules/scsi/$i.ko >/dev/null 2>&1 && echo "  $SUCCESS" || echo " failed " ; then
+   if test -f /modules/scsi/$i.ko && $INSMOD /modules/scsi/$i.ko >/dev/null 2>&1 && echo "  $SUCCESS" || echo " failed " ; then
      case "$TYPE" in scsi|SCSI) FOUND_SCSI="yes"; ;; esac
    fi
  done
@@ -350,7 +350,7 @@ fi
 
 if test -z "$NOSCSI" ; then
  log_begin_msg "Scanning for SCSI devices."
- $INSMOD -f /modules/scsi/firmware_class.ko 1>/dev/null
+ $INSMOD /modules/scsi/firmware_class.ko 1>/dev/null
  test -n "$MODULES" && loadmodules SCSI $MODULES &&  echo -n "" || echo "           ${BLUE}[${NORMAL} none found ${BLUE}]${NORMAL} (try bootoption scsi=probe)"
 else
   log_warn_msg "Not scanning for SCSI devices as requested on commandline." && echo " $SUCCESS"
@@ -361,10 +361,10 @@ if checkbootparam scsi ; then
   if test "$MODULE" = "probe" ; then
     log_begin_msg "Bootoption scsi=probe found. Trying to autoprobe SCSI modules:"
     echo ""
-    echo -n "   Trying to load scsi_debug: " ; $INSMOD -f /modules/scsi/scsi_debug.ko 1>/dev/null && echo "           $SUCCESS" || echo " [ failed ]"
+    echo -n "   Trying to load scsi_debug: " ; $INSMOD /modules/scsi/scsi_debug.ko 1>/dev/null && echo "           $SUCCESS" || echo " [ failed ]"
     for module in /modules/scsi/*.ko ; do
       echo -n "   Probing ${WHITE}${module}${NORMAL}..."
-      $INSMOD -f ${module} >/dev/null 2>&1 && echo " $SUCCESS" || echo " [ failed ]"
+      $INSMOD ${module} >/dev/null 2>&1 && echo " $SUCCESS" || echo " [ failed ]"
     done
   elif test "$MODULE" = "ask" ; then
     askmodules SCSI $(cd /modules/scsi; echo *.ko)
@@ -372,7 +372,7 @@ if checkbootparam scsi ; then
   else
     [ -n "$MODULE" ] || echo "   ${RED}Neither a specific module nor option probe nor option ask for SCSI module given. Skipping.${NORMAL}"
     [ -n "$MODULE" ] && echo -n "   Trying to load module ${WHITE}${MODULE}${NORMAL}:" ; \
-      $INSMOD -f "/modules/scsi/${MODULE}.ko" 1>/dev/null && echo "  $SUCCESS" || echo " [ failed ]"
+      $INSMOD "/modules/scsi/${MODULE}.ko" 1>/dev/null && echo "  $SUCCESS" || echo " [ failed ]"
   fi
 fi
 # End of SCSI check
@@ -382,7 +382,7 @@ if test -n "$VMWARE" ; then
   echo ""
   for module in mptbase mptscsih mptspi BusLogic ; do
     echo -n "   Trying to load ${WHITE}${module}${NORMAL}: "
-    $INSMOD -f /modules/scsi/${module}.ko >/dev/null 2>&1 && echo " $SUCCESS" || echo " [ failed ]"
+    $INSMOD /modules/scsi/${module}.ko >/dev/null 2>&1 && echo " $SUCCESS" || echo " [ failed ]"
   done
 fi
 
@@ -458,11 +458,11 @@ fi
 # boot via pcmcia
 if checkbootparam bootpcmcia ; then
   log_begin_msg "Bootoption bootpcmcia found. Trying to load ${WHITE}PCMCIA${NORMAL} modules..."
-  if $INSMOD -f /modules/div/pcmcia_core.ko 1>/dev/null ; then
-     $INSMOD -f /modules/div/firmware_class.ko 1>/dev/null && \
-     $INSMOD -f /modules/div/pcmcia.ko         1>/dev/null && \
-     $INSMOD -f /modules/div/rsrc_nonstatic.ko 1>/dev/null && \
-     $INSMOD -f /modules/div/yenta_socket.ko   1>/dev/null && echo " $SUCCESS"
+  if $INSMOD /modules/div/pcmcia_core.ko 1>/dev/null ; then
+     $INSMOD /modules/div/firmware_class.ko 1>/dev/null && \
+     $INSMOD /modules/div/pcmcia.ko         1>/dev/null && \
+     $INSMOD /modules/div/rsrc_nonstatic.ko 1>/dev/null && \
+     $INSMOD /modules/div/yenta_socket.ko   1>/dev/null && echo " $SUCCESS"
   else
     echo " [ failed ]"
   fi
@@ -640,7 +640,7 @@ boot_from()
   # load filesystems
   /GRML/sbin/modprobe fuse
   /GRML/sbin/modprobe ntfs
-  $INSMOD -f /modules/div/ntfs.ko 1>/dev/null
+  $INSMOD /modules/div/ntfs.ko 1>/dev/null
 
   if [ -n "$ISO_PATH" ]; then
      LOOP_SOURCE="$TARGET.loop"
@@ -802,8 +802,7 @@ if  test -n "$DO_REMOUNT" -a -n "$FOUND_GRML" ; then
 fi
 
 # Final test if everything succeeded.
-if test -n "$FOUND_GRML"
-then
+if test -n "$FOUND_GRML" ; then
 # copy library cache
 cat /GRML/etc/ld.so.cache > /etc/ld.so.cache
 
@@ -873,19 +872,19 @@ MINSIZE=20000
 # At least this much memory minus 30% should remain when home and var are full.
 MINLEFT=16000
 # Maximum ramdisk size
-[ -n "$TOTALMEM" ] && MAXSIZE="$(expr $TOTALMEM - $MINLEFT)"
+[ -n "$TOTALMEM" ] && MAXSIZE="$(/usr/bin/expr $TOTALMEM - $MINLEFT)"
 # Default ramdisk size for ramdisk
-[ -n "$TOTALMEM" ] && RAMSIZE="$(expr $TOTALMEM / 5)"
+[ -n "$TOTALMEM" ] && RAMSIZE="$(/usr/bin/expr $TOTALMEM / 5)"
 
 # Create additional dynamic ramdisk.
 test -z "$RAMSIZE" -o "$RAMSIZE" -lt "$MINSIZE" && RAMSIZE="$MINSIZE"
 mkdir -p /ramdisk
 # tmpfs/varsize version, can use swap
-RAMSIZE=$(expr $RAMSIZE \* 4)
+RAMSIZE=$(/usr/bin/expr $RAMSIZE \* 4)
 log_begin_msg "Creating /ramdisk (dynamic size=${RAMSIZE}k) on shared memory"
 # We need /bin/mount here for the -o size= option
 /bin/mount -t tmpfs -o "size=${RAMSIZE}k" /ramdisk /ramdisk  && echo "$SUCCESS"
-mkdir -p /ramdisk/tmp /ramdisk/home/grml && chmod 1777 /ramdisk/tmp && chown grml.grml /ramdisk/home/grml && ln -snf /ramdisk/home /home && mv /tmp /tmp.old && ln -s /ramdisk/tmp /tmp && rm -rf /tmp.old
+mkdir -p /ramdisk/tmp /ramdisk/home/grml && chmod 1777 /ramdisk/tmp && chown grml.grml /ramdisk/home/grml && ln -snf /ramdisk/home /home && /bin/mv /tmp /tmp.old && ln -s /ramdisk/tmp /tmp && rm -rf /tmp.old
 
 stage=3
 rundebugshell
@@ -893,12 +892,23 @@ rundebugshell
 log_begin_msg "Creating $unionfs and symlinks on ramdisk"
 mkdir -p /UNIONFS
 if test -n "$UNIONFS" && /bin/mount -t $UNIONFS_FILETYPE -o noatime${SECURE},dirs=/ramdisk=rw:/GRML=ro /UNIONFS /UNIONFS ; then
+ # check architecture
+ if [ -f /GRML/lib/ld-linux.so.2 ] ; then
+   LDLINUX=/GRML/lib/ld-linux.so.2
+   GRMLLIB=/GRML/lib
+ elif [ -f /GRML/lib64/ld-linux-x86-64.so.2 ] ; then
+   LDLINUX=/GRML/lib64/ld-linux-x86-64.so.2
+   EMUL='emul'
+   LIB64='lib64'
+   GRMLLIB=/GRML/lib64
+ fi
  # We now have unionfs, copy some data from the initial ramdisk first
  cp -a /etc/fstab /etc/auto.mnt /etc/filesystems /etc/mtab /UNIONFS/etc/
- for i in bin boot etc sbin var lib opt root usr; do # Move directories to unionfs
+ for i in bin boot etc sbin var opt root usr $EMUL $LIB64 lib ; do # Move directories to unionfs
   if test -d /$i; then
-   mv /$i /$i.old && \
-   /GRML/lib/ld-linux.so.2 --library-path /GRML/lib /GRML/bin/ln -snf /UNIONFS/$i /$i && \
+   /bin/mv /$i /$i.old && \
+   # /GRML/lib/ld-linux.so.2 --library-path /GRML/lib /GRML/bin/ln -snf /UNIONFS/$i /$i && \
+   $LDLINUX --library-path $GRMLLIB /GRML/bin/ln -snf /UNIONFS/$i /$i 1>/dev/null 2>/dev/null
    rm -rf /$i.old
   else
    ln -snf /UNIONFS/$i /$i
@@ -955,7 +965,7 @@ echo "/sbin/modprobe" > /proc/sys/kernel/modprobe
 # Change root device from /dev/fd0 to /dev/ram0
 echo "0x100" > /proc/sys/kernel/real-root-dev
 
-umount /sys # (remount in grml-autoconfig)
+/bin/umount /sys # (remount in grml-autoconfig)
 
 stage=4
 rundebugshell
