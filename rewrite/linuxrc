@@ -531,8 +531,9 @@ if [ -n "$NFS" ]; then
     done
   }
   # modules.alias and modules.dep are in place so USE IT :)!
-  modLoad "$(for x in $(find /sys/devices/ -name modalias); do grep pci: $x; done |/static/xargs)"
-
+  find /sys/devices/ -name modalias |/static/xargs -r /static/grep -h pci: |while read i; do
+    modLoad "$i"
+  done
   # loading additional modules
   modLoad sunrpc lockd af_packet nfs
 
