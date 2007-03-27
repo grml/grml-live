@@ -216,6 +216,10 @@ GRML_NAME="GRML"
 case "$CMDLINE" in *grml_dir=*) GRML_DIR="$grml_dir"; ;; esac
 case "$CMDLINE" in *grml_name=*) GRML_NAME="$grml_name"; ;; esac
 
+# NFS
+for i in $cmdline; do case "$i" in nfsdir=*|NFSDIR=*) eval $i;; esac; done
+[ -n "$nfsdir" ] && NFS="$nfsdir"
+
 if [ -n "$DEBUG" ]; then
    log_begin_msg "Bootoption debug detected. Printing kernel command line:"
    echo ""
@@ -508,57 +512,50 @@ esac
 
 stage=2
 rundebugshell
-# NFS
-for i in $cmdline; do case "$i" in nfsdir=*|NFSDIR=*) eval $i;; esac; done
-[ -n "$nfsdir" ] && NFS="$nfsdir"
 if [ -n "$NFS" ]; then
   tmp_="$(getbootparam nfsdir)"
   log_begin_msg "Bootoption NFS found." ; echo "$SUCCESS"
 
-  # put the mylibs into /lib for discover and udhcpc
-  cdir
+  /static/cdir
 
-  # starting hw-detection for network card - currently broken, so don't use it
-  #  echo "Starting hw-detection"
-  #  kernel_version_=`uname -r`
-  #  modules_to_load=$(/static/discover --disable-bus all --enable-bus pci --type network --normalize-whitespace --data-path=linux/module/name --data-version=$kernel_version_ | grep -v '^ $' | uniq)
-  #  echo "trying to load the following network modules:  \"$modules_to_load\""
-
-  KERNELVER=`uname -r`
-  for mod in `find /lib/modules/$KERNELVER/kernel/drivers/net/ -name \*.ko` ; do
-      echo `basename $mod | sed -e 's/\.ko$//'` >> /modules.load
-  done
-  modules_to_load=`cat /modules.load | xargs`
-
-  # FIXME modprobe is buggy from busybox
   log_begin_msg "Trying to load network driver(s)." ; echo
   modLoad()
   {
     for mod in $@ ; do
-      tmp_="`modprobe -vn $mod 2>/dev/null`"
-      if [ $? -ne 0 ]; then
-         continue
+      if [ -n "$DEBUG" ] ; then
+         echo "Debug: trying to load $mod:"
+         modprobe -v $mod
+      else
+         modprobe $mod 2>/dev/null
       fi
-      # be quiet by default, be verbose only with bootoption debuglinuxrc
-      [ -n "$DEBUG" ] && eval "$tmp_" || eval "$tmp_" 1>/dev/null 2>/dev/null
     done
   }
-  modLoad "$modules_to_load"
-  rm -f /modules.load
+  # modules.alias and modules.dep are in place so USE IT :)!
+  modLoad "$(for x in $(find /sys/devices/ -name modalias); do grep pci: $x; done |/static/xargs)"
 
   # loading additional modules
   modLoad sunrpc lockd af_packet nfs
 
-  for INTERFACE in `ifconfig -a | grep '^eth' | sed 's/\ .*//'` ; do
+  dhcp_iface_=$(getbootparam dhcp_iface)
+  if [ -z "$dhcp_iface_" ]; then
+  	dhcp_iface_=`ifconfig -a | grep '^eth' | sed 's/ .*//'`
+  fi
+
+  # make sure we have a udhcpc executable, if it's not present
+  # assume that busybox provides one
+  if ! [ -x /static/udhcpc ] ; then
+     ln -s /static/busybox /static/udhcpc
+  fi
+
+  for INTERFACE in $dhcp_iface_ ; do
       log_begin_msg "Requesting network configuration using udhcp for ${INTERFACE}:" ; echo
       /static/timeout 10 /static/udhcpc --interface="${INTERFACE}" --foreground --quit --script=/static/udhcp-config.sh
       # echo "press <enter> to start a system shell and configure your system"
       # sh
   done
 
-  # recreate the old dir structures
-  rdir
-  #rm -rf /myusr /mylib
+  # recreate dir layout + remove extra modules
+  /static/rdir
 
   log_begin_msg "Looking for GRML in: ${MAGENTA}$NFS${NORMAL}" ; echo "$SUCCESS"
   if mount -t nfs "$NFS" -o "async,ro,nolock" /cdrom #>/dev/null 2>&1
@@ -904,7 +901,15 @@ if test -n "$UNIONFS" && /bin/mount -t $UNIONFS_FILETYPE -o noatime${SECURE},dir
  fi
  # We now have unionfs, copy some data from the initial ramdisk first
  cp -a /etc/fstab /etc/auto.mnt /etc/filesystems /etc/mtab /UNIONFS/etc/
- for i in bin boot etc sbin var opt root usr $EMUL $LIB64 lib ; do # Move directories to unionfs
+
+ # disable resolvconf on the terminalserver client
+ if [ -n "$NFS" ] ; then
+    rm /UNIONFS/etc/resolv.conf
+    cp -a /etc/resolv.conf /UNIONFS/etc
+    echo REPORT_ABSENT_SYMLINK=no >> /UNIONFS/etc/default/resolvconf
+ fi
+
+ for i in bin boot etc sbin var lib opt root usr; do # Move directories to unionfs
   if test -d /$i; then
    /bin/mv /$i /$i.old && \
    # /GRML/lib/ld-linux.so.2 --library-path /GRML/lib /GRML/bin/ln -snf /UNIONFS/$i /$i && \
