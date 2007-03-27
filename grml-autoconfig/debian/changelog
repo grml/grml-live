@@ -1,3 +1,12 @@
+grml-autoconfig (0.6.26) unstable; urgency=low
+
+  * Reintroduce /usr/bin/cpufreq-detect.sh code, otherwise
+    cpu-screen and cpu frequency scaling won't work.
+    [Closes: issue178]
+    [Closes: issue179]
+
+ -- Michael Prokop <mika@grml.org>  Tue, 27 Mar 2007 10:47:38 +0200
+
 grml-autoconfig (0.6.25) unstable; urgency=low
 
   * Improve informational messages for VMware/Qemu. 

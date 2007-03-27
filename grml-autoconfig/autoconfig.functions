@@ -344,7 +344,7 @@ config_time(){
     # hwclock uses the TZ variable
     [ -r /etc/timezone ] && TZ=$(cat /etc/timezone)
     [ -n "$TZ" ] || TZ=Europe/Vienna
-  
+
     if ! [ -r /dev/rtc ] ; then
       ewarn "Realtime clock not available, skipping execution of hwclock therefore." ; eend 0
     else
@@ -394,7 +394,7 @@ else
                einfo "VMware: Copying /etc/X11/xorg.conf.vmware to /etc/X11/xorg.conf"
                cp /etc/X11/xorg.conf.vmware /etc/X11/xorg.conf ; eend $?
             fi
-	 fi
+         fi
       fi
    fi
 fi
@@ -1234,18 +1234,26 @@ else
   else
     if /usr/sbin/laptop-detect ; then
        einfo "Detected Laptop - trying to use cpu frequency scaling:"
-       eindent
-         einfo "Loading module cpufreq_ondemand and adjusting scaling_governor."
-	 if modprobe cpufreq_ondemand && RC=0 || RC=1 ; then
-	    for file in $(find /sys/devices/system/cpu/ -name scaling_governor 2>/dev/null) ; do
-                echo ondemand > $file
-            done
-         fi
-	 eend $RC
-       eoutdent
-    fi
-  fi
-fi
+       if [ -r /usr/bin/cpufreq-detect.sh ] ; then
+          eindent
+          . /usr/bin/cpufreq-detect.sh
+          if [ -n "$MODULE" -a "$MODULE" != none ]; then
+             einfo "Loading modules ${MODULE} and cpufreq_ondemand, setting ondemand governor"
+             modprobe "$MODULE" 1>>$DEBUG || modprobe "$MODULE_FALLBACK" 1>>$DEBUG
+             if modprobe cpufreq_ondemand && RC=0 || RC=1 ; then
+                for file in $(find /sys/devices/system/cpu/ -name scaling_governor 2>/dev/null) ; do
+                    echo ondemand > $file
+                done
+             fi
+             eend $RC
+          else
+             ewarn "Could not detect an appropriate CPU for use with cpu frequency scaling - skipping." && eend 1
+          fi
+          eoutdent
+       fi # cpufreq-detect
+    fi # laptop-detect
+  fi # cpufreq_check
+fi # checkbootparam nocpu
 }
 # }}}
 
@@ -1631,7 +1639,7 @@ EOF
    chmod 755 /etc/init.d/xstartup
 
    sed -i 's#^6:.*#6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /bin/zsh"#' /etc/inittab
-   
+
    /sbin/telinit q ; eend $?
 
    if grep -q '^allowed_users=' /etc/X11/Xwrapper.config ; then
