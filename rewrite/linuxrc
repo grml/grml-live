@@ -902,15 +902,13 @@ if test -n "$UNIONFS" && /bin/mount -t $UNIONFS_FILETYPE -o noatime${SECURE},dir
  fi
  # We now have unionfs, copy some data from the initial ramdisk first
  cp -a /etc/fstab /etc/auto.mnt /etc/filesystems /etc/mtab /UNIONFS/etc/
-
  # disable resolvconf on the terminalserver client
  if [ -n "$NFS" ] ; then
     rm /UNIONFS/etc/resolv.conf
     cp -a /etc/resolv.conf /UNIONFS/etc
     echo REPORT_ABSENT_SYMLINK=no >> /UNIONFS/etc/default/resolvconf
  fi
-
- for i in bin boot etc sbin var lib opt root usr; do # Move directories to unionfs
+ for i in bin boot etc sbin var opt root usr $EMUL $LIB64 lib ; do # Move directories to unionfs
   if test -d /$i; then
    /bin/mv /$i /$i.old && \
    # /GRML/lib/ld-linux.so.2 --library-path /GRML/lib /GRML/bin/ln -snf /UNIONFS/$i /$i && \
