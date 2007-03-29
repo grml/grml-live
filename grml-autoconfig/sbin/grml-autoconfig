@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika(at)grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Don Nov 16 20:24:16 CET 2006 [mika]
+# Latest change: Don Mär 29 11:30:33 CEST 2007 [mika]
 ################################################################################
 
 if [ "$UID" != 0 ];  then
@@ -23,12 +23,12 @@ grep -q small /etc/grml_version 2>/dev/null && AUTOCONFIG=/etc/grml/autoconfig.s
 # helper functions
 activate_value()
 {
-  sed -i "s/$1.*/$1='yes'/" $AUTOCONFIG
+  sed -i "s/$1.*/$1'yes'/" $AUTOCONFIG
 }
 
 deactivate_value()
 {
-  sed -i "s/$1.*/$1='no'/" $AUTOCONFIG
+  sed -i "s/$1.*/$1'no'/" $AUTOCONFIG
 }
 
 check_setting()
@@ -70,12 +70,12 @@ gpm "start GPM (mouse on console)" $GPMSTATUS \
 
 set_values()
 {
-  check_setting dhcp        && activate_value CONFIG_DHCP         || deactivate_value CONFIG_DHCP
-  check_setting fstab       && activate_value CONFIG_FSTAB        || deactivate_value CONFIG_FSTAB
-  check_setting cpufreq     && activate_value CONFIG_CPU          || deactivate_value CONFIG_CPU
-  check_setting acpi_apm    && activate_value CONFIG_ACPI_APM     || deactivate_value CONFIG_ACPI_APM
-  check_setting syslog      && activate_value CONFIG_SYSLOG       || deactivate_value CONFIG_SYSLOG
-  check_setting gpm         && activate_value CONFIG_GPM          || deactivate_value CONFIG_GPM
+  check_setting dhcp      && activate_value CONFIG_DHCP=     || deactivate_value CONFIG_DHCP=
+  check_setting fstab     && activate_value CONFIG_FSTAB=    || deactivate_value CONFIG_FSTAB=
+  check_setting cpufreq   && activate_value CONFIG_CPU=      || deactivate_value CONFIG_CPU=
+  check_setting acpi_apm  && activate_value CONFIG_ACPI_APM= || deactivate_value CONFIG_ACPI_APM=
+  check_setting syslog    && activate_value CONFIG_SYSLOG=   || deactivate_value CONFIG_SYSLOG=
+  check_setting gpm       && activate_value CONFIG_GPM=      || deactivate_value CONFIG_GPM=
 }
 
 # and now run it:

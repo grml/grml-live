@@ -1,3 +1,11 @@
+grml-autoconfig (0.6.27) unstable; urgency=low
+
+  * grml-autoconfig script: make sure CONFIG_FSTAB matches only
+    CONFIG_FSTAB and not CONFIG_FSTABUSER & CO. Thanks for the hint,
+    gebi!
+
+ -- Michael Prokop <mika@grml.org>  Thu, 29 Mar 2007 11:31:20 +0200
+
 grml-autoconfig (0.6.26) unstable; urgency=low
 
   * Reintroduce /usr/bin/cpufreq-detect.sh code, otherwise
