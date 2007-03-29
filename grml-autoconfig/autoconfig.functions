@@ -509,10 +509,21 @@ fi
 # activate serial console {{{
 config_console(){
 if checkbootparam "console"; then
-  einfo "Bootoption (for serial) console detected. Activating mgetty."
+  einfo "Bootoption (for serial) console detected."
+  eindent
+    if [ -r /etc/mgetty/mgetty.config ] ; then
+       MODE=$(getbootparam console | awk -F, '{print $2}')
+       MODE=${MODE%%n*}
+       [ -n "$MODE" ] || MODE=9600 # default mode
+       einfo "Setting speed in /etc/mgetty/mgetty.config to $MODE bps"
+       sed -i "s/speed [0-9]*/speed $MODE/" /etc/mgetty/mgetty.config ; eend $?
+    fi
+
+    einfo "Activating mgetty."
     sed -i 's/^#T0/T0/' /etc/inittab
     sed -i 's/^#T1/T1/' /etc/inittab
-  /sbin/telinit q ; eend $?
+    /sbin/telinit q ; eend $?
+  eoutdent
 fi
 }
 # }}}
