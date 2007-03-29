@@ -1,3 +1,11 @@
+grml-autoconfig (0.6.28) unstable; urgency=low
+
+  * config_console(): support setting of bps via bootoption
+    serial as requested by Marc 'Zugschlus' Haber, see
+    http://blog.zugschlus.de/archives/530-using-grml-to-prepare-LVM-surgery.html
+
+ -- Michael Prokop <mika@grml.org>  Thu, 29 Mar 2007 15:33:10 +0200
+
 grml-autoconfig (0.6.27) unstable; urgency=low
 
   * grml-autoconfig script: make sure CONFIG_FSTAB matches only
