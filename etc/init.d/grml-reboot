@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sam Mär 31 13:36:51 CEST 2007 [mika]
+# Latest change: Sam Mär 31 14:02:06 CEST 2007 [mika]
 ################################################################################
 
 export PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -177,7 +177,7 @@ if [ -z "$INSTALLED" -a -z "$NOPROMPT" ]; then
       umount -l /cdrom
       [ -n "$CDROM" -a -z "$NOEJECT" ] && eject -p "$CDROM" 2>/dev/null
       echo ""
-      echo "${CYAN}Please remove CD, close cdrom drive and hit return.${NORMAL}"
+      echo "${GREEN}Please remove CD, close cdrom drive and hit return.${NORMAL}"
       read
    fi
 fi
