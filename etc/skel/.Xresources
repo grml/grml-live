@@ -3,7 +3,7 @@
 ! Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 ! Bug-Reports:   see http://grml.org/bugs/
 ! License:       This file is licensed under the GPL v2.
-! Latest change: Don Sep 28 23:10:44 CEST 2006 [mika]
+! Latest change: Fre Mär 30 20:32:58 CEST 2007 [mika]
 !###############################################################################
 ! Notice:   apply changes via running `xrdb -merge ~/.Xresources'
 !           run "xprop WM_CLASS" to find out title of windows
@@ -114,7 +114,8 @@ XTerm*color8: gray50
 XTerm*color9: red
 XTerm*color10: green
 XTerm*color11: yellow
-XTerm*color12: blue
+!XTerm*color12: blue
+XTerm*color12: #4444FF
 XTerm*color13: magenta
 XTerm*color14: cyan
 XTerm*color15: white

@@ -4,14 +4,14 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sam Sep 30 13:48:17 CEST 2006 [mika]
+# Latest change: Sam Mär 31 13:36:51 CEST 2007 [mika]
 ################################################################################
 
-PATH=/sbin:/bin:/usr/bin:/usr/sbin
-export PATH
+export PATH=/sbin:/bin:/usr/bin:/usr/sbin
 
-[ -r /etc/grml_colors ] && . /etc/grml_colors
-                           . /etc/grml/lsb-functions
+. /etc/grml_colors
+. /etc/grml/lsb-functions
+
 cd /
 
 # Clean input/output
@@ -20,34 +20,26 @@ exec >/dev/console 2>&1 </dev/console
 # Check if we are running from a GRML-CD or HD
 INSTALLED=""
 [ -e /GRML/etc/grml_cd ] || INSTALLED=yes
-grep -q 'toram ' /proc/cmdline && INSTALLED=yes
+# Assume that we don't want the eject+prompt stuff when running in one
+# of the special modes:
+grep -qe ' toram' -qe ' usb' -qe 'serial' -qe 'fromhd' /proc/cmdline && INSTALLED=yes
 
 case "$0" in
   *halt)
         level=0
-        message="
-${YELLOW}GRML halted.${NORMAL}"
+        message="grml system will be halted..."
         command="halt"
-        options="-p -d -i -f"
         ;;
   *reboot)
         level=6
-        message="${GREEN}Preparing for reboot...${NORMAL}"
+        message="Preparing for reboot..."
         command="reboot"
-        if [[ `readlink /sbin/reboot` == 'halt' ]] ; then
-          options="-d -i -f" # this is sysvinit of debian
-        else
-          options="-r -d -i -f" # this is sysvinit of grml
-        fi
         ;;
   *)
-        echo "$0: call this script as \"halt\" or \"reboot\" please!"
+        echo "Usage: call this script as \"halt\" or \"reboot\" please.">&2
         exit 1
         ;;
 esac
-
-# No sync and no wtmp entry if running from CD
-[ -n "$INSTALLED" ] || options="$options -n"
 
 mysleep() {
   for i in `seq 1 40` ; do
@@ -62,18 +54,18 @@ echo "0" > /proc/sys/kernel/printk
 
 # We may kill our network connection here before unmounting NFS. Bad luck.
 # poweroff pcmcia devices
-if pidof cardmgr >/dev/null 2>&1; then
-  log_begin_msg "Shutting down PCMCIA devices..."
-  cardctl eject >/dev/null 2>&1 && sleep 3
-  killall cardmgr && sleep 3 ; log_end_msg $?
+if [ -d /sys/bus/pcmcia -a -x /sbin/pccardctl ] ; then
+   log_begin_msg "Shutting down PCMCIA devices..."
+   pccardctl eject >/dev/null 2>&1
+   log_end_msg $?
 fi
 
 if [ -n "$INSTALLED" ] ; then
-  echo
-  log_begin_msg_nn "Running /etc/init.d/rc ${level}: "
-  /etc/init.d/rc $level 1>/dev/null 2>&1 &
-  mysleep "$GREEN"
-  log_end_msg 0
+   echo
+   log_begin_msg_nn "Running /etc/init.d/rc ${level}: "
+   /etc/init.d/rc $level 1>/dev/null 2>&1 &
+   mysleep "$GREEN"
+   log_end_msg 0
 fi
 
 # Remove all truecrypt mappings...
@@ -99,33 +91,36 @@ mysleep "$RED" ; log_end_msg $?
 
 # check for nfsdir
 if grep -q nfsdir /proc/cmdline ; then
-  log_begin_msg "Bootoption nfsdir detected, syncing filesystems"
-  sync && sleep 1 ; log_end_msg $?
+   log_begin_msg "Bootoption nfsdir detected, syncing filesystems."
+   sync && sleep 1 ; log_end_msg $?
 else
-  # Unmount network filesystems first before shutting down network
-  NETMOUNTS="$(awk '{if($1~/:/){print $2}}' /proc/mounts 2>/dev/null)"
-  if [ -n "$NETMOUNTS" ]; then
-    log_begin_msg "Unmounting network filesystems."
-    umount -t nfs -arvf 2>/dev/null ; log_end_msg $?
-  fi
-  # Shutdown network
-  NETDEVICES="$(awk -F: '/eth.:/{print $1}' /proc/net/dev 2>/dev/null)"
-  if [ -n "$NETDEVICES" ]; then
-    pidof pump >/dev/null 2>&1 && { pump -k ; sleep 2; }
-    log_begin_msg "Shutting down network device..."
-    for n in $NETDEVICES; do
-      echo "${SUBMSG} ${WHITE}$n${NORMAL}"
-      ifconfig $n down
-    done ; log_end_msg $?
-  fi
-  log_begin_msg "Syncing local filesystems..."
-  sync && sleep 1 ; log_end_msg $?
+   # Unmount network filesystems first before shutting down network
+   NETMOUNTS="$(awk '{if($1~/:/){print $2}}' /proc/mounts 2>/dev/null)"
+   if [ -n "$NETMOUNTS" ]; then
+      log_begin_msg "Unmounting network filesystems."
+      umount -t nfs -arvf 2>/dev/null ; log_end_msg $?
+   fi
+   # Shutdown network
+   NETDEVICES="$(/sbin/ifconfig | awk '/^[^ ]+/ {print $1}' | grep -v '^lo$')"
+   if [ -n "$NETDEVICES" ]; then
+      pidof pump >/dev/null 2>&1 && { pump -k ; sleep 2; }
+      killall dhclient dhclient3 2>/dev/null
+      log_begin_msg "Shutting down network device..."
+      for n in $NETDEVICES; do
+          echo "${SUBMSG} ${WHITE}$n${NORMAL}"
+          ifdown $n 1>/dev/null 2>&1
+          ifconfig $n down
+      done ; log_end_msg $?
+   fi
+   log_begin_msg "Syncing local filesystems..."
+   sync && sleep 1 ; log_end_msg $?
 fi
 
 # Turn off swap, then unmount file systems.
 log_begin_msg "Turning off swap."
 swapoff -a >/dev/null 2>&1 ; log_end_msg $?
 
+# Udev
 log_begin_msg "Deactivating udev:"
 echo -n "   ${GREEN}-${NORMAL} "
 /etc/init.d/udev stop ; log_end_msg $?
@@ -138,34 +133,20 @@ CMDLINE="`cat /proc/cmdline 2>/dev/null`"
 # noprompt or noeject option given?
 NOPROMPT=${NOPROMPT:-''}
 case "$CMDLINE" in *noprompt*) NOPROMPT="yes"; ;; esac
-# NOEJECT=""
 NOEJECT=${NOEJECT:-''}
 case "$CMDLINE" in *noeject*) NOEJECT="yes"; ;; esac
 [ -r /etc/noprompt ] && NOPROMPT='yes'
 [ -r /etc/noeject ]  && NOPROMPT='yes' && NOEJECT='yes'
 
-# No sync and no wtmp entry if running from CD
-[ -n "$INSTALLED" ] || options="$options -n"
-
-if [ -z "$NOEJECT" ]; then
 # Turn on autoeject of CD-ROMs
-  for dev in /proc/sys/dev/cdrom*/lock;      do [ -f "$dev" ] && echo 0 > "$dev"; done
-  for dev in /proc/sys/dev/cdrom*/autoeject; do [ -f "$dev" ] && echo 1 > "$dev"; done
+if [ -z "$NOEJECT" ]; then
+   for dev in /proc/sys/dev/cdrom*/lock;      do [ -f "$dev" ] && echo 0 > "$dev"; done
+   for dev in /proc/sys/dev/cdrom*/autoeject; do [ -f "$dev" ] && echo 1 > "$dev"; done
 fi
 
 # Turn on auto-eject feature of cdrom (2.2 kernel)
- if [ -z "$INSTALLED" ]; then
- CDROM="$(awk '/ \/cdrom /{print $1;exit 0;}' /proc/mounts)"
-# [ -n "$CDROM" ] && eject -s -a on "$CDROM" 2>/dev/null
- fi
-
-# Note: This needs the static version of "init" which contains
-# the "halt" command plus rmmod/umount calls
-FINALCMD="/sbin/$command"
-if [ -z "$INSTALLED" -a -z "$NOPROMPT" ]; then
-   [ -L /etc/init ] && rm -f /etc/init
-   [ -x /etc/init ] || cp -p /sbin/init /etc/
-   [ -x /etc/init ] && FINALCMD="/etc/init"
+if [ -z "$INSTALLED" ]; then
+   CDROM="$(awk '/ \/cdrom /{print $1;exit 0;}' /proc/mounts)"
 fi
 
 # Now umount everything but root
@@ -189,16 +170,22 @@ log_end_msg 0
 [ -n "$INSTALLED" ] && mount -n -o remount,ro / 2>/dev/null
 
 if [ -z "$INSTALLED" -a -z "$NOPROMPT" ]; then
-  umount -l /cdrom
-  [ -n "$CDROM" -a -z "$NOEJECT" ] && eject -p "$CDROM" 2>/dev/null
-  echo ""
-  echo "${CYAN}Please remove CD, close cdrom drive and hit return.${NORMAL}"
-  read
+   # do not prompt for removal when running in grml2ram mode:
+   if ! mount | grep -q 'on /cdrom ' ; then
+      echo "CD not mounted, nothing to eject therefore."
+   else
+      umount -l /cdrom
+      [ -n "$CDROM" -a -z "$NOEJECT" ] && eject -p "$CDROM" 2>/dev/null
+      echo ""
+      echo "${CYAN}Please remove CD, close cdrom drive and hit return.${NORMAL}"
+      read
+   fi
 fi
 
+echo
 echo "$message" >/dev/console
 
-# Now halt or reboot.
-exec $FINALCMD $options >/dev/console 2>&1 </dev/console
+# Finally halt or reboot
+/etc/init.d/$command stop
 
 ## END OF FILE #################################################################

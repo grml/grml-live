@@ -1,3 +1,12 @@
+grml-etc (0.9.13) unstable; urgency=low
+
+  * Rewrote /etc/init.d/grml-reboot and /etc/init.d/grml-halt:
+    now get rid of grml-sysvinit (strike!). [Closes: issue176]
+  * /etc/skel/.Xresources: use another blue for 'XTerm*color12'
+    so it should be better readable (thanks gebi).
+
+ -- Michael Prokop <mika@grml.org>  Sat, 31 Mar 2007 13:52:18 +0200
+
 grml-etc (0.9.12) unstable; urgency=low
 
   * Added /etc/skel/.idesktop/xterm-iso.lnk and updated irssi.lnk
