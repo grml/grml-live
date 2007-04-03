@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Son Mär 25 12:32:37 CEST 2007 [mika]
+# Latest change: Die Apr 03 17:02:59 CEST 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -270,39 +270,40 @@ config_language(){
 
  [ -r /etc/sysconfig/keyboard ] && . /etc/sysconfig/keyboard
 
-  # Set default keyboard before interactive setup
-  if [ -n "$KEYTABLE" ] ; then
-   einfo "Running loadkeys for ${WHITE}${KEYTABLE}${NORMAL} in background"
-   loadkeys -q $KEYTABLE &
-   eend $?
-  fi
+ # activate unicode console if running within utf8 environment
+ if [ -r /etc/default/locale ] ; then
+    if grep -q "LANG=.*UTF" /etc/default/locale ; then
+       einfo "Setting up unicode environment."
+       unicode_start
+       eend $?
+    fi
+ fi
 
-  if [ -n "$CONSOLEFONT" ] ; then
-     einfo "Running consolechars using ${CONSOLEFONT}"
-     consolechars -f $CONSOLEFONT || consolechars -d
-     eend $?
-  fi
+ # Set default keyboard before interactive setup
+ if [ -n "$KEYTABLE" ] ; then
+  einfo "Running loadkeys for ${WHITE}${KEYTABLE}${NORMAL} in background"
+  loadkeys -q $KEYTABLE &
+  eend $?
+ fi
 
-  # we have to set up all consoles, therefore loop it over all ttys:
-  if [ -n "$CHARMAP" ] ; then
-     einfo "Running consolechars for ${CHARMAP}"
-     NUM_CONSOLES=`fgconsole --next-available`
-     NUM_CONSOLES=`expr ${NUM_CONSOLES} - 1`
-     [ ${NUM_CONSOLES} -eq 1 ] && NUM_CONSOLES=6
-     for vc in `seq 0 ${NUM_CONSOLES}`  ; do
-       consolechars --tty=/dev/tty${vc} -m ${CHARMAP} ; RC=$?
-     done
-     eend ${RC}
-  fi
-
-  # activate unicode console if running within utf8 environment
-  if [ -r /etc/default/locale ] ; then
-     if grep -q "LANG=.*UTF" /etc/default/locale ; then
-        einfo "Setting up unicode environment."
-        unicode_start
-        eend $?
-     fi
-  fi
+ # we have to set up all consoles, therefore loop it over all ttys:
+ NUM_CONSOLES=`fgconsole --next-available`
+ NUM_CONSOLES=`expr ${NUM_CONSOLES} - 1`
+ [ ${NUM_CONSOLES} -eq 1 ] && NUM_CONSOLES=6
+ if [ -n "$CHARMAP" ] ; then
+    einfo "Running consolechars for ${CHARMAP}"
+    for vc in `seq 0 ${NUM_CONSOLES}`  ; do
+        consolechars --tty=/dev/tty${vc} -m ${CHARMAP} ; RC=$?
+    done
+    eend $RC
+ fi
+ if [ -n "$CONSOLEFONT" ] ; then
+    einfo "Running consolechars using ${CONSOLEFONT}"
+    for vc in `seq 0 ${NUM_CONSOLES}`  ; do
+        consolechars --tty=/dev/tty${vc} -f $CONSOLEFONT || consolechars --tty=/dev/tty${vc} -d
+    done
+    eend $?
+ fi
 
  eoutdent
 }
