@@ -1,3 +1,12 @@
+grml-autoconfig (0.6.29) unstable; urgency=low
+
+  * config_language(): rework the way unicode_start and consolechars
+    are used. This should fix a race condition with german umlauts
+    within for example GNU screen so the umlauts work on tty1 but
+    not on other consoles.
+
+ -- Michael Prokop <mika@grml.org>  Tue,  3 Apr 2007 17:03:02 +0200
+
 grml-autoconfig (0.6.28) unstable; urgency=low
 
   * config_console(): support setting of bps via bootoption
