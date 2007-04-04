@@ -389,12 +389,10 @@ if checkbootparam novmware ; then
    ewarn "Skipping running vmware specific stuff as requested on boot commandline." ; eend 0
 else
    if [ -z "$INSTALLED" ] ; then
-      if ! checkbootparam qemu ; then
-         if vmware-detect ; then
-            if [ -r /etc/X11/xorg.conf.vmware ] ; then
-               einfo "VMware: Copying /etc/X11/xorg.conf.vmware to /etc/X11/xorg.conf"
-               cp /etc/X11/xorg.conf.vmware /etc/X11/xorg.conf ; eend $?
-            fi
+      if ! checkbootparam qemu || vmware-detect || stringinstring "BOOT_IMAGE=vmware " "$CMDLINE" ; then
+         if [ -r /etc/X11/xorg.conf.vmware ] ; then
+            einfo "VMware: Copying /etc/X11/xorg.conf.vmware to /etc/X11/xorg.conf"
+            cp /etc/X11/xorg.conf.vmware /etc/X11/xorg.conf ; eend $?
          fi
       fi
    fi
@@ -2126,6 +2124,18 @@ EOF
     screen /usr/bin/grml2hd_noninteractive ; einfo "Invoking a shell, just exit to continue booting..." ; /bin/zsh
   else
     ewarn "There was an error adjusting /etc/grml2hd/config. Skipping execution of grml2hd for security reasons." ; eend 1
+  fi
+fi
+}
+# }}}
+
+# {{{ Support customization
+config_distri(){
+if checkbootparam "distri"; then
+  DISTRI="$(getbootparam 'distri' 2>>$DEBUG)"
+  if [ -r /cdrom/desktop/"$DISTRI".jpg ] ; then
+     [ -n "$BOOTDEBUG" ] && einfo "Debug: bootoption distri found and file /cdrom/desktop/$DISTRI present" && eend 0
+     cp /cdrom/desktop/"$DISTRI".jpg /usr/share/grml/desktop.jpg
   fi
 fi
 }

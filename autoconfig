@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Son Mär 25 12:45:13 CEST 2007 [mika]
+# Latest change: Mit Apr 04 21:33:40 CEST 2007 [mika]
 ################################################################################
 
 ################################################################################
@@ -58,26 +58,26 @@ CONFIG_BLIND='yes'            # check for blind option or brltty
 CONFIG_CDROM_PERM='yes'       # for burning on IDE-CD-Roms, k3b (and others) check for special permissions
 CONFIG_CDROM_SCRIPTS='yes'    # run scripts from /cdrom/scripts
 CONFIG_CONSOLE='yes'          # activate mgetty when using console=... as bootparam
-CONFIG_DMA='yes'              # Enable DMA for all IDE drives
 CONFIG_CREATE_MNT_DIRS='no'   # create /mnt-directories
 CONFIG_DEBNET='yes'           # search for /etc/network/interfaces on partitions and set up network afterwards
 CONFIG_DEBS='yes'             # check for bootoption debs for installing .debs
 CONFIG_DEBUG='yes'            # activate start of shells during startup at several stages
 CONFIG_DISCOVER='no'          # use discover for hardware detection
 CONFIG_DISTCC='yes'           # activate and setup distcc through bootparam distcc=$NETWORK,$INTERFACE
+CONFIG_DISTRI='yes'           # support some customization via bootoption distri
+CONFIG_DMA='yes'              # Enable DMA for all IDE drives
 CONFIG_EXTRACT='yes'          # specify which (only in combination with bootparam myconfig/netconfig useful)
 CONFIG_FAST='yes'             # skip startup of w3m on tty1
 CONFIG_FIREWIRE_DEV='no'      # bugfix for kernel >=2.6.11 - create some firewire-devices
 CONFIG_FIX_PASSWD='yes'       # fix unionfs-problem with passwd
 CONFIG_FIX_UNIONFS='yes'      # fix/workaround for unionfs
-CONFIG_USERFSTAB='yes'        # check for username of uid 1000
 CONFIG_FWTIMEOUT='yes'        # set timeout for firmware loading
 CONFIG_GRML2HD='yes'          # check for 'grml2hd' bootoption
 CONFIG_HOMEDIR='yes'          # check for persistent homedir option
 CONFIG_HOSTNAME='yes'         # set hostname to 'grml' on systems running from CD
-CONFIG_HOTPLUG_MAIN='no'      # start hotplug system [should be handled by udev now]
 CONFIG_HOTPLUG_AGENT='no'     # deactivate specific hotplug agent(s) via bootparam
 CONFIG_HOTPLUG_BLACKLIST='no' # check for blacklist bootparam
+CONFIG_HOTPLUG_MAIN='no'      # start hotplug system [should be handled by udev now]
 CONFIG_HWINFO='no'            # run hwinfo for module-detection (requires bootparam 'hwinfo'!)
 CONFIG_INTERACTIVE='yes'      # check for expert-mode as bootparam
 CONFIG_KERNEL='yes'           # display information on running kernel
@@ -104,6 +104,7 @@ CONFIG_SWSPEAK='yes'          # run software synthesizer via speakup
 CONFIG_TESTCD='yes'           # CD checker
 CONFIG_TIME='yes'             # set clock, check for bootparam utc/gmt [only in live-mode]
 CONFIG_TIMEZONE='yes'         # get bootparam 'tz' and set it as /etc/localtime [only in live-mode]
+CONFIG_USERFSTAB='yes'        # check for username of uid 1000
 CONFIG_VMWARE='yes'           # vmware specific stuff (use xorg.conf.vmware)
 CONFIG_WELCOME='yes'          # play welcome sound (audio)
 CONFIG_WONDERSHAPER='yes'     # start wondershaper with options provided via bootparam
