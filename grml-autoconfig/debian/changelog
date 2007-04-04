@@ -1,3 +1,12 @@
+grml-autoconfig (0.6.30) unstable; urgency=low
+
+  * config_vmware(): if vmware-detect fails (in grml64 currently
+    for example) additionally check for bootimage vmware.
+  * config_distri(): new code which supports setting wallpaper
+    via /cdrom/desktop/$DISTRI.jpg
+
+ -- Michael Prokop <mika@grml.org>  Wed,  4 Apr 2007 21:28:49 +0200
+
 grml-autoconfig (0.6.29) unstable; urgency=low
 
   * config_language(): rework the way unicode_start and consolechars
