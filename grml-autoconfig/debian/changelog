@@ -1,3 +1,13 @@
+grml-autoconfig (0.6.31) unstable; urgency=low
+
+  * language-functions: applied patch by Jan-Pieter Jacobs
+    which improves and extends locales for Belgian. Thanks!
+    We now have bed (dutch), bef (french) and beg (german)
+    (in iso and utf8 versions as usual) plus the normal
+    'be' stuff (with updated locales now) of course.
+
+ -- Michael Prokop <mika@grml.org>  Fri,  6 Apr 2007 23:34:04 +0200
+
 grml-autoconfig (0.6.30) unstable; urgency=low
 
   * config_vmware(): if vmware-detect fails (in grml64 currently
