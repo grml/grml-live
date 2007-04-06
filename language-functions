@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sam Dez 16 17:45:30 CET 2006 [mika]
+# Latest change: Fre Apr 06 23:41:38 CEST 2007 [mika]
 ################################################################################
 
 # The default language/keyboard to use. This CAN NOT be autoprobed.
@@ -59,9 +59,9 @@ case "$LANGUAGE" in
                 KDEKEYBOARDS="us,fr"
                 TZ="Australia/Sydney"
                 ;;
-        be-iso)
-                # Belgian version
-                LANGUAGE="be"
+        be-iso|bed-iso)
+                # Belgian version (default and dutch one)
+                LANGUAGE="nl"
                 COUNTRY="be"
                 LANG="C"
                 KEYTABLE="be2-latin1"
@@ -71,11 +71,61 @@ case "$LANGUAGE" in
                 KDEKEYBOARDS="us,de,fr"
                 TZ="Europe/Brussels"
                 ;;
-        be|be-utf8)
-                # Belgian version (UTF8)
-                LANGUAGE="be_BY:be"
+        be|be-utf8|bed|bed-utf8)
+                # Belgian version (default and dutch one) (UTF8)
+                LANGUAGE="nl_BE:nl"
                 COUNTRY="be"
-                LANG="be_BY.UTF-8"
+                LANG="nl_BE.UTF-8"
+                KEYTABLE="be2-latin1"
+                XKEYBOARD="be"
+                KDEKEYBOARD="be"
+                CHARSET="utf8"
+                # Additional KDE Keyboards
+                KDEKEYBOARDS="us,de,fr"
+                TZ="Europe/Brussels"
+                ;;
+        bef-iso)
+                # Belgian version (french)
+                LANGUAGE="fr"
+                COUNTRY="be"
+                LANG="C"
+                KEYTABLE="be2-latin1"
+                XKEYBOARD="be"
+                KDEKEYBOARD="be"
+                CHARSET="iso8859-15"
+                KDEKEYBOARDS="us,de,fr"
+                TZ="Europe/Brussels"
+                ;;
+        bef|bef-utf8)
+                # Belgian version (french) (UTF8)
+                LANGUAGE="fr_BE:fr"
+                COUNTRY="be"
+                LANG="fr_BE.UTF-8"
+                KEYTABLE="be2-latin1"
+                XKEYBOARD="be"
+                KDEKEYBOARD="be"
+                CHARSET="utf8"
+                # Additional KDE Keyboards
+                KDEKEYBOARDS="us,de,fr"
+                TZ="Europe/Brussels"
+                ;;
+        beg-iso)
+                # Belgian version (german)
+                LANGUAGE="de"
+                COUNTRY="be"
+                LANG="C"
+                KEYTABLE="be2-latin1"
+                XKEYBOARD="be"
+                KDEKEYBOARD="be"
+                CHARSET="iso8859-15"
+                KDEKEYBOARDS="us,de,fr"
+                TZ="Europe/Brussels"
+                ;;
+        beg|beg-utf8)
+                # Belgian version (german) (UTF8)
+                LANGUAGE="de_BE:de"
+                COUNTRY="be"
+                LANG="de_BE.UTF-8"
                 KEYTABLE="be2-latin1"
                 XKEYBOARD="be"
                 KDEKEYBOARD="be"
