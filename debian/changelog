@@ -1,3 +1,9 @@
+grml-autoconfig (0.6.32) unstable; urgency=low
+
+  * Fix logical structure of config_vmware().
+
+ -- Michael Prokop <mika@grml.org>  Mon,  9 Apr 2007 13:40:40 +0200
+
 grml-autoconfig (0.6.31) unstable; urgency=low
 
   * language-functions: applied patch by Jan-Pieter Jacobs
