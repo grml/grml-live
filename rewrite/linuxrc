@@ -2,7 +2,7 @@
 # Filename: /linuxrc
 # Purpose:  minirt for kernel 2.6 running on grml live-cd
 # Authors:  (c) Klaus Knopper <knoppix@knopper.net>, (c) Michael Prokop <mika@grml.org>
-# Latest change: Tue Mar 27 23:05:51 CEST 2007
+# Latest change: Mon Apr 09 12:47:28 CEST 2007
 #######################################################################################
 
 # hardcoded configurable options
@@ -171,17 +171,30 @@ FAILED=" ${NORMAL}[${RED}fail${NORMAL}]"
 # echo "$CLEAR"
 # Just go to the top of the screen
 # echo -n "[H[J"
+DISTRI="$(getbootparam 'distri' 2>/dev/null)"
+if [ -n "$DISTRI" ] ; then
+SPLASH="
+${RED} $DISTRI
+
+${WHITE}based on grml.org.
+
+${NORMAL}"
+else
+SPLASH="
+${RED}   ____ ____  __  __ _
+${RED}  / ___|  _ \|  \/  | |
+${RED} | |  _| |_) | |\/| | |
+${RED} | |_| |  _ <| |  | | |___
+${RED}  \____|_| \_\_|  |_|_____|
+
+${WHITE}grml.org - Linux for users of texttools and sysadmins.
+
+${NORMAL}"
+fi
+
 echo ""
 echo "${WHITE}Welcome to"
-echo ""
-echo "${RED}   ____ ____  __  __ _     "
-echo "${RED}  / ___|  _ \|  \/  | |    "
-echo "${RED} | |  _| |_) | |\/| | |    "
-echo "${RED} | |_| |  _ <| |  | | |___ "
-echo "${RED}  \____|_| \_\_|  |_|_____|"
-echo ""
-echo "${WHITE}grml.org - Linux for users of texttools and sysadmins."
-echo "${NORMAL}"
+echo "$SPLASH"
 
 # We need the builtin commands and /static only starting at this point
 PATH=/static
@@ -326,7 +339,7 @@ fi
 
 # New sysfs based SCSI detection (thanks, Jörg Schirottke)
 sysfsscsi(){
-SYS=$(for x in $(find /sys/devices/ -name modalias); do grep pci: $x; done|cut -f2 -d:)
+SYS=$(for x in $(find /sys/devices/ -name modalias); do grep pci: $x 2>/dev/null; done|cut -f2 -d:)
 while read id driver; do
  for sysid in $SYS; do
   case $sysid in $id)
@@ -571,31 +584,41 @@ if [ -n "$NFS" ]; then
 fi
 
 # Now that the right SCSI driver is (hopefully) loaded, try to find CD-ROM
-if test -z $NFS ; then
-  DEVICES="/dev/hd?"
-  test -n "$FOUND_SCSI" -a -z "$NOCD" && DEVICES="/dev/scd? /dev/scd?? $DEVICES"
-  # New: Also try parallel port CD-Roms [for Mike].
-  DEVICES="$DEVICES /dev/pcd?"
-  # New: also check HD partitions for a GRML/GRML image
-  # notice: use /dev/sd? for usb-sticks without partition(s)
-  test -n "$FOUND_SCSI" -a -z "$NOSCSI" && DEVICES="$DEVICES /dev/sd?[1-9] /dev/sd?[1-9][0-9] /dev/sd?"
-  DEVICES="$DEVICES /dev/hd?[1-9] /dev/hd?[1-9][0-9]"
-  case "$CMDLINE" in *fromhd=/dev/*) DEVICES="$fromhd"; ;; esac
-  for i in $DEVICES
-  do
-  log_begin_msg "${CRE} ${GREEN}*${NORMAL} Looking for CD-ROM in:    ${MAGENTA}$i${NORMAL}"
-  if mountit $i /cdrom "-o ro" >/dev/null 2>&1
-    then
-    echo "  $SUCCESS"
-    if test -f /cdrom/$GRML_DIR/$GRML_NAME
-      then
-      log_begin_msg "Accessing grml CD-ROM at: ${MAGENTA}$i${NORMAL}" ; echo "  $SUCCESS"
-      FOUND_GRML="$i"
-      break
-    fi
-    umount /cdrom
+grmlmount()
+{
+  if test -z $NFS ; then
+    DEVICES="/dev/hd?"
+    test -n "$FOUND_SCSI" -a -z "$NOCD" && DEVICES="/dev/scd? /dev/scd?? $DEVICES"
+    # New: Also try parallel port CD-ROMs
+    DEVICES="$DEVICES /dev/pcd?"
+    # New: also check HD partitions for a GRML/GRML image
+    # notice: use /dev/sd? for usb-sticks without partition(s)
+    test -n "$FOUND_SCSI" -a -z "$NOSCSI" && DEVICES="$DEVICES /dev/sd?[1-9] /dev/sd?[1-9][0-9] /dev/sd?"
+    DEVICES="$DEVICES /dev/hd?[1-9] /dev/hd?[1-9][0-9]"
+    case "$CMDLINE" in *fromhd=/dev/*) DEVICES="$fromhd"; ;; esac
+    for i in $DEVICES ; do
+      log_begin_msg "${CRE} ${GREEN}*${NORMAL} Looking for CD-ROM in:    ${MAGENTA}$i${NORMAL}"
+      if mountit $i /cdrom "-o ro" >/dev/null 2>&1 ; then
+         echo "  $SUCCESS"
+         if test -f /cdrom/$GRML_DIR/$GRML_NAME ; then
+            log_begin_msg "Accessing grml CD-ROM at: ${MAGENTA}$i${NORMAL}" ; echo "  $SUCCESS"
+            FOUND_GRML="$i"
+            break
+         fi
+        umount /cdrom
+      fi
+    done
   fi
-  done
+}
+
+# Rerun the grml-CDROM part 3 times at total
+if ! grmlmount ; then
+   log_warning_msg "grml CD-ROM not yet found, sleeping for 5 seconds and trying again then."
+   sleep 5
+   if ! grmlmount ; then
+      log_warning_msg "grml CD-ROM still not yet found, sleeping for 5 more seconds and trying once more again."
+      sleep 5
+   fi
 fi
 
 # Harddisk-installed script part version has been removed
