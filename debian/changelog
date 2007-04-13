@@ -4,6 +4,7 @@ grml-etc (0.9.14) unstable; urgency=low
     to package grml-desktop. Added package grml-desktop to
     Suggests: therefore. This should simplify customization
     of grml.
+  * Drop /etc/skel/.wmi as wmi is not supported anymore.
 
  -- Michael Prokop <mika@grml.org>  Fri, 13 Apr 2007 18:13:37 +0200
 
