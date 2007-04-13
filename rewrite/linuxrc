@@ -239,6 +239,27 @@ if [ -n "$DEBUG" ]; then
    cat /proc/cmdline
 fi
 
+# check for available ram 
+RAM=$(/static/awk '/MemTotal/{print $2}' /proc/meminfo)
+log_begin_msg "${RAM} kB of RAM available"
+
+case "$CMDLINE" in *small*) GRML_TYPE="small"; ;; esac
+
+if [ "$GRML_TYPE" = "small" ]
+then
+    if [[ $RAM -lt 25000 ]]
+    then 
+	log_end_msg "You need at least 32MB of RAM available for grml-small"
+	return 1
+    fi
+else
+    if [[ $RAM -lt 58000 ]]
+    then
+	log_end_msg "You need at least 64Mb of RAM available for grml"
+	return 1
+    fi
+fi
+
 # Run a shell if in debug mode
 # echo "${BLUE}Dropping you to a busybox shell for debugging.${NORMAL}"
 stage=1
