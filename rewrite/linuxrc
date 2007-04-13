@@ -2,7 +2,7 @@
 # Filename: /linuxrc
 # Purpose:  minirt for kernel 2.6 running on grml live-cd
 # Authors:  (c) Klaus Knopper <knoppix@knopper.net>, (c) Michael Prokop <mika@grml.org>
-# Latest change: Mon Apr 09 12:47:28 CEST 2007
+# Latest change: Fri Apr 13 10:55:59 CEST 2007 [mika]
 #######################################################################################
 
 # hardcoded configurable options
@@ -228,6 +228,7 @@ GRML_DIR="GRML"
 GRML_NAME="GRML"
 case "$CMDLINE" in *grml_dir=*) GRML_DIR="$grml_dir"; ;; esac
 case "$CMDLINE" in *grml_name=*) GRML_NAME="$grml_name"; ;; esac
+case "$CMDLINE" in *small*) GRML_TYPE="small"; ;; esac
 
 # NFS
 for i in $cmdline; do case "$i" in nfsdir=*|NFSDIR=*) eval $i;; esac; done
@@ -552,7 +553,7 @@ if [ -n "$NFS" ]; then
 
   dhcp_iface_=$(getbootparam dhcp_iface)
   if [ -z "$dhcp_iface_" ]; then
-  	dhcp_iface_=`ifconfig -a | grep '^eth' | sed 's/ .*//'`
+        dhcp_iface_=`ifconfig -a | grep '^eth' | sed 's/ .*//'`
   fi
 
   # make sure we have a udhcpc executable, if it's not present
@@ -896,6 +897,24 @@ MINLEFT=16000
 [ -n "$TOTALMEM" ] && MAXSIZE="$(/usr/bin/expr $TOTALMEM - $MINLEFT)"
 # Default ramdisk size for ramdisk
 [ -n "$TOTALMEM" ] && RAMSIZE="$(/usr/bin/expr $TOTALMEM / 5)"
+
+# check for available RAM
+# check for bootoption small and/or grml-small
+if [ -n "$FOUNDMEM" ] ; then
+   if [ "$GRML_TYPE" = "small" ] ; then
+      if [ "$FOUNDMEM" -lt 25000 ] ; then
+         log_begin_msg "Bootoption *small detected, but you need at least 32MB of RAM available." ; echo " $FAILED"
+         log_begin_msg "Dropping you to a shell, continue on your own risk." ; echo " $FAILED"
+         /bin/bash
+      fi
+   else
+      if [ "$FOUNDMEM" -lt 58000 ] ; then
+         log_begin_msg "You need at least 64MB of RAM available for grml." ; echo "   $FAILED"
+         log_begin_msg "Dropping you to a shell, continue on your own risk." ; echo " $FAILED"
+         /bin/bash
+      fi
+   fi
+fi
 
 # Create additional dynamic ramdisk.
 test -z "$RAMSIZE" -o "$RAMSIZE" -lt "$MINSIZE" && RAMSIZE="$MINSIZE"
