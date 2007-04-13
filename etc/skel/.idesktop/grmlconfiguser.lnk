@@ -1,0 +1,9 @@
+table Icon
+  Caption: grml-config-user
+  ToolTip.Caption: configure some userspecific settings
+  Command: /usr/bin/x-terminal-emulator -T "grml-config-user" -e /usr/bin/grml-config-user
+  Icon: /home/grml/.idesktop/icons/l33t_DEV_kcontrol.png
+  X: 318
+  Y: 451
+end
+

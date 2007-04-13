@@ -1,0 +1,9 @@
+table Icon
+  Caption: aterm
+  ToolTip.Caption: the VT102 emulator for the X window system runnning in en_US.iso885915 mode
+  Command: LANG=en_US.iso885915 /usr/bin/aterm -tr
+  Icon: /home/grml/.idesktop/icons/l33t_TER_eterm.png
+  X: 224
+  Y: 13
+end
+

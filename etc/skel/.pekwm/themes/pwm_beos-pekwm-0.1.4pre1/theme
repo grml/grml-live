@@ -1,0 +1,121 @@
+# "pwm-beos" theme for pekwm-0.1.4pre1
+# theme ported by Oliver Kraitschy (http://www.okraits.de/)
+# Date: 05.05.2005
+
+# Based on look-beoslike.conf from PWM,
+# http://modeemi.cs.tut.fi/~tuomov/pwm/
+
+$MFONT = "Bitstream Vera Sans-9#Left#1 1#XFT"
+$FONT = "Bitstream Vera Sans-9:Bold#Center#1 1#XFT"
+
+PDecor {
+
+Decor = "DEFAULT" {
+	Title { 
+		Height = "18"
+		Pad = "4 0 5 5"
+
+		WidthMin = "100"
+		WidthMax = "95"
+		WidthSymetric = "true"
+
+		Focused = "SolidRaised #405060 #607080 #203040 1 0 1x1"
+		Unfocused = "SolidRaised #505050 #707070 #404040 1 0 1x1"
+
+		Tab {
+			Focused = "SolidRaised #d8d8d8 #ffffff #606060 1 0 1x1"
+			FocusedSelected = "SolidRaised #ffcb00 #ffff66 #ff9800 1 0 1x1"
+			Unfocused = "SolidRaised #d8d8d8 #ffffff #606060 1 0 1x1"
+			UnfocusedSelected = "SolidRaised #a8a8a8 #efefef #606060 1 0 1x1"
+		}
+		Separator {
+			Focused = "EMPTY"
+			Unfocused = "EMPTY"
+		}
+		Font {
+			Focused = "$FONT"
+		}
+		FontColor {
+			Focused = "#000000"
+			FocusedSelected = "#000000"
+			Unfocused = "#000000"
+			UnfocusedSelected = "#000000"
+		}
+		Buttons {
+		}
+		Border {
+			Focused {
+				TopLeft = "Image tl.png"
+				Top = "Image v.png"
+				TopRight = "Image tr.png"
+				Left = "Image s.png"
+				Right = "Image s.png"
+				BottomLeft = "Image bl.png"
+				Bottom = "Image v.png"
+				BottomRight = "Image br.png"
+			}
+			Unfocused {
+				TopLeft = "Image tl.png"
+				Top = "Image v.png"
+				TopRight = "Image tr.png"
+				Left = "Image s.png"
+				Right = "Image s.png"
+				BottomLeft = "Image bl.png"
+				Bottom = "Image v.png"
+				BottomRight = "Image br.png"
+			}
+		}
+	} 
+}
+
+}
+
+
+Harbour {
+	Texture = "SolidRaised #d8d8d8 #ffffff #606060 1 0 1x1"
+}
+
+Menu {
+	Focused {
+		Font = "$MFONT"
+		Background = "SolidRaised #d8d8d8 #ffffff #606060 1 1 5x5"
+		Item = "EMPTY"
+		Text = "#000000"
+		Separator = "Solid #606060 0x1"
+		Arrow = "Solid #000000 5x5"
+	}
+	Unfocused {
+		Font = "$MFONT"
+		Background = "SolidRaised #a8a8a8 #efefef #606060 1 1 5x5"
+		Item = "EMPTY"
+		Text = "#000000"
+		Separator = "Solid #606060 0x1"
+		Arrow = "Solid #000000 5x5"
+	}
+	Selected {
+		Font = "$MFONT"
+		Background = "SolidRaised #ffcb00 #ffff66 #ff9800 1 1 5x5"
+		Item = "SolidRaised #ffcb00 #ffff66 #ff9800 1 1 1x1"
+		Text = "#000000"
+		Arrow = "Solid #000000 5x5"
+	}
+	Pad = "2 2 4 4"
+}
+
+CmdDialog {
+	Font = "$MFONT"
+	Texture = "Solid #d8d8d8"
+	Text = "#000000"
+	Pad = "4 4 4 4"
+}
+
+Status {
+	Font = "$MFONT"
+	Texture = "Solid #d8d8d8"
+	Text = "#000000"
+	Pad = "0 0 0 0"
+}
+
+Root {
+	Command = "false"
+}

@@ -1,0 +1,16 @@
+Source: grml-desktop
+Section: grml
+Priority: extra
+Maintainer: Michael Prokop <mika@grml.org>
+Build-Depends: debhelper (>= 5)
+Standards-Version: 3.7.2
+
+Package: grml-desktop
+Architecture: any
+Depends: idesk
+Suggests: fluxbox, fvwm | fvwm2 | fvwm-crystal, ion2, ion3, pekwm
+Description: configuration files for the X desktop at grml
+ This packages provides several configuration files for
+ different tools and window managers used at grml. The
+ files have been seperated from package grml-etc to
+ make customization of grml easier.

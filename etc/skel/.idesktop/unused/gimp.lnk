@@ -1,0 +1,8 @@
+table Icon
+  Caption: gimp
+  Command: /usr/bin/gimp
+  Icon: /home/grml/.idesktop/icons/l33t_GRA_gimp.png
+  X: 1054
+  Y: 573
+end
+

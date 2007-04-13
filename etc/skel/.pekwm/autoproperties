@@ -1,0 +1,207 @@
+# run "xprop WM_CLASS" to find out title of windows
+#
+# auto-group mozilla download windows and move them to the top-right corner
+#Property = "^mozilla-bin,^Mozilla-bin" {
+#	ApplyOn = "New Transient"
+#	Title = "^Saving"
+#	Group = "moz-dl" { Size = "10" }
+#	Geometry = "+0+0"
+#	Layer = "Below"
+#}
+#
+#Property = "^Mozilla,^navigator:browser" {
+#	ApplyOn = "Start New Workspace"
+#	Workspace = "2"
+#}
+#
+# Dillo
+#Property = "^dillo,^Dillo" {
+#	ApplyOn = "Start New"
+#	Group = "dillo" { Size = "10"; Behind = "True" }
+#}
+#
+# I apply this one on Transients to make it apply on playlist and eq
+#Property = ".*,^xmms" {
+#	ApplyOn = "Start New Transient"
+#	Layer = "Desktop"
+#	Sticky = "True"
+#	Skip = "Menus FocusToggle FrameSnap"
+#}
+#
+# Remove Gimp windows from the menus, only want the main gimp window.
+#Property = "^toolbox,^Gimp" {
+#	ApplyOn = "Start New"
+#}
+#
+# The Crop dialog always get in the way, put it up in the corner.
+#Property = "^info_dialog,^Gimp" {
+#	ApplyOn = "Start New"
+#	Layer = "OnTop"
+#	Geometry = "+0+0"
+#	Skip = "Menus"
+#}
+#
+# The rest of the gimp windows. ;)
+#Property = ".*,^Gimp" {
+#	ApplyOn = "Start New"
+#	Skip = "Menus";
+#}
+#
+# Gkrellm
+#Property = "^gkrellm,^Gkrellm" {
+#	ApplyOn = "Start New"
+#	Sticky = "True"
+#	Skip = "Menus FocusToggle"
+#	Layer = "Desktop"
+#}
+#
+# Standard enviorment stuff, xclock xload and xbiff
+#Property = "^xclock,^XClock" {
+#	ApplyOn = "Start New"
+#	Geometry = "120x137+0-137"
+#	Border = "False"; Titlebar = "False"
+#	Sticky = "True"
+#	Layer = "Desktop"
+#	Skip = "Menus FocusToggle FrameSnap"
+#}
+#Property = "^xload,^XLoad" {
+#	ApplyOn = "Start New"
+#	Geometry = "560x137+120-137"
+#	Border = "False"; Titlebar = "False"
+#	Sticky = "True"
+#	Layer = "Desktop"
+#	Skip = "Menus FocusToggle FrameSnap"
+#}
+#Property = "^xbiff,^XBiff" {
+#	ApplyOn = "Start New"
+#	Geometry = "120x137-120-137"
+#	Border = "False"; Titlebar = "False"
+#	Sticky = "True"
+#	Layer = "Desktop"
+#	Skip = "Menus FocusToggle FrameSnap"
+#}
+
+# Opera alway maximized without decor and jailed on workspace 5
+#Property = "^opera,^Opera" {
+#  ApplyOn = "Start Reload New Workspace"
+#  Geometry = "1200x930+0+0"
+##  Border = "False"; Titlebar = "False"
+#  Border = "True"; Titlebar = "True"
+#  Workspace = "2"
+#  MaximizedVertical = "True"
+#}
+
+# xconsole
+#Property = "^xconsole,^XConsole" {
+#  ApplyOn = "Start Reload New Workspace"
+#  Geometry = "1211x95+0+929"
+#  Skip = "Menus FocusToggle FrameSnap"
+#  Border = "True"; Titlebar = "False"
+#  Sticky = "True"
+#}
+
+# Gkrellm
+#Property = "^gkrellm,^Gkrellm" {
+#  ApplyOn = "Start Reload New Workspace"
+#  Sticky = "True"
+##  Geometry = "12x12+886+0"
+##  Geometry = "120x120+50+50"
+#  Skip = "Menus FocusToggle"
+#  Layer = "Desktop"
+#}
+
+# klipper
+#Property = "^klipper,^klipper" {
+#  ApplyOn = "Start Reload New Workspace"
+#  Sticky = "True"
+#  Geometry = "59x51+1221+974"
+#  Skip = "Menus FocusToggle FrameSnap"
+#  Border = "True"; Titlebar = "False"
+#  Layer = "Desktop"
+#}
+
+#Property = "^xload,^XLoad" {
+#  ApplyOn = "Start New"
+#  Geometry = "300x70+0-0"
+#  Border = "False"; Titlebar = "False"
+#  Sticky = "True"
+#  Layer = "Desktop"
+#  Skip = "Menus FocusToggle FrameSnap"
+#}
+
+#Property = "^xterm,^XTerm" {
+#  ApplyOn = "Start New Reload"
+#  Geometry = "980x450+0-850"
+#}
+
+#Property = "^Zinf,^Zinf" {
+#  Border = "False"; Titlebar = "False"
+#  Layer = "OnTop"
+#}
+#Property = "^Zinf,^Playlist" {
+#  ApplyOn = "Start New Workspace"
+#  Geometry = "1024x768+0+0"
+#  Border = "False"; Titlebar = "False"
+#  Layer = "Below"
+#}
+# Make VNC-Viewer look like there is no PekWM :-)
+#Property = "^xtightvncviewer,^Vncviewer" {
+#  ApplyOn = "Start New Workspace"
+#  Geometry = "1024x768+0+0"
+#  Border = "False"; Titlebar = "False"
+#}
+
+# Autogroup Gimp Tools and Image Windows
+#Property = "^toolbox,^Gimp" {
+#  ApplyOn = "Start New Workspace"
+#  Group = "Gimp-Tools" { Size = "10" }
+#}
+#Property = "^brush_selection,^Gimp" {
+#  ApplyOn = "Start New Workspace"
+#  Group = "Gimp-Tools" { Size = "10" }
+#}
+#Property = "^gradient_selection,^Gimp" {
+#  ApplyOn = "Start New Workspace"
+#  Group = "Gimp-Tools" { Size = "10" }
+#}
+#Property = "^pattern_selection,^Gimp" {
+#  ApplyOn = "Start New Workspace"
+#  Group = "Gimp-Tools" { Size = "10" }
+#}
+#Property = "^layers_channels_paths,^Gimp" {
+#  ApplyOn = "Start New Workspace"
+#  Group = "Gimp-Tools" { Size = "10" }
+#}
+#Property = "^image_window,^Gimp" {
+#  ApplyOn = "Start New Workspace"
+#  Group = "Gimp-Images" { Size = "10" }
+#}
+
+#Property = "^win,^Xpdf" {
+#  ApplyOn = "Start New Reload Workspace"
+##  Border = "False"; Titlebar = "False"
+#  Border = "True"; Titlebar = "True"
+#}
+
+#Property = "^xmbmon,^XMBmon" {
+#  ApplyOn = "Start New Reload Workspace"
+#  Geometry = "130x120+11580+0"
+#  Border = "False"; Titlebar = "False"
+#  Sticky = "True"
+#  Layer = "Desktop"
+#  Skip = "Menus FocusToggle FrameSnap"
+#}
+
+#Property = "^xfce,^Xfce" {
+#  ApplyOn = "Start Reload New"
+#  Geometry = "280x210+1010-850"
+#  Sticky = "True"
+#  Layer = "Desktop"
+#  Skip = "Menus FocusToggle FrameSnap"
+#}
+
+#Property = "^ardour_editor,^Ardour" {
+#  ApplyOn = "Start New Workspace"
+#  Border = "False"; Titlebar = "False"
+#  MaximizedHorizontal = "True"; MaximizedVertical = "True"
+#}

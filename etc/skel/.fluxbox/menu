@@ -1,0 +1,37 @@
+[begin] (Fluxbox) {} <>
+    [exec] (xterm) {x-terminal-emulator} <>
+    [submenu] (handy stuff) {} <>
+        [exec] (dillo webbrowser) {dillo} 
+        [exec] (firefox webbrowser) {firefox} 
+        [exec] (w3m webbrowser) {x-terminal-emulator -T "w3m" -e /usr/bin/w3m /usr/share/doc/grml-docs/startpage.html} <>
+        [exec] (gkrellm) {gkrellm} <>
+        [exec] (configure fluxbox [fluxbare]) {fluxbare} <>
+        [exec] (transparent terminal [aterm]) {aterm -tr} <>
+        [exec] (file manager [rox-filer]) {rox-filer} <>
+    [end]
+    [submenu] (grml) {} <>
+        [exec] (grml info screen) {dillo /usr/share/doc/grml-docs/startpage.html} <>
+        [exec] (lock X) {x-terminal-emulator -T "grml-lock" -e /usr/bin/grml-lock} <>
+        [exec] (configure mailclient mutt) {x-terminal-emulator -T "grml-mutt" -e /usr/bin/grml-mutt} <>
+        [exec] (configure mailclient mutt-ng) {x-terminal-emulator -T "grml-muttng" -e /usr/bin/grml-muttng} <>
+        [exec] (configure newsreader slrn) {x-terminal-emulator -T "grml-slrn" -e /usr/bin/grml-slrn} <>
+        [exec] (configure network) {sudo x-terminal-emulator -T "grml-network" -e /usr/sbin/grml-network} <>
+        [exec] (configure and run terminalserver) {sudo x-terminal-emulator -T "grml-terminalserver" -e /usr/sbin/grml-terminalserver} <>
+    [end]
+    [submenu] (Debian) {} <>
+        [include] (/etc/X11/fluxbox/menudefs.hook) {} <>
+    [end]
+    [config] (Configure) {} <>
+    [submenu] (Styles) {Choose a style...} <>
+        [stylesdir] (/usr/share/fluxbox/styles) {} <>
+        [stylesdir] (~/.fluxbox/styles) {} <>
+    [end]
+    [workspaces] (Workspace List) {} <>
+    [submenu] (Tools) {} <>
+        [exec] (Windowname) {xprop|grep WM_CLASS|cut -d \" -f 2|xmessage -file - -center} <>
+        [exec] (Run) {fbrun} <>
+    [end]
+    [reconfig] (Reload config) {} <>
+    [restart] (Restart) {} <>
+    [exit] (Exit) {} <>
+[end]

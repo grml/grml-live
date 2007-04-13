@@ -1,0 +1,84 @@
+author = "Ron Rogers <ash0xx@justballs.net>"
+
+frame_left_width  			= 7
+frame_right_width  			= 7
+chart_width_min  			= 50
+chart_width_max  			= 200
+chart_width_ref  			= 60
+allow_scaling    			= true
+
+chart_in_color       			= #bebebe
+chart_in_color_grid  			= #ffffff
+chart_out_color      			= #a4a4a4
+chart_out_color_grid 			= #ffffff
+
+bg_grid_mode = 1
+
+large_font			= -adobe-helvetica-medium-r-normal-*-*-80-*-*-p-*-iso8859-1
+normal_font			= -adobe-helvetica-medium-r-normal-*-*-80-*-*-p-*-iso8859-1
+small_font			= -adobe-helvetica-medium-r-normal-*-*-80-*-*-p-*-iso8859-1
+
+rx_led_x = 3
+rx_led_y = 9
+tx_led_x = -3
+tx_led_y = 9
+
+StyleChart  *.border 			= 3,3,2,2
+StyleChart  *.font 	   		= normal_font
+StyleChart  *.alt_font 	    		= small_font
+
+StylePanel  *.border 			= 2,2,11,3
+StylePanel  net.border 			= 2,2,13,2
+StylePanel  *.margin 			= 2
+StylePanel  *.font			= normal_font
+StylePanel  *.alt_font			= normal_font
+StylePanel  *.krell_x_hot		= 63
+StylePanel  *.krell_depth		= 64
+StylePanel  *.krell_yoff		= 4
+
+StyleMeter  *.margin 			= 3
+#StyleMeter gkrellmms.margin	 	= 0
+StyleMeter  *.font 			= normal_font
+StyleMeter  *.alt_font 			= small_font
+StyleMeter  mem.label_position 		= 0
+StyleMeter  *.label_position 		= 0
+StyleMeter  fs.label_position 		= 0
+StyleMeter  swap.label_position 	= 0
+StyleMeter  *.krell_x_hot 		= 63
+StyleMeter  *.krell_depth 		= 65
+StyleMeter  *.krell_yoff 		= 4
+StyleMeter  mail.krell_x_hot 		= -1
+
+# borders
+StyleMeter  *.border			= 2,2,4,4
+StyleMeter  timer.border		= 0,0,4,4
+StyleMeter  mem.border 			= 0,0,11,4
+StyleMeter  swap.border 		= 0,0,11,3
+StyleMeter  fs.border 			= 0,0,11,3
+StyleMeter  apm.border 			= 0,0,12,3
+StyleMeter  timer.border 		= 0,0,2,2
+StyleMeter  uptime.border 		= 0,0,3,5
+
+# graph color
+StyleChart  *.textcolor 		= #ffffff #494d59 shadow
+StyleChart  *.alt_textcolor 		= #ffffff #494d59 shadow
+
+# panel color
+StylePanel  *.textcolor 		= #000000 #bebebe shadow
+StylePanel  *.alt_textcolor 		= #000000 #bebebe shadow
+
+#meter_color
+StyleMeter  *.textcolor 		= #000000 #bebebe shadow
+StyleMeter  *.alt_textcolor 		= #000000 #bebebe shadow
+StyleMeter  fs.textcolor 		= #000000 #bebebe shadow
+StyleMeter  mem.textcolor 		= #000000 #bebebe shadow
+StyleMeter  swap.textcolor 		= #000000 #bebebe shadow
+StyleMeter  mail.textcolor 		= #000000 #bebebe shadow
+StyleMeter  host.textcolor 		= #000000 #bebebe shadow
+StyleMeter  cal.textcolor 		= #000000 #bebebe shadow
+
+set_integer mem_krell_cache_yoff	= 1
+set_integer mem_krell_buffers_yoff	= 1
+
+krell_slider_depth 			= 65
+krell_slider_x_hot 			= 63
