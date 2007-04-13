@@ -50,8 +50,8 @@ binary-arch: build install
 	dh_compress
 	dh_fixperms
 	dh_installdeb
-	find debian/grml-etc/etc -type f ! -name \*.xpm ! -name \*.png -print | \
-	sed -e 's#^debian/grml-etc##g' > debian/grml-etc/DEBIAN/conffiles
+	find debian/grml-desktop/etc -type f ! -name \*.xpm ! -name \*.png -print | \
+	sed -e 's#^debian/grml-desktop##g' > debian/grml-desktop/DEBIAN/conffiles
 	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums
