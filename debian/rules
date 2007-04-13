@@ -48,6 +48,8 @@ binary-arch: build install
 	dh_link
 	dh_strip
 	dh_compress
+	mkdir -p debian/grml-desktop/usr/share/lintian/overrides/
+	cp -av debian/overrides debian/grml-desktop/usr/share/lintian/overrides/grml-desktop
 	dh_fixperms
 	dh_installdeb
 	find debian/grml-desktop/etc -type f ! -name \*.xpm ! -name \*.png -print | \
