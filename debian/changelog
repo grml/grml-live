@@ -1,3 +1,11 @@
+grml-desktop (0.1-2) unstable; urgency=low
+
+  * /etc/skel/.fluxbox/keys: change logic of 'move to desktop'
+    (aka SendToWorkspace) and 'change to desktop' (aka Workspace),
+    so alt+f# changes the desktop now!
+
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Apr 2007 00:02:26 +0200
+
 grml-desktop (0.1-1) unstable; urgency=low
 
   * Initial release.
