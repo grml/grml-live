@@ -1,5 +1,0 @@
-sensor sensor_float_factor 10000
-sensor gkrellm_float_factor 1000
-sensor "THRM" "thermal_zone/THRM" 10000 0 0 0
-sensor units_fahrenheit 0
-sensor volt_display_mode 0

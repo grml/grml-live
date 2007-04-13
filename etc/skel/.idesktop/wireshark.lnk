@@ -1,9 +1,0 @@
-table Icon
-  Caption: wireshark
-  ToolTip.Caption:  Interactively dump and analyze network traffic (once known as ethereal)
-  Command: /usr/bin/sudo /usr/bin/wireshark
-  Icon: /home/grml/.idesktop/icons/l33t_UNK_ethereal.png
-  X: 644
-  Y: 13
-end
-

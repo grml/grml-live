@@ -1,8 +1,0 @@
-table Icon
-  Caption: vmware
-  Command: /usr/bin/vmware
-  Icon: /home/grml/.idesktop/icons/l33t_EMU_vmware.png
-  X: 1044
-  Y: 433
-end
-

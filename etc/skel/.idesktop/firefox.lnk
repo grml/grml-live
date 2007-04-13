@@ -1,9 +1,0 @@
-table Icon
-  Caption: firefox
-  ToolTip.Caption: the mozilla browser also known as iceweasel
-  Command: /usr/bin/mozilla-firefox
-  Icon: /home/grml/.idesktop/icons/l33t_BRO_firefox.png
-  X: 124
-  Y: 13
-end
-

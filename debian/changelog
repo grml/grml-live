@@ -1,3 +1,12 @@
+grml-etc (0.9.14) unstable; urgency=low
+
+  * Move windowmanager configuration files and idesk stuff
+    to package grml-desktop. Added package grml-desktop to
+    Suggests: therefore. This should simplify customization
+    of grml.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Apr 2007 18:13:37 +0200
+
 grml-etc (0.9.13) unstable; urgency=low
 
   * Rewrote /etc/init.d/grml-reboot and /etc/init.d/grml-halt:
