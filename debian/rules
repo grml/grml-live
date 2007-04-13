@@ -31,7 +31,7 @@ install: build
 	dh_clean -k 
 	dh_installdirs etc/skel
 
-	cp -a etc/skel debian/grml-desktop/
+	cp -a etc/skel debian/grml-desktop/etc/
 
 # Build architecture-independent files here.
 binary-indep: build install
