@@ -1,3 +1,10 @@
+grml-autoconfig (0.6.33) unstable; urgency=low
+
+  * Do not execute unicode_start on grml-small in live-mode.
+    [Testing: issue193]
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Apr 2007 12:49:56 +0200
+
 grml-autoconfig (0.6.32) unstable; urgency=low
 
   * Fix logical structure of config_vmware().
