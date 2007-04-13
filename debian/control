@@ -9,7 +9,7 @@ Package: grml-desktop
 Architecture: any
 Depends: idesk
 Suggests: fluxbox, fvwm | fvwm2 | fvwm-crystal, ion2, ion3, pekwm
-Conflicts: grml-etc (< 0.9.14)
+Conflicts: grml-etc (<< 0.9.14)
 Description: configuration files for the X desktop at grml
  This packages provides several configuration files for
  different tools and window managers used at grml. The
