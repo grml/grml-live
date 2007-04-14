@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 5)
 Standards-Version: 3.7.2
 
 Package: grml-desktop
-Architecture: any
+Architecture: all
 Depends: idesk
 Suggests: fluxbox, fvwm | fvwm2 | fvwm-crystal, ion2, ion3, pekwm
 Conflicts: grml-etc (<< 0.9.14)
