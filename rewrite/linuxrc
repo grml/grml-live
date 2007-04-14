@@ -2,7 +2,7 @@
 # Filename: /linuxrc
 # Purpose:  minirt for kernel 2.6 running on grml live-cd
 # Authors:  (c) Klaus Knopper <knoppix@knopper.net>, (c) Michael Prokop <mika@grml.org>
-# Latest change: Fri Apr 13 10:55:59 CEST 2007 [mika]
+# Latest change: Sat Apr 14 12:41:44 CEST 2007 [mika]
 #######################################################################################
 
 # hardcoded configurable options
@@ -145,7 +145,7 @@ fi
 #}
 
 log_failure_msg () {
-  echo " ${RED}*${NORMAL} $@"
+  echo -n " ${RED}*${NORMAL} $@"
 }
 
 #log_warning_msg () {
@@ -238,27 +238,6 @@ if [ -n "$DEBUG" ]; then
    log_begin_msg "Bootoption debug detected. Printing kernel command line:"
    echo ""
    cat /proc/cmdline
-fi
-
-# check for available ram 
-RAM=$(/static/awk '/MemTotal/{print $2}' /proc/meminfo)
-log_begin_msg "${RAM} kB of RAM available"
-
-case "$CMDLINE" in *small*) GRML_TYPE="small"; ;; esac
-
-if [ "$GRML_TYPE" = "small" ]
-then
-    if [[ $RAM -lt 25000 ]]
-    then 
-	log_end_msg "You need at least 32MB of RAM available for grml-small"
-	return 1
-    fi
-else
-    if [[ $RAM -lt 58000 ]]
-    then
-	log_end_msg "You need at least 64Mb of RAM available for grml"
-	return 1
-    fi
 fi
 
 # Run a shell if in debug mode
@@ -661,7 +640,7 @@ remount_grml()
     [ -n "$SOURCE2" ] && umount $SOURCE2  # umount possible loop-device
     mount_grml $TARGET
   else
-    log_failure_msg "Warning: Changing to $TARGET failed."
+    log_failure_msg "Warning: Changing to $TARGET failed." ; echo "$FAILED"
     return 1
   fi
 
@@ -698,7 +677,7 @@ boot_from()
   fi
   if [ $? -ne 0 ]; then
      [ -n "$LOOP_SOURCE" ] && /bin/umount $LOOP_SOURCE
-     log_failure_msg "Accessing grml CD-ROM failed. ${MAGENTA}$TARGET_DEV${NORMAL} is not mountable."
+     log_failure_msg "Accessing grml CD-ROM failed. ${MAGENTA}$TARGET_DEV${NORMAL} is not mountable." ; echo "$FAILED"
      sleep 2
      return 1
   fi
@@ -706,7 +685,7 @@ boot_from()
   if [ -f $TARGET/$GRML_DIR/$GRML_NAME ]; then
     log_begin_msg "Accessing grml CD-ROM at ${MAGENTA}$TARGET_DEV${NORMAL}." ; echo "  $SUCCESS"
   else
-    log_failure_msg "Accessing grml CD-ROM failed. Could not find $GRML_DIR/$GRML_NAME on ${MAGENTA}$TARGET_DEV${RED}.${NORMAL}"
+    log_failure_msg "Accessing grml CD-ROM failed. Could not find $GRML_DIR/$GRML_NAME on ${MAGENTA}$TARGET_DEV${RED}.${NORMAL}" ; echo "$FAILED"
     [ -n "$LOOP_SOURCE" ] && /bin/umount $LOOP_SOURCE
     umount $TARGET
     sleep 2
@@ -749,7 +728,7 @@ copy_to()
        fi
       done
       if test -z "$MOUNTED"; then
-        log_failure_msg "Copying grml CD-ROM failed. ${MAGENTA}$TARGET_DEV_DESC${NORMAL} is not mountable."
+        log_failure_msg "Copying grml CD-ROM failed. ${MAGENTA}$TARGET_DEV_DESC${NORMAL} is not mountable." ; echo "$FAILED"
         sleep 2
         return 1
       fi
@@ -764,21 +743,18 @@ copy_to()
   esac
 
   # sanity check
-
-  if [ $FOUNDSPACE -lt $SIZE ]
-  then
-    log_failure_msg "Copying grml CD-ROM failed. Not enough free space on ${MAGENTA}${TARGET_DEV_DESC}${NORMAL}. Found: ${MAGENTA}${FOUNDSPACE}k${NORMAL} Need: ${MAGENTA}${SIZE}k${NORMAL}"
+  if [ $FOUNDSPACE -lt $SIZE ] ; then
+    log_failure_msg "Copying grml CD-ROM failed. Not enough free space on ${MAGENTA}${TARGET_DEV_DESC}${NORMAL}:" ; echo "$FAILED"
+    log_failure_msg "Found: ${MAGENTA}${FOUNDSPACE}k${NORMAL} Need: ${MAGENTA}${SIZE}k${NORMAL}" ; echo "$FAILED"
     sleep 2
     umount $TARGET
     return 1
   fi
 
   # do the real copy
-
   log_begin_msg "Copying grml CD-ROM to ${TARGET_DEV_DESC}... Please be patient."
   echo
-  if [ -z "$use_cp" -a -x /usr/bin/rsync ]
-  then
+  if [ -z "$use_cp" -a -x /usr/bin/rsync ] ; then
     # first cp the small files
     /usr/bin/rsync -a --exclude="$GRML_DIR/$GRML_NAME" $COPY $TARGET # Copy grml to $TARGET
     # then the big file with nice progress meter
@@ -795,9 +771,8 @@ copy_to()
   else
     /bin/cp -a -f $COPY $TARGET # Copy grml to $TARGET
   fi
-  if [ $? -ne 0 ]
-  then
-    log_failure_msg "Copying grml CD-ROM failed. ${MAGENTA}$TARGET_DEV_DESC${NORMAL} possibly has not enough space left."
+  if [ $? -ne 0 ] ; then
+    log_failure_msg "Copying grml CD-ROM failed. ${MAGENTA}$TARGET_DEV_DESC${NORMAL} possibly has not enough space left." ; echo "$FAILED"
     sleep 2
     return 1
   fi
@@ -850,7 +825,7 @@ if test -n "$FOUND_GRML" ; then
 cat /GRML/etc/ld.so.cache > /etc/ld.so.cache
 
 UNIONFS=""
-if checkbootparam "unionfs" ; then
+if checkbootparam "unionfs" || test ! -r /modules/aufs.ko ; then
    $INSMOD /modules/unionfs.ko 1>/dev/null
    grep -q unionfs /proc/filesystems && UNIONFS=yes
    unionfs='unionfs'
@@ -989,12 +964,9 @@ if test -n "$UNIONFS" && /bin/mount -t $UNIONFS_FILETYPE -o noatime${SECURE},dir
  done && echo "   $SUCCESS" || echo "   $FAILED"
 else
  echo ""
- log_failure_msg "ERROR: CANNOT UNITE READ-ONLY MEDIA AND INITIAL RAMDISK!"
- echo "$FAILED"
- sleep 2
- echo "Can not continue booting, dropping you to a busybox shell."
- stage=4
- rundebugshell
+ log_failure_msg "ERROR: CANNOT UNITE READ-ONLY MEDIA AND INITIAL RAMDISK!" ; echo "$FAILED"
+ log_failure_msg "Can not continue booting, dropping you to a shell." ; echo "$FAILED"
+ /bin/bash
 fi
 
 chown grml.grml /home/grml
