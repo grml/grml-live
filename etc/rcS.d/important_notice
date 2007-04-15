@@ -9,6 +9,6 @@ If you find other files than this one (important_notice) in
 the /etc/rc{0..6}.d/ /etc/rcS.d directories the software
 shipping the initscript does not use the Debian mechansism
 update-rc.d to install and activate initscripts and is
-broken therefore. Please report to it upstream authors!
+broken therefore. Please report it to upstream authors!
 
  -- Michael Prokop <mika@grml.org>, Fri May 12 17:59:42 CEST 2006
