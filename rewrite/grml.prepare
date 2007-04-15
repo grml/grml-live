@@ -4,7 +4,7 @@
 # Authors:       (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is copyright by Michael Prokop
-# Latest change: Sat Sep 16 16:43:05 CEST 2006 [mika]
+# Latest change: Sun Apr 15 17:31:51 CEST 2007
 ################################################################################
 
 # misc stuff
@@ -14,24 +14,8 @@
 
 # variables
   grep -q small /etc/grml_version && GRML_SMALL=yes  || GRML_SMALL=''
-  [ -n "$GRML_SMALL" ] && KERNEL='2.6.17-grml-small' || KERNEL='2.6.19-grml'
-
-# important pre-checks
-if [ -f /usr/share/initramfs-tools/init ] ; then
-  ORIG=$(md5sum /usr/share/initramfs-tools/init | awk '{print $1}')
-  GRML=$(md5sum /usr/share/initramfs-tools/init.grml | awk '{print $1}')
-  if [ "$ORIG" != "$GRML" ] ; then
-     eerror "Please fix /usr/share/initramfs-tools/init[.grml]" ; eend 1
-     exit 1
-  fi
-  ORIG=$(md5sum /usr/share/initramfs-tools/scripts/functions | awk '{print $1}')
-  GRML=$(md5sum /usr/share/initramfs-tools/scripts/functions.grml | awk '{print $1}')
-  if [ "$ORIG" != "$GRML" ] ; then
-     eerror "Please fix /usr/share/initramfs-tools/scripts/functions[.grml]" ; eend 1
-     exit 1
-  fi
-  unset ORIG GRML
-fi
+  [ -n "$GRML_SMALL" ] && KERNEL='2.6.20-grml-small' || KERNEL='2.6.20-grml'
+  [ -r /lib64 ] && KERNEL='2.6.20-grml64' && GRML_SMALL=''
 
 if [ -f /usr/share/fonts/X11/misc/artwiz-cursor.pcf.gz ] ; then
   if dpkg-divert --list artwiz-cursor | grep -q /usr/share/fonts/X11/misc/cursor.pcf.gz ; then
@@ -39,6 +23,13 @@ if [ -f /usr/share/fonts/X11/misc/artwiz-cursor.pcf.gz ] ; then
      exit 1
   fi
 fi
+
+#if [ -r /usr/share/fonts/X11/misc/cursor.pcf.gz ] ; then
+#  einfo "Fixing the broken artwiz-cursor"
+#  ( cd /usr/share/fonts/X11/misc/ && \
+#    dpkg-divert --remove /usr/share/fonts/X11/misc/cursor.pcf.gz && mkfontdir )
+#  eend $?
+#fi
 
 # start of main cleanup process...
 if ! [ -r /boot/config-"$KERNEL" ] ; then
@@ -48,6 +39,9 @@ if ! [ -r /boot/config-"$KERNEL" ] ; then
 fi
 
 einfo "Preparing grml-system: `cat /etc/grml_version`." ; eend 0
+
+einfo "Setting up /etc/motd.tail"
+echo "" > /etc/motd.tail ; eend 0
 
 einfo "Do not forget to run the final check:"
  eindent
@@ -160,6 +154,7 @@ einfo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
   rm -f /var/cache/apt/*.bin
   apt-cache gencaches
   sync-available
+  # apt-get check
 eend $?
 
 einfo "Copying original runlevel.conf to /etc/runlevel.conf"
@@ -178,13 +173,6 @@ eend $?
 einfo "Removing ssh-keys"
   rm -f /etc/ssh/*key*
 eend $?
-
-if [ -r /usr/X11R6/lib/X11/fonts/misc/cursor.pcf.gz ] ; then
-  einfo "Fixing the broken artwiz-cursor"
-  ( cd /usr/X11R6/lib/X11/fonts/misc && \
-    dpkg-divert --remove /usr/X11R6/lib/X11/fonts/misc/cursor.pcf.gz && mkfontdir )
-  eend $?
-fi
 
 # remove only "temporary" or saved files in the given directories
 nuke(){
@@ -300,13 +288,15 @@ einfo "Cleaning and removing some misc files and directories"
 eend $?
 
 einfo "Setting up /etc/resolv.conf"
+  if [ -d /etc/dhcpc ] ; then
   cat >/etc/dhcpc/resolv.conf <<EOT
 # insert nameservers here
 # nameserver 127.0.0.1
 EOT
   chmod 644 /etc/dhcpc/resolv.conf
+  fi
   # is resolvconf available?
-  if [ -L /etc/resolvconf/run/resolv.conf ] ; then
+  if [ -r /etc/resolvconf/run/resolv.conf ] ; then
      ln -sf /etc/resolvconf/run/resolv.conf /etc/
   else
      ln -s /etc/dhcpc/resolv.conf /etc/
