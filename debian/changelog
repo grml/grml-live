@@ -3,6 +3,7 @@ grml-autoconfig (0.6.34) unstable; urgency=low
   * Code rewrite of config_fstab(), this should fix the '/home
     is unmounted on hd-installation if fstype is not auto'.
   * Bump Standard Version to 3.7.2 (no further changes).
+  * Add '#DEBHELPER#' to maintainer scripts.
 
  -- Michael Prokop <mika@grml.org>  Sun, 15 Apr 2007 12:12:33 +0200
 
