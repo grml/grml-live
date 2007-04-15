@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sam Jun 25 00:48:55 CEST 2005 [mika]
+# Latest change: Son Apr 15 13:10:36 CEST 2007 [mika]
 ################################################################################
 
 # The default runlevel.
@@ -50,12 +50,12 @@ po::powerokwait:/etc/init.d/powerfail stop
 #
 # Format:
 #  <id>:<runlevels>:<action>:<process>
-1:12345:respawn:/sbin/rungetty tty1 -u root -g root --autologin root /usr/bin/grml-init
+1:12345:respawn:/sbin/rungetty tty1 --noclear -u root -g root --autologin root /usr/bin/zsh-login
 2:2345:respawn:/sbin/rungetty tty2 -u grml -g grml --autologin grml /usr/bin/grml-init
-3:2345:respawn:/sbin/rungetty --prompt tty3 -u grml -g grml --autologin grml /usr/bin/grml-init
-4:2345:respawn:/sbin/rungetty --prompt tty4 -u grml -g grml --autologin grml /usr/bin/grml-init
-5:2345:respawn:/sbin/rungetty --prompt tty5 -u grml -g grml --autologin grml /usr/bin/grml-init
-6:2345:respawn:/sbin/rungetty --prompt tty6 -u grml -g grml --autologin grml /usr/bin/grml-init
+3:2345:respawn:/sbin/rungetty tty3 -u grml -g grml --autologin grml /usr/bin/grml-init
+# 4:2345:respawn:/sbin/rungetty tty4 -u grml -g grml --autologin grml /usr/bin/grml-init
+# 5:2345:respawn:/sbin/rungetty tty5 -u grml -g grml --autologin grml /usr/bin/grml-init
+# 6:2345:respawn:/sbin/rungetty tty6 -u grml -g grml --autologin grml /usr/bin/grml-init
 # Note that on most Debian systems tty7 is used by the X Window System.
 # Use tty8 for a second xserver.
 # 9:2345:respawn:/sbin/getty  38400 tty9
