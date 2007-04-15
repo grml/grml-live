@@ -1656,7 +1656,14 @@ sudo -u $fstabuser -i /usr/bin/grml-x $WINDOWMANAGER 1>>$DEBUG
 EOF
    chmod 755 /etc/init.d/xstartup
 
-   sed -i 's#^6:.*#6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /bin/zsh"#' /etc/inittab
+   # adjust inittab for xstartup
+   if grep -q '^6' /etc/inittab ; then
+      sed -i 's#^6:.*#6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /bin/zsh"#' /etc/inittab
+   elif grep -q '^# 6' /etc/inittab ; then # no tty6? assume customized grml-small:
+      sed -i 's#^6:.*#6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /bin/zsh"#' /etc/inittab
+   else # just append tty6 to inittab if it isn't present at all
+      echo '6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /bin/zsh"' >> /etc/inittab
+   fi
 
    /sbin/telinit q ; eend $?
 
