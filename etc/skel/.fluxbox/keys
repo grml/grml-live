@@ -14,9 +14,9 @@
 Mod1 Tab       :NextWindow
 Mod1 Shift Tab :PrevWindow
 Control Right  :NextWorkspace
-Mod1 Right     :NextWorkspace
+Mod1 Shift Right     :NextWorkspace
 Control Left   :PrevWorkspace
-Mod1 Left      :PrevWorkspace
+Mod1 Shift Left      :PrevWorkspace
 
 Mod1 q   :PrevWindow
 Mod1 w   :NextWindow
