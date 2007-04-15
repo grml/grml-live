@@ -274,7 +274,7 @@ config_language(){
  if [ -r /etc/default/locale ] ; then
     if grep -q "LANG=.*UTF" /etc/default/locale ; then
        if checkgrmlsmall && [ -z "$INSTALLED" ] ; then
-	  ewarn "Not runnning unicode_start: grml-small with reduced language support detected." ; eend 0
+          ewarn "Not runnning unicode_start: grml-small with reduced language support detected." ; eend 0
        else
           einfo "Setting up unicode environment."
           unicode_start ; eend $?
@@ -996,118 +996,117 @@ config_fstab(){
 NOSWAP="yes" # we do not use swap by default!
 if checkbootparam "swap" -o checkbootparam "anyswap" ; then
    NOSWAP=''
+   checkbootparam "anyswap" && export ANYSWAP='yes' || export ANYSWAP=""
 fi
 
 if checkbootparam "nofstab" -o checkbootparam "forensic" ; then
   ewarn "Skipping /etc/fstab creation as requested on boot commandline." ; eend 0
 else
-  checkbootparam "anyswap" && export ANYSWAP='yes' || export ANYSWAP=""
   einfo "Scanning for harddisk partitions and creating /etc/fstab. (Disable this via boot option: nofstab)"
   iszsh && setopt nonomatch
   if [ -x /usr/sbin/rebuildfstab ] ; then
-    config_userfstab || fstabuser=grml
-    /usr/sbin/rebuildfstab -r -u $fstabuser -g $fstabuser ; eend $?
+     config_userfstab || fstabuser=grml
+     /usr/sbin/rebuildfstab -r -u $fstabuser -g $fstabuser ; eend $?
   else
-    ewarn "Command rebuildfstab not found. Install package grml-rebuildfstab." ; eend 1
+     ewarn "Command rebuildfstab not found. Install package grml-rebuildfstab." ; eend 1
   fi
-  if [ -e /var/run/rebuildfstab.pid ]; then
-    # Another instance of rebuildfstab, probably from hotplug, is still running, so just wait.
-    sleep 8
-  fi
-fi
-# Scan for swap, config, homedir
-if [ -z "$NOSWAP" ]; then
-   einfo "Searching for swap partition(s) as requested."
-fi
-GRML_IMG=""
-GRML_SWP=""
-HOMEDIR="$(getbootparam home)"
-if [ -n "$partitions" ]; then
- while read p m f relax; do
-  case "$p" in *fd0*|*proc*|*sys*|*\#*) continue;; esac
-  partoptions="users,exec"
-  fnew=""
-  case "$f" in swap)
-   eindent
-   if [ -n "$NOSWAP" ]; then
-      if [ -z "$INSTALLED" ] ; then
-         ewarn "Ignoring swap partition ${WHITE}$p${NORMAL}. (Force usage via boot option 'swap', or execute grml-swapon)" ; eend 0
-      fi
-   else
-     case "$(dd if=$p bs=1 count=6 skip=4086 2>/dev/null)" in
-             S1SUSP|S2SUSP|pmdisk|[zZ]*)
-                if [ -n "$ANYSWAP" ] ; then
-                  einfo "Using swap partition ${WHITE}${p}${NORMAL} [bootoption anyswap found]."
-                  swapon $p 2>>$DEBUG ; eend $?
-                else
-                  ewarn "Suspend signature on ${WHITE}${p}${NORMAL} found, not using as swap. (Force usage via boot option: anyswap)"
-                fi
-               ;;
-             *)
-                if [[ "$p" == LABEL* ]] ; then
-                   p=$(blkid -t $p | awk -F: '{print $1}')
-                fi
-                if grep -q $p /proc/swaps ; then
-                   ewarn "Not using swap partition ${WHITE}${p}${NORMAL} as it is already in use." ; eend 0
-                else
-                   einfo "Using swap partition ${WHITE}${p}${NORMAL}."
-                   swapon $p 2>>$DEBUG ; eend $?
-                fi
-               ;;
-     esac
-   fi
-   eoutdent
-   continue
-   ;;
-  esac
-# Create mountdir if not already present, but don't try to create stuff like /proc/bus/usb
-# Notice: grml-rebuildfstab >= 0.3-1 handles this now
-#  case "$m" in *none*|*proc*|*sys*|'') continue ;; esac
-#  [ -d "$m" ] || mkdir -p "$m"
-# WARNING: NTFS RW mounts are only safe since Kernel 2.6.11
-  [ "$f" = "ntfs" -a "${KERNEL%.*}" != "2.6" ] && continue
-  MOUNTOPTS="ro"
-  case "$f" in
-    vfat|msdos|ntfs) MOUNTOPTS="$MOUNTOPTS,uid=${fstabuser},gid=${fstabuser}" ;;
-    ext2|ext3|reiserfs|jfs|reiser4|xfs) MOUNTOPTS="$MOUNTOPTS,noatime" ;;
-    *) continue ;;
-    # *) NONEFOUND='1'; continue ;;
-  esac
-  if [ -z "$NOSWAP" ] ; then
-     mount -o "$MOUNTOPTS" -t $f $p $m 2>>$DEBUG || continue
-     # Activate swapfile, if exists
-     SWAPFILE="$(/bin/ls -1d $m/[Gg][Rr][Mm][Ll].[Ss][Ww][Pp] 2>/dev/null)"
-  fi
-  if [ -z "$NOSWAP" -a -n "$SWAPFILE" -a -f "$SWAPFILE" ]; then
-   mount -o remount,rw $m
-   if swapon "$SWAPFILE" 2>>$DEBUG ; then
-    einfo "Using GRML swapfile ${SWAPFILE}."
-    fnew="$SWAPFILE swap swap defaults 0 0"
-    stringinfile "$fnew" "/etc/fstab" || echo "$fnew" >> /etc/fstab
-    GRML_SWP="$GRML_SWP $SWAPFILE"
-    eend 0
-   fi
-   mount -o remount,ro $m 2>>$DEBUG
-  fi
-  IMAGE="$(/bin/ls -1d $m/[Gg][Rr][Mm][Ll].[Ii][Mm][Gg] 2>/dev/null)"
-  if [ -z "$INSTALLED" -a -z "$GRML_IMG" -a -n "$IMAGE" -a -f "$IMAGE" ]; then
-   if [ -n "$HOMEDIR" ]; then
-    if [ "$HOMEDIR" != "scan" -a "$HOMEDIR" != "$IMAGE" -a "$HOMEDIR" != "${IMAGE%/*.*}" ]; then
-     continue
-    fi
-   fi
-   if type -a grml-image >/dev/null 2>&1 && grml-image "$IMAGE" </dev/console >/dev/console 2>&1; then
-    GRML_IMG="$IMAGE"
-    mount -o remount,ro $m 2>>$DEBUG
-   fi
-  fi
-  eend 0
-  # Umount, if not in use
-  umount -r $m 2>/dev/null
- done <<EOT
-$(cat /etc/fstab)
+fi # checkbootparam nofstab/forensic
+
+# Scan for swap, config, homedir - but only in live-mode
+if [ -z "$INSTALLED" ] ; then
+   [ -z "$NOSWAP" ] && einfo "Searching for swap partition(s) as requested."
+   GRML_IMG=""
+   GRML_SWP=""
+   HOMEDIR="$(getbootparam home)"
+   if [ -n "$partitions" ]; then
+      while read p m f relax; do
+        case "$p" in *fd0*|*proc*|*sys*|*\#*) continue;; esac
+        partoptions="users,exec"
+        fnew=""
+        # it's a swap partition?
+        case "$f" in swap)
+          eindent
+          if [ -n "$NOSWAP" ]; then
+             ewarn "Ignoring swap partition ${WHITE}$p${NORMAL}. (Force usage via boot option 'swap', or execute grml-swapon)"
+             eend 0
+          else
+             case "$(dd if=$p bs=1 count=6 skip=4086 2>/dev/null)" in
+                   S1SUSP|S2SUSP|pmdisk|[zZ]*)
+                     if [ -n "$ANYSWAP" ] ; then
+                        einfo "Using swap partition ${WHITE}${p}${NORMAL} [bootoption anyswap found]."
+                        swapon $p 2>>$DEBUG ; eend $?
+                     else
+                        ewarn "Suspend signature on ${WHITE}${p}${NORMAL} found, not using as swap. (Force usage via boot option: anyswap)"
+                     fi
+                     ;;
+                   *)
+                     if [[ "$p" == LABEL* ]] ; then
+                        p=$(blkid -t $p | awk -F: '{print $1}')
+                     fi
+                     if grep -q $p /proc/swaps ; then
+                        ewarn "Not using swap partition ${WHITE}${p}${NORMAL} as it is already in use." ; eend 0
+                     else
+                        einfo "Using swap partition ${WHITE}${p}${NORMAL}."
+                        swapon $p 2>>$DEBUG ; eend $?
+                     fi
+                     ;;
+             esac # dd-check
+          fi # -n "$NOSWAP
+          eoutdent
+          continue
+          ;;
+        esac # it's a swap partition?
+
+        # mount read-only
+        MOUNTOPTS="ro"
+        case "$f" in
+          vfat|msdos|ntfs) MOUNTOPTS="$MOUNTOPTS,uid=${fstabuser},gid=${fstabuser}" ;;
+          ext2|ext3|reiserfs|jfs|reiser4|xfs) MOUNTOPTS="$MOUNTOPTS,noatime" ;;
+          *) continue ;;
+          # *) NONEFOUND='1'; continue ;;
+        esac
+   
+        # use a swapfile
+        if [ -z "$NOSWAP" ] ; then
+           mount -o "$MOUNTOPTS" -t $f $p $m 2>>$DEBUG || continue
+           # Activate swapfile, if exists
+           SWAPFILE="$(/bin/ls -1d $m/[Gg][Rr][Mm][Ll].[Ss][Ww][Pp] 2>/dev/null)"
+        fi
+        if [ -z "$NOSWAP" -a -n "$SWAPFILE" -a -f "$SWAPFILE" ]; then
+           mount -o remount,rw $m && MOUNTED=1
+           if swapon "$SWAPFILE" 2>>$DEBUG ; then
+              einfo "Using GRML swapfile ${SWAPFILE}."
+              fnew="$SWAPFILE swap swap defaults 0 0"
+              stringinfile "$fnew" "/etc/fstab" || echo "$fnew" >> /etc/fstab
+              GRML_SWP="$GRML_SWP $SWAPFILE"
+              eend 0
+           fi
+           mount -o remount,ro $m 2>>$DEBUG && MOUNTED=1
+        fi
+   
+        # use a image as home
+        IMAGE="$(/bin/ls -1d $m/[Gg][Rr][Mm][Ll].[Ii][Mm][Gg] 2>/dev/null)"
+        if [ -z "$GRML_IMG" -a -n "$IMAGE" -a -f "$IMAGE" ]; then
+           if [ -n "$HOMEDIR" ]; then
+              if [ "$HOMEDIR" != "scan" -a "$HOMEDIR" != "$IMAGE" -a "$HOMEDIR" != "${IMAGE%/*.*}" ]; then
+                 continue
+              fi
+           fi
+           if type -a grml-image >/dev/null 2>&1 && grml-image "$IMAGE" </dev/console >/dev/console 2>&1; then
+              GRML_IMG="$IMAGE"
+              mount -o remount,ro $m 2>>$DEBUG && MOUNTED=1
+           fi
+        fi
+        eend 0
+   
+        # Umount, if not in use
+        [ -n "$MOUNTED" ] && umount -r $m 2>/dev/null
+   
+      done <<EOT
+      $(cat /etc/fstab)
 EOT
-fi
+   fi # -n $partitions
+fi # -z $INSTALLED
 }
 # }}}
 
@@ -1313,79 +1312,83 @@ fi
 # {{{ Check for persistent homedir option and eventually mount /home from there, or use a loopback file.
 config_homedir(){
 if checkbootparam home ; then
-HOMEDIR="$(getbootparam home)"
-MYHOMEDEVICE=""
-MYHOMEMOUNTPOINT=""
-MYHOMEDIR=""
-if [ -n "$HOMEDIR" ]; then
-  einfo "Bootoption home detected." && eend 0
-  case "$HOMEDIR" in
-    /dev/*)
-    MYHOMEDEVICE="${HOMEDIR##/dev/}"
-    MYHOMEDEVICE="/dev/${MYHOMEDEVICE%%/*}"
-    MYHOMEMOUNTPOINT="/mnt/${MYHOMEDEVICE##/dev/}"
-    MYHOMEDIR="/mnt/${HOMEDIR##/dev/}"
-  ;;
-    /mnt/*)
-    MYHOMEDEVICE="${HOMEDIR##/mnt/}"
-    MYHOMEDEVICE="/dev/${MYHOMEDEVICE%%/*}"
-    MYHOMEMOUNTPOINT="/mnt/${MYHOMEDEVICE##/dev/}"
-    MYHOMEDIR="$HOMEDIR"
-  ;;
-    [Aa][Uu][Tt][Oo]|[Ss][Cc][Aa][Nn]|[Ff][Ii][Nn][Dd])
-    MYHOMEDIR="$(findfile grml.img)"
-    MYHOMEDEVICE="${MYHOMEDIR##/mnt/}"
-    MYHOMEDEVICE="/dev/${MYHOMEDEVICE%%/*}"
-    MYHOMEMOUNTPOINT="/mnt/${MYHOMEDEVICE##/dev/}"
-  ;;
-  *)
-    eerror "Invalid home= option '$HOMEDIR' specified (must start with /dev/ or /mnt/ or 'scan')." ; eend 1
-    eerror "Option ignored." ; eend 1
-  ;;
-  esac
-fi
-
-if [ -n "$MYHOMEDIR" ]; then
-  if trymount "$MYHOMEDEVICE" "$MYHOMEMOUNTPOINT"; then
-    [ -f "$MYHOMEMOUNTPOINT/grml.img" ] && MYHOMEDIR="$MYHOMEMOUNTPOINT/grml.img"
-    while read device mountpoint fs relax; do
-      case "$mountpoint" in *$MYHOMEMOUNTPOINT*)
-        case "$fs" in *[Nn][Tt][Ff][Ss]*)
-          umount "$MYHOMEMOUNTPOINT"; eerror "Error: will not mount NTFS filesystem on $MYHOMEDEVICE read/write!" ; eend 1
-          break
-        ;;
-        *[Ff][Aa][Tt]*)
-        # Note: This currently won't work with encrypted partitions
-        umount "$MYHOMEMOUNTPOINT"; mount -t vfat -o rw,uid=grml,gid=grml,umask=002 "$MYHOMEDEVICE" "$MYHOMEMOUNTPOINT"
-        if [ ! -f "$MYHOMEDIR" ]; then
-          ewarn "WARNING: FAT32 is not a good filesystem option for /home/grml (missing socket/symlink support)."
-          ewarn "WARNING: Better use an ext2 loopback file on this device, and boot with home=$MYHOMEDEVICE/grml.img."
-        fi
-        ;;
-      esac
-      if mount -o remount,rw "$MYHOMEMOUNTPOINT"; then
-        einfo "Mounting ${WHITE}$MYHOMEDIR${NORMAL} as ${WHITE}/home/grml${NORMAL}."
-        if [ -f "$MYHOMEDIR" ]; then
-          # It's a loopback file, mount it over the /home/grml directory
-          trymount "$MYHOMEDIR" /home/grml
-          RC="$?"
-          [ "$RC" = "0" ] && ERROR="$(mount -o remount,rw /home/grml 2>&1)"
-          RC="$?"
-        else
-          # Do a --bind mount
-          ERROR="$(mount --bind "$MYHOMEDIR" /home/grml 2>&1)"
-          RC="$?"
-        fi
-        [ "$RC" = "0" ] && eend 0 || ( eerror "${ERROR}" ; eend 1 )
-      fi
-      break
+   HOMEDIR="$(getbootparam home)"
+   MYHOMEDEVICE=""
+   MYHOMEMOUNTPOINT=""
+   MYHOMEDIR=""
+   if [ -n "$HOMEDIR" ]; then
+      einfo "Bootoption home detected." && eend 0
+      case "$HOMEDIR" in
+        /dev/*)
+        MYHOMEDEVICE="${HOMEDIR##/dev/}"
+        MYHOMEDEVICE="/dev/${MYHOMEDEVICE%%/*}"
+        MYHOMEMOUNTPOINT="/mnt/${MYHOMEDEVICE##/dev/}"
+        MYHOMEDIR="/mnt/${HOMEDIR##/dev/}"
       ;;
-    esac
-  done <<EOT
-$(cat /proc/mounts)
+        /mnt/*)
+        MYHOMEDEVICE="${HOMEDIR##/mnt/}"
+        MYHOMEDEVICE="/dev/${MYHOMEDEVICE%%/*}"
+        MYHOMEMOUNTPOINT="/mnt/${MYHOMEDEVICE##/dev/}"
+        MYHOMEDIR="$HOMEDIR"
+      ;;
+        [Aa][Uu][Tt][Oo]|[Ss][Cc][Aa][Nn]|[Ff][Ii][Nn][Dd])
+        MYHOMEDIR="$(findfile grml.img)"
+        MYHOMEDEVICE="${MYHOMEDIR##/mnt/}"
+        MYHOMEDEVICE="/dev/${MYHOMEDEVICE%%/*}"
+        MYHOMEMOUNTPOINT="/mnt/${MYHOMEDEVICE##/dev/}"
+      ;;
+      *)
+        eerror "Invalid home= option '$HOMEDIR' specified (must start with /dev/ or /mnt/ or 'scan')." ; eend 1
+        eerror "Option ignored." ; eend 1
+      ;;
+      esac
+   fi # -n $HOMEDIR
+
+   if [ -n "$MYHOMEDIR" ]; then
+      if trymount "$MYHOMEDEVICE" "$MYHOMEMOUNTPOINT"; then
+         [ -f "$MYHOMEMOUNTPOINT/grml.img" ] && MYHOMEDIR="$MYHOMEMOUNTPOINT/grml.img"
+         while read device mountpoint fs relax; do
+           case "$mountpoint" in *$MYHOMEMOUNTPOINT*)
+             case "$fs" in
+               *[Nn][Tt][Ff][Ss]*)
+                 umount "$MYHOMEMOUNTPOINT"; eerror "Error: will not mount NTFS filesystem on $MYHOMEDEVICE read/write!" ; eend 1
+                 break
+                 ;;
+               *[Ff][Aa][Tt]*)
+                 # Note: This currently won't work with encrypted partitions
+                 umount "$MYHOMEMOUNTPOINT"; mount -t vfat -o rw,uid=grml,gid=grml,umask=002 "$MYHOMEDEVICE" "$MYHOMEMOUNTPOINT"
+                 if [ ! -f "$MYHOMEDIR" ]; then
+                    ewarn "WARNING: FAT32 is not a good filesystem option for /home/grml (missing socket/symlink support)."
+                    ewarn "WARNING: Better use an ext2 loopback file on this device, and boot with home=$MYHOMEDEVICE/grml.img."
+                 fi
+                 ;;
+             esac
+
+             if mount -o remount,rw "$MYHOMEMOUNTPOINT"; then
+                einfo "Mounting ${WHITE}$MYHOMEDIR${NORMAL} as ${WHITE}/home/grml${NORMAL}."
+                if [ -f "$MYHOMEDIR" ]; then
+                   # It's a loopback file, mount it over the /home/grml directory
+                   trymount "$MYHOMEDIR" /home/grml
+                   RC="$?"
+                   [ "$RC" = "0" ] && ERROR="$(mount -o remount,rw /home/grml 2>&1)"
+                   RC="$?"
+                else
+                   # Do a --bind mount
+                   ERROR="$(mount --bind "$MYHOMEDIR" /home/grml 2>&1)"
+                   RC="$?"
+                fi # -f $MYHOMEDIR
+
+                [ "$RC" = "0" ] && eend 0 || ( eerror "${ERROR}" ; eend 1 )
+
+             fi #  mount -o remount,rw,...
+           break
+           ;;
+           esac # case "$mountpoint" in *$MYHOMEMOUNTPOINT*)
+         done <<EOT
+         $(cat /proc/mounts)
 EOT
-  fi
-fi
+     fi # if trymount ...
+   fi # -n $MYHOMEDIR
 fi # checkbootparam home
 }
 # }}}
