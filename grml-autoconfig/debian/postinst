@@ -38,4 +38,6 @@ update-rc.d ${INITSCRIPT}.last   start 99 2 . >/dev/null
 
 fi
 
+#DEBHELPER#
+
 exit 0
