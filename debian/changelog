@@ -1,3 +1,10 @@
+grml-etc (0.9.15) unstable; urgency=low
+
+  * Update /etc/runlevel.conf* to current package version and
+    selection.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 15 Apr 2007 12:46:15 +0200
+
 grml-etc (0.9.14) unstable; urgency=low
 
   * Move windowmanager configuration files and idesk stuff
