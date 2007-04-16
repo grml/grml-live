@@ -2150,6 +2150,8 @@ config_debootstrap(){
 
 if stringinstring "BOOT_IMAGE=debian2hd " "$CMDLINE" ; then
 
+einfo "Bootoption debian2hd found. Setting up environment for automatic installation via grml-debootstrap." ; eend 0
+
 if ! [ -x /usr/sbin/grml-debootstrap ] ; then
    eerror "Bootoption debian2hd found, but grml-debootstrap is not available." ; eend 1
    eerror "Dropping you to a shell, just exit it to continue booting." ; eend 1
@@ -2162,8 +2164,11 @@ if checkbootparam "partition" ; then
   # notice: the following checks whether the given partition is available, if not the skip
   # execution of grml-debootstrap as it might result in data loss...
   if ! [ -r $PARTITION ] ; then
-     ewarn "Partition $PARTITION does not exist. Skipping execution of grml-debootstrap therefore." ; eend 1
+     eerror "Partition $PARTITION does not exist. Skipping execution of grml-debootstrap therefore." ; eend 1
   fi
+else
+  eerror "No bootoption partition found, can not continue execution of grml-debootstrap." ; eend 1
+  exit 0
 fi
 
 if checkbootparam "grub" ; then
@@ -2211,9 +2216,10 @@ AUTOINSTALL='yes' grml-debootstrap $PARTITIONCMD $GRUBCMD $GROOTCMD $RELEASECMD 
 EOF
 
 chmod 750  /usr/bin/grml-debootstrap_noninteractive
-einfo "Bootoption debian2hd found. Running automatic installation via grml-debootstrap." && eend 0
 
-screen /usr/bin/grml-debootstrap_noninteractive ; einfo "Invoking a shell, just exit to continue booting..." ; /bin/zsh
+screen /usr/bin/grml-debootstrap_noninteractive
+einfo "Invoking a shell, just exit to continue booting..."
+/bin/zsh
 
 fi # stringinstring "BOOT_IMAGE=debian2hd
 }
