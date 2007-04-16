@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mit Apr 04 21:33:42 CEST 2007 [mika]
+# Latest change: Mon Apr 16 19:33:45 CEST 2007 [mika]
 ################################################################################
 
 ################################################################################
@@ -59,6 +59,7 @@ CONFIG_CDROM_PERM='yes'       # for burning on IDE-CD-Roms, k3b (and others) che
 CONFIG_CDROM_SCRIPTS='yes'    # run scripts from /cdrom/scripts
 CONFIG_CONSOLE='yes'          # activate mgetty when using console=... as bootparam
 CONFIG_CREATE_MNT_DIRS='no'   # create /mnt-directories
+CONFIG_DEBOOTSTRAP='yes'      # support automatic installation of Debian via grml-deboostrap
 CONFIG_DEBNET='yes'           # search for /etc/network/interfaces on partitions and set up network afterwards
 CONFIG_DEBS='yes'             # check for bootoption debs for installing .debs
 CONFIG_DEBUG='yes'            # activate start of shells during startup at several stages
