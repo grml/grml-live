@@ -2153,9 +2153,10 @@ if stringinstring "BOOT_IMAGE=debian2hd " "$CMDLINE" ; then
 einfo "Bootoption debian2hd found. Setting up environment for automatic installation via grml-debootstrap." ; eend 0
 
 if ! [ -x /usr/sbin/grml-debootstrap ] ; then
+   eindent
    eerror "Bootoption debian2hd found, but grml-debootstrap is not available." ; eend 1
-   eerror "Dropping you to a shell, just exit it to continue booting." ; eend 1
-   /bin/zsh
+   eoutdent
+   exit 1
 fi
 
 if checkbootparam "partition" ; then
@@ -2167,8 +2168,10 @@ if checkbootparam "partition" ; then
      eerror "Partition $PARTITION does not exist. Skipping execution of grml-debootstrap therefore." ; eend 1
   fi
 else
+  eindent
   eerror "No bootoption partition found, can not continue execution of grml-debootstrap." ; eend 1
-  exit 0
+  eoutdent
+  exit 1
 fi
 
 if checkbootparam "grub" ; then
