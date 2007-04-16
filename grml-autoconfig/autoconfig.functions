@@ -2159,17 +2159,17 @@ if ! [ -x /usr/sbin/grml-debootstrap ] ; then
    exit 1
 fi
 
-if checkbootparam "partition" ; then
-  PARTITION=''
-  PARTITION="$(getbootparam 'partition' 2>>$DEBUG)"
+if checkbootparam "target" ; then
+  TARGET=''
+  TARGET="$(getbootparam 'target' 2>>$DEBUG)"
   # notice: the following checks whether the given partition is available, if not the skip
   # execution of grml-debootstrap as it might result in data loss...
-  if ! [ -r $PARTITION ] ; then
-     eerror "Partition $PARTITION does not exist. Skipping execution of grml-debootstrap therefore." ; eend 1
+  if ! [ -r "$TARGET" ] ; then
+     eerror "Target $TARGET does not exist. Skipping execution of grml-debootstrap therefore." ; eend 1
   fi
 else
   eindent
-  eerror "No bootoption partition found, can not continue execution of grml-debootstrap." ; eend 1
+  eerror "No bootoption named target found, can not continue execution of grml-debootstrap." ; eend 1
   eoutdent
   exit 1
 fi
@@ -2200,11 +2200,14 @@ if checkbootparam "password" ; then
 fi
 
 # now check which options are available
-if [ -n "PARTITION" ] ; then
-   PARTITIONCMD="--target $PARTITION"
+if [ -n "TARGET" ] ; then
+   TARGETCMD="--target $TARGET"
 else
-   PARTITIONCMD=''
-   ewarn "Partion not set via bootoption. Skipping execution of grml-debootstrap therefore."; eend 1
+   TARGETCMD=''
+   eindent
+   eerror "Target not set via bootoption. Skipping execution of grml-debootstrap therefore."; eend 1
+   eoutdent
+   exit 1
 fi
 [ -n "$GRUB" ]     && GRUBCMD="--grub $GRUB"               || GRUBCMD=''
 [ -n "$GROOT" ]    && GROOTCMD="--groot $GROOT"            || GROOTCMD=''
@@ -2215,7 +2218,7 @@ fi
 # and finally write script and execute it
 cat>|/usr/bin/grml-debootstrap_noninteractive<<EOF
 #!/bin/sh
-AUTOINSTALL='yes' grml-debootstrap $PARTITIONCMD $GRUBCMD $GROOTCMD $RELEASECMD $MIRRORCMD $PASSWORDCMD
+AUTOINSTALL='yes' grml-debootstrap $TARGETCMD $GRUBCMD $GROOTCMD $RELEASECMD $MIRRORCMD $PASSWORDCMD
 EOF
 
 chmod 750  /usr/bin/grml-debootstrap_noninteractive
