@@ -2213,7 +2213,7 @@ fi
 [ -n "$GROOT" ]    && GROOTCMD="--groot $GROOT"            || GROOTCMD=''
 [ -n "$RELEASE" ]  && RELEASECMD="--release $RELEASE"      || RELEASECMD=''
 [ -n "$MIRROR" ]   && MIRRORCMD="--mirror $MIRROR"         || MIRRORCMD=''
-[ -n "$PASSWORD" ] && PASSWORDCMD="--password $PASSWORD" ] || PASSWORDCMD=''
+[ -n "$PASSWORD" ] && PASSWORDCMD="--password $PASSWORD"   || PASSWORDCMD=''
 
 # and finally write script and execute it
 cat>|/usr/bin/grml-debootstrap_noninteractive<<EOF
