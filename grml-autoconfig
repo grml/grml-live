@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mit Apr 04 21:34:05 CEST 2007 [mika]
+# Latest change: Mon Apr 16 19:34:17 CEST 2007 [mika]
 ################################################################################
 
 # http://wiki.debian.org/LSBInitScripts =>
@@ -259,6 +259,8 @@ checkvalue $CONFIG_BLANKING && config_blanking
 [ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||||||||||">/dev/tty7
 
 checkvalue $CONFIG_GRML2HD && config_grml2hd
+
+checkvalue $CONFIG_DEBOOTSTRAP && config_debootstrap
 
 checkvalue $CONFIG_XSTARTUP && config_x_startup
 # }}}

@@ -1,3 +1,10 @@
+grml-autoconfig (0.6.37) unstable; urgency=low
+
+  * Support full automatic installation of Debian via grml-debootstrap
+    via config_debootstrap().
+
+ -- Michael Prokop <mika@grml.org>  Mon, 16 Apr 2007 19:27:13 +0200
+
 grml-autoconfig (0.6.36) unstable; urgency=low
 
   * Fix tty6-check, thanks for the code review - Matthias Lederhofer!
