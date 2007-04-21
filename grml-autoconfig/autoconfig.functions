@@ -2194,6 +2194,11 @@ if checkbootparam "mirror" ; then
   MIRROR="$(getbootparam 'mirror' 2>>$DEBUG)"
 fi
 
+if checkbootparam "boot_append" ; then
+  BOOT_APPEND=''
+  BOOT_APPEND="$(getbootparam 'boot_append' 2>>$DEBUG)"
+fi
+
 if checkbootparam "password" ; then
   PASSWORD=''
   PASSWORD="$(getbootparam 'password' 2>>$DEBUG)"
@@ -2214,11 +2219,12 @@ fi
 [ -n "$RELEASE" ]  && RELEASECMD="--release $RELEASE"      || RELEASECMD=''
 [ -n "$MIRROR" ]   && MIRRORCMD="--mirror $MIRROR"         || MIRRORCMD=''
 [ -n "$PASSWORD" ] && PASSWORDCMD="--password $PASSWORD"   || PASSWORDCMD=''
+[ -n "$BOOT_APPEND" ] && BOOT_APPEND="--boot_append $BOOT_APPEND" || BOOT_APPEND=''
 
 # and finally write script and execute it
 cat>|/usr/bin/grml-debootstrap_noninteractive<<EOF
 #!/bin/sh
-AUTOINSTALL='yes' grml-debootstrap $TARGETCMD $GRUBCMD $GROOTCMD $RELEASECMD $MIRRORCMD $PASSWORDCMD
+AUTOINSTALL='yes' grml-debootstrap $TARGETCMD $GRUBCMD $GROOTCMD $RELEASECMD $MIRRORCMD $PASSWORDCMD $BOOT_APPEND
 EOF
 
 chmod 750  /usr/bin/grml-debootstrap_noninteractive
