@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Apr 16 19:32:25 CEST 2007 [mika]
+# Latest change: Son Apr 22 14:01:33 CEST 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -2243,6 +2243,8 @@ if checkbootparam "distri"; then
   DISTRI="$(getbootparam 'distri' 2>>$DEBUG)"
   if [ -r /cdrom/desktop/"$DISTRI".jpg ] ; then
      [ -n "$BOOTDEBUG" ] && einfo "Debug: bootoption distri found and file /cdrom/desktop/$DISTRI present" && eend 0
+     # make sure the desktop.jpg file is not a symlink, so copying does not file then
+     [ -L /usr/share/grml/desktop.jpg ] && rm /usr/share/grml/desktop.jpg
      cp /cdrom/desktop/"$DISTRI".jpg /usr/share/grml/desktop.jpg
   fi
 fi
