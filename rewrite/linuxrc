@@ -613,12 +613,16 @@ grmlmount()
 }
 
 # Rerun the grml-CDROM part 3 times at total
-if ! grmlmount ; then
-   log_warning_msg "grml CD-ROM not yet found, sleeping for 5 seconds and trying again then."
-   sleep 5
-   if ! grmlmount ; then
-      log_warning_msg "grml CD-ROM still not yet found, sleeping for 5 more seconds and trying once more again."
-      sleep 5
+grmlmount
+if [ -z "$FOUND_GRML" ] ; then
+   echo
+   log_warn_msg "grml CD-ROM not yet found, sleeping for 5 seconds and trying again then."
+   sleep 5 && echo " $SUCCESS"
+   grmlmount
+   if [ -z "$FOUND_GRML" ] ; then
+      echo
+      log_warn_msg "grml CD-ROM still not yet found, sleeping for 5 more seconds and trying once more again."
+      sleep 5 && echo " $SUCCESS"
    fi
 fi
 
