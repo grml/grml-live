@@ -1,3 +1,9 @@
+grml-etc (0.9.18) unstable; urgency=low
+
+  * /etc/runlevel.conf.hdinstall: add /etc/init.d/avahi-daemon
+
+ -- Michael Prokop <mika@grml.org>  Sat, 28 Apr 2007 20:51:50 +0200
+
 grml-etc (0.9.17) unstable; urgency=low
 
   * Fix typo in /etc/rcS.d/important_notice, thanks - nico.
