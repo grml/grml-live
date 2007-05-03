@@ -1,5 +1,5 @@
 #!/bin/sh
-KERNEL='2.6.19-grml'
+[ -n "$KERNEL" ] || KERNEL='2.6.20-grml'
 for s in $(find /lib/modules/$KERNEL/kernel/drivers/scsi -name *.ko); do
  # DEP=$(modinfo $s|grep '^depends:'|echo $(cut -d' ' -f2-))
  DEP=$(modinfo $s|grep '^depends:'|cut -d' ' -f2-)

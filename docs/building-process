@@ -116,7 +116,7 @@ EOF
 # cp /etc/locale.gen.minimal /etc/locale.gen && locale-gen
 # mv /etc/motd.dpkg-new /var/run/motd
 
-# aptitude install dctrl-tools usbutils
+# aptitude install dctrl-tools usbutils bzip2 pdmenu
 # apt-get clean
 # aptitude forget-new
 # umount /proc /sys 2>/dev/null
@@ -328,7 +328,7 @@ grml    ALL=NOPASSWD: ALL
 secvpn  ALL=NOPASSWD: /usr/sbin/secvpn, /usr/sbin/pppd
 EOF
 
-# aptitude install powernowd aumix alsa-utils hwinfo mdadm locales dctrl-tools usbutils sudo
+# aptitude install powernowd aumix alsa-utils hwinfo mdadm locales dctrl-tools usbutils sudo bzip2 pdmenu
 # cp /etc/locale.gen.minimal /etc/locale.gen && locale-gen
 # mv /etc/motd.dpkg-new /var/run/motd
 
@@ -682,7 +682,7 @@ aptitude install grml grml-x
 wget http://dufo.tugraz.at/~prokop/grml-kernel/2.6.20-grml/linux-image-2.6.20-grml64_grml.01_amd64.deb
 wget http://dufo.tugraz.at/~prokop/grml-kernel/2.6.20-grml/linux-headers-2.6.20-grml64_grml.01_amd64.deb
 
-aptitude install dctrl-tools usbutils
+aptitude install dctrl-tools usbutils bzip2 pdmenu
 
 aptitude install multitail htop iptstate idesk xserver-xorg-video-vmware
 
