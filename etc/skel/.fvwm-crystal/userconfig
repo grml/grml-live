@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Jun 12 18:42:31 CEST 2006 [mika]
+# Latest change: Son Mai 06 00:45:00 CEST 2007 [mika]
 ################################################################################
 # Bind applications to specific desktop:
 # Style vmware StartsOnPage 3 0
@@ -32,5 +32,10 @@ Key Right A $[Mod1]      GotoPage-Right
 
 # Unbind alt-x for emacs-users:
 Key X A $[Mod1] -
+
+# Use application launching tool apwal on right mouse click:
+Mouse 3 RI $[Mod] Exec /usr/bin/apwal
+# The default is 'Open new terminal on RMB':
+# Mouse 3 RI $[Mod] AA
 
 ## END OF FILE #################################################################

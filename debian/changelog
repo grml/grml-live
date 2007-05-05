@@ -1,3 +1,10 @@
+grml-desktop (0.1-5) unstable; urgency=low
+
+  * Add configuration /etc/skel/.apwalrc.xml for apwal and include
+    it within fvwm-crystal configuration (as right mouse click).
+
+ -- Michael Prokop <mika@grml.org>  Sun,  6 May 2007 00:45:12 +0200
+
 grml-desktop (0.1-4) unstable; urgency=low
 
   * /etc/skel/.fluxbox/keys: configure Alt+Shift+F# aus SendToWorkspace.
