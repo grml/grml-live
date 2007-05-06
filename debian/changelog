@@ -1,3 +1,9 @@
+grml-desktop (0.1-6) unstable; urgency=low
+
+  * Update /etc/skel/.apwalrc.xml.
+
+ -- Michael Prokop <mika@grml.org>  Sun,  6 May 2007 15:51:06 +0200
+
 grml-desktop (0.1-5) unstable; urgency=low
 
   * Add configuration /etc/skel/.apwalrc.xml for apwal and include

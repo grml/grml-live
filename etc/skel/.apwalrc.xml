@@ -37,7 +37,7 @@
       <y>-1</y>
     </app>
     <app>
-      <cmdline>/usr/bin/grml-lock</cmdline>
+      <cmdline>uxterm -e grml-lock</cmdline>
       <path></path>
       <icon>/usr/share/fvwm-crystal/fvwm/icons/Default/32x32/fvwm-crystal/system-lock-screen.png</icon>
       <x>3</x>
@@ -65,7 +65,7 @@
       <y>1</y>
     </app>
     <app>
-      <cmdline>aumix</cmdline>
+      <cmdline>uxterm -e aumix</cmdline>
       <path></path>
       <icon>/usr/share/icons/hicolor/48x48/apps/TagTool.png</icon>
       <x>1</x>
