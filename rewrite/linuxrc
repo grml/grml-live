@@ -2,7 +2,7 @@
 # Filename: /linuxrc
 # Purpose:  minirt for kernel 2.6 running on grml live-cd
 # Authors:  (c) Klaus Knopper <knoppix@knopper.net>, (c) Michael Prokop <mika@grml.org>
-# Latest change: Wed May 09 19:38:42 CEST 2007 [mika]
+# Latest change: Wed May 09 21:43:34 CEST 2007 [mika]
 #######################################################################################
 
 # hardcoded configurable options
@@ -597,6 +597,12 @@ grmlmount()
     test -n "$FOUND_SCSI" -a -z "$NOSCSI" && DEVICES="$DEVICES /dev/sd?[1-9] /dev/sd?[1-9][0-9] /dev/sd?"
     DEVICES="$DEVICES /dev/hd?[1-9] /dev/hd?[1-9][0-9]"
     case "$CMDLINE" in *fromhd=/dev/*) DEVICES="$fromhd"; ;; esac
+    # make sure we dont' search for the booting device if cdrom=... is present
+    case "$CMDLINE" in *cdrom=/dev/*)
+            CDROMDEV="$(echo $CMDLINE | tr ' ' '\n' | sed -n '/cdrom=/s/.*=//p' | tail -1)"
+            DEVICES="$(echo $CDROMDEV | awk -F/ '{ print $1 "/" $2 "/" $3 }')"
+            ;;
+    esac
     for i in $DEVICES ; do
       log_begin_msg "${CRE} ${GREEN}*${NORMAL} Looking for CD-ROM in:    ${MAGENTA}$i${NORMAL}"
       if mountit $i /cdrom "-o ro" >/dev/null 2>&1 ; then
@@ -606,7 +612,7 @@ grmlmount()
             FOUND_GRML="$i"
             break
          fi
-        umount /cdrom
+      umount /cdrom
       fi
     done
   fi
@@ -630,7 +636,7 @@ fi
 # (GRML can be booted directly from HD now).
 mount_grml()
 {
-  if test -n "$FOUND_GRML" -a -f $1/$GRML_DIR/$GRML_NAME; then
+  if test -n "$FOUND_GRML" -a -f $1/$GRML_DIR/$GRML_NAME ; then
     # echo "6" > /proc/sys/kernel/printk
     mount -t squashfs $1/$GRML_DIR/$GRML_NAME /GRML -o loop,ro$SECURE || FOUND_GRML=""
   fi
@@ -666,7 +672,11 @@ boot_from()
   # load filesystems
   /GRML/sbin/modprobe fuse
   /GRML/sbin/modprobe ntfs
-  [ -r /modules/div/ntfs.ko ] && $INSMOD /modules/div/ntfs.ko 1>/dev/null
+  if [ -r /modules/div/ntfs.ko ] ; then
+     grep -q ntfs /proc/modules || $INSMOD /modules/div/ntfs.ko 1>/dev/null
+  else
+     log_failure_msg "No NTFS kernel module found." ; echo "$FAILED"
+  fi
 
   if [ -n "$ISO_PATH" ]; then
      LOOP_SOURCE="$TARGET.loop"
