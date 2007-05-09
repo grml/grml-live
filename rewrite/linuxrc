@@ -2,7 +2,7 @@
 # Filename: /linuxrc
 # Purpose:  minirt for kernel 2.6 running on grml live-cd
 # Authors:  (c) Klaus Knopper <knoppix@knopper.net>, (c) Michael Prokop <mika@grml.org>
-# Latest change: Sat Apr 14 12:41:44 CEST 2007 [mika]
+# Latest change: Wed May 09 19:38:42 CEST 2007 [mika]
 #######################################################################################
 
 # hardcoded configurable options
@@ -134,7 +134,7 @@ if checkbootparam "splash" ; then
   echo "${RED} | |_| |  _ <| |  | | |___ "
   echo "${RED}  \____|_| \_\_|  |_|_____|"
   echo ""
-  echo "${WHITE}grml.org - Linux for users of texttools and sysadmins."
+  echo "${WHITE}grml.org - Linux for sysadmins and texttool users."
   echo "${NORMAL}"
   exec >/dev/null </dev/null 2>&1
 fi
@@ -187,7 +187,7 @@ ${RED} | |  _| |_) | |\/| | |
 ${RED} | |_| |  _ <| |  | | |___
 ${RED}  \____|_| \_\_|  |_|_____|
 
-${WHITE}grml.org - Linux for users of texttools and sysadmins.
+${WHITE}grml.org - Linux for sysadmins and texttool users.
 
 ${NORMAL}"
 fi
@@ -459,7 +459,7 @@ fi
 # Unfortunately, hotpluggable devices tend to need some time in order to register
 if test -n "$FOUNDUSB" -o -n "$FOUNDFIREWIRE"; then
   log_begin_msg "Scanning for USB/Firewire devices."
-  sleep 4
+  sleep 6
   if test -n "$USB"; then
     sleep 10
   fi
@@ -666,7 +666,7 @@ boot_from()
   # load filesystems
   /GRML/sbin/modprobe fuse
   /GRML/sbin/modprobe ntfs
-  $INSMOD /modules/div/ntfs.ko 1>/dev/null
+  [ -r /modules/div/ntfs.ko ] && $INSMOD /modules/div/ntfs.ko 1>/dev/null
 
   if [ -n "$ISO_PATH" ]; then
      LOOP_SOURCE="$TARGET.loop"
@@ -686,7 +686,7 @@ boot_from()
      return 1
   fi
 
-  if [ -f $TARGET/$GRML_DIR/$GRML_NAME ]; then
+  if [ -f "$TARGET/$GRML_DIR/$GRML_NAME" ]; then
     log_begin_msg "Accessing grml CD-ROM at ${MAGENTA}$TARGET_DEV${NORMAL}." ; echo "  $SUCCESS"
   else
     log_failure_msg "Accessing grml CD-ROM failed. Could not find $GRML_DIR/$GRML_NAME on ${MAGENTA}$TARGET_DEV${RED}.${NORMAL}" ; echo "$FAILED"
