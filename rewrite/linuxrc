@@ -2,7 +2,7 @@
 # Filename: /linuxrc
 # Purpose:  minirt for kernel 2.6 running on grml live-cd
 # Authors:  (c) Klaus Knopper <knoppix@knopper.net>, (c) Michael Prokop <mika@grml.org>
-# Latest change: Wed May 09 21:43:34 CEST 2007 [mika]
+# Latest change: Thu May 10 11:29:02 CEST 2007 [mika]
 #######################################################################################
 
 # hardcoded configurable options
@@ -473,7 +473,7 @@ if checkbootparam scandelay ; then
   sleep $DELAY && echo "  $SUCCESS"
 fi
 
-# boot via pcmcia
+# boot via pcmcia - not yet supported!
 if checkbootparam bootpcmcia ; then
   log_begin_msg "Bootoption bootpcmcia found. Trying to load ${WHITE}PCMCIA${NORMAL} modules..."
   if $INSMOD /modules/div/pcmcia_core.ko 1>/dev/null ; then
