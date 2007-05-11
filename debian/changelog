@@ -1,3 +1,13 @@
+grml-etc (0.9.22) unstable; urgency=low
+
+  * Add /etc/skel/.config/gtk-2.0/gtkfilechooser: this file defines,
+    that we want a more verbose Save-Dialog within GTK applications
+    like Firefox/Iceweasel. This fixes an very annoying flickering
+    problem within Save-Dialog, thanks for reporting to
+    Josef Teske!
+
+ -- Michael Prokop <mika@grml.org>  Fri, 11 May 2007 22:30:57 +0200
+
 grml-etc (0.9.21) unstable; urgency=low
 
   * /etc/runlevel.conf.hdinstall: re-add /etc/init.d/openafs-client.
