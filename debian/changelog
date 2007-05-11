@@ -1,3 +1,13 @@
+grml-autoconfig (0.6.42) unstable; urgency=low
+
+  * Add additional check for valid block device and if mounting
+    a partition was successfull for handling swap bootoption.
+    The bootoption 'swap' mounted all availble partitions
+    read-only, this should be fixed now.
+    Thanks for the bugreport, Matthias Diener!
+
+ -- Michael Prokop <mika@grml.org>  Sat, 12 May 2007 00:47:33 +0200
+
 grml-autoconfig (0.6.41) unstable; urgency=low
 
   * config_distri(): make sure /usr/share/grml/desktop.jpg is removed

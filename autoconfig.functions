@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Son Apr 22 14:01:33 CEST 2007 [mika]
+# Latest change: Sam Mai 12 00:46:15 CEST 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -1046,8 +1046,12 @@ if [ -z "$INSTALLED" ] ; then
                      if grep -q $p /proc/swaps ; then
                         ewarn "Not using swap partition ${WHITE}${p}${NORMAL} as it is already in use." ; eend 0
                      else
+                        if [ -b "$p" ] ; then
                         einfo "Using swap partition ${WHITE}${p}${NORMAL}."
                         swapon $p 2>>$DEBUG ; eend $?
+                        else
+                        ewarn "$p is not a valid block device - not using it therefore." ; eend 0
+                        fi
                      fi
                      ;;
              esac # dd-check
@@ -1068,14 +1072,16 @@ if [ -z "$INSTALLED" ] ; then
 
         # use a swapfile
         if [ -z "$NOSWAP" ] ; then
-           mount -o "$MOUNTOPTS" -t $f $p $m 2>>$DEBUG || continue
+           mount -o "$MOUNTOPTS" -t $f $p $m 2>>$DEBUG && MOUNTED=1 || continue
            # Activate swapfile, if exists
            SWAPFILE="$(/bin/ls -1d $m/[Gg][Rr][Mm][Ll].[Ss][Ww][Pp] 2>/dev/null)"
         fi
         if [ -z "$NOSWAP" -a -n "$SWAPFILE" -a -f "$SWAPFILE" ]; then
            mount -o remount,rw $m && MOUNTED=1
            if swapon "$SWAPFILE" 2>>$DEBUG ; then
-              einfo "Using GRML swapfile ${SWAPFILE}."
+              eindent
+                einfo "Using GRML swapfile ${WHITE}${SWAPFILE}${NORMAL}."
+              eoutdent
               fnew="$SWAPFILE swap swap defaults 0 0"
               stringinfile "$fnew" "/etc/fstab" || echo "$fnew" >> /etc/fstab
               GRML_SWP="$GRML_SWP $SWAPFILE"
