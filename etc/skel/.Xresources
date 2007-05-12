@@ -142,8 +142,8 @@ rxvt*.borderColor: white
 rxvt*.scrollColor: black
 rxvt*.font:        -misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
 
-aterm*.background:  black
-aterm*.foreground:  lightgrey
+aterm*.background:  white
+aterm*.foreground:  black
 aterm*.cursorColor: orange
 aterm*.borderColor: white
 aterm*.scrollColor: black
