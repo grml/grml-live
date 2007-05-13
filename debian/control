@@ -10,7 +10,7 @@ Architecture: all
 Replaces: automount-knoppix
 Suggests: grml-desktop, grml-shlib, grml-files, grml-docs, grml-sectools, grml-templates, grml-x, policyrcd-script-zg2
 Recommends: dillo, eterm, python, vim (>= 7.0)
-Depends: grml-autoconfig, grml-scripts (>= 0.9), grml-etc-core (>= 0.2)
+Depends: grml-autoconfig, grml-scripts (>= 0.9), grml-etc-core (>= 0.3)
 Conflicts: smbconf-pfeifle, grml-etc-core (<= 0.2.25), grml-sysvinit
 Description: ecetera files for the grml system
  This package includes some /etc files for the
