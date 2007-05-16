@@ -1,3 +1,10 @@
+grml-etc (1.0.2) unstable; urgency=low
+
+  * Update /etc/runlevel.conf.hdinstall and /etc/runlevel.conf.livecd
+    for the stable release.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 16 May 2007 12:30:05 +0200
+
 grml-etc (1.0.1) unstable; urgency=low
 
   * Depend on grml-etc-core (>= 0.3).

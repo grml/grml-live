@@ -131,7 +131,6 @@
 25	0,6	-		/etc/init.d/hwclock.sh
 25	-	-		/etc/init.d/bluetooth
 25	-	-		/etc/init.d/brltty
-25	-	-		/etc/init.d/libdevmapper1.02
 25	-	-		/etc/init.d/libdevmapper1.02.1
 26	-	-		/etc/init.d/lvm2
 28	-	-		/etc/init.d/cryptdisks
