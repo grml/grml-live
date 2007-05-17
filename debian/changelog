@@ -1,3 +1,11 @@
+grml-etc (1.0.3) unstable; urgency=low
+
+  * Remove /usr/lib/cups/backend/pdf and
+    /usr/share/cups/model/PS2PDF.ppd - you should use cups-pdf
+    instead.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 17 May 2007 11:37:25 +0200
+
 grml-etc (1.0.2) unstable; urgency=low
 
   * Update /etc/runlevel.conf.hdinstall and /etc/runlevel.conf.livecd
