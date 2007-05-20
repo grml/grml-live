@@ -1,3 +1,11 @@
+grml-etc (1.0.4) unstable; urgency=low
+
+  * /etc/skel/.w3m/config: use 'editor /usr/bin/editor' instead
+    of 'editor /usr/local/bin/vim'. Thanks for bugreport goes to
+    Jan-Pieter Jacobs!
+
+ -- Michael Prokop <mika@grml.org>  Sun, 20 May 2007 12:35:12 +0200
+
 grml-etc (1.0.3) unstable; urgency=low
 
   * Remove /usr/lib/cups/backend/pdf and

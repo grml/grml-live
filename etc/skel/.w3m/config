@@ -42,8 +42,8 @@ extbrowser3
 extbrowser2 
 extbrowser /usr/bin/lynx
 mailer 
-editor /usr/local/bin/vim
-urimethodmap ~/.w3m/urimethodmap, /usr/local/etc/w3m/urimethodmap
+editor /usr/bin/editor
+urimethodmap ~/.w3m/urimethodmap
 mailcap ~/.w3m/mailcap, /etc/mailcap
 mime_types ~/.mime.types, /etc/mime.types
 index_file 
