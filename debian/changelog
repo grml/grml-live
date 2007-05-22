@@ -1,3 +1,10 @@
+grml-etc (1.0.5) unstable; urgency=low
+
+  * /etc/locale.gen.grml: add support for nl_BE.
+    Thanks for the bugreport, Jan-Pieter Jacobs.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 22 May 2007 14:26:37 +0200
+
 grml-etc (1.0.4) unstable; urgency=low
 
   * /etc/skel/.w3m/config: use 'editor /usr/bin/editor' instead
