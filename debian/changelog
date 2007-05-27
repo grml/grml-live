@@ -1,3 +1,10 @@
+grml-etc (1.0.6) unstable; urgency=low
+
+  * Add /etc/skel/.ipython/ipythonrc - configuration file
+    for ipython.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 27 May 2007 19:32:52 +0200
+
 grml-etc (1.0.5) unstable; urgency=low
 
   * /etc/locale.gen.grml: add support for nl_BE.
