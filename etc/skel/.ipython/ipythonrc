@@ -1,4 +1,3 @@
-#!/bin/sh
 # Filename:      i$HOME/.ipython/ipythonrc
 # Purpose:       configuration file for ipython
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
