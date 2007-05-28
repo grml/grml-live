@@ -560,26 +560,28 @@ case "$LANGUAGE" in
                 KDEKEYBOARDS="fr,us,de"
                 TZ="Europe/Rome"
                 ;;
-        ja-iso)
+        ja-iso|jp-iso)
                 # (limited) Japanese version
                 COUNTRY="jp"
                 LANG="ja_JP"
                 LANGUAGE="ja"
-                KEYTABLE="us"
-                XKEYBOARD="us"
+                KEYTABLE="jp106"
+                XKEYMODEL="jp106"
+                XKEYBOARD="jp"
                 KDEKEYBOARD="us"
                 CHARSET="iso8859-15"
                 KDEKEYBOARDS="fr,us,de"
                 TZ="Asia/Tokyo"
                 ;;
-        ja|ja-utf8)
+        ja|ja-utf8|jp|jp-utf8)
                 # (limited) Japanese version (UTF8)
                 LANGUAGE="ja_JP:ja"
                 COUNTRY="jp"
                 LANG="ja_JP.UTF-8"
                 LANGUAGE="ja"
-                KEYTABLE="us"
-                XKEYBOARD="us"
+                KEYTABLE="jp106"
+                XKEYMODEL="jp106"
+                XKEYBOARD="jp"
                 KDEKEYBOARD="us"
                 CHARSET="utf8"
                 # Additional KDE Keyboards
