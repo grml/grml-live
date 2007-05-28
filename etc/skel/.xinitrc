@@ -48,7 +48,11 @@
   if [ $XKEYBOARD == "us" ] ; then
      [ -r $HOME/.Xmodmap ] && xmodmap $HOME/.Xmodmap
   else
-     setxkbmap "$XKEYBOARD"
+     if [ -n "$XKEYMODEL" ] ; then
+        setxkbmap -model "$XKEYMODEL" -layout "$XKEYBOARD"
+     else
+        setxkbmap "$XKEYBOARD"
+     fi
   fi
 
 # mouse for lefty:

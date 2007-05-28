@@ -1,3 +1,9 @@
+grml-etc (1.0.7) unstable; urgency=low
+
+  * /etc/skel/.xinitrc: support $XKEYMODEL
+
+ -- Michael Prokop <mika@grml.org>  Mon, 28 May 2007 13:56:38 +0200
+
 grml-etc (1.0.6) unstable; urgency=low
 
   * Add /etc/skel/.ipython/ipythonrc - configuration file
