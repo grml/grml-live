@@ -1,0 +1,153 @@
+!! ~/.xmodmap
+!!
+!! created by Benjamin Kellermann <Benjamin dot Kellermann at gmx dot Germany>
+!! and Erik Streb <mail at erikstreb dot de>
+!!
+!! The german NEO Layout Version 1.9.6
+!! see http://pebbles.schattenlauf.de/layout.php for details
+!!
+!! To try the layout in this file, simply do xmodmap <file>.
+!! To load the layout in this file at X startup, simply store it as
+!! ~/.xmodmap (named .xmodmap in your home directory)
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! The first row (number Row)
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!eigentlich sollte die folgende Zeile rein, aber auf älteren Systemen ist der
+!dead_stroke noch nicht definiert
+!keycode 49 = dead_circumflex dead_caron dead_breve dead_stroke
+keycode 49 = dead_circumflex dead_caron dead_breve
+
+keycode 10 = 1 degree 1 onequarter oneeighth
+keycode 11 = 2 paragraph 2 onehalf
+keycode 12 = 3 section 3 threequarters threeeighths
+keycode 13 = 4 dollar    yen cent Prior Prior
+keycode 14 = 5 EuroSign  sterling currency fiveeighths implies
+keycode 15 = 6 ordfeminine ae AE 6 ifonlyif
+
+keycode 16 = 7 masculine oe OE seveneighths
+keycode 17 = 8 doublelowquotemark singlelowquotemark guillemotright slash U2203
+keycode 18 = 9 leftdoublequotemark leftsinglequotemark guillemotleft asterisk U2200
+keycode 19 = 0 rightdoublequotemark rightsinglequotemark U203A minus notsign
+
+keycode 20 = minus endash emdash U2039 minus logicalor
+keycode 21 = dead_acute dead_grave dead_cedilla dead_ogonek dead_abovedot dead_abovering
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! The upper row
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+keycode 24 = x X at Greek_xi x Greek_XI
+keycode 25 = v V underscore v BackSpace U039B
+keycode 26 = l L bracketleft Greek_lambda Up Up
+keycode 27 = c C bracketright Greek_chi Tab Tab
+keycode 28 = w W asciicircum w Insert
+
+keycode 29 = k K exclam Greek_kappa exclamdown copyright
+keycode 30 = h H less Greek_psi 7 Greek_PSI
+keycode 31 = g G greater Greek_gamma 8 Greek_GAMMA
+keycode 32 = f F equal Greek_phi 9 Greek_PHI
+keycode 33 = q Q ampersand q plus logicaland
+keycode 34 = ssharp ssharp U133 U132 schwa SCHWA
+keycode 35 = dead_tilde dead_macron dead_diaeresis dead_doubleacute dead_belowdot dead_belowdot
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! The home row (middle row)
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+keycode 38 = u U backslash  backslash     Home Home
+keycode 39 = i I slash      Greek_iota    Left Left
+keycode 40 = a A braceleft  Greek_alpha   Down Down
+keycode 41 = e E braceright Greek_epsilon Right Right
+keycode 42 = o O asterisk   Greek_omega   End End
+
+keycode 43 = s S question  Greek_sigma questiondown Greek_SIGMA
+keycode 44 = n N parenleft Greek_nu    4 numerosign
+keycode 45 = r R parenright Greek_rho  5 registered
+keycode 46 = t T minus Greek_tau 6 trademark
+keycode 47 = d D colon Greek_delta comma Greek_DELTA
+keycode 48 = y Y y Greek_upsilon thorn THORN
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! The lower row
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+keycode 52 = odiaeresis Odiaeresis numbersign odiaeresis Escape
+keycode 53 = udiaeresis Udiaeresis dollar udiaeresis Delete integral
+keycode 54 = adiaeresis Adiaeresis bar Greek_eta Next Next
+keycode 55 = p P asciitilde Greek_pi Return Greek_PI
+keycode 56 = z Z grave Greek_zeta z Greek_OMEGA
+
+keycode 57 = b B plus Greek_beta infinity enfilledcircbullet
+keycode 58 = m M percent mu 1
+keycode 59 = comma apostrophe apostrophe U3D1 2 radical
+keycode 60 = period ellipsis quotedbl Greek_theta 3 Greek_THETA
+keycode 61 = j J semicolon j period nabla
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Modifier definition
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Make CapsLock an additional Alt_Gr (Mode_switch is for 3rd and 4th level)
+remove Lock = Caps_Lock
+remove Mod3 = ISO_Level3_Shift
+keycode 66 = Mode_switch Mode_switch Caps_Lock Caps_Lock
+
+! Make AltGr and apostrophe to Mode_switch (which is the 3rd and 4th level)
+keycode 113 = ISO_Level3_Shift ISO_Level3_Shift ISO_Level3_Shift ISO_Level3_Shift KP_Decimal
+!keycode 48 = Mode_switch Mode_switch U133 U132 schwa SCHWA
+add Mod5 = Mode_switch
+
+! If the left win key should modify the 5th and 6th, comment this out
+!keycode 115 = ISO_Level3_Shift
+! the right win key modifies the 5th and 6th
+!keycode 116 = ISO_Level3_Shift
+
+! Make the former qwertz-# and qwertz-< to Mod5 (ISO_Level3_Shift)
+keycode 51 = Mode_switch Mode_switch
+keycode 94  = ISO_Level3_Shift ISO_Level3_Shift
+add Mod3 = ISO_Level3_Shift
+
+! force to learn the new Escape!
+!keycode 9 =
+
+keycode 65 = space space space nobreakspace 0 U202F
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Keypad
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! The uppest row
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!keycode 77 = Num_Lock Pointer_EnableKeys
+keycode 112 = KP_Divide KP_Divide division U2215
+keycode 63  = KP_Multiply KP_Multiply multiply U22C5
+keycode 82  = KP_Subtract KP_Subtract U2212
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! The upper row
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+keycode 79 = KP_Home	KP_7 KP_7 U226A
+keycode 80 = KP_Up KP_8 uparrow U2229
+keycode 81 = KP_Prior	KP_9 KP_9 U226B
+keycode 86 = KP_Add KP_Add plusminus U2213
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! The middle row
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+keycode 83 = KP_Left  KP_4 leftarrow U2282
+keycode 84 = KP_Begin KP_5 dagger U220A
+keycode 85 = KP_Right KP_6 rightarrow U2283
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! The lower row
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+keycode 87 = KP_End  KP_1 KP_1 U2264
+keycode 88 = KP_Down KP_2 downarrow U222A
+keycode 89 = KP_Next KP_3 KP_3 U2265
+keycode 108 = KP_Enter KP_Enter notequal U2248
+!keysym <KPEQ> 	 	KP_Equal
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! The lowest row
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+keycode 90 = KP_Insert	KP_0 percent U2030
+keycode 91 = KP_Delete	KP_Decimal period comma
