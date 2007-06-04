@@ -1,3 +1,9 @@
+grml-autoconfig (0.7.3) unstable; urgency=low
+
+  * language-functions: support dvorak keyboard layout [Closes: issue227]
+
+ -- Michael Prokop <mika@grml.org>  Mon, 04 Jun 2007 22:34:00 +0200
+
 grml-autoconfig (0.7.2) unstable; urgency=low
 
   * language-functions: improve setup for japan, add support for 'jp'
