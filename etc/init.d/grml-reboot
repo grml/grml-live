@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sam Mär 31 14:02:06 CEST 2007 [mika]
+# Latest change: Mon Jun 04 23:32:07 CEST 2007 [mika]
 ################################################################################
 
 export PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -55,6 +55,9 @@ echo "0" > /proc/sys/kernel/printk
 # We may kill our network connection here before unmounting NFS. Bad luck.
 # poweroff pcmcia devices
 if [ -d /sys/bus/pcmcia -a -x /sbin/pccardctl ] ; then
+   # make sure we don't lose any data, see issue219 for details
+   log_begin_msg "Syncing devices..."
+   sync ; log_end_msg $?
    log_begin_msg "Shutting down PCMCIA devices..."
    pccardctl eject >/dev/null 2>&1
    log_end_msg $?
