@@ -49,9 +49,13 @@ Password = ppp
 Init3 = AT+CGDCONT=1,"IP","A1.net"
 Dial Attempts = 3
 
-# T-Mobile vodafone cards using nozomi:
+# T-Mobile cards using nozomi:
 [Dialer tmnozomi]
 Modem = /dev/noz0
+
+# Newer T-Mobile cards and the usb box using usbserial:
+[Dialer tmusb]
+Modem = /dev/ttyUSB0
 
 # 3 vodafone cards:
 [Dialer dreiusb]
