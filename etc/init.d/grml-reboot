@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Jun 25 23:53:08 CEST 2007 [mika]
+# Latest change: Die Jun 26 00:08:30 CEST 2007 [mika]
 ################################################################################
 
 export PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -167,7 +167,7 @@ for i in /dev/loop*; do losetup -d $i 2>/dev/null; done
 # Remove remaining unused modules (Kernel 2.4)
 # rmmod -a >/dev/null 2>&1
 
-umount -t notmpfs,nosysfs,noproc,nousbfs -adrvf 2>/dev/null
+umount -t notmpfs,nosysfs,noproc,nousbfs -adrvf 1>/dev/null 2>&1
 
 log_end_msg 0
 
