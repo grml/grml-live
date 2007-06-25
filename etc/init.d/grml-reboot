@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Jun 04 23:32:07 CEST 2007 [mika]
+# Latest change: Mon Jun 25 23:53:08 CEST 2007 [mika]
 ################################################################################
 
 export PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -101,7 +101,7 @@ else
    NETMOUNTS="$(awk '{if($1~/:/){print $2}}' /proc/mounts 2>/dev/null)"
    if [ -n "$NETMOUNTS" ]; then
       log_begin_msg "Unmounting network filesystems."
-      umount -t nfs -arvf 2>/dev/null ; log_end_msg $?
+      umount -t nfs,nfs4,smbfs -alvf 2>/dev/null
    fi
    # Shutdown network
    NETDEVICES="$(/sbin/ifconfig | awk '/^[^ ]+/ {print $1}' | grep -v '^lo$')"
@@ -147,12 +147,12 @@ if [ -z "$NOEJECT" ]; then
    for dev in /proc/sys/dev/cdrom*/autoeject; do [ -f "$dev" ] && echo 1 > "$dev"; done
 fi
 
-# Turn on auto-eject feature of cdrom (2.2 kernel)
+# Detected cdrom device
 if [ -z "$INSTALLED" ]; then
    CDROM="$(awk '/ \/cdrom /{print $1;exit 0;}' /proc/mounts)"
 fi
 
-# Now umount everything but root
+# Umount everything but root
 log_begin_msg "Unmounting file systems."
 
 # Be safe in case someone messed with /etc/mtab
@@ -165,7 +165,9 @@ fi
 for i in /dev/loop*; do losetup -d $i 2>/dev/null; done
 
 # Remove remaining unused modules (Kernel 2.4)
-rmmod -a >/dev/null 2>&1
+# rmmod -a >/dev/null 2>&1
+
+umount -t notmpfs,nosysfs,noproc,nousbfs -adrvf 2>/dev/null
 
 log_end_msg 0
 
@@ -179,9 +181,8 @@ if [ -z "$INSTALLED" -a -z "$NOPROMPT" ]; then
    else
       umount -l /cdrom
       [ -n "$CDROM" -a -z "$NOEJECT" ] && eject -p "$CDROM" 2>/dev/null
-      echo ""
-      echo "${GREEN}Please remove CD, close cdrom drive and hit return.${NORMAL}"
-      read
+      echo
+      read -s -p "${GREEN}Please remove CD, close cdrom drive and hit return [auto 2 minutes].${NORMAL}" -t 120 a
    fi
 fi
 

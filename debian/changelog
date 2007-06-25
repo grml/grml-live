@@ -1,3 +1,19 @@
+grml-etc (1.0.10) unstable; urgency=low
+
+  [Michael Prokop]
+  * /etc/init.d/grml-reboot:
+    - use default of 2 minutes timeout for "Please remove CD" (merge
+      with Knoppix)
+    - unmount nfs4 and smbfs as well in nfs code, use -l option instead
+      of -r
+    - do not rmmod all (unused) kernel modules anymore
+    - try to unmount all remaining filesystems manually
+
+  [Andreas Gredler]
+  * /et/wvdial.conf.umts: added support for t-mobile usb cards and boxes
+
+ -- Michael Prokop <mika@grml.org>  Mon, 25 Jun 2007 23:54:33 +0200
+
 grml-etc (1.0.9) unstable; urgency=low
 
   * /etc/init.d/grml-reboot: sync devices before deactivating
