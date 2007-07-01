@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Jun 04 22:31:00 CEST 2007 [mika]
+# Latest change: Son Jul 01 22:55:38 CEST 2007 [mika]
 ################################################################################
 
 # The default language/keyboard to use. This CAN NOT be autoprobed.
@@ -330,8 +330,8 @@ case "$LANGUAGE" in
                 KDEKEYBOARDS="dk,de,us,fr"
                 TZ="Europe/Copenhagen"
                 ;;
-        dvorak)
-                # Dvorak layout
+        dvorak|dvorak-utf8)
+                # Dvorak layout (UTF8)
                 LANGUAGE="us"
                 COUNTRY="at"
                 LANG="en_US.UTF-8"
@@ -339,6 +339,18 @@ case "$LANGUAGE" in
                 XKEYBOARD="dvorak"
                 KDEKEYBOARD="dvorak,us,de"
                 CHARSET="utf8"
+                KDEKEYBOARDS="dvorak,us,de,fr"
+                TZ="Europe/Vienna"
+                ;;
+        dvorak-iso)
+                # Dvorak layout (ISO)
+                LANGUAGE="us"
+                COUNTRY="at"
+                LANG="en_US.iso885915"
+                KEYTABLE="dvorak"
+                XKEYBOARD="dvorak"
+                KDEKEYBOARD="dvorak,us,de"
+                CHARSET="iso8859-15"
                 KDEKEYBOARDS="dvorak,us,de,fr"
                 TZ="Europe/Vienna"
                 ;;

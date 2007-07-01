@@ -6,6 +6,9 @@ grml-autoconfig (0.7.4) unstable; urgency=low
       can be found the user gets a hint to execute 'Start lvm2' to
       set it up
     - bootoption 'nolvm' completely disables the lvm code/checks
+  * support dvorak keyboard layout in iso-mode as well (using
+    bootoption 'dvorak-iso'; bootoptions 'dvorak' and 'dvorak-utf8'
+    are supported as well of course)
 
  -- Michael Prokop <mika@grml.org>  Sun, 01 Jul 2007 20:35:30 +0200
 
