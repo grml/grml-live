@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sam Mai 12 00:46:15 CEST 2007 [mika]
+# Latest change: Son Jul 01 20:34:14 CEST 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -2040,6 +2040,33 @@ config_swraid(){
 
      fi # is /sbin/mdadm executable?
   fi # check for bootoptions
+  fi # run only in live-cd mode
+}
+# }}}
+
+# {{{ LVM (Logical Volumes)
+config_lvm(){
+  if [ -z "$INSTALLED" ] ; then
+  # notice: checkbootparam "forensic" is just for users who don't know how to really use the bootoption
+  if checkbootparam 'nolvm' ; then
+     ewarn "Skipping LVM code as requested on boot commandline." ; eend 0
+  else
+    if ! [ -x /sbin/lvm -a -x /etc/init.d/lvm2 -a -x /sbin/lvdisplay ] ; then
+       eerror "LVM not available, can not execute it." ; eend 1
+    else
+       if lvdisplay 1>/dev/null 2>&1 ; then
+	  einfo "You seem to have logical volumes (LVM) on your system."
+          eindent
+          einfo "Just run 'Start lvm2' to activate them or boot using 'lvm' as bootoption for autostart."
+	  eend 0
+          if checkbootparam 'lvm' ; then
+             einfo "Bootoption LVM found. Searching for logical volumes:"
+	     /etc/init.d/lvm2 start ; eend $?
+	  fi
+          eoutdent
+       fi
+    fi # check for lvm binary
+  fi # check for bootoption nolvm
   fi # run only in live-cd mode
 }
 # }}}
