@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Apr 16 19:33:45 CEST 2007 [mika]
+# Latest change: Son Jul 01 20:35:11 CEST 2007 [mika]
 ################################################################################
 
 ################################################################################
@@ -86,6 +86,7 @@ CONFIG_LANGUAGE='yes'         # allow language specification via commandline
 CONFIG_LD_MOD='yes'           # run ldconfig and depmod on systems running from harddisk; remove /etc/grml.first.boot for forcing
 CONFIG_LOCAL_NET='yes'        # bring up loopback interface
 CONFIG_LOG='yes'              # DEBUG=/dev/null or logfile int /tmp/...
+CONFIG_LVM='yes'              # logical volume setup
 CONFIG_MIXER='no'             # set audio volumes [only in live-cd mode relevant, except for bootoption nosound]
 CONFIG_MODEM='yes'            # check for AC'97 Modem Controller modem
 CONFIG_MODULES='yes'          # load modules specified in /etc/grml/modules

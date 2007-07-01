@@ -127,6 +127,8 @@ checkvalue $CONFIG_ENVIRONMENT && config_environment
 
 checkvalue $CONFIG_SWRAID && config_swraid
 
+checkvalue $CONFIG_LVM && config_lvm
+
 # No kernel messages while probing modules
 echo "0" > /proc/sys/kernel/printk
 
