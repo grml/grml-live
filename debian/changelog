@@ -1,3 +1,10 @@
+grml-etc (1.0.11) unstable; urgency=low
+
+  * /etc/init.d/grml-reboot: cosmetic fix (drop an empty line of
+    output which seems unnecessary nowadays)
+
+ -- Michael Prokop <mika@grml.org>  Sun, 01 Jul 2007 20:21:45 +0200
+
 grml-etc (1.0.10) unstable; urgency=low
 
   [Michael Prokop]

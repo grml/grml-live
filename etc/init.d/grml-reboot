@@ -64,7 +64,6 @@ if [ -d /sys/bus/pcmcia -a -x /sbin/pccardctl ] ; then
 fi
 
 if [ -n "$INSTALLED" ] ; then
-   echo
    log_begin_msg_nn "Running /etc/init.d/rc ${level}: "
    /etc/init.d/rc $level 1>/dev/null 2>&1 &
    mysleep "$GREEN"
