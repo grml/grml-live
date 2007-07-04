@@ -2,6 +2,10 @@ grml-etc (1.0.11) unstable; urgency=low
 
   * /etc/init.d/grml-reboot: cosmetic fix (drop an empty line of
     output which seems unnecessary nowadays)
+  * debian/preinst: change /var/lib/dpkg/status code to the usual
+    dpkg-query solution (as http://wiki.debian.org/DpkgConffileHandling
+    suggests) to make lintian happy
+    (hello maintainer-script-uses-dpkg-status-directly).
 
  -- Michael Prokop <mika@grml.org>  Sun, 01 Jul 2007 20:21:45 +0200
 

@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Don Nov 02 20:58:57 CET 2006 [mika]
+# Latest change: Mit Jul 04 12:31:26 CEST 2007 [mika]
 ################################################################################
 
 set -e
@@ -28,9 +28,10 @@ rm_conffile() {
 
     if [ -e "$CONFFILE" ]; then
         md5sum="`md5sum \"$CONFFILE\" | sed -e \"s/ .*//\"`"
-        old_md5sum="`sed -n -e \"/^Conffiles:/,/^[^ ]/{\\\\' $CONFFILE'{s/.* //;p}}\" /var/lib/dpkg/status`"
+	old_md5sum="`dpkg-query -W -f='${Conffiles}' grml-etc | sed -n -e \"\\\\' $CONFFILE'{s/ obsolete$//;s/.* //p}\"`"
         if [ "$md5sum" != "$old_md5sum" ]; then
-            echo "Conffile $CONFFILE has been modified, temporary moving to $CONFFILE.dpkg-bak ..."
+            echo "Obsolete conffile $CONFFILE has been modified by you."
+	    echo "Saving as $CONFFILE.dpkg-bak ..."
             mv -f "$CONFFILE" "$CONFFILE".dpkg-bak
         fi
     fi
