@@ -1,3 +1,9 @@
+grml-autoconfig (0.7.5) unstable; urgency=low
+
+  * Integrate /etc/init.d/loadcpufreq in config_cpu() [Closes: issue238]
+
+ -- Michael Prokop <mika@grml.org>  Wed, 04 Jul 2007 12:02:49 +0200
+
 grml-autoconfig (0.7.4) unstable; urgency=low
 
   * support LVM (logical volumes):

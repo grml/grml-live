@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Son Jul 01 20:34:14 CEST 2007 [mika]
+# Latest change: Mit Jul 04 12:02:35 CEST 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -1249,28 +1249,71 @@ else
      einfo "Detecting CPU: `awk -F: '/^processor/{printf " Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG` " ; eend 0
   fi
 
+  # Disclaimer: sorry for the tons of if/then/else... but this makes sure we use:
+  # * it only if we have the according kernel modules available
+  # * cpufreq only on laptops (check via /usr/sbin/laptop-detect)
+  # * current version of /etc/init.d/loadcpufreq from Debian (to stay in sync)
+  #   -> parse output of the initscript and output it according to our look'n'feel
+  # * our own cpufreq-detect.sh if /etc/init.d/loadcpufreq isn't present
   if ! cpufreq_check ; then
     ewarn "Skipping cpufreq setup as module dependencies are not fulfilled." ; eend 1
   else
-    if /usr/sbin/laptop-detect ; then
+    if /usr/sbin/laptop-detect 1>/dev/null 2>&1 ; then
        einfo "Detected Laptop - trying to use cpu frequency scaling:"
-       if [ -r /usr/bin/cpufreq-detect.sh ] ; then
-          eindent
+       eindent
+       if [ -x /etc/init.d/loadcpufreq ] ; then
+          SKIP_CPU_GOVERNOR=''
+          LOADCPUFREQ=$(mktemp)
+          /etc/init.d/loadcpufreq start >"$LOADCPUFREQ" 2>&1 ; RC=$?
+          if grep -q FATAL "$LOADCPUFREQ" ; then
+             eindent
+               SKIP_CPU_GOVERNOR=1
+               oldIFS="$IFS"
+               IFS="
+"
+                for line in $(grep FATAL "$LOADCPUFREQ" | sed 's/.*FATAL: //; s/ (.*)//') ; do
+                    eerror "$line" ; eend $RC
+                done
+                IFS="$oldIFS"
+             eoutdent
+           elif grep -q done "$LOADCPUFREQ" ; then
+             MODULE=$(grep done "$LOADCPUFREQ" | sed 's/.*done (\(.*\))./\1/')
+             if [ -n "$MODULE" -a "$MODULE" != none ]; then
+                einfo "Loading cpufreq kernel module $MODULE" ; eend 0
+             else
+                ewarn "Could not find an appropriate kernel module for cpu frequency scaling." ; eend 1
+             fi
+          fi
+          rm -f $LOADCPUFREQ
+       elif [ -r /usr/bin/cpufreq-detect.sh ] ; then
           . /usr/bin/cpufreq-detect.sh
           if [ -n "$MODULE" -a "$MODULE" != none ]; then
-             einfo "Loading modules ${MODULE} and cpufreq_ondemand, setting ondemand governor"
+             einfo "Loading modules ${MODULE}"
              modprobe "$MODULE" 1>>$DEBUG || modprobe "$MODULE_FALLBACK" 1>>$DEBUG
-             if modprobe cpufreq_ondemand && RC=0 || RC=1 ; then
-                for file in $(find /sys/devices/system/cpu/ -name scaling_governor 2>/dev/null) ; do
-                    echo ondemand > $file
-                done
+             RC=$?
+             if [[ $RC == 0 ]]; then
+                eend 0
+             else
+                SKIP_CPU_GOVERNOR=1
+                eend $1
              fi
-             eend $RC
           else
              ewarn "Could not detect an appropriate CPU for use with cpu frequency scaling - skipping." && eend 1
+          fi # $MODULE
+       fi # loadcpufreq
+
+       if [ -z "$SKIP_CPU_GOVERNOR" ] ; then
+          einfo "Loading cpufreq_ondemand, setting ondemand governor"
+          if modprobe cpufreq_ondemand ; RC=$? ; then
+             for file in $(find /sys/devices/system/cpu/ -name scaling_governor 2>/dev/null) ; do
+                 echo ondemand > $file
+             done
           fi
-          eoutdent
-       fi # cpufreq-detect
+          eend $RC
+       fi # cpu-governor
+
+       eoutdent
+
     fi # laptop-detect
   fi # cpufreq_check
 fi # checkbootparam nocpu
@@ -2055,14 +2098,14 @@ config_lvm(){
        eerror "LVM not available, can not execute it." ; eend 1
     else
        if lvdisplay 1>/dev/null 2>&1 ; then
-	  einfo "You seem to have logical volumes (LVM) on your system."
+          einfo "You seem to have logical volumes (LVM) on your system."
           eindent
           einfo "Just run 'Start lvm2' to activate them or boot using 'lvm' as bootoption for autostart."
-	  eend 0
+          eend 0
           if checkbootparam 'lvm' ; then
              einfo "Bootoption LVM found. Searching for logical volumes:"
-	     /etc/init.d/lvm2 start ; eend $?
-	  fi
+             /etc/init.d/lvm2 start ; eend $?
+          fi
           eoutdent
        fi
     fi # check for lvm binary
@@ -2294,4 +2337,4 @@ config_keyboard(){
 # }}}
 
 ## END OF FILE #################################################################
-# vim:foldmethod=marker
+# vim:foldmethod=marker expandtab ai ft=zsh
