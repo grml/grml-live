@@ -1,3 +1,10 @@
+grml-etc (1.0.12) unstable; urgency=low
+
+  * /etc/runlevel.conf.hdinstall: update to current package selection
+    in grml (a new devel release is coming...)
+
+ -- Michael Prokop <mika@grml.org>  Tue, 10 Jul 2007 16:14:25 +0200
+
 grml-etc (1.0.11) unstable; urgency=low
 
   * /etc/init.d/grml-reboot: cosmetic fix (drop an empty line of
