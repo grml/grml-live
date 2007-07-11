@@ -4,6 +4,7 @@ grml-autoconfig (0.7.6) unstable; urgency=low
     not provide appropriate return code for us.
   * config_cpu(): Virtual Box supports ACPI and laptop-detect returns
     with '0', so check for it and skip it.
+  * config_mixer(): Add 'no soundcard?' to aumix error message
 
  -- Michael Prokop <mika@grml.org>  Wed, 11 Jul 2007 19:25:25 +0200
 
