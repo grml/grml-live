@@ -2097,7 +2097,7 @@ config_lvm(){
     if ! [ -x /sbin/lvm -a -x /etc/init.d/lvm2 -a -x /sbin/lvdisplay ] ; then
        eerror "LVM not available, can not execute it." ; eend 1
     else
-       if lvdisplay 1>/dev/null 2>&1 ; then
+       if lvdisplay 2>&1 | grep -v 'No volume groups found' 1>/dev/null 2>&1 ; then
           einfo "You seem to have logical volumes (LVM) on your system."
           eindent
           einfo "Just run 'Start lvm2' to activate them or boot using 'lvm' as bootoption for autostart."
