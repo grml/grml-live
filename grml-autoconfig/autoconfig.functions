@@ -1504,7 +1504,7 @@ else
       ERROR=$(aumix -w $VOL -v $VOL -p $VOL -m $VOL 2>&1) ; RC=$?
       if [ -n "$ERROR" ] ; then
          eindent
-         eerror "Problem setting mixer volumes: $ERROR"
+         eerror "Problem setting mixer volumes: $ERROR (no soundcard?)"
          eoutdent
       fi
       eend $RC
