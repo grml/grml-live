@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mit Jul 11 19:34:06 CEST 2007 [mika]
+# Latest change: Don Jul 12 15:33:48 CEST 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -1529,11 +1529,10 @@ if checkbootparam "nomodem"; then
   ewarn "Skipping check for AC97 modem controller as requested on boot commandline." ; eend 0
 else
   if [ -x /etc/init.d/sl-modem-daemon ] ; then
-   if lspci | grep Intel | grep -q "AC'97 Modem Controller" ; then
-     einfo "AC97 modem controller detected. Starting sl-modem-daemon in background."
-     /etc/init.d/sl-modem-daemon start >>$DEBUG &
-     eend 0
-   fi
+     if lspci | grep Intel | grep -q "AC'97 Modem Controller" ; then
+        einfo "AC97 modem controller detected. Start it running 'Start sl-modem-daemon'."
+        eend 0
+     fi
   fi
 fi
 }
