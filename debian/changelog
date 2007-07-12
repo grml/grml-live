@@ -1,3 +1,9 @@
+grml-autoconfig (0.7.8) unstable; urgency=low
+
+  * Inform users about CONFIG_DHCP=no when running from harddisk.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 12 Jul 2007 15:31:38 +0200
+
 grml-autoconfig (0.7.7) unstable; urgency=low
 
   * config_mixer: check for /proc/asound/cards before trying to
