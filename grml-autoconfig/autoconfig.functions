@@ -1169,6 +1169,10 @@ else
     sleep 1
     eend 0
   done
+  if [ -n "$INSTALLED" ] ; then
+     ewarn 'If you want to disable automatic DHCP requests set CONFIG_DHCP=no in /etc/grml/autoconfig.'
+     eend 0
+  fi
 fi
 }
 # }}}
