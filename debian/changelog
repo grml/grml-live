@@ -1,3 +1,13 @@
+grml-etc (1.0.13) unstable; urgency=low
+
+  * /etc/runlevel.conf.hdinstall + /etc/runlevel.conf.livecd: updated
+    to current package state. Now /etc/runlevel.conf.livecd looks like
+    /etc/runlevel.conf.hdinstall again (just disabled some further
+    services of course).
+
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Jul 2007 17:22:20 +0200
+
 grml-etc (1.0.12) unstable; urgency=low
 
   * /etc/runlevel.conf.hdinstall: update to current package selection
