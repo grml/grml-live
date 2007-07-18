@@ -1,10 +1,16 @@
+grml-etc (1.0.14) unstable; urgency=low
+
+  * /etc/runlevel.conf.hdinstall + /etc/runlevel.conf.livecd:
+    another update for nfs-common
+
+ -- Michael Prokop <mika@grml.org>  Wed, 18 Jul 2007 02:10:27 +0200
+
 grml-etc (1.0.13) unstable; urgency=low
 
   * /etc/runlevel.conf.hdinstall + /etc/runlevel.conf.livecd: updated
     to current package state. Now /etc/runlevel.conf.livecd looks like
     /etc/runlevel.conf.hdinstall again (just disabled some further
     services of course).
-
 
  -- Michael Prokop <mika@grml.org>  Fri, 13 Jul 2007 17:22:20 +0200
 
