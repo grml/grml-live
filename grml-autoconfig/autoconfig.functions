@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Don Jul 12 15:33:48 CEST 2007 [mika]
+# Latest change: Mit Jul 25 18:59:49 CEST 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -2174,6 +2174,19 @@ if checkbootparam "debnet" ; then
   eerror "Error: /mnt already mounted." ; eend 1
  fi
 fi
+}
+# }}}
+
+# {{{ check for broken ipw3945 driver which causes problems (especially on hd install)
+config_ipw3945() {
+  if grep -q ipw3945 /proc/modules ; then
+     if ! iwconfig 2>/dev/null| grep -q 'IEEE 802' ; then
+        ewarn "Broken ipw3945 network interface found, reloading module."
+        rmmod ipw3945
+        modprobe ipw3945
+        eend $?
+     fi
+  fi
 }
 # }}}
 
