@@ -3,6 +3,7 @@ grml-autoconfig (0.7.11) unstable; urgency=low
   * Rename bootoption splash into "textsplash" (and additionally
     support "tsplash" as well) so users can use graphical splash
     from Debian *or* textsplash of grml.
+  * Fix code regression of checkbootparam (use '||' instead of '-o')
 
  -- Michael Prokop <mika@grml.org>  Wed, 25 Jul 2007 19:12:56 +0200
 

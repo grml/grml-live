@@ -996,12 +996,12 @@ fi
 config_fstab(){
 
 NOSWAP="yes" # we do not use swap by default!
-if checkbootparam "swap" -o checkbootparam "anyswap" ; then
+if checkbootparam "swap" || checkbootparam "anyswap" ; then
    NOSWAP=''
    checkbootparam "anyswap" && export ANYSWAP='yes' || export ANYSWAP=""
 fi
 
-if checkbootparam "nofstab" -o checkbootparam "forensic" ; then
+if checkbootparam "nofstab" || checkbootparam "forensic" ; then
   ewarn "Skipping /etc/fstab creation as requested on boot commandline." ; eend 0
 else
   einfo "Scanning for harddisk partitions and creating /etc/fstab. (Disable this via boot option: nofstab)"
@@ -1758,7 +1758,7 @@ fi
 }
 
 config_automount(){
-if checkbootparam noautoconfig -o checkbootparam forensic ; then
+if checkbootparam noautoconfig || checkbootparam forensic ; then
   ewarn "Skipping running automount of device(s) labeled GRMLCFG as requested." ; eend 0
 else
  if [ -z "$INSTALLED" ] ; then
@@ -2039,8 +2039,8 @@ fi
 config_swraid(){
   if [ -z "$INSTALLED" ] ; then
   # notice: checkbootparam "forensic" is just for users who don't know how to really use the bootoption
-  if checkbootparam 'noraid'   -o checkbootparam 'noswraid' -o \
-     checkbootparam 'forensic' -o checkbootparam 'raid=noautodetect' ; then
+  if checkbootparam 'noraid'   || checkbootparam 'noswraid' -o \
+     checkbootparam 'forensic' || checkbootparam 'raid=noautodetect' ; then
      ewarn "Skipping SW-RAID code as requested on boot commandline." ; eend 0
   else
     if ! [ -x /sbin/mdadm ] ; then
@@ -2180,7 +2180,7 @@ fi
 # {{{ check for broken ipw3945 driver which causes problems (especially on hd install)
 config_ipw3945() {
   if grep -q ipw3945 /proc/modules ; then
-     if ! iwconfig 2>/dev/null| grep -q 'IEEE 802' ; then
+     if ! iwconfig 2>/dev/null| grep -qe 'IEEE 802' -qe 'unassociated' ; then
         ewarn "Broken ipw3945 network interface found, reloading module."
         rmmod ipw3945
         modprobe ipw3945

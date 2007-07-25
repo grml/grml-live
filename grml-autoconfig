@@ -63,7 +63,7 @@ CMDLINE="$(cat /proc/cmdline)"
 checkvalue $CONFIG_DEBUG && config_debug
 
 SPLASH=''
-if checkbootparam "textsplash" -o checkbootparam "tsplash"; then
+if checkbootparam "textsplash" || checkbootparam "tsplash"; then
   SPLASH=1
 fi
 
