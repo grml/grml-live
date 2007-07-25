@@ -1,3 +1,12 @@
+grml-autoconfig (0.7.9) unstable; urgency=low
+
+  * Support bootoption nogrmlacpi to disable acpi stuff inside
+    grml-autoconfig without having to boot using noacpi (which
+    triggers kernel code actions).
+  * Inform user how to skip the acpi stuff.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 25 Jul 2007 15:20:14 +0200
+
 grml-autoconfig (0.7.8) unstable; urgency=low
 
   * Inform users about CONFIG_DHCP=no when running from harddisk.

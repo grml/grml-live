@@ -716,9 +716,11 @@ fi
 config_acpi_apm(){
 if [ -d /proc/acpi ]; then
   if checkbootparam "noacpi"; then
-    ewarn "Skipping ACPI Bios detection as requested on boot commandline." ; eend 0
+    ewarn "Skipping ACPI Bios detection as requested via noacpi on boot commandline." ; eend 0
+  elif checkbootparam "nogrmlacpi" ; then
+    ewarn "Skipping ACPI Bios detection as requested via nogrmlacpi on boot commandline." ; eend 0
   else
-    einfo "ACPI Bios found, activating modules: "
+    einfo "ACPI Bios found, activating modules (disable via bootoption noacpi / nogrmlacpi): "
     eindent
     found=""
     for a in /lib/modules/$KERNEL/kernel/drivers/acpi/*; do
