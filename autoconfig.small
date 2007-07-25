@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Son Jul 01 20:35:11 CEST 2007 [mika]
+# Latest change: Mit Jul 25 18:58:57 CEST 2007 [mika]
 ################################################################################
 
 ################################################################################
@@ -80,6 +80,7 @@ CONFIG_HOTPLUG_AGENT='no'     # deactivate specific hotplug agent(s) via bootpar
 CONFIG_HOTPLUG_BLACKLIST='no' # check for blacklist bootparam
 CONFIG_HOTPLUG_MAIN='no'      # start hotplug system [should be handled by udev now]
 CONFIG_HWINFO='no'            # run hwinfo for module-detection (requires bootparam 'hwinfo'!)
+CONFIG_IPW3945='yes'          # check for broken ipw3945 module
 CONFIG_INTERACTIVE='yes'      # check for expert-mode as bootparam
 CONFIG_KERNEL='yes'           # display information on running kernel
 CONFIG_LANGUAGE='yes'         # allow language specification via commandline
