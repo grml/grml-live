@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Apr 16 19:34:17 CEST 2007 [mika]
+# Latest change: Mit Jul 25 19:12:49 CEST 2007 [mika]
 ################################################################################
 
 # http://wiki.debian.org/LSBInitScripts =>
@@ -17,6 +17,7 @@
 # Default-Stop:
 ### END INIT INFO
 
+# {{{ placeholder functions for restart/reload/stop
 if [[ $1 == "restart" ]] ; then
   echo "$0 restart - empty placeholder. Doing nothing but running."
 fi
@@ -29,6 +30,7 @@ if [[ $1 == "stop" ]] ; then
   echo "$0 stop - empty placeholder. Doing nothing but exiting."
   exit 1
 fi
+# }}}
 
 # {{{ path, signals, umask, zsh, colors
 export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin"
@@ -43,7 +45,7 @@ setopt no_nomatch # avoid 'no matches found: ...'
 # {{{ source main files
 source /etc/grml/autoconfig            # configuration file
 source /etc/grml/autoconfig.functions  # functions
-source /etc/grml/lsb-functions
+source /etc/grml/lsb-functions         # helper functions for smart display
 # }}}
 
 # {{{ mount important directories
@@ -61,7 +63,7 @@ CMDLINE="$(cat /proc/cmdline)"
 checkvalue $CONFIG_DEBUG && config_debug
 
 SPLASH=''
-if checkbootparam "splash" ; then
+if checkbootparam "textsplash" -o checkbootparam "tsplash"; then
   SPLASH=1
 fi
 
@@ -274,7 +276,6 @@ if [ -z "$SPLASH" ] ; then
   stage=6
   rundebugshell
 fi
-# }}}
 
 if [ -n "$BOOTDEBUG" ] ; then
   CMDLINE="$(cat /proc/cmdline)"
@@ -282,6 +283,7 @@ if [ -n "$BOOTDEBUG" ] ; then
   einfo "Bootoption debug detected. Printing kernel command line:"
   echo "$CMDLINE"
 fi
+# }}}
 
 # {{{ Re-enable signals
 trap 2 3 11
