@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mit Jul 25 18:59:49 CEST 2007 [mika]
+# Latest change: Don Aug 02 11:01:10 CEST 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -444,11 +444,13 @@ update_progress(){
 config_timezone(){
  # don't touch the files if running from harddisk:
  if [ -z "$INSTALLED" ]; then
-  einfo "Setting timezone."
-  KTZ="$(getbootparam tz 2>>$DEBUG)"
-  [ -f "/usr/share/zoneinfo/$KTZ" ] && TZ="$KTZ"
-  rm -f /etc/localtime
-  cp "/usr/share/zoneinfo/$TZ" /etc/localtime && eend 0
+    KTZ="$(getbootparam tz 2>>$DEBUG)"
+    if [ -n "$KTZ" ] ; then
+       einfo "Setting timezone."
+       [ -f "/usr/share/zoneinfo/$KTZ" ] && TZ="$KTZ"
+       rm -f /etc/localtime
+       cp "/usr/share/zoneinfo/$TZ" /etc/localtime ; eend $?
+    fi
  fi
 }
 # }}}
