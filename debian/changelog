@@ -1,3 +1,9 @@
+grml-etc (1.0.15) unstable; urgency=low
+
+  * Update /etc/init.d/ssh according to changes in Debian's original file.
+
+ -- Michael Prokop <mika@grml.org>  Thu,  9 Aug 2007 18:41:27 +0200
+
 grml-etc (1.0.14) unstable; urgency=low
 
   * /etc/runlevel.conf.hdinstall + /etc/runlevel.conf.livecd:
