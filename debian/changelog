@@ -1,3 +1,11 @@
+grml-etc (1.0.16) unstable; urgency=low
+
+  * Adjust /etc/inittab.grml + /etc/inittab.small so ctrl-alt-del
+    triggers reboot instead of powerdown. Thanks for the suggestion
+    to Norbert Tretkowski, thanks for the patch to Nico Golde!
+
+ -- Michael Prokop <mika@grml.org>  Fri, 31 Aug 2007 00:10:23 +0200
+
 grml-etc (1.0.15) unstable; urgency=low
 
   * Update /etc/init.d/ssh according to changes in Debian's original file.
