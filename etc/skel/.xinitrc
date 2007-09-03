@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sam Dez 16 16:45:54 CET 2006 [mika]
+# Latest change: Die Sep 04 01:42:40 CEST 2007 [mika]
 ################################################################################
 
 # is something goes wrong fall back to plain x-terminal-emulator:
@@ -44,14 +44,18 @@
   [ -r $HOME/.Xresources ] && xrdb -merge $HOME/.Xresources
 
 # keybindings
-  . /etc/sysconfig/keyboard && \
-  if [ $XKEYBOARD == "us" ] ; then
-     [ -r $HOME/.Xmodmap ] && xmodmap $HOME/.Xmodmap
+  if ! [ -r /etc/sysconfig/keyboard ] ; then
+     [ -r $HOME/.Xmodmap ] && xmodmap $HOME/.Xmodmap || setxkbmap us
   else
-     if [ -n "$XKEYMODEL" ] ; then
-        setxkbmap -model "$XKEYMODEL" -layout "$XKEYBOARD"
+     . /etc/sysconfig/keyboard
+     if [ $XKEYBOARD == "us" ] ; then
+        [ -r $HOME/.Xmodmap ] && xmodmap $HOME/.Xmodmap
      else
-        setxkbmap "$XKEYBOARD"
+        if [ -n "$XKEYMODEL" ] ; then
+           setxkbmap -model "$XKEYMODEL" -layout "$XKEYBOARD"
+        else
+           setxkbmap "$XKEYBOARD"
+        fi
      fi
   fi
 
