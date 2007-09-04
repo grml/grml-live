@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Die Sep 04 12:36:35 CEST 2007 [mika]
+# Latest change: Die Sep 04 13:58:35 CEST 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -96,7 +96,7 @@ CMDLINE="$(cat /proc/cmdline)"
 
 # {{{ Check if we are running from the grml-CD or HD
 INSTALLED=""
-{ [ -e /GRML/etc/grml_cd ] || [ -r /etc/grml_cd ] } && INSTALLED="yes"
+[ -e /etc/grml_cd ] || INSTALLED="yes"
 
 # testcd
 TESTCD=""
