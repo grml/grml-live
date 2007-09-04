@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Don Aug 02 11:01:10 CEST 2007 [mika]
+# Latest change: Die Sep 04 12:36:35 CEST 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -96,7 +96,7 @@ CMDLINE="$(cat /proc/cmdline)"
 
 # {{{ Check if we are running from the grml-CD or HD
 INSTALLED=""
-[ -e /GRML/etc/grml_cd ] || INSTALLED="yes"
+{ [ -e /GRML/etc/grml_cd ] || [ -r /etc/grml_cd ] } && INSTALLED="yes"
 
 # testcd
 TESTCD=""
@@ -590,21 +590,33 @@ config_fix_passwd(){
 # {{{ CD Checker
 config_testcd(){
 if [ -n "$TESTCD" ]; then
-  einfo "Checking CD data integrity as requested by '${WHITE}testcd${NORMAL}' boot option."
-  einfo "Reading files and checking against GRML/md5sums, this may take a while..."
-  echo -n "${RED}"
-  ( cd /cdrom/GRML/ ; rm -f /tmp/md5sum.log ; md5sum -c md5sums 2>&1 | tee /tmp/md5sum.log )
-  if [ "$?" = "0" ]; then
-    echo " ${GREEN}Everything looks OK${NORMAL}"
-    else
-    echo "${RED} *** CHECKSUM FAILED FOR THESE FILES:                          ***"
-    egrep -v '(^md5sum:|OK$)' /tmp/md5sum.log
-    echo "${RED} *** DATA ON YOUR CD MEDIUM IS POSSIBLY INCOMPLETE OR DAMAGED, ***${NORMAL}"
-    echo "${RED} *** OR YOUR COMPUTER HAS BAD RAM.                             ***${NORMAL}"
-    echo -n "${CYAN}Hit return to contine, or press the reset button to quit.${NORMAL} "
-    read a
-  fi
-  eend 0
+   einfo "Checking CD data integrity as requested by '${WHITE}testcd${NORMAL}' boot option."
+   einfo "Reading files and checking against GRML/md5sums, this may take a while..."
+   echo -n "${RED}"
+
+   # /linuxrc grml version:
+   [ -d /cdrom/GRML ]      && TESTCD_PATH=/cdrom/GRML
+   # live-initramfs version:
+   [ -d /live/image/GRML ] && TESTCD_PATH=/live/image/GRML
+
+   if [ -n "$TESTCD_PATH" ] ; then
+      ( cd "$TESTCD_PATH" ; rm -f /tmp/md5sum.log ; md5sum -c md5sums 2>&1 | tee /tmp/md5sum.log )
+   else
+      echo "${RED} *** Error: Could not find md5sum file.                           ***"
+   fi
+
+   if [ "$?" = "0" ]; then
+     echo " ${GREEN}Everything looks OK${NORMAL}"
+     else
+     echo "${RED} *** CHECKSUM FAILED FOR THESE FILES:                          ***"
+     egrep -v '(^md5sum:|OK$)' /tmp/md5sum.log
+     echo "${RED} *** DATA ON YOUR CD MEDIUM IS POSSIBLY INCOMPLETE OR DAMAGED, ***${NORMAL}"
+     echo "${RED} *** OR YOUR COMPUTER HAS BAD RAM.                             ***${NORMAL}"
+     echo -n "${CYAN}Hit return to contine, or press the reset button to quit.${NORMAL}"
+     read a
+   fi
+
+   eend 0
 fi
 }
 # }}}
@@ -2369,4 +2381,4 @@ config_keyboard(){
 # }}}
 
 ## END OF FILE #################################################################
-# vim:foldmethod=marker expandtab ai ft=zsh
+# vim:foldmethod=marker expandtab ai ft=zsh shiftwidth=3
