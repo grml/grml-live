@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Die Sep 04 13:58:35 CEST 2007 [mika]
+# Latest change: Mit Sep 05 19:09:45 CEST 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -262,10 +262,12 @@ config_language(){
 
    # write keyboard related variables to file for later use
    [ -d /etc/sysconfig ] || mkdir /etc/sysconfig
-   echo "KEYTABLE=\"$KEYTABLE\""          > /etc/sysconfig/keyboard
-   echo "XKEYBOARD=\"$XKEYBOARD\""       >> /etc/sysconfig/keyboard
-   echo "KDEKEYBOARD=\"$KDEKEYBOARD\""   >> /etc/sysconfig/keyboard
-   echo "KDEKEYBOARDS=\"$KDEKEYBOARDS\"" >> /etc/sysconfig/keyboard
+   if ! [ -e /etc/sysconfig/keyboard ] ; then
+      echo "KEYTABLE=\"$KEYTABLE\""          > /etc/sysconfig/keyboard
+      echo "XKEYBOARD=\"$XKEYBOARD\""       >> /etc/sysconfig/keyboard
+      echo "KDEKEYBOARD=\"$KDEKEYBOARD\""   >> /etc/sysconfig/keyboard
+      echo "KDEKEYBOARDS=\"$KDEKEYBOARDS\"" >> /etc/sysconfig/keyboard
+   fi
  fi
 
  [ -r /etc/sysconfig/keyboard ] && . /etc/sysconfig/keyboard
@@ -284,9 +286,9 @@ config_language(){
 
  # Set default keyboard before interactive setup
  if [ -n "$KEYTABLE" ] ; then
-  einfo "Running loadkeys for ${WHITE}${KEYTABLE}${NORMAL} in background"
-  loadkeys -q $KEYTABLE &
-  eend $?
+    einfo "Running loadkeys for ${WHITE}${KEYTABLE}${NORMAL} in background"
+    loadkeys -q $KEYTABLE &
+    eend $?
  fi
 
  # we have to set up all consoles, therefore loop it over all ttys:
