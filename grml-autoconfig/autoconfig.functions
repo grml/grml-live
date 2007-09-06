@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mit Sep 05 19:09:45 CEST 2007 [mika]
+# Latest change: Don Sep 06 23:57:02 CEST 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -155,11 +155,6 @@ else
   DEBUG="/dev/null"
 fi
 }
-# }}}
-
-# {{{ Check if we are in interactive startup mode
-INTERACTIVE=""
-stringinstring "BOOT_IMAGE=expert " "$CMDLINE" && INTERACTIVE="yes"
 # }}}
 
 # {{{ set firmware timeout via bootparam
@@ -884,24 +879,8 @@ fi
 
 # {{{ Interactive configuration
 config_interactive(){
-if [ -n "$INTERACTIVE" ] ; then
-einfo "Entering interactive configuration second stage."
-
-  echo " ${GREEN}Your console keyboard defaults to: ${MAGENTA}${KEYTABLE}"
-  echo -n "${CYAN}Do you want to (re)configure your console keyboard?${NORMAL} [Y/n] "
-  read a
-  [ "$a" != "n" ] && /usr/sbin/dpkg-reconfigure console-data ; eend $?
-
-  echo -n "${CYAN}Do you want to (re)configure your soundcard?${NORMAL} [Y/n] "
-  read a
-  [ "$a" != "n" ] && alsaconf && ( exec aumix -m 0 >>$DEBUG 2>&1 & ) ; eend $?
-
-  echo -n "${CYAN}Do you want to (re)configure your graphics (X11) subsystem?${NORMAL} [Y/n] "
-  read a
-  [ "$a" != "n" ] && xorgcfg -textmode ; eend $?
-  echo " ${GREEN}Interactive configuration finished. Everything else should be fine for now.${NORMAL}"
-fi
-eend 0
+  ewarn "config_interactive is deprecated nowadays."
+  ewarn "Please set CONFIG_INTERACTIVE='no' in /etc/grml/autoconfig" ; eend 0
 }
 # }}}
 
