@@ -1,3 +1,9 @@
+grml-autoconfig (0.7.17) unstable; urgency=low
+
+  * Update /etc/mtab if running in live-initramfs mode.
+
+ -- Michael Prokop <mika@grml.org>  Sat,  8 Sep 2007 13:07:54 +0200
+
 grml-autoconfig (0.7.16) unstable; urgency=low
 
   * Drop support for (deprecated) bootoption 'expert'.
