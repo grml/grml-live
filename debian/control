@@ -4,6 +4,9 @@ Priority: extra
 Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends: debhelper (>= 5)
 Standards-Version: 3.7.2
+Homepage: http://hg.grml.org/grml-desktop/
+XS-Vcs-hg: http://hg.grml.org/grml-desktop/
+XS-Vcs-Browser: http://hg.grml.org/grml-desktop/
 
 Package: grml-desktop
 Architecture: all
