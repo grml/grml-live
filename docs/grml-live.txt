@@ -130,8 +130,10 @@ live-initramfs(8).
 TODO
 ----
 
-* provide a wrapper script which runs all the necessary command in a single run (/usr/sbin/grml-live and
-/etc/grml/grml-live.conf are work in progress)
+* provide a wrapper script which runs all the necessary command in a single run
+(/usr/sbin/grml-live and /etc/grml/grml-live.conf are work in progress)
+
+* support signed apt repositories
 
 * provide buildprocess for boot/isolinux stuff
 
