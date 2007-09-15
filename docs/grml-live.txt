@@ -16,9 +16,84 @@ Important! grml-live is under heavy construction and everything but ready yet.
 Introduction
 ------------
 
-grml-live provides the build system for creating a grml (based) live-cd.  It is
-based on link:http://www.informatik.uni-koeln.de/fai/[FAI] (Fully Automatic
-Installation).
+grml-live provides the build system for creating a grml (based) live-cd.  The
+build system is based on link:http://www.informatik.uni-koeln.de/fai/[FAI]
+(Fully Automatic Installation). If you are familiar with FAI already it is very
+easy to get a live-cd, if you don't know FAI yet don't despair: it's still very
+easy. :)
+
+FAI uses a class based system. This gives you the flexibility to choose the
+packages you would like to include on your very own live-cd without having to
+deal with all the details in the core of the system.
+
+How to get your own live-cd - the easy, fast and simple way
+-----------------------------------------------------------
+
+To get a small, Debian-stable and grml based live-cd:
+
+  # TARGET="/grml/chroot/grml_uncompressed" ; mkdir -p $TARGET
+  # fai -v -C /etc/grml/fai -cGRML dirinstall $TARGET
+  # mksquashfs $TARGET/* /grml/chroot/grml_cd/live/grml.squashfs -noappend
+  # cd /grml/chroot/grml_cd/
+  # mkisofs -V "my personal grml" -l -r -J -no-emul-boot -boot-load-size 4 \
+            -boot-info-table -c boot/isolinux/boot.cat \
+            -b boot/isolinux/isolinux.bin -o /grml/grml.iso .
+
+(TODO: provide the contenct of /grml/chroot/grml_cd through the package
+grml-live, in the meanwhil get the content from a current grml-ISO)
+
+Files
+-----
+
+Notice that grml-live ships FAI configuration files that do not use the same
+namespace as the FAI packages itself.  This ensures that grml-live does not
+clash with your usual FAI configuration, so instead of /etc/fai/fai.conf
+(package fai-client) grml uses /etc/grml/fai/fai.conf instead. For more details
+see below. To get an idea how another configuration or example files could look
+like check out /usr/share/doc/fai-doc/examples/simple/ (provided by Debian package
+fai-doc). /usr/share/doc/fai-doc/fai-guide.html/ch-config.html also provides
+documentation regarding configuration possibilities.
+
+  /etc/grml/fai/fai.conf
+
+Main configuration file which specifies where all the configuration files and
+scripts for FAI/grml-live can be found. By default it is
+FAI_CONFIGDIR=/etc/grml/fai/config, a directory shipped by grml-live
+out-of-the-box so you shouldn't have to configure anything in this file.
+
+  /etc/grml/fai/config/
+
+The main directory for configuration of FAI/grml-live. More details below.
+
+  /etc/grml/fai/config/class/
+
+This directory contains files which specify main configuration variables for the
+FAI classes.
+
+  /etc/grml/fai/config/debconf/
+
+This directory provides the files for presseding/configuration of debconf
+through files.
+
+  /etc/grml/fai/config/hooks/
+
+This directory provides files for customizing the build process through hooks.
+Hooks are user defined programs or scripts, which are called during the
+installation process.
+
+  /etc/grml/fai/config/package_config/
+
+File with lists of software packages to be installed or removed.  The different
+classes describe what should find its way to your ISO.  When running 'fai -v
+-cGRML dirinstall ...' only the files from the directory GRML/ will be taken, if
+you use 'fai -v -cGRML,FOOBAR dirinstall ...' then the files of GRML/ **plus**
+the files from FOOBAR/ will be taken. So just create a new class to adjust it to
+your needs. Please notice that the directory GRML contains a package list
+defining a minimum but still reasonable package configuration.
+
+  /etc/grml/fai/config/scripts/
+
+Scripts for customising the ISO within build process.
 
 Bugs
 ----
