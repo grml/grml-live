@@ -217,6 +217,9 @@ that are arch specific so we have a clean package list in all classes)
 grml, grml64, grml-small for at least x86, amd64 and ppc) [currently it defaults
 to Debian/stable I386]
 
+* support setting grml-live configuration on the command line to provide
+different flavours using the commandline only
+
 * really support signed apt repositories (currently it's deactivated via fai's
 dirinstall for some packages)
 
