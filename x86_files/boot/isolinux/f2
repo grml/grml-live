@@ -1,0 +1,23 @@
+grml - Linux for sysadmins and users of texttools                            09F207
+                                                                               
+09  Overview of bootsplashes on grml (F1-F10)07                                    
+                                                                               
+  09F107   main bootsplash with keyboard-image and bootprompt                      
+  09F207   this overview page                                                      
+  09F307   main grml bootoptions                                                   
+  09F407   main cheatcodes for grml [1/2]                                          
+  09F507   main cheatcodes for grml [2/2]                                          
+  09F607   troubleshooting on grml                                                 
+  09F707   kernel cheatcodes                                                       
+  09F807   grml configuration options                                              
+  09F907   grml2hd - automatic installation of grml                                
+  09F1007  problems with grml?           _                                         
+                 __ _ _ __ _ __ ___ | |  ___  _ __ __ _                        
+                / _` | '__| '_ ` _ \| | / _ \| '__/ _` |                       
+               | (_| | |  | | | | | | || (_) | | | (_| |                       
+                \__, |_|  |_| |_| |_|_(_)___/|_|  \__, |                       
+                |___/                             |___/                        
+                                                                               
+ Problems? Some more information is accessible via keys F3-F10.                
+ See F6 for troubleshooting information.   Timeout: 30 seconds                 
+1f

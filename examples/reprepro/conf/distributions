@@ -1,0 +1,10 @@
+Origin: Debian
+Label: Debian-All
+Suite: stable
+Codename: etch
+Version: 4.0
+Architectures: i386
+Components: main contrib non-free
+Description: Debian
+Update: debian
+# SignWith: yes

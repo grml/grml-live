@@ -159,9 +159,9 @@ einfo "Unmounting proc, /dev/pts, /dev/capi"
   umount -a 2>/dev/null
 eend $?
 
-einfo "Removing initrd-images"
-  rm -f /boot/initrd.img-*
-eend $?
+#einfo "Removing initrd-images"
+#  rm -f /boot/initrd.img-*
+#eend $?
 
 einfo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
   # for i in $(find /var/lib/apt/lists -type f \( -name \*Packages -o -name \*Sources \) 2>/dev/null); do  :>"$i"; done

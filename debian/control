@@ -10,7 +10,7 @@ XS-Vcs-Browser: http://hg.grml.org/grml-live/
 
 Package: grml-live
 Architecture: all
-Depends: fai-client, fai-server, syslinux [i386], memtest86+ [i386]
+Depends: fai-client, fai-server, syslinux [i386], memtest86+ [i386], squashfs-tools, wget
 Suggests: fai-doc
 Description: build system for creating a grml (based) live-cd
  This package provides the build system for creating

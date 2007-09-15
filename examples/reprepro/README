@@ -1,0 +1,2 @@
+Update pool via running 'reprepro -b . update'
+See reprepro(1) for more details.

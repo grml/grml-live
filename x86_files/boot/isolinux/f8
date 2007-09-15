@@ -1,0 +1,23 @@
+grml - Linux for sysadmins and users of texttools                            09F807
+                                                                               
+70 grml configuration options                                                    
+ ==========================                                                    
+                                                                               
+  myconfig=/dev/ice    -> search for config.tbz and grml.sh on specifed device 
+  extract=/directory   -> extract only provided directory of config archive    
+  netconfig=server.tld/path/to/config.tbz -> download specified archive and    
+                                             extract it                        
+  noautoconfig         -> do not automount device labeled with GRMLCFG         
+  file=configname.tbz  -> use specified filename as configuration archive      
+  partconf=/dev/ice    -> copy files specified in  /etc/grml/partconf from     
+                          /dev/ice to the grml system                          
+                                                                               
+  Usage examples:                                                              
+                                                                               
+  grml myconfig=/dev/sda1    -> mount usb device and extract config.tbz        
+                                and execute grml.sh if present                 
+  grml netconfig=grml.org/config.tar.gz -> download file and extract it        
+  grml myconfig=/dev/fd0 file=foobar.tbz -> extract archive from floppy        
+  grml partconf=/dev/hda2    -> mount partition read-only and get files        
+                                specified in  /etc/grml/partconf               
+1f

@@ -25,7 +25,6 @@ grml-etc
 grml-etc-core
 grml-files
 grml-hwinfo
-grml-kerneladdons-2.6.22 linux-image-2.6.22-grml
 grml-laptop
 grml-mercurial-utils
 grml-network
@@ -58,7 +57,6 @@ nscd
 openssh-client openssh-server
 pciutils usbutils
 postfix
-powernowd
 rdate
 resolvconf
 rsh-client
@@ -70,3 +68,7 @@ tcsh
 time
 usbutils
 wireless-tools wpasupplicant
+
+PACKAGES aptitude I386 
+grml-kerneladdons-2.6.22 linux-image-2.6.22-grml aufs-modules-2.6.22-grml
+powernowd

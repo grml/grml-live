@@ -1,0 +1,23 @@
+grml - Linux for sysadmins and users of texttools                            09F407
+                                                                               
+70 The following options can be used at the boot:-prompt. [1/2]                  
+                                                                               
+ grml nousb nousb2           disable initialization of USB in initial ramdisk  
+ grml nofirewire        disable initialization of firewire in initial ramdisk  
+ grml scandelay[=seconds]    delay accessing ISO-device (useful on usb-stick)  
+ grml scsi=modulename              load specified SCSI module (don't add .ko)  
+ grml scsi=probe                         autoprobe all available scsi modules  
+ grml scsi=ask                              prompt for loading of SCSI module  
+ grml blacklist=modulename     completely disable loading of specified module  
+ grml no{fstab|swap|apm|apic|acpi|scsi|sound}       disable specified feature  
+ grml nodma ide=nodma            disable DMA accelleration for ALL IDE-drives  
+ grml noudev                          disable startup of udev (use with care)  
+ grml noeject noprompt      do not eject CD after halt / do not prompt for it  
+ grml swspeak               prepare system for use with software synthesizer,  
+                                           run "swspeak" after booting system  
+ grml vga=ask  / vga=791            prompt for framebuffer menu / set options  
+                                                                               
+ Note: If you want to boot via USB/Firewire and accessing the device does not  
+ work try to boot with 'grml scandelay' which adds a delay of a few seconds.   
+                                                                               
+1f

@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sat Sep 15 20:58:00 CEST 2007 [mika]
+# Latest change: Sat Sep 15 21:36:04 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -110,8 +110,11 @@ if [ -z "$FORCE" ] ; then
    echo
    echo "$PN - check your configuration (or invoke using -F to force execution without prompting)"
    echo
-   echo "  FAI classes:                  $CLASSES"
-   echo "  target / output directory:    $CHROOT_TARGET"
+   echo "  FAI classes:    $CLASSES"
+   echo "  chroot target:  $CHROOT_TARGET"
+   echo "  build target:   $BUILD_TARGET"
+   echo "  ISO target:     $ISO_TARGET"
+
    [ -n "$FAI_ARGS" ] && echo "  additional arguments for FAI: $FAI_ARGS"
    echo
    echo -n "Is this ok for you? [y/N] "
@@ -133,25 +136,26 @@ fi
 
 # execute FAI {{{
 if [ -d "$CHROOT_TARGET" ] ; then
-   echo "$CHROOT_TARGET assumes already, skipping the 'fai dirnstall' stage therefore."
+   echo "  [x] $CHROOT_TARGET exists already, skipping the stage 'fai dirnstall'"
 else
    mkdir "$CHROOT_TARGET" || bailout 5 "Problem with creating $CHROOT_TARGET for FAI"
    fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" dirinstall "$CHROOT_TARGET" $FAI_ARGS
 fi
 # }}}
 
-if [ -d "$BUILD_TARGET" ] ; then
-   echo "$BUILD_TARGET assumes already, skipping the 'squashfs' stage therefore."
-else
-   mkdir -p "$BUILD_TARGET" || bailout 6 "Problem with creating $BUILD_TARGET for squashfs"
+mkdir -p "$BUILD_TARGET" || bailout 6 "Problem with creating $BUILD_TARGET for stage ARCH"
 
-   if [ "$ARCH" = x86 ] ; then
+# x86:
+if [ "$ARCH" = x86 ] ; then
+   if [ -d "$BUILD_TARGET"/boot/isolinux ] ; then
+      echo "  [x] $BUILD_TARGET/boot/isolinux exists already - skipping stage 'boot/isolinux'"
+      continue
+   else
       mkdir -p "$BUILD_TARGET"/boot/isolinux
       mkdir "$BUILD_TARGET"/GRML
-      mkdir "$BUILD_TARGET"/live
       cp /boot/memtest86+.bin                                       "$BUILD_TARGET"/boot/isolinux/memtest
       cp "$CHROOT_TARGET"/boot/initrd*                              "$BUILD_TARGET"/boot/isolinux/initrd.gz
-      cp "$CHROOT_TARGET"/boot/vmlinuz                              "$BUILD_TARGET"/boot/isolinux/linux26
+      cp "$CHROOT_TARGET"/boot/vmlinuz*                             "$BUILD_TARGET"/boot/isolinux/linux26
       cp /usr/lib/syslinux/chain.c32                                "$BUILD_TARGET"/boot/isolinux/
       cp /usr/lib/syslinux/isolinux.bin                             "$BUILD_TARGET"/boot/isolinux/
       cp /usr/lib/syslinux/memdisk                                  "$BUILD_TARGET"/boot/isolinux/
@@ -167,27 +171,50 @@ else
       # minirt26.gz
       # boot.cat
       if [ -n "$WINDOWS_BINARIES" ] ; then
-         mkdir "$BUILD_TARGET"/windows
-         ( cd "$BUILD_TARGET"/windows
-         for file in pageant plink pscp psftp putty puttygen ; do
-             wget $WINDOWS_BINARIES/$file
-         done )
+         if [ -d "$BUILD_TARGET"/windows ] ; then
+            echo "  [x] $BUILD_TARGET/windows exists already - skipping stage WINDOWS_BINARIES"
+            return 0
+         else
+            mkdir "$BUILD_TARGET"/windows
+            ( cd "$BUILD_TARGET"/windows
+              for file in pageant plink pscp psftp putty puttygen ; do
+                  wget ${WINDOWS_BINARIES}/${file}.exe
+              done )
+         fi
       fi
-   elif [ "$ARCH" = amd64 ] ; then
-       echo 'Warning: gebi, it is your turn. :)'>2
-   elif [ "$ARCH" = ppc ] ; then
-       echo 'Warning: formorer, it is your turn. :)'>2
-   else
-      echo 'Warning: Unsupported ARCH, sorry. Want to support it? Contribute!'>&2
    fi
+# amd64:
+elif [ "$ARCH" = amd64 ] ; then
+    echo 'Warning: gebi, it is your turn. :)'>2
+# ppc:
+elif [ "$ARCH" = ppc ] ; then
+    echo 'Warning: formorer, it is your turn. :)'>2
+# unsuported:
+else
+   echo 'Warning: Unsupported ARCH, sorry. Want to support it? Contribute!'>&2
+fi
+
+if [ -d "$BUILD_TARGET"/live ] ; then
+   echo "  [x] $BUILD_TARGET/live exists already, skipping stage 'squashfs'"
+else
+   mkdir "$BUILD_TARGET"/live
+   mksquashfs $CHROOT_TARGET/* $BUILD_TARGET/live/grml.squashfs -noappend
 fi
 
 if [ -d "$ISO_TARGET" ] ; then
-   echo "$ISO_TARGET assumes already, skipping the 'iso build' stage therefore."
+   echo "  [x] $ISO_TARGET exists already, skipping the stage 'iso build'"
 else
-   mkdir -p "$ISO_TARGET" || bailout 6 "Problem with creating $ISO_TARGET for squashfs"
+   mkdir -p "$ISO_TARGET" || bailout 6 "Problem with creating $ISO_TARGET for stage 'iso build'"
+   ( cd "$BUILD_TARGET" &&
+     mkisofs -V "Debian/etch grml" -publisher 'Michael Prokop <mika@grml.org>' \
+             -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
+             -c boot/isolinux/boot.cat -b boot/isolinux/isolinux.bin      \
+             -o "$ISO_TARGET"/grml_0.0-1.iso .
+   )
+
 fi
 
+echo "  [*] Sucessfully finished execution of $PN"
 bailout 0
 
 ## END OF FILE #################################################################

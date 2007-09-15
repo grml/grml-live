@@ -46,9 +46,9 @@ Options
 
   -c **CLASSES**::
 
-Specify the CLASSES to be used for building the ISO via fai.
-By default only the class GRML is assumed, resulting in a small base system (being
-about ~170MB ISO size).
+Specify the CLASSES to be used for building the ISO via fai.  By default only
+the classes GRML and I386 are assumed, resulting in a small base system (being
+about ~150MB ISO size).
 
   -t **TARGET_DIRECTORY**::
 
@@ -96,8 +96,9 @@ the simplicity in the build process.
 
 The main and base class provided by grml-live is named GRML. It's strongly
 recommended to **always** use the class GRML when building an ISO using
-grml-live.  The following files and directories are relevant for class GRML by
-default:
+grml-live as well as the architecture dependend class (being 'I386' for x86_32
+currently only). The following files and directories are relevant for class GRML
+by default:
 
   /etc/grml/fai/config/scripts/GRML/
   /etc/grml/fai/config/debconf/GRML
@@ -201,7 +202,9 @@ Requirements for the build system
 * any Debian based system should be sufficient (if not please send a bug
 report), for example a grml2hd harddisk installation ships all you need
 
-* enough free disk space, at least 1GB are required for a minimal grml-live run
+* enough free disk space, at least 700MB are required for a minimal grml-live
+run (~400MB for the chroot [$CHROOT_TARGET], ~150MB for the build target
+[$BUILD_TARGET] and ~150MB for the resulting ISO [$ISO_TARGET]).
 
 * fast network access for retreiving the Debian packages used for creating the
 chroot (check out "local mirror" and "NFSROOT" to workaround this problem as far
@@ -217,10 +220,20 @@ single run (boot/isolinux, mksquashfs and mkisofs stuff is missing currently)
 
 * explain (and provide configuration for) the use of NFSROOT
 
-* support setting stuff like ISO name, version,...
+* support setting stuff like ISO name, version,... (especially for stuff inside
+x86_files/boot/isolinux)
+
+* identify all packages that are arch specific
 
 * support different flavours and architectures of Debian (currently it defaults
 to Debian/stable x86_32)
+
+* use hooks of FAI in grml-live script?
+
+* the GRML class(es) should send output as used inside FAI as well (so it's not
+as verbose unless you specify it)
+
+* provide possibility for cleanup of all created build directories
 
 Bugs
 ----
