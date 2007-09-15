@@ -229,6 +229,8 @@ as verbose unless you specify it)
 
 * provide possibility for cleanup of all created build directories
 
+* support nocolor-option for /etc/grml/fai/grml/grml_cleanup_chroot
+
 Bugs
 ----
 

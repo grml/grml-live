@@ -2,7 +2,9 @@
 
 # helper functions {{{
 
-echo "debug: scripts/init-top/grml running"
+if ! grep -qe debug -qe verbose /proc/cmdline 2>/dev/null ; then
+   echo "debug: scripts/init-top/grml running"
+fi
 
 # get boot command line
 CMDLINE="$(cat /proc/cmdline)"

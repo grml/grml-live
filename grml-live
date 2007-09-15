@@ -136,8 +136,9 @@ if [ -d "$CHROOT_TARGET" ] ; then
 else
    mkdir "$CHROOT_TARGET" || bailout 5 "Problem with creating $CHROOT_TARGET for FAI"
    fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" dirinstall "$CHROOT_TARGET" $FAI_ARGS
-   umount $CHROOT_TARGET/proc 2>/dev/null
-   umount $CHROOT_TARGET/sys  2>/dev/null
+   umount $CHROOT_TARGET/proc 2>/dev/null || /bin/true
+   umount $CHROOT_TARGET/sys  2>/dev/null || /bin/true
+   echo "  [*] Finished execution of stage 'fai dirinstall'"
 fi
 # }}}
 
@@ -172,7 +173,7 @@ if [ "$ARCH" = x86 ] ; then
       # boot.cat
       if [ -n "$WINDOWS_BINARIES" ] ; then
          if [ -d "$BUILD_TARGET"/windows ] ; then
-            echo "  [x] $BUILD_TARGET/windows exists already - skipping stage WINDOWS_BINARIES"
+            echo "  [x] $BUILD_TARGET/windows exists already - skipping stage 'WINDOWS_BINARIES'"
             return 0
          else
             mkdir "$BUILD_TARGET"/windows
@@ -181,7 +182,9 @@ if [ "$ARCH" = x86 ] ; then
                   wget ${WINDOWS_BINARIES}/${file}.exe
               done )
          fi
+      echo "  [*] Finished execution of stage 'WINDOWS_BINARIES'"
       fi
+   echo "  [*] Finished execution of stage 'boot/isolinux'"
    fi
 # amd64:
 elif [ "$ARCH" = amd64 ] ; then
@@ -200,6 +203,7 @@ else
    mkdir "$BUILD_TARGET"/live
    mksquashfs $CHROOT_TARGET/* $BUILD_TARGET/live/grml.squashfs -noappend
 fi
+echo "  [*] Finished execution of stage 'squashfs'"
 # }}}
 
 # ISO_TARGET - mkisofs {{{
@@ -214,7 +218,7 @@ else
              -c boot/isolinux/boot.cat -b boot/isolinux/isolinux.bin      \
              -o "$ISO_TARGET"/grml_0.0-1.iso .
    )
-
+   echo "  [*] Finished execution of stage 'iso build'"
 fi
 # }}}
 
