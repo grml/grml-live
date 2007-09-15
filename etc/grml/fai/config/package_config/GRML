@@ -2,7 +2,6 @@ PACKAGES aptitude
 
 aumix alsa-utils
 bzip2
-cfengine2
 console-common
 cron
 dctrl-tools

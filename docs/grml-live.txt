@@ -63,29 +63,22 @@ Force execution and do not display summary of configuration details.
 
 Display short usage information and exit.
 
-  additional_arguments_for_fai::
-
-Any additional argument(s) to grml-live will be given to the FAI commandline
-(being basically "fai dirinstall ...).  This might become a temporary solution
-(due to security reasons), if you need an option please let us know so we can
-implement it.
-
 How to get your own live-cd - the easy, fast and simple way
 -----------------------------------------------------------
 
-To get a small, Debian-stable and grml based live-cd:
+To get a small, Debian-stable and grml based live-cd using /dev/shm/
+as build and output directory:
 
-  # TARGET="/grml/grml_uncompressed"
-  # CDDIR="/grml/grml_cd"
-  # grml-live -c GRML -t $TARGET
-  # mksquashfs $TARGET/* $CDDIR/live/grml.squashfs -noappend
-  # cd $CDDIR
-  # mkisofs -V "my personal grml" -l -r -J -no-emul-boot -boot-load-size 4 \
-            -boot-info-table -c boot/isolinux/boot.cat \
-            -b boot/isolinux/isolinux.bin -o /grml/grml.iso .
+  # grml-live
 
-(TODO: provide the content of /grml/chroot/grml_cd through the package
-grml-live, in the meanwhile get the content from a current grml-ISO)
+[NOTE]
+
+If you have about 700MB of free space inside /dev/shm (being a tmpfs, usually
+you have >=1GB of RAM) just run "mount -o remount,suid,dev,rw /dev/shm" and use
+/dev/shm as build and output directory - resulting in very fast build process.
+But please be aware of the fact that rebooting your system will result in an
+empty /dev/shm, so please another directory for $CHROOT_TARGET, $BUILD_TARGET
+and $ISO_TARGET if you plan to create more persistent output. :)
 
 The class concept
 -----------------
@@ -144,11 +137,11 @@ out-of-the-box so you shouldn't have to configure anything in this file.
 
   /etc/grml/fai/make-fai-nfsroot.conf
 
-TODO
+TODO: documentation
 
   /etc/grml/fai/NFSROOT
 
-TODO
+TODO: documentation
 
   /etc/grml/fai/apt/sources.list
 
@@ -202,9 +195,10 @@ Requirements for the build system
 * any Debian based system should be sufficient (if not please send a bug
 report), for example a grml2hd harddisk installation ships all you need
 
-* enough free disk space, at least 700MB are required for a minimal grml-live
-run (~400MB for the chroot [$CHROOT_TARGET], ~150MB for the build target
-[$BUILD_TARGET] and ~150MB for the resulting ISO [$ISO_TARGET]).
+* enough free disk space; at least 800MB are required for a minimal grml-live
+run (\~400MB for the chroot [$CHROOT_TARGET], \~150MB for the build target
+[$BUILD_TARGET] and \~150MB for the resulting ISO [$ISO_TARGET] plus some
+temporary files)
 
 * fast network access for retreiving the Debian packages used for creating the
 chroot (check out "local mirror" and "NFSROOT" to workaround this problem as far
@@ -245,3 +239,6 @@ Authors
 -------
 Michael Prokop <mika@grml.org>.
 
+/////////////////////////////////////
+// vim:ai tw=80 ft=asciidoc expandtab
+/////////////////////////////////////

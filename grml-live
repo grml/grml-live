@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sat Sep 15 21:36:04 CEST 2007 [mika]
+# Latest change: Sat Sep 15 22:32:11 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -21,6 +21,7 @@ if [ "$(id -u 2>/dev/null)" != 0 ] ; then
    exit 1
 fi
 
+# make sure they are not set by default
 VERBOSE=''
 FORCE=''
 
@@ -28,12 +29,12 @@ FORCE=''
 . /etc/grml/grml-live.conf
 
 PN=$(basename $0)
-TMPFILE=$(mktemp)
+# TMPFILE=$(mktemp)
 # }}}
 
 # clean exit {{{
 bailout() {
-  rm -f "$TMPFILE"
+  # rm -f "$TMPFILE"
   [ -n "$1" ] && EXIT="$1" || EXIT="1"
   [ -n "$2" ] && echo "$2">&2
   exit "$EXIT"
@@ -45,8 +46,8 @@ trap bailout 1 2 3 15
 [ -n "$GRML_FAI_CONFIG" ] || GRML_FAI_CONFIG=/etc/grml/fai
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 [ -n "$USERNAME" ] || USERNAME=grml
-[ -n "$CLASSES" ] || CLASSES="GRML"
-[ -n "$CHROOT_TARGET" ] || bailout 1 "${PN}: \$CHROOT_TARGET not specified. Please adjust /etc/grml/grml-live.conf. Exiting."
+[ -n "$CLASSES" ]  || CLASSES="GRML,I386"
+[ -n "$TARGET" ] || bailout 1 "${PN}: \$TARGET not specified. Please adjust /etc/grml/grml-live.conf. Exiting."
 # }}}
 
 # usage information {{{
@@ -60,9 +61,9 @@ Usage: $PN [-c <classe[s]>] [-t <target_directory>] [-F] [-h|--help] [additional
 Usage examples:
 
     $PN
-    $PN -c GRML -t /dev/shm/grml
-    $PN -c GRML,GRML_X -t /grml/chroot/grml_uncompressed
-    $PN -c GRML
+    $PN -c GRML,I386 -t /dev/shm/grml
+    $PN -c GRML,GRML_X,I386 -t /grml/
+    $PN -c GRML,I386
 
 More details: man grml-live
               /usr/share/doc/grml-live/grml-live.html
@@ -75,34 +76,26 @@ http://grml.org/bugs/
 
 # command line parsing {{{
 
-while getopts ?c:f:t:Fhv: opt; do
+while getopts ?t:f:Fhv: opt; do
   case "$opt" in
     c) CLASSES="$OPTARG" ;;
     F) FORCE=1 ;;
     h) usage ; bailout 0 ;;
-    t) CHROOT_TARGET="$OPTARG" ;;
+    t) TARGET="$OPTARG" ;;
     v) VERBOSE="-v" ;;
     ?) echo "invalid option -$OPTARG" >&2; bailout 1 ;;
   esac
 done
 shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
-FAI_ARGS="$*"
+# FAI_ARGS="$*"
 
 # }}}
 
 # some misc checks before executing FAI {{{
 [ -n "$CLASSES" ] || bailout 1 "Error: \$CLASSES unset, please set it in /etc/grml/grml-live.conf or
 specify it on the command line using the -c|--classes option."
-[ -n "$CHROOT_TARGET" ] || bailout 1 "Error: \$CHROOT_TARGET unset, please set it in /etc/grml/grml-live.conf or
+[ -n "$TARGET" ] || bailout 1 "Error: \$TARGET unset, please set it in /etc/grml/grml-live.conf or
 specify it on the command line using the -t|--target option."
-
-if [ "$EXECUTE" != '1' ] ; then
-   echo "Error: please set EXECUTE=1 in /etc/grml/grml-live.conf to really execute grml-live.">&2
-   echo
-   echo "See 'man grml-live' for more details or execute '$PN --help'">&2
-   echo
-   bailout 1
-fi
 # }}}
 
 # ask user whether the setup is ok {{{
@@ -110,11 +103,11 @@ if [ -z "$FORCE" ] ; then
    echo
    echo "$PN - check your configuration (or invoke using -F to force execution without prompting)"
    echo
-   echo "  FAI classes:    $CLASSES"
-   echo "  chroot target:  $CHROOT_TARGET"
-   echo "  build target:   $BUILD_TARGET"
-   echo "  ISO target:     $ISO_TARGET"
-
+   echo "  FAI classes:       $CLASSES"
+   echo "  output directory:  $TARGET"
+   [ -n "$CHROOT_TARGET" ] && echo "  chroot target:     $CHROOT_TARGET"
+   [ -n "$BUILD_TARGET" ]  && echo "  build target:      $BUILD_TARGET"
+   [ -n "$ISO_TARGET" ]    && echo "  ISO target:        $ISO_TARGET"
    [ -n "$FAI_ARGS" ] && echo "  additional arguments for FAI: $FAI_ARGS"
    echo
    echo -n "Is this ok for you? [y/N] "
@@ -126,6 +119,7 @@ if [ -z "$FORCE" ] ; then
 fi
 # }}}
 
+# on-the-fly configuration {{{
 if [ -n "$GRML_LIVE_SOURCES" ] ; then
    echo "$GRML_LIVE_SOURCES" > /etc/grml/fai/apt/sources.list
 fi
@@ -133,16 +127,22 @@ fi
 if [ -n "$FAI_DEBOOTSTRAP" ] ; then
    sed -i "s#^FAI_DEBOOTSTRAP#FAI_DEBOOTSTRAP=$FAI_DEBOOTSTRAP#" /etc/grml/fai/make-fai-nfsroot.conf
 fi
+# }}}
 
-# execute FAI {{{
+# CHROOT_TARGET - execute FAI {{{
+[ -n "$CHROOT_TARGET" ] || CHROOT_TARGET="$TARGET/grml_chroot"
 if [ -d "$CHROOT_TARGET" ] ; then
    echo "  [x] $CHROOT_TARGET exists already, skipping the stage 'fai dirnstall'"
 else
    mkdir "$CHROOT_TARGET" || bailout 5 "Problem with creating $CHROOT_TARGET for FAI"
    fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" dirinstall "$CHROOT_TARGET" $FAI_ARGS
+   umount $CHROOT_TARGET/proc 2>/dev/null
+   umount $CHROOT_TARGET/sys  2>/dev/null
 fi
 # }}}
 
+# BUILD_TARGET - execute arch specific stuff and squashfs {{{
+[ -n "$BUILD_TARGET" ] || BUILD_TARGET="$TARGET/grml_cd"
 mkdir -p "$BUILD_TARGET" || bailout 6 "Problem with creating $BUILD_TARGET for stage ARCH"
 
 # x86:
@@ -200,7 +200,10 @@ else
    mkdir "$BUILD_TARGET"/live
    mksquashfs $CHROOT_TARGET/* $BUILD_TARGET/live/grml.squashfs -noappend
 fi
+# }}}
 
+# ISO_TARGET - mkisofs {{{
+[ -n "$ISO_TARGET" ] || ISO_TARGET="$TARGET/grml_isos"
 if [ -d "$ISO_TARGET" ] ; then
    echo "  [x] $ISO_TARGET exists already, skipping the stage 'iso build'"
 else
@@ -213,9 +216,12 @@ else
    )
 
 fi
+# }}}
 
+# finalize {{{
 echo "  [*] Sucessfully finished execution of $PN"
 bailout 0
+# }}}
 
 ## END OF FILE #################################################################
 # vim:foldmethod=marker ts=2 ft=sh ai expandtab tw=80 sw=2
