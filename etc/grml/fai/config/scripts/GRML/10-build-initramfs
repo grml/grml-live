@@ -2,8 +2,8 @@
 set -u
 set -e
 
-cp /etc/grml/fai/live-initramfs/live.conf "$target/etc/live.conf"
+cp /etc/grml/fai/live-initramfs/live.conf $target/etc/live.conf
 cp /etc/grml/fai/live-initramfs/grml-script.init-top "$target/usr/share/initramfs-tools/scripts/init-top/grml"
-FILE=$(ls -1 "$target"/boot/vmlinuz-* | sort -r | head -1)
+FILE=$(ls -1 $target/boot/vmlinuz-* | sort -r | head -1)
 KERNELVERSION=$(echo "${FILE##$target/boot/vmlinuz-}")
-chroot $target update-initramfs -c -t -k $KERNELVERSION
+$ROOTCMD update-initramfs -c -t -k $KERNELVERSION

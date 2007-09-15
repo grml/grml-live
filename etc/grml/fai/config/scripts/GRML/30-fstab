@@ -6,6 +6,7 @@ USERNAME=''
 [ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
 [ -n "$USERNAME" ] || USERNAME=grml
 
+# FIXME: use /etc/grml/fai/... as base
 cat > "$target"/etc/fstab << EOF
 # /etc/fstab - static file system information
 # <filesystem> <mountpoint>   <type> <options>                             <dump> <pass>

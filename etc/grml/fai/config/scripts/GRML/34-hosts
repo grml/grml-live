@@ -6,7 +6,8 @@ HOSTNAME=''
 [ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 
-cat > "$target"/etc/hosts << EOF
+# FIXME: use /etc/grml/fai/... as base
+cat > $target/etc/hosts << EOF
 127.0.0.1       $HOSTNAME    localhost
 
 # The following lines are desirable for IPv6 capable hosts

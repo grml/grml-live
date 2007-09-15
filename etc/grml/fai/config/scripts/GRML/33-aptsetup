@@ -2,11 +2,12 @@
 set -u
 set -e
 
-rm -f "$target/etc/apt/sources.list"
+rm -f $target/etc/apt/sources.list
 
-chroot "$target" ln -s /etc/apt/sources.list.grml /etc/apt/sources.list
+$ROOTCMD ln -s /etc/apt/sources.list.grml /etc/apt/sources.list
 
-cat > "$target"/etc/apt/preferences << EOF
+# FIXME: use /etc/grml/fai/... as base
+cat > $target/etc/apt/preferences << EOF
 // main grml-repository:
 Package: *
 Pin: origin deb.grml.org

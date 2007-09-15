@@ -2,6 +2,7 @@
 set -u
 set -e
 
-if [ -r "$target"/usr/bin/vim.basic ] ; then
-   chroot "$target" update-alternatives --set editor /usr/bin/vim.basic
+# FIXME: use /etc/grml/fai/... as base
+if [ -r $target/usr/bin/vim.basic ] ; then
+   $ROOTCMD update-alternatives --set editor /usr/bin/vim.basic
 fi

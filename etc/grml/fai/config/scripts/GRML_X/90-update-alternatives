@@ -2,10 +2,10 @@
 set -u
 set -e
 
-if [ -r "$target"/usr/bin/xterm ] ; then
-   chroot "$target" update-alternatives --set x-terminal-emulator /usr/bin/xterm
+if [ -r $target/usr/bin/xterm ] ; then
+   $ROOTCMD update-alternatives --set x-terminal-emulator /usr/bin/xterm
 fi
 
-if [ -r "$target"/etc/X11/cursors/whiteglass.theme ] ; then
-   chroot "$target" update-alternatives --set x-cursor-theme /etc/X11/cursors/whiteglass.theme
+if [ -r $target/etc/X11/cursors/whiteglass.theme ] ; then
+   $ROOTCMD update-alternatives --set x-cursor-theme /etc/X11/cursors/whiteglass.theme
 fi

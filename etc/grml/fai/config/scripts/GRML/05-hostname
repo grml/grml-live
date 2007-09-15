@@ -6,4 +6,4 @@ HOSTNAME=''
 [ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 
-echo "$HOSTNAME" > "$target"/etc/hostname
+echo "$HOSTNAME" > $target/etc/hostname

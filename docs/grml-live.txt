@@ -231,6 +231,9 @@ as verbose unless you specify it)
 
 * support nocolor-option for /etc/grml/fai/grml/grml_cleanup_chroot
 
+* copy files from $FAI_CONFIGDIR/... instead of using 'cat > $FILE << EOF ...'
+inside the  /etc/grml/fai/config/scripts/GRML/-scripts
+
 Bugs
 ----
 

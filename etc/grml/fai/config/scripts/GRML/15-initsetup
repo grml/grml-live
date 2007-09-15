@@ -2,8 +2,8 @@
 set -u
 set -e
 
-if grep -q "small" "$target"/etc/grml_version ; then
-   cp "$target"/etc/runlevel.conf.livecd.small "$target"/etc/runlevel.conf
+if grep -q 'small' $target/etc/grml_version ; then
+   cp $target/etc/runlevel.conf.livecd.small $target/etc/runlevel.conf
 else
-   cp "$target"/etc/runlevel.conf.livecd "$target"/etc/runlevel.conf
+   cp $target/etc/runlevel.conf.livecd $target/etc/runlevel.conf
 fi

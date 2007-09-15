@@ -2,7 +2,8 @@
 set -u
 set -e
 
-cat >> "$target"/etc/network/interfaces << EOF
+# FIXME: use /etc/grml/fai/... as base
+cat >> $target/etc/network/interfaces << EOF
 # The loopback interface
 # automatically added when upgrading
 auto lo
