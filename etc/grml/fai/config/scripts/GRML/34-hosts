@@ -1,0 +1,17 @@
+#!/bin/sh
+set -u
+set -e
+
+cat > "$target"/etc/hosts << EOF
+127.0.0.1       grml    localhost
+
+# The following lines are desirable for IPv6 capable hosts
+# (added automatically by netbase upgrade)
+
+::1     ip6-localhost ip6-loopback grml
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+EOF

@@ -1,0 +1,37 @@
+#!/bin/sh
+# make sure we have file-rc available before
+# package_config/GRML is being executed:
+if [ -z "$target" ] ; then
+        echo "Fatal: $target unset for $0 - can not continue therefore."
+        exit 1
+fi
+
+# work around http://trac.lighttpd.net/trac/ticket/657:
+echo "Acquire::http::Pipeline-Depth "0";" >> $target/etc/apt/apt.conf
+
+# install grml keys:
+gpg --keyserver subkeys.pgp.net --recv-keys F61E2E7CECDEA787
+gpg --export F61E2E7CECDEA787 > $target/etc/apt/grml.key
+chroot $target apt-key add /etc/apt/grml.key
+
+# finally install file-rc:
+chroot $target apt-get update
+chroot $target apt-get --download-only --assume-yes install file-rc
+chroot $target /bin/sh -c "dpkg -i --force-all /var/cache/apt/archives/file-rc*.deb"
+chroot $target apt-get -f install file-rc
+
+# we don't need the invoke-rc.d and update-rc.d diversion
+# because otherwise use of file-rc with aptitude fails:
+if [ -L "$target"/usr/sbin/invoke-rc.d ] ; then
+   rm -f "$target"/usr/sbin/invoke-rc.d
+   chroot $target dpkg-divert --package fai --rename --remove /usr/sbin/invoke-rc.d
+fi
+if [ -L "$target"/usr/sbin/update-rc.d ] ; then
+   dpkg --purge sysv-rc
+   chroot $target apt-get --assume-yes --reinstall install file-rc
+fi
+
+# debug:
+# chroot $target /bin/bash
+
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

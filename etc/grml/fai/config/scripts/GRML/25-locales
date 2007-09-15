@@ -1,0 +1,6 @@
+#!/bin/sh
+set -u
+set -e
+
+cp "$target"/etc/locale.gen.minimal "$target"/etc/locale.gen
+chroot "$target" locale-gen

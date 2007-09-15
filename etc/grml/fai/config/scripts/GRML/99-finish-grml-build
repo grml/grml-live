@@ -1,0 +1,5 @@
+#!/bin/sh
+set -u
+set -e
+
+touch "$target"/etc/grml_cd

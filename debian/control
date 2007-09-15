@@ -1,0 +1,18 @@
+Source: grml-live
+Section: grml
+Priority: extra
+Maintainer: Michael Prokop <mika@grml.org>
+Build-Depends: debhelper (>= 5), asciidoc, xsltproc, docbook-xsl
+Standards-Version: 3.7.2
+Homepage: http://hg.grml.org/grml-live/
+XS-Vcs-hg: http://hg.grml.org/grml-live/
+XS-Vcs-Browser: http://hg.grml.org/grml-live/
+
+Package: grml-live
+Architecture: all
+Depends: fai-client, fai-server
+Suggests: fai-doc
+Description: build system for creating a grml (based) live-cd
+ This package provides the build system for creating
+ a grml (based) live-cd. It is based on FAI (Fully Automatic
+ Installation).

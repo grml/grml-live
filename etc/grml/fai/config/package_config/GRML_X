@@ -1,0 +1,14 @@
+PACKAGES aptitude
+
+grml-ddcxinfo
+grml-desktop
+grml-x
+xserver-xorg-input-vmmouse
+xterm xcursor-themes
+xfonts-100dpi
+xfonts-75dpi
+xfonts-base
+dillo
+gkrellm
+fluxbox
+vim-gtk

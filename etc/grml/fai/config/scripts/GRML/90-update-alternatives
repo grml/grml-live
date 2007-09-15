@@ -1,0 +1,7 @@
+#!/bin/sh
+set -u
+set -e
+
+if [ -r "$target"/usr/bin/vim.basic ] ; then
+   chroot "$target" update-alternatives --set editor /usr/bin/vim.basic
+fi

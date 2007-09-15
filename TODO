@@ -1,0 +1,6 @@
+TODO for grml-live
+==================
+
+* make all references to "grml" (hostname, usersetup,...) configurable
+* replace 192.168.... mirrors with something generic and make it configurable
+* provide buildprocess for boot/isolinux stuff

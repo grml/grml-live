@@ -1,0 +1,7 @@
+#!/bin/sh
+set -u
+set -e
+
+if [ -r "$target/etc/X11/xorg.conf" ] ; then
+   mv -f "$target"/etc/X11/xorg.conf "$target"/etc/X11/xorg.conf.debian
+fi

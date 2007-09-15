@@ -1,0 +1,3 @@
+PACKAGES aptitude
+
+vim vim-addon-manager vim-common vim-gtk vim-gui-common vim-latexsuite vim-python vim-ruby vim-runtime vim-scripts vim-vimoutliner

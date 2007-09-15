@@ -1,0 +1,72 @@
+PACKAGES aptitude
+
+aumix alsa-utils
+bzip2
+cfengine2
+console-common
+cron
+dctrl-tools
+debconf-utils
+deborphan
+discover
+eject
+file
+grml
+grml2hd
+grml2hd-utils
+grml2usb
+grml-autoconfig
+grml-crypt
+grml-debian-keyring
+grml-debootstrap
+grml-debugtools
+grml-docs
+grml-etc
+grml-etc-core
+grml-files
+grml-hwinfo
+grml-kerneladdons-2.6.22 linux-image-2.6.22-grml
+grml-laptop
+grml-mercurial-utils
+grml-network
+grml-policyrcd
+grml-pylib
+grml-rebuildfstab
+grml-saveconfig
+grml-scanpartitions
+grml-scripts
+grml-sectools
+grml-shlib
+grml-templates
+grml-terminalserver
+grml-usleep
+grml-vpn
+hdparm
+htop
+hwinfo
+idesk
+iptstate
+less
+linuxlogo
+live-initramfs
+locales
+lvm2
+mdadm
+multitail
+nfs-common
+nscd
+openssh-client openssh-server
+pciutils usbutils
+postfix
+powernowd
+rdate
+resolvconf
+rsh-client
+rsync
+strace
+syslog-ng
+sysutils
+tcsh
+time
+usbutils
+wireless-tools wpasupplicant

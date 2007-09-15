@@ -1,0 +1,36 @@
+#!/bin/sh
+set -u
+set -e
+
+cat > "$target"/etc/sudoers << EOF
+# sudoers file.
+# This file MUST be edited with the "visudo" command as root.
+# See the man page for details on how to write a sudoers file.
+
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+
+# User privilege specification
+root    ALL=(ALL) ALL
+
+# WARNING: This allows the unprivileged grml user to start commands as root
+# WARNING: This is totally insecure and (almost) makes grml a second root account.
+# WARNING: Never allow external access to the grml user!!!
+grml    ALL=NOPASSWD: ALL
+
+# allow editing of files with editor:
+# grml ALL=NOPASSWD: sudoedit
+
+# usage examples:
+# grml ALL=NOPASSWD: /sbin/hdparm
+# grml ALL=NOPASSWD: /usr/sbin/hwinfo
+# Cmnd_Alias DEBIAN = /usr/bin/apt-get, /usr/bin/dpkg, /usr/bin/auto-apt, /usr/bin/apt-file
+# grml ALL=NOPASSWD: DEBIAN
+# chroot       ALL=NOPASSWD: /usr/sbin/chroot, /bin/su - chroot
+# chroot       ALL=NOPASSWD: /usr/sbin/chroot, /bin/su - chroot
+
+secvpn  ALL=NOPASSWD: /usr/sbin/secvpn, /usr/sbin/pppd
+EOF

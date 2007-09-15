@@ -1,0 +1,11 @@
+#!/bin/sh
+set -u
+set -e
+
+cat >> "$target"/etc/network/interfaces << EOF
+# The loopback interface
+# automatically added when upgrading
+auto lo
+iface lo inet loopback
+EOF
+

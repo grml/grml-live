@@ -1,0 +1,24 @@
+PACKAGES aptitude
+cfengine2
+cron
+debconf-utils
+discover
+file
+hdparm
+jove
+less
+linuxlogo
+nfs-common
+nscd
+rdate
+rsync
+rsh-client
+openssh-client openssh-server
+strace
+sysutils
+tcsh
+time
+eject
+locales
+console-common
+pciutils usbutils

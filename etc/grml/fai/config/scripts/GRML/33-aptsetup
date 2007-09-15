@@ -1,0 +1,25 @@
+#!/bin/sh
+set -u
+set -e
+
+rm -f "$target/etc/apt/sources.list"
+
+chroot "$target" ln -s /etc/apt/sources.list.grml /etc/apt/sources.list
+
+cat > "$target"/etc/apt/preferences << EOF
+// main grml-repository:
+Package: *
+Pin: origin deb.grml.org
+Pin-Priority: 996
+
+// fallback grml-repository:
+Package: *
+Pin: origin grml.org
+Pin-Priority: 995
+
+// debian unstable pool (default):
+Package: *
+Pin: release a=unstable,o=Debian
+Pin-Priority: 991
+
+EOF

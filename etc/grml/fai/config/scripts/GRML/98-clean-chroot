@@ -1,0 +1,7 @@
+#!/bin/sh
+set -u
+set -e
+
+cp /etc/fai/grml/grml_cleanup_chroot "$target/root/"
+chroot "$target" /root/grml_cleanup_chroot
+rm "$target/root/grml_cleanup_chroot"

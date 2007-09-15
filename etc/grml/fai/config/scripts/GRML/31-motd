@@ -1,0 +1,5 @@
+#!/bin/sh
+set -u
+set -e
+
+chroot "$target" mv /etc/motd.dpkg-new /var/run/motd

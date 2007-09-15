@@ -1,0 +1,11 @@
+# These lines should work for many sites
+# A more comprehensive example is at /usr/share/doc/fai-doc/examples/etc
+
+deb http://192.168.1.112/debian     etch         main contrib non-free
+deb http://deb.grml.org/            grml-stable  main
+deb http://deb.grml.org/            grml-testing main
+deb http://ftp.de.debian.org/debian etch         main contrib non-free
+
+# deb http://www.informatik.uni-koeln.de/fai/download etch koeln
+# deb http://ftp.debian.org/debian etch-proposed-updates main contrib non-free
+# deb http://security.debian.org/debian-security etch/updates main contrib non-free

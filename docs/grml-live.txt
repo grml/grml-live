@@ -1,0 +1,29 @@
+grml-live(8)
+============
+
+Name
+----
+grml-live - generate a grml (based) live-cd
+
+Synopsis
+--------
+grml-live [ todo...]
+
+*******************************************************************************
+Important! grml-live is under heavy construction and everything but ready yet.
+*******************************************************************************
+
+Introduction
+------------
+
+grml-live provides the build system for creating a grml (based) live-cd.  It is
+based on link:http://www.informatik.uni-koeln.de/fai/[FAI] (Fully Automatic
+Installation).
+
+Bugs
+----
+Please report feedback, link:http://grml.org/bugs/[bugreports] and wishes link:http://grml.org/contact/[to us]!
+
+Authors
+-------
+Michael Prokop <mika@grml.org>.
