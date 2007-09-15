@@ -43,7 +43,7 @@ trap bailout 1 2 3 15
 # }}}
 
 # check for important variables {{{
-[ -n "$FAI_CONFIG" ] || FAI_CONFIG=/etc/grml/fai
+[ -n "$GRML_FAI_CONFIG" ] || GRML_FAI_CONFIG=/etc/grml/fai
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 [ -n "$USERNAME" ] || USERNAME=grml
 [ -n "$CLASSES" ] || CLASSES="GRML"
@@ -133,7 +133,7 @@ if [ -n "$FAI_DEBOOTSTRAP" ] ; then
 fi
 
 # execute FAI {{{
-fai -v -C "$FAI_CONFIG" -c"$CLASSES" dirinstall "$TARGET" $FAI_ARGS
+fai -v -C "$GRML_FAI_CONFIG" -c"$CLASSES" dirinstall "$TARGET" $FAI_ARGS
 # }}}
 
 ## END OF FILE #################################################################
