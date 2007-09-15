@@ -207,32 +207,39 @@ as possiblbe)
 Known TODOs
 -----------
 
-* extend the grml-live wrapper script so it runs all the necessary command in a
-single run (boot/isolinux, mksquashfs and mkisofs stuff is missing currently)
+* do not use /dev/shm/ als default target directory (which one do we want to use
+instead?)
 
-* really support signed apt repositories
+* add support for amd64 [gebi?] + ppc [formorer?] (and identify all packages
+that are arch specific so we have a clean package list in all classes)
+
+* support different grml-flavours through classes right out-of-the-box (being:
+grml, grml64, grml-small for at least x86, amd64 and ppc) [currently it defaults
+to Debian/stable I386]
+
+* really support signed apt repositories (currently it's deactivated via fai's
+dirinstall for some packages)
 
 * explain (and provide configuration for) the use of NFSROOT
 
 * support setting stuff like ISO name, version,... (especially for stuff inside
 x86_files/boot/isolinux)
 
-* identify all packages that are arch specific
+* support "final builds" (including stuff like md5sums)
 
-* support different flavours and architectures of Debian (currently it defaults
-to Debian/stable x86_32)
+* use hooks of FAI as far as possible in all grml-live scripts
 
-* use hooks of FAI in grml-live script?
-
-* the GRML class(es) should send output as used inside FAI as well (so it's not
-as verbose unless you specify it)
+* the grml-live class(es) should send output as used inside FAI as well (so it's
+not as verbose unless you specify it, make it configurable)
 
 * provide possibility for cleanup of all created build directories
+
+* support hooks to further allow customisation of the build process
 
 * support nocolor-option for /etc/grml/fai/grml/grml_cleanup_chroot
 
 * copy files from $FAI_CONFIGDIR/... instead of using 'cat > $FILE << EOF ...'
-inside the  /etc/grml/fai/config/scripts/GRML/-scripts
+inside all the /etc/grml/fai/config/scripts/GRML/-scripts
 
 Bugs
 ----
