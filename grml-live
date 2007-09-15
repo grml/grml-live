@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sat Sep 15 18:22:07 CEST 2007 [mika]
+# Latest change: Sat Sep 15 20:58:00 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -23,7 +23,6 @@ fi
 
 VERBOSE=''
 FORCE=''
-DEBUG='' # TODO / FIXME - not implemented yet
 
 # source main configuration file:
 . /etc/grml/grml-live.conf
@@ -47,7 +46,7 @@ trap bailout 1 2 3 15
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 [ -n "$USERNAME" ] || USERNAME=grml
 [ -n "$CLASSES" ] || CLASSES="GRML"
-[ -n "$TARGET" ] || bailout 1 "${PN}: \$TARGET not specified. Please adjust /etc/grml/grml-live.conf. Exiting."
+[ -n "$CHROOT_TARGET" ] || bailout 1 "${PN}: \$CHROOT_TARGET not specified. Please adjust /etc/grml/grml-live.conf. Exiting."
 # }}}
 
 # usage information {{{
@@ -56,7 +55,7 @@ usage()
   echo "
 $PN - build process script for generating a (grml based) Linux Live-ISO
 
-Usage: $PN [-c <classe[s]>] [-t <target_directory>] [-F] [-h|--help] [addiontalarguments_for_fai]
+Usage: $PN [-c <classe[s]>] [-t <target_directory>] [-F] [-h|--help] [additional_arguments_for_fai]
 
 Usage examples:
 
@@ -81,8 +80,8 @@ while getopts ?c:f:t:Fhv: opt; do
     c) CLASSES="$OPTARG" ;;
     F) FORCE=1 ;;
     h) usage ; bailout 0 ;;
-    t) TARGET="$OPTARG" ;;
-    v) VERBOSE=1 ;;
+    t) CHROOT_TARGET="$OPTARG" ;;
+    v) VERBOSE="-v" ;;
     ?) echo "invalid option -$OPTARG" >&2; bailout 1 ;;
   esac
 done
@@ -94,7 +93,7 @@ FAI_ARGS="$*"
 # some misc checks before executing FAI {{{
 [ -n "$CLASSES" ] || bailout 1 "Error: \$CLASSES unset, please set it in /etc/grml/grml-live.conf or
 specify it on the command line using the -c|--classes option."
-[ -n "$TARGET" ] || bailout 1 "Error: \$TARGET unset, please set it in /etc/grml/grml-live.conf or
+[ -n "$CHROOT_TARGET" ] || bailout 1 "Error: \$CHROOT_TARGET unset, please set it in /etc/grml/grml-live.conf or
 specify it on the command line using the -t|--target option."
 
 if [ "$EXECUTE" != '1' ] ; then
@@ -112,7 +111,7 @@ if [ -z "$FORCE" ] ; then
    echo "$PN - check your configuration (or invoke using -F to force execution without prompting)"
    echo
    echo "  FAI classes:                  $CLASSES"
-   echo "  target / output directory:    $TARGET"
+   echo "  target / output directory:    $CHROOT_TARGET"
    [ -n "$FAI_ARGS" ] && echo "  additional arguments for FAI: $FAI_ARGS"
    echo
    echo -n "Is this ok for you? [y/N] "
@@ -133,8 +132,63 @@ if [ -n "$FAI_DEBOOTSTRAP" ] ; then
 fi
 
 # execute FAI {{{
-fai -v -C "$GRML_FAI_CONFIG" -c"$CLASSES" dirinstall "$TARGET" $FAI_ARGS
+if [ -d "$CHROOT_TARGET" ] ; then
+   echo "$CHROOT_TARGET assumes already, skipping the 'fai dirnstall' stage therefore."
+else
+   mkdir "$CHROOT_TARGET" || bailout 5 "Problem with creating $CHROOT_TARGET for FAI"
+   fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" dirinstall "$CHROOT_TARGET" $FAI_ARGS
+fi
 # }}}
+
+if [ -d "$BUILD_TARGET" ] ; then
+   echo "$BUILD_TARGET assumes already, skipping the 'squashfs' stage therefore."
+else
+   mkdir -p "$BUILD_TARGET" || bailout 6 "Problem with creating $BUILD_TARGET for squashfs"
+
+   if [ "$ARCH" = x86 ] ; then
+      mkdir -p "$BUILD_TARGET"/boot/isolinux
+      mkdir "$BUILD_TARGET"/GRML
+      mkdir "$BUILD_TARGET"/live
+      cp /boot/memtest86+.bin                                       "$BUILD_TARGET"/boot/isolinux/memtest
+      cp "$CHROOT_TARGET"/boot/initrd*                              "$BUILD_TARGET"/boot/isolinux/initrd.gz
+      cp "$CHROOT_TARGET"/boot/vmlinuz                              "$BUILD_TARGET"/boot/isolinux/linux26
+      cp /usr/lib/syslinux/chain.c32                                "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/lib/syslinux/isolinux.bin                             "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/lib/syslinux/memdisk                                  "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/lib/syslinux/menu.c32                                 "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/x86_files/boot/isolinux/allinone.img  "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/x86_files/boot/isolinux/balder10.imz  "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/x86_files/boot/isolinux/boot-beep.msg "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/x86_files/boot/isolinux/boot.msg      "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/x86_files/boot/isolinux/f*            "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/x86_files/boot/isolinux/isolinux.cfg  "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/x86_files/boot/isolinux/logo.16       "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/x86_files/boot/isolinux/syslinux.cfg  "$BUILD_TARGET"/boot/isolinux/
+      # minirt26.gz
+      # boot.cat
+      if [ -n "$WINDOWS_BINARIES" ] ; then
+         mkdir "$BUILD_TARGET"/windows
+         ( cd "$BUILD_TARGET"/windows
+         for file in pageant plink pscp psftp putty puttygen ; do
+             wget $WINDOWS_BINARIES/$file
+         done )
+      fi
+   elif [ "$ARCH" = amd64 ] ; then
+       echo 'Warning: gebi, it is your turn. :)'>2
+   elif [ "$ARCH" = ppc ] ; then
+       echo 'Warning: formorer, it is your turn. :)'>2
+   else
+      echo 'Warning: Unsupported ARCH, sorry. Want to support it? Contribute!'>&2
+   fi
+fi
+
+if [ -d "$ISO_TARGET" ] ; then
+   echo "$ISO_TARGET assumes already, skipping the 'iso build' stage therefore."
+else
+   mkdir -p "$ISO_TARGET" || bailout 6 "Problem with creating $ISO_TARGET for squashfs"
+fi
+
+bailout 0
 
 ## END OF FILE #################################################################
 # vim:foldmethod=marker ts=2 ft=sh ai expandtab tw=80 sw=2
