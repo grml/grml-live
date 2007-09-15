@@ -20,7 +20,7 @@ fi
 
 VERBOSE=''
 FORCE=''
-DEBUG=''
+DEBUG='' # TODO / FIXME - not implemented yet
 
 # source main configuration file:
 . /etc/grml/grml-live.conf
@@ -121,8 +121,16 @@ if [ -z "$FORCE" ] ; then
 fi
 # }}}
 
+if [ -n "$GRML_LIVE_SOURCES" ] ; then
+   echo $GRML_LIVE_SOURCES > /etc/grml/fai/apt/sources.list
+fi
+
+if [ -n "$FAI_DEBOOTSTRAP" ] ; then
+   sed -i "s#^FAI_DEBOOTSTRAP#FAI_DEBOOTSTRAP=$FAI_DEBOOTSTRAP#" /etc/grml/fai/make-fai-nfsroot.conf
+fi
+
 # execute FAI {{{
-echo fai -v -C "$FAI_CONFIG" -c"$CLASSES" dirinstall "$TARGET" $FAI_ARGS
+fai -v -C "$FAI_CONFIG" -c"$CLASSES" dirinstall "$TARGET" $FAI_ARGS
 # }}}
 
 ## END OF FILE #################################################################

@@ -37,12 +37,9 @@ How to get your own live-cd - the easy, fast and simple way
 
 To get a small, Debian-stable and grml based live-cd:
 
-  # export LANG=C ; export LC_MESSAGES=C
   # TARGET="/grml/chroot/grml_uncompressed"
   # CDDIR="/grml/chroot/grml_cd"
-  # mkdir -p $TARGET
-
-  # fai -v -C /etc/grml/fai -cGRML dirinstall $TARGET
+  # grml-live -c GRML -t $TARGET
   # mksquashfs $TARGET/* $CDDIR/live/grml.squashfs -noappend
   # cd $CDDIR
   # mkisofs -V "my personal grml" -l -r -J -no-emul-boot -boot-load-size 4 \
@@ -63,6 +60,11 @@ see below. To get an idea how another configuration or example files could look
 like check out /usr/share/doc/fai-doc/examples/simple/ (provided by Debian package
 fai-doc). /usr/share/doc/fai-doc/fai-guide.html/ch-config.html also provides
 documentation regarding configuration possibilities.
+
+  /usr/sbin/grml-live
+
+Script for the main build process (being a wrapper around FAI currently).
+Requires root permissions for execution.
 
   /etc/grml/fai/fai.conf
 
@@ -128,11 +130,8 @@ live-initramfs(8).
 TODO
 ----
 
-* provide a wrapper script which runs all the necessary command in a single run
-(named grml-live plus configuration file /etc/grml/grml-live.conf)
-
-* replace 192.168.... inside the configuration files for the Debian mirro with
-something generic and make it configurable
+* provide a wrapper script which runs all the necessary command in a single run (/usr/sbin/grml-live and
+/etc/grml/grml-live.conf are work in progress)
 
 * provide buildprocess for boot/isolinux stuff
 
