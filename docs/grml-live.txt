@@ -244,6 +244,9 @@ not as verbose unless you specify it, make it configurable)
 * copy files from $FAI_CONFIGDIR/... instead of using 'cat > $FILE << EOF ...'
 inside all the /etc/grml/fai/config/scripts/GRML/-scripts
 
+* provide autostart-stuff (for Windows) inside root of $BUILD_TARGET (the
+grml-cd)
+
 Bugs
 ----
 
