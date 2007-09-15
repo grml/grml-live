@@ -26,15 +26,25 @@ FAI uses a class based system. This gives you the flexibility to choose the
 packages you would like to include on your very own live-cd without having to
 deal with all the details in the core of the system.
 
+Please notice that you should have a fast network connection as all the Debian
+packages will be installed via network. If you want to use a local mirror
+checkout
+link:http://www.informatik.uni-koeln.de/fai/download/mkdebmirror[mkdebmirror]
+and debmirror.
+
 How to get your own live-cd - the easy, fast and simple way
 -----------------------------------------------------------
 
 To get a small, Debian-stable and grml based live-cd:
 
-  # TARGET="/grml/chroot/grml_uncompressed" ; mkdir -p $TARGET
+  # export LANG=C ; export LC_MESSAGES=C
+  # TARGET="/grml/chroot/grml_uncompressed"
+  # CDDIR="/grml/chroot/grml_cd"
+  # mkdir -p $TARGET
+
   # fai -v -C /etc/grml/fai -cGRML dirinstall $TARGET
-  # mksquashfs $TARGET/* /grml/chroot/grml_cd/live/grml.squashfs -noappend
-  # cd /grml/chroot/grml_cd/
+  # mksquashfs $TARGET/* $CDDIR/live/grml.squashfs -noappend
+  # cd $CDDIR
   # mkisofs -V "my personal grml" -l -r -J -no-emul-boot -boot-load-size 4 \
             -boot-info-table -c boot/isolinux/boot.cat \
             -b boot/isolinux/isolinux.bin -o /grml/grml.iso .
@@ -61,6 +71,20 @@ scripts for FAI/grml-live can be found. By default it is
 FAI_CONFIGDIR=/etc/grml/fai/config, a directory shipped by grml-live
 out-of-the-box so you shouldn't have to configure anything in this file.
 
+  /etc/grml/fai/make-fai-nfsroot.conf
+
+TODO
+
+  /etc/grml/fai/NFSROOT
+
+TODO
+
+  /etc/grml/fai/apt/sources.list
+
+This file specifies which mirrors should be used for retreiving the Debian
+packages used for creating the ISO. If you want to use a local mirror you have
+to adjust this file.
+
   /etc/grml/fai/config/
 
 The main directory for configuration of FAI/grml-live. More details below.
@@ -72,7 +96,7 @@ FAI classes.
 
   /etc/grml/fai/config/debconf/
 
-This directory provides the files for presseding/configuration of debconf
+This directory provides the files for preseeding/configuration of debconf
 through files.
 
   /etc/grml/fai/config/hooks/
@@ -84,21 +108,43 @@ installation process.
   /etc/grml/fai/config/package_config/
 
 File with lists of software packages to be installed or removed.  The different
-classes describe what should find its way to your ISO.  When running 'fai -v
--cGRML dirinstall ...' only the files from the directory GRML/ will be taken, if
-you use 'fai -v -cGRML,FOOBAR dirinstall ...' then the files of GRML/ **plus**
-the files from FOOBAR/ will be taken. So just create a new class to adjust it to
-your needs. Please notice that the directory GRML contains a package list
-defining a minimum but still reasonable package configuration.
+classes describe what should find its way to your ISO.  When running 'fai -v -C
+/etc/grml/fai -cGRML dirinstall ...' only the files from the directory GRML/
+will be taken, if you use 'fai -v -C /etc/grml/fai -cGRML,FOOBAR dirinstall ...'
+then the files of GRML/ **plus** the files from FOOBAR/ will be taken. So just
+create a new class to adjust it to your needs. Please notice that the directory
+GRML contains a package list defining a minimum but still reasonable package
+configuration.
 
   /etc/grml/fai/config/scripts/
 
 Scripts for customising the ISO within build process.
 
+  /etc/grml/fai/live-initramfs/
+
+This directory provides the files used for building the initramfs/initrd via
+live-initramfs(8).
+
+TODO
+----
+
+* provide a wrapper script which runs all the necessary command in a single run
+(named grml-live plus configuration file /etc/grml/grml-live.conf)
+
+* replace 192.168.... inside the configuration files for the Debian mirro with
+something generic and make it configurable
+
+* provide buildprocess for boot/isolinux stuff
+
+* explain and provide configuration for use of NFSROOT
+
 Bugs
 ----
-Please report feedback, link:http://grml.org/bugs/[bugreports] and wishes link:http://grml.org/contact/[to us]!
+
+Please report feedback, link:http://grml.org/bugs/[bugreports] and wishes
+link:http://grml.org/contact/[to the grml-team]!
 
 Authors
 -------
 Michael Prokop <mika@grml.org>.
+

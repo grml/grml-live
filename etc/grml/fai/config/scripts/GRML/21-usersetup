@@ -2,11 +2,15 @@
 set -u
 set -e
 
-chroot "$target" addgroup --gid 1000 grml
-chroot "$target" useradd -d /home/grml -m -s /bin/zsh -g 1000 grml
+USERNAME=''
+[ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
+[ -n "$USERNAME" ] || USERNAME=grml
+
+chroot "$target" addgroup --gid 1000 $USERNAME
+chroot "$target" useradd -d /home/$USERNAME -m -s /bin/zsh -g 1000 $USERNAME
 
 sed -i 's/^root::/root:*:/' "$target"/etc/shadow
-sed -i 's/^grml::/grml:*:/' "$target"/etc/shadow
+sed -i 's/^$USERNAME::/$USERNAME:*:/' "$target"/etc/shadow
 
 chroot "$target" chsh -s /bin/zsh root
-chroot "$target" chsh -s /bin/zsh grml
+chroot "$target" chsh -s /bin/zsh $USERNAME

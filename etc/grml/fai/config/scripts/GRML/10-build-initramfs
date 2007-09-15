@@ -2,6 +2,7 @@
 set -u
 set -e
 
+cp /etc/grml/fai/live-initramfs/live.conf "$target/etc/live.conf"
 FILE=$(ls -1 "$target"/boot/vmlinuz-* | sort -r | head -1)
 KERNELVERSION=$(echo "${FILE##$target/boot/vmlinuz-}")
 chroot $target update-initramfs -c -t -k $KERNELVERSION

@@ -2,6 +2,10 @@
 set -u
 set -e
 
+USERNAME=''
+[ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
+[ -n "$USERNAME" ] || USERNAME=grml
+
 cat > "$target"/etc/sudoers << EOF
 # sudoers file.
 # This file MUST be edited with the "visudo" command as root.
@@ -16,19 +20,19 @@ cat > "$target"/etc/sudoers << EOF
 # User privilege specification
 root    ALL=(ALL) ALL
 
-# WARNING: This allows the unprivileged grml user to start commands as root
-# WARNING: This is totally insecure and (almost) makes grml a second root account.
-# WARNING: Never allow external access to the grml user!!!
-grml    ALL=NOPASSWD: ALL
+# WARNING: This allows the unprivileged $USERNAME user to start commands as root
+# WARNING: This is totally insecure and (almost) makes $USERNAME a second root account.
+# WARNING: Never allow external access to the $USERNAME user!!!
+$USERNAME    ALL=NOPASSWD: ALL
 
 # allow editing of files with editor:
-# grml ALL=NOPASSWD: sudoedit
+# $USERNAME ALL=NOPASSWD: sudoedit
 
 # usage examples:
-# grml ALL=NOPASSWD: /sbin/hdparm
-# grml ALL=NOPASSWD: /usr/sbin/hwinfo
+# $USERNAME ALL=NOPASSWD: /sbin/hdparm
+# $USERNAME ALL=NOPASSWD: /usr/sbin/hwinfo
 # Cmnd_Alias DEBIAN = /usr/bin/apt-get, /usr/bin/dpkg, /usr/bin/auto-apt, /usr/bin/apt-file
-# grml ALL=NOPASSWD: DEBIAN
+# $USERNAME ALL=NOPASSWD: DEBIAN
 # chroot       ALL=NOPASSWD: /usr/sbin/chroot, /bin/su - chroot
 # chroot       ALL=NOPASSWD: /usr/sbin/chroot, /bin/su - chroot
 

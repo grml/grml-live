@@ -1,0 +1,9 @@
+#!/bin/sh
+set -u
+set -e
+
+HOSTNAME=''
+[ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
+[ -n "$HOSTNAME" ] || HOSTNAME=grml
+
+echo "$HOSTNAME" > "$target"/etc/hostname

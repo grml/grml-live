@@ -30,11 +30,11 @@ install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k 
-	dh_installdirs etc/grml/fai/live-initramfs
+	dh_installdirs etc/grml/fai/live-initramfs usr/sbin
 
 	# Add here commands to install the package into debian/grml-live.
 	cp -a etc debian/grml-live/
-	install -m 755 initramfs/scripts/init-top/grml debian/grml-live/etc/grml/fai/live-initramfs/grml
+	install -o root -m 755 grml-live debian/grml-live/usr/sbin/grml-live
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -45,7 +45,7 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs 
-	dh_installdocs TODO docs/grml-live.html
+	dh_installdocs docs/grml-live.html
 	dh_installexamples
 	dh_installman docs/grml-live.8
 	dh_link

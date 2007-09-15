@@ -1,0 +1,129 @@
+#!/bin/sh
+# Filename:      grml-live
+# Purpose:       build process script for generating a (grml based) Linux Live-ISO
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sat Sep 15 18:22:07 CEST 2007 [mika]
+################################################################################
+
+# read configuration files, set some misc variables {{{
+
+# exit on any error:
+set -e
+
+# we need root permissions for the build-process:
+if [ "$(id -u 2>/dev/null)" != 0 ] ; then
+   echo "Error: please run this script with uid 0 (root)." >&2
+   exit 1
+fi
+
+VERBOSE=''
+FORCE=''
+DEBUG=''
+
+# source main configuration file:
+. /etc/grml/grml-live.conf
+
+PN=$(basename $0)
+TMPFILE=$(mktemp)
+# }}}
+
+# clean exit {{{
+bailout() {
+  rm -f "$TMPFILE"
+  [ -n "$1" ] && EXIT="$1" || EXIT="1"
+  [ -n "$2" ] && echo "$2">&2
+  exit "$EXIT"
+}
+trap bailout 1 2 3 15
+# }}}
+
+# check for important variables {{{
+[ -n "$FAI_CONFIG" ] || FAI_CONFIG=/etc/grml/fai
+[ -n "$HOSTNAME" ] || HOSTNAME=grml
+[ -n "$USERNAME" ] || USERNAME=grml
+[ -n "$CLASSES" ] || CLASSES="GRML"
+[ -n "$TARGET" ] || bailout 1 "${PN}: \$TARGET not specified. Please adjust /etc/grml/grml-live.conf. Exiting."
+# }}}
+
+# usage information {{{
+usage()
+{
+  echo "
+$PN - build process script for generating a (grml based) Linux Live-ISO
+
+Usage: $PN [-c <classe[s]>] [-t <target_directory>] [-F] [-h|--help] [addiontalarguments_for_fai]
+
+Usage examples:
+
+    $PN
+    $PN -c GRML -t /dev/shm/grml
+    $PN -c GRML,GRML_X -t /grml/chroot/grml_uncompressed
+    $PN -c GRML
+
+More details: man grml-live
+              /usr/share/doc/grml-live/grml-live.html
+
+Please send your bug reports, feedback,.. to the grml-team.
+http://grml.org/bugs/
+"
+}
+# }}}
+
+# command line parsing {{{
+
+while getopts ?c:f:t:Fhv: opt; do
+  case "$opt" in
+    c) CLASSES="$OPTARG" ;;
+    F) FORCE=1 ;;
+    h) usage ; bailout 0 ;;
+    t) TARGET="$OPTARG" ;;
+    v) VERBOSE=1 ;;
+    ?) echo "invalid option -$OPTARG" >&2; bailout 1 ;;
+  esac
+done
+shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
+FAI_ARGS="$*"
+
+# }}}
+
+# some misc checks before executing FAI {{{
+[ -n "$CLASSES" ] || bailout 1 "Error: \$CLASSES unset, please set it in /etc/grml/grml-live.conf or
+specify it on the command line using the -c|--classes option."
+[ -n "$TARGET" ] || bailout 1 "Error: \$TARGET unset, please set it in /etc/grml/grml-live.conf or
+specify it on the command line using the -t|--target option."
+
+if [ "$EXECUTE" != '1' ] ; then
+   echo "Error: please set EXECUTE=1 in /etc/grml/grml-live.conf to really execute grml-live.">&2
+   echo
+   echo "See 'man grml-live' for more details or execute '$PN --help'">&2
+   echo
+   bailout 1
+fi
+# }}}
+
+# ask user whether the setup is ok {{{
+if [ -z "$FORCE" ] ; then
+   echo
+   echo "$PN - check your configuration (or invoke using -F to force execution without prompting)"
+   echo
+   echo "  FAI classes:                  $CLASSES"
+   echo "  target / output directory:    $TARGET"
+   [ -n "$FAI_ARGS" ] && echo "  additional arguments for FAI: $FAI_ARGS"
+   echo
+   echo -n "Is this ok for you? [y/N] "
+   read a
+   if ! [ "$a" = 'y' -o "$a" = 'Y' ] ; then
+      bailout 1 "Exiting as requested."
+   fi
+   echo
+fi
+# }}}
+
+# execute FAI {{{
+echo fai -v -C "$FAI_CONFIG" -c"$CLASSES" dirinstall "$TARGET" $FAI_ARGS
+# }}}
+
+## END OF FILE #################################################################
+# vim:foldmethod=marker ts=2 ft=sh ai expandtab tw=80 sw=2
