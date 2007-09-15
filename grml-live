@@ -125,7 +125,7 @@ fi
 # }}}
 
 if [ -n "$GRML_LIVE_SOURCES" ] ; then
-   echo $GRML_LIVE_SOURCES > /etc/grml/fai/apt/sources.list
+   echo "$GRML_LIVE_SOURCES" > /etc/grml/fai/apt/sources.list
 fi
 
 if [ -n "$FAI_DEBOOTSTRAP" ] ; then
