@@ -55,6 +55,8 @@ binary-arch: build install
 	dh_link
 	dh_strip
 	dh_compress
+	mkdir -p $(CURDIR)/debian/grml-live/usr/share/lintian/overrides/
+	cp -av debian/overrides $(CURDIR)/debian/grml-live/usr/share/lintian/overrides/grml-live
 	dh_fixperms
 	# make sure they are executable:
 	chmod 755 debian/grml-live/etc/grml/fai/config/hooks/*

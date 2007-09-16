@@ -1,0 +1,4 @@
+grml-live: executable-not-elf-or-script ./usr/share/grml-live/windows/autostart/autorun.pif
+grml-live: executable-not-elf-or-script ./usr/share/grml-live/windows/autostart/autorun.bat
+grml-live: executable-not-elf-or-script ./usr/share/grml-live/windows/autostart/autorun.inf
+grml-live: unknown-section grml
