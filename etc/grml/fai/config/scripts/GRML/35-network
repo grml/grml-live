@@ -1,12 +1,18 @@
 #!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRML/35-network
+# Purpose:       set up /etc/network/interfaces of live-system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sun Sep 16 23:02:18 CEST 2007 [mika]
+################################################################################
+
 set -u
 set -e
 
-# FIXME: use /etc/grml/fai/... as base
-cat >> $target/etc/network/interfaces << EOF
-# The loopback interface
-# automatically added when upgrading
-auto lo
-iface lo inet loopback
-EOF
+if [ -r /etc/grml/fai/files/etc/network/interfaces ] ; then
+   cp /etc/grml/fai/files/etc/network/interfaces $target/etc/network/interfaces
+fi
 
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

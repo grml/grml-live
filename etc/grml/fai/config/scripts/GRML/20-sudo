@@ -1,4 +1,12 @@
 #!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRML/20-sudo
+# Purpose:       configure sudo setup of the live-system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sun Sep 16 23:12:25 CEST 2007 [mika]
+################################################################################
+
 set -u
 set -e
 
@@ -6,36 +14,10 @@ USERNAME=''
 [ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
 [ -n "$USERNAME" ] || USERNAME=grml
 
-# FIXME: use /etc/grml/fai/... as base
-cat > $target/etc/sudoers << EOF
-# sudoers file.
-# This file MUST be edited with the "visudo" command as root.
-# See the man page for details on how to write a sudoers file.
+if [ -r /etc/grml/fai/files/etc/sudoers ] ; then
+   cp /etc/grml/fai/files/etc/sudoers $target/etc/sudoers
+   chmod 440 $target/etc/sudoers
+fi
 
-# Host alias specification
-
-# User alias specification
-
-# Cmnd alias specification
-
-# User privilege specification
-root    ALL=(ALL) ALL
-
-# WARNING: This allows the unprivileged $USERNAME user to start commands as root
-# WARNING: This is totally insecure and (almost) makes $USERNAME a second root account.
-# WARNING: Never allow external access to the $USERNAME user!!!
-$USERNAME    ALL=NOPASSWD: ALL
-
-# allow editing of files with editor:
-# $USERNAME ALL=NOPASSWD: sudoedit
-
-# usage examples:
-# $USERNAME ALL=NOPASSWD: /sbin/hdparm
-# $USERNAME ALL=NOPASSWD: /usr/sbin/hwinfo
-# Cmnd_Alias DEBIAN = /usr/bin/apt-get, /usr/bin/dpkg, /usr/bin/auto-apt, /usr/bin/apt-file
-# $USERNAME ALL=NOPASSWD: DEBIAN
-# chroot       ALL=NOPASSWD: /usr/sbin/chroot, /bin/su - chroot
-# chroot       ALL=NOPASSWD: /usr/sbin/chroot, /bin/su - chroot
-
-secvpn  ALL=NOPASSWD: /usr/sbin/secvpn, /usr/sbin/pppd
-EOF
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

@@ -1,13 +1,17 @@
 #!/bin/sh
+# Filename:      /etc/grml/fai/config/hooks/instsoft.GRML
+# Purpose:       grml specific Debian installation in the chroot
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sun Sep 16 22:53:02 CEST 2007 [mika]
+################################################################################
+
 set -u
 set -e
 
-# make sure we have file-rc available before
-# package_config/GRML is being executed:
-
-# TODO: test whether adding file-rc to FAI_DEBOOTSTRAP_OPTS= would do the trick too
-
-# work around http://trac.lighttpd.net/trac/ticket/657:
+# work around http://trac.lighttpd.net/trac/ticket/657
+# should be removed later on:
 echo "Acquire::http::Pipeline-Depth "0";" >> $target/etc/apt/apt.conf
 
 # install grml keys:
@@ -15,24 +19,16 @@ gpg --keyserver subkeys.pgp.net --recv-keys F61E2E7CECDEA787
 gpg --export F61E2E7CECDEA787 > $target/etc/apt/grml.key
 $ROOTCMD apt-key add /etc/apt/grml.key
 
-# finally install file-rc:
+# make sure we have file-rc available before
+# package_config/GRML is being executed:
 $ROOTCMD apt-get update
-$ROOTCMD apt-get --download-only --assume-yes install file-rc
-$ROOTCMD /bin/sh -c "dpkg -i --force-all /var/cache/apt/archives/file-rc*.deb"
-$ROOTCMD apt-get -f install file-rc
+$ROOTCMD aptitude -f -y install file-rc
 
-# we don't need the invoke-rc.d and update-rc.d diversion
-# because otherwise use of file-rc with aptitude fails:
+# we don't need the invoke-rc.d.d diversion (we have grml-policyrcd :)):
 if [ -L "$target"/usr/sbin/invoke-rc.d ] ; then
    rm -f "$target"/usr/sbin/invoke-rc.d
    $ROOTCMD dpkg-divert --package fai --rename --remove /usr/sbin/invoke-rc.d
 fi
-if [ -L "$target"/usr/sbin/update-rc.d ] ; then
-   dpkg --purge sysv-rc
-   $ROOTCMD apt-get --assume-yes --reinstall install file-rc
-fi
 
-# debug:
-# $ROOTCMD /bin/bash
-
+## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

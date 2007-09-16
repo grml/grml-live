@@ -1,6 +1,17 @@
 #!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRML/25-locales
+# Purpose:       locales (language) configuration of the live system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sun Sep 16 22:59:23 CEST 2007 [mika]
+################################################################################
+
 set -u
 set -e
 
 cp $target/etc/locale.gen.minimal $target/etc/locale.gen
 $ROOTCMD locale-gen
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

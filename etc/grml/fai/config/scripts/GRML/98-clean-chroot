@@ -1,7 +1,20 @@
 #!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRML/98-clean-chroot
+# Purpose:       clean up chroot system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sun Sep 16 23:03:50 CEST 2007 [mika]
+################################################################################
+
 set -u
 set -e
+
+# TODO: provide customization of what should be cleaned up
 
 cp /etc/grml/fai/grml/grml_cleanup_chroot $target/root/
 $ROOTCMD /root/grml_cleanup_chroot
 rm $target/root/grml_cleanup_chroot
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

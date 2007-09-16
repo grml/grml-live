@@ -1,4 +1,12 @@
 #!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRML/15-initsetup
+# Purpose:       configure init system for the live-system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sun Sep 16 22:57:36 CEST 2007 [mika]
+################################################################################
+
 set -u
 set -e
 
@@ -7,3 +15,6 @@ if grep -q 'small' $target/etc/grml_version ; then
 else
    cp $target/etc/runlevel.conf.livecd $target/etc/runlevel.conf
 fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

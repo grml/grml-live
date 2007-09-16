@@ -1,4 +1,12 @@
 #!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRML/33-aptsetup
+# Purpose:       configure Debian package management of live-system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sun Sep 16 23:10:06 CEST 2007 [mika]
+################################################################################
+
 set -u
 set -e
 
@@ -6,21 +14,9 @@ rm -f $target/etc/apt/sources.list
 
 $ROOTCMD ln -s /etc/apt/sources.list.grml /etc/apt/sources.list
 
-# FIXME: use /etc/grml/fai/... as base
-cat > $target/etc/apt/preferences << EOF
-// main grml-repository:
-Package: *
-Pin: origin deb.grml.org
-Pin-Priority: 996
+if [ -r /etc/grml/fai/files/etc/apt/preferences ] ; then
+   cp /etc/grml/fai/files/etc/apt/preferences $target/etc/apt/preferences
+fi
 
-// fallback grml-repository:
-Package: *
-Pin: origin grml.org
-Pin-Priority: 995
-
-// debian unstable pool (default):
-Package: *
-Pin: release a=unstable,o=Debian
-Pin-Priority: 991
-
-EOF
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

@@ -1,4 +1,12 @@
 #!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRML/34-hosts
+# Purpose:       configure /etc/hosts of live-system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sun Sep 16 23:10:46 CEST 2007 [mika]
+################################################################################
+
 set -u
 set -e
 
@@ -6,17 +14,9 @@ HOSTNAME=''
 [ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 
-# FIXME: use /etc/grml/fai/... as base
-cat > $target/etc/hosts << EOF
-127.0.0.1       $HOSTNAME    localhost
+if [ -r /etc/grml/fai/files/etc/hosts ] ; then
+   cp /etc/grml/fai/files/etc/hosts $target/etc/hosts
+fi
 
-# The following lines are desirable for IPv6 capable hosts
-# (added automatically by netbase upgrade)
-
-::1     ip6-localhost ip6-loopback $HOSTNAME
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
-ff02::3 ip6-allhosts
-EOF
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

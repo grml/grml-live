@@ -1,9 +1,19 @@
 #!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRML/05-hostname
+# Purpose:       set hostname of live-system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sun Sep 16 22:55:31 CEST 2007 [mika]
+################################################################################
+
 set -u
 set -e
 
 HOSTNAME=''
 [ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
-
 echo "$HOSTNAME" > $target/etc/hostname
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

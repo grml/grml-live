@@ -1,9 +1,22 @@
 #!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRML/10-build-initramfs
+# Purpose:       configure live-initramfs and build initramfs for booting
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sun Sep 16 22:56:40 CEST 2007 [mika]
+################################################################################
+
 set -u
 set -e
 
 cp /etc/grml/fai/live-initramfs/live.conf $target/etc/live.conf
 cp /etc/grml/fai/live-initramfs/grml-script.init-top "$target/usr/share/initramfs-tools/scripts/init-top/grml"
+
 FILE=$(ls -1 $target/boot/vmlinuz-* | sort -r | head -1)
 KERNELVERSION=$(echo "${FILE##$target/boot/vmlinuz-}")
+
 $ROOTCMD update-initramfs -c -t -k $KERNELVERSION
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

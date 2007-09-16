@@ -1,0 +1,15 @@
+// main grml-repository:
+Package: *
+Pin: origin deb.grml.org
+Pin-Priority: 996
+
+// fallback grml-repository:
+Package: *
+Pin: origin grml.org
+Pin-Priority: 995
+
+// debian unstable pool (default):
+Package: *
+Pin: release a=unstable,o=Debian
+Pin-Priority: 991
+

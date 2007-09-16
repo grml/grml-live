@@ -1,4 +1,12 @@
 #!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRML/21-usersetup
+# Purpose:       adjust user setup of the live-system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sun Sep 16 22:58:45 CEST 2007 [mika]
+################################################################################
+
 set -u
 set -e
 
@@ -14,3 +22,6 @@ sed -i 's/^$USERNAME::/$USERNAME:*:/' $target/etc/shadow
 
 $ROOTCMD chsh -s /bin/zsh root
 $ROOTCMD chsh -s /bin/zsh $USERNAME
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
