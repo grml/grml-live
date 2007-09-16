@@ -1,0 +1,3 @@
+@echo Loading "index.html"...
+@start GRML/index.html
+@exit

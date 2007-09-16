@@ -169,15 +169,16 @@ if [ "$ARCH" = i386 ] ; then
       echo "  [x] $BUILD_TARGET/boot/isolinux exists already - skipping stage 'boot/isolinux'"
       continue
    else
+      # booting stuff:
       mkdir -p "$BUILD_TARGET"/boot/isolinux
       mkdir "$BUILD_TARGET"/GRML
-      cp /boot/memtest86+.bin                                       "$BUILD_TARGET"/boot/isolinux/memtest
-      cp "$CHROOT_TARGET"/boot/initrd*                              "$BUILD_TARGET"/boot/isolinux/initrd.gz
-      cp "$CHROOT_TARGET"/boot/vmlinuz*                             "$BUILD_TARGET"/boot/isolinux/linux26
-      cp /usr/lib/syslinux/chain.c32                                "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/lib/syslinux/isolinux.bin                             "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/lib/syslinux/memdisk                                  "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/lib/syslinux/menu.c32                                 "$BUILD_TARGET"/boot/isolinux/
+      cp /boot/memtest86+.bin                                        "$BUILD_TARGET"/boot/isolinux/memtest
+      cp "$CHROOT_TARGET"/boot/initrd*                               "$BUILD_TARGET"/boot/isolinux/initrd.gz
+      cp "$CHROOT_TARGET"/boot/vmlinuz*                              "$BUILD_TARGET"/boot/isolinux/linux26
+      cp /usr/lib/syslinux/chain.c32                                 "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/lib/syslinux/isolinux.bin                              "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/lib/syslinux/memdisk                                   "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/lib/syslinux/menu.c32                                  "$BUILD_TARGET"/boot/isolinux/
       cp /usr/share/grml-live/i386_files/boot/isolinux/allinone.img  "$BUILD_TARGET"/boot/isolinux/
       cp /usr/share/grml-live/i386_files/boot/isolinux/balder10.imz  "$BUILD_TARGET"/boot/isolinux/
       cp /usr/share/grml-live/i386_files/boot/isolinux/boot-beep.msg "$BUILD_TARGET"/boot/isolinux/
@@ -186,8 +187,12 @@ if [ "$ARCH" = i386 ] ; then
       cp /usr/share/grml-live/i386_files/boot/isolinux/isolinux.cfg  "$BUILD_TARGET"/boot/isolinux/
       cp /usr/share/grml-live/i386_files/boot/isolinux/logo.16       "$BUILD_TARGET"/boot/isolinux/
       cp /usr/share/grml-live/i386_files/boot/isolinux/syslinux.cfg  "$BUILD_TARGET"/boot/isolinux/
-      # minirt26.gz
-      # boot.cat
+      # autostart for Windows:
+      cp /usr/share/grml-live/windows/autostart/autorun.bat          "$BUILD_TARGET"/
+      cp /usr/share/grml-live/windows/autostart/autorun.inf          "$BUILD_TARGET"/
+      cp /usr/share/grml-live/windows/autostart/autorun.pif          "$BUILD_TARGET"/
+      cp /usr/share/grml-live/windows/autostart/cdrom.ico            "$BUILD_TARGET"/
+      # windows-binaries:
       if [ -n "$WINDOWS_BINARIES" ] ; then
          if [ -d "$BUILD_TARGET"/windows ] ; then
             echo "  [x] $BUILD_TARGET/windows exists already - skipping stage 'WINDOWS_BINARIES'"

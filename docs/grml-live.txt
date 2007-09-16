@@ -220,8 +220,7 @@ instead?)
 that are arch specific so we have a clean package list in all classes)
 
 * support different grml-flavours through classes right out-of-the-box (being:
-grml, grml64, grml-small for at least x86, amd64 and ppc) [currently it defaults
-to Debian/stable I386, unstable I386 works as well]
+grml, grml64, grml-small for at least x86, amd64 and ppc)
 
 * support setting grml-live configuration on the command line to provide
 different flavours using the commandline only
@@ -246,9 +245,6 @@ not as verbose unless you specify it, make it configurable)
 * support hooks to further allow customisation of the build process
 
 * support nocolor-option for /etc/grml/fai/grml/grml_cleanup_chroot
-
-* provide autostart-stuff (for Windows) inside root of $BUILD_TARGET (the
-grml-cd)
 
 Bugs
 ----
