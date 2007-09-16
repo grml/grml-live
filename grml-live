@@ -188,10 +188,10 @@ if [ "$ARCH" = x86 ] ; then
    fi
 # amd64:
 elif [ "$ARCH" = amd64 ] ; then
-    echo 'Warning: gebi, it is your turn. :)'>2
+    echo 'Warning: gebi, it is your turn. :)'>&2
 # ppc:
 elif [ "$ARCH" = powerpc ] ; then
-    echo 'Warning: formorer, it is your turn. :)'>2
+    echo 'Warning: formorer, it is your turn. :)'>&2
 # unsuported:
 else
    echo 'Warning: Unsupported ARCH, sorry. Want to support it? Contribute!'>&2
