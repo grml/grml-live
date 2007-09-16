@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Sep 16 23:47:55 CEST 2007 [mika]
+# Latest change: Sun Sep 16 23:53:24 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -162,8 +162,9 @@ fi
 [ -n "$BUILD_TARGET" ] || BUILD_TARGET="$TARGET/grml_cd"
 mkdir -p "$BUILD_TARGET" || bailout 6 "Problem with creating $BUILD_TARGET for stage ARCH"
 
-# x86:
-if [ "$ARCH" = x86 ] ; then
+# i386:
+[ -n "$ARCH" ] || ARCH="$(dpkg --print-architecture)"
+if [ "$ARCH" = i386 ] ; then
    if [ -d "$BUILD_TARGET"/boot/isolinux ] ; then
       echo "  [x] $BUILD_TARGET/boot/isolinux exists already - skipping stage 'boot/isolinux'"
       continue
@@ -177,14 +178,14 @@ if [ "$ARCH" = x86 ] ; then
       cp /usr/lib/syslinux/isolinux.bin                             "$BUILD_TARGET"/boot/isolinux/
       cp /usr/lib/syslinux/memdisk                                  "$BUILD_TARGET"/boot/isolinux/
       cp /usr/lib/syslinux/menu.c32                                 "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/x86_files/boot/isolinux/allinone.img  "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/x86_files/boot/isolinux/balder10.imz  "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/x86_files/boot/isolinux/boot-beep.msg "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/x86_files/boot/isolinux/boot.msg      "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/x86_files/boot/isolinux/f*            "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/x86_files/boot/isolinux/isolinux.cfg  "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/x86_files/boot/isolinux/logo.16       "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/x86_files/boot/isolinux/syslinux.cfg  "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/i386_files/boot/isolinux/allinone.img  "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/i386_files/boot/isolinux/balder10.imz  "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/i386_files/boot/isolinux/boot-beep.msg "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/i386_files/boot/isolinux/boot.msg      "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/i386_files/boot/isolinux/f*            "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/i386_files/boot/isolinux/isolinux.cfg  "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/i386_files/boot/isolinux/logo.16       "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/i386_files/boot/isolinux/syslinux.cfg  "$BUILD_TARGET"/boot/isolinux/
       # minirt26.gz
       # boot.cat
       if [ -n "$WINDOWS_BINARIES" ] ; then
