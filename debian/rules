@@ -34,9 +34,10 @@ install: build
 	  	       usr/share/grml-live
 
 	# Add here commands to install the package into debian/grml-live.
-	cp -a etc debian/grml-live/
-	cp -a examples debian/grml-live/usr/share/doc/grml-live/
-	cp -a x86_files debian/grml-live/usr/share/grml-live/
+	cp -a etc         debian/grml-live/
+	cp -a examples    debian/grml-live/usr/share/doc/grml-live/
+	cp -a i386_files debian/grml-live/usr/share/grml-live/
+	cp -a windows     debian/grml-live/usr/share/grml-live/
 	install -o root -m 755 grml-live debian/grml-live/usr/sbin/grml-live
 
 # Build architecture-independent files here.
