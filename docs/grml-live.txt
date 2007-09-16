@@ -184,6 +184,12 @@ configuration.
 
 Scripts for customising the ISO within build process.
 
+  /etc/grml/fai/files/
+
+This directory provides files used inside the scripts of
+/etc/grml/fai/config/scripts/*. For a full documentation what happens with the
+files please refer to the source of the scripts.
+
   /etc/grml/fai/live-initramfs/
 
 This directory provides the files used for building the initramfs/initrd via
@@ -215,7 +221,7 @@ that are arch specific so we have a clean package list in all classes)
 
 * support different grml-flavours through classes right out-of-the-box (being:
 grml, grml64, grml-small for at least x86, amd64 and ppc) [currently it defaults
-to Debian/stable I386]
+to Debian/stable I386, unstable I386 works as well]
 
 * support setting grml-live configuration on the command line to provide
 different flavours using the commandline only
@@ -240,9 +246,6 @@ not as verbose unless you specify it, make it configurable)
 * support hooks to further allow customisation of the build process
 
 * support nocolor-option for /etc/grml/fai/grml/grml_cleanup_chroot
-
-* copy files from $FAI_CONFIGDIR/... instead of using 'cat > $FILE << EOF ...'
-inside all the /etc/grml/fai/config/scripts/GRML/-scripts
 
 * provide autostart-stuff (for Windows) inside root of $BUILD_TARGET (the
 grml-cd)

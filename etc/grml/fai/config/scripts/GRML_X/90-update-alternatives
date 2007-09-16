@@ -1,4 +1,12 @@
 #!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRML_X/90-update-alternatives
+# Purpose:       set up /etc/alternatives/* according to grml preferences
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sun Sep 16 23:18:02 CEST 2007 [mika]
+################################################################################
+
 set -u
 set -e
 
@@ -9,3 +17,6 @@ fi
 if [ -r $target/etc/X11/cursors/whiteglass.theme ] ; then
    $ROOTCMD update-alternatives --set x-cursor-theme /etc/X11/cursors/whiteglass.theme
 fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
