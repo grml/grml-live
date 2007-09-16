@@ -1,6 +1,7 @@
 PACKAGES aptitude
 
 aumix alsa-utils
+busybox
 bzip2
 console-common
 cron
