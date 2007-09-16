@@ -190,7 +190,7 @@ if [ "$ARCH" = x86 ] ; then
 elif [ "$ARCH" = amd64 ] ; then
     echo 'Warning: gebi, it is your turn. :)'>2
 # ppc:
-elif [ "$ARCH" = ppc ] ; then
+elif [ "$ARCH" = powerpc ] ; then
     echo 'Warning: formorer, it is your turn. :)'>2
 # unsuported:
 else
