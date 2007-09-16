@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 # Filename:      grml-live
 # Purpose:       build process script for generating a (grml based) Linux Live-ISO
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sat Sep 15 22:32:11 CEST 2007 [mika]
+# Latest change: Sun Sep 16 23:47:55 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -76,18 +76,23 @@ http://grml.org/bugs/
 
 # command line parsing {{{
 
-while getopts ?t:f:Fhv: opt; do
+while getopts "c:s:t:Fhv" opt; do
   case "$opt" in
     c) CLASSES="$OPTARG" ;;
+    # f) FLAVOUR="$OPTARG" ;; # TODO
     F) FORCE=1 ;;
     h) usage ; bailout 0 ;;
-    t) TARGET="$OPTARG" ;;
+    s) SUITE="$OPTARG" ;;
+    t) TARGET="$OPTARG"
+       CHROOT_TARGET="$TARGET/grml_chroot"
+       BUILD_TARGET="$TARGET/grml_cd"
+       ISO_TARGET="$TARGET/grml_isos"
+       ;;
     v) VERBOSE="-v" ;;
     ?) echo "invalid option -$OPTARG" >&2; bailout 1 ;;
   esac
 done
 shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
-# FAI_ARGS="$*"
 
 # }}}
 
@@ -108,7 +113,9 @@ if [ -z "$FORCE" ] ; then
    [ -n "$CHROOT_TARGET" ] && echo "  chroot target:     $CHROOT_TARGET"
    [ -n "$BUILD_TARGET" ]  && echo "  build target:      $BUILD_TARGET"
    [ -n "$ISO_TARGET" ]    && echo "  ISO target:        $ISO_TARGET"
-   [ -n "$FAI_ARGS" ] && echo "  additional arguments for FAI: $FAI_ARGS"
+   [ -n "$SUITE" ]         && echo "  Debian suite:      $SUITE"
+   [ -n "$FAI_ARGS" ]      && echo "  additional arguments for FAI: $FAI_ARGS"
+   [ -n "$VERBOSE" ]       && echo "  Using VERBOSE mode."
    echo
    echo -n "Is this ok for you? [y/N] "
    read a
@@ -124,6 +131,14 @@ if [ -n "$GRML_LIVE_SOURCES" ] ; then
    echo "$GRML_LIVE_SOURCES" > /etc/grml/fai/apt/sources.list
 fi
 
+# we assume that it is set to 'etch' by default
+if [ -n "$SUITE" ] ; then
+   sed -i "s#etch #$SUITE #"   /etc/grml/fai/make-fai-nfsroot.conf
+   sed -i "s#etch #$SUITE #"   /etc/grml/grml-live.conf
+   sed -i "s# etch # $SUITE #" /etc/grml/grml-live.conf
+   sed -i "s# etch # $SUITE #" /etc/grml/fai/apt/sources.list
+fi
+
 if [ -n "$FAI_DEBOOTSTRAP" ] ; then
    sed -i "s#^FAI_DEBOOTSTRAP#FAI_DEBOOTSTRAP=$FAI_DEBOOTSTRAP#" /etc/grml/fai/make-fai-nfsroot.conf
 fi
@@ -131,6 +146,7 @@ fi
 
 # CHROOT_TARGET - execute FAI {{{
 [ -n "$CHROOT_TARGET" ] || CHROOT_TARGET="$TARGET/grml_chroot"
+
 if [ -d "$CHROOT_TARGET" ] ; then
    echo "  [x] $CHROOT_TARGET exists already, skipping the stage 'fai dirnstall'"
 else
