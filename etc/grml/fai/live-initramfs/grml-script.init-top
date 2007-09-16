@@ -2,7 +2,7 @@
 
 # helper functions {{{
 
-if ! grep -qe debug -qe verbose /proc/cmdline 2>/dev/null ; then
+if grep -qe debug -qe verbose /proc/cmdline 2>/dev/null ; then
    echo "debug: scripts/init-top/grml running"
 fi
 
