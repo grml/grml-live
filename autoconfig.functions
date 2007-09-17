@@ -2106,7 +2106,8 @@ config_lvm(){
   if checkbootparam 'nolvm' ; then
      ewarn "Skipping LVM code as requested on boot commandline." ; eend 0
   else
-    if ! [ -x /sbin/lvm -a -x /etc/init.d/lvm2 -a -x /sbin/lvdisplay ] ; then
+    # Debian etch provides /etc/init.d/lvm only, newer suites provide /etc/init.d/lvm2
+    if ! [ -x /sbin/lvm -a -x /sbin/lvdisplay ] || ! [ -x /etc/init.d/lvm2 -o -x /etc/init.d/lvm ] ; then
        eerror "LVM not available, can not execute it." ; eend 1
     else
        if lvdisplay 2>&1 | grep -v 'No volume groups found' 1>/dev/null 2>&1 ; then
