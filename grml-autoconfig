@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sam Sep 08 12:15:12 CEST 2007 [mika]
+# Latest change: Mon Sep 17 17:39:29 CEST 2007 [mika]
 ################################################################################
 
 # http://wiki.debian.org/LSBInitScripts =>
@@ -78,7 +78,7 @@ fi
 
 # make sure /etc/resolv.conf points to /dev/shm/resolvconf
 # and /dev/shm/resolvconf exists:
-if [ -z "$INSTALLED" ] ; then
+if [ -z "$INSTALLED" ] && ! [ -d /dev/shm/resolvconf ] ; then
    if [[ $(readlink /etc/resolv.conf) == /etc/resolvconf/run/resolv.conf ]] && \
       [[ $(readlink /etc/resolvconf/run) == /dev/shm/resolvconf ]] ; then
       mkdir /dev/shm/resolvconf
