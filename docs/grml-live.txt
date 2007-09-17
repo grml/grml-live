@@ -10,7 +10,7 @@ Synopsis
 grml-live [-c <classe[s]>] [-t <target_directory>] [-F] [-h|--help]
 
 *******************************************************************************
-Important! grml-live is under heavy construction, your feedback is highly
+Important! grml-live is under heavy construction, though your feedback is highly
 appreciated.  This document is growing as requested. If you have questions which
 aren't answered by this document yet please let me (mika@grml.org) know!
 *******************************************************************************
@@ -32,14 +32,14 @@ configuration and packages, so you can use grml-live and FAI completely
 independent!
 
 [NOTE]
+
 Please notice that you should have a fast network connection as all the Debian
 packages will be installed via network. If you want to use a local mirror
-(strongly recommended!) checkout
-mkdebmirror (see /usr/share/doc/grml-live/examples/mkdebmirror)
-debmirro(1) and reprepro(1) (check out
-/usr/share/doc/grml-live/examples/reprepro/ for a sample configuration).
-To avoid downloading of the base system check out FAI's
-NFSROOT (check docs for ../fai/nfsroot/live/filesystem.dir/var/tmp/base.tgz).
+(strongly recommended!) checkout mkdebmirror (see
+/usr/share/doc/grml-live/examples/mkdebmirror), debmirror(1), reprepro(1) (see
+/usr/share/doc/grml-live/examples/reprepro/ for a sample configuration) and
+approx. To avoid downloading of the base system check out FAI's NFSROOT (check
+docs for ../fai/nfsroot/live/filesystem.dir/var/tmp/base.tgz).
 
 Options
 -------
@@ -50,6 +50,11 @@ Specify the CLASSES to be used for building the ISO via fai.  By default only
 the classes GRMLBASE and I386 are assumed, resulting in a small base system
 (being about ~150MB ISO size).
 
+  -s **SUITE**::
+
+Specify the Debian suite you want to use for your live-system.  Defaults to
+"etch"; support values are: etch, lenny, sid, stable, testing, unstable.
+
   -t **TARGET_DIRECTORY**::
 
 Output directory of the build process of FAI - being the chroot
@@ -57,11 +62,16 @@ used for building the ISO.
 
   -F::
 
-Force execution and do not display summary of configuration details.
+Force execution and do not prompt for / display summary of configuration
+details.
 
-  -h|--help::
+  -h::
 
 Display short usage information and exit.
+
+  -v::
+
+Increase verbosity in the build process.
 
 How to get your own live-cd - the easy, fast and simple way
 -----------------------------------------------------------
@@ -220,31 +230,42 @@ instead?)
 that are arch specific so we have a clean package list in all classes)
 
 * support different grml-flavours through classes right out-of-the-box (being:
-grml, grml64, grml-small for at least x86, amd64 and ppc)
+grml, grml64, grml-small (in progress) for at least x86, amd64 and ppc)
 
-* support setting grml-live configuration on the command line to provide
-different flavours using the commandline only
+* support signed apt repositories (currently it's deactivated via FAI's
+FAI_ALLOW_UNSIGNED=1 for some packages)
 
-* really support signed apt repositories (currently it's deactivated via fai's
-dirinstall for some packages)
-
-* explain (and provide configuration for) the use of NFSROOT
+* explain (and provide configuration for) use of NFSROOT
 
 * support setting stuff like ISO name, version,... (especially for stuff inside
-x86_files/boot/isolinux)
+boot/isolinux/*)
 
-* support "final builds" (including stuff like md5sums)
-
-* use hooks of FAI as far as possible in all grml-live scripts
+* support "final builds" (including stuff like generating md5sums, gpg,...)
 
 * the grml-live class(es) should send output as used inside FAI as well (so it's
 not as verbose unless you specify it, make it configurable)
 
 * provide possibility for cleanup of all created build directories
 
-* support hooks to further allow customisation of the build process
+* support hooks to allow further customisation of the build process
 
-* support nocolor-option for /etc/grml/fai/grml/grml_cleanup_chroot
+Debian package
+--------------
+
+Debian packages will be available through the grml-repository at
+link:http://deb.grml.org/[http://deb.grml.org/] as soon as the grml-team
+considers grml-live as stable enough. In the meantime just build the package on
+your own:
+
+  hg clone http://hg.grml.org/grml-live
+  cd grml-live
+  debuild -us -uc
+
+Source
+------
+
+The source of grml-live is available at
+link:http://hg.grml.org/grml-live/[http://hg.grml.org/grml-live/]
 
 Bugs
 ----
