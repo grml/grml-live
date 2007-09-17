@@ -76,6 +76,15 @@ if [ -z "$INSTALLED" -a -e /live/cow ] ; then
    fi
 fi
 
+# make sure /etc/resolv.conf points to /dev/shm/resolvconf
+# and /dev/shm/resolvconf exists:
+if [ -z "$INSTALLED" ] ; then
+   if [[ $(readlink /etc/resolv.conf) == /etc/resolvconf/run/resolv.conf ]] && \
+      [[ $(readlink /etc/resolvconf/run) == /dev/shm/resolvconf ]] ; then
+      mkdir /dev/shm/resolvconf
+   fi
+fi
+
 if [ -z "$SPLASH" ] ; then
   stage=5
   rundebugshell
