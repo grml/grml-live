@@ -1,3 +1,9 @@
+grml-autoconfig (0.7.20) unstable; urgency=low
+
+  * Improve check for presence of /dev/shm/resolvconf.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 17 Sep 2007 17:37:34 +0200
+
 grml-autoconfig (0.7.19) unstable; urgency=low
 
   * Make sure /dev/shm/resolvconf exists.
