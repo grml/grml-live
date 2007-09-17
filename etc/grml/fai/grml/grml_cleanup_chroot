@@ -61,30 +61,24 @@ grep '^[a-z]' /etc/grml/modules >> /etc/modules
 eend 0
 
 einfo "Setting up /etc/inittab"
-if [ -z "$GRML_SMALL" ] ; then
-   cp /etc/inittab.grml  /etc/inittab
-else
-   cp /etc/inittab.small /etc/inittab
-fi
-eend 0
+cp /etc/inittab.grml  /etc/inittab
+eend $?
 
-if [ -z "$GRML_SMALL" ] ; then
-  if [ -L /usr/include/linux ] ; then
-    einfo "/usr/include/linux is ok" ; eend 0
-  elif [ -n "$GRML64" ] ; then
-      if [ -d /usr/src/linux-headers-"$KERNEL" ] ; then
-         einfo "grml64 detected, assuming /usr/src/linux-headers-$KERNEL is ok." ; eend 0
-      else
-         eerror "/usr/src/linux-headers-$KERNEL not found, exiting." ; eend 1
-         exit 10
-      fi
-  elif [ -d /usr/src/linux-headers-"$KERNEL" ] ; then
-       eerror "/usr/include/linux is NOT a symlink to /usr/src/linux/include/linux/ - error"
-       eend 1
+if [ -L /usr/include/linux ] ; then
+  einfo "/usr/include/linux is ok" ; eend 0
+elif [ -n "$GRML64" ] ; then
+    if [ -d /usr/src/linux-headers-"$KERNEL" ] ; then
+       einfo "grml64 detected, assuming /usr/src/linux-headers-$KERNEL is ok." ; eend 0
+    else
+       eerror "/usr/src/linux-headers-$KERNEL not found, exiting." ; eend 1
        exit 10
-  else
-       ewarn "linux-headers-$KERNEL not installed." ; eend 0
-  fi
+    fi
+elif [ -d /usr/src/linux-headers-"$KERNEL" ] ; then
+     eerror "/usr/include/linux is NOT a symlink to /usr/src/linux/include/linux/ - error"
+     eend 1
+     exit 10
+else
+     ewarn "linux-headers-$KERNEL not installed." ; eend 0
 fi
 
 einfo "Creating ~/.zshrc"
@@ -158,11 +152,7 @@ else
 fi
 
 einfo "Copying original runlevel.conf to /etc/runlevel.conf"
-  if ! [ -z $GRML_SMALL ] ; then
-    cp /etc/runlevel.conf.livecd.small /etc/runlevel.conf
-  else
-    cp /etc/runlevel.conf.livecd /etc/runlevel.conf
-  fi
+cp /etc/runlevel.conf.livecd /etc/runlevel.conf
 eend $?
 
 einfo "Removing x-server-conffiles"
@@ -327,13 +317,6 @@ else
 fi
 
 if [ -n "$REMOVE_DOCS" ] ; then
-#  einfo "Cleaning up /etc/skel..."
-#  rm -rf /etc/skel/.fluxbox 
-#  rm -rf /etc/skel/.gkrellm2 
-#  rm -rf /etc/skel/.idesktop 
-#  rm -rf /etc/skel/.pekwm
-#  eend $?
-
   einfo "Cleaning documentation directories..."
   if [ -d /usr/share/doc/grml-docs ] ; then
      mv /usr/share/doc/grml-docs /tmp/

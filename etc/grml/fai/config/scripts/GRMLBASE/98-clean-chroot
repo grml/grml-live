@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Sep 17 17:02:43 CEST 2007 [mika]
+# Latest change: Mon Sep 17 17:36:13 CEST 2007 [mika]
 ################################################################################
 
 set -u

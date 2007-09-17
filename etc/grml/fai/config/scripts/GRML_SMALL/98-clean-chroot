@@ -1,25 +1,22 @@
 #!/bin/sh
-# Filename:      /etc/grml/fai/config/scripts/GRML/98-clean-chroot
+# Filename:      /etc/grml/fai/config/scripts/GRML_SMALL/98-clean-chroot
 # Purpose:       clean up chroot system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Sep 17 17:03:12 CEST 2007 [mika]
+# Latest change: Mon Sep 17 17:36:11 CEST 2007 [mika]
 ################################################################################
 
 set -u
 set -e
 
-# supported environment variables for grml_cleanup_chroot:
+# supported environment variables of grml_cleanup_chroot.small:
 #   NOCOLORS: if set it disables colors in (debugging) output
-#   LATEX_CLEANUP: remove some big directories of texlive (/usr/share/doc/texlive-*)
-#   NOONLINE: disable functions that require working network setup
-#   FAST: skip some longer tasks
 #   REMOVE_DOCS: rm -rf /usr/share/doc + /usr/share/info
 
-cp /etc/grml/fai/grml/grml_cleanup_chroot $target/root/
-$ROOTCMD sh -c "NOCOLORS=1 /root/grml_cleanup_chroot"
-rm $target/root/grml_cleanup_chroot
+cp /etc/grml/fai/grml/grml_cleanup_chroot.small $target/root/
+$ROOTCMD sh -c "NOCOLORS=1 /root/grml_cleanup_chroot.small"
+rm $target/root/grml_cleanup_chroot.small
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
