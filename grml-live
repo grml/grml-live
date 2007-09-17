@@ -153,6 +153,8 @@ if [ -d "$CHROOT_TARGET" ] ; then
 else
    mkdir "$CHROOT_TARGET" || bailout 5 "Problem with creating $CHROOT_TARGET for FAI"
    fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" dirinstall "$CHROOT_TARGET" $FAI_ARGS
+   # notice: 'fai dirinstall' does not seem to exit appropriate -> we need
+   # better error handling
    umount $CHROOT_TARGET/proc 2>/dev/null || /bin/true
    umount $CHROOT_TARGET/sys  2>/dev/null || /bin/true
    echo "  [*] Finished execution of stage 'fai dirinstall'"
