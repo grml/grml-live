@@ -1,10 +1,10 @@
-#!/bin/sh
+#/bin/sh
 # Filename:      /etc/grml/fai/config/scripts/GRML/21-usersetup
 # Purpose:       adjust user setup of the live-system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Sep 16 22:58:45 CEST 2007 [mika]
+# Latest change: Mon Sep 17 15:12:21 CEST 2007 [mika]
 ################################################################################
 
 set -u
@@ -18,7 +18,7 @@ $ROOTCMD addgroup --gid 1000 $USERNAME
 $ROOTCMD useradd -d /home/$USERNAME -m -s /bin/zsh -g 1000 $USERNAME
 
 sed -i 's/^root::/root:*:/' $target/etc/shadow
-sed -i 's/^$USERNAME::/$USERNAME:*:/' $target/etc/shadow
+sed -i "s/^$USERNAME::/$USERNAME:*:/" $target/etc/shadow
 
 $ROOTCMD chsh -s /bin/zsh root
 $ROOTCMD chsh -s /bin/zsh $USERNAME
