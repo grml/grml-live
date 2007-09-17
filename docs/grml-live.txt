@@ -38,7 +38,7 @@ packages will be installed via network. If you want to use a local mirror
 (strongly recommended!) checkout mkdebmirror (see
 /usr/share/doc/grml-live/examples/mkdebmirror), debmirror(1), reprepro(1) (see
 /usr/share/doc/grml-live/examples/reprepro/ for a sample configuration) and
-approx. To avoid downloading of the base system check out FAI's NFSROOT (check
+approx(8). To avoid downloading of the base system check out FAI's NFSROOT (check
 docs for ../fai/nfsroot/live/filesystem.dir/var/tmp/base.tgz).
 
 Options
@@ -223,6 +223,9 @@ as possiblbe)
 Known TODOs
 -----------
 
+* make sure the suite-target adjusts the mirror definitions according (working
+also vice versa!)
+
 * do not use /dev/shm/ als default target directory (which one do we want to use
 instead?)
 
@@ -233,21 +236,25 @@ that are arch specific so we have a clean package list in all classes)
 grml, grml64, grml-small (in progress) for at least x86, amd64 and ppc)
 
 * support signed apt repositories (currently it's deactivated via FAI's
-FAI_ALLOW_UNSIGNED=1 for some packages)
+FAI_ALLOW_UNSIGNED=1 for some packages in the toolchain)
 
 * explain (and provide configuration for) use of NFSROOT
 
-* support setting stuff like ISO name, version,... (especially for stuff inside
-boot/isolinux/*)
+* support setting stuff like ISO name, version,... on-the-fly (especially for
+stuff inside boot/isolinux/*)
 
 * support "final builds" (including stuff like generating md5sums, gpg,...)
 
 * the grml-live class(es) should send output as used inside FAI as well (so it's
 not as verbose unless you specify it, make it configurable)
 
-* provide possibility for cleanup of all created build directories
+* provide possibility for cleanup of all created build directories and
+a smart summary of the buildprocess (including "took ... minutes/seconds to
+build...)
 
 * support hooks to allow further customisation of the build process
+
+* test the package on non-grml systems (and maybe even non-Debian) as well
 
 Debian package
 --------------
