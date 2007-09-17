@@ -307,8 +307,7 @@ einfo "Cleaning and removing some misc files and directories"
          /var/run/*/* /var/run/* /var/log/ksymoops/* /var/lock/*/* /var/lock/*    \
          /var/state/*/* /var/state/* /var/log/nessus/*                            \
          /halt /reboot /ash.static /etc/dhcpc/*.info /etc/dhcpc/resolv*           \
-         /etc/resolv.conf /etc/*passwd- /etc/*shadow- /etc/*group-                \
-         /var/spool/postfix/maildrop/*                                            \
+         /etc/*passwd- /etc/*shadow- /etc/*group- /var/spool/postfix/maildrop/*   \
          /etc/lvm/.cache 2>/dev/null
   rm -rf /tmp/* /var/tmp/* /var/tmp/.* /var/backups/* /.ssh /root/.ssh /home/*/.ssh \
          /home/grml/* /home/grml/.??* /var/lib/texmf/ls-R  /var/spool/texmf/ls-R    \
@@ -322,29 +321,6 @@ einfo "Cleaning and removing some misc files and directories"
   # Recreate empty utmp and wtmp
   :>/var/run/utmp
   :>/var/run/wtmp
-eend $?
-
-einfo "Setting up /etc/resolv.conf"
-  if [ -d /etc/dhcpc ] ; then
-    cat >/etc/dhcpc/resolv.conf <<EOT
-# insert nameservers here
-# nameserver 127.0.0.1
-EOT
-    chmod 644 /etc/dhcpc/resolv.conf
-  else
-    cat >/etc/resolv.conf <<EOT
-# insert nameservers here
-# nameserver 127.0.0.1
-EOT
-    chmod 644 /etc/resolv.conf
-  fi
-
-   # is resolvconf available?
-   if [ -r /etc/resolvconf/run/resolv.conf ] ; then
-      ln -sf /etc/resolvconf/run/resolv.conf /etc/
-   else
-      ln -s /etc/dhcpc/resolv.conf /etc/
-   fi
 eend $?
 
 if [ -x /usr/sbin/update-ca-certificates ] ; then

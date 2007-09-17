@@ -16,7 +16,7 @@ USERNAME=''
 
 if [ -r /etc/grml/fai/files/etc/sudoers ] ; then
    cp /etc/grml/fai/files/etc/sudoers $target/etc/sudoers
-   sed -i "s/^USERNAME/$USERNAME/" $target/etc/sudoers
+   sed -i "s/\$USERNAME/$USERNAME/" $target/etc/sudoers
    chmod 440 $target/etc/sudoers
 fi
 

@@ -18,7 +18,7 @@ $ROOTCMD addgroup --gid 1000 $USERNAME
 $ROOTCMD useradd -d /home/$USERNAME -m -s /bin/zsh -g 1000 $USERNAME
 
 sed -i 's/^root::/root:*:/' $target/etc/shadow
-sed -i "s/^$USERNAME::/$USERNAME:*:/" $target/etc/shadow
+sed -i "s/^$USERNAME:!:/$USERNAME:*:/" $target/etc/shadow
 
 $ROOTCMD chsh -s /bin/zsh root
 $ROOTCMD chsh -s /bin/zsh $USERNAME
