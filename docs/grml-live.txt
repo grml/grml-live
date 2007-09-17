@@ -47,8 +47,8 @@ Options
   -c **CLASSES**::
 
 Specify the CLASSES to be used for building the ISO via fai.  By default only
-the classes GRML and I386 are assumed, resulting in a small base system (being
-about ~150MB ISO size).
+the classes GRMLBASE and I386 are assumed, resulting in a small base system
+(being about ~150MB ISO size).
 
   -t **TARGET_DIRECTORY**::
 
@@ -87,26 +87,26 @@ grml-live uses FAI and its class based concept for adjusting configuration
 according to your needs. This gives you flexibility and strength without losing
 the simplicity in the build process.
 
-The main and base class provided by grml-live is named GRML. It's strongly
-recommended to **always** use the class GRML when building an ISO using
+The main and base class provided by grml-live is named GRMLBASE. It's strongly
+recommended to **always** use the class GRMLBASE when building an ISO using
 grml-live as well as the architecture dependend class (being 'I386' for x86_32
 currently only). The following files and directories are relevant for class GRML
 by default:
 
-  /etc/grml/fai/config/scripts/GRML/
-  /etc/grml/fai/config/debconf/GRML
-  /etc/grml/fai/config/class/GRML.var
-  /etc/grml/fai/config/hooks/instsoft.GRML
-  /etc/grml/fai/config/package_config/GRML
+  /etc/grml/fai/config/scripts/GRMLBASE/
+  /etc/grml/fai/config/debconf/GRMLBASE
+  /etc/grml/fai/config/class/GRMLBASE.var
+  /etc/grml/fai/config/hooks/instsoft.GRMLBASE
+  /etc/grml/fai/config/package_config/GRMLBASE
 
 Take a look at the next section for information about the concept of those
 files/directories.
 
 If you want to use your own configuration, extend an existing configuration
 and/or add additional packages to your ISO just invent a new class. For example
-if you want to use your own class named "FOOBAR" just extend CLASSES="GRML" inside
-/etc/grml/grml-live.conf to CLASSES="GRML,FOOBAR" or invoke grml-live using
-the classes option: "grml-live -c GRML,FOOBAR ...".
+if you want to use your own class named "FOOBAR" just extend CLASSES="GRMLBASE"
+inside /etc/grml/grml-live.conf to CLASSES="GRMLBASE,FOOBAR" or invoke grml-live
+using the classes option: "grml-live -c GRMLBASE,FOOBAR ...".
 
 More details regarding the class concept can be found in the documentation of
 FAI (available at /usr/share/doc/fai-doc/).
@@ -173,12 +173,12 @@ installation process.
 
 File with lists of software packages to be installed or removed.  The different
 classes describe what should find its way to your ISO.  When running 'fai -v -C
-/etc/grml/fai -cGRML dirinstall ...' only the files from the directory GRML/
-will be taken, if you use 'fai -v -C /etc/grml/fai -cGRML,FOOBAR dirinstall ...'
-then the files of GRML/ **plus** the files from FOOBAR/ will be taken. So just
-create a new class to adjust it to your needs. Please notice that the directory
-GRML contains a package list defining a minimum but still reasonable package
-configuration.
+/etc/grml/fai -cGRMLBASE dirinstall ...' only the files from the directory GRML/
+will be taken, if you use 'fai -v -C /etc/grml/fai -cGRMLBASE,FOOBAR dirinstall
+...' then the files of GRML/ **plus** the files from FOOBAR/ will be taken. So
+just create a new class to adjust it to your needs. Please notice that the
+directory GRML contains a package list defining a minimum but still reasonable
+package configuration.
 
   /etc/grml/fai/config/scripts/
 

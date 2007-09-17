@@ -10,9 +10,6 @@ PACKAGES aptitude AMD64
 inux-image-amd64
 memtest86+
 
-PACKAGES aptitude DHCPC
-dhcp3-client
-
 PACKAGES aptitude GRUB
 grub lilo-
 

@@ -8,7 +8,6 @@ cron
 dctrl-tools
 debconf-utils
 deborphan
-discover
 eject
 file
 grml
@@ -43,29 +42,22 @@ grml-vpn
 hdparm
 htop
 hwinfo
-idesk
 iptstate
 less
-linuxlogo
 live-initramfs
 locales
 lvm2
 mdadm
 multitail
 nfs-common
-nscd
 openssh-client openssh-server
 pciutils usbutils
 postfix
-rdate
 resolvconf
-rsh-client
 rsync
 strace
 syslog-ng
 sysutils
-tcsh
-time
 usbutils
 wireless-tools wpasupplicant
 

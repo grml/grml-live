@@ -8,7 +8,7 @@
 ################################################################################
 
 arguments=(
-  '-c:classe(s):(`cd /etc/grml/fai/config/package_config && ls`)'
+  '-c:classe(s):($(cd /etc/grml/fai/config/class/ && ls *.var | tr -d '.var'))'
   '-F[force execution without prompting for yes/no]'
   '-h[display usage information]'
   '-s:Debian suite:(stable testing unstable etch lenny sid)'
