@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Sep 17 00:21:49 CEST 2007 [mika]
+# Latest change: Mon Sep 17 18:31:35 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -154,11 +154,16 @@ if [ -d "$CHROOT_TARGET" ] ; then
 else
    mkdir "$CHROOT_TARGET" || bailout 5 "Problem with creating $CHROOT_TARGET for FAI"
    fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" dirinstall "$CHROOT_TARGET" $FAI_ARGS
-   # notice: 'fai dirinstall' does not seem to exit appropriate -> we need
-   # better error handling
    umount $CHROOT_TARGET/proc 2>/dev/null || /bin/true
    umount $CHROOT_TARGET/sys  2>/dev/null || /bin/true
-   echo "  [*] Finished execution of stage 'fai dirinstall'"
+   # notice: 'fai dirinstall' does not seem to exit appropriate ->
+   # we need better error handling
+   if [ -r "$CHROOT_TARGET"/etc/grml_cd ] ; then
+      echo "  [*] Finished execution of stage 'fai dirinstall'"
+   else
+      echo "  [!] There was an error during execution of stage 'fai dirinstall'"
+      exit 1
+   fi
 fi
 # }}}
 
@@ -254,4 +259,4 @@ bailout 0
 # }}}
 
 ## END OF FILE #################################################################
-# vim:foldmethod=marker ts=2 ft=sh ai expandtab tw=80 sw=2
+# vim:foldmethod=marker ts=2 ft=sh ai expandtab tw=80 sw=3
