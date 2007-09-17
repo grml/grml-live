@@ -1,57 +1,40 @@
 #!/bin/bash
-# Filename:      grml.clean
+# Filename:      /etc/grml/fai/grml/grml_cleanup_chroot
 # Purpose:       clean up grml chroot
 # Authors:       (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
-# License:       This file is copyright by Michael Prokop
-# Latest change: Thu May 17 15:44:56 CEST 2007 [mika]
+# License:       This file is licensed under the GPL v2.
+# Latest change: Mon Sep 17 16:57:17 CEST 2007 [mika]
 ################################################################################
 
 # misc stuff
   umask 022
-  . /etc/grml_colors        || exit 5
+  [ -n "$NOCOLORS" ] || . /etc/grml_colors
   . /etc/grml/lsb-functions || exit 6
-
-#  /usr/share/doc/texlive-latex-recommended/latex/
-#  /usr/share/doc/texlive-latex-base/latex/
-#  /usr/share/doc/texlive-base-bin/pdftex/thanh/
-#  /usr/share/doc/texlive-latex-base/latex/base/
-#  /usr/share/doc/texlive-latex-base/latex/hyperref/
-#  /usr/share/doc/texlive-latex-base/generic/babel/ 
-#  /usr/share/doc/texlive-latex-recommended/latex/koma-script/
-#  /usr/share/doc/texmf/pgf/pgfmanual.pdf.gz
-
-# variables
-  grep -q small /etc/grml_version && GRML_SMALL=yes  || GRML_SMALL=''
   [ -x /lib64 ] && GRML64=yes || GRML64=''
-#  if [ -n "$GRML_SMALL" ] ; then
-#     echo -n 'Are you sure you want to run GRML_SMALL stuff? [y|N] '
-#     read a
-#     if [ "$a" == 'y' ] ; then
-#        echo 'Continuing as requested.'
-#     else
-#        echo 'Exiting as requested.'
-#        unset GRML_SMALL
-#        exit 1
-#     fi
-#  fi
 
 # detect kernel version, assume newest kernel version
   KERNEL=$(ls -1 /lib/modules/ | sort -r -u | head -1)
 
-if [ -f /usr/share/fonts/X11/misc/artwiz-cursor.pcf.gz ] ; then
-  if dpkg-divert --list artwiz-cursor | grep -q /usr/share/fonts/X11/misc/cursor.pcf.gz ; then
-     eerror "Broken diversion of artwiz-cursor, see #341397"
-     exit 1
-  fi
+if [ -n "$LATEX_CLEANUP" ] ; then
+   rm -rf /usr/share/doc/texlive-latex-recommended/latex/ \
+          /usr/share/doc/texlive-latex-base/latex/ \
+          /usr/share/doc/texlive-base-bin/pdftex/thanh/ \
+          /usr/share/doc/texlive-latex-base/latex/base/ \
+          /usr/share/doc/texlive-latex-base/latex/hyperref/ \
+          /usr/share/doc/texlive-latex-base/generic/babel/  \
+          /usr/share/doc/texlive-latex-recommended/latex/koma-script/ \
+          /usr/share/doc/texmf/pgf/pgfmanual.pdf.gz
 fi
 
-#if [ -r /usr/share/fonts/X11/misc/cursor.pcf.gz ] ; then
-#  einfo "Fixing the broken artwiz-cursor"
-#  ( cd /usr/share/fonts/X11/misc/ && \
-#    dpkg-divert --remove /usr/share/fonts/X11/misc/cursor.pcf.gz && mkfontdir )
-#  eend $?
-#fi
+if [ -f /usr/share/fonts/X11/misc/artwiz-cursor.pcf.gz ] ; then
+  if dpkg-divert --list artwiz-cursor | grep -q /usr/share/fonts/X11/misc/cursor.pcf.gz ; then
+     eerror "Broken diversion of artwiz-cursor, see #341397, trying to fix it"
+     ( cd /usr/share/fonts/X11/misc/ &&
+       dpkg-divert --remove /usr/share/fonts/X11/misc/cursor.pcf.gz && mkfontdir )
+     eend 0
+  fi
+fi
 
 # start of main cleanup process...
 if ! [ -r /boot/config-"$KERNEL" ] ; then
@@ -60,19 +43,10 @@ if ! [ -r /boot/config-"$KERNEL" ] ; then
   exit 9
 fi
 
-einfo "Preparing grml-system: `cat /etc/grml_version`." ; eend 0
+einfo "Preparing grml-system: $(cat /etc/grml_version)" ; eend 0
 
 einfo "Setting up /etc/motd.tail"
 echo "" > /etc/motd.tail ; eend 0
-
-einfo "Do not forget to run the final check:"
- eindent
-  einfo 'adjust grml-version: vim -X /etc/grml_version'
-  einfo 'is runlevel.conf ok: vimdiff -X /etc/runlevel.conf /etc/runlevel.conf.livecd'
-  einfo 'find old files:      find /etc -name \*dpkg\*'
-  einfo "delete conffiles:    dpkg --purge \`dpkg --list | grep '^rc' | awk '{print \$2}'\`"
-  einfo 'dangling symlinks:   ls **/*(-@)'
- eoutdent
 
 einfo "Setting up /etc/modules: "
 cat>/etc/modules<<EOF
@@ -159,22 +133,12 @@ einfo "Unmounting proc, /dev/pts, /dev/capi"
   umount -a 2>/dev/null
 eend $?
 
-#einfo "Removing initrd-images"
-#  rm -f /boot/initrd.img-*
-#eend $?
-
 einfo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
-  # for i in $(find /var/lib/apt/lists -type f \( -name \*Packages -o -name \*Sources \) 2>/dev/null); do  :>"$i"; done
-  # for i in /var/lib/apt/lists/*_{Release,Packages,Sources}; do :>$i; touch -t 198103190000.00 $i; done
-  # sync-available 2>/dev/null
-  # apt-get check
   rm -f /var/lib/apt/lists/*Packages
   rm -f /var/lib/apt/lists/*Release
   rm -f /var/lib/apt/lists/*Sources
   rm -f /var/lib/apt/lists/*.gpg
   rm -f /var/cache/apt-show-versions/*
-  # :> /var/cache/apt/pkgcache.bin
-  # :> /var/cache/apt/srcpkgcache.bin
   rm -f /var/cache/debconf/templates.dat-old
   rm -f /var/cache/apt/*.bin
   apt-get check 2>/dev/null
@@ -224,8 +188,6 @@ zero(){
   done
 }
 
-#rmdir /mnt/cdrom?* /mnt/hd?* 2>/dev/null
-
 #for i in `find /usr/*/man -name \*.\[0-9ln\]` ; do
 #  [ -f "$i".gz -o -f "$i".bz2 ] && rm -f "$i"
 #done
@@ -243,9 +205,6 @@ einfo "Running apt-get clean"
   apt-get clean
 eend $?
 
-# remove files from packages which have been removed
-# COLUMNS=200 dpkg --purge `dpkg -l | grep '^rc' | awk '{ print $2 }'` 
-
 if [ -x /usr/bin/nvi ] ; then
   if ! [ -d /var/tmp/vi.recover ] ; then
     einfo "Creating nvi /var/tmp directory"
@@ -261,7 +220,6 @@ fi
 if [ -x /sbin/depmod ] ; then
   if [ -r /lib/modules/$KERNEL ] ; then
     einfo "Updating modules.dep for kernel $KERNEL"
-    # depmod -a $KERNEL
     depmod -ae -F /boot/System.map-"$KERNEL" "$KERNEL"
     eend $?
   fi
@@ -284,8 +242,6 @@ if [ -x /usr/bin/update-pciids ] ; then
   einfo "Updating PCI- and USB-ids"
   update-pciids
   update-usbids
-#  ls -la /usr/share/misc/*.ids* 
-#  ls -la /var/lib/usbutils/usb*
   eend $?
 else
   ewarn "update-pciids/update-usbids not installed" ; eend 0
@@ -345,14 +301,6 @@ else
   ewarn "ldconfig not installed" ; eend 0
 fi
 
-#if [ -r /lib/modules/$KERNEL/ ] ; then
-#  einfo "Searching for modules not compiled against $KERNEL"
-#  ( cd /lib/modules/$KERNEL/ && modinfo **/*.ko | grep vermagic | grep -v $KERNEL )
-#  eend 0
-#else
-#  eerror "/lib/modules/$KERNEL/ not found" ; eend 1
-#fi
-
 if [ -x /usr/bin/update-menus ] ; then
   einfo "Updating windowmanager menus"
   update-menus -v
@@ -378,29 +326,36 @@ else
   ewarn "mandb not installed" ; eend 0
 fi
 
-#if [ -n "$GRML_SMALL" ] ; then
+if [ -n "$REMOVE_DOCS" ] ; then
 #  einfo "Cleaning up /etc/skel..."
 #  rm -rf /etc/skel/.fluxbox 
 #  rm -rf /etc/skel/.gkrellm2 
 #  rm -rf /etc/skel/.idesktop 
 #  rm -rf /etc/skel/.pekwm
 #  eend $?
-#
-#  einfo "Cleaning documentation directories..."
-#  mv /usr/share/doc/grml-docs /tmp/
-#  rm -rf /usr/share/doc
-#  mkdir /usr/share/doc
-#  mv /tmp/grml-docs /usr/share/doc/grml-docs
-#  rm -rf /usr/share/gtk-doc/
-#  rm -rf /usr/share/man/
-#  rm -rf /usr/man
-#  rm -rf /usr/share/info
-#  eend $?
-#
-#  einfo "Creating /usr/share/info/..."
-#  mkdir -p /usr/share/info/
-#  eend $?
-#fi
+
+  einfo "Cleaning documentation directories..."
+  if [ -d /usr/share/doc/grml-docs ] ; then
+     mv /usr/share/doc/grml-docs /tmp/
+  fi
+
+  rm -rf /usr/share/doc
+  mkdir /usr/share/doc
+
+  if [ -d /tmp/grml-docs ] ; then
+     mv /tmp/grml-docs /usr/share/doc/grml-docs
+  fi
+
+  rm -rf /usr/share/gtk-doc/
+  rm -rf /usr/share/man/
+  rm -rf /usr/man
+  rm -rf /usr/share/info
+  eend $?
+
+  einfo "Creating /usr/share/info/..."
+  mkdir -p /usr/share/info/
+  eend $?
+fi
 
 if [ -d /var/lib/clamav/ ] ; then
   einfo "Cleaning /var/lib/clamav/"
@@ -439,6 +394,7 @@ eend $?
 ################################################################################
 # MISC STUFF
 # ~~~~~~~~~~
+# list dangling symlinks: ls **/*(-@)
 #
 # Security-audit:
 # find / \! -type l -perm -2000 -ls > audit/sgid-files 
@@ -454,30 +410,11 @@ eend $?
 # list non-stripped files:
 # file /usr/sbin/* | grep -v ', stripped' | grep -v 'perl' | grep -v 'Bourne' | grep -v 'python' | grep -v 'symbolic link'
 #
-# einfo "Removing unused architecture Kernel sources: "
-#   for i in `ls -1 /usr/src/linux/arch/ | grep -v i386`; do
-#     echo -n "$i "; rm -rf /usr/src/linux/arch/"$i" /usr/src/linux/include/asm-"$i"
-#   done
-# eend $?
-#
 # Is software by grml-repos up2date?
 # grep-dctrl --field Maintainer 'Michael Prokop' /var/lib/apt/lists/grml.org_repos_._* | grep Package | awk '{print $2}' | xargs echo 
 #
 # runlevel.conf:
 # for file in /etc/init.d/* ; do grep $file -q /etc/runlevel.conf.hdinstall || echo $file not found ; done
 ################################################################################
-# ISO
-# ~~~
-# /usr/bin/mksquashfs /home/mika/grml/chroot/grml_uncompressed.large/* \
-# /home/mika/grml/chroot/grml_cd.large/GRML/GRML  -noappend -sort /home/mika/grml/svn/grml/remastering/sort
-#
-# mkisofs -V "grml 0.8" -publisher 'Michael Prokop <mika@grml.org>' -l -r \
-# -J -no-emul-boot -boot-load-size 4 -boot-info-table -c boot/isolinux/boot.cat \
-# -b boot/isolinux/isolinux.bin -o /home/mika/grml/chroot/grml_0.8.iso .
-# 
-# vim grml_cd.large/GRML/grml-version
-# 
-# find . -type f -not -name md5sums -not -name boot.cat -exec md5sum {} \; > GRML/md5sums
-################################################################################
-#
+
 ## END OF FILE #################################################################
