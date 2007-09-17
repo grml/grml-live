@@ -24,17 +24,17 @@
 # variables
   grep -q small /etc/grml_version && GRML_SMALL=yes  || GRML_SMALL=''
   [ -x /lib64 ] && GRML64=yes || GRML64=''
-  if [ -n "$GRML_SMALL" ] ; then
-     echo -n 'Are you sure you want to run GRML_SMALL stuff? [y|N] '
-     read a
-     if [ "$a" == 'y' ] ; then
-        echo 'Continuing as requested.'
-     else
-        echo 'Exiting as requested.'
-        unset GRML_SMALL
-        exit 1
-     fi
-  fi
+#  if [ -n "$GRML_SMALL" ] ; then
+#     echo -n 'Are you sure you want to run GRML_SMALL stuff? [y|N] '
+#     read a
+#     if [ "$a" == 'y' ] ; then
+#        echo 'Continuing as requested.'
+#     else
+#        echo 'Exiting as requested.'
+#        unset GRML_SMALL
+#        exit 1
+#     fi
+#  fi
 
 # detect kernel version, assume newest kernel version
   KERNEL=$(ls -1 /lib/modules/ | sort -r -u | head -1)
@@ -402,29 +402,29 @@ else
   ewarn "mandb not installed" ; eend 0
 fi
 
-if [ -n "$GRML_SMALL" ] ; then
-  einfo "Cleaning up /etc/skel..."
-  rm -rf /etc/skel/.fluxbox 
-  rm -rf /etc/skel/.gkrellm2 
-  rm -rf /etc/skel/.idesktop 
-  rm -rf /etc/skel/.pekwm
-  eend $?
-
-  einfo "Cleaning documentation directories..."
-  mv /usr/share/doc/grml-docs /tmp/
-  rm -rf /usr/share/doc
-  mkdir /usr/share/doc
-  mv /tmp/grml-docs /usr/share/doc/grml-docs
-  rm -rf /usr/share/gtk-doc/
-  rm -rf /usr/share/man/
-  rm -rf /usr/man
-  rm -rf /usr/share/info
-  eend $?
-
-  einfo "Creating /usr/share/info/..."
-  mkdir -p /usr/share/info/
-  eend $?
-fi
+#if [ -n "$GRML_SMALL" ] ; then
+#  einfo "Cleaning up /etc/skel..."
+#  rm -rf /etc/skel/.fluxbox 
+#  rm -rf /etc/skel/.gkrellm2 
+#  rm -rf /etc/skel/.idesktop 
+#  rm -rf /etc/skel/.pekwm
+#  eend $?
+#
+#  einfo "Cleaning documentation directories..."
+#  mv /usr/share/doc/grml-docs /tmp/
+#  rm -rf /usr/share/doc
+#  mkdir /usr/share/doc
+#  mv /tmp/grml-docs /usr/share/doc/grml-docs
+#  rm -rf /usr/share/gtk-doc/
+#  rm -rf /usr/share/man/
+#  rm -rf /usr/man
+#  rm -rf /usr/share/info
+#  eend $?
+#
+#  einfo "Creating /usr/share/info/..."
+#  mkdir -p /usr/share/info/
+#  eend $?
+#fi
 
 if [ -d /var/lib/clamav/ ] ; then
   einfo "Cleaning /var/lib/clamav/"
