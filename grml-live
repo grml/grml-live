@@ -152,7 +152,7 @@ fi
 if [ -d "$CHROOT_TARGET" ] ; then
    echo "  [x] $CHROOT_TARGET exists already, skipping the stage 'fai dirnstall'"
 else
-   mkdir "$CHROOT_TARGET" || bailout 5 "Problem with creating $CHROOT_TARGET for FAI"
+   mkdir -p "$CHROOT_TARGET" || bailout 5 "Problem with creating $CHROOT_TARGET for FAI"
    fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" dirinstall "$CHROOT_TARGET" $FAI_ARGS
    umount $CHROOT_TARGET/proc 2>/dev/null || /bin/true
    umount $CHROOT_TARGET/sys  2>/dev/null || /bin/true
