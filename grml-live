@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Tue Sep 18 09:11:50 CEST 2007 [mika]
+# Latest change: Tue Sep 18 19:29:33 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -26,7 +26,8 @@ VERBOSE=''
 FORCE=''
 
 # source main configuration file:
-. /etc/grml/grml-live.conf
+LIVE_CONF=/etc/grml/grml-live.conf
+. $LIVE_CONF
 
 PN=$(basename $0)
 # TMPFILE=$(mktemp)
@@ -47,7 +48,7 @@ trap bailout 1 2 3 15
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 [ -n "$USERNAME" ] || USERNAME=grml
 [ -n "$CLASSES" ]  || CLASSES="GRML,I386"
-[ -n "$TARGET" ] || bailout 1 "${PN}: \$TARGET not specified. Please adjust /etc/grml/grml-live.conf. Exiting."
+[ -n "$TARGET" ] || bailout 1 "${PN}: \$TARGET not specified. Please adjust $LIVE_CONF. Exiting."
 # }}}
 
 # usage information {{{
@@ -98,9 +99,9 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 # }}}
 
 # some misc checks before executing FAI {{{
-[ -n "$CLASSES" ] || bailout 1 "Error: \$CLASSES unset, please set it in /etc/grml/grml-live.conf or
+[ -n "$CLASSES" ] || bailout 1 "Error: \$CLASSES unset, please set it in $LIVE_CONF or
 specify it on the command line using the -c|--classes option."
-[ -n "$TARGET" ] || bailout 1 "Error: \$TARGET unset, please set it in /etc/grml/grml-live.conf or
+[ -n "$TARGET" ] || bailout 1 "Error: \$TARGET unset, please set it in $LIVE_CONF or
 specify it on the command line using the -t|--target option."
 # }}}
 
@@ -132,17 +133,21 @@ if [ -n "$GRML_LIVE_SOURCES" ] ; then
    echo "$GRML_LIVE_SOURCES" > /etc/grml/fai/apt/sources.list
 fi
 
-# this heuristic is broken as it works exactly *once* by default :-/
-# TODO / FIXME
-if [ -n "$SUITE" ] ; then
-   sed -i "s#etch #$SUITE #"   /etc/grml/fai/make-fai-nfsroot.conf
-   sed -i "s#etch #$SUITE #"   /etc/grml/grml-live.conf
-   sed -i "s# etch # $SUITE #" /etc/grml/grml-live.conf
-   sed -i "s# etch # $SUITE #" /etc/grml/fai/apt/sources.list
+if [ -n "$FAI_DEBOOTSTRAP" ] ; then
+   sed -i "s#^FAI_DEBOOTSTRAP=.*#FAI_DEBOOTSTRAP=\"$FAI_DEBOOTSTRAP\"#" /etc/grml/fai/make-fai-nfsroot.conf
 fi
 
-if [ -n "$FAI_DEBOOTSTRAP" ] ; then
-   sed -i "s#^FAI_DEBOOTSTRAP#FAI_DEBOOTSTRAP=$FAI_DEBOOTSTRAP#" /etc/grml/fai/make-fai-nfsroot.conf
+# does this suck? YES!
+if [ -n "$SUITE" ] ; then
+   sed -ie "s/SUITE=.*/SUITE=\"$SUITE\"/" $LIVE_CONF
+
+   DIST="\|\ etch\ \|\ stable\ \|\ lenny\ \|\ testing\ \|\ sid\ \|\ unstable\ "
+   sed -ie "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" $LIVE_CONF
+   sed -ie "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" /etc/grml/fai/apt/sources.list
+
+   DIST='\"etch\|=\"stable=\"lenny=\"testing=\"sid=\"unstable'
+   sed -ie "s#FAI_DEBOOTSTRAP=$DIST#FAI_DEBOOTSTRAP=\"$SUITE#" $LIVE_CONF
+   sed -ie "s#FAI_DEBOOTSTRAP=$DIST#FAI_DEBOOTSTRAP=\"$SUITE#" /etc/grml/fai/make-fai-nfsroot.conf
 fi
 # }}}
 

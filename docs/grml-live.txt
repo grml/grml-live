@@ -255,12 +255,6 @@ as possiblbe)
 Known TODOs
 -----------
 
-* make sure the suite-target adjusts the mirror definitions according (working
-also vice versa!) and you can define the mirror more central (without having to
-deal with /etc/grml/grml-live.conf, /etc/grml/fai/make-fai-nfsroot.conf and
-/etc/grml/fai/apt/sources.list; debootstrap [FAI_DEBOOTSTRAP] vs. apt inside
-chroot [sources.list] as well)
-
 * document the available classes in more detail
 
 * make sure $TARGET is mounted rw,suid,dev
@@ -271,7 +265,7 @@ chroot [sources.list] as well)
 that are arch specific so we have a clean package list in all classes)
 
 * support different grml-flavours through classes right out-of-the-box (being:
-grml, grml64, grml-small (in progress) for at least x86, amd64 and ppc)
+grml, grml64, grml-small (done) for at least x86, amd64 and ppc)
 
 * support signed apt repositories (currently it's deactivated via FAI's
 FAI_ALLOW_UNSIGNED=1 for some packages in the toolchain)
@@ -281,7 +275,9 @@ FAI_ALLOW_UNSIGNED=1 for some packages in the toolchain)
 * support setting stuff like ISO name, version,... on-the-fly (especially for
 stuff inside boot/isolinux/*)
 
-* support "final builds" (including stuff like generating md5sums, gpg,...)
+* support "final builds" (including stuff like generating md5sums, gpg,... -
+create something like grml_release including all the details about the build
+like dpkg selection, logs,...)
 
 * the grml-live class(es) should send output as used inside FAI as well (so it's
 not as verbose unless you specify it, make it configurable)
@@ -291,8 +287,6 @@ a smart summary of the buildprocess (including "took ... minutes/seconds to
 build...)
 
 * support hooks to allow further customisation of the build process
-
-* test the package on non-grml systems (and maybe even non-Debian) as well
 
 Debian package
 --------------
