@@ -4,12 +4,13 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Sep 16 22:59:23 CEST 2007 [mika]
+# Latest change: Tue Sep 18 19:46:58 CEST 2007 [mika]
 ################################################################################
 
 set -u
 set -e
 
+# FIXME: replace it with /etc/locale.gen.grml finally!
 cp $target/etc/locale.gen.minimal $target/etc/locale.gen
 $ROOTCMD locale-gen
 
