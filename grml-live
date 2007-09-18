@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Tue Sep 18 19:29:33 CEST 2007 [mika]
+# Latest change: Tue Sep 18 20:32:35 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -36,6 +36,7 @@ PN=$(basename $0)
 # clean exit {{{
 bailout() {
   # rm -f "$TMPFILE"
+  [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_TARGET}/${MIRROR_DIRECTORY}"
   [ -n "$1" ] && EXIT="$1" || EXIT="1"
   [ -n "$2" ] && echo "$2">&2
   exit "$EXIT"
@@ -129,7 +130,16 @@ fi
 # }}}
 
 # on-the-fly configuration {{{
-if [ -n "$GRML_LIVE_SOURCES" ] ; then
+if [ -n "$MIRROR_DIRECTORY" ] ; then
+   if ! [ -d "$MIRROR_DIRECTORY/debian" ] ; then
+      echo "Sorry, $MIRROR_DIRECTORY/debian does not seem to exist. Exiting.">&2
+      bailout 1
+   fi
+   echo "$MIRROR_SOURCES" > /etc/grml/fai/apt/sources.list
+   if [ -n "$GRML_LIVE_SOURCES" ] ; then
+      echo "$GRML_LIVE_SOURCES" >> /etc/grml/fai/apt/sources.list
+   fi
+elif [ -n "$GRML_LIVE_SOURCES" ] ; then
    echo "$GRML_LIVE_SOURCES" > /etc/grml/fai/apt/sources.list
 fi
 
@@ -158,9 +168,14 @@ if [ -d "$CHROOT_TARGET" ] ; then
    echo "  [x] $CHROOT_TARGET exists already, skipping the stage 'fai dirnstall'"
 else
    mkdir -p "$CHROOT_TARGET" || bailout 5 "Problem with creating $CHROOT_TARGET for FAI"
+   if [ -n "${MIRROR_DIRECTORY}" ] ; then
+      mkdir -p "${CHROOT_TARGET}/${MIRROR_DIRECTORY}"
+      mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_TARGET}/${MIRROR_DIRECTORY}"
+   fi
    fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" dirinstall "$CHROOT_TARGET" $FAI_ARGS
    umount $CHROOT_TARGET/proc 2>/dev/null || /bin/true
    umount $CHROOT_TARGET/sys  2>/dev/null || /bin/true
+   [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_TARGET}/${MIRROR_DIRECTORY}"
    # notice: 'fai dirinstall' does not seem to exit appropriate ->
    # we need better error handling
    if [ -r "$CHROOT_TARGET"/etc/grml_cd ] ; then
