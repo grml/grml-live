@@ -81,6 +81,11 @@ as build and output directory:
 
   # grml-live
 
+To get a small Debian-unstable and grml-small based live-cd using /grml as build
+and output directory:
+
+  # grml-live -c GRMLBASE,GRML_SMALL,I386 -t /grml
+
 [NOTE]
 
 If you have about 700MB of free space inside /dev/shm (being a tmpfs, usually
@@ -89,6 +94,22 @@ you have >=1GB of RAM) just run "mount -o remount,suid,dev,rw /dev/shm" and use
 But please be aware of the fact that rebooting your system will result in an
 empty /dev/shm, so please another directory for $CHROOT_TARGET, $BUILD_TARGET
 and $ISO_TARGET if you plan to create more persistent output. :)
+
+Features
+--------
+
+* create a grml-/Debian-based Linux Live-CD with one single command
+
+* class based concept, providing a maximum of flexibility
+
+* supports integration of own hooks, scripts and configuration
+
+* supports use and integration of own Software and/or Kernels via use of Debian
+repositories
+
+* native support of FAI features
+
+* multi-arch support (work in progress)
 
 The class concept
 -----------------
