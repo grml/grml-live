@@ -3,33 +3,41 @@ grml-live(8)
 
 Name
 ----
-grml-live - build process script for generating a (grml based) Linux Live-ISO
+
+grml-live - build framework for generating a grml and Debian based Linux Live
+system (CD/ISO)
 
 Synopsis
 --------
+
 grml-live [-c <classe[s]>] [-t <target_directory>] [-F] [-h|--help]
 
 *******************************************************************************
 Important! grml-live is under heavy construction, though your feedback is highly
 appreciated.  This document is growing as requested. If you have questions which
-aren't answered by this document yet please let me (mika@grml.org) know!
+aren't answered by this document yet please let me know: <mika@grml.org>!
 *******************************************************************************
 
 Description
 -----------
 
-grml-live provides the build system for creating (a grml based) live-cd. The
-build system is based on link:http://www.informatik.uni-koeln.de/fai/[FAI]
-(Fully Automatic Installation).
+grml-live provides the build system for creating a grml and Debian based Linux
+live-cd. The build system is based on
+link:http://www.informatik.uni-koeln.de/fai/[FAI] (Fully Automatic
+Installation). grml-live uses the "fai dirinstall" feature to generate a chroot
+system based on the class concept of FAI (see later section for further details)
+and provides all the details to be able to generate a full-featured ISO. It does
+not use all the FAI features by default though and you don't have to know FAI to
+be able to use it.
 
-FAI uses a class based system. This gives you the flexibility to choose the
+The use of FAI behind the curtains gives you the flexibility to choose the
 packages you would like to include on your very own Linux live-cd without having
 to deal with all the details of a build process.
 
-CAUTION: grml-live does not use /etc/fai for configuration but instead provides
-and uses /etc/grml/fai. This ensures that it does not clash with default FAI
-configuration and packages, so you can use grml-live and FAI completely
-independent!
+CAUTION: grml-live does **not** use /etc/fai for configuration but instead
+provides and uses /etc/grml/fai. This ensures that it does not clash with
+default FAI configuration and packages, so you can use grml-live and FAI
+completely independent at the same time!
 
 [NOTE]
 
@@ -252,6 +260,8 @@ also vice versa!) and you can define the mirror more central (without having to
 deal with /etc/grml/grml-live.conf, /etc/grml/fai/make-fai-nfsroot.conf and
 /etc/grml/fai/apt/sources.list; debootstrap [FAI_DEBOOTSTRAP] vs. apt inside
 chroot [sources.list] as well)
+
+* document the available classes in more detail
 
 * make sure $TARGET is mounted rw,suid,dev
 
