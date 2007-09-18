@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Sep 17 18:31:35 CEST 2007 [mika]
+# Latest change: Tue Sep 18 09:11:50 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -107,10 +107,10 @@ specify it on the command line using the -t|--target option."
 # ask user whether the setup is ok {{{
 if [ -z "$FORCE" ] ; then
    echo
-   echo "$PN - check your configuration (or invoke using -F to force execution without prompting)"
+   echo "$PN - check your configuration (or invoke using -F to force execution without prompting):"
    echo
    echo "  FAI classes:       $CLASSES"
-   echo "  output directory:  $TARGET"
+   echo "  main directory:    $TARGET"
    [ -n "$CHROOT_TARGET" ] && echo "  chroot target:     $CHROOT_TARGET"
    [ -n "$BUILD_TARGET" ]  && echo "  build target:      $BUILD_TARGET"
    [ -n "$ISO_TARGET" ]    && echo "  ISO target:        $ISO_TARGET"
