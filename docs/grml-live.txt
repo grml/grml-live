@@ -57,8 +57,11 @@ Specify the Debian suite you want to use for your live-system.  Defaults to
 
   -t **TARGET_DIRECTORY**::
 
-Output directory of the build process of FAI - being the chroot
-used for building the ISO.
+Main output directory of the build process of FAI.  Three directories are
+created inside the target directory, being: grml_cd/ - where the files for
+creating the ISO are located (including the compressed squashfs file),
+grml_chroot/ - the generated chroot system and grml_isos/ - where the resulting
+ISO is stored.
 
   -F::
 
@@ -76,15 +79,15 @@ Increase verbosity in the build process.
 How to get your own live-cd - the easy, fast and simple way
 -----------------------------------------------------------
 
-To get a small, Debian-stable and grml based live-cd using /dev/shm/
+To get a small, Debian-stable and grml based live-cd using /grml/grml-live
 as build and output directory:
 
   # grml-live
 
-To get a small Debian-unstable and grml-small based live-cd using /grml as build
-and output directory:
+To get a small Debian-unstable and grml-small based live-cd using
+/home/mika/grml-live as build and output directory:
 
-  # grml-live -c GRMLBASE,GRML_SMALL,I386 -t /grml
+  # grml-live -c GRMLBASE,GRML_SMALL,I386 -t /home/mika/grml-live
 
 [NOTE]
 
@@ -246,9 +249,6 @@ Known TODOs
 
 * make sure the suite-target adjusts the mirror definitions according (working
 also vice versa!)
-
-* do not use /dev/shm/ als default target directory (which one do we want to use
-instead?)
 
 * add support for amd64 [gebi?] + ppc [formorer?] (and identify all packages
 that are arch specific so we have a clean package list in all classes)

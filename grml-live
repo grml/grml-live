@@ -61,8 +61,8 @@ Usage: $PN [-c <classe[s]>] [-t <target_directory>] [-s <suite> [-Fvh]
 Usage examples:
 
     $PN
-    $PN -c GRMLBASE,I386 -t /dev/shm/grml
     $PN -c GRMLBASE,GRML_X,I386 -t /grml/
+    $PN -c GRMLBASE,I386 -t /dev/shm/grml
     $PN -c GRMLBASE,GRML_SMALL,I386
     $PN -s sid -c GRMLBASE,I386
 
