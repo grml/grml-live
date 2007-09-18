@@ -4,17 +4,16 @@ grml-live(8)
 Name
 ----
 
-grml-live - build framework for generating a grml and Debian based Linux Live
-system (CD/ISO)
+grml-live - build framework based on FAI for generating a grml and Debian based
+Linux Live system (CD/ISO)
 
 Synopsis
 --------
 
-grml-live [-c <classe[s]>] [-t <target_directory>] [-F] [-h|--help]
+grml-live [-c <classe[s]>] [-t <target_directory>] [-s <suite>] [-Fvh]
 
 *******************************************************************************
-Important! grml-live is under heavy construction, though your feedback is highly
-appreciated.  This document is growing as requested. If you have questions which
+Important! This document is growing as requested. If you have questions which
 aren't answered by this document yet please let me know: <mika@grml.org>!
 *******************************************************************************
 
@@ -22,17 +21,17 @@ Description
 -----------
 
 grml-live provides the build system for creating a grml and Debian based Linux
-live-cd. The build system is based on
+Live-CD. The build system is based on
 link:http://www.informatik.uni-koeln.de/fai/[FAI] (Fully Automatic
 Installation). grml-live uses the "fai dirinstall" feature to generate a chroot
-system based on the class concept of FAI (see later section for further details)
-and provides all the details to be able to generate a full-featured ISO. It does
-not use all the FAI features by default though and you don't have to know FAI to
-be able to use it.
+system based on the class concept of FAI (see later sections for further
+details) and provides the framework to be able to generate a full-featured ISO.
+It does not use all the FAI features by default though and you don't have to
+know FAI to be able to use it.
 
-The use of FAI behind the curtains gives you the flexibility to choose the
-packages you would like to include on your very own Linux live-cd without having
-to deal with all the details of a build process.
+The use of FAI gives you the flexibility to choose the packages you would like
+to include on your very own Linux Live-CD without having to deal with all the
+details of a build process.
 
 CAUTION: grml-live does **not** use /etc/fai for configuration but instead
 provides and uses /etc/grml/fai. This ensures that it does not clash with
@@ -42,39 +41,38 @@ completely independent at the same time!
 [NOTE]
 
 Please notice that you should have a fast network connection as all the Debian
-packages will be installed via network. If you want to use a local mirror
-(strongly recommended!) checkout mkdebmirror (see
-/usr/share/doc/grml-live/examples/mkdebmirror), debmirror(1), reprepro(1) (see
-/usr/share/doc/grml-live/examples/reprepro/ for a sample configuration) and
-approx(8). To avoid downloading of the base system check out FAI's NFSROOT (check
-docs for ../fai/nfsroot/live/filesystem.dir/var/tmp/base.tgz).
+packages will be downloaded and installed via network. If you want to use a
+local mirror (strongly recommended if you plan to use grml-live more than once)
+checkout mkdebmirror (see /usr/share/doc/grml-live/examples/mkdebmirror),
+debmirror(1), reprepro(1) (see /usr/share/doc/grml-live/examples/reprepro/ for a
+sample configuration) and approx(8). To avoid downloading the base system again
+and again check out FAI's NFSROOT (see FAQ of this document for details).
 
 Options
 -------
 
   -c **CLASSES**::
 
-Specify the CLASSES to be used for building the ISO via fai.  By default only
+Specify the CLASSES to be used for building the ISO via FAI.  By default only
 the classes GRMLBASE and I386 are assumed, resulting in a small base system
-(being about ~150MB ISO size).
+(being about ~150MB total ISO size) for x86 (32bit).
 
   -s **SUITE**::
 
 Specify the Debian suite you want to use for your live-system.  Defaults to
-"etch"; support values are: etch, lenny, sid, stable, testing, unstable.
+"etch" (being current Debian/stable). Supported values are: etch, lenny, sid,
+stable, testing, unstable.
 
   -t **TARGET_DIRECTORY**::
 
-Main output directory of the build process of FAI.  Three directories are
-created inside the target directory, being: grml_cd/ - where the files for
-creating the ISO are located (including the compressed squashfs file),
-grml_chroot/ - the generated chroot system and grml_isos/ - where the resulting
-ISO is stored.
+Main output directory of the build process of FAI.  Some directories are created
+inside this target directory, being: grml_cd (where the files for creating the
+ISO are located, including the compressed squashfs file), grml_chroot (the
+chroot system) and grml_isos (where the resulting ISO is stored).
 
   -F::
 
-Force execution and do not prompt for / display summary of configuration
-details.
+Force execution and do not prompt for acknowledgment of configuration.
 
   -h::
 
@@ -84,30 +82,30 @@ Display short usage information and exit.
 
 Increase verbosity in the build process.
 
-How to get your own live-cd - the easy, fast and simple way
+How to get your own Live-CD - the easy, fast and simple way
 -----------------------------------------------------------
 
-To get a small, Debian-stable and grml based live-cd using /grml/grml-live
-as build and output directory:
+To get a small, Debian-stable and grml-based Live-CD using /grml/grml-live
+as build and output directory just run:
 
   # grml-live
 
-To get a small Debian-unstable and grml-small based live-cd using
-/home/mika/grml-live as build and output directory:
+To get a small Debian-unstable and grml-small based Live-CD using
+/home/mika/grml-live as build and output directory just use:
 
   # grml-live -c GRMLBASE,GRML_SMALL,I386 -t /home/mika/grml-live
 
 [NOTE]
 
 If you have about 700MB of free space inside /dev/shm (being a tmpfs, usually
-you have >=1GB of RAM) just run "mount -o remount,suid,dev,rw /dev/shm" and use
-/dev/shm as build and output directory - resulting in very fast build process.
-But please be aware of the fact that rebooting your system will result in an
-empty /dev/shm, so please another directory for $CHROOT_TARGET, $BUILD_TARGET
-and $ISO_TARGET if you plan to create more persistent output. :)
+you should have >=1GB of RAM) just run "mount -o remount,suid,dev,rw /dev/shm"
+and use /dev/shm as build and output directory - resulting in very fast build
+process.  But please be aware of the fact that rebooting your system will result
+in an empty /dev/shm, so please another directory for $CHROOT_TARGET,
+$BUILD_TARGET and $ISO_TARGET if you plan to create more persistent output. :)
 
-Features
---------
+Main features of grml-live
+--------------------------
 
 * create a grml-/Debian-based Linux Live-CD with one single command
 
@@ -115,8 +113,8 @@ Features
 
 * supports integration of own hooks, scripts and configuration
 
-* supports use and integration of own Software and/or Kernels via use of Debian
-repositories
+* supports use and integration of own Software and/or Kernels via simple use of
+Debian repositories
 
 * native support of FAI features
 
@@ -125,15 +123,15 @@ repositories
 The class concept
 -----------------
 
-grml-live uses FAI and its class based concept for adjusting configuration
-according to your needs. This gives you flexibility and strength without losing
-the simplicity in the build process.
+grml-live uses FAI and its class based concept for adjusting configuration and
+setup according to your needs. This gives you flexibility and strength without
+losing the simplicity in the build process.
 
 The main and base class provided by grml-live is named GRMLBASE. It's strongly
 recommended to **always** use the class GRMLBASE when building an ISO using
-grml-live as well as the architecture dependend class (being 'I386' for x86_32
-currently only). The following files and directories are relevant for class GRML
-by default:
+grml-live, as well as the architecture dependend class which provides the kernel
+(being 'I386' for x86_32 currently only). The following files and directories
+are relevant for class GRMLBASE by default:
 
   /etc/grml/fai/config/scripts/GRMLBASE/
   /etc/grml/fai/config/debconf/GRMLBASE
@@ -145,51 +143,61 @@ Take a look at the next section for information about the concept of those
 files/directories.
 
 If you want to use your own configuration, extend an existing configuration
-and/or add additional packages to your ISO just invent a new class. For example
-if you want to use your own class named "FOOBAR" just extend CLASSES="GRMLBASE"
-inside /etc/grml/grml-live.conf to CLASSES="GRMLBASE,FOOBAR" or invoke grml-live
-using the classes option: "grml-live -c GRMLBASE,FOOBAR ...".
+and/or add additional packages to your ISO just invent a new class (or extend an
+existing one). For example if you want to use your own class named "FOOBAR" just
+extend CLASSES="GRMLBASE,I386" inside /etc/grml/grml-live.conf to
+CLASSES="GRMLBASE,I386,FOOBAR" or invoke grml-live using the classes option:
+"grml-live -c GRMLBASE,I386,FOOBAR ...".
 
 More details regarding the class concept can be found in the documentation of
-FAI (available at /usr/share/doc/fai-doc/).
+FAI itself (being available at /usr/share/doc/fai-doc/).
 
 Files
 -----
 
 Notice that grml-live ships FAI configuration files that do not use the same
-namespace as the FAI packages itself.  This ensures that grml-live does not
-clash with your usual FAI configuration, so instead of /etc/fai/fai.conf
-(package fai-client) grml uses /etc/grml/fai/fai.conf instead. For more details
-see below. To get an idea how another configuration or example files could look
-like check out /usr/share/doc/fai-doc/examples/simple/ (provided by Debian package
-fai-doc). /usr/share/doc/fai-doc/fai-guide.html/ch-config.html also provides
-documentation regarding configuration possibilities.
+namespace as the FAI packages itself. This ensures that grml-live does not clash
+with your usual FAI configuration, so instead of /etc/fai/fai.conf (package
+fai-client) grml uses /etc/grml/fai/fai.conf instead. For more details see
+below. To get an idea how another configuration or example files could look like
+check out /usr/share/doc/fai-doc/examples/simple/ (provided by Debian package
+fai-doc). Furthermore /usr/share/doc/fai-doc/fai-guide.html/ch-config.html
+provides documentation regarding configuration possibilities.
 
   /usr/sbin/grml-live
 
-Script for the main build process (being a wrapper around FAI currently).
-Requires root permissions for execution.
+Script for the main build process. Requires root permissions for execution.
+
+  /etc/grml/grml-live.conf
+
+Main configuration file for grml-live. All the important steps can be configured
+at this stage.
 
   /etc/grml/fai/fai.conf
 
-Main configuration file which specifies where all the configuration files and
-scripts for FAI/grml-live can be found. By default it is
+Main configuration file for FAI which specifies where all the configuration
+files and scripts for FAI/grml-live can be found. By default it is set to
 FAI_CONFIGDIR=/etc/grml/fai/config, a directory shipped by grml-live
 out-of-the-box so you shouldn't have to configure anything in this file.
 
   /etc/grml/fai/make-fai-nfsroot.conf
 
-TODO: documentation
+This file is used by make-fai-nfsroot(8) only. Usually you don't have to change
+anything inside this file. If you want to modify NFSROOT though you can adjust
+it there.
 
   /etc/grml/fai/NFSROOT
 
-TODO: documentation
+This file specifies the package list for creating the NFSROOT.
 
   /etc/grml/fai/apt/sources.list
 
 This file specifies which mirrors should be used for retreiving the Debian
-packages used for creating the ISO. If you want to use a local mirror you have
-to adjust this file.
+packages used for creating the main chroot (including all the software you would
+like to see included). If you want to use a local mirror you either have to
+adjust this file or use the GRML_LIVE_SOURCES variable inside
+/etc/grml/grml-live.conf which modifies /etc/grml/fai/apt/sources.list
+on-the-fly then.
 
   /etc/grml/fai/config/
 
@@ -207,24 +215,24 @@ through files.
 
   /etc/grml/fai/config/hooks/
 
-This directory provides files for customizing the build process through hooks.
+This directory provides files for customising the build process through hooks.
 Hooks are user defined programs or scripts, which are called during the
 installation process.
 
   /etc/grml/fai/config/package_config/
 
-File with lists of software packages to be installed or removed.  The different
-classes describe what should find its way to your ISO.  When running 'fai -v -C
-/etc/grml/fai -cGRMLBASE dirinstall ...' only the files from the directory GRML/
-will be taken, if you use 'fai -v -C /etc/grml/fai -cGRMLBASE,FOOBAR dirinstall
-...' then the files of GRML/ **plus** the files from FOOBAR/ will be taken. So
-just create a new class to adjust it to your needs. Please notice that the
-directory GRML contains a package list defining a minimum but still reasonable
-package configuration.
+Directory with lists of software packages to be installed or removed.  The
+different classes describe what should find its way to your ISO.  When running
+"grml-live -c GRMLBASE,I386 ..." only the files from the directories GRMLBASE
+and I386 will be taken, if you use 'grml-live -c GRMLBASE,I386,FOOBAR ...' then
+the files of GRMLBASE, I386 **plus** the files from FOOBAR will be taken. So
+just create a new class to adjust the package selection according to your needs.
+Please notice that the directory GRMLBASE contains a package list defining a
+minimum but still reasonable package configuration.
 
   /etc/grml/fai/config/scripts/
 
-Scripts for customising the ISO within build process.
+Scripts for customising the ISO within the build process.
 
   /etc/grml/fai/files/
 
@@ -240,8 +248,9 @@ live-initramfs(8).
 Requirements for the build system
 ---------------------------------
 
-* any Debian based system should be sufficient (if not please send a bug
-report), for example a grml2hd harddisk installation ships all you need
+* any Debian based system should be sufficient (if not it's a bug, so please
+send us a bug report then) [a usual link:http://grml.org/grml2hd/[grml2hd]
+harddisk installation ships all you need]
 
 * enough free disk space; at least 800MB are required for a minimal grml-live
 run (\~400MB for the chroot [$CHROOT_TARGET], \~150MB for the build target
@@ -252,44 +261,173 @@ temporary files)
 chroot (check out "local mirror" and "NFSROOT" to workaround this problem as far
 as possiblbe)
 
+FAQ
+---
+
+Help, I'm using Debian etch and I don't have FAI version >3.2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  wget http://www.informatik.uni-koeln.de/fai/download/etch/fai-client_3.2.1_all.deb \
+       http://www.informatik.uni-koeln.de/fai/download/etch/fai-server_3.2.1_all.deb
+  dpkg -i fai-client_3.2.1_all.deb fai-server_3.2.1_all.deb
+
+or check out the link:http://www.informatik.uni-koeln.de/fai/[FAI-homepage] for
+further details.
+
+I've problems with the build process. How to start debugging?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Check out the logs inside /var/log/fai/dirinstall/... If you don't have the time
+to debug the problem in further detail or don't know how to proceed just send a
+copy of your config, logs and the commandline with a short problem description
+to <mika@grml.org>:
+
+  # history | grep grml-live > /etc/grml/grml_live.cmdline
+  # tar zcf grml_live_problem.tar.gz /etc/grml/grml-live.conf \
+            /var/log/fai/dirinstall /etc/grml/fai
+
+Can I use my own (local) Debian mirror?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sure. Just adjust the variables GRML_LIVE_SOURCES and FAI_DEBOOTSTRAP (if not
+already using NFSROOT's base.tgz) inside /etc/grml/grml-live.conf according to
+your needs. Please don't forget that you should use the grml servers as well
+(see default configuration) so all the grml packages can be downloaded as well.
+
+If you want to use a local (for example NFS mount) mirror additionally, just
+adjust MIRROR_DIRECTORY and MIRROR_SOURCES insede /etc/grml/grml-live.conf as
+well.
+
+Unless you specify GRML_LIVE_SOURCES and/or FAI_DEBOOTSTRAP the default from
+/etc/grml/fai/apt/sources.list and /etc/grml/fai/make-fai-nfsroot.conf will be
+taken. If you customise the variables in /etc/grml/grml-live.conf then the two
+files will be adjusted during runtime automatically.
+
+If MIRROR_DIRECTORY and MIRROR_SOURCES are specified the local mirror will be
+taken as first entry in the generated sources.list so it's prefered over
+non-local mirrors. Using a fallback mirror (via providing several mirrors in
+GRML_LIVE_SOURCES as used by default) is a recommended setting.
+
+How do I add additional Debian package(s) to my CD/ISO?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Just create a new class (using the package_config directory):
+
+  # cat > /etc/grml/fai/config/package_config/MIKA << EOF
+  PACKAGES aptitude
+
+  vim
+  another_name_of_a_debian_package
+  and_another_one
+  EOF
+
+and specify it when invoking grml-live then:
+
+  # grml-live -c GRMLBASE,I386,MIKA
+
+I fscked up my grml-live configuration. How do I reset it to the defaults?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Notice: this deletes all your grml-live configuration files. If that's really
+what you are searching for just run:
+
+  rm -rf /etc/grml/fai /etc/grml/grml-live.conf
+  dpkg -i --force-confnew --force-confmiss /path/to/grml-live_..._all.deb
+
+[NOTE]
+
+If you don't control your /etc using a version control system (VCS) yet it's a
+good chance to start using it now. Check out
+link:http://michael-prokop.at/blog/2007/03/14/maintain-etc-with-mercurial-on-debian/[http://michael-prokop.at/blog/2007/03/14/maintain-etc-with-mercurial-on-debian/]
+for more details how to maintain /etc using the mercurial VCS.
+
+How do I create a base.tgz for use as NFSROOT?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+First of all build the chroot system:
+
+  mkdir /tmp/nfsroot && cd /tmp/nfsroot
+  debootstrap etch /tmp/nfsroot/ http://ftp.de.debian.org/debian
+  tar zcf base.tgz ./
+
+Then check out where your NFSROOT is located:
+
+  # grep '^NFSROOT' /etc/grml/fai/make-fai-nfsroot.conf
+  NFSROOT=/grml/fai/nfsroot
+
+So as /grml/fai/nfsroot is your NFSROOT place the file under
+/grml/fai/nfsroot/live/filesystem.dir/var/tmp/:
+
+  mv base.tgz /grml/fai/nfsroot/live/filesystem.dir/var/tmp/base.tgz
+
+Now running "grml-live ..." will use this file as main system instead of
+executing debootstrap. Check out the output for the following lines:
+
+  [...]
+  Calling task_extrbase
+  Unpacking Debian base archive
+  Extracting /grml/fai/nfsroot/live/filesystem.dir/var/tmp/base.tgz
+  Calling task_mirror
+  [...]
+
+I've a question which isn't answered by this document
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Don't hesitate to ask on IRC (channel #grml on irc.freenode.org) or just drop me
+a mail: <mika@grml.org>
+
 Known TODOs
 -----------
 
+* "fai dirinstall" does not seem to always exit according to what happend during
+the build; make sure to exit on any error
+
 * document the available classes in more detail
 
-* make sure $TARGET is mounted rw,suid,dev
-
-* write a step-by-step guide **how** to adjust **what** at **which** place
+* add a check to make sure $TARGET is mounted rw,suid,dev?
 
 * add support for amd64 [gebi?] + ppc [formorer?] (and identify all packages
 that are arch specific so we have a clean package list in all classes)
 
 * support different grml-flavours through classes right out-of-the-box (being:
-grml, grml64, grml-small (done) for at least x86, amd64 and ppc)
+grml and  grml-small (done), each for x86, amd64 and ppc)
 
 * support signed apt repositories (currently it's deactivated via FAI's
 FAI_ALLOW_UNSIGNED=1 for some packages in the toolchain)
-
-* explain (and provide configuration for) use of NFSROOT
 
 * support setting stuff like ISO name, version,... on-the-fly (especially for
 stuff inside boot/isolinux/*)
 
 * support "final builds" (including stuff like generating md5sums, gpg,... -
-create something like grml_release including all the details about the build
-like dpkg selection, logs,...)
+create a grml_release-directory including all the details about the build
+process like dpkg selection, logs,...)
 
-* the grml-live class(es) should send output as used inside FAI as well (so it's
-not as verbose unless you specify it, make it configurable)
+* the grml-live class(es) should send output to stdout and stderr as used inside
+FAI as well (so it's not as verbose unless you specify it, make it configurable
+though); check for errors inside the logs then as well
 
 * provide possibility for cleanup of all created build directories and
 a smart summary of the buildprocess (including "took ... minutes/seconds to
-build...)
+build...")
+
+* check out how FAI_DEBMIRROR of /etc/grml/fai/fai.conf could be merged with our
+MIRROR_DIRECTORY and MIRROR_SOURCES feature of /etc/grml/grml-live.conf
 
 * support hooks to allow further customisation of the build process
 
-Debian package
---------------
+Long term goals
+---------------
+
+* Provide all upcoming grml releases based on grml-live.
+
+* Provide a console interface (using dialog) for easy and common use of
+grml-live.
+
+* Provide a graphical interface (for example using pygtk) for easy and common
+use of grml-live.
+
+Download / install grml-live as a Debian package
+------------------------------------------------
 
 Debian packages will be available through the grml-repository at
 link:http://deb.grml.org/[http://deb.grml.org/] as soon as the grml-team

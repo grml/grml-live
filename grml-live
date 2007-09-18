@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Tue Sep 18 20:32:35 CEST 2007 [mika]
+# Latest change: Tue Sep 18 22:46:28 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -82,7 +82,6 @@ http://grml.org/bugs/
 while getopts "c:s:t:Fhv" opt; do
   case "$opt" in
     c) CLASSES="$OPTARG" ;;
-    # f) FLAVOUR="$OPTARG" ;; # TODO
     F) FORCE=1 ;;
     h) usage ; bailout 0 ;;
     s) SUITE="$OPTARG" ;;
@@ -149,15 +148,15 @@ fi
 
 # does this suck? YES!
 if [ -n "$SUITE" ] ; then
-   sed -ie "s/SUITE=.*/SUITE=\"$SUITE\"/" $LIVE_CONF
+   sed -i "s/SUITE=.*/SUITE=\"$SUITE\"/" $LIVE_CONF
 
    DIST="\|\ etch\ \|\ stable\ \|\ lenny\ \|\ testing\ \|\ sid\ \|\ unstable\ "
-   sed -ie "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" $LIVE_CONF
-   sed -ie "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" /etc/grml/fai/apt/sources.list
+   sed -i "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" $LIVE_CONF
+   sed -i "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" /etc/grml/fai/apt/sources.list
 
    DIST='\"etch\|=\"stable=\"lenny=\"testing=\"sid=\"unstable'
-   sed -ie "s#FAI_DEBOOTSTRAP=$DIST#FAI_DEBOOTSTRAP=\"$SUITE#" $LIVE_CONF
-   sed -ie "s#FAI_DEBOOTSTRAP=$DIST#FAI_DEBOOTSTRAP=\"$SUITE#" /etc/grml/fai/make-fai-nfsroot.conf
+   sed -i "s#FAI_DEBOOTSTRAP=$DIST#FAI_DEBOOTSTRAP=\"$SUITE#" $LIVE_CONF
+   sed -i "s#FAI_DEBOOTSTRAP=$DIST#FAI_DEBOOTSTRAP=\"$SUITE#" /etc/grml/fai/make-fai-nfsroot.conf
 fi
 # }}}
 
