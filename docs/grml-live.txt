@@ -248,7 +248,14 @@ Known TODOs
 -----------
 
 * make sure the suite-target adjusts the mirror definitions according (working
-also vice versa!)
+also vice versa!) and you can define the mirror more central (without having to
+deal with /etc/grml/grml-live.conf, /etc/grml/fai/make-fai-nfsroot.conf and
+/etc/grml/fai/apt/sources.list; debootstrap [FAI_DEBOOTSTRAP] vs. apt inside
+chroot [sources.list] as well)
+
+* make sure $TARGET is mounted rw,suid,dev
+
+* write a step-by-step guide **how** to adjust **what** at **which** place
 
 * add support for amd64 [gebi?] + ppc [formorer?] (and identify all packages
 that are arch specific so we have a clean package list in all classes)
