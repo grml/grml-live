@@ -387,7 +387,8 @@ error processing" [software.log], "FAILED with exit code" [shell.log],...)
 * support something like a directory /etc/grml/fai/packages to install
 additional Debian packages without the need for a Debian repository
 
-* document the available classes in more detail
+* document the available classes in more detail (GRMLBASE, LATEX_CLEANUP,
+NO_ONLINE, REMOVE_DOCS, GRML_SMALL,...)
 
 * add a check to make sure $TARGET is mounted rw,suid,dev?
 

@@ -4,36 +4,43 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Sep 17 17:36:13 CEST 2007 [mika]
+# Latest change: Wed Sep 19 13:42:19 CEST 2007 [mika]
 ################################################################################
 
-set -u
 set -e
+set -u
 
-# TODO: use extra files and class names instead of environment variabes
-
-# supported environment variables for grml_cleanup_chroot:
-#   NOCOLORS: if set it disables colors in (debugging) output
-#   LATEX_CLEANUP: remove some big directories of texlive (/usr/share/doc/texlive-*)
-#   NOONLINE: disable functions that require working network setup
-#   FAST: skip some longer tasks
-#   REMOVE_DOCS: rm -rf /usr/share/doc + /usr/share/info
-
-if ifclass GRML_SMALL ; then
-   cp /etc/grml/fai/grml/grml_cleanup_chroot.small $target/root/
-   $ROOTCMD sh -c "NOCOLORS=1 /root/grml_cleanup_chroot.small"
-   rm $target/root/grml_cleanup_chroot.small
+# remove some big directories when using class LATEX_CLEANUP:
+if ifclass LATEX_CLEANUP ; then
+   cp /etc/grml/fai/grml/grml_cleanup_chroot.latex_cleanup $target/root/
+   $ROOTCMD /root/grml_cleanup_chroot.latex_cleanup
+   rm $target/root/grml_cleanup_chroot.latex_cleanup
 fi
 
-if ifclass REMOVE_DOCS ; then
-   $ROOTCMD sh -c "NOCOLORS=1 REMOVE_DOCS=1 /root/grml_cleanup_chroot.small"
-   rm $target/root/grml_cleanup_chroot.small
+# skip tasks which require only when using class NO_ONLINE:
+if ! ifclass NO_ONLINE ; then
+   cp /etc/grml/fai/grml/grml_cleanup_chroot.no_online $target/root/
+   $ROOTCMD /root/grml_cleanup_chroot.no_online
+   rm $target/root/grml_cleanup_chroot.no_online
 fi
 
-# final cleanup
+# remove /usr/share/doc, /usr/share/info,... only in class REMOVE_DOCS:
+if ifclass REMOVE_DOCS: ; then
+   cp /etc/grml/fai/grml/grml_cleanup_chroot.remove_docs $target/root/
+   $ROOTCMD /root/grml_cleanup_chroot.remove_docs
+   rm $target/root/grml_cleanup_chroot.remove_docs
+fi
+
+# misc cleanup:
 cp /etc/grml/fai/grml/grml_cleanup_chroot $target/root/
-$ROOTCMD sh -c "NOCOLORS=1 /root/grml_cleanup_chroot"
+$ROOTCMD /root/grml_cleanup_chroot
 rm $target/root/grml_cleanup_chroot
+
+# make sure GRML_SMALL uses the appropriate configuration:
+if ifclass GRML_SMALL ; then
+   cp $target/etc/inittab.small $target/etc/inittab
+   cp $target/etc/runlevel.conf.livecd.small $target/etc/runlevel.conf
+fi
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

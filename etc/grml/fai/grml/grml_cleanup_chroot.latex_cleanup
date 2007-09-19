@@ -1,0 +1,22 @@
+#!/bin/bash
+# Filename:      /etc/grml/fai/grml/grml_cleanup_chroot_latex_cleanup
+# Purpose:       remove some large LaTeX directories
+# Authors:       (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Wed Sep 19 13:38:49 CEST 2007 [mika]
+################################################################################
+
+# misc stuff
+  . /etc/grml/lsb-functions || exit 6
+
+rm -rf /usr/share/doc/texlive-latex-recommended/latex/ \
+       /usr/share/doc/texlive-latex-base/latex/ \
+       /usr/share/doc/texlive-base-bin/pdftex/thanh/ \
+       /usr/share/doc/texlive-latex-base/latex/base/ \
+       /usr/share/doc/texlive-latex-base/latex/hyperref/ \
+       /usr/share/doc/texlive-latex-base/generic/babel/  \
+       /usr/share/doc/texlive-latex-recommended/latex/koma-script/ \
+       /usr/share/doc/texmf/pgf/pgfmanual.pdf.gz
+
+## END OF FILE #################################################################

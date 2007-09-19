@@ -1,0 +1,38 @@
+#!/bin/bash
+# Filename:      /etc/grml/fai/grml/grml_cleanup_chroot_no_online
+# Purpose:       execute tasks that require network access
+# Authors:       (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Wed Sep 19 13:38:54 CEST 2007 [mika]
+################################################################################
+
+# misc stuff
+  umask 022
+  . /etc/grml/lsb-functions || exit 6
+
+if [ -x /usr/bin/freshclam ] ; then
+  einfo "Updating clamav database via running freshclam"
+  /usr/bin/freshclam ; eend $?
+else
+  ewarn "freshclam not installed" ; eend 0
+fi
+
+if [ -x /usr/bin/update-pciids ] ; then
+  einfo "Updating PCI- and USB-ids"
+  update-pciids
+  update-usbids
+  eend $?
+else
+  ewarn "update-pciids/update-usbids not installed" ; eend 0
+fi
+
+if [ -x /usr/sbin/nessus-update-plugins ] ; then
+   einfo "Updating nessus-plugins"
+   nessus-update-plugins
+   eend $?
+else
+  ewarn "nessus-update-plugins not installed" ; eend 0
+fi
+
+## END OF FILE #################################################################

@@ -4,28 +4,16 @@
 # Authors:       (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Sep 17 22:14:33 CEST 2007 [mika]
+# Latest change: Wed Sep 19 13:38:45 CEST 2007 [mika]
 ################################################################################
 
 # misc stuff
   umask 022
-  [ -n "$NOCOLORS" ] || . /etc/grml_colors
   . /etc/grml/lsb-functions || exit 6
   [ -x /lib64 ] && GRML64=yes || GRML64=''
 
 # detect kernel version, assume newest kernel version
   KERNEL=$(ls -1 /lib/modules/ | sort -r -u | head -1)
-
-if [ -n "$LATEX_CLEANUP" ] ; then
-   rm -rf /usr/share/doc/texlive-latex-recommended/latex/ \
-          /usr/share/doc/texlive-latex-base/latex/ \
-          /usr/share/doc/texlive-base-bin/pdftex/thanh/ \
-          /usr/share/doc/texlive-latex-base/latex/base/ \
-          /usr/share/doc/texlive-latex-base/latex/hyperref/ \
-          /usr/share/doc/texlive-latex-base/generic/babel/  \
-          /usr/share/doc/texlive-latex-recommended/latex/koma-script/ \
-          /usr/share/doc/texmf/pgf/pgfmanual.pdf.gz
-fi
 
 if [ -f /usr/share/fonts/X11/misc/artwiz-cursor.pcf.gz ] ; then
   if dpkg-divert --list artwiz-cursor | grep -q /usr/share/fonts/X11/misc/cursor.pcf.gz ; then
@@ -221,36 +209,6 @@ else
   ewarn "depmod not installed" ; eend 0
 fi
 
-if [ -n "$NOONLINE" ] ; then
-   einfo "\$NOONLINE is set, skipping online tasks" ; eend 0
-else
-
-if [ -x /usr/bin/freshclam ] ; then
-  einfo "Updating clamav database via running freshclam"
-  /usr/bin/freshclam ; eend $?
-else
-  ewarn "freshclam not installed" ; eend 0
-fi
-
-if [ -x /usr/bin/update-pciids ] ; then
-  einfo "Updating PCI- and USB-ids"
-  update-pciids
-  update-usbids
-  eend $?
-else
-  ewarn "update-pciids/update-usbids not installed" ; eend 0
-fi
-
-if [ -x /usr/sbin/nessus-update-plugins ] ; then
-   einfo "Updating nessus-plugins"
-   nessus-update-plugins
-   eend $?
-else
-  ewarn "nessus-update-plugins not installed" ; eend 0
-fi
-
-fi # end of $NOONLINE-check
-
 einfo "Cleaning and removing some misc files and directories"
   rm -f  /etc/sysconfig/* /etc/motd.dpkg-new /etc/auto.master.distrib.dpkg-new    \
          /etc/samba/*.SID /etc/samba/*.tdb /dev/mouse* /dev/cdrom* /dev/cdwriter* \
@@ -280,11 +238,6 @@ if [ -x /usr/sbin/update-ca-certificates ] ; then
 else
   ewarn "update-ca-certificates not installed" ; eend 0
 fi
-
-# some stuff does not have to run every single time...
-if [ -n "$FAST" ] ; then
-   einfo "\$FAST is set, skipping some tasks" ; eend 0
-else
 
 # regenerate module dependencies and ls.so.cache
 if [ -x /sbin/ldconfig ] ; then
@@ -318,30 +271,6 @@ if [ -x /usr/bin/mandb ] ; then
   eend $?
 else
   ewarn "mandb not installed" ; eend 0
-fi
-
-if [ -n "$REMOVE_DOCS" ] ; then
-  einfo "Cleaning documentation directories..."
-  if [ -d /usr/share/doc/grml-docs ] ; then
-     mv /usr/share/doc/grml-docs /tmp/
-  fi
-
-  rm -rf /usr/share/doc
-  mkdir /usr/share/doc
-
-  if [ -d /tmp/grml-docs ] ; then
-     mv /tmp/grml-docs /usr/share/doc/grml-docs
-  fi
-
-  rm -rf /usr/share/gtk-doc/
-  rm -rf /usr/share/man/
-  rm -rf /usr/man
-  rm -rf /usr/share/info
-  eend $?
-
-  einfo "Creating /usr/share/info/..."
-  mkdir -p /usr/share/info/
-  eend $?
 fi
 
 if [ -d /var/lib/clamav/ ] ; then
@@ -385,8 +314,6 @@ if [ -x /usr/bin/updatedb ] ; then
 else
   ewarn "updatedb not installed" ; eend 0
 fi
-
-fi # end of $FAST-check
 
 einfo "Unmounting all filesystems"
   umount -a
