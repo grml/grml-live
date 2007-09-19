@@ -4,11 +4,10 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Wed Sep 19 13:42:19 CEST 2007 [mika]
+# Latest change: Wed Sep 19 13:51:05 CEST 2007 [mika]
 ################################################################################
 
 set -e
-set -u
 
 # remove some big directories when using class LATEX_CLEANUP:
 if ifclass LATEX_CLEANUP ; then
