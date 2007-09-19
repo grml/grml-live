@@ -257,7 +257,7 @@ einfo "Cleaning and removing some misc files and directories"
          /etc/lvm/.cache 2>/dev/null
   rm -rf /tmp/* /var/tmp/* /var/tmp/.* /var/backups/* /.ssh /root/.ssh /home/*/.ssh \
          /home/grml/* /home/grml/.??* /var/lib/texmf/ls-R  /var/spool/texmf/ls-R    \
-         /var/lib/mysql /var/log/lilo_log.* 2>/dev/null
+         /var/lib/mysql /var/log/lilo_log.* /core* 2>/dev/null
   nuke   /var/log       /var/cache
   zero   /var/local     /var/log /var/spool \
          /var/lib/games /var/cache/man      \
