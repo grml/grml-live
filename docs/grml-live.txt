@@ -10,7 +10,8 @@ Linux Live system (CD/ISO)
 Synopsis
 --------
 
-grml-live [-c <classe[s]>] [-t <target_directory>] [-s <suite>] [-Fvh]
+grml-live [-c <classe[s]>] [-i <iso_name> ] [-r <release_name>]
+[-s <suite>] [-t <target_directory>] [-v <version_number>] [-Fvh]
 
 *******************************************************************************
 Important! This document is growing as requested. If you have questions which
@@ -57,6 +58,24 @@ Specify the CLASSES to be used for building the ISO via FAI.  By default only
 the classes GRMLBASE and I386 are assumed, resulting in a small base system
 (being about ~150MB total ISO size) for x86 (32bit).
 
+  -F::
+
+Force execution and do not prompt for acknowledgment of configuration.
+
+  -h::
+
+Display short usage information and exit.
+
+  -i **ISO_NAME**::
+
+Specify name of ISO which will be available inside $TARGET_DIRECTORY/grml_isos
+by default.
+
+  -r **RELEASENAME**::
+
+Specify name of the release. (Notice: the output of the release name is limited
+to 30 characters.)
+
   -s **SUITE**::
 
 Specify the Debian suite you want to use for your live-system.  Defaults to
@@ -70,20 +89,18 @@ inside this target directory, being: grml_cd (where the files for creating the
 ISO are located, including the compressed squashfs file), grml_chroot (the
 chroot system) and grml_isos (where the resulting ISO is stored).
 
-  -F::
+  -v **VERSION_NUMBER**::
 
-Force execution and do not prompt for acknowledgment of configuration.
+Specify version number of the release. (Notice: the output of the version number
+is limited to 5 characters. So "1.0-1" is fine, but "1.0.0.1" will be stripped
+to "1.0.0" then.)
 
-  -h::
-
-Display short usage information and exit.
-
-  -v::
+  -V::
 
 Increase verbosity in the build process.
 
-How to get your own Live-CD - the easy, fast and simple way
------------------------------------------------------------
+Usage examples
+--------------
 
 To get a small, Debian-stable and grml-based Live-CD using /grml/grml-live
 as build and output directory just run:
@@ -94,6 +111,12 @@ To get a small Debian-unstable and grml-small based Live-CD using
 /home/mika/grml-live as build and output directory just use:
 
   # grml-live -c GRMLBASE,GRML_SMALL,I386 -t /home/mika/grml-live
+
+To get a smal, Debian-unstable and grml-based Live-CD using /tmp as build and
+output directory and use grml_0.0-3.iso as ISO name (placed inside
+/tmp/grml_isos) just invoke:
+
+  # grml-live -t /tmp -c GRMLBASE,I386 -s sid -v -i grml_0.0-3.iso
 
 [NOTE]
 
@@ -396,9 +419,6 @@ grml and  grml-small (done), each for x86, amd64 and ppc)
 
 * support signed apt repositories (currently it's deactivated via FAI's
 FAI_ALLOW_UNSIGNED=1 for some packages in the toolchain)
-
-* support setting stuff like ISO name, version,... on-the-fly (especially for
-stuff inside boot/isolinux/*)
 
 * support "final builds" (including stuff like generating md5sums, gpg,... -
 create a grml_release-directory including all the details about the build
