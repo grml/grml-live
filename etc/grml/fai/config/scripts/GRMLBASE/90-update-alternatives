@@ -14,5 +14,13 @@ if [ -r $target/usr/bin/vim.basic ] ; then
    $ROOTCMD update-alternatives --set editor /usr/bin/vim.basic
 fi
 
+if [ -r $target/usr/bin/xterm ] ; then
+   $ROOTCMD update-alternatives --set x-terminal-emulator /usr/bin/xterm
+fi
+
+if [ -r $target/etc/X11/cursors/whiteglass.theme ] ; then
+   $ROOTCMD update-alternatives --set x-cursor-theme /etc/X11/cursors/whiteglass.theme
+fi
+
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

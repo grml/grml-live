@@ -10,6 +10,8 @@
 set -u
 set -e
 
+# TODO: use extra files and class names instead of environment variabes
+
 # supported environment variables for grml_cleanup_chroot:
 #   NOCOLORS: if set it disables colors in (debugging) output
 #   LATEX_CLEANUP: remove some big directories of texlive (/usr/share/doc/texlive-*)
@@ -17,6 +19,18 @@ set -e
 #   FAST: skip some longer tasks
 #   REMOVE_DOCS: rm -rf /usr/share/doc + /usr/share/info
 
+if ifclass GRML_SMALL ; then
+   cp /etc/grml/fai/grml/grml_cleanup_chroot.small $target/root/
+   $ROOTCMD sh -c "NOCOLORS=1 /root/grml_cleanup_chroot.small"
+   rm $target/root/grml_cleanup_chroot.small
+fi
+
+if ifclass REMOVE_DOCS ; then
+   $ROOTCMD sh -c "NOCOLORS=1 REMOVE_DOCS=1 /root/grml_cleanup_chroot.small"
+   rm $target/root/grml_cleanup_chroot.small
+fi
+
+# final cleanup
 cp /etc/grml/fai/grml/grml_cleanup_chroot $target/root/
 $ROOTCMD sh -c "NOCOLORS=1 /root/grml_cleanup_chroot"
 rm $target/root/grml_cleanup_chroot

@@ -1,5 +1,5 @@
 #!/bin/sh
-# Filename:      /etc/grml/fai/config/scripts/GRML_X/32-xorg
+# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/32-xorg
 # Purpose:       make sure there does not exist /etc/X11/xorg.conf by default
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
