@@ -380,10 +380,6 @@ a mail: <mika@grml.org>
 Known TODOs
 -----------
 
-* "fai dirinstall" does not seem to always exit according to what happend during
-the build; make sure to exit on any error (check logs for stuff like "dpkg:
-error processing" [software.log], "FAILED with exit code" [shell.log],...)
-
 * support something like a directory /etc/grml/fai/packages to install
 additional Debian packages without the need for a Debian repository
 

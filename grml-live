@@ -176,12 +176,13 @@ else
    umount $CHROOT_TARGET/sys  2>/dev/null || /bin/true
    [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_TARGET}/${MIRROR_DIRECTORY}"
    # notice: 'fai dirinstall' does not seem to exit appropriate ->
-   # we need better error handling
-   if [ -r "$CHROOT_TARGET"/etc/grml_cd ] ; then
-      echo "  [*] Finished execution of stage 'fai dirinstall'"
-   else
+   if grep -q 'dpkg: error processing' /var/log/fai/dirinstall/$HOSTNAME/software.log || \
+      grep -q 'FAILED with exit code' /var/log/fai/dirinstall/$HOSTNAME/shell.log ; then
       echo "  [!] There was an error during execution of stage 'fai dirinstall'"
+      echo "      Check out /var/log/fai/dirinstall/$HOSTNAME/... for details"
       exit 1
+   else
+      echo "  [*] Finished execution of stage 'fai dirinstall'"
    fi
 fi
 # }}}

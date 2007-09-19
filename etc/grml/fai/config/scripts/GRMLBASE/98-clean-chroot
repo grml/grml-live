@@ -24,7 +24,7 @@ if ! ifclass NO_ONLINE ; then
 fi
 
 # remove /usr/share/doc, /usr/share/info,... only in class REMOVE_DOCS:
-if ifclass REMOVE_DOCS: ; then
+if ifclass REMOVE_DOCS ; then
    cp /etc/grml/fai/grml/grml_cleanup_chroot.remove_docs $target/root/
    $ROOTCMD /root/grml_cleanup_chroot.remove_docs
    rm $target/root/grml_cleanup_chroot.remove_docs
