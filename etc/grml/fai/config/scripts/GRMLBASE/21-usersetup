@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Sep 17 15:12:21 CEST 2007 [mika]
+# Latest change: Wed Sep 19 20:27:03 CEST 2007 [mika]
 ################################################################################
 
 set -u
@@ -14,10 +14,19 @@ USERNAME=''
 [ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
 [ -n "$USERNAME" ] || USERNAME=grml
 
-$ROOTCMD addgroup --gid 1000 $USERNAME
-$ROOTCMD useradd -d /home/$USERNAME -m -s /bin/zsh -g 1000 $USERNAME
+if grep -q "$USERNAME:x:1000" $target/etc/group ; then
+   echo "group $USERNAME exists already, skipping"
+else
+  $ROOTCMD addgroup --gid 1000 $USERNAME
+fi
 
-sed -i 's/^root::/root:*:/' $target/etc/shadow
+if grep -q "$USERNAME:x:1000" $target/etc/passwd ; then
+   echo "user $USERNAME exists already, skipping"
+else
+   $ROOTCMD useradd -d /home/$USERNAME -m -s /bin/zsh -g 1000 $USERNAME
+fi
+
+sed -i 's/^root::/root:*:/'            $target/etc/shadow
 sed -i "s/^$USERNAME:!:/$USERNAME:*:/" $target/etc/shadow
 
 $ROOTCMD chsh -s /bin/zsh root

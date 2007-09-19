@@ -164,7 +164,7 @@ fi
 [ -n "$CHROOT_TARGET" ] || CHROOT_TARGET="$TARGET/grml_chroot"
 
 if [ -d "$CHROOT_TARGET" ] ; then
-   echo "  [x] $CHROOT_TARGET exists already, skipping the stage 'fai dirnstall'"
+   echo "  [x] $CHROOT_TARGET exists already, skipping the stage 'fai dirinstall'"
 else
    mkdir -p "$CHROOT_TARGET" || bailout 5 "Problem with creating $CHROOT_TARGET for FAI"
    if [ -n "${MIRROR_DIRECTORY}" ] ; then
@@ -175,11 +175,18 @@ else
    umount $CHROOT_TARGET/proc 2>/dev/null || /bin/true
    umount $CHROOT_TARGET/sys  2>/dev/null || /bin/true
    [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_TARGET}/${MIRROR_DIRECTORY}"
-   # notice: 'fai dirinstall' does not seem to exit appropriate ->
-   if grep -q 'dpkg: error processing' /var/log/fai/dirinstall/$HOSTNAME/software.log || \
-      grep -q 'FAILED with exit code' /var/log/fai/dirinstall/$HOSTNAME/shell.log ; then
+
+   # notice: 'fai dirinstall' does not seem to exit appropriate, so:
+   ERROR=''
+   [ -r "/var/log/fai/dirinstall/$HOSTNAME/software.log" ] &&
+   grep -q 'dpkg: error processing' /var/log/fai/dirinstall/$HOSTNAME/software.log && ERROR=1
+
+   [ -r "/var/log/fai/dirinstall/$HOSTNAME/shell.log" ] &&
+   grep -q 'FAILED with exit code' /var/log/fai/dirinstall/$HOSTNAME/shell.log && ERROR=2
+
+   if [ -n "$ERROR" ] ; then
       echo "  [!] There was an error during execution of stage 'fai dirinstall'"
-      echo "      Check out /var/log/fai/dirinstall/$HOSTNAME/... for details"
+      echo "      Check out /var/log/fai/dirinstall/$HOSTNAME/... for details. [exit ${ERROR}]"
       exit 1
    else
       echo "  [*] Finished execution of stage 'fai dirinstall'"

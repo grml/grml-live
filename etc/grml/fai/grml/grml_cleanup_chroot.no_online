@@ -4,7 +4,7 @@
 # Authors:       (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Wed Sep 19 13:38:54 CEST 2007 [mika]
+# Latest change: Wed Sep 19 20:07:43 CEST 2007 [mika]
 ################################################################################
 
 # misc stuff
@@ -20,8 +20,8 @@ fi
 
 if [ -x /usr/bin/update-pciids ] ; then
   einfo "Updating PCI- and USB-ids"
-  update-pciids
-  update-usbids
+  update-pciids || echo "Warning: update-pciids was not successfull">&2
+  update-usbids || echo "Warning: update-usbids was not successfull">&2
   eend $?
 else
   ewarn "update-pciids/update-usbids not installed" ; eend 0
@@ -29,7 +29,7 @@ fi
 
 if [ -x /usr/sbin/nessus-update-plugins ] ; then
    einfo "Updating nessus-plugins"
-   nessus-update-plugins
+   nessus-update-plugins || echo "Warning: nessus-update-plugins was not successfull">&2
    eend $?
 else
   ewarn "nessus-update-plugins not installed" ; eend 0
