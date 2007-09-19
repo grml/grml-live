@@ -64,6 +64,10 @@ einfo "Setting up /etc/inittab"
 cp /etc/inittab.grml  /etc/inittab
 eend $?
 
+einfo "Cleaning up /usr/src/linux-headers-$KERNEL"
+( cd /usr/src && make clean && make symlinks )
+eend $?
+
 if [ -L /usr/include/linux ] ; then
   einfo "/usr/include/linux is ok" ; eend 0
 elif [ -n "$GRML64" ] ; then
