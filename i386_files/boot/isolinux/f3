@@ -1,9 +1,8 @@
 grml - Linux for sysadmins and users of texttools                            09F307
                                                                                
-70 This edition of grml boots with kernel 2.6.22-grml by default.                
- The following options can be used at the boot:-prompt:                        
+70 The following options can be used at the boot:-prompt:                        
                                                                                
- grml   [options, list via F4-F10]                grml default running 2.6.22  
+ grml   [options, list via F4-F10]                          boot grml default  
  memtest                                     memtest86+ (memory test program)  
  fb1280x1024, fb1024x768 or fb800x600   use framebuffer mode (e.g. notebooks)  
  nofb                                                disable framebuffer mode  
@@ -15,7 +14,8 @@
  debug                          get interactive shells during startup process  
  grub                                   start GRand Unified Bootloader (GRUB)  
  dos                                                        start FreeDOS 1.0  
- vmware                           boot with special options for use in VMware  
+ qemu                               boot with special options for use in Qemu  
+ vmware                            boot with special options for use in VMware 
                                                                                
  A list with all supported boot options can be found at the CD at              
  /cdrom/GRML/grml-cheatcodes.txt                                               
