@@ -1,5 +1,6 @@
 PACKAGES aptitude
 
+acpi-support
 aumix alsa-utils
 busybox
 bzip2
