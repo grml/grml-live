@@ -112,11 +112,11 @@ To get a small Debian-unstable and grml-small based Live-CD using
 
   # grml-live -c GRMLBASE,GRML_SMALL,I386 -t /home/mika/grml-live
 
-To get a smal, Debian-unstable and grml-based Live-CD using /tmp as build and
+To get a small, Debian-unstable and grml-based Live-CD using /tmp as build and
 output directory and use grml_0.0-3.iso as ISO name (placed inside
 /tmp/grml_isos) just invoke:
 
-  # grml-live -t /tmp -c GRMLBASE,I386 -s sid -v -i grml_0.0-3.iso
+  # grml-live -t /tmp -c GRMLBASE,I386 -s sid -i grml_0.0-3.iso
 
 [NOTE]
 
@@ -451,10 +451,9 @@ use of grml-live.
 Download / install grml-live as a Debian package
 ------------------------------------------------
 
-Debian packages will be available through the grml-repository at
-link:http://deb.grml.org/[http://deb.grml.org/] as soon as the grml-team
-considers grml-live as stable enough. In the meantime just build the package on
-your own:
+Debian packages are available through the grml-repository at
+link:http://deb.grml.org/pool/main/g/grml-live/[deb.grml.org].  If you want to
+build a Debian package of the most current version on your own, just execute:
 
   hg clone http://hg.grml.org/grml-live
   cd grml-live
