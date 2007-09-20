@@ -1,6 +1,7 @@
 grml-autoconfig (0.7.23) unstable; urgency=low
 
   * Add acpi-support to Recommends and depend on console-tools.
+  * Drop the logger stuff for acpid as doesn't seem to help.
 
  -- Michael Prokop <mika@grml.org>  Thu, 20 Sep 2007 17:24:13 +0200
 

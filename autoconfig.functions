@@ -751,7 +751,7 @@ if [ -d /proc/acpi ]; then
     if ! [ -S /var/run/acpid.socket ] ; then
       if ! [ -r /var/run/dbus/pid ] ; then
         einfo "Starting acpi daemon."
-        /etc/init.d/acpid start 2>&1 1>>$DEBUG | logger ; eend $?
+        /etc/init.d/acpid start 1>>$DEBUG 2>&1 ; eend $?
       else
         eerror "acpid error: it seems you are running d-bus/hal, but acpid needs to be started before d-bus."
         eerror "Solution: please activate acpid via /etc/runlevel.conf"
