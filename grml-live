@@ -56,6 +56,7 @@ trap bailout 1 2 3 15
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 [ -n "$USERNAME" ] || USERNAME=grml
 [ -n "$CLASSES" ]  || CLASSES="GRML,I386"
+[ -n "$BOOT_METHOD" ] || BOOT_METHOD='isolinux'
 [ -n "$TARGET" ] || bailout 1 "${PN}: \$TARGET not specified. Please adjust $LIVE_CONF. Exiting."
 
 [ -n "$VERSION" ]  || VERSION="0.0.1"
@@ -184,6 +185,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$BUILD_TARGET" ]  && echo "  build target:      $BUILD_TARGET"
    [ -n "$ISO_TARGET" ]    && echo "  ISO target:        $ISO_TARGET"
    [ -n "$SUITE" ]         && echo "  Debian suite:      $SUITE"
+   [ -n "$BOOT_METHOD" ]   && echo "  Boot method:       $BOOT_METHOD"
    [ -n "$FAI_ARGS" ]      && echo "  additional arguments for FAI: $FAI_ARGS"
    [ -n "$VERBOSE" ]       && echo "  Using VERBOSE mode."
    echo
@@ -360,7 +362,6 @@ fi
 [ -n "$ISO_TARGET" ] || ISO_TARGET="$TARGET/grml_isos"
 [ -n "$ISO_NAME" ] || ISO_NAME="grml_${VERSION}.iso"
 
-[ -n "$BOOT_METHOD" ] || BOOT_METHOD='isolinux'
 if [ "$BOOT_METHOD" = "isolinux" ] ; then
    BOOT_FILE="boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat"
 elif [ "$BOOT_METHOD" = "grub" ] ; then
