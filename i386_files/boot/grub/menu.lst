@@ -1,0 +1,56 @@
+# menu.lst - See: grub(8), info grub, update-grub(8)
+# grub-install(8), grub-floppy(8),
+# grub-md5-crypt, /usr/share/doc/grub
+# and /usr/share/doc/grub-doc/.
+
+# misc options:
+timeout 30
+root (cd)
+# color red/blue green/black
+splashimage=/boot/grub/splash.xpm.gz
+foreground  = 000000
+background  = FFCC33
+
+# define entries:
+title grml %VERSION% - Default boot (using 1024x768 framebuffer)
+kernel /boot/isolinux/linux26 lang=us apm=power-off vga=791 quiet boot=live nomce
+initrd /boot/isolinux/initrd.gz
+
+title grml %VERSION% - without framebuffer
+kernel /boot/isolinux/linux26 lang=us apm=power-off vga=normal video=ofonly quiet initrd=initrd.gz boot=live nomce
+initrd /boot/isolinux/initrd.gz
+
+title grml %VERSION% - with 1280x1024 framebuffer
+kernel /boot/isolinux/linux26 lang=us apm=power-off vga=794 quiet initrd=initrd.gz boot=live nomce
+initrd /boot/isolinux/initrd.gz
+
+title grml %VERSION% - with 800x600 framebuffer
+kernel /boot/isolinux/linux26 lang=us apm=power-off vga=788 quiet initrd=initrd.gz boot=live nomce
+initrd /boot/isolinux/initrd.gz
+
+title grml %VERSION% - failsafe boot
+kernel /boot/isolinux/linux26 vga=normal lang=us boot=live noautoconfig atapicd noacpi acpi=off nomodules nofirewire noudev nousb nohotplug noapm nopcmcia maxcpus=1 noscsi noagp nodma ide=nodma noswap nofstab nosound nogpm nosyslog nodhcp nocpu nodisc nomodem xmodule=vesa noraid nolvm
+initrd /boot/isolinux/initrd.gz
+
+title grml %VERSION% - debug mode
+kernel /boot/isolinux/linux26 lang=us apm=power-off vga=791 verbose debug=vc debug initrd=initrd.gz boot=live initcall_debug nomce
+initrd /boot/isolinux/initrd.gz
+
+title grml %VERSION% - forensic mode
+kernel /boot/isolinux/linux26 vga=791 lang=us nofstab noraid nolvm noautoconfig noswap raid=noautodetect quiet initrd=initrd.gz boot=live
+initrd /boot/isolinux/initrd.gz
+
+title grml %VERSION% - serial mode
+kernel /boot/isolinux/linux26 lang=us apm=power-off vga=normal video=vesafb:off quiet initrd=initrd.gz boot=live nomce
+initrd /boot/isolinux/initrd.gz
+
+title Run memtest86+
+kernel /boot/isolinux/memtest
+
+title Boot FreeDOS
+kernel /boot/isolinux/memdisk
+initrd /boot/isolinux/balder10.imz
+
+title grml %VERSION% - old boot method
+kernel /boot/isolinux/linux26 ramdisk_size=100000 init=/etc/init lang=us apm=power-off vga=791 nomce quiet grml_dir="live" grml_name="grml.squashfs"
+initrd /boot/isolinux/minirt26.gz

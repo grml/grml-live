@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Wed Sep 19 23:59:48 CEST 2007 [mika]
+# Latest change: Thu Sep 20 13:25:31 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -279,9 +279,9 @@ mkdir -p "$BUILD_TARGET" || bailout 6 "Problem with creating $BUILD_TARGET for s
 # i386:
 [ -n "$ARCH" ] || ARCH="$(dpkg --print-architecture)"
 if [ "$ARCH" = i386 ] ; then
-   if [ -d "$BUILD_TARGET"/boot/isolinux ] ; then
-      ewarn "$BUILD_TARGET/boot exists already, skipping stage 'boot/isolinux'" ; eend 0
-      log "$BUILD_TARGET/boot exists already, skipping stage 'boot/isolinux'"
+   if [ -d "$BUILD_TARGET"/boot ] ; then
+      ewarn "$BUILD_TARGET/boot exists already, skipping stage 'boot'" ; eend 0
+      log "$BUILD_TARGET/boot exists already, skipping stage 'boot'"
    else
       # booting stuff:
       mkdir -p "$BUILD_TARGET"/boot/isolinux
@@ -293,14 +293,9 @@ if [ "$ARCH" = i386 ] ; then
       cp /usr/lib/syslinux/isolinux.bin                              "$BUILD_TARGET"/boot/isolinux/
       cp /usr/lib/syslinux/memdisk                                   "$BUILD_TARGET"/boot/isolinux/
       cp /usr/lib/syslinux/menu.c32                                  "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/i386_files/boot/isolinux/allinone.img  "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/i386_files/boot/isolinux/balder10.imz  "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/i386_files/boot/isolinux/boot-beep.msg "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/i386_files/boot/isolinux/boot.msg      "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/i386_files/boot/isolinux/f*            "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/i386_files/boot/isolinux/isolinux.cfg  "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/i386_files/boot/isolinux/logo.16       "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/i386_files/boot/isolinux/syslinux.cfg  "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/i386_files/boot/isolinux/*             "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/i386_files/boot/isolinux/*             "$BUILD_TARGET"/boot/isolinux/
+      cp -a /usr/share/grml-live/i386_files/boot/grub                "$BUILD_TARGET"/boot/
 
       # adjust boot splash information:
       ISO_DATE="$(date +%Y-%m-%d)"
@@ -314,6 +309,8 @@ if [ "$ARCH" = i386 ] ; then
       sed -i "s/%VERSION%/$VERSION/"   "$BUILD_TARGET"/boot/isolinux/boot-beep.msg
       sed -i "s/%RELEASENAME%/$RELEASENAME/" "$BUILD_TARGET"/boot/isolinux/boot-beep.msg
       sed -i "s/%DATE%/$ISO_DATE/"     "$BUILD_TARGET"/boot/isolinux/boot-beep.msg
+
+      sed -i "s/%VERSION%/$VERSION/"   "$BUILD_TARGET"/boot/grub/menu.lst
 
       # autostart for Windows:
       cp /usr/share/grml-live/windows/autostart/autorun.bat          "$BUILD_TARGET"/
@@ -335,7 +332,7 @@ if [ "$ARCH" = i386 ] ; then
       einfo "Finished execution of stage 'WINDOWS_BINARIES'" ; eend 0
       log "Finished execution of stage 'WINDOWS_BINARIES' [$(date)]"
       fi
-   einfo "Finished execution of stage 'boot/isolinux'" ; eend 0
+   einfo "Finished execution of stage 'boot'" ; eend 0
    fi
 # amd64:
 elif [ "$ARCH" = amd64 ] ; then
@@ -363,6 +360,13 @@ fi
 [ -n "$ISO_TARGET" ] || ISO_TARGET="$TARGET/grml_isos"
 [ -n "$ISO_NAME" ] || ISO_NAME="grml_${VERSION}.iso"
 
+[ -n "$BOOT_METHOD" ] || BOOT_METHOD='isolinux'
+if [ "$BOOT_METHOD" = "isolinux" ] ; then
+   BOOT_FILE="boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat"
+elif [ "$BOOT_METHOD" = "grub" ] ; then
+   BOOT_FILE="boot/grub/stage2_eltorito"
+fi
+
 if [ -f "${ISO_TARGET}/${ISO_NAME}" ] ; then
    ewarn "$ISO_TARGET exists already, skipping stage 'iso build'" ; eend 0
    log "$ISO_TARGET exists already, skipping stage 'iso build'"
@@ -371,7 +375,7 @@ else
    ( cd "$BUILD_TARGET" &&
      mkisofs -V "grml $VERSION" -publisher 'grml-live | grml.org' \
              -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
-             -c boot/isolinux/boot.cat -b boot/isolinux/isolinux.bin      \
+             -b $BOOT_FILE \
              -o "${ISO_TARGET}/${ISO_NAME}" .
    )
    einfo "Finished execution of stage 'iso build'" ; eend 0
