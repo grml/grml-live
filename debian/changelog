@@ -1,3 +1,10 @@
+grml-etc (1.0.18) unstable; urgency=low
+
+  * Adjust check for bootoption tsplash + textsplash in
+    /etc/init.d/bootsplash_end.sh and /etc/init.d/bootsplash_start.sh
+
+ -- Michael Prokop <mika@grml.org>  Thu, 20 Sep 2007 16:04:54 +0200
+
 grml-etc (1.0.17) unstable; urgency=low
 
   * /etc/skel/.xinitrc: make sure /etc/sysconfig/keyboard is readable.
