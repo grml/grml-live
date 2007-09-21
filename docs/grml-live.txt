@@ -417,11 +417,8 @@ NO_ONLINE, REMOVE_DOCS, GRML_SMALL,...)
 
 * add a check to make sure $TARGET is mounted rw,suid,dev?
 
-* add support for amd64 [gebi?] + ppc [formorer?] (and identify all packages
+* add support for ppc [formorer?] (and identify all packages
 that are arch specific so we have a clean package list in all classes)
-
-* support different grml-flavours through classes right out-of-the-box (being:
-grml and  grml-small (done), each for x86, amd64 and ppc)
 
 * support signed apt repositories (currently it's deactivated via FAI's
 FAI_ALLOW_UNSIGNED=1 for some packages in the toolchain)
