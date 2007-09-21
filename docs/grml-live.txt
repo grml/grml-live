@@ -406,6 +406,9 @@ Known TODOs
 * support something like a directory /etc/grml/fai/packages to install
 additional Debian packages without the need for a Debian repository
 
+* provide hooks/options for updating an existing chroot/squashfs-file/ISO
+(work in progress, see patches directory inside source)
+
 * document the available classes in more detail (GRMLBASE, LATEX_CLEANUP,
 NO_ONLINE, REMOVE_DOCS, GRML_SMALL,...)
 

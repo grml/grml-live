@@ -1,0 +1,21 @@
+--- /usr/lib/fai/subroutines-linux.orig	2007-09-21 10:47:35.000000000 +0200
++++ /usr/lib/fai/subroutines-linux	2007-09-21 10:49:09.000000000 +0200
+@@ -229,6 +229,18 @@
+     updatebase
+ }
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
++task_updatechroot() {
++
++    # update the chroot
++    echo "Updating chroot"
++    if [ -z "$TARGET" ] ; then
++        echo "Error: \$TARGET not set, exiting.">&2
++        return 1
++    else
++        chroot $TARGET apt-get update
++    fi
++}
++# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ task_instsoft() {
+ 
+     echo "Installing software may take a while"

@@ -1,0 +1,7 @@
+fai_dirupdate_[1234].diff:
+
+Try to provide an "update chroot" action, like:
+
+  # TARGET=/dev/shm/grml_chroot fai -C/etc/grml/fai -cGRMLBASE,I386 dirupdate
+
+Needs work though...
