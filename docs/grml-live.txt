@@ -403,6 +403,9 @@ a mail: <mika@grml.org>
 Known TODOs
 -----------
 
+* the template system isn't flexible enough yet: provide support for different
+flavours, allow longer version number
+
 * support something like a directory /etc/grml/fai/packages to install
 additional Debian packages without the need for a Debian repository
 
