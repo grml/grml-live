@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Fri Sep 21 11:44:43 CEST 2007 [mika]
+# Latest change: Fri Sep 21 17:00:20 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -247,7 +247,7 @@ else
       mkdir -p "${CHROOT_TARGET}/${MIRROR_DIRECTORY}"
       mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_TARGET}/${MIRROR_DIRECTORY}"
    fi
-   fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" dirinstall "$CHROOT_TARGET" $FAI_ARGS | tee -a $LOGFILE
+   fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u "$HOSTNAME" dirinstall "$CHROOT_TARGET" $FAI_ARGS | tee -a $LOGFILE
    umount $CHROOT_TARGET/proc 2>/dev/null || /bin/true
    umount $CHROOT_TARGET/sys  2>/dev/null || /bin/true
    [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_TARGET}/${MIRROR_DIRECTORY}"
@@ -265,7 +265,7 @@ else
    if [ -n "$ERROR" ] ; then
       log "There was an error during execution of stage 'fai dirinstall' [$(date)]"
       eerror "There was an error during execution of stage 'fai dirinstall'"
-      echo "      Check out /var/log/fai/dirinstall/$HOSTNAME/... for details. [exit ${ERROR}]"
+      echo "   Check out /var/log/fai/dirinstall/$HOSTNAME/ for details. [exit ${ERROR}]"
       eend 1 ; exit 1
    else
       log "Finished execution of stage 'fai dirinstall' [$(date)]"

@@ -5,3 +5,7 @@ Try to provide an "update chroot" action, like:
   # TARGET=/dev/shm/grml_chroot fai -C/etc/grml/fai -cGRMLBASE,I386 dirupdate
 
 Needs work though...
+
+fai_dirinstall_check.diff:
+
+Make sure to exit in fai dirinstall if task instsoft wasn't successfull. 

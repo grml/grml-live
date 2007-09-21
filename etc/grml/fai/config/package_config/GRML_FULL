@@ -189,6 +189,18 @@ upgrade-oldest
 zfs-fuse
 zsh-lovers
 
+## Notice: this packages are known to be x86-only currently [2007-09-21]:
+# 3ware-cli-binary aamath aesutil afflib asleap athcool atitvout btsco chntpw
+# cmospwd cpp-2.95 cpuburn-in-binary ctapi-cyberjack ctris dcfldd dd-rhelp
+# deletemail detox dupmerge dupseek dynamic-disk ecryptfs-utils ext3rminator
+# fdflush firescope fnfx-client fnfxd ftpbackup fuseiso9660 fvwm-crystal-minimal
+# gateguardian gatling gifshuffle gkrellm-x86info glipper-nognome heirloom-sh
+# histring hydra i810switch i855crt i8kutils icmp-mtu icmp-quench icmp-reset
+# irpas lcdtest minised nat-traverse orpheus ppmd prosilla pspax pstack ptfinder
+# rainbowcrack replicator rootsh s3switch salvage-ntfs scrounge-ntfs shadowfs
+# shmux sjog speechd-up spicctrl ssdeep sudosh tlswrap toshset toshutils
+# tpm-tools trapdoor2 trousers xserver-xorg-video-amd zfs-fuse
+
 # official Debian packages:
 2vcard
 3270-common
