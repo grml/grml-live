@@ -205,8 +205,8 @@ fi
 # on-the-fly configuration {{{
 if [ -n "$MIRROR_DIRECTORY" ] ; then
    if ! [ -d "$MIRROR_DIRECTORY/debian" ] ; then
-      eerror "Sorry, $MIRROR_DIRECTORY/debian does not seem to exist. Exiting."
       log "Sorry, $MIRROR_DIRECTORY/debian does not seem to exist. Exiting. [$(date)]"
+      eerror "Sorry, $MIRROR_DIRECTORY/debian does not seem to exist. Exiting."
       bailout 1
    fi
    echo "$MIRROR_SOURCES" > /etc/grml/fai/apt/sources.list
@@ -239,8 +239,8 @@ fi
 [ -n "$CHROOT_TARGET" ] || CHROOT_TARGET="$TARGET/grml_chroot"
 
 if [ -d "$CHROOT_TARGET/bin" ] ; then
-   ewarn "$CHROOT_TARGET exists already, skipping stage 'fai dirinstall'" ; eend 0
    log "$CHROOT_TARGET exists already, skipping stage 'fai dirinstall'"
+   ewarn "$CHROOT_TARGET exists already, skipping stage 'fai dirinstall'" ; eend 0
 else
    mkdir -p "$CHROOT_TARGET" || bailout 5 "Problem with creating $CHROOT_TARGET for FAI"
    if [ -n "${MIRROR_DIRECTORY}" ] ; then
@@ -263,13 +263,13 @@ else
    fi
 
    if [ -n "$ERROR" ] ; then
+      log "There was an error during execution of stage 'fai dirinstall' [$(date)]"
       eerror "There was an error during execution of stage 'fai dirinstall'"
       echo "      Check out /var/log/fai/dirinstall/$HOSTNAME/... for details. [exit ${ERROR}]"
-      log "There was an error during execution of stage 'fai dirinstall' [$(date)]"
       eend 1 ; exit 1
    else
-      einfo "Finished execution of stage 'fai dirinstall'"
       log "Finished execution of stage 'fai dirinstall' [$(date)]"
+      einfo "Finished execution of stage 'fai dirinstall'"
    fi
 fi
 # }}}
@@ -278,12 +278,13 @@ fi
 [ -n "$BUILD_TARGET" ] || BUILD_TARGET="$TARGET/grml_cd"
 mkdir -p "$BUILD_TARGET" || bailout 6 "Problem with creating $BUILD_TARGET for stage ARCH"
 
-# i386:
 [ -n "$ARCH" ] || ARCH="$(dpkg --print-architecture)"
-if [ "$ARCH" = i386 ] ; then
+
+# i386:
+if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
    if [ -d "$BUILD_TARGET"/boot ] ; then
-      ewarn "$BUILD_TARGET/boot exists already, skipping stage 'boot'" ; eend 0
       log "$BUILD_TARGET/boot exists already, skipping stage 'boot'"
+      ewarn "$BUILD_TARGET/boot exists already, skipping stage 'boot'" ; eend 0
    else
       # booting stuff:
       mkdir -p "$BUILD_TARGET"/boot/isolinux
@@ -322,8 +323,8 @@ if [ "$ARCH" = i386 ] ; then
       # windows-binaries:
       if [ -n "$WINDOWS_BINARIES" ] ; then
          if [ -f "$BUILD_TARGET"/windows/putty.exe ] ; then
-            ewarn "$BUILD_TARGET/windows exists already, skipping stage 'WINDOWS_BINARIES'" ; eend 0
             log "$BUILD_TARGET/windows exists already, skipping stage 'WINDOWS_BINARIES'"
+            ewarn "$BUILD_TARGET/windows exists already, skipping stage 'WINDOWS_BINARIES'" ; eend 0
          else
             mkdir "$BUILD_TARGET"/windows
             ( cd "$BUILD_TARGET"/windows
@@ -331,14 +332,11 @@ if [ "$ARCH" = i386 ] ; then
                  wget -O ${file}.exe ${WINDOWS_BINARIES}/${file}.exe
               done )
          fi
-      einfo "Finished execution of stage 'WINDOWS_BINARIES'" ; eend 0
       log "Finished execution of stage 'WINDOWS_BINARIES' [$(date)]"
+      einfo "Finished execution of stage 'WINDOWS_BINARIES'" ; eend 0
       fi
    einfo "Finished execution of stage 'boot'" ; eend 0
    fi
-# amd64:
-elif [ "$ARCH" = amd64 ] ; then
-    ewarn 'Warning: gebi, it is your turn. :)'>&2
 # ppc:
 elif [ "$ARCH" = powerpc ] ; then
     ewarn 'Warning: formorer, it is your turn. :)'>&2
@@ -348,13 +346,13 @@ else
 fi
 
 if [ -f "$BUILD_TARGET"/live/grml.squashfs ] ; then
-   ewarn "$BUILD_TARGET/live exists already, skipping stage 'squashfs'" ; eend 0
    log "$BUILD_TARGET/live exists already, skipping stage 'squashfs'"
+   ewarn "$BUILD_TARGET/live exists already, skipping stage 'squashfs'" ; eend 0
 else
    mkdir "$BUILD_TARGET"/live
    mksquashfs $CHROOT_TARGET/* $BUILD_TARGET/live/grml.squashfs -noappend
-   einfo "Finished execution of stage 'squashfs'" ; eend 0
    log "Finished execution of stage 'squashfs' [$(date)]"
+   einfo "Finished execution of stage 'squashfs'" ; eend 0
 fi
 # }}}
 
@@ -369,18 +367,25 @@ elif [ "$BOOT_METHOD" = "grub" ] ; then
 fi
 
 if [ -f "${ISO_TARGET}/${ISO_NAME}" ] ; then
-   ewarn "$ISO_TARGET exists already, skipping stage 'iso build'" ; eend 0
    log "$ISO_TARGET exists already, skipping stage 'iso build'"
+   ewarn "$ISO_TARGET exists already, skipping stage 'iso build'" ; eend 0
 else
    mkdir -p "$ISO_TARGET" || bailout 6 "Problem with creating $ISO_TARGET for stage 'iso build'"
-   ( cd "$BUILD_TARGET" &&
-     mkisofs -V "grml $VERSION" -publisher 'grml-live | grml.org' \
-             -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
-             -b $BOOT_FILE \
-             -o "${ISO_TARGET}/${ISO_NAME}" .
-   )
-   einfo "Finished execution of stage 'iso build'" ; eend 0
-   log "Finished execution of stage 'iso build' [$(date)]"
+   CURRENT_DIR=$(pwd)
+   cd "$BUILD_TARGET" &&
+   mkisofs -V "grml $VERSION" -publisher 'grml-live | grml.org' \
+           -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
+           -b $BOOT_FILE \
+           -o "${ISO_TARGET}/${ISO_NAME}" . ; RC=$?
+   cd $CURRENT_DIR
+   if [ "$RC" = 0 ] ; then
+      log "Finished execution of stage 'iso build' [$(date)]"
+      einfo "Finished execution of stage 'iso build'" ; eend 0
+   else
+      log "There was an error ($RC) executing stage 'iso build' [$(date)]"
+      eerror "There was an error executing stage 'iso build'" ; eend 1
+      bailout $RC
+   fi
 fi
 # }}}
 
