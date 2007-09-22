@@ -400,63 +400,13 @@ I've a question which isn't answered by this document
 Don't hesitate to ask on IRC (channel #grml on irc.freenode.org) or just drop me
 a mail: <mika@grml.org>
 
-Known TODOs
------------
-
-* the template system isn't flexible enough yet: provide support for different
-flavours, allow longer version number
-
-* support something like a directory /etc/grml/fai/packages to install
-additional Debian packages without the need for a Debian repository
-
-* provide hooks/options for updating an existing chroot/squashfs-file/ISO
-(work in progress, see patches directory inside source)
-
-* document the available classes in more detail (GRMLBASE, LATEX_CLEANUP,
-NO_ONLINE, REMOVE_DOCS, GRML_SMALL,...)
-
-* add a check to make sure $TARGET is mounted rw,suid,dev?
-
-* add support for ppc [formorer?] (and identify all packages
-that are arch specific so we have a clean package list in all classes)
-
-* support signed apt repositories (currently it's deactivated via FAI's
-FAI_ALLOW_UNSIGNED=1 for some packages in the toolchain)
-
-* support "final builds" (including stuff like generating md5sums, gpg,... -
-create a grml_release-directory including all the details about the build
-process like dpkg selection, logs,...)
-
-* the grml-live class(es) should send output to stdout and stderr as used inside
-FAI as well (so it's not as verbose unless you specify it, make it configurable
-though); check for errors inside the logs then as well
-
-* provide possibility for cleanup of all created build directories and
-a smart summary of the buildprocess (including "took ... minutes/seconds to
-build...")
-
-* check out how FAI_DEBMIRROR of /etc/grml/fai/fai.conf could be merged with our
-MIRROR_DIRECTORY and MIRROR_SOURCES feature of /etc/grml/grml-live.conf
-
-* support hooks to allow further customisation of the build process
-
-Long term goals
----------------
-
-* Provide all upcoming grml releases based on grml-live.
-
-* Provide a console interface (using dialog) for easy and common use of
-grml-live.
-
-* Provide a graphical interface (for example using pygtk) for easy and common
-use of grml-live.
-
 Download / install grml-live as a Debian package
 ------------------------------------------------
 
 Debian packages are available through the grml-repository at
 link:http://deb.grml.org/pool/main/g/grml-live/[deb.grml.org].  If you want to
-build a Debian package of the most current version on your own, just execute:
+build a Debian package on your own (using for example a specific version or the
+current development tree), just execute:
 
   hg clone http://hg.grml.org/grml-live
   cd grml-live
@@ -467,6 +417,12 @@ Source
 
 The source of grml-live is available at
 link:http://hg.grml.org/grml-live/[http://hg.grml.org/grml-live/]
+
+TODO list
+---------
+
+Check out link:http://wiki.grml.org/doku.php?id=grml-live[grml-live@grml-wiki]
+for details.
 
 Bugs
 ----
