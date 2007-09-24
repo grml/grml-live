@@ -1357,6 +1357,7 @@ podracer
 policyrcd-script-zg2
 polipo
 pop3browser
+poppler-utils
 pork
 portmap
 portsentry
@@ -1943,9 +1944,7 @@ xnee
 xnest
 xosd-bin
 xpdf
-xpdf-common
 xpdf-reader
-xpdf-utils
 xprobe
 xresprobe
 xrsh
