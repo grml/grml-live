@@ -1,3 +1,9 @@
+grml-etc (1.0.19) unstable; urgency=low
+
+  * /etc/skel/.channels/*: update URLs and frequence for Graz
+
+ -- Michael Prokop <mika@grml.org>  Wed, 26 Sep 2007 22:25:39 +0200
+
 grml-etc (1.0.18) unstable; urgency=low
 
   * Adjust check for bootoption tsplash + textsplash in
