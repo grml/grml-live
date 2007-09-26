@@ -394,6 +394,31 @@ executing debootstrap. Check out the output for the following lines:
   Calling task_mirror
   [...]
 
+Set up approx for use with grml-live
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Make sure /etc/grml/grml-live.conf provides according GRML_LIVE_SOURCES and
+FAI_DEBOOTSTRAP:
+
+  # cat /etc/grml/grml-live.conf
+  [...]
+  GRML_LIVE_SOURCES="
+  deb http://localhost:9999/grml            grml-stable  main
+  deb http://localhost:9999/grml            grml-testing main
+  deb http://localhost:9999/debian etch     main contrib non-free
+  "
+  FAI_DEBOOTSTRAP="etch http://localhost:9999/debian"
+
+Configure approx:
+
+  # cat /etc/approx/approx.conf
+  [...]
+  debian http://ftp.at.debian.org/debian
+  grml   http://deb.grml.org/
+
+Don't forget to restart approx (/etc/init.d/approx restart). That's it.
+All downloaded files will be cached in /var/cache/approx now.
+
 I've a question which isn't answered by this document
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
