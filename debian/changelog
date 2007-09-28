@@ -1,3 +1,9 @@
+grml-live (0.0.3) unstable; urgency=low
+
+  * Make sure $SECONDS is set.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 28 Sep 2007 23:04:24 +0200
+
 grml-live (0.0.2) unstable; urgency=low
 
   * Add support for amd64.
