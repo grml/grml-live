@@ -188,6 +188,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$BUILD_TARGET" ]  && echo "  build target:      $BUILD_TARGET"
    [ -n "$ISO_TARGET" ]    && echo "  ISO target:        $ISO_TARGET"
    [ -n "$GRML_NAME" ]     && echo "  grml name:         $GRML_NAME"
+   [ -n "$RELEASENAME" ]   && echo "  release name:      $RELEASENAME"
    [ -n "$VERSION" ]       && echo "  grml version:      $VERSION"
    [ -n "$SUITE" ]         && echo "  Debian suite:      $SUITE"
    [ -n "$BOOT_METHOD" ]   && echo "  Boot method:       $BOOT_METHOD"
