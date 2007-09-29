@@ -54,7 +54,17 @@ eend $?
 
 if [ -x /usr/bin/make -a -r /usr/src/Makefile ] ; then
    einfo "Cleaning up /usr/src/linux-headers-$KERNEL"
-   ( cd /usr/src && make clean && make symlinks )
+   ( cd /usr/src
+   VER=$(/bin/ls -d /usr/src/linux-headers-* | head -1)
+   VER=${VER##/usr/src/linux-headers-}
+   if [ -n "$VER" ] ; then
+      VER=$VER make clean && \
+      VER=$VER make symlinks
+   else
+      make clean && \
+      make symlinks
+   fi
+   )
    eend $?
 fi
 

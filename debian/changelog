@@ -6,8 +6,10 @@ grml-live (0.0.3) unstable; urgency=low
   * Make sure $SECONDS is set before outputting the runtime.
   * Unify usage of i386_files, place all template files in
     directory templates now.
+  * Improve portability of linux headers cleanup inside
+    grml_cleanup_chroot.
 
- -- Michael Prokop <mika@grml.org>  Sat, 29 Sep 2007 11:40:22 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 29 Sep 2007 16:55:47 +0200
 
 grml-live (0.0.2) unstable; urgency=low
 
