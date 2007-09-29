@@ -370,7 +370,7 @@ find .. -type f -not -name md5sums -exec md5sum {} \; > md5sums )
 
 # ISO_TARGET - mkisofs {{{
 [ -n "$ISO_TARGET" ] || ISO_TARGET="$TARGET/grml_isos"
-[ -n "$ISO_NAME" ] || ISO_NAME="$GRML_NAME_${VERSION}.iso"
+[ -n "$ISO_NAME" ] || ISO_NAME="${GRML_NAME}_${VERSION}.iso"
 
 if [ "$BOOT_METHOD" = "isolinux" ] ; then
    BOOT_FILE="boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat"
