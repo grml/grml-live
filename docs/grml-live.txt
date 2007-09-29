@@ -10,8 +10,8 @@ Linux Live system (CD/ISO)
 Synopsis
 --------
 
-grml-live [-c <classe[s]>] [-i <iso_name> ] [-r <release_name>]
-[-s <suite>] [-t <target_directory>] [-v <version_number>] [-Fvh]
+grml-live [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ] [-r <release_name>]
+[-s <suite>] [-t <target_directory>] [-v <version_number>] [-FVh]
 
 *******************************************************************************
 Important! This document is growing as requested. If you have questions which
@@ -62,6 +62,10 @@ the classes GRMLBASE and I386 are assumed, resulting in a small base system
 
 Force execution and do not prompt for acknowledgment of configuration.
 
+  -g **GRML_NAME**::
+
+Set the grml flavour name. Common usage examples: grml, grml-small, grml64.
+
   -h::
 
 Display short usage information and exit.
@@ -73,8 +77,7 @@ by default.
 
   -r **RELEASENAME**::
 
-Specify name of the release. (Notice: the output of the release name is limited
-to 30 characters.)
+Specify name of the release.
 
   -s **SUITE**::
 
@@ -91,9 +94,7 @@ chroot system) and grml_isos (where the resulting ISO is stored).
 
   -v **VERSION_NUMBER**::
 
-Specify version number of the release. (Notice: the output of the version number
-is limited to 5 characters. So "1.0-1" is fine, but "1.0.0.1" will be stripped
-to "1.0.0" then.)
+Specify version number of the release.
 
   -V::
 

@@ -1,0 +1,255 @@
+      CHEATCODES AND HINTS FOR GRML
+==============================================================================
+
+These options (can be combined) work from the (isolinux/grub) bootprompt:
+
+grml                                Use default settings (same as just pressing return)
+memtest                             Run Memtest86+ instead of Linux
+fb1280x1024                         Use fixed framebuffer graphics (1)
+fb1024x768                          Use fixed framebuffer graphics (2) [notice: grml's default]
+fb800x600                           Use fixed framebuffer graphics (3)
+nofb                                Disable framebuffer
+floppy                              Boot from floppydisk
+hd / hd1 / hd2 / hd3                Boot from (local) primary / secondary /... harddisk
+failsafe                            Boot with (almost) no HW-detection
+debug                               Get shells during process of booting for debugging
+bootchart                           Create chart of booting sequence in /var/log/bootchart.tgz
+forensic                            Do not touch any harddisks during hardware recognition
+splash                              Text based bootsplash
+serial                              Activate ttyS0 and start mgetty
+dos                                 Boot FreeDOS
+grub                                Boot into the Grub bootloader
+qemu                                Boot with special options for use in Qemu
+vmware                              Boot with special options for use in VMware
+
+Important: if you notice any problems with one of the
+following options please report it to the grml-team:
+http://grml.org/bugs/
+
+Notice: not all of the following cheatcodes are available on all the grml flavours.
+For example the X window system is not part of grml-small.
+
+Regional settings:
+------------------
+grml lang=at|de|cn|da|es|fr|it      Specify language ($LANG, $LC_ALL, $LANGUAGE - utf8) + keyboard
+grml lang=nl|pl|ru|sk|tr|tw|us      Specify language ($LANG, $LC_ALL, $LANGUAGE - utf8) + keyboard
+grml lang=$LANG-iso                 Activate $LANG (use like in lines above) with iso-mode instead of utf8
+grml gmt                            Use GMT-based time
+grml tz=Europe/Vienna               Use this timezone for TZ
+grml keyboard=us xkeyboard=us       Use different keyboard layout (text-console/X)
+grml setkeycodes                    Set some special function keys for MS/HP keyboards
+
+Configuration settings:
+-----------------------
+grml myconfig=/dev/fd0              Execute "grml.sh" and extract config.tbz from a partition:
+                                    /dev/fd0  for floppy disk
+                                    /dev/sda1 for USB-stick/first SCSI-device
+grml netconfig=server/config.tbz    Download file and extract configuration archive
+grml partconf=/dev/hda2             Copy files specified in /etc/grml/partconf from /dev/hda2
+                                    to booting grml system
+grml file=foobar.tbz                Use specified file as name for configuration archive
+                                    instead of the default one (config.tbz)
+grml extract=/etc                   Extract only /etc from configuration archive,
+                                    use it in combination with myconfig or netconfig
+grml home=/dev/hda2                 Mount specified partition as grml homedir
+grml home=/dev/sda1/grml.img        Mount loopback file as /home/grml
+grml home=scan                      Automatic search for grml homedir (using file grml.img)
+grml hostname=...                   Set hostname
+grml debnet                         Search through local partitions for file /etc/network/interfaces,
+                                    copy /etc/network to local system and restart networking then
+grml distri=...                     Set distribution name to given argument. If a jpg file named like the
+                                    given distri name can be found in directory desktop on the ISO
+				    (/cdrom/desktop/"$DISTRI") it will be taken as wallpaper for grml
+grml unionfs                        Use unionfs instead of aufs as overlay filesystem
+
+Notice: Take a look at http://grml.org/config/ and
+/usr/share/doc/grml-saveconfig/grml-config.html
+for more information regarding the configuration
+framework of grml.
+
+Booting related options:
+------------------------
+grml toram                          Copy CD to RAM and run from there
+grml tohd=/dev/hda1                 Copy CD to HD partition and run from there
+grml fromhd                         Skip checking for grml on CD-ROM
+grml fromhd=/dev/hda1               Boot from previously copied CD-Image
+grml bootfrom=/dev/hda1             Access Image then boot from previously
+                                    copied CD-Image
+grml bootfrom=/dev/hda1/GRML.iso    Access image, boot from ISO-Image
+grml grml_dir=GRML                  Directory to search for on the CD
+grml grml_name=GRML                 SquashFS-File to search for on the CD
+
+Debugging related settings:
+---------------------------
+debug                               Get shells during process of booting
+grml nocolor                        Disable colorized output while booting
+grml log                            Log error messages while booting and
+grml testcd                         Check CD data integrity and md5sums
+
+Service related settings:
+-------------------------
+grml ssh=password                   Set password for user grml and start ssh-server
+grml startup=script                 Start $script instead of grml-quickconfig on startup
+grml nosyslog                       Do not start syslog-ng
+grml nogpm                          Disable GPM daemon
+grml noblank                        Disable console blanking
+grml small                          Do not start that many consoles
+grml wondershaper=eth0,1000,500     Set up basic traffic shaping
+grml services={postfix,mysql,...}   Start service(s) which have an init-script (/etc/init.d/)
+grml welcome                        Welcome message via soundoutput
+grml noeject                        Do NOT eject CD after halt/reboot
+grml noprompt                       Do NOT prompt to remove the CD when halting/rebooting the system
+grml distcc=$NETWORK,$INTERFACE     Activate distcc-daemon to listen on specified network
+                                    and interface, usage example:
+                                    distcc=192.168.0.1/24,eth0
+grml gcc=3.4 gpp=3.4                Link /usr/bin/gcc, /usr/bin/cpp and /usr/bin/c++ to specified version
+grml startx{=windowmanager}         Start X window system automatically
+                                    Default window manager (if not provided): wm-ng (wrapper around fluxbox)
+
+Accessibility related settings:
+-------------------------------
+grml blind                          Start Braille-Terminal (no X)
+grml swspeak                        Prepare system for use with software synthesizer through speakup
+                                    Run 'swspeak' after booting up to activate sound output
+grml brltty=type,port,table         Parameters for Braille device (e.g.: brltty=al,/dev/ttyS0,text.de.tbl)
+grml speakup_synth=...              Use speakup kernel module with given hardware type
+
+Hardware related settings:
+--------------------------
+grml swap                           Activate present/detected swap partitions
+grml noswraid                       Disable scanning for software raid arrays (creates /etc/mdadm/mdadm.conf)
+grml swraid                         Enable automatic assembling of software raid arrays
+grml nolvm                          Disable scanning for Logical Volumes (LVM)
+grml lvm                            Automatically activate Logival Volumes (LVM) during boot
+grml scandelay[=seconds]            Delay accessing ISO-device (useful for booting via usb/firewire)
+grml cdrom=/dev/...                 Use specifed device as CD-ROM device (used for mounting the grml-ISO)
+grml xmodule=ati|fbdev|i810|mga     Use specified X.org-Module (1)
+grml xmodule=nv|radeon|savage|s3    Use specified X.org-Module (2)
+grml xmodule=radeon|svga|i810       Use specified X.org-Module (3)
+grml no{acpi,agp,apm,cpu,dhcp}      Skip parts of HW-detection (1)
+grml no{dma,fstab,modem}            Skip parts of HW-detection (2)
+grml no{pcmcia,scsi,swap,usb}       Skip parts of HW-detection (3)
+grml 915resolution=...              Start resolution modify tool for Intel graphic chipset
+                                    usage: $MODE,$XRESO,$YRESO
+grml blacklist=modulename           Completely disable loading of specified module via
+                                    blacklisting through /etc/modprobe.d/grml
+grml fwtimeout=50                   Set firmware timeout via /sys/class/firmware/timeout to specified value
+grml nosound                        Mute sound devices (notice: this does not deactivate loading of sound drivers!)
+grml vol=number                     Set mixer volumes to level $number
+grml pnpbios=off                    No PnP Bios initialization
+grml acpi=off                       Disable ACPI Bios completely
+grml nousb2                         Disable initialization of USB 2.x controller(s)
+grml nousb                          Disable initialization of USB in booting sequence
+grml nofirewire                     Disable initialization of firewire devices in booting sequence
+grml pci=irqmask=0x0e98             Try this, if PS/2 mouse doesn't work *)
+grml pci=bios                       Workaround for bad PCI controllers
+grml ide2=0x180 nopcmcia            Boot from PCMCIA-CD-ROM (some notebooks)
+grml mem=128M                       Specify Memory size in MByte
+grml dma                            Enable DMA accelleration for ALL IDE-Drives
+grml nodma ide=nodma                Disable DMA accelleration for ALL IDE-Drives
+grml vga=normal [video=ofonly]      No-framebuffer mode (does not influence X)
+grml vga=ask [video=ofonly]         Display menu for framebuffer mode
+
+Installation related settings:
+------------------------------
+
+Caution: do *not* use the grml2hd and/or debian2hd bootoption if you do not know what you are doing!
+
+Install plain Debian via debian2hd bootoption (which runs grml-debootstrap in non-interactive mode):
+
+debian2hd <options>                 ... whereas valid options for debian2hd are:
+
+  target=       target partition/directory of the new Debian system, e.g.: target=/dev/hda1
+  grub=         where to install grub to? Use grub syntax for specifying, e.g.: grub=hd0
+  groot=        specify root device for usage in grub (use grub syntax), e.g.: groot=hd0,0
+  release=      specify release of new Debian system (default is stable), e.g.: release=sid
+  mirror=       specify mirror for apt-get/aptitude, e,g.: mirror=ftp://ftp.tugraz.at/mirror/debian
+  password=     set passwort of user root without prompting for it, e.g.: password=AiTh5ahn
+
+  Usage example for automatic installation:
+    debian2hd target=/dev/hda1 grub=hd0 groot=hd0,0 mirror=ftp://ftp.tugraz.at/mirror/debian password=foobar
+
+  See http://grml.org/grml-debootstrap/ for more information.
+
+Install grml via grml2hd bootoption (which runs grml2hd in non-interactive mode):
+
+grml2hd <options>                   ... whereas valid options for grml2hd are:
+
+   user=                user name for user which should be used at hd-install
+   filesystem={ext2|ext3|reiserfs|reiser4|jfs|xfs}      filesystem to be used
+   mbr=/dev/...  partition where MBR should be installed (default:=partition)
+   partition=/dev/...                partition where grml should be installed
+
+  Usage example for booting:
+   grml2hd partition=/dev/hda4 mbr=/dev/hda filesystem=ext3 user=mika
+
+  Passwords of user root and user are "grml" - please adjust after hd-install!
+
+  See http://grml.org/grml2hd/ for more information.
+
+Additional notes:
+-----------------
+
+*) Try "grml pci=irqmask=0x0e98" if (you have a notebook and) your
+PS/2 mouse doesn't work. (Possibly caused by a BIOS-flaw on your board,
+BIOS updates can help.) Sometimes, switching to the text console with
+Control-Alt-F1 and back to the X-screen with Control-Alt-F7 solves the
+problem without rebooting, since the X server reinitializes the mouse
+driver during that procedure.
+
+*) Bootfrom needs access to a running grml-System with the same Kernel
+as the Bootkernel, before it is able to mount the partition / ISO-Image.
+This should allow a poor mans install from NTFS-Partitions and makes it
+also possible to boot an ISO-Image directly. You can also use wildcards
+in the ISO-Filename, but it must be unique. So: If you have just one
+grml.iso on /dev/hda1 you can access it as: bootfrom=/dev/hda1/G*.iso,
+but if there are several, you need to make clear, which one you want.
+(Feature added by Fabian Franz.)
+
+*) If your grml-CD makes strange noises during boot, or you see frequent
+errors like "squashfs: read error", or programs are crashing randomly,
+then your CD image is probably defective or incomplete, or your CD-burner
+created a defective CD due to wrong writing speed or bad media. This is
+the most common error reported.  Please boot with "grml testcd" to check
+if the CD is OK, and/or even better, verify the MD5 checksums that are
+present on the mirrors before writing the CD.  Check your CD low-level
+via running 'readcd -c2scan dev=/dev/cdrom'. In some cases, defective
+IDE controllers cause this error if you have DMA enabled. Also, please
+read the grml-FAQ.
+
+*) In case of a failing hardware autodetection, try booting with any of
+the "no-" options as shown in the table above, like in
+   grml noagp noapm noapic acpi=off nodma
+to skip some critical parts of the autodetection system.
+
+*) Some boards apparently don't pass the proper memory size to the
+linux-kernel. It may cause the message "Panic: cannot mount root file
+system" and the system hangs. Use "grml mem=128M" to solve that
+problem if your system has 128MByte memory for example (caution:
+you MUST use a capital "M" here).
+
+*) The "myconfig=/dev/partition" option allows you to reconfigure the
+system after autoconfiguration by running a bourne shell script called
+"grml.sh" and/or extracting configuration files from a file named
+config.tbz from the root directory on the given device (or floppy).
+Take a look at http://grml.org/config/ for more information regarding
+the configuration framework of grml.
+
+*) If you wish to remaster the CD, please don't forget to specify
+
+        -no-emul-boot -boot-load-size 4 -boot-info-table \
+        -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat
+
+as option to mkisofs. Otherwise your CD won't be bootable. The
+directory GRML, containig the compressed filesystem file "GRML",
+must be located in the top level directory of the CD.
+
+*) Caution: screensavers: Don't start xlock/vlock or any other screensaver
+that requires a password. There are no default passwords on grml,
+i.e. all accounts are LOCKED unless you explicitly set a password.
+See also README_Security.txt about this issue.
+Hint: If you accidentially started a screensaver switch to one of the
+textconsoles by Control-Alt-F1 and kill the screensaver (or just set a
+password for the grml user). Take a look at the script grml-lock.
+
+# EOF

@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Fri Sep 21 17:00:20 CEST 2007 [mika]
+# Latest change: Sat Sep 29 10:44:26 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -61,6 +61,7 @@ trap bailout 1 2 3 15
 
 [ -n "$VERSION" ]  || VERSION="0.0.1"
 [ -n "$RELEASENAME" ] || RELEASENAME="grml-live rocks"
+[ -n "$GRML_NAME" ] || GRML_NAME='grml'
 
 [ -n "$LOGDIR" ] || LOGDIR="/var/log/fai/dirinstall/$HOSTNAME"
 [ -d "$LOGDIR" ] || mkdir -p $LOGDIR
@@ -122,17 +123,18 @@ usage()
   echo "
 $PN - build process script for generating a (grml based) Linux Live-ISO
 
-Usage: $PN [-c <classe[s]>] [-i <iso_name> ] [-r <release_name>] \\
-       [-s <suite>] [-t <target_directory>] [-v <version_number>] [-Fvh]
+Usage: $PN [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ] \\
+                 [-r <release_name>] [-s <suite>] [-t <target_directory>] \\
+                 [-v <version_number>] [-FVh]
 
 Usage examples:
 
     $PN
     $PN -c GRMLBASE,GRML_X,I386 -t /grml/
     $PN -c GRMLBASE,I386 -t /dev/shm/grml
-    $PN -c GRMLBASE,GRML_SMALL,I386
-    $PN -c GRMLBASE,I386 -v -i grml_0.0-1.iso
-    $PN -c GRMLBASE,I386 -s sid
+    $PN -c GRMLBASE,GRML_SMALL,I386 -g grml-small -v 1.0
+    $PN -c GRMLBASE,I386 -i grml_0.0-1.iso
+    $PN -c GRMLBASE,I386 -s sid -V
 
 More details: man grml-live
               /usr/share/doc/grml-live/grml-live.html
@@ -145,9 +147,10 @@ http://grml.org/bugs/
 
 # command line parsing {{{
 
-while getopts "c:i:r:s:t:v:FhV" opt; do
+while getopts "c:g:i:r:s:t:v:FhV" opt; do
   case "$opt" in
     c) CLASSES="$OPTARG" ;;
+    g) GRML_NAME="$OPTARG" ;;
     i) ISO_NAME="$OPTARG" ;;
     r) RELEASENAME="$OPTARG" ;;
     s) SUITE="$OPTARG" ;;
@@ -288,38 +291,40 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
    else
       # booting stuff:
       mkdir -p "$BUILD_TARGET"/boot/isolinux
+      cp /boot/memtest86+.bin                              "$BUILD_TARGET"/boot/isolinux/memtest
+      cp "$CHROOT_TARGET"/boot/initrd*                     "$BUILD_TARGET"/boot/isolinux/initrd.gz
+      cp "$CHROOT_TARGET"/boot/vmlinuz*                    "$BUILD_TARGET"/boot/isolinux/linux26
+      cp /usr/lib/syslinux/chain.c32                       "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/lib/syslinux/isolinux.bin                    "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/lib/syslinux/memdisk                         "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/lib/syslinux/menu.c32                        "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/templates/boot/isolinux/*    "$BUILD_TARGET"/boot/isolinux/
+      cp /usr/share/grml-live/templates/boot/isolinux/*    "$BUILD_TARGET"/boot/isolinux/
+      cp -a /usr/share/grml-live/templates/boot/grub       "$BUILD_TARGET"/boot/
+
       [ -d "$BUILD_TARGET"/GRML ] || mkdir "$BUILD_TARGET"/GRML
-      cp /boot/memtest86+.bin                                        "$BUILD_TARGET"/boot/isolinux/memtest
-      cp "$CHROOT_TARGET"/boot/initrd*                               "$BUILD_TARGET"/boot/isolinux/initrd.gz
-      cp "$CHROOT_TARGET"/boot/vmlinuz*                              "$BUILD_TARGET"/boot/isolinux/linux26
-      cp /usr/lib/syslinux/chain.c32                                 "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/lib/syslinux/isolinux.bin                              "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/lib/syslinux/memdisk                                   "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/lib/syslinux/menu.c32                                  "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/i386_files/boot/isolinux/*             "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/i386_files/boot/isolinux/*             "$BUILD_TARGET"/boot/isolinux/
-      cp -a /usr/share/grml-live/i386_files/boot/grub                "$BUILD_TARGET"/boot/
+      cp -a /usr/share/grml-live/templates/GRML/* "$BUILD_TARGET"/GRML/
 
       # adjust boot splash information:
       ISO_DATE="$(date +%Y-%m-%d)"
-      VERSION="$(cut_string 5 "$VERSION")" ; VERSION="$(extend_string_end 5 "$VERSION")"
-      RELEASENAME="$(cut_string 30 "$RELEASENAME")" ; RELEASENAME="$(extend_string_end 30 "$RELEASENAME")"
+      RELEASE_INFO="$GRML_NAME $VERSION - Release Codename $RELEASENAME"
+      RELEASE_INFO="$(cut_string 68 "$RELEASE_INFO")"
+      RELEASE_INFO="$(extend_string_end 68 "$RELEASE_INFO")"
 
-      sed -i "s/%VERSION%/$VERSION/"   "$BUILD_TARGET"/boot/isolinux/boot.msg
-      sed -i "s/%RELEASENAME%/$RELEASENAME/" "$BUILD_TARGET"/boot/isolinux/boot.msg
-      sed -i "s/%DATE%/$ISO_DATE/"     "$BUILD_TARGET"/boot/isolinux/boot.msg
+      sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_TARGET"/GRML/grml-version
+      sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_TARGET"/GRML/grml-version
 
-      sed -i "s/%VERSION%/$VERSION/"   "$BUILD_TARGET"/boot/isolinux/boot-beep.msg
-      sed -i "s/%RELEASENAME%/$RELEASENAME/" "$BUILD_TARGET"/boot/isolinux/boot-beep.msg
-      sed -i "s/%DATE%/$ISO_DATE/"     "$BUILD_TARGET"/boot/isolinux/boot-beep.msg
+      sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_TARGET"/boot/isolinux/boot.msg
+      sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_TARGET"/boot/isolinux/boot.msg
 
-      sed -i "s/%VERSION%/$VERSION/"   "$BUILD_TARGET"/boot/grub/menu.lst
+      sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_TARGET"/boot/isolinux/boot-beep.msg
+      sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_TARGET"/boot/isolinux/boot-beep.msg
+
+      sed -i "s/%VERSION%/$VERSION/"           "$BUILD_TARGET"/boot/grub/menu.lst
+      sed -i "s/%GRML_NAME%/$GRML_NAME/"       "$BUILD_TARGET"/boot/grub/menu.lst
 
       # autostart for Windows:
-      cp /usr/share/grml-live/windows/autostart/autorun.bat          "$BUILD_TARGET"/
-      cp /usr/share/grml-live/windows/autostart/autorun.inf          "$BUILD_TARGET"/
-      cp /usr/share/grml-live/windows/autostart/autorun.pif          "$BUILD_TARGET"/
-      cp /usr/share/grml-live/windows/autostart/cdrom.ico            "$BUILD_TARGET"/
+      cp /usr/share/grml-live/templates/windows/autostart/* "$BUILD_TARGET"/
       # windows-binaries:
       if [ -n "$WINDOWS_BINARIES" ] ; then
          if [ -f "$BUILD_TARGET"/windows/putty.exe ] ; then
@@ -354,11 +359,15 @@ else
    log "Finished execution of stage 'squashfs' [$(date)]"
    einfo "Finished execution of stage 'squashfs'" ; eend 0
 fi
+
+# create md5sum file:
+( cd $BUILD_TARGET/GRML &&
+find .. -type f -not -name md5sums -exec md5sum {} \; > md5sums )
 # }}}
 
 # ISO_TARGET - mkisofs {{{
 [ -n "$ISO_TARGET" ] || ISO_TARGET="$TARGET/grml_isos"
-[ -n "$ISO_NAME" ] || ISO_NAME="grml_${VERSION}.iso"
+[ -n "$ISO_NAME" ] || ISO_NAME="$GRML_NAME_${VERSION}.iso"
 
 if [ "$BOOT_METHOD" = "isolinux" ] ; then
    BOOT_FILE="boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat"

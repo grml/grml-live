@@ -1,8 +1,13 @@
 grml-live (0.0.3) unstable; urgency=low
 
-  * Make sure $SECONDS is set.
+  * Support for setting GRML_NAME (like grml vs. grml-small
+    vs grml64 vs...)
+  * Drop the character limits of $VERSION and $RELEASENAME.
+  * Make sure $SECONDS is set before outputting the runtime.
+  * Unify usage of i386_files, place all template files in
+    directory templates now.
 
- -- Michael Prokop <mika@grml.org>  Fri, 28 Sep 2007 23:04:24 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 29 Sep 2007 11:40:22 +0200
 
 grml-live (0.0.2) unstable; urgency=low
 
