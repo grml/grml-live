@@ -65,7 +65,7 @@ trap bailout 1 2 3 15
 
 [ -n "$LOGDIR" ] || LOGDIR="/var/log/fai/dirinstall/$HOSTNAME"
 [ -d "$LOGDIR" ] || mkdir -p $LOGDIR
-LOGFILE="$LOGDIR/grml-live.conf"
+LOGFILE="$LOGDIR/grml-live.log"
 # }}}
 
 # some important functions {{{

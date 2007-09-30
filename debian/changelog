@@ -13,6 +13,8 @@ grml-live (0.0.3) unstable; urgency=low
   * Do not install kernel via GRMLBASE but via GRML_* classes
     instead so we have only one single kernel on the system
     with something like 'GRMLBASE,GRML_SMALL,REMOVE_DOCS,I386'.
+  * Use grml-live.log as logfile.
+  * Added vim to GRML_MEDIUM package list.
 
  -- Michael Prokop <mika@grml.org>  Sun, 30 Sep 2007 12:58:15 +0200
 
