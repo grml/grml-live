@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Don Sep 20 15:31:56 CEST 2007 [mika]
+# Latest change: Son Sep 30 14:15:11 CEST 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -270,12 +270,8 @@ config_language(){
  # activate unicode console if running within utf8 environment
  if [ -r /etc/default/locale ] ; then
     if grep -q "LANG=.*UTF" /etc/default/locale ; then
-       if checkgrmlsmall && [ -z "$INSTALLED" ] ; then
-          ewarn "Not runnning unicode_start: grml-small with reduced language support detected." ; eend 0
-       else
-          einfo "Setting up unicode environment."
-          unicode_start 2>>$DEBUG ; eend $?
-       fi
+       einfo "Setting up unicode environment."
+       unicode_start 2>>$DEBUG ; eend $?
     fi
  fi
 
