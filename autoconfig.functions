@@ -597,19 +597,19 @@ if [ -n "$TESTCD" ]; then
    [ -d /live/image/GRML ] && TESTCD_PATH=/live/image/GRML
 
    if [ -n "$TESTCD_PATH" ] ; then
-      ( cd "$TESTCD_PATH" ; rm -f /tmp/md5sum.log ; md5sum -c md5sums 2>&1 | tee /tmp/md5sum.log )
+      ( cd "$TESTCD_PATH" ; rm -f /tmp/md5sum.log ; md5sum -c md5sums 2>&1 | tee /tmp/md5sum.log ; RC=$? )
    else
       echo "${RED} *** Error: Could not find md5sum file.                           ***"
    fi
 
-   if [ "$?" = "0" ]; then
-     echo " ${GREEN}Everything looks OK${NORMAL}"
-     else
-     echo "${RED} *** CHECKSUM FAILED FOR THESE FILES:                          ***"
-     egrep -v '(^md5sum:|OK$)' /tmp/md5sum.log
-     echo "${RED} *** DATA ON YOUR CD MEDIUM IS POSSIBLY INCOMPLETE OR DAMAGED, ***${NORMAL}"
-     echo "${RED} *** OR YOUR COMPUTER HAS BAD RAM.                             ***${NORMAL}"
-     echo -n "${CYAN}Hit return to contine, or press the reset button to quit.${NORMAL}"
+   if [ "$RC" = "0" ]; then
+      einfo "Everything looks OK" ; eend 0
+   else
+      eerror 'Checksum failed for theses files:' ; eend 1
+      egrep -v '(^md5sum:|OK$)' /tmp/md5sum.log
+      eerror 'Data on the grml medium is possibly incomplete/damaged or...'
+      eerror '... RAM of your computer is broken.' ; eend 1
+      einfon "Hit return to continue, or press the reset button to quit."
      read a
    fi
 
