@@ -365,7 +365,7 @@ fi
 
 # create md5sum file:
 ( cd $BUILD_TARGET/GRML &&
-find .. -type f -not -name md5sums -exec md5sum {} \; > md5sums )
+find .. -type f -not -name md5sums -not -name isolinux.bin -exec md5sum {} \; > md5sums )
 # }}}
 
 # ISO_TARGET - mkisofs {{{
