@@ -51,8 +51,9 @@ lvm2
 mdadm
 multitail
 nfs-common
-openssh-client openssh-server
-pciutils usbutils
+openssh-client
+openssh-server
+pciutils
 postfix
 resolvconf
 rsync
@@ -60,7 +61,8 @@ strace
 syslog-ng
 sysutils
 usbutils
-wireless-tools wpasupplicant
+wireless-tools
+wpasupplicant
 
 PACKAGES aptitude I386 
 powernowd

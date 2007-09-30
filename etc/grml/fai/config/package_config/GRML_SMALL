@@ -1,6 +1,5 @@
 PACKAGES aptitude
 
-acpid
 adduser
 agrep
 apt
@@ -31,7 +30,6 @@ ddrescue
 debconf
 debconf-i18n
 debianutils
-debootstrap
 deborphan
 dhcp-client
 dialog
@@ -128,10 +126,11 @@ nfs-common
 ntfsprogs
 ntpdate
 nvi
-openssh-client openssh-server
+openssh-client
+openssh-server
 passwd
 patch
-pciutils usbutils
+pciutils
 ppp
 pppoeconf
 prism54-firmware
@@ -174,6 +173,7 @@ udev
 unp
 unzip
 unzoo
+usbutils
 update-inetd
 util-linux
 vlan
@@ -182,7 +182,6 @@ wget
 whiptail
 wipe
 wireless-tools
-wireless-tools wpasupplicant
 wpasupplicant
 xfsprogs
 zip

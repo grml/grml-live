@@ -39,6 +39,7 @@ diff
 dmidecode
 dmraid
 dmsetup
+dns2tcp
 dosfstools
 dpkg
 dselect
@@ -128,10 +129,11 @@ nfs-common
 ntfsprogs
 ntpdate
 nvi
-openssh-client openssh-server
+openssh-client
+openssh-server
 passwd
 patch
-pciutils usbutils
+pciutils
 ppp
 pppoeconf
 prism54-firmware
@@ -175,6 +177,7 @@ unp
 unzip
 unzoo
 update-inetd
+usbutils
 util-linux
 vlan
 vlock
@@ -183,7 +186,6 @@ wget
 whiptail
 wipe
 wireless-tools
-wireless-tools wpasupplicant
 wpasupplicant
 xfsprogs
 zip
