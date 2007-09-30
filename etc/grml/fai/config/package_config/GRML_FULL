@@ -2094,3 +2094,6 @@ sl-modem-modules-2.6.22-grml
 sysprof-module-2.6.22-grml
 tidev-modules-2.6.22-grml
 truecrypt-2.6.22-grml
+
+PACKAGES aptitude AMD64
+linux-image-2.6.20-grml64 aufs-modules-2.6.20-grml64
