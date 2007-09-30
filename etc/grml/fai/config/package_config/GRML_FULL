@@ -89,7 +89,6 @@ cmospwd
 cpuburn-in-binary
 ctapi-cyberjack
 ctris
-dcfldd
 dd-rhelp
 ded
 deletemail
@@ -513,6 +512,7 @@ dbs
 dbus
 dbus-x11
 dc
+dcfldd
 dconf
 dcraw
 dctrl-tools
