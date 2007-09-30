@@ -189,4 +189,4 @@ zip
 zsh
 
 PACKAGES aptitude I386 
-linux-image-2.6.20-grml-small aufs-modules-2.6.20-grml-small
+linux-image-2.6.22-grml aufs-modules-2.6.22-grml
