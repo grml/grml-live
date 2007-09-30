@@ -1,6 +1,9 @@
 grml-autoconfig (0.7.24) unstable; urgency=low
 
   * Adjust look'n'feel of testcd and improve error handling as well.
+  * Drop the "Not runnning unicode_start: grml-small with reduced language
+    support detected." check as we want to get working UTF8 setup on
+    grml-small/grml-medium as well.
 
  -- Michael Prokop <mika@grml.org>  Sun, 30 Sep 2007 14:13:45 +0200
 
