@@ -1,3 +1,9 @@
+grml-live (0.0.4) unstable; urgency=low
+
+  * Check for /var/run/fai/FAI_INSTALLATION_IN_PROGRESS and exit then.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 04 Oct 2007 22:16:34 +0200
+
 grml-live (0.0.3) unstable; urgency=low
 
   * Support for setting GRML_NAME (like grml vs. grml-small

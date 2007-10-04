@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sat Sep 29 10:44:26 CEST 2007 [mika]
+# Latest change: Thu Oct 04 22:16:28 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -18,6 +18,12 @@ set -e
 # we need root permissions for the build-process:
 if [ "$(id -u 2>/dev/null)" != 0 ] ; then
    echo "Error: please run this script with uid 0 (root)." >&2
+   exit 1
+fi
+
+if [ -r /var/run/fai/FAI_INSTALLATION_IN_PROGRESS ] ; then
+   echo "/usr/sbin/fai already running or was aborted before."&>2
+   echo "You may remove /var/run/fai/FAI_INSTALLATION_IN_PROGRESS and try again.">&2
    exit 1
 fi
 
