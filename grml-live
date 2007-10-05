@@ -301,7 +301,8 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       # booting stuff:
       mkdir -p "$BUILD_TARGET"/boot/isolinux
       cp /boot/memtest86+.bin                              "$BUILD_TARGET"/boot/isolinux/memtest
-      cp "$CHROOT_TARGET"/boot/initrd*                     "$BUILD_TARGET"/boot/isolinux/initrd.gz
+      # do not keep the initrd inside the chroot, let's save space instead:
+      mv "$CHROOT_TARGET"/boot/initrd*                     "$BUILD_TARGET"/boot/isolinux/initrd.gz
       cp "$CHROOT_TARGET"/boot/vmlinuz*                    "$BUILD_TARGET"/boot/isolinux/linux26
       cp /usr/lib/syslinux/chain.c32                       "$BUILD_TARGET"/boot/isolinux/
       cp /usr/lib/syslinux/isolinux.bin                    "$BUILD_TARGET"/boot/isolinux/

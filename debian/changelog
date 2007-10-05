@@ -5,6 +5,8 @@ grml-live (0.0.4) unstable; urgency=low
     - disable pipeline workaround 
     - create /dev/MAKEDEV in chroot to work around the
       "./MAKEDEV: No such file or directory" problem of some packages
+  * Do not copy the initrd of chroot to boot/isolinux/ but instead move
+    it to save a few more MBs of space.
 
  -- Michael Prokop <mika@grml.org>  Thu, 04 Oct 2007 22:16:34 +0200
 
