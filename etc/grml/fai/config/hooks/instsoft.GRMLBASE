@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Sep 16 22:53:02 CEST 2007 [mika]
+# Latest change: Sat Oct 06 00:55:29 CEST 2007 [mika]
 ################################################################################
 
 set -u
@@ -12,7 +12,7 @@ set -e
 
 # work around http://trac.lighttpd.net/trac/ticket/657
 # should be removed later on:
-echo "Acquire::http::Pipeline-Depth "0";" >> $target/etc/apt/apt.conf
+# echo "Acquire::http::Pipeline-Depth "0";" >> $target/etc/apt/apt.conf
 
 # install grml keys:
 gpg --keyserver subkeys.pgp.net --recv-keys F61E2E7CECDEA787
@@ -23,6 +23,11 @@ $ROOTCMD apt-key add /etc/apt/grml.key
 # package_config/GRML is being executed:
 $ROOTCMD apt-get update
 $ROOTCMD aptitude -f -y install file-rc
+
+# make sure /dev/MAKEDEV is available:
+if [ -x "$target"/sbin/MAKEDEV ] && ! [ -r "$target"/dev/MAKEDEV ] ; then
+   ln -s /sbin/MAKEDEV "$target"/dev/MAKEDEV
+fi
 
 # we don't need the invoke-rc.d.d diversion (we have grml-policyrcd :)):
 if [ -L "$target"/usr/sbin/invoke-rc.d ] ; then

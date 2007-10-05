@@ -1,6 +1,10 @@
 grml-live (0.0.4) unstable; urgency=low
 
   * Check for /var/run/fai/FAI_INSTALLATION_IN_PROGRESS and exit then.
+  * /etc/grml/fai/config/hooks/instsoft.GRMLBASE:
+    - disable pipeline workaround 
+    - create /dev/MAKEDEV in chroot to work around the
+      "./MAKEDEV: No such file or directory" problem of some packages
 
  -- Michael Prokop <mika@grml.org>  Thu, 04 Oct 2007 22:16:34 +0200
 
