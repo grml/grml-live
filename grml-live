@@ -69,8 +69,7 @@ trap bailout 1 2 3 15
 [ -n "$RELEASENAME" ] || RELEASENAME="grml-live rocks"
 [ -n "$GRML_NAME" ] || GRML_NAME='grml'
 
-[ -n "$LOGDIR" ] || LOGDIR="/var/log/fai/dirinstall/$HOSTNAME"
-[ -d "$LOGDIR" ] || mkdir -p $LOGDIR
+[ -n "$LOGDIR" ] || LOGDIR="/var/log/"
 LOGFILE="$LOGDIR/grml-live.log"
 # }}}
 

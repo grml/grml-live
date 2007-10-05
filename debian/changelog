@@ -7,6 +7,8 @@ grml-live (0.0.4) unstable; urgency=low
       "./MAKEDEV: No such file or directory" problem of some packages
   * Do not copy the initrd of chroot to boot/isolinux/ but instead move
     it to save a few more MBs of space.
+  * Use /var/log/grml-live.log as log file as /var/log/fai/* is too
+    dangerous because of automatic removal of the files/dirs via fai.
 
  -- Michael Prokop <mika@grml.org>  Thu, 04 Oct 2007 22:16:34 +0200
 
