@@ -152,14 +152,14 @@ http://grml.org/bugs/
 
 # command line parsing {{{
 
-while getopts "c:g:i:r:s:t:v:FhV" opt; do
+while getopts "c:g:i:o:r:s:t:v:FhV" opt; do
   case "$opt" in
     c) CLASSES="$OPTARG" ;;
     g) GRML_NAME="$OPTARG" ;;
     i) ISO_NAME="$OPTARG" ;;
     r) RELEASENAME="$OPTARG" ;;
     s) SUITE="$OPTARG" ;;
-    t) TEMPLATE_DIRECTORY="$OPTARG"
+    t) TEMPLATE_DIRECTORY="$OPTARG";;
     o) OUTPUT="$OPTARG"
        CHROOT_OUTPUT="$OUTPUT/grml_chroot"
        BUILD_OUTPUT="$OUTPUT/grml_cd"
