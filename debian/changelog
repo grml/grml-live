@@ -3,6 +3,8 @@ grml-live (0.0.4) unstable; urgency=low
   * The -t option for specifying the output directory has been
     renamed into -o. The option -t now specifies the place where
     templates for building the ISO can be found.
+  * Option -t can be used for specifying the template directory.
+    TEMPLATE_DIRECTORY can be used in /etc/grml/grml-live.conf
   * Check for /var/run/fai/FAI_INSTALLATION_IN_PROGRESS and exit then.
   * /etc/grml/fai/config/hooks/instsoft.GRMLBASE:
     - disable pipeline workaround 

@@ -178,9 +178,9 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 
 # some misc checks before executing FAI {{{
 [ -n "$CLASSES" ] || bailout 1 "Error: \$CLASSES unset, please set it in $LIVE_CONF or
-specify it on the command line using the -c|--classes option."
+specify it on the command line using the -c option."
 [ -n "$OUTPUT" ] || bailout 1 "Error: \$OUTPUT unset, please set it in $LIVE_CONF or
-specify it on the command line using the -t|--target option."
+specify it on the command line using the -o option."
 # }}}
 
 # ask user whether the setup is ok {{{
@@ -308,12 +308,23 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       cp /usr/lib/syslinux/isolinux.bin                    "$BUILD_OUTPUT"/boot/isolinux/
       cp /usr/lib/syslinux/memdisk                         "$BUILD_OUTPUT"/boot/isolinux/
       cp /usr/lib/syslinux/menu.c32                        "$BUILD_OUTPUT"/boot/isolinux/
-      cp /usr/share/grml-live/templates/boot/isolinux/*    "$BUILD_OUTPUT"/boot/isolinux/
-      cp /usr/share/grml-live/templates/boot/isolinux/*    "$BUILD_OUTPUT"/boot/isolinux/
-      cp -a /usr/share/grml-live/templates/boot/grub       "$BUILD_OUTPUT"/boot/
 
+      if ! [ -d "${TEMPLATE_DIRECTORY}"/boot ] ; then
+         log "${TEMPLATE_DIRECTORY}/boot does not exist. Exiting."
+         eerror "${TEMPLATE_DIRECTORY}/boot does not exist. Exiting." ; eend 1
+         bailout 8
+      fi
+      cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*               "$BUILD_OUTPUT"/boot/isolinux/
+      cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*               "$BUILD_OUTPUT"/boot/isolinux/
+      cp -a ${TEMPLATE_DIRECTORY}/boot/grub                  "$BUILD_OUTPUT"/boot/
+
+      if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
+         log "${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
+         eerror "${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting." ; eend 1
+         bailout 9
+      fi
       [ -d "$BUILD_OUTPUT"/GRML ] || mkdir "$BUILD_OUTPUT"/GRML
-      cp -a /usr/share/grml-live/templates/GRML/* "$BUILD_OUTPUT"/GRML/
+      cp -a ${TEMPLATE_DIRECTORY}/GRML/* "$BUILD_OUTPUT"/GRML/
 
       # adjust boot splash information:
       ISO_DATE="$(date +%Y-%m-%d)"
@@ -334,7 +345,9 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       sed -i "s/%GRML_NAME%/$GRML_NAME/"       "$BUILD_OUTPUT"/boot/grub/menu.lst
 
       # autostart for Windows:
-      cp /usr/share/grml-live/templates/windows/autostart/* "$BUILD_OUTPUT"/
+      if [ -d "${TEMPLATE_DIRECTORY}/windows/autostart/" ] ; then
+         cp ${TEMPLATE_DIRECTORY}/windows/autostart/* "$BUILD_OUTPUT"/
+      fi
       # windows-binaries:
       if [ -n "$WINDOWS_BINARIES" ] ; then
          if [ -f "$BUILD_OUTPUT"/windows/putty.exe ] ; then
