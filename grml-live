@@ -305,8 +305,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       # if we don't have an initrd we a) can't boot and b) there was an error
       # during build, so check for the file:
       if [ -f "$CHROOT_OUTPUT"/boot/initrd* ] ; then
-         # do not keep the initrd inside the chroot, let's save space instead:
-         mv "$CHROOT_OUTPUT"/boot/initrd*                     "$BUILD_OUTPUT"/boot/isolinux/initrd.gz
+         cp "$CHROOT_OUTPUT"/boot/initrd*  "$BUILD_OUTPUT"/boot/isolinux/initrd.gz
       else
          log "No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting"
          eerror "No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
