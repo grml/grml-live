@@ -17,7 +17,7 @@ FILE=$(ls -1 $target/boot/vmlinuz-* | sort -r | head -1)
 KERNELVERSION=$(echo "${FILE##$target/boot/vmlinuz-}")
 
 # make sure mdadm isn't executed in initrd:
-if [ -d "$target"/etc/default/mdadm ] ; then
+if [ -f "$target"/etc/default/mdadm ] ; then
    sed -i "s/START_DAEMON=.*/s/START_DAEMON='false'/" "$target"/etc/default/mdadm
    sed -i "s/INITRDSTART=.*/INITRDSTART='none'/"      "$target"/etc/default/mdadm
 fi
