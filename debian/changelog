@@ -28,6 +28,7 @@ grml-live (0.0.4) unstable; urgency=low
   * Use iceweasel/firefox as x-www-browser and w3m as www-browser (if
     available). 
   * Make sure the initrd does not start mdadm automatically.
+  * Check for presence of the initrd.
 
  -- Michael Prokop <mika@grml.org>  Thu, 04 Oct 2007 22:16:34 +0200
 

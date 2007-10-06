@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Thu Oct 04 22:16:28 CEST 2007 [mika]
+# Latest change: Sat Oct 06 18:28:57 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -300,9 +300,19 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
    else
       # booting stuff:
       mkdir -p "$BUILD_OUTPUT"/boot/isolinux
-      cp /boot/memtest86+.bin                              "$BUILD_OUTPUT"/boot/isolinux/memtest
-      # do not keep the initrd inside the chroot, let's save space instead:
-      mv "$CHROOT_OUTPUT"/boot/initrd*                     "$BUILD_OUTPUT"/boot/isolinux/initrd.gz
+      cp /boot/memtest86+.bin "$BUILD_OUTPUT"/boot/isolinux/memtest
+
+      # if we don't have an initrd we a) can't boot and b) there was an error
+      # during build, so check for the file:
+      if [ -f "$CHROOT_OUTPUT"/boot/initrd* ] ; then
+         # do not keep the initrd inside the chroot, let's save space instead:
+         mv "$CHROOT_OUTPUT"/boot/initrd*                     "$BUILD_OUTPUT"/boot/isolinux/initrd.gz
+      else
+         log "No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting"
+         eerror "No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
+         bailout 10
+      fi
+
       cp "$CHROOT_OUTPUT"/boot/vmlinuz*                    "$BUILD_OUTPUT"/boot/isolinux/linux26
       cp /usr/lib/syslinux/chain.c32                       "$BUILD_OUTPUT"/boot/isolinux/
       cp /usr/lib/syslinux/isolinux.bin                    "$BUILD_OUTPUT"/boot/isolinux/
