@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Sep 16 22:56:40 CEST 2007 [mika]
+# Latest change: Sat Oct 06 16:47:50 CEST 2007 [mika]
 ################################################################################
 
 set -u
@@ -15,6 +15,12 @@ cp /etc/grml/fai/live-initramfs/grml-script.init-top "$target/usr/share/initramf
 
 FILE=$(ls -1 $target/boot/vmlinuz-* | sort -r | head -1)
 KERNELVERSION=$(echo "${FILE##$target/boot/vmlinuz-}")
+
+# make sure mdadm isn't executed in initrd:
+if [ -d "$target"/etc/default/mdadm ] ; then
+   sed -i "s/START_DAEMON=.*/s/START_DAEMON='false'/" "$target"/etc/default/mdadm
+   sed -i "s/INITRDSTART=.*/INITRDSTART='none'/"      "$target"/etc/default/mdadm
+fi
 
 $ROOTCMD update-initramfs -c -t -k $KERNELVERSION
 

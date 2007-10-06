@@ -10,8 +10,9 @@ Linux Live system (CD/ISO)
 Synopsis
 --------
 
-grml-live [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ] [-r <release_name>]
-[-s <suite>] [-t <target_directory>] [-v <version_number>] [-FVh]
+grml-live [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ] [-o
+<output_directory>] [-r <release_name>] [-s <suite>] [-t <template_directory>]
+[-v <version_number>] [-FVh]
 
 *******************************************************************************
 Important! This document is growing as requested. If you have questions which
@@ -76,8 +77,15 @@ Display short usage information and exit.
 
   -i **ISO_NAME**::
 
-Specify name of ISO which will be available inside $TARGET_DIRECTORY/grml_isos
+Specify name of ISO which will be available inside $OUTPUT_DIRECTORY/grml_isos
 by default.
+
+  -o **OUTPUT_DIRECTORY**::
+
+Main output directory of the build process of FAI.  Some directories are created
+inside this target directory, being: grml_cd (where the files for creating the
+ISO are located, including the compressed squashfs file), grml_chroot (the
+chroot system) and grml_isos (where the resulting ISO is stored).
 
   -r **RELEASENAME**::
 
@@ -88,12 +96,10 @@ Specify name of the release.
 Specify the Debian suite you want to use for your live-system.  Defaults to
 "etch" (being current Debian/stable). Supported values are: etch, lenny, sid.
 
-  -t **TARGET_DIRECTORY**::
+  -t **TEMPLATE_DIRECTORY**::
 
-Main output directory of the build process of FAI.  Some directories are created
-inside this target directory, being: grml_cd (where the files for creating the
-ISO are located, including the compressed squashfs file), grml_chroot (the
-chroot system) and grml_isos (where the resulting ISO is stored).
+Specify place of the templates used for building the ISO. By default 
+(and if not manually specified) this is /usr/share/grml-live/templates/.
 
   -v **VERSION_NUMBER**::
 
@@ -114,13 +120,13 @@ as build and output directory just run:
 To get a small Debian-unstable and grml-small based Live-CD using
 /home/mika/grml-live as build and output directory just use:
 
-  # grml-live -c GRMLBASE,GRML_SMALL,I386 -t /home/mika/grml-live
+  # grml-live -c GRMLBASE,GRML_SMALL,I386 -o /home/mika/grml-live
 
 To get a small, Debian-unstable and grml-based Live-CD using /tmp as build and
 output directory and use grml_0.0-3.iso as ISO name (placed inside
 /tmp/grml_isos) just invoke:
 
-  # grml-live -t /tmp -c GRMLBASE,GRML_SMALL,I386 -s sid -i grml_0.0-3.iso
+  # grml-live -o /tmp -c GRMLBASE,GRML_SMALL,I386 -s sid -i grml_0.0-3.iso
 
 [NOTE]
 
@@ -128,8 +134,8 @@ If you have about 700MB of free space inside /dev/shm (being a tmpfs, usually
 you should have >=1GB of RAM) just run "mount -o remount,suid,dev,rw /dev/shm"
 and use /dev/shm as build and output directory - resulting in very fast build
 process.  But please be aware of the fact that rebooting your system will result
-in an empty /dev/shm, so please another directory for $CHROOT_TARGET,
-$BUILD_TARGET and $ISO_TARGET if you plan to create more persistent output. :)
+in an empty /dev/shm, so please another directory for $CHROOT_OUTPUT,
+$BUILD_OUTPUT and $ISO_OUTPUT if you plan to create more persistent output. :)
 
 Main features of grml-live
 --------------------------
@@ -282,8 +288,8 @@ send us a bug report then) [a usual link:http://grml.org/grml2hd/[grml2hd]
 harddisk installation ships all you need]
 
 * enough free disk space; at least 800MB are required for a minimal grml-live
-run (\~400MB for the chroot [$CHROOT_TARGET], \~150MB for the build target
-[$BUILD_TARGET] and \~150MB for the resulting ISO [$ISO_TARGET] plus some
+run (\~400MB for the chroot [$CHROOT_OUTPUT], \~150MB for the build target
+[$BUILD_OUTPUT] and \~150MB for the resulting ISO [$ISO_OUTPUT] plus some
 temporary files), if you plan to use GRML_FULL you should have at least 4GB of
 total free disk space
 

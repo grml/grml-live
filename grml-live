@@ -49,7 +49,7 @@ PN=$(basename $0)
 
 # clean exit {{{
 bailout() {
-  [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_TARGET}/${MIRROR_DIRECTORY}"
+  [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
   [ -n "$1" ] && EXIT="$1" || EXIT="1"
   [ -n "$2" ] && eerror "$2">&2
   exit "$EXIT"
@@ -63,7 +63,7 @@ trap bailout 1 2 3 15
 [ -n "$USERNAME" ] || USERNAME=grml
 [ -n "$CLASSES" ]  || CLASSES="GRML,I386"
 [ -n "$BOOT_METHOD" ] || BOOT_METHOD='isolinux'
-[ -n "$TARGET" ] || bailout 1 "${PN}: \$TARGET not specified. Please adjust $LIVE_CONF. Exiting."
+[ -n "$OUTPUT" ] || bailout 1 "${PN}: \$OUTPUT not specified. Please adjust $LIVE_CONF. Exiting."
 
 [ -n "$VERSION" ]  || VERSION="0.0.1"
 [ -n "$RELEASENAME" ] || RELEASENAME="grml-live rocks"
@@ -129,17 +129,17 @@ usage()
 $PN - build process script for generating a (grml based) Linux Live-ISO
 
 Usage: $PN [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ] \\
-                 [-r <release_name>] [-s <suite>] [-t <target_directory>] \\
-                 [-v <version_number>] [-FVh]
+                 [-o <output_directory>] [-s <suite>] [-t <template_directory>] \\
+                 [-s <suite>] [-v <version_number>] [-FVh]
 
 Usage examples:
 
     $PN
-    $PN -c GRMLBASE,GRML_X,I386 -t /grml/
-    $PN -c GRMLBASE,I386 -t /dev/shm/grml
+    $PN -c GRMLBASE,GRML_SMALL,I386 -o /grml/
+    $PN -c GRMLBASE,GRML_MEDIUM,I386 -o /dev/shm/grml
     $PN -c GRMLBASE,GRML_SMALL,I386 -g grml-small -v 1.0
-    $PN -c GRMLBASE,I386 -i grml_0.0-1.iso
-    $PN -c GRMLBASE,I386 -s sid -V
+    $PN -c GRMLBASE,GRML_FULL,I386 -i grml_0.0-1.iso
+    $PN -c GRMLBASE,GRML_FULL,I386 -s sid -V
 
 More details: man grml-live
               /usr/share/doc/grml-live/grml-live.html
@@ -159,10 +159,11 @@ while getopts "c:g:i:r:s:t:v:FhV" opt; do
     i) ISO_NAME="$OPTARG" ;;
     r) RELEASENAME="$OPTARG" ;;
     s) SUITE="$OPTARG" ;;
-    t) TARGET="$OPTARG"
-       CHROOT_TARGET="$TARGET/grml_chroot"
-       BUILD_TARGET="$TARGET/grml_cd"
-       ISO_TARGET="$TARGET/grml_isos"
+    t) TEMPLATE_DIRECTORY="$OPTARG"
+    o) OUTPUT="$OPTARG"
+       CHROOT_OUTPUT="$OUTPUT/grml_chroot"
+       BUILD_OUTPUT="$OUTPUT/grml_cd"
+       ISO_OUTPUT="$OUTPUT/grml_isos"
        ;;
     v) VERSION="$OPTARG" ;;
     F) FORCE=1 ;;
@@ -178,7 +179,7 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 # some misc checks before executing FAI {{{
 [ -n "$CLASSES" ] || bailout 1 "Error: \$CLASSES unset, please set it in $LIVE_CONF or
 specify it on the command line using the -c|--classes option."
-[ -n "$TARGET" ] || bailout 1 "Error: \$TARGET unset, please set it in $LIVE_CONF or
+[ -n "$OUTPUT" ] || bailout 1 "Error: \$OUTPUT unset, please set it in $LIVE_CONF or
 specify it on the command line using the -t|--target option."
 # }}}
 
@@ -188,10 +189,10 @@ if [ -z "$FORCE" ] ; then
    echo "${PN}: check your configuration (or use -F to force execution without prompting):"
    echo
    echo "  FAI classes:       $CLASSES"
-   echo "  main directory:    $TARGET"
-   [ -n "$CHROOT_TARGET" ] && echo "  chroot target:     $CHROOT_TARGET"
-   [ -n "$BUILD_TARGET" ]  && echo "  build target:      $BUILD_TARGET"
-   [ -n "$ISO_TARGET" ]    && echo "  ISO target:        $ISO_TARGET"
+   echo "  main directory:    $OUTPUT"
+   [ -n "$CHROOT_OUTPUT" ] && echo "  chroot target:     $CHROOT_OUTPUT"
+   [ -n "$BUILD_OUTPUT" ]  && echo "  build target:      $BUILD_OUTPUT"
+   [ -n "$ISO_OUTPUT" ]    && echo "  ISO target:        $ISO_OUTPUT"
    [ -n "$GRML_NAME" ]     && echo "  grml name:         $GRML_NAME"
    [ -n "$RELEASENAME" ]   && echo "  release name:      $RELEASENAME"
    [ -n "$VERSION" ]       && echo "  grml version:      $VERSION"
@@ -246,22 +247,22 @@ if [ -n "$SUITE" ] ; then
 fi
 # }}}
 
-# CHROOT_TARGET - execute FAI {{{
-[ -n "$CHROOT_TARGET" ] || CHROOT_TARGET="$TARGET/grml_chroot"
+# CHROOT_OUTPUT - execute FAI {{{
+[ -n "$CHROOT_OUTPUT" ] || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
 
-if [ -d "$CHROOT_TARGET/bin" ] ; then
-   log "$CHROOT_TARGET exists already, skipping stage 'fai dirinstall'"
-   ewarn "$CHROOT_TARGET exists already, skipping stage 'fai dirinstall'" ; eend 0
+if [ -d "$CHROOT_OUTPUT/bin" ] ; then
+   log "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'"
+   ewarn "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'" ; eend 0
 else
-   mkdir -p "$CHROOT_TARGET" || bailout 5 "Problem with creating $CHROOT_TARGET for FAI"
+   mkdir -p "$CHROOT_OUTPUT" || bailout 5 "Problem with creating $CHROOT_OUTPUT for FAI"
    if [ -n "${MIRROR_DIRECTORY}" ] ; then
-      mkdir -p "${CHROOT_TARGET}/${MIRROR_DIRECTORY}"
-      mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_TARGET}/${MIRROR_DIRECTORY}"
+      mkdir -p "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
+      mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
    fi
-   fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u "$HOSTNAME" dirinstall "$CHROOT_TARGET" $FAI_ARGS | tee -a $LOGFILE
-   umount $CHROOT_TARGET/proc 2>/dev/null || /bin/true
-   umount $CHROOT_TARGET/sys  2>/dev/null || /bin/true
-   [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_TARGET}/${MIRROR_DIRECTORY}"
+   fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u "$HOSTNAME" dirinstall "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
+   umount $CHROOT_OUTPUT/proc 2>/dev/null || /bin/true
+   umount $CHROOT_OUTPUT/sys  2>/dev/null || /bin/true
+   [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
 
    # notice: 'fai dirinstall' does not seem to exit appropriate, so:
    ERROR=''
@@ -285,34 +286,34 @@ else
 fi
 # }}}
 
-# BUILD_TARGET - execute arch specific stuff and squashfs {{{
-[ -n "$BUILD_TARGET" ] || BUILD_TARGET="$TARGET/grml_cd"
-mkdir -p "$BUILD_TARGET" || bailout 6 "Problem with creating $BUILD_TARGET for stage ARCH"
+# BUILD_OUTPUT - execute arch specific stuff and squashfs {{{
+[ -n "$BUILD_OUTPUT" ] || BUILD_OUTPUT="$OUTPUT/grml_cd"
+mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for stage ARCH"
 
 [ -n "$ARCH" ] || ARCH="$(dpkg --print-architecture)"
 
 # i386:
 if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
-   if [ -d "$BUILD_TARGET"/boot ] ; then
-      log "$BUILD_TARGET/boot exists already, skipping stage 'boot'"
-      ewarn "$BUILD_TARGET/boot exists already, skipping stage 'boot'" ; eend 0
+   if [ -d "$BUILD_OUTPUT"/boot ] ; then
+      log "$BUILD_OUTPUT/boot exists already, skipping stage 'boot'"
+      ewarn "$BUILD_OUTPUT/boot exists already, skipping stage 'boot'" ; eend 0
    else
       # booting stuff:
-      mkdir -p "$BUILD_TARGET"/boot/isolinux
-      cp /boot/memtest86+.bin                              "$BUILD_TARGET"/boot/isolinux/memtest
+      mkdir -p "$BUILD_OUTPUT"/boot/isolinux
+      cp /boot/memtest86+.bin                              "$BUILD_OUTPUT"/boot/isolinux/memtest
       # do not keep the initrd inside the chroot, let's save space instead:
-      mv "$CHROOT_TARGET"/boot/initrd*                     "$BUILD_TARGET"/boot/isolinux/initrd.gz
-      cp "$CHROOT_TARGET"/boot/vmlinuz*                    "$BUILD_TARGET"/boot/isolinux/linux26
-      cp /usr/lib/syslinux/chain.c32                       "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/lib/syslinux/isolinux.bin                    "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/lib/syslinux/memdisk                         "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/lib/syslinux/menu.c32                        "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/templates/boot/isolinux/*    "$BUILD_TARGET"/boot/isolinux/
-      cp /usr/share/grml-live/templates/boot/isolinux/*    "$BUILD_TARGET"/boot/isolinux/
-      cp -a /usr/share/grml-live/templates/boot/grub       "$BUILD_TARGET"/boot/
+      mv "$CHROOT_OUTPUT"/boot/initrd*                     "$BUILD_OUTPUT"/boot/isolinux/initrd.gz
+      cp "$CHROOT_OUTPUT"/boot/vmlinuz*                    "$BUILD_OUTPUT"/boot/isolinux/linux26
+      cp /usr/lib/syslinux/chain.c32                       "$BUILD_OUTPUT"/boot/isolinux/
+      cp /usr/lib/syslinux/isolinux.bin                    "$BUILD_OUTPUT"/boot/isolinux/
+      cp /usr/lib/syslinux/memdisk                         "$BUILD_OUTPUT"/boot/isolinux/
+      cp /usr/lib/syslinux/menu.c32                        "$BUILD_OUTPUT"/boot/isolinux/
+      cp /usr/share/grml-live/templates/boot/isolinux/*    "$BUILD_OUTPUT"/boot/isolinux/
+      cp /usr/share/grml-live/templates/boot/isolinux/*    "$BUILD_OUTPUT"/boot/isolinux/
+      cp -a /usr/share/grml-live/templates/boot/grub       "$BUILD_OUTPUT"/boot/
 
-      [ -d "$BUILD_TARGET"/GRML ] || mkdir "$BUILD_TARGET"/GRML
-      cp -a /usr/share/grml-live/templates/GRML/* "$BUILD_TARGET"/GRML/
+      [ -d "$BUILD_OUTPUT"/GRML ] || mkdir "$BUILD_OUTPUT"/GRML
+      cp -a /usr/share/grml-live/templates/GRML/* "$BUILD_OUTPUT"/GRML/
 
       # adjust boot splash information:
       ISO_DATE="$(date +%Y-%m-%d)"
@@ -320,28 +321,28 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       RELEASE_INFO="$(cut_string 68 "$RELEASE_INFO")"
       RELEASE_INFO="$(extend_string_end 68 "$RELEASE_INFO")"
 
-      sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_TARGET"/GRML/grml-version
-      sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_TARGET"/GRML/grml-version
+      sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/GRML/grml-version
+      sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_OUTPUT"/GRML/grml-version
 
-      sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_TARGET"/boot/isolinux/boot.msg
-      sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_TARGET"/boot/isolinux/boot.msg
+      sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_OUTPUT"/boot/isolinux/boot.msg
+      sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_OUTPUT"/boot/isolinux/boot.msg
 
-      sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_TARGET"/boot/isolinux/boot-beep.msg
-      sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_TARGET"/boot/isolinux/boot-beep.msg
+      sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_OUTPUT"/boot/isolinux/boot-beep.msg
+      sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_OUTPUT"/boot/isolinux/boot-beep.msg
 
-      sed -i "s/%VERSION%/$VERSION/"           "$BUILD_TARGET"/boot/grub/menu.lst
-      sed -i "s/%GRML_NAME%/$GRML_NAME/"       "$BUILD_TARGET"/boot/grub/menu.lst
+      sed -i "s/%VERSION%/$VERSION/"           "$BUILD_OUTPUT"/boot/grub/menu.lst
+      sed -i "s/%GRML_NAME%/$GRML_NAME/"       "$BUILD_OUTPUT"/boot/grub/menu.lst
 
       # autostart for Windows:
-      cp /usr/share/grml-live/templates/windows/autostart/* "$BUILD_TARGET"/
+      cp /usr/share/grml-live/templates/windows/autostart/* "$BUILD_OUTPUT"/
       # windows-binaries:
       if [ -n "$WINDOWS_BINARIES" ] ; then
-         if [ -f "$BUILD_TARGET"/windows/putty.exe ] ; then
-            log "$BUILD_TARGET/windows exists already, skipping stage 'WINDOWS_BINARIES'"
-            ewarn "$BUILD_TARGET/windows exists already, skipping stage 'WINDOWS_BINARIES'" ; eend 0
+         if [ -f "$BUILD_OUTPUT"/windows/putty.exe ] ; then
+            log "$BUILD_OUTPUT/windows exists already, skipping stage 'WINDOWS_BINARIES'"
+            ewarn "$BUILD_OUTPUT/windows exists already, skipping stage 'WINDOWS_BINARIES'" ; eend 0
          else
-            mkdir "$BUILD_TARGET"/windows
-            ( cd "$BUILD_TARGET"/windows
+            mkdir "$BUILD_OUTPUT"/windows
+            ( cd "$BUILD_OUTPUT"/windows
               for file in pageant plink pscp psftp putty puttygen ; do
                  wget -O ${file}.exe ${WINDOWS_BINARIES}/${file}.exe
               done )
@@ -359,23 +360,23 @@ else
    eerror 'Error: Unsupported ARCH, sorry. Want to support it? Contribute!' ; eend 1
 fi
 
-if [ -f "$BUILD_TARGET"/live/grml.squashfs ] ; then
-   log "$BUILD_TARGET/live exists already, skipping stage 'squashfs'"
-   ewarn "$BUILD_TARGET/live exists already, skipping stage 'squashfs'" ; eend 0
+if [ -f "$BUILD_OUTPUT"/live/grml.squashfs ] ; then
+   log "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'"
+   ewarn "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'" ; eend 0
 else
-   mkdir "$BUILD_TARGET"/live
-   mksquashfs $CHROOT_TARGET/* $BUILD_TARGET/live/grml.squashfs -noappend
+   mkdir "$BUILD_OUTPUT"/live
+   mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend
    log "Finished execution of stage 'squashfs' [$(date)]"
    einfo "Finished execution of stage 'squashfs'" ; eend 0
 fi
 
 # create md5sum file:
-( cd $BUILD_TARGET/GRML &&
+( cd $BUILD_OUTPUT/GRML &&
 find .. -type f -not -name md5sums -not -name isolinux.bin -exec md5sum {} \; > md5sums )
 # }}}
 
-# ISO_TARGET - mkisofs {{{
-[ -n "$ISO_TARGET" ] || ISO_TARGET="$TARGET/grml_isos"
+# ISO_OUTPUT - mkisofs {{{
+[ -n "$ISO_OUTPUT" ] || ISO_OUTPUT="$OUTPUT/grml_isos"
 [ -n "$ISO_NAME" ] || ISO_NAME="${GRML_NAME}_${VERSION}.iso"
 
 if [ "$BOOT_METHOD" = "isolinux" ] ; then
@@ -384,17 +385,17 @@ elif [ "$BOOT_METHOD" = "grub" ] ; then
    BOOT_FILE="boot/grub/stage2_eltorito"
 fi
 
-if [ -f "${ISO_TARGET}/${ISO_NAME}" ] ; then
-   log "$ISO_TARGET exists already, skipping stage 'iso build'"
-   ewarn "$ISO_TARGET exists already, skipping stage 'iso build'" ; eend 0
+if [ -f "${ISO_OUTPUT}/${ISO_NAME}" ] ; then
+   log "$ISO_OUTPUT exists already, skipping stage 'iso build'"
+   ewarn "$ISO_OUTPUT exists already, skipping stage 'iso build'" ; eend 0
 else
-   mkdir -p "$ISO_TARGET" || bailout 6 "Problem with creating $ISO_TARGET for stage 'iso build'"
+   mkdir -p "$ISO_OUTPUT" || bailout 6 "Problem with creating $ISO_OUTPUT for stage 'iso build'"
    CURRENT_DIR=$(pwd)
-   cd "$BUILD_TARGET" &&
+   cd "$BUILD_OUTPUT" &&
    mkisofs -V "grml $VERSION" -publisher 'grml-live | grml.org' \
            -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
            -b $BOOT_FILE \
-           -o "${ISO_TARGET}/${ISO_NAME}" . ; RC=$?
+           -o "${ISO_OUTPUT}/${ISO_NAME}" . ; RC=$?
    cd $CURRENT_DIR
    if [ "$RC" = 0 ] ; then
       log "Finished execution of stage 'iso build' [$(date)]"

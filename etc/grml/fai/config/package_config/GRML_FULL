@@ -955,6 +955,7 @@ irssi-plugin-xmpp
 irssi-scripts
 irssi-text
 isakmpd
+iscsitarget
 isdnactivecards
 isdnutils-base
 isdnvboxclient
@@ -2083,6 +2084,7 @@ exmap-modules-2.6.22-grml
 grml-kerneladdons-2.6.22
 gspca-modules-2.6.22-grml
 ipw3945-modules-2.6.22-grml
+iscsitarget-module-2.6.22-grml
 kqemu-modules-2.6.22-grml
 linux-doc-2.6.22-grml
 linux-headers-2.6.22-grml
