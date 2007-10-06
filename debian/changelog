@@ -1,8 +1,8 @@
 grml-live (0.0.4) unstable; urgency=low
 
- * The -t option for specifying the output directory has been
-   renamed into -o. The option -t now specifies the place where
-   templates for building the ISO can be found.
+  * The -t option for specifying the output directory has been
+    renamed into -o. The option -t now specifies the place where
+    templates for building the ISO can be found.
   * Check for /var/run/fai/FAI_INSTALLATION_IN_PROGRESS and exit then.
   * /etc/grml/fai/config/hooks/instsoft.GRMLBASE:
     - disable pipeline workaround 

@@ -1,7 +1,7 @@
 grml-live (0.0.4) unstable; urgency=low
 
- * The -t option for specifying the output directory has been
-   renamed into -o. The option -t now specifies the place where
-   templates for building the ISO can be found.
+  * The -t option for specifying the output directory has been
+    renamed into -o. The option -t now specifies the place where
+    templates for building the ISO can be found.
 
  -- Michael Prokop <mika@grml.org>  Sat, 06 Oct 2007 16:50:16 +0200
