@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Sep 16 23:02:53 CEST 2007 [mika]
+# Latest change: Sat Oct 06 13:04:13 CEST 2007 [mika]
 ################################################################################
 
 set -u
@@ -20,6 +20,14 @@ fi
 
 if [ -r $target/etc/X11/cursors/whiteglass.theme ] ; then
    $ROOTCMD update-alternatives --set x-cursor-theme /etc/X11/cursors/whiteglass.theme
+fi
+
+if [ -r $target/usr/bin/iceweasel ] ; then
+   $ROOTCMD update-alternatives --set x-www-browser /usr/bin/iceweasel
+fi
+
+if [ -r $target/usr/bin/w3m ] ; then
+   $ROOTCMD update-alternatives --set www-browser /usr/bin/w3m
 fi
 
 ## END OF FILE #################################################################

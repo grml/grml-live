@@ -18,6 +18,8 @@ grml-live (0.0.4) unstable; urgency=low
   * Set $HOSTNAME to according hostname via
     /etc/grml/fai/config/scripts/GRMLBASE/34-hosts
   * Adjust filename in header of /etc/grml/fai/config/scripts/GRMLBASE/*.
+  * Use iceweasel/firefox as x-www-browser and w3m as www-browser (if
+    available).
 
  -- Michael Prokop <mika@grml.org>  Thu, 04 Oct 2007 22:16:34 +0200
 
