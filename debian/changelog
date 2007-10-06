@@ -9,6 +9,8 @@ grml-live (0.0.4) unstable; urgency=low
     it to save a few more MBs of space.
   * Use /var/log/grml-live.log as log file as /var/log/fai/* is too
     dangerous because of automatic removal of the files/dirs via fai.
+  * Use class GRML_MEDIUM by default and document GRMLBASE, GRML_* plus
+    I386/AMD64 classes in the docs.
 
  -- Michael Prokop <mika@grml.org>  Thu, 04 Oct 2007 22:16:34 +0200
 

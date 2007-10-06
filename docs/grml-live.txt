@@ -55,8 +55,12 @@ Options
   -c **CLASSES**::
 
 Specify the CLASSES to be used for building the ISO via FAI.  By default only
-the classes GRMLBASE and I386 are assumed, resulting in a small base system
-(being about ~150MB total ISO size) for x86 (32bit).
+the classes GRMLBASE, GRML_SMALL and I386 are assumed, resulting in a small base
+system (being about ~150MB total ISO size). If using a non-I386 system (like
+amd64) you should specify the appropriate architecture as well. Additionally you
+can specify a class providing a grml-kernel (see
+/etc/grml/fai/config/package_config/ for a full list).  So instead of GRML_SMALL
+you can also use GRML_MEDIUM and GRML_FULL instead.
 
   -F::
 
@@ -82,8 +86,7 @@ Specify name of the release.
   -s **SUITE**::
 
 Specify the Debian suite you want to use for your live-system.  Defaults to
-"etch" (being current Debian/stable). Supported values are: etch, lenny, sid,
-stable, testing, unstable.
+"etch" (being current Debian/stable). Supported values are: etch, lenny, sid.
 
   -t **TARGET_DIRECTORY**::
 
@@ -117,7 +120,7 @@ To get a small, Debian-unstable and grml-based Live-CD using /tmp as build and
 output directory and use grml_0.0-3.iso as ISO name (placed inside
 /tmp/grml_isos) just invoke:
 
-  # grml-live -t /tmp -c GRMLBASE,I386 -s sid -i grml_0.0-3.iso
+  # grml-live -t /tmp -c GRMLBASE,GRML_SMALL,I386 -s sid -i grml_0.0-3.iso
 
 [NOTE]
 
@@ -153,9 +156,10 @@ losing the simplicity in the build process.
 
 The main and base class provided by grml-live is named GRMLBASE. It's strongly
 recommended to **always** use the class GRMLBASE when building an ISO using
-grml-live, as well as the architecture dependend class which provides the kernel
-(being 'I386' for x86_32 currently only). The following files and directories
-are relevant for class GRMLBASE by default:
+grml-live, as well as the architecture dependent class which provides the kernel
+(being 'I386' for x86_32 and 'AMD64' for x86_64) and a GRML_* class (like
+GRML_SMALL, GRML_MEDIUM or GRML_FULL). The following files and directories are
+relevant for class GRMLBASE by default:
 
   /etc/grml/fai/config/scripts/GRMLBASE/
   /etc/grml/fai/config/debconf/GRMLBASE
@@ -169,9 +173,9 @@ files/directories.
 If you want to use your own configuration, extend an existing configuration
 and/or add additional packages to your ISO just invent a new class (or extend an
 existing one). For example if you want to use your own class named "FOOBAR" just
-extend CLASSES="GRMLBASE,I386" inside /etc/grml/grml-live.conf to
-CLASSES="GRMLBASE,I386,FOOBAR" or invoke grml-live using the classes option:
-"grml-live -c GRMLBASE,I386,FOOBAR ...".
+extend CLASSES="GRMLBASE,GRML_SMALL,I386" inside /etc/grml/grml-live.conf to
+CLASSES="GRMLBASE,GRML_SMALL,I386,FOOBAR" or invoke grml-live using the classes
+option: "grml-live -c GRMLBASE,GRML_SMALL,I386,FOOBAR ...".
 
 More details regarding the class concept can be found in the documentation of
 FAI itself (being available at /usr/share/doc/fai-doc/).
@@ -247,12 +251,13 @@ installation process.
 
 Directory with lists of software packages to be installed or removed.  The
 different classes describe what should find its way to your ISO.  When running
-"grml-live -c GRMLBASE,I386 ..." only the files from the directories GRMLBASE
-and I386 will be taken, if you use 'grml-live -c GRMLBASE,I386,FOOBAR ...' then
-the files of GRMLBASE, I386 **plus** the files from FOOBAR will be taken. So
-just create a new class to adjust the package selection according to your needs.
-Please notice that the directory GRMLBASE contains a package list defining a
-minimum but still reasonable package configuration.
+"grml-live -c GRMLBASE,GRML_SMALL,I386 ..." only the configuration of GRMLBASE,
+GRML_SMALL and and I386 will be taken. If you use 'grml-live -c
+GRMLBASE,GRML_SMALL,I386,FOOBAR ...' then the files of GRMLBASE, GRML_SMALL,
+I386 **plus** the files from FOOBAR will be taken. So just create a new class to
+adjust the package selection according to your needs.  Please notice that the
+directory GRMLBASE contains a package list defining a minimum but still
+reasonable package configuration.
 
   /etc/grml/fai/config/scripts/
 
@@ -348,7 +353,7 @@ Just create a new class (using the package_config directory):
 
 and specify it when invoking grml-live then:
 
-  # grml-live -c GRMLBASE,I386,MIKA
+  # grml-live -c GRMLBASE,GRML_SMALL,I386,MIKA
 
 I fscked up my grml-live configuration. How do I reset it to the defaults?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
