@@ -11,6 +11,10 @@ grml-live (0.0.4) unstable; urgency=low
     dangerous because of automatic removal of the files/dirs via fai.
   * Use class GRML_MEDIUM by default and document GRMLBASE, GRML_* plus
     I386/AMD64 classes in the docs.
+  * Add new packages to GRML_FULL:
+    - tgt: Linux target framework user-space tools
+    - paperkey: extract just the secret information out ouf OpenPGP keys
+    - gitpkg: helper scripts for maintaining packages with git
 
  -- Michael Prokop <mika@grml.org>  Thu, 04 Oct 2007 22:16:34 +0200
 

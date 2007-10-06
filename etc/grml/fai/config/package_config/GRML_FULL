@@ -788,6 +788,7 @@ giblib1
 gif2png
 giftcurs
 git-core
+gitpkg
 gitweb
 gkermit
 gkrellm
@@ -1289,6 +1290,7 @@ pads
 paketto
 pal
 pamusb-tools
+paperkey
 par
 par2
 paris-traceroute
@@ -1717,6 +1719,7 @@ texlive-latex-base
 texlive-latex-recommended
 texpower
 textdraw
+tgt
 thttpd
 tidy
 timeout
