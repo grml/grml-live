@@ -1,10 +1,10 @@
 #!/bin/sh
-# Filename:      /etc/grml/fai/config/scripts/GRML/34-hosts
+# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/34-hosts
 # Purpose:       configure /etc/hosts of live-system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Sep 16 23:10:46 CEST 2007 [mika]
+# Latest change: Sat Oct 06 12:35:30 CEST 2007 [mika]
 ################################################################################
 
 set -u
@@ -17,6 +17,9 @@ HOSTNAME=''
 if [ -r /etc/grml/fai/files/etc/hosts ] ; then
    cp /etc/grml/fai/files/etc/hosts $target/etc/hosts
 fi
+
+# replace $HOSTNAME with the real hostname:
+sed -i "s/\$HOSTNAME/$HOSTNAME/" $target/etc/hosts
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

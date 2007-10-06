@@ -1,5 +1,5 @@
 #!/bin/sh
-# Filename:      /etc/grml/fai/config/scripts/GRML/05-hostname
+# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/05-hostname
 # Purpose:       set hostname of live-system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/

@@ -1,5 +1,5 @@
 #!/bin/sh
-# Filename:      /etc/grml/fai/config/scripts/GRML/25-locales
+# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/25-locales
 # Purpose:       locales (language) configuration of the live system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/

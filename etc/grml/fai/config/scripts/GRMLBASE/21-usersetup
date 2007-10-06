@@ -1,5 +1,5 @@
 #!/bin/sh
-# Filename:      /etc/grml/fai/config/scripts/GRML/21-usersetup
+# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/21-usersetup
 # Purpose:       adjust user setup of the live-system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
