@@ -1,3 +1,13 @@
+grml-live (0.0.5) unstable; urgency=low
+
+  * Add new scripts to /usr/share/grml-live/examples/buildd/:
+    - grml-live_autobuild_grml-small_etch.sh
+    - grml-live_autobuild_grml-small_sid.sh
+    - grml-live_autobuild_grml64-small_etch.sh
+    - grml-live_autobuild_grml64-small_sid.sh
+
+ -- Michael Prokop <mika@grml.org>  Sun, 07 Oct 2007 23:06:28 +0200
+
 grml-live (0.0.4) unstable; urgency=low
 
   * The -t option for specifying the output directory has been
