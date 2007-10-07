@@ -27,6 +27,7 @@ grml-live (0.0.4) unstable; urgency=low
     available). 
   * Check for presence of the initrd.
   * Improve adjustment of suite for $FAI_DEBOOTSTRAP.
+  * Add /usr/share/grml-live/examples/buildd/
 
  -- Michael Prokop <mika@grml.org>  Thu, 04 Oct 2007 22:16:34 +0200
 
