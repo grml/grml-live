@@ -242,9 +242,8 @@ if [ -n "$SUITE" ] ; then
    sed -i "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" $LIVE_CONF
    sed -i "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" /etc/grml/fai/apt/sources.list
 
-   DIST='\"etch\|=\"stable=\"lenny=\"testing=\"sid=\"unstable'
-   sed -i "s#FAI_DEBOOTSTRAP=$DIST#FAI_DEBOOTSTRAP=\"$SUITE#" $LIVE_CONF
-   sed -i "s#FAI_DEBOOTSTRAP=$DIST#FAI_DEBOOTSTRAP=\"$SUITE#" /etc/grml/fai/make-fai-nfsroot.conf
+   sed -i "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" $LIVE_CONF
+   sed -i "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" /etc/grml/fai/make-fai-nfsroot.conf
 fi
 # }}}
 
