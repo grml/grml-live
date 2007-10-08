@@ -5,6 +5,8 @@ grml-live (0.0.5) unstable; urgency=low
     - grml-live_autobuild_grml-small_sid.sh
     - grml-live_autobuild_grml64-small_etch.sh
     - grml-live_autobuild_grml64-small_sid.sh
+  * Add new packages to GRML_FULL:
+    - pristine-tar
 
  -- Michael Prokop <mika@grml.org>  Sun, 07 Oct 2007 23:06:28 +0200
 
