@@ -5,6 +5,7 @@ grml-live (0.0.5) unstable; urgency=low
     - grml-live_autobuild_grml-small_sid.sh
     - grml-live_autobuild_grml64-small_etch.sh
     - grml-live_autobuild_grml64-small_sid.sh
+  * Some more FAI error checking.
   * Add new packages to GRML_FULL:
     - pristine-tar
 
