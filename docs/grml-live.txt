@@ -17,6 +17,7 @@ grml-live [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ] [-o
 *******************************************************************************
 Important! This document is growing as requested. If you have questions which
 aren't answered by this document yet please let me know: <mika@grml.org>!
+This document currently applies to grml-live 0.0.4/0.0.5
 *******************************************************************************
 
 Description
@@ -47,8 +48,9 @@ packages will be downloaded and installed via network. If you want to use a
 local mirror (strongly recommended if you plan to use grml-live more than once)
 checkout mkdebmirror (see /usr/share/doc/grml-live/examples/mkdebmirror),
 debmirror(1), reprepro(1) (see /usr/share/doc/grml-live/examples/reprepro/ for a
-sample configuration) and approx(8). To avoid downloading the base system again
-and again check out FAI's NFSROOT (see FAQ of this document for details).
+sample configuration), apt-cacher(1) and approx(8). To avoid downloading the
+base system again and again check out FAI's NFSROOT (see FAQ of this document
+for details).
 
 Options
 -------
@@ -405,6 +407,31 @@ executing debootstrap. Check out the output for the following lines:
   Extracting /grml/fai/nfsroot/live/filesystem.dir/var/tmp/base.tgz
   Calling task_mirror
   [...]
+
+[NOTE]
+
+Notice that you can also use /etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz if
+you prefer to use /etc as the main configuration directory instead of
+/path/to/nfsroot/.... (Thanks to Thomas Lange for the tip.)
+
+Set up apt-cacher for use with grml-live
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Make sure /etc/grml/grml-live.conf provides according GRML_LIVE_SOURCES and
+FAI_DEBOOTSTRAP:
+
+  # cat /etc/grml/grml-live.conf
+  [...]
+  GRML_LIVE_SOURCES="
+  deb http://localhost:3142/deb.grml.org grml-stable  main
+  deb http://localhost:3142/deb.grml.org grml-testing main
+  deb http://localhost:3142/ftp.de.debian.org/debian etch main contrib non-free
+  "
+  [...]
+  FAI_DEBOOTSTRAP="etch http://localhost:3142/ftp.de.debian.org/debian etch main contrib non-free"
+
+Make sure apt-cacher is running (/etc/init.d/apt-cacher restart). That's it.
+All downloaded files will be cached in /var/cache/apt-cacher/ now.
 
 Set up approx for use with grml-live
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
