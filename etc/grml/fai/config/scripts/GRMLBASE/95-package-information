@@ -16,7 +16,7 @@ if [ -x $target/usr/bin/dpkg-query ] ; then
    /var/log/fai/dirinstall/$HOSTNAME/packages.size
 fi
 
-$ROOTCMD COLUMNS=200 dpkg --list > /var/log/fai/dirinstall/$HOSTNAME/dpkg.list
-$ROOTCMD COLUMNS=200 dpkg --get-selections > /var/log/fai/dirinstall/$HOSTNAME/dpkg.selections
+COLUMNS=200 $ROOTCMD dpkg --list > /var/log/fai/dirinstall/$HOSTNAME/dpkg.list
+COLUMNS=200 $ROOTCMD dpkg --get-selections > /var/log/fai/dirinstall/$HOSTNAME/dpkg.selections
 
 ## END OF FILE #################################################################
