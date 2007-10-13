@@ -1,3 +1,10 @@
+grml-etc (1.0.20) unstable; urgency=low
+
+  * Added support for yesss in /etc/wvdial.conf.umts. Thanks for
+    the patch to Karl Voit!
+
+ -- Michael Prokop <mika@grml.org>  Sat, 13 Oct 2007 18:11:48 +0200
+
 grml-etc (1.0.19) unstable; urgency=low
 
   * /etc/skel/.channels/*: update URLs and frequence for Graz

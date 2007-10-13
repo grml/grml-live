@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>, (c) Andreas Gredler <jimmy@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Tue Jun 19 10:19:25 CEST 2007 [jimmy]
+# Latest change: Sam Okt 13 18:11:37 CEST 2007 [mika]
 ################################################################################
 
 # Usage examples:
@@ -105,5 +105,20 @@ ISDN = 0
 
 [Dialer onenozomi]
 Modem = /dev/noz0
+
+# yesss
+# parts extracted from http://www.insync.za.net/3g_docs/wvdial.conf
+[Dialer yesss]
+Phone = *99***1#
+Username = web
+Password = web
+Stupid Mode = 1
+Dial Command = ATDT
+Modem = /dev/ttyUSB0
+Modem Type = Analog Modem
+Baud = 460800
+Init2 = ATZ
+Init3 = ATQ0 V1 E1 S0=0 &C1 &D2 +FCLASS=0
+Init5 = AT+CGDCONT=1,"IP","web.yesss.at";
 
 ## END OF FILE ##################################################################
