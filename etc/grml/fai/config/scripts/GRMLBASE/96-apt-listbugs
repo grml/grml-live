@@ -1,0 +1,23 @@
+#!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/96-apt-listbugs
+# Purpose:       retreive list of bugreports of installed packages inside chroot
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sat Oct 13 18:03:15 CEST 2007 [mika]
+################################################################################
+
+HOSTNAME=''
+[ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
+[ -n "$HOSTNAME" ] || HOSTNAME=grml
+
+if [ -x $target/usr/sbin/apt-listbugs ] ; then
+   for severity in critical grave serious ; do
+       apt-listbugs -s $severity list $(apt-show-source | \
+       grep -v -e 'not installed' -e '--------------' -e 'Version' | \
+       awk '{print $4;}' | grep -v '^[() ]*$'| sort | uniq) \
+       /var/log/fai/dirinstall/$HOSTNAME/bugs.${severity}
+   done
+fi
+
+## END OF FILE #################################################################

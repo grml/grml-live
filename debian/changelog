@@ -7,6 +7,9 @@ grml-live (0.0.5) unstable; urgency=low
     - grml-live_autobuild_grml64-small_sid.sh
   * Some more FAI error checking.
   * Update buildd scripts (better subject handling).
+  * Re-enable 'Acquire::http::Pipeline-Depth' workaround'
+  * Add new scripts for retreiving bugs via apt-listbugs
+    and storing package selection inside log directory.
   * Add new packages to GRML_FULL:
     - ack-grep
     - mailplate

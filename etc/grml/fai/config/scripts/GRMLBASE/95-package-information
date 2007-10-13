@@ -1,0 +1,22 @@
+#!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/95-package-information
+# Purpose:       store package information of chroot system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sat Oct 13 17:48:38 CEST 2007 [mika]
+################################################################################
+
+HOSTNAME=''
+[ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
+[ -n "$HOSTNAME" ] || HOSTNAME=grml
+
+if [ -x $target/usr/bin/dpkg-query ] ; then
+   $ROOTCMD dpkg-query -W --showformat='${Package}\t${Installed-Size;10}\n' > \
+   /var/log/fai/dirinstall/$HOSTNAME/packages.size
+fi
+
+$ROOTCMD COLUMNS=200 dpkg --list > /var/log/fai/dirinstall/$HOSTNAME/dpkg.list
+$ROOTCMD COLUMNS=200 dpkg --get-selections > /var/log/fai/dirinstall/$HOSTNAME/dpkg.selections
+
+## END OF FILE #################################################################

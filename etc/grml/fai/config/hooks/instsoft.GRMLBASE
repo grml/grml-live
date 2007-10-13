@@ -12,7 +12,7 @@ set -e
 
 # work around http://trac.lighttpd.net/trac/ticket/657
 # should be removed later on:
-# echo "Acquire::http::Pipeline-Depth "0";" >> $target/etc/apt/apt.conf
+echo "Acquire::http::Pipeline-Depth "0";" >> $target/etc/apt/apt.conf
 
 # install grml keys:
 gpg --keyserver subkeys.pgp.net --recv-keys F61E2E7CECDEA787
