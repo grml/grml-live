@@ -1081,6 +1081,7 @@ magicrescue
 mailcheck
 maildirsync
 mailfilter
+mailplate
 mailx
 mairix
 make
