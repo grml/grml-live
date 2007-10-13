@@ -254,6 +254,7 @@ apmd
 apt
 apt-dpkg-ref
 apt-file
+apt-listbugs
 apt-listchanges
 apt-show-source
 apt-show-versions
@@ -831,6 +832,7 @@ gs-esp
 gscanbus
 gsfonts
 gsfonts-x11
+gsm-utils
 gtkam
 guessnet
 gv
@@ -1614,6 +1616,7 @@ snarf
 sniffit
 snmp
 snoopy
+snort
 snowdrop
 snownews
 socat
@@ -1889,6 +1892,7 @@ wpasupplicant
 wprint
 wput
 wwwconfig-common
+wvdial
 wyrd
 x-ttcidfont-conf
 x11-common

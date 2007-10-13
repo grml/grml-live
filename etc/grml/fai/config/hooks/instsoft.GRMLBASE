@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sat Oct 06 00:55:29 CEST 2007 [mika]
+# Latest change: Sat Oct 13 23:18:56 CEST 2007 [mika]
 ################################################################################
 
 set -u
@@ -23,6 +23,22 @@ $ROOTCMD apt-key add /etc/apt/grml.key
 # package_config/GRML is being executed:
 $ROOTCMD apt-get update
 $ROOTCMD aptitude -f -y install file-rc
+
+#$ROOTCMD aptitude -f -y install apt-listbugs
+#if [ -r $target/etc/apt/apt.conf.d/10apt-listbugs ] ; then
+#   mv $target/etc/apt/apt.conf.d/10apt-listbugs $target/etc/apt/apt.conf.d/10apt-listbugs.disabled
+#fi
+
+# we definitely don't want to fail running fai dirinstall just
+# because of some well known bugs:
+[ -d $target/etc/apt/apt.conf.d ] || mkdir $target/etc/apt/apt.conf.d
+cat > $target/etc/apt/apt.conf.d/10apt-listbugs << EOF
+// Check all packages whether they has critical bugs before they are installed.
+// If you don't like it, comment it out.
+//DPkg::Pre-Install-Pkgs {"/usr/sbin/apt-listbugs apt || exit 10"};
+//DPkg::Tools::Options::/usr/sbin/apt-listbugs "";
+//DPkg::Tools::Options::/usr/sbin/apt-listbugs::Version "2";
+EOF
 
 # make sure /dev/MAKEDEV is available:
 if [ -x "$target"/sbin/MAKEDEV ] && ! [ -r "$target"/dev/MAKEDEV ] ; then

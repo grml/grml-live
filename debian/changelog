@@ -10,6 +10,12 @@ grml-live (0.0.5) unstable; urgency=low
   * Re-enable 'Acquire::http::Pipeline-Depth' workaround'
   * Add new scripts for retreiving bugs via apt-listbugs
     and storing package selection inside log directory.
+  * Re-enable problematic packages that have been fixed:
+    - apt-listbugs (fixed via manual interaction in scripts)
+    - gsm-utils (#353967)
+    - snort (#443481)
+    - wvdial (fixed via debconf)
+  * Integrate support for apt-listbugs.
   * Add new packages to GRML_FULL:
     - ack-grep
     - mailplate
