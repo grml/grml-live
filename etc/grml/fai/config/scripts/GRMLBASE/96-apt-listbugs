@@ -15,9 +15,9 @@ HOSTNAME=''
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 
 if [ -x $target/usr/sbin/apt-listbugs -a -x $target/usr/bin/apt-show-source ] && \
-   [ -x $target/etc/apt/listbugs ] ; then
+   [ -x $target/etc/apt/grml/listbugs ] ; then
    for severity in critical grave serious ; do
-       SEVERITY=$severity $ROOTCMD /etc/apt/listbugs > \
+       SEVERITY=$severity $ROOTCMD /etc/apt/grml/listbugs > \
        /var/log/fai/dirinstall/$HOSTNAME/bugs.${severity}
    done
 fi
