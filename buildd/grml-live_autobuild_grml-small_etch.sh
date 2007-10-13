@@ -36,7 +36,7 @@ $ISO_DETAILS
 Return code of grml-live run was: $RC
 
 Find details in the attached logs." | \
-mutt -s "grml-live autobuild daemon: $DATE" \
+mutt -s "grml-live_autobuild_grml-small_etch.sh [${DATE}] - $RC" \
      -a ${TMP_DIR}/stdout \
      -a ${TMP_DIR}/stderr \
      -a $ATTACHMENT \

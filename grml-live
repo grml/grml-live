@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sat Oct 06 18:28:57 CEST 2007 [mika]
+# Latest change: Mit Okt 10 09:38:42 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -268,6 +268,8 @@ else
    ERROR=''
    if [ -r "/var/log/fai/dirinstall/$HOSTNAME/software.log" ] ; then
       grep 'dpkg: error processing' /var/log/fai/dirinstall/$HOSTNAME/software.log >> $LOGFILE && ERROR=1
+      grep 'E: Method http has died unexpectedly!' /var/log/fai/dirinstall/$HOSTNAME/software.log >> $LOGFILE && ERROR=2
+      grep 'ERROR: chroot' /var/log/fai/dirinstall/$HOSTNAME/software.log >> $LOGFILE && ERROR=3
    fi
 
    if [ -r "/var/log/fai/dirinstall/$HOSTNAME/shell.log" ] ; then
@@ -275,10 +277,11 @@ else
    fi
 
    if [ -n "$ERROR" ] ; then
-      log "There was an error during execution of stage 'fai dirinstall' [$(date)]"
+      log "There was an error [${ERROR}] during execution of stage 'fai dirinstall' [$(date)]"
       eerror "There was an error during execution of stage 'fai dirinstall'"
       echo "   Check out /var/log/fai/dirinstall/$HOSTNAME/ for details. [exit ${ERROR}]"
-      eend 1 ; exit 1
+      eend 1
+      bailout 1
    else
       log "Finished execution of stage 'fai dirinstall' [$(date)]"
       einfo "Finished execution of stage 'fai dirinstall'"
