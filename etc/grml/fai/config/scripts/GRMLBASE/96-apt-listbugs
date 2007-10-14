@@ -4,22 +4,26 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Oct 14 00:14:02 CEST 2007 [mika]
+# Latest change: Sun Oct 14 11:48:35 CEST 2007 [mika]
 ################################################################################
 
 set -e
 set -u
 
-HOSTNAME=''
-[ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
-[ -n "$HOSTNAME" ] || HOSTNAME=grml
+if ifclass RELEASE ; then
 
-if [ -x $target/usr/sbin/apt-listbugs -a -x $target/usr/bin/apt-show-source ] && \
-   [ -x $target/etc/apt/grml/listbugs ] ; then
-   for severity in critical grave serious ; do
-       SEVERITY=$severity $ROOTCMD /etc/apt/grml/listbugs > \
-       /var/log/fai/dirinstall/$HOSTNAME/bugs.${severity}
-   done
+  HOSTNAME=''
+  [ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
+  [ -n "$HOSTNAME" ] || HOSTNAME=grml
+
+  if [ -x $target/usr/sbin/apt-listbugs -a -x $target/usr/bin/apt-show-source ] && \
+     [ -x $target/etc/apt/grml/listbugs ] ; then
+     for severity in critical grave serious ; do
+         SEVERITY=$severity $ROOTCMD /etc/apt/grml/listbugs > \
+         /var/log/fai/dirinstall/$HOSTNAME/bugs.${severity} || true # make sure it does not fail
+     done
+  fi
+
 fi
 
 ## END OF FILE #################################################################
