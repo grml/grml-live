@@ -188,6 +188,11 @@ option: "grml-live -c GRMLBASE,GRML_SMALL,I386,FOOBAR ...".
 More details regarding the class concept can be found in the documentation of
 FAI itself (being available at /usr/share/doc/fai-doc/).
 
+Available classes
+-----------------
+
+To be done...
+
 Files
 -----
 
