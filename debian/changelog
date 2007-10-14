@@ -6,16 +6,18 @@ grml-live (0.0.5) unstable; urgency=low
     - grml-live_autobuild_grml64-small_etch.sh
     - grml-live_autobuild_grml64-small_sid.sh
   * Some more FAI error checking.
-  * Update buildd scripts (better subject handling).
+  * Updated buildd scripts (better subject handling).
   * Re-enable 'Acquire::http::Pipeline-Depth' workaround'
   * Add new scripts for retreiving bugs via apt-listbugs
     and storing package selection inside log directory.
+    This has been integrated in a new class named "RELEASE".
+  * Added support for new kernel version 2.6.23-grml to
+    GRML_FULL.
   * Re-enable problematic packages that have been fixed:
     - apt-listbugs (fixed via manual interaction in scripts)
     - gsm-utils (#353967)
     - snort (#443481)
     - wvdial (fixed via debconf)
-  * Integrate support for apt-listbugs.
   * Add new packages to GRML_FULL:
     - ack-grep
     - mailplate

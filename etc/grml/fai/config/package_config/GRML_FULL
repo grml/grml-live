@@ -2085,28 +2085,54 @@ zd1211-firmware
 # x86/32bit (class I386) specific packages:
 PACKAGES aptitude I386
 
-aufs-modules-2.6.22-grml
-drbd8-module-2.6.22-grml
-exmap-modules-2.6.22-grml
-grml-kerneladdons-2.6.22
-gspca-modules-2.6.22-grml
-ipw3945-modules-2.6.22-grml
-iscsitarget-module-2.6.22-grml
-kqemu-modules-2.6.22-grml
-linux-doc-2.6.22-grml
-linux-headers-2.6.22-grml
-linux-image-2.6.22-grml
-linux-kernel-headers-grml
-madwifi-modules-2.6.22-grml
-misdn-modules-2.6.22-grml
-ndiswrapper-modules-2.6.22-grml
-openafs-modules-2.6.22-grml
-qc-usb-modules-2.6.22-grml
-realtime-lsm-module-2.6.22-grml
-sl-modem-modules-2.6.22-grml
-sysprof-module-2.6.22-grml
-tidev-modules-2.6.22-grml
-truecrypt-2.6.22-grml
+#acx100-2.6.23-grml
+aufs-modules-2.6.23-grml
+#bcm5700-module-2.6.23-grml
+grml-kerneladdons-2.6.23
+gspca-modules-2.6.23-grml
+ipw3945-modules-2.6.23-grml
+#ivtv-modules-2.6.23-grml
+kqemu-modules-2.6.23-grml
+#kvm-modules-2.6.23-grml
+linux-doc-2.6.23-grml
+linux-headers-2.6.23-grml
+linux-image-2.6.23-grml
+#linux-source-2.6.23-grml
+loop-aes-modules-2.6.23-grml
+nozomi-modules-2.6.23-grml
+#nvidia-kernel-2.6.23-grml
+qc-usb-modules-2.6.23-grml
+realtime-lsm-module-2.6.23-grml
+rt2400-modules-2.6.23-grml
+rt2500-modules-2.6.23-grml
+sl-modem-modules-2.6.23-grml
+#spca5xx-modules-2.6.23-grml
+sysprof-module-2.6.23-grml
+#virtualbox-ose-modules-2.6.23-grml
+#zaptel-modules-2.6.23-grml
+
+#aufs-modules-2.6.22-grml
+#drbd8-module-2.6.22-grml
+#exmap-modules-2.6.22-grml
+#grml-kerneladdons-2.6.22
+#gspca-modules-2.6.22-grml
+#ipw3945-modules-2.6.22-grml
+#iscsitarget-module-2.6.22-grml
+#kqemu-modules-2.6.22-grml
+#linux-doc-2.6.22-grml
+#linux-headers-2.6.22-grml
+#linux-image-2.6.22-grml
+#linux-kernel-headers-grml
+#madwifi-modules-2.6.22-grml
+#misdn-modules-2.6.22-grml
+#ndiswrapper-modules-2.6.22-grml
+#openafs-modules-2.6.22-grml
+#qc-usb-modules-2.6.22-grml
+#realtime-lsm-module-2.6.22-grml
+#sl-modem-modules-2.6.22-grml
+#sysprof-module-2.6.22-grml
+#tidev-modules-2.6.22-grml
+#truecrypt-2.6.22-grml
 
 PACKAGES aptitude AMD64
 linux-image-2.6.20-grml64 aufs-modules-2.6.20-grml64
