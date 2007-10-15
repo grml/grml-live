@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Oct 15 19:12:33 CEST 2007 [mika]
+# Latest change: Mon Oct 15 19:29:19 CEST 2007 [mika]
 ################################################################################
 
 set -u
@@ -24,10 +24,9 @@ $ROOTCMD apt-key add /etc/apt/grml.key
 $ROOTCMD apt-get update
 $ROOTCMD aptitude -f -y install file-rc
 
-#$ROOTCMD aptitude -f -y install apt-listbugs
-#if [ -r $target/etc/apt/apt.conf.d/10apt-listbugs ] ; then
-#   mv $target/etc/apt/apt.conf.d/10apt-listbugs $target/etc/apt/apt.conf.d/10apt-listbugs.disabled
-#fi
+# Workaround #443481 of snort for Debian/etch:
+mkdir -p $target/etc/snort
+echo 'LOGDIR=/var/log/snort' >> $target/etc/snort/snort.common.parameters
 
 # we definitely don't want to fail running fai dirinstall just
 # because of some well known bugs:
