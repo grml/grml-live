@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sat Oct 13 23:18:56 CEST 2007 [mika]
+# Latest change: Mon Oct 15 19:12:33 CEST 2007 [mika]
 ################################################################################
 
 set -u
@@ -12,7 +12,7 @@ set -e
 
 # work around http://trac.lighttpd.net/trac/ticket/657
 # should be removed later on:
-echo "Acquire::http::Pipeline-Depth "0";" >> $target/etc/apt/apt.conf
+echo "Acquire::http::Pipeline-Depth "0"; // added by grml-live" >> $target/etc/apt/apt.conf
 
 # install grml keys:
 gpg --keyserver subkeys.pgp.net --recv-keys F61E2E7CECDEA787

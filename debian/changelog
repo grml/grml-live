@@ -7,7 +7,9 @@ grml-live (0.0.5) unstable; urgency=low
     - grml-live_autobuild_grml64-small_sid.sh
   * Some more FAI error checking.
   * Updated buildd scripts (better subject handling).
-  * Re-enable 'Acquire::http::Pipeline-Depth' workaround'
+  * Re-enable 'Acquire::http::Pipeline-Depth' workaround'.
+    Restore usual Debian behaviour at the end using
+    /etc/grml/fai/config/scripts/GRMLBASE/99-finish-grml-build
   * Add new scripts for retreiving bugs via apt-listbugs
     and storing package selection inside log directory.
     This has been integrated in a new class named "RELEASE".
