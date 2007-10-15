@@ -25,6 +25,7 @@ grml-live (0.0.5) unstable; urgency=low
   * Do not exit with an error code if /usr/include/linux is NOT
     a symlink to /usr/src/linux/include/linux but keep it as
     a warning instead.
+  * Log executed grml-live command.
   * Re-enable problematic packages that have been fixed:
     - apt-listbugs (fixed via manual interaction in scripts)
     - gsm-utils (#353967)
