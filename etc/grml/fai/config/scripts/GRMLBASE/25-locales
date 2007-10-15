@@ -4,14 +4,21 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Tue Sep 18 19:46:58 CEST 2007 [mika]
+# Latest change: Mon Oct 15 19:00:15 CEST 2007 [mika]
 ################################################################################
 
 set -u
 set -e
 
-# FIXME: replace it with /etc/locale.gen.grml finally!
-cp $target/etc/locale.gen.minimal $target/etc/locale.gen
+# use full locales setup only in classes GRML_FULL and LOCALES
+if ifclass GRML_FULL || ifclass LOCALES ; then
+   echo 'Using /etc/locale.gen.grml for locales generation'
+   cp $target/etc/locale.gen.grml $target/etc/locale.gen
+else
+   echo 'Using /etc/locale.gen.minimal for locales generation'
+   cp $target/etc/locale.gen.minimal $target/etc/locale.gen
+fi
+
 $ROOTCMD locale-gen
 
 ## END OF FILE #################################################################

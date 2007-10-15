@@ -13,6 +13,10 @@ grml-live (0.0.5) unstable; urgency=low
     This has been integrated in a new class named "RELEASE".
   * Added support for new kernel version 2.6.23-grml to
     GRML_FULL.
+  * Use uxterm as x-terminal-emulator and fall back to xterm
+    only it uxterm is not available.
+  * Support /etc/locale.gen.grml - it's used by default in
+    class GRML_FULL and a new class named LOCALES.
   * Re-enable problematic packages that have been fixed:
     - apt-listbugs (fixed via manual interaction in scripts)
     - gsm-utils (#353967)
