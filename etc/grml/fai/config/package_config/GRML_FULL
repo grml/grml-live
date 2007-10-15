@@ -47,13 +47,6 @@ PACKAGES aptitude
 #dpkg: error processing vifm (--configure):
 # subprocess post-installation script returned error exit status 1
 
-# snort (snort, snort-common, snort-rules-default):
-#Selecting previously deselected package snort.
-#Unpacking snort (from .../snort_2.7.0-3_i386.deb) ...
-#mkdir: cannot create directory `/var/log/fai/dirinstall/grml': No such file or directory
-#dpkg: error processing /var/cache/apt/archives/snort_2.7.0-3_i386.deb (--unpack):
-# subprocess pre-installation script returned error exit status 1
-
 # gsm-utils:
 # creates a group with GUID 1000 => #353967
 
@@ -1616,7 +1609,6 @@ snarf
 sniffit
 snmp
 snoopy
-snort
 snowdrop
 snownews
 socat
@@ -2084,6 +2076,9 @@ zd1211-firmware
 
 # x86/32bit (class I386) specific packages:
 PACKAGES aptitude I386
+
+# we also want to use linux-kernel-headers-grml instead of linux-libc-dev:
+linux-kernel-headers-grml
 
 #acx100-2.6.23-grml
 aufs-modules-2.6.23-grml

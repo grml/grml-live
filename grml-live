@@ -267,6 +267,7 @@ else
    # notice: 'fai dirinstall' does not seem to exit appropriate, so:
    ERROR=''
    if [ -r "/var/log/fai/dirinstall/$HOSTNAME/software.log" ] ; then
+      # 1 errors during executing of commands
       grep 'dpkg: error processing' /var/log/fai/dirinstall/$HOSTNAME/software.log >> $LOGFILE && ERROR=1
       grep 'E: Method http has died unexpectedly!' /var/log/fai/dirinstall/$HOSTNAME/software.log >> $LOGFILE && ERROR=2
       grep 'ERROR: chroot' /var/log/fai/dirinstall/$HOSTNAME/software.log >> $LOGFILE && ERROR=3
