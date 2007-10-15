@@ -74,14 +74,14 @@ elif [ -n "$GRML64" ] ; then
     if [ -d /usr/src/linux-headers-"$KERNEL" ] ; then
        einfo "grml64 detected, assuming /usr/src/linux-headers-$KERNEL is ok." ; eend 0
     else
-       ewarn "/usr/src/linux-headers-$KERNEL not found, exiting." ; eend 0
+       ewarn "Warning: /usr/src/linux-headers-$KERNEL not found, exiting." ; eend 0
     fi
 elif [ -d /usr/src/linux-headers-"$KERNEL" ] ; then
-     eerror "/usr/include/linux is NOT a symlink to /usr/src/linux/include/linux/ - error"
-     eend 1
-     exit 10
+     ewarn "Warning: /usr/include/linux is NOT a symlink to /usr/src/linux/include/linux/ (possible an error)"
+     ewarn "Common reason: you forgot to install linux-kernel-headers-grml and use linux-libc-dev instead"
+     eend 0
 else
-     ewarn "linux-headers-$KERNEL not installed." ; eend 0
+     ewarn "Warning: linux-headers-$KERNEL not installed." ; eend 0
 fi
 
 einfo "Creating ~/.zshrc"

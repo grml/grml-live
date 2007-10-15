@@ -13,6 +13,12 @@ grml-live (0.0.5) unstable; urgency=low
     This has been integrated in a new class named "RELEASE".
   * Added support for new kernel version 2.6.23-grml to
     GRML_FULL.
+  * New class SID - /etc/grml/fai/config/package_config/SID:
+    - this class is used for packages that are known to cause
+      problems with Debian/etch but work with Debian/sid
+  * Do not exit with an error code if /usr/include/linux is NOT
+    a symlink to /usr/src/linux/include/linux but keep it as
+    a warning instead.
   * Re-enable problematic packages that have been fixed:
     - apt-listbugs (fixed via manual interaction in scripts)
     - gsm-utils (#353967)
