@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Oct  7 09:29:22 UTC 2007 [mika]
+# Latest change: Don Okt 18 00:32:36 CEST 2007 [mika]
 ################################################################################
 
 set -e
@@ -36,7 +36,7 @@ done
 
 # inform on successful removal:
 if [ "$(echo "$REMOVE_ME" | tr -d ' ' )" != "" ] ; then
-   echo "deleted files $REMOVE_ME" | mail -s "daily-builds cleanup script" mika@grml.org
+   echo "deleted files $REMOVE_ME" | mail -s "daily-builds cleanup script" root@localhost
 fi
 
-# EOF
+## END OF FILE #################################################################

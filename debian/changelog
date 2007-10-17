@@ -7,6 +7,8 @@ grml-live (0.0.6) unstable; urgency=low
   * Use /var/log/fai/dirinstall/${HOSTNAME}/grml-live.log as logfile
     for grml-live instead of /var/log/grml-live.log so it's easier
     to track.
+  * Update of buildd scripts: main configuration file main.sh
+    which provides all the build stuff inside separate functions.
 
  -- Michael Prokop <mika@grml.org>  Wed, 17 Oct 2007 22:59:08 +0200
 

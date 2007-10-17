@@ -1,53 +1,23 @@
 #!/bin/sh
 
-set -u
+. main.sh || exit 1
 
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11
-
-# configuration:
-DATE=$(date +%Y%m%d)
-STORAGE=/grml-live/
-OUTPUT_DIR="${STORAGE}/grml-live_${DATE}.$$"
-TMP_DIR=$(mktemp -d)
-MUTT_HEADERS=$(mktemp)
-ATTACHMENT=$TMP_DIR/grml-live-logs_$DATE.tar.gz
-RECIPIENT=grml-live@ml.grml.org
+# settings for grml_live_run:
 ISO_NAME=grml64-medium_sid_$DATE.iso
-ISO_DIR=/grml-live/grml-isos
-[ -n "$TMP_DIR" ] || exit 10
-[ -n "$MUTT_HEADERS" ] || exit 20
-echo "my_hdr From: grml-live autobuild daemon <grml-live@grml.org>" > $MUTT_HEADERS
+SUITE=sid
+CLASSES='GRMLBASE,GRML_MEDIUM,AMD64'
+NAME=grml64-medium
+SCRIPTNAME="$(basename $0)"
 
 # execute grml-live:
-grml-live -F -s sid -c GRMLBASE,AMD64,GRML_MEDIUM -o $OUTPUT_DIR \
-          -g grml64-medium -v $DATE -r grml-live-autobuild -i $ISO_NAME \
-	  1>${TMP_DIR}/stdout 2>${TMP_DIR}/stderr ; RC=$?
+grml_live_run
 
-# create log archive:
-tar zcf $ATTACHMENT /var/log/fai/dirinstall/grml 1>/dev/null
+create_logs
 
-if ! [ -f "$OUTPUT_DIR/grml_isos/$ISO_NAME" ] ; then
-   ISO_DETAILS="There was an error creating $ISO_NAME"
-else
-   ISO_DETAILS=$(ls -lh $OUTPUT_DIR/grml_isos/$ISO_NAME)
-fi
+iso_details
 
-# send status mail:
-echo -en "Automatically generated mail by grml-live_autobuild_grml-medium_sid.sh
+send_mail
 
-$ISO_DETAILS
+store_iso
 
-Return code of grml-live run was: $RC
-
-Find details in the attached logs." | \
-mutt -s "grml-live_autobuild_grml64-medium_sid.sh [${DATE}] - $RC" \
-     -a ${TMP_DIR}/stdout \
-     -a ${TMP_DIR}/stderr \
-     -a $ATTACHMENT \
-     $RECIPIENT
-
-# make sure we store the final iso:
-[ -d "$ISO_DIR" ] || mkdir "$ISO_DIR"
-mv $OUTPUT_DIR/grml_isos/$ISO_NAME $ISO_DIR
-
-rm -rf "$TMP_DIR" "$MUTT_HEADERS" "$OUTPUT_DIR"
+bailout
