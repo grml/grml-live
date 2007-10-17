@@ -4,6 +4,8 @@ grml-live (0.0.6) unstable; urgency=low
     grml(32) on amd64.
   * Fix stderr redirection in "/usr/sbin/fai already running..."
   * Update /etc/grml/fai/make-fai-nfsroot.conf
+  * Update of buildd scripts: main configuration file main.sh
+    which provides all the build stuff inside separate functions.
 
  -- Michael Prokop <mika@grml.org>  Wed, 17 Oct 2007 22:59:08 +0200
 
