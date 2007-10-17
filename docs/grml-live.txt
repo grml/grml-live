@@ -10,9 +10,9 @@ Linux Live system (CD/ISO)
 Synopsis
 --------
 
-grml-live [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ] [-o
-<output_directory>] [-r <release_name>] [-s <suite>] [-t <template_directory>]
-[-v <version_number>] [-FVh]
+grml-live [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ]
+[-o <output_directory>] [-r <release_name>] [-s <suite>] [-t
+<template_directory>] [-v <version_number>] [-FVh]
 
 *******************************************************************************
 Important! This document is growing as requested. If you have questions which
@@ -54,6 +54,13 @@ for details).
 
 Options
 -------
+
+  -a **ARCHITECTURE**::
+
+Use the specified architecture instead of the currently running one.  This
+allows building a 32bit system on a 64bit host. Please notice that real
+crosscompiling (like building a ppc system on x86) isn't possible due to the
+nature and the need of working in a chroot.
 
   -c **CLASSES**::
 

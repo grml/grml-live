@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Wed Oct 17 22:59:03 CEST 2007 [mika]
+# Latest change: Wed Oct 17 23:53:13 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -128,9 +128,10 @@ usage()
   echo "
 $PN - build process script for generating a (grml based) Linux Live-ISO
 
-Usage: $PN [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ] \\
-                 [-o <output_directory>] [-s <suite>] [-t <template_directory>] \\
-                 [-s <suite>] [-v <version_number>] [-FVh]
+Usage: $PN [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] \\
+                 [-i <iso_name> ] [-o <output_directory>] [-s <suite>] \\
+                 [-t <template_directory>] [-s <suite>] \\
+                 [-v <version_number>] [-FVh]
 
 Usage examples:
 
@@ -138,8 +139,8 @@ Usage examples:
     $PN -c GRMLBASE,GRML_SMALL,I386 -o /grml/
     $PN -c GRMLBASE,GRML_MEDIUM,I386 -o /dev/shm/grml
     $PN -c GRMLBASE,GRML_SMALL,I386 -g grml-small -v 1.0
-    $PN -c GRMLBASE,GRML_FULL,I386 -i grml_0.0-1.iso
-    $PN -c GRMLBASE,GRML_FULL,I386 -s sid -V
+    $PN -c GRMLBASE,GRML_FULL,I386 -i grml_0.0-1.iso -v 0.0-1
+    $PN -c GRMLBASE,GRML_FULL,I386 -s sid -V -r 'grml-live rocks'
 
 More details: man grml-live
               /usr/share/doc/grml-live/grml-live.html
@@ -249,10 +250,10 @@ if [ -n "$SUITE" ] ; then
    sed -i "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" /etc/grml/fai/make-fai-nfsroot.conf
 fi
 
-if [ "$(dpkg --print-architecture)" != "$ARCH" ] ; then
-   if ! grep -q -- 'FAI_DEBOOTSTRAP_OPTS.*--arch' /etc/grml/fai/make-fai-nfsroot.conf ; then
-      sed -i "s|FAI_DEBOOTSTRAP_OPTS=\"\(.*\)|FAI_DEBOOTSTRAP_OPTS=\"--arch $ARCH \1|" /etc/grml/fai/make-fai-nfsroot.conf
-   fi
+# set $ARCH
+if grep -q -- 'FAI_DEBOOTSTRAP_OPTS.*--arch' /etc/grml/fai/make-fai-nfsroot.conf || \
+   [ "$(dpkg --print-architecture)" != "$ARCH" ] ; then
+   sed -i "s|FAI_DEBOOTSTRAP_OPTS=\"\(.*\)|FAI_DEBOOTSTRAP_OPTS=\"--arch $ARCH \1|" /etc/grml/fai/make-fai-nfsroot.conf
 fi
 # }}}
 
