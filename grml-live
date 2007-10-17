@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Wed Oct 17 23:53:13 CEST 2007 [mika]
+# Latest change: Thu Oct 18 00:18:07 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -71,6 +71,9 @@ trap bailout 1 2 3 15
 
 [ -n "$LOGDIR" ] || LOGDIR="/var/log/"
 LOGFILE="$LOGDIR/grml-live.log"
+
+NFSROOT_CONF=/etc/grml/fai/make-fai-nfsroot.conf
+
 # }}}
 
 # some important functions {{{
@@ -235,7 +238,7 @@ elif [ -n "$GRML_LIVE_SOURCES" ] ; then
 fi
 
 if [ -n "$FAI_DEBOOTSTRAP" ] ; then
-   sed -i "s#^FAI_DEBOOTSTRAP=.*#FAI_DEBOOTSTRAP=\"$FAI_DEBOOTSTRAP\"#" /etc/grml/fai/make-fai-nfsroot.conf
+   sed -i "s#^FAI_DEBOOTSTRAP=.*#FAI_DEBOOTSTRAP=\"$FAI_DEBOOTSTRAP\"#" $NFSROOT_CONF
 fi
 
 # does this suck? YES!
@@ -247,13 +250,15 @@ if [ -n "$SUITE" ] ; then
    sed -i "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" /etc/grml/fai/apt/sources.list
 
    sed -i "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" $LIVE_CONF
-   sed -i "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" /etc/grml/fai/make-fai-nfsroot.conf
+   sed -i "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" $NFSROOT_CONF
 fi
 
 # set $ARCH
-if grep -q -- 'FAI_DEBOOTSTRAP_OPTS.*--arch' /etc/grml/fai/make-fai-nfsroot.conf || \
-   [ "$(dpkg --print-architecture)" != "$ARCH" ] ; then
-   sed -i "s|FAI_DEBOOTSTRAP_OPTS=\"\(.*\)|FAI_DEBOOTSTRAP_OPTS=\"--arch $ARCH \1|" /etc/grml/fai/make-fai-nfsroot.conf
+[ -n "$ARCH" ] || ARCH="$(dpkg --print-architecture)"
+if grep -q -- 'FAI_DEBOOTSTRAP_OPTS.*--arch' $NFSROOT_CONF ; then
+   sed -i "s/--arch [a-z0-9]* /--arch $ARCH /" $NFSROOT_CONF
+else
+   sed -i "s|FAI_DEBOOTSTRAP_OPTS=\"\(.*\)|FAI_DEBOOTSTRAP_OPTS=\"--arch $ARCH \1|" $NFSROOT_CONF
 fi
 # }}}
 
@@ -303,8 +308,6 @@ fi
 # BUILD_OUTPUT - execute arch specific stuff and squashfs {{{
 [ -n "$BUILD_OUTPUT" ] || BUILD_OUTPUT="$OUTPUT/grml_cd"
 mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for stage ARCH"
-
-[ -n "$ARCH" ] || ARCH="$(dpkg --print-architecture)"
 
 # i386:
 if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
