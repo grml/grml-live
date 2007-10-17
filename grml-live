@@ -152,19 +152,20 @@ http://grml.org/bugs/
 
 # command line parsing {{{
 
-while getopts "c:g:i:o:r:s:t:v:FhV" opt; do
+while getopts "a:c:g:i:o:r:s:t:v:FhV" opt; do
   case "$opt" in
+    a) ARCH="$OPTARG" ;;
     c) CLASSES="$OPTARG" ;;
     g) GRML_NAME="$OPTARG" ;;
     i) ISO_NAME="$OPTARG" ;;
-    r) RELEASENAME="$OPTARG" ;;
-    s) SUITE="$OPTARG" ;;
-    t) TEMPLATE_DIRECTORY="$OPTARG";;
     o) OUTPUT="$OPTARG"
        CHROOT_OUTPUT="$OUTPUT/grml_chroot"
        BUILD_OUTPUT="$OUTPUT/grml_cd"
        ISO_OUTPUT="$OUTPUT/grml_isos"
        ;;
+    r) RELEASENAME="$OPTARG" ;;
+    s) SUITE="$OPTARG" ;;
+    t) TEMPLATE_DIRECTORY="$OPTARG";;
     v) VERSION="$OPTARG" ;;
     F) FORCE=1 ;;
     h) usage ; bailout 0 ;;
@@ -198,6 +199,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$RELEASENAME" ]   && echo "  release name:      $RELEASENAME"
    [ -n "$VERSION" ]       && echo "  grml version:      $VERSION"
    [ -n "$SUITE" ]         && echo "  Debian suite:      $SUITE"
+   [ -n "$ARCH" ]          && echo "  Architecture:      $ARCH"
    [ -n "$BOOT_METHOD" ]   && echo "  Boot method:       $BOOT_METHOD"
    [ -n "$TEMPLATE_DIRECTORY" ] && echo "  Template files:    $TEMPLATE_DIRECTORY"
    [ -n "$FAI_ARGS" ]      && echo "  additional arguments for FAI: $FAI_ARGS"
@@ -245,6 +247,12 @@ if [ -n "$SUITE" ] ; then
 
    sed -i "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" $LIVE_CONF
    sed -i "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" /etc/grml/fai/make-fai-nfsroot.conf
+fi
+
+if [ "$(dpkg --print-architecture)" != "$ARCH" ] ; then
+   if ! grep -q -- 'FAI_DEBOOTSTRAP_OPTS.*--arch' /etc/grml/fai/make-fai-nfsroot.conf ; then
+      sed -i "s|FAI_DEBOOTSTRAP_OPTS=\"\(.*\)|FAI_DEBOOTSTRAP_OPTS=\"--arch $ARCH \1|" /etc/grml/fai/make-fai-nfsroot.conf
+   fi
 fi
 # }}}
 

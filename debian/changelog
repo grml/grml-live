@@ -1,3 +1,10 @@
+grml-live (0.0.6) unstable; urgency=low
+
+  * New option "-a" for setting architecture. This allows building
+    grml(32) on amd64.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 17 Oct 2007 10:00:14 +0200
+
 grml-live (0.0.5) unstable; urgency=low
 
   * Add new scripts to /usr/share/grml-live/examples/buildd/:
