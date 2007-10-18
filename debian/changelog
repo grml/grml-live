@@ -15,6 +15,8 @@ grml-live (0.0.6) unstable; urgency=low
     /etc/grml/fai/config/scripts/GRMLBASE/10-build-initramfs
   * Work around #353967 for Debian/etch in
     /etc/grml/fai/config/scripts/GRMLBASE/21-usersetup
+  * Add new packages to GRML_FULL:
+    - mr
 
  -- Michael Prokop <mika@grml.org>  Wed, 17 Oct 2007 22:59:08 +0200
 
