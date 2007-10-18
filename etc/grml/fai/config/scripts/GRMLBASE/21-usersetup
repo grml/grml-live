@@ -19,8 +19,8 @@ if grep -q "$USERNAME:x:1000" $target/etc/group ; then
 else
   if grep -q 'gsmsms:x:1000' $target/etc/group ; then
      echo 'Bug #353967 detected, fixing GUID = 1000 setup for you'
-     $ROOTCMD delgroup gsmsms
-     $ROOTCMD deluser gsmsms
+     $ROOTCMD delgroup gsmsms || /bin/true
+     $ROOTCMD deluser gsmsms  || /bin/true
      $ROOTCMD addgroup --gid 1000 $USERNAME
      $ROOTCMD addgroup --system gsmsms
      $ROOTCMD adduser --system --ingroup gsmsms \
