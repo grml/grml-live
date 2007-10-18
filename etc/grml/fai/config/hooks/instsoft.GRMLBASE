@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Oct 15 19:29:19 CEST 2007 [mika]
+# Latest change: Thu Oct 18 14:18:44 CEST 2007 [mika]
 ################################################################################
 
 set -u
@@ -15,7 +15,8 @@ set -e
 echo "Acquire::http::Pipeline-Depth "0"; // added by grml-live" >> $target/etc/apt/apt.conf
 
 # install grml keys:
-gpg --keyserver subkeys.pgp.net --recv-keys F61E2E7CECDEA787
+gpg --keyserver subkeys.pgp.net      --recv-keys F61E2E7CECDEA787 || \
+gpg --keyserver blackhole.pca.dfn.de --recv-keys F61E2E7CECDEA787
 gpg --export F61E2E7CECDEA787 > $target/etc/apt/grml.key
 $ROOTCMD apt-key add /etc/apt/grml.key
 

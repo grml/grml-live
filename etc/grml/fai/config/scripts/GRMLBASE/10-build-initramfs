@@ -4,16 +4,15 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sat Oct 06 16:47:50 CEST 2007 [mika]
+# Latest change: Thu Oct 18 14:02:50 CEST 2007 [mika]
 ################################################################################
 
-set -u
 set -e
 
 cp /etc/grml/fai/live-initramfs/live.conf $target/etc/live.conf
 cp /etc/grml/fai/live-initramfs/grml-script.init-top "$target/usr/share/initramfs-tools/scripts/init-top/grml"
 
-FILE=$(ls -1 $target/boot/vmlinuz-* | sort -r | head -1)
+FILE=$(ls -1 $target/boot/vmlinuz-* 2>/dev/null| sort -r | head -1)
 KERNELVERSION=$(echo "${FILE##$target/boot/vmlinuz-}")
 
 # make sure mdadm isn't executed in initrd:
@@ -22,7 +21,12 @@ KERNELVERSION=$(echo "${FILE##$target/boot/vmlinuz-}")
 #   sed -i "s/INITRDSTART=.*/INITRDSTART=none/"    "$target"/etc/default/mdadm
 #fi
 
-$ROOTCMD update-initramfs -c -t -k $KERNELVERSION
+if [ -z "$KERNELVERSION" ] ; then
+   echo "Error: No kernel found, can not create initramfs. Exiting.">&2
+   exit 1
+else
+   $ROOTCMD update-initramfs -c -t -k $KERNELVERSION
+fi
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

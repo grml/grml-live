@@ -12,28 +12,30 @@ set -e
 # remove some big directories when using class LATEX_CLEANUP:
 if ifclass LATEX_CLEANUP ; then
    cp /etc/grml/fai/grml/grml_cleanup_chroot.latex_cleanup $target/root/
-   $ROOTCMD /root/grml_cleanup_chroot.latex_cleanup
+   $ROOTCMD  /root/grml_cleanup_chroot.latex_cleanup
    rm $target/root/grml_cleanup_chroot.latex_cleanup
 fi
 
 # skip tasks which require only when using class NO_ONLINE:
 if ! ifclass NO_ONLINE ; then
    cp /etc/grml/fai/grml/grml_cleanup_chroot.no_online $target/root/
-   $ROOTCMD /root/grml_cleanup_chroot.no_online
+   $ROOTCMD  /root/grml_cleanup_chroot.no_online
    rm $target/root/grml_cleanup_chroot.no_online
 fi
 
 # remove /usr/share/doc, /usr/share/info,... only in class REMOVE_DOCS:
 if ifclass REMOVE_DOCS ; then
    cp /etc/grml/fai/grml/grml_cleanup_chroot.remove_docs $target/root/
-   $ROOTCMD /root/grml_cleanup_chroot.remove_docs
+   $ROOTCMD  /root/grml_cleanup_chroot.remove_docs
    rm $target/root/grml_cleanup_chroot.remove_docs
 fi
 
 # misc cleanup:
-cp /etc/grml/fai/grml/grml_cleanup_chroot $target/root/
-$ROOTCMD /root/grml_cleanup_chroot
-rm $target/root/grml_cleanup_chroot
+if [ -f /etc/grml/fai/grml/grml_cleanup_chroot ] ; then
+   cp /etc/grml/fai/grml/grml_cleanup_chroot $target/root/
+   $ROOTCMD  /root/grml_cleanup_chroot
+   rm $target/root/grml_cleanup_chroot
+fi
 
 # make sure GRML_SMALL uses the appropriate configuration:
 if ifclass GRML_SMALL ; then

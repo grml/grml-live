@@ -9,6 +9,12 @@ grml-live (0.0.6) unstable; urgency=low
     to track.
   * Update of buildd scripts: main configuration file main.sh
     which provides all the build stuff inside separate functions.
+  * Fall back to blackhole.pca.dfn.de as keyserver if retreiving
+    from subkeys.pgp.net fails.
+  * Improve check for kernel version inside
+    /etc/grml/fai/config/scripts/GRMLBASE/10-build-initramfs
+  * Work around #353967 for Debian/etch in
+    /etc/grml/fai/config/scripts/GRMLBASE/21-usersetup
 
  -- Michael Prokop <mika@grml.org>  Wed, 17 Oct 2007 22:59:08 +0200
 

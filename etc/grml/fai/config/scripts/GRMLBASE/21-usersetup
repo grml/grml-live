@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Wed Sep 19 20:27:03 CEST 2007 [mika]
+# Latest change: Thu Oct 18 14:28:53 CEST 2007 [mika]
 ################################################################################
 
 set -u
@@ -17,6 +17,16 @@ USERNAME=''
 if grep -q "$USERNAME:x:1000" $target/etc/group ; then
    echo "group $USERNAME exists already, skipping"
 else
+  if grep -q 'gsmsms:x:1000' $target/etc/group ; then
+     echo 'Bug #353967 detected, fixing GUID = 1000 setup for you'
+     $ROOTCMD delgroup gsmsms
+     $ROOTCMD deluser gsmsms
+     $ROOTCMD addgroup --gid 1000 $USERNAME
+     $ROOTCMD addgroup --system gsmsms
+     $ROOTCMD adduser --system --ingroup gsmsms \
+                      --no-create-home --home /var/spool/sms gsmsms
+     $ROOTCMD adduser gsmsms dialout
+  fi
   $ROOTCMD addgroup --gid 1000 $USERNAME
 fi
 
