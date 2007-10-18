@@ -1,20 +1,10 @@
 PACKAGES aptitude
 
-# TODO: get rid of all packages that are libs/dependencies only;
-#       identify all I386-only packages
-
-## Known problems, TODO:
+## Known problems {{{
 
 # 3ware-3dm2-binary: problem with
 #   openssl req -new -x509 -nodes -out /etc/3dm2/3dm2.pem -keyout /etc/3dm2/3dm2.pem -days 365
 # of /var/lib/dpkg/info/3ware-3dm2-binary.postinst
-
-# apt-listbugs, fails due to:
-# // DPkg::Pre-Install-Pkgs {"/usr/sbin/apt-listbugs apt || exit 10"};
-# in /etc/apt/apt.conf.d/10apt-listbugs
-# with
-# E: Sub-process /usr/bin/dpkg returned an error code (1)
-# E: Sub-process /usr/sbin/apt-listbugs apt || exit 10 returned an error code (10)
 
 # a2ps fails with:
 #Setting up a2ps (1:4.13c~rc5-1) ...
@@ -31,24 +21,10 @@ PACKAGES aptitude
 #cp: cannot stat `/usr/share/doc/bandwidthd-pgsql/bandwidthd-pgsql.conf': No such file or directory
 #bandwidthd-pgsql failed to preconfigure, with exit status 1
 
-# wvdial executes 'wvdialconf /etc/wvdial.conf':
-#Setting up wvdial (1.56-1.2) ...
-#Editing `/etc/wvdial.conf'.
-#
-#Scanning your serial ports for a modem.
-#
-#Modem Port Scan<*1>: S0   S1   S2   S3
-#WvModem<*1>: Cannot get information for serial port.
-#ttyUSB0<*1>: ATQ0 V1 E1 -- OK
-#[...]
-
 # vifm:
 #Setting up vifm (0.3-2) ...
 #dpkg: error processing vifm (--configure):
 # subprocess post-installation script returned error exit status 1
-
-# gsm-utils:
-# creates a group with GUID 1000 => #353967
 
 # ivtv-utils:
 # ships /usr/include/linux/ivtv.h => #443165
@@ -60,12 +36,12 @@ PACKAGES aptitude
 # /var/lib/dpkg/info/tidev-modules-2.6.22-grml.postinst: line 9: update-devfsd: command not found
 
 # The update-modules command is deprecated and should not be used!
-# -> used by:
+# -> used by at least:
 # dumputils evms ipx irda-utils mt-st rng-tools setserial tidev-modules-2.6.22-grml toshutils udftools
 
-## End-of-Warnings
+## End-of-Warnings }}}
 
-# grml specific packages:
+# grml specific packages {{{
 3ware-cli-binary
 aamath
 advchk
@@ -180,8 +156,9 @@ udev
 upgrade-oldest
 zfs-fuse
 zsh-lovers
+# }}}
 
-## Notice: this packages are known to be x86-only currently [2007-10-05]:
+## Notice: this packages are known to be x86-only currently [2007-10-05] {{{
 # 3ware-cli-binary aamath aesutil afflib asleap athcool atitvout btsco chntpw
 # cmospwd cpp-2.95 cpuburn-in-binary ctapi-cyberjack ctris dd-rhelp
 # deletemail detox dupmerge dupseek dynamic-disk ecryptfs-utils ext3rminator
@@ -192,8 +169,9 @@ zsh-lovers
 # rainbowcrack replicator rootsh s3switch salvage-ntfs scrounge-ntfs shadowfs
 # shmux sjog speechd-up spicctrl ssdeep sudosh tlswrap toshset toshutils
 # tpm-tools trapdoor2 trousers unison2.9.1 xserver-xorg-video-amd zfs-fuse
+# }}}
 
-# official Debian packages:
+# official Debian packages {{{
 2vcard
 3270-common
 4g8
@@ -2046,8 +2024,9 @@ zsh-static
 zssh
 zsync
 zzuf
+# }}}
 
-# non-free:
+# non-free {{{
 abs-guide
 agrep
 atmel-firmware
@@ -2073,8 +2052,9 @@ sl-modem-daemon
 tth
 unrar
 zd1211-firmware
+# }}}
 
-# x86/32bit (class I386) specific packages:
+# x86/32bit (class I386) specific packages {{{
 PACKAGES aptitude I386
 
 # we also want to use linux-kernel-headers-grml instead of linux-libc-dev:
@@ -2128,6 +2108,11 @@ sysprof-module-2.6.23-grml
 #sysprof-module-2.6.22-grml
 #tidev-modules-2.6.22-grml
 #truecrypt-2.6.22-grml
+# }}}
 
+# amd64 specific packages {{{
 PACKAGES aptitude AMD64
 linux-image-2.6.20-grml64 aufs-modules-2.6.20-grml64
+# }}}
+
+# vim: foldmethod=marker
