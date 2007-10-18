@@ -779,6 +779,7 @@ gettext-el
 gfs-tools
 gftp-common
 gftp-text
+ghostscript
 giblib1
 gif2png
 giftcurs
@@ -819,9 +820,6 @@ grepmail
 groff
 groff-base
 grub
-gs
-gs-common
-gs-esp
 gscanbus
 gsfonts
 gsfonts-x11
