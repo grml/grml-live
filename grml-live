@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Thu Oct 18 00:42:13 CEST 2007 [mika]
+# Latest change: Sat Oct 20 12:12:23 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -219,10 +219,12 @@ if [ -z "$FORCE" ] ; then
    fi
    echo
 
-   start_seconds=$(cut -d . -f 1 /proc/uptime)
-   log "------------------------------------------------------------------------------"
-   log "Starting grml-live run [$(date)]"
 fi
+
+start_seconds=$(cut -d . -f 1 /proc/uptime)
+log "------------------------------------------------------------------------------"
+log "Starting grml-live run [$(date)]"
+log "Executed command line: $0 $*"
 # }}}
 
 # on-the-fly configuration {{{
@@ -452,7 +454,7 @@ fi
 # }}}
 
 # finalize {{{
-[ -n "$start_seconds" ] && SECONDS="$[$(cut -d . -f 1 /proc/uptime)-$start_seconds]"
+[ -n "$start_seconds" ] && SECONDS="$[$(cut -d . -f 1 /proc/uptime)-$start_seconds]" || SECONDS="unknown"
 einfo "Sucessfully finished execution of $PN [running ${SECONDS} seconds]" ; eend 0
 log "Sucessfully finished execution of $PN [running ${SECONDS} seconds]"
 log "------------------------------------------------------------------------------"

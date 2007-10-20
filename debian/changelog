@@ -1,3 +1,10 @@
+grml-live (0.0.7) unstable; urgency=low
+
+  * Log executed grml-live command line.
+  * Set $SECONDS to unknown if $start_seconds is not set.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 20 Oct 2007 12:12:33 +0200
+
 grml-live (0.0.6) unstable; urgency=low
 
   * New option "-a" for setting architecture. This allows building
