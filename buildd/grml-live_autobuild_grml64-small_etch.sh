@@ -9,7 +9,7 @@ NAME=grml64-small
 SCRIPTNAME="$(basename $0)"
 ARCH=amd64
 
-. /usr/share/grml-live/buildd/buildd/functions.sh || exit 1
+. /usr/share/grml-live/buildd/functions.sh || exit 1
 
 # execute grml-live:
 grml_live_run

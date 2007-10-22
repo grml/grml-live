@@ -1,5 +1,5 @@
 #!/bin/sh
-# Filename:      /usr/share/grml-live/buildd/buildd/functions.sh
+# Filename:      /usr/share/grml-live/buildd/functions.sh
 # Purpose:       main function file for grml-live buildd
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/

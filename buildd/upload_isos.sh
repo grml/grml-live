@@ -1,5 +1,5 @@
 #!/bin/sh
-# Filename:      /usr/share/grml-live/buildd/buildd/upload_isos.sh
+# Filename:      /usr/share/grml-live/buildd/upload_isos.sh
 # Purpose:       upload grml ISOs to a rsync server
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
@@ -7,7 +7,7 @@
 # Latest change: Mon Oct 22 19:11:33 CEST 2007 [mika]
 ################################################################################
 
-. /usr/share/grml-live/buildd/buildd/functions.sh || exit 1
+. /usr/share/grml-live/buildd/functions.sh || exit 1
 [ -n "$RSYNC_MIRROR" ] || exit 2
 cd $ISO_DIR || exit 3
 

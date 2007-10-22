@@ -1,5 +1,5 @@
 #!/bin/sh
-# Filename:      /usr/share/grml-live/buildd/buildd/cleanup.sh
+# Filename:      /usr/share/grml-live/buildd/cleanup.sh
 # Purpose:       clean up daily builds directory - remove old files
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
