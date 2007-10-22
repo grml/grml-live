@@ -1,6 +1,0 @@
-This directory provides files used for autobuilding grml-ISOs on a daily base,
-like what http://daily.grml.org/ provides. If you plan to use those files
-you definitely have to adjust them according to your needs, it should just
-provide an idea of what can be done using grml-live.
-
-  -- Michael Prokop <mika@grml.org>, Sun Oct  7 13:04:05 CEST 2007

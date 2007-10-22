@@ -5,11 +5,11 @@ DATE=$(date +%Y%m%d)
 ISO_NAME=grml-small_sid_$DATE.iso
 SUITE=sid
 CLASSES='GRMLBASE,GRML_SMALL,REMOVE_DOCS,I386'
-NAME=grml
+NAME=grml-small
 SCRIPTNAME="$(basename $0)"
 ARCH=i386
 
-. main.sh || exit 1
+. /usr/share/grml-live/buildd/buildd/functions.sh || exit 1
 
 # execute grml-live:
 grml_live_run

@@ -1,5 +1,9 @@
 grml-live (0.0.7) unstable; urgency=low
 
+  * Reworked buildd concept. Now we have a seperate
+    /usr/share/grml-live/buildd/functions.sh for generic
+    stuff and /etc/grml/grml-buildd.conf as configuration
+    file.
   * Log executed grml-live command line.
   * Set $SECONDS to unknown if $start_seconds is not set.
   * Add new packages to GRML_FULL:
