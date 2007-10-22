@@ -37,7 +37,7 @@ install: build
 	cp -a etc         debian/grml-live/
 	cp -a examples    debian/grml-live/usr/share/doc/grml-live/
 	cp -a templates   debian/grml-live/usr/share/grml-live/
-	cp -a buildd/*.sh debian/grml-live/usr/share/grml-live/examples/
+	cp -a buildd/*.sh debian/grml-live/usr/share/grml-live/buildd/
 	install -o root -m 640 buildd/grml-buildd.conf debian/grml-live/etc/grml/grml-buildd.conf
 	install -o root -m 755 grml-live debian/grml-live/usr/sbin/grml-live
 
