@@ -31,7 +31,8 @@ install: build
 	dh_testroot
 	dh_clean -k 
 	dh_installdirs etc/grml/fai/live-initramfs usr/sbin usr/share/doc/grml-live \
-	  	       usr/share/grml-live usr/share/grml-live/examples
+	  	       usr/share/grml-live usr/share/grml-live/examples \
+		       usr/share/grml-live/buildd
 
 	# Add here commands to install the package into debian/grml-live.
 	cp -a etc         debian/grml-live/
