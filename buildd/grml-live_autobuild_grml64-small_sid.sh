@@ -7,6 +7,7 @@ SUITE=sid
 CLASSES='GRMLBASE,GRML_SMALL,REMOVE_DOCS,AMD64'
 NAME=grml64-small
 SCRIPTNAME="$(basename $0)"
+ARCH=amd64
 
 . /usr/share/grml-live/buildd/buildd/functions.sh || exit 1
 

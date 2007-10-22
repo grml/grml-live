@@ -7,6 +7,7 @@ SUITE=etch
 CLASSES='GRMLBASE,GRML_FULL,LATEX_CLEANUP,AMD64'
 NAME=grml64
 SCRIPTNAME="$(basename $0)"
+ARCH=amd64
 
 . /usr/share/grml-live/buildd/buildd/functions.sh || exit 1
 
