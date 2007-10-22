@@ -4,12 +4,14 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Oct 22 19:11:33 CEST 2007 [mika]
+# Latest change: Mon Oct 22 19:50:36 CEST 2007 [mika]
 ################################################################################
 
-. /usr/share/grml-live/buildd/functions.sh || exit 1
+. /etc/grml/grml-buildd.conf || exit 1
 [ -n "$RSYNC_MIRROR" ] || exit 2
-cd $ISO_DIR || exit 3
+[ -n "$ISO_DIR" ] || exit 3
+
+cd $ISO_DIR || exit 4
 
 umask 002
 for file in *.iso ; do
