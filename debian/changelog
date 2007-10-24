@@ -8,6 +8,8 @@ grml-live (0.0.7) unstable; urgency=low
       grml-live.{stdout,stderr} as log files.
     - buildd/functions.sh: do not mv files if there was an error
       during grml-live execution
+  * Added new grml-repository named grml-live which is intented
+    to fix issues from Debian for grml-live builds.
   * Display version number of grml-live.
   * Log executed grml-live command line.
   * Set FAI_DEBOOTSTRAP_OPTS="--exclude=dhcp-client,info"
