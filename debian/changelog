@@ -3,7 +3,10 @@ grml-live (0.0.7) unstable; urgency=low
   * Reworked buildd concept. Now we have a seperate
     /usr/share/grml-live/buildd/functions.sh for generic
     stuff and /etc/grml/grml-buildd.conf as configuration
-    file.
+    file. Use grml-buildd.{stdout,stderr} instead of
+    grml-live.{stdout,stderr} as log files.
+  * Use version number of grml-live inside script and write
+    it to the logs as well.
   * Log executed grml-live command line.
   * Set $SECONDS to unknown if $start_seconds is not set.
   * Improve directory handling for $LOGFILE.

@@ -46,8 +46,8 @@ echo "my_hdr From: grml-live autobuild daemon <$FROM>" > $MUTT_HEADERS
 grml_live_run() {
 grml-live -F $GRML_LIVE_ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
           -g $NAME -v $DATE -r grml-live-autobuild -i $ISO_NAME \
-	  1>$LOGFILES/grml-live.stdout \
-	  2>$LOGFILES/grml-live.stderr ; RC=$?
+	  1>$LOGFILES/grml-buildd.stdout \
+	  2>$LOGFILES/grml-buildd.stderr ; RC=$?
 
 if [ "$RC" = "0" ] ; then
    RC_INFO=success
