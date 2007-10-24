@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sat Oct 20 12:12:23 CEST 2007 [mika]
+# Latest change: Wed Oct 24 09:26:39 CEST 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -69,7 +69,8 @@ trap bailout 1 2 3 15
 [ -n "$RELEASENAME" ] || RELEASENAME="grml-live rocks"
 [ -n "$GRML_NAME" ] || GRML_NAME='grml'
 
-if mkdir -p /var/log/fai/dirinstall/${HOSTNAME} ; then
+[ -d /var/log/fai/dirinstall/"${HOSTNAME}" ] || mkdir -p /var/log/fai/dirinstall/${HOSTNAME} 
+if [ -d /var/log/fai/dirinstall/"${HOSTNAME}" ] ; then
    LOGFILE=/var/log/fai/dirinstall/${HOSTNAME}/grml-live.log
 else
    LOGFILE="$LOGDIR/grml-live.log"

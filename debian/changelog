@@ -6,6 +6,7 @@ grml-live (0.0.7) unstable; urgency=low
     file.
   * Log executed grml-live command line.
   * Set $SECONDS to unknown if $start_seconds is not set.
+  * Improve directory handling for $LOGFILE.
   * Add new packages to GRML_FULL:
     - ldnsutils
 
