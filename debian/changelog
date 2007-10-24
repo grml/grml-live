@@ -1,3 +1,9 @@
+grml-etc (1.0.22) unstable; urgency=low
+
+  * /etc/wvdial.conf.umts: do not enable "Idle Seconds" by default.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 24 Oct 2007 09:54:16 +0200
+
 grml-etc (1.0.21) unstable; urgency=low
 
   * /etc/skel/.channels/channels.conf-AT-graz: update for new sender
