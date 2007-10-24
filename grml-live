@@ -292,6 +292,7 @@ else
    ERROR=''
    if [ -r "/var/log/fai/dirinstall/$HOSTNAME/software.log" ] ; then
       # 1 errors during executing of commands
+      # Unable to write mmap - msync (28 No space left on device)
       grep 'dpkg: error processing' /var/log/fai/dirinstall/$HOSTNAME/software.log >> $LOGFILE && ERROR=1
       grep 'E: Method http has died unexpectedly!' /var/log/fai/dirinstall/$HOSTNAME/software.log >> $LOGFILE && ERROR=2
       grep 'ERROR: chroot' /var/log/fai/dirinstall/$HOSTNAME/software.log >> $LOGFILE && ERROR=3
