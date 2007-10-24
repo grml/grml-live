@@ -10,6 +10,8 @@ grml-live (0.0.7) unstable; urgency=low
       during grml-live execution
   * Added new grml-repository named grml-live which is intented
     to fix issues from Debian for grml-live builds.
+  * Use apt-pinning via /etc/grml/fai/config/hooks/instsoft.GRMLBASE
+    already and remove it from /etc/grml/fai/config/scripts/GRMLBASE/33-aptsetup
   * Display version number of grml-live.
   * Log executed grml-live command line.
   * Set FAI_DEBOOTSTRAP_OPTS="--exclude=dhcp-client,info"
