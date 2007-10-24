@@ -71,12 +71,8 @@ trap bailout 1 2 3 15
 [ -n "$RELEASENAME" ] || RELEASENAME="grml-live rocks"
 [ -n "$GRML_NAME" ] || GRML_NAME='grml'
 
-[ -d /var/log/fai/dirinstall/"${HOSTNAME}" ] || mkdir -p /var/log/fai/dirinstall/${HOSTNAME}
-if [ -d /var/log/fai/dirinstall/"${HOSTNAME}" ] ; then
-   LOGFILE=/var/log/fai/dirinstall/${HOSTNAME}/grml-live.log
-else
-   LOGFILE="$LOGDIR/grml-live.log"
-fi
+[ -d /var/log/grml-live ] || mkdir /var/log/grml-live
+LOGFILE=/var/log/grml-live/"$(date +%Y-%m-%d)_$$.log"
 
 NFSROOT_CONF=/etc/grml/fai/make-fai-nfsroot.conf
 
@@ -212,6 +208,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$TEMPLATE_DIRECTORY" ] && echo "  Template files:    $TEMPLATE_DIRECTORY"
    [ -n "$FAI_ARGS" ]      && echo "  additional arguments for FAI: $FAI_ARGS"
    [ -n "$VERBOSE" ]       && echo "  Using VERBOSE mode."
+   [ -n "$LOGFILE" ]       && echo "  Logging to file:   $LOGFILE"
    echo
    echo -n "Is this ok for you? [y/N] "
    read a
@@ -225,6 +222,8 @@ start_seconds=$(cut -d . -f 1 /proc/uptime)
 log "------------------------------------------------------------------------------"
 log "Starting grml-live [${GRML_LIVE_VERSION}] run [$(date)]"
 log "Executed command line: $0 $@"
+
+einfo "Logging actions to logfile $LOGFILE"
 # }}}
 
 # on-the-fly configuration {{{

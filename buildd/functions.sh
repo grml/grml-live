@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Oct 22 19:19:26 CEST 2007 [mika]
+# Latest change: Wed Oct 24 11:07:47 CEST 2007 [mika]
 ################################################################################
 
 die() {
@@ -33,12 +33,16 @@ MUTT_HEADERS=$(mktemp)
 [ -n "$ARCH" ] && GRML_LIVE_ARCH="-a $ARCH"
 
 # make sure we have same safe defaults:
-[ -n "$OUTPUT_DIR" ] || OUTPUT_DIR="${STORAGE}/grml-live_${DATE}.$$"
-[ -n "$ISO_DIR" ]    || ISO_DIR=$STORAGE/grml-isos
-[ -n "$RECIPIENT" ]  || RECIPIENT=root@localhost
-[ -n "$ATTACHMENT" ] || ATTACHMENT=$TMP_DIR/grml-live-logs_$DATE.tar.gz
-[ -n "$LOGFILES" ]   || LOGFILES=/var/log/fai/dirinstall/grml
-[ -n "$FROM" ]       || FROM=root@localhost
+[ -n "$OUTPUT_DIR" ]    || OUTPUT_DIR="${STORAGE}/grml-live_${DATE}.$$"
+[ -n "$ISO_DIR" ]       || ISO_DIR=$STORAGE/grml-isos
+[ -n "$RECIPIENT" ]     || RECIPIENT=root@localhost
+[ -n "$ATTACHMENT" ]    || ATTACHMENT=$TMP_DIR/grml-live-logs_$DATE.tar.gz
+[ -n "$FAI_LOGFILES" ]  || FAI_LOGFILES=/var/log/fai/dirinstall/grml
+[ -n "$GRML_LOGFILES" ] || GRML_LOGFILES=/var/log/grml-live/
+[ -n "$FROM" ]          || FROM=root@localhost
+
+[ -d "$FAI_LOGFILES" ]  || mkdir -p $FAI_LOGFILES
+[ -d "$GRML_LOGFILES" ] || mkdir -p $GRML_LOGFILES
 
 echo "my_hdr From: grml-live autobuild daemon <$FROM>" > $MUTT_HEADERS
 
@@ -46,8 +50,8 @@ echo "my_hdr From: grml-live autobuild daemon <$FROM>" > $MUTT_HEADERS
 grml_live_run() {
 grml-live -F $GRML_LIVE_ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
           -g $NAME -v $DATE -r grml-live-autobuild -i $ISO_NAME \
-	  1>$LOGFILES/grml-buildd.stdout \
-	  2>$LOGFILES/grml-buildd.stderr ; RC=$?
+	  1>$GRML_LOGFILES/grml-buildd.stdout \
+	  2>$GRML_LOGFILES/grml-buildd.stderr ; RC=$?
 
 if [ "$RC" = "0" ] ; then
    RC_INFO=success
@@ -80,11 +84,11 @@ Return code of grml-live run was: $RC
 
 The following errors have been noticed (several might be warnings only):
 
-$(grep error $LOGFILES/* | grep -ve liberror -ve libgpg-error || echo "* nothing")
+$(grep error $FAI_LOGFILES/* | grep -ve liberror -ve libgpg-error || echo "* nothing")
 
 The following warnings have been noticed:
 
-$(grep warn $LOGFILES/* || echo "* nothing")
+$(grep warn $FAI_LOGFILES/* || echo "* nothing")
 
 Find details in the attached logs." | \
 mutt -s "$SCRIPTNAME [${DATE}] - $RC_INFO" \
