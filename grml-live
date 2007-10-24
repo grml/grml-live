@@ -184,9 +184,6 @@ while getopts "a:c:g:i:o:r:s:t:v:FhV" opt; do
   esac
 done
 shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
-
-echo "Executing grml-live $GRML_LIVE_VERSION using the commandline:" >> $LOGFILE
-echo "$(basename $0) $@" >> $LOGFILE
 # }}}
 
 # some misc checks before executing FAI {{{
@@ -222,13 +219,12 @@ if [ -z "$FORCE" ] ; then
       bailout 1 "Exiting as requested."
    fi
    echo
-
 fi
 
 start_seconds=$(cut -d . -f 1 /proc/uptime)
 log "------------------------------------------------------------------------------"
-log "Starting grml-live run [$(date)]"
-log "Executed command line: $0 $*"
+log "Starting grml-live [${GRML_LIVE_VERSION}] run [$(date)]"
+log "Executed command line: $0 $@"
 # }}}
 
 # on-the-fly configuration {{{
