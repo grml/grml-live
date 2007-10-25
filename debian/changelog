@@ -20,6 +20,7 @@ grml-live (0.0.7) unstable; urgency=low
   * Improve directory handling for $LOGFILE.
   * Add new packages to GRML_FULL:
     - ldnsutils
+  * Add 'ed' to GRML_SMALL and GRML_MEDIUM.
 
  -- Michael Prokop <mika@grml.org>  Sat, 20 Oct 2007 12:12:33 +0200
 
