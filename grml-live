@@ -254,8 +254,12 @@ if [ -n "$SUITE" ] ; then
    sed -i "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" /etc/grml/fai/apt/sources.list
    # notice: activate grml-live pool only if we are building against unstable:
    if grep -qe unstable -qe sid /etc/grml/fai/apt/sources.list ; then
+      grep -q 'grml-live.*main' || \
       grep grml-stable /etc/grml/fai/apt/sources.list | \
            sed 's/grml-stable/grml-live/' >> /etc/grml/fai/apt/sources.list
+   else
+      grep -q 'grml-live.*main' /etc/grml/fai/apt/sources.list && \
+      sed -i 's/.*grml-live.*/# removed grml-live repository/' /etc/grml/fai/apt/sources.list
    fi
 
    sed -i "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" $LIVE_CONF
