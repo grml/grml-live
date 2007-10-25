@@ -8,6 +8,7 @@ grml-live (0.0.7) unstable; urgency=low
       grml-live.{stdout,stderr} as log files.
     - buildd/functions.sh: do not mv files if there was an error
       during grml-live execution
+    - do not re-execute grml-live is the target ISO exists already
   * Added new grml-repository named grml-live which is intented
     to fix issues from Debian for grml-live builds. It is automatically
     activated if you are building against unstable/sid and should
@@ -20,6 +21,8 @@ grml-live (0.0.7) unstable; urgency=low
     by default.
   * Set $SECONDS to unknown if $start_seconds is not set.
   * Improve directory handling for $LOGFILE.
+  * Check for presence of /bin/zsh before setting default shell in
+    /etc/grml/fai/config/scripts/GRMLBASE/21-usersetup
   * Add new packages to GRML_FULL:
     - ldnsutils
     - madwifi-modules-2.6.23-grml

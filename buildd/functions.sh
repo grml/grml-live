@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Wed Oct 24 11:07:47 CEST 2007 [mika]
+# Latest change: Thu Oct 25 22:40:45 CEST 2007 [mika]
 ################################################################################
 
 die() {
@@ -48,35 +48,40 @@ echo "my_hdr From: grml-live autobuild daemon <$FROM>" > $MUTT_HEADERS
 
 # execute grml-live:
 grml_live_run() {
-grml-live -F $GRML_LIVE_ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
-          -g $NAME -v $DATE -r grml-live-autobuild -i $ISO_NAME \
-	  1>$GRML_LOGFILES/grml-buildd.stdout \
-	  2>$GRML_LOGFILES/grml-buildd.stderr ; RC=$?
+  if [ -f "$ISO_DIR/$ISO_NAME" ] ; then
+     echo "$ISO_DIR/$ISO_NAME exists already. Nothing to be done, exiting."
+     exit 0
+  fi
 
-if [ "$RC" = "0" ] ; then
-   RC_INFO=success
-else
-   RC_INFO=error
-fi
+  grml-live -F $GRML_LIVE_ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
+            -g $NAME -v $DATE -r grml-live-autobuild -i $ISO_NAME \
+            1>$GRML_LOGFILES/grml-buildd.stdout \
+            2>$GRML_LOGFILES/grml-buildd.stderr ; RC=$?
+
+  if [ "$RC" = "0" ] ; then
+     RC_INFO=success
+  else
+     RC_INFO=error
+  fi
 }
 
 # create log archive:
 create_logs() {
-( cd / && tar zcf $ATTACHMENT var/log/fai/dirinstall/grml 1>/dev/null )
+  ( cd / && tar zcf $ATTACHMENT var/log/fai/dirinstall/grml 1>/dev/null )
 }
 
 # store information of ISO size:
 iso_details() {
-if ! [ -f "$OUTPUT_DIR/grml_isos/$ISO_NAME" ] ; then
-   ISO_DETAILS="There was an error creating $ISO_NAME"
-else
-   ISO_DETAILS=$(ls -lh $OUTPUT_DIR/grml_isos/$ISO_NAME)
-fi
+  if ! [ -f "$OUTPUT_DIR/grml_isos/$ISO_NAME" ] ; then
+     ISO_DETAILS="There was an error creating $ISO_NAME"
+  else
+     ISO_DETAILS=$(ls -lh $OUTPUT_DIR/grml_isos/$ISO_NAME)
+  fi
 }
 
 # send status mail:
 send_mail() {
-echo -en "Automatically generated mail by $SCRIPTNAME
+  echo -en "Automatically generated mail by $SCRIPTNAME
 
 $ISO_DETAILS
 
@@ -91,9 +96,9 @@ The following warnings have been noticed:
 $(grep warn $FAI_LOGFILES/* || echo "* nothing")
 
 Find details in the attached logs." | \
-mutt -s "$SCRIPTNAME [${DATE}] - $RC_INFO" \
-     -a $ATTACHMENT \
-     $RECIPIENT
+  mutt -s "$SCRIPTNAME [${DATE}] - $RC_INFO" \
+       -a $ATTACHMENT \
+       $RECIPIENT
 }
 
 # make sure we store the final iso:
