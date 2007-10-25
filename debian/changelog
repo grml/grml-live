@@ -24,6 +24,7 @@ grml-live (0.0.7) unstable; urgency=low
     - ldnsutils
     - madwifi-modules-2.6.23-grml
   * Update kernel version of GRML_MEDIUM to 2.6.23-grml as well.
+  * Use new kernel version 2.6.23-grml64 for amd64.
   * Add 'ed' to GRML_SMALL and GRML_MEDIUM.
 
  -- Michael Prokop <mika@grml.org>  Sat, 20 Oct 2007 12:12:33 +0200

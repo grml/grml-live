@@ -192,4 +192,4 @@ PACKAGES aptitude I386
 linux-image-2.6.20-grml-small aufs-modules-2.6.20-grml-small
 
 PACKAGES aptitude AMD64
-linux-image-2.6.20-grml64 aufs-modules-2.6.20-grml64
+linux-image-2.6.23-grml64 aufs-modules-2.6.23-grml64
