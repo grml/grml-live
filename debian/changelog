@@ -9,7 +9,9 @@ grml-live (0.0.7) unstable; urgency=low
     - buildd/functions.sh: do not mv files if there was an error
       during grml-live execution
   * Added new grml-repository named grml-live which is intented
-    to fix issues from Debian for grml-live builds.
+    to fix issues from Debian for grml-live builds. It is automatically
+    activated if you are building against unstable/sid and should
+    be used manually only if you realy know what you are doing. :)
   * Use apt-pinning via /etc/grml/fai/config/hooks/instsoft.GRMLBASE
     already and remove it from /etc/grml/fai/config/scripts/GRMLBASE/33-aptsetup
   * Display version number of grml-live.
