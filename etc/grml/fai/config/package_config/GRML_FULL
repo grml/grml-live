@@ -2075,6 +2075,7 @@ linux-headers-2.6.23-grml
 linux-image-2.6.23-grml
 #linux-source-2.6.23-grml
 loop-aes-modules-2.6.23-grml
+madwifi-modules-2.6.23-grml
 nozomi-modules-2.6.23-grml
 #nvidia-kernel-2.6.23-grml
 qc-usb-modules-2.6.23-grml
