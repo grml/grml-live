@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Thu Oct 25 22:40:45 CEST 2007 [mika]
+# Latest change: Fri Oct 26 01:29:50 CEST 2007 [mika]
 ################################################################################
 
 die() {
@@ -48,9 +48,11 @@ echo "my_hdr From: grml-live autobuild daemon <$FROM>" > $MUTT_HEADERS
 
 # execute grml-live:
 grml_live_run() {
-  if [ -f "$ISO_DIR/$ISO_NAME" ] ; then
-     echo "$ISO_DIR/$ISO_NAME exists already. Nothing to be done, exiting."
-     exit 0
+  if ! [ "$FORCE_REBUILD" = "1" ] ; then
+     if [ -f "$ISO_DIR/$ISO_NAME" ] ; then
+        echo "$ISO_DIR/$ISO_NAME exists already. Nothing to be done, exiting."
+        exit 0
+     fi
   fi
 
   grml-live -F $GRML_LIVE_ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
