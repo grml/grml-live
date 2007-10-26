@@ -207,8 +207,8 @@ if [ -z "$FORCE" ] ; then
    [ -n "$BOOT_METHOD" ]   && echo "  Boot method:       $BOOT_METHOD"
    [ -n "$TEMPLATE_DIRECTORY" ] && echo "  Template files:    $TEMPLATE_DIRECTORY"
    [ -n "$FAI_ARGS" ]      && echo "  additional arguments for FAI: $FAI_ARGS"
-   [ -n "$VERBOSE" ]       && echo "  Using VERBOSE mode."
    [ -n "$LOGFILE" ]       && echo "  Logging to file:   $LOGFILE"
+   [ -n "$VERBOSE" ]       && echo "  Using VERBOSE mode."
    echo
    echo -n "Is this ok for you? [y/N] "
    read a
