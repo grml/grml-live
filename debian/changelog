@@ -29,9 +29,17 @@ grml-live (0.0.7) unstable; urgency=low
   * Add new packages to GRML_FULL:
     - ldnsutils
     - madwifi-modules-2.6.23-grml
-  * Update kernel version of GRML_MEDIUM to 2.6.23-grml as well.
+    - linux-wlan-ng-modules-2.6.23-grml
+  * Add new packages to GRML_MEDIUM:
+    - alsa-base
+    - alsa-tools
+    - alsa-utils
+    - ed
+    - pcmciautils
+    - Update kernel version to 2.6.23-grml
+  * Add new package to GRML_SMALL:
+    - ed
   * Use new kernel version 2.6.23-grml64 for amd64.
-  * Add 'ed' to GRML_SMALL and GRML_MEDIUM.
 
  -- Michael Prokop <mika@grml.org>  Sat, 20 Oct 2007 12:12:33 +0200
 

@@ -3,6 +3,9 @@ PACKAGES aptitude
 acpid
 adduser
 agrep
+alsa-base
+alsa-tools
+alsa-utils
 apt
 atftp
 atftpd
@@ -135,6 +138,7 @@ openssh-server
 passwd
 patch
 pciutils
+pcmciautils
 ppp
 pppoeconf
 prism54-firmware
