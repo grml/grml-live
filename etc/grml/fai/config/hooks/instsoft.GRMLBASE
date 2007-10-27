@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mit Okt 24 14:30:53 CEST 2007 [mika]
+# Latest change: Sat Oct 27 02:15:35 CEST 2007 [mika]
 ################################################################################
 
 set -u
@@ -22,7 +22,7 @@ $ROOTCMD apt-key add /etc/apt/grml.key
 
 # make sure we prefer grml repository:
 if [ -r /etc/grml/fai/files/etc/apt/preferences ] ; then
-   cp /etc/grml/fai/files/etc/apt/preferences $target/etc/apt/preferences
+   cp /etc/grml/fai/apt//preferences $target/etc/apt/preferences
 fi
 
 # make sure we have file-rc available before
