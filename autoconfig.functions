@@ -744,7 +744,7 @@ if [ -d /proc/acpi ]; then
     else
       ewarn "(none)" ; eend 1
     fi
-    if ! [ -S /var/run/acpid.socket ] ; then
+    if ! ps x | grep -q /usr/sbin/acpid ; then
       if ! [ -r /var/run/dbus/pid ] ; then
         einfo "Starting acpi daemon."
         /etc/init.d/acpid start 1>>$DEBUG 2>&1 ; eend $?
