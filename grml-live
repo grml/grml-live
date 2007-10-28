@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Oct 28 15:26:10 CET 2007 [mika]
+# Latest change: Sun Oct 28 23:52:20 CET 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -31,9 +31,16 @@ if [ -r /var/run/fai/FAI_INSTALLATION_IN_PROGRESS ] ; then
    exit 1
 fi
 
+if [ -r /var/run/fai/fai_softupdate_is_running ] ; then
+   echo "/usr/sbin/fai softupdate already running or was aborted before.">&2
+   echo "You may remove /var/run/fai/fai_softupdate_is_running and try again.">&2
+   exit 1
+fi
+
 # make sure they are not set by default
 VERBOSE=''
 FORCE=''
+UPDATE=''
 
 if [ -r /etc/grml/lsb-functions ] ; then
    . /etc/grml/lsb-functions
@@ -170,7 +177,7 @@ http://grml.org/bugs/
 
 # command line parsing {{{
 
-while getopts "a:c:g:i:o:r:s:t:v:FhV" opt; do
+while getopts "a:c:g:i:o:r:s:t:v:FhuV" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     c) CLASSES="$OPTARG" ;;
@@ -187,6 +194,7 @@ while getopts "a:c:g:i:o:r:s:t:v:FhV" opt; do
     v) VERSION="$OPTARG" ;;
     F) FORCE=1 ;;
     h) usage ; bailout 0 ;;
+    u) UPDATE=1 ;;
     V) VERBOSE="-v" ;;
     ?) echo "invalid option -$OPTARG" >&2; bailout 1 ;;
   esac
@@ -221,6 +229,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$FAI_ARGS" ]      && echo "  additional arguments for FAI: $FAI_ARGS"
    [ -n "$LOGFILE" ]       && echo "  Logging to file:   $LOGFILE"
    [ -n "$VERBOSE" ]       && echo "  Using VERBOSE mode."
+   [ -n "$UPDATE" ]        && echo "  Executing UPDATE instead of fresh installation."
    echo
    echo -n "Is this ok for you? [y/N] "
    read a
@@ -290,7 +299,13 @@ fi
 # CHROOT_OUTPUT - execute FAI {{{
 [ -n "$CHROOT_OUTPUT" ] || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
 
-if [ -d "$CHROOT_OUTPUT/bin" ] ; then
+if [ -n "$UPDATE" ] ; then
+   FAI_ACTION=softupdate
+else
+   FAI_ACTION=dirinstall
+fi
+
+if [ -d "$CHROOT_OUTPUT/bin" -a -z "$UPDATE" ] ; then
    log "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'"
    ewarn "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'" ; eend 0
 else
@@ -299,7 +314,7 @@ else
       mkdir -p "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
       mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
    fi
-   fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u "$HOSTNAME" dirinstall "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
+   fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u "$HOSTNAME" $FAI_ACTION "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
    log "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]"
    echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]" > $CHROOT_OUTPUT/etc/grml_version
    chmod 644 $CHROOT_OUTPUT/etc/grml_version
@@ -312,6 +327,7 @@ else
    if [ -r "/var/log/fai/dirinstall/$HOSTNAME/software.log" ] ; then
       # 1 errors during executing of commands
       # Unable to write mmap - msync (28 No space left on device)
+      # 'No candidate version found for' [/var/log/fai/current/software.log]
       grep 'dpkg: error processing' /var/log/fai/dirinstall/$HOSTNAME/software.log >> $LOGFILE && ERROR=1
       grep 'E: Method http has died unexpectedly!' /var/log/fai/dirinstall/$HOSTNAME/software.log >> $LOGFILE && ERROR=2
       grep 'ERROR: chroot' /var/log/fai/dirinstall/$HOSTNAME/software.log >> $LOGFILE && ERROR=3

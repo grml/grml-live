@@ -1,5 +1,10 @@
 grml-live (0.0.7) unstable; urgency=low
 
+  * Added FAI patches to /usr/share/grml-live/patches/ - it's
+    recommended to apply the patches to FAI until they are accepted
+    upstream. See Debian's BTS for more details: #444210, #447080
+    and #448426.
+  * Support option '-u' for updating system.
   * Reworked buildd concept.
     - Now we have a seperate
       /usr/share/grml-live/buildd/functions.sh for generic stuff

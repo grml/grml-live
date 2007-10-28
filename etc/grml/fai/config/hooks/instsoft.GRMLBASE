@@ -10,6 +10,24 @@
 set -u
 set -e
 
+if [ "$FAI_ACTION" = "softupdate" ] ; then
+   echo "Softupdate"
+   # make sure we prefer grml repository:
+   if [ -r /etc/grml/fai/apt/preferences ] ; then
+      cp /etc/grml/fai/apt/preferences $target/etc/apt/preferences
+   fi
+
+   if [ -r /etc/grml/fai/apt/sources.list ] ; then
+      if [ -L $target/etc/apt/sources.list ] ; then
+         rm $target/etc/apt/sources.list
+      fi
+      cp /etc/grml/fai/apt/sources.list $target/etc/apt/sources.list
+   fi
+
+   $ROOTCMD apt-get update
+
+else # no softupdate but fresh installation
+
 # work around http://trac.lighttpd.net/trac/ticket/657
 # should be removed later on:
 echo "Acquire::http::Pipeline-Depth "0"; // added by grml-live" >> $target/etc/apt/apt.conf
@@ -22,7 +40,7 @@ $ROOTCMD apt-key add /etc/apt/grml.key
 
 # make sure we prefer grml repository:
 if [ -r /etc/grml/fai/files/etc/apt/preferences ] ; then
-   cp /etc/grml/fai/apt//preferences $target/etc/apt/preferences
+   cp /etc/grml/fai/apt/preferences $target/etc/apt/preferences
 fi
 
 # make sure we have file-rc available before
@@ -55,6 +73,8 @@ if [ -L "$target"/usr/sbin/invoke-rc.d ] ; then
    rm -f "$target"/usr/sbin/invoke-rc.d
    $ROOTCMD dpkg-divert --package fai --rename --remove /usr/sbin/invoke-rc.d
 fi
+
+fi # end of FAI_ACTION = softupdate
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
