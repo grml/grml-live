@@ -20,6 +20,8 @@ grml-live (0.0.7) unstable; urgency=low
     debootstrap system we can't do anything via grml-live for you
     right now. Instead grab http://daily.grml.org/base.tgz
     and place that at $NFSROOT/nfsroot/live/filesystem.dir/var/tmp/base.tgz
+  * Add /usr/share/grml-live/scripts/repodiff.pl (by formorer, thx!)
+    for comparing two repositories.
   * Replaced /etc/grml/fai/files/etc/apt/preferences
     with /etc/grml/fai/apt/preferences so grml-live repository
     can be used and configured at a single place.
