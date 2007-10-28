@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Oct 28 14:43:27 CET 2007 [mika]
+# Latest change: Sun Oct 28 15:26:10 CET 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -16,6 +16,8 @@ export LC_ALL=C
 set -e
 
 GRML_LIVE_VERSION='0.0.7'
+CMDLINE="$0 $@"
+ISO_DATE="$(date +%Y-%m-%d)"
 
 # we need root permissions for the build-process:
 if [ "$(id -u 2>/dev/null)" != 0 ] ; then
@@ -54,6 +56,7 @@ bailout() {
   [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
   [ -n "$1" ] && EXIT="$1" || EXIT="1"
   [ -n "$2" ] && eerror "$2">&2
+  log "------------------------------------------------------------------------------"
   exit "$EXIT"
 }
 trap bailout 1 2 3 15
@@ -229,8 +232,8 @@ fi
 
 start_seconds=$(cut -d . -f 1 /proc/uptime)
 log "------------------------------------------------------------------------------"
-log "Starting grml-live [${GRML_LIVE_VERSION}] run [$(date)]"
-log "Executed command line: $0 $@"
+log "Starting grml-live [${GRML_LIVE_VERSION}] run on $(date)"
+log "Executed command line: $CMDLINE"
 
 einfo "Logging actions to logfile $LOGFILE"
 # }}}
@@ -297,6 +300,8 @@ else
       mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
    fi
    fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u "$HOSTNAME" dirinstall "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
+   log "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]"
+   echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]" > $CHROOT_OUTPUT/etc/grml_version
    umount $CHROOT_OUTPUT/proc 2>/dev/null || /bin/true
    umount $CHROOT_OUTPUT/sys  2>/dev/null || /bin/true
    [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
@@ -377,7 +382,6 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       cp -a ${TEMPLATE_DIRECTORY}/GRML/* "$BUILD_OUTPUT"/GRML/
 
       # adjust boot splash information:
-      ISO_DATE="$(date +%Y-%m-%d)"
       RELEASE_INFO="$GRML_NAME $VERSION - Release Codename $RELEASENAME"
       RELEASE_INFO="$(cut_string 68 "$RELEASE_INFO")"
       RELEASE_INFO="$(extend_string_end 68 "$RELEASE_INFO")"
@@ -475,7 +479,6 @@ fi
 [ -n "$start_seconds" ] && SECONDS="$[$(cut -d . -f 1 /proc/uptime)-$start_seconds]" || SECONDS="unknown"
 einfo "Sucessfully finished execution of $PN [running ${SECONDS} seconds]" ; eend 0
 log "Sucessfully finished execution of $PN [running ${SECONDS} seconds]"
-log "------------------------------------------------------------------------------"
 bailout 0
 # }}}
 

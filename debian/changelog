@@ -25,7 +25,8 @@ grml-live (0.0.7) unstable; urgency=low
   * Set FAI_DEBOOTSTRAP_OPTS="--exclude=dhcp-client,info"
     by default.
   * Set $SECONDS to unknown if $start_seconds is not set.
-  * Improve directory handling for $LOGFILE.
+  * Log closing signs (----...) via bailout to make sure they are
+    always set - even when exiting with an error.
   * Check for presence of /bin/zsh before setting default shell in
     /etc/grml/fai/config/scripts/GRMLBASE/21-usersetup
   * Add new packages to GRML_FULL:
