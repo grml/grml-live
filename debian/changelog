@@ -9,6 +9,7 @@ grml-live (0.0.7) unstable; urgency=low
     - buildd/functions.sh: do not mv files if there was an error
       during grml-live execution
     - do not re-execute grml-live is the target ISO exists already
+  * Set /etc/grml_version of live-system to the according value.
   * Log to /var/log/grml-live.log by default now and support
     $ZERO_LOGFILE for cleaning up logs.
   * Added new grml-repository named grml-live which is intented

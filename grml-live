@@ -302,6 +302,7 @@ else
    fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u "$HOSTNAME" dirinstall "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
    log "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]"
    echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]" > $CHROOT_OUTPUT/etc/grml_version
+   chmod 644 $CHROOT_OUTPUT/etc/grml_versio
    umount $CHROOT_OUTPUT/proc 2>/dev/null || /bin/true
    umount $CHROOT_OUTPUT/sys  2>/dev/null || /bin/true
    [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
