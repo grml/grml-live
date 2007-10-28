@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Fri Oct 26 01:29:50 CEST 2007 [mika]
+# Latest change: Sun Oct 28 14:49:02 CET 2007 [mika]
 ################################################################################
 
 die() {
@@ -37,12 +37,16 @@ MUTT_HEADERS=$(mktemp)
 [ -n "$ISO_DIR" ]       || ISO_DIR=$STORAGE/grml-isos
 [ -n "$RECIPIENT" ]     || RECIPIENT=root@localhost
 [ -n "$ATTACHMENT" ]    || ATTACHMENT=$TMP_DIR/grml-live-logs_$DATE.tar.gz
-[ -n "$FAI_LOGFILES" ]  || FAI_LOGFILES=/var/log/fai/dirinstall/grml
-[ -n "$GRML_LOGFILES" ] || GRML_LOGFILES=/var/log/grml-live/
 [ -n "$FROM" ]          || FROM=root@localhost
 
+if [ -n "$LOGFILE" ] ; then
+   GRML_LOGFILE="$LOGFILE"
+else
+   [ -n "$GRML_LOGFILE" ]  || GRML_LOGFILE=/var/log/grml-live.log
+fi
+
+[ -n "$FAI_LOGFILES" ]  || FAI_LOGFILES=/var/log/fai/dirinstall/grml
 [ -d "$FAI_LOGFILES" ]  || mkdir -p $FAI_LOGFILES
-[ -d "$GRML_LOGFILES" ] || mkdir -p $GRML_LOGFILES
 
 echo "my_hdr From: grml-live autobuild daemon <$FROM>" > $MUTT_HEADERS
 
@@ -57,8 +61,8 @@ grml_live_run() {
 
   grml-live -F $GRML_LIVE_ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
             -g $NAME -v $DATE -r grml-live-autobuild -i $ISO_NAME \
-            1>$GRML_LOGFILES/grml-buildd.stdout \
-            2>$GRML_LOGFILES/grml-buildd.stderr ; RC=$?
+            1>$FAI_LOGFILES/grml-buildd.stdout \
+            2>$FAI_LOGFILES/grml-buildd.stderr ; RC=$?
 
   if [ "$RC" = "0" ] ; then
      RC_INFO=success
@@ -69,7 +73,7 @@ grml_live_run() {
 
 # create log archive:
 create_logs() {
-  ( cd / && tar zcf $ATTACHMENT var/log/fai/dirinstall/grml 1>/dev/null )
+  ( cd / && tar zcf $ATTACHMENT var/log/fai/dirinstall/grml $GRML_LOGFILE 1>/dev/null )
 }
 
 # store information of ISO size:
