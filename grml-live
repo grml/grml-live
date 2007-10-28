@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Wed Oct 24 10:11:02 CEST 2007 [mika]
+# Latest change: Sun Oct 28 14:43:27 CET 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -71,8 +71,17 @@ trap bailout 1 2 3 15
 [ -n "$RELEASENAME" ] || RELEASENAME="grml-live rocks"
 [ -n "$GRML_NAME" ] || GRML_NAME='grml'
 
-[ -d /var/log/grml-live ] || mkdir /var/log/grml-live
-LOGFILE=/var/log/grml-live/"$(date +%Y-%m-%d)_$$.log"
+# logfile:
+if [ -z "$LOGFILE" ] ; then
+   LOGFILE=/var/log/grml-live.log
+fi
+touch $LOGFILE
+chown root:adm $LOGFILE
+chmod 640 $LOGFILE
+# clean/zero logfile:
+if [ -n "$ZERO_LOGFILE" ] ; then
+   echo -n > $LOGFILE
+fi
 
 NFSROOT_CONF=/etc/grml/fai/make-fai-nfsroot.conf
 
