@@ -31,7 +31,7 @@ debconf
 debconf-i18n
 debianutils
 deborphan
-dhcp-client
+dhcp3-client
 dialog
 diff
 dmidecode

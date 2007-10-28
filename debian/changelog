@@ -39,8 +39,9 @@ grml-live (0.0.7) unstable; urgency=low
     - ed
     - pcmciautils
     - Update kernel version to 2.6.23-grml
-  * Add new package to GRML_SMALL:
-    - ed
+    - replace dhcp-client with dhcp3-client
+  * Add ed package to GRML_SMALL and replace dhcp-client with
+    dhcp3-client.
   * Use new kernel version 2.6.23-grml64 for amd64.
 
  -- Michael Prokop <mika@grml.org>  Sat, 20 Oct 2007 12:12:33 +0200
