@@ -305,6 +305,15 @@ else
    FAI_ACTION=dirinstall
 fi
 
+if [ -n "$UPDATE" ] ; then
+   if ! [ -r "$CHROOT_OUTPUT/etc/grml_version" ] ; then
+      log "Error: It does not look like you have a working chroot system. Updating not possible."
+      eerror "Error: It does not look like you have a working chroot system. Updating not possible."
+      eend 1
+      bailout 20
+   fi
+fi
+
 if [ -d "$CHROOT_OUTPUT/bin" -a -z "$UPDATE" ] ; then
    log "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'"
    ewarn "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'" ; eend 0
