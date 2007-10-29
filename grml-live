@@ -396,10 +396,11 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          bailout 8
       fi
 
-      cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*               "$BUILD_OUTPUT"/boot/isolinux/
-      cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*               "$BUILD_OUTPUT"/boot/isolinux/
-      if ! [ -d "${TEMPLATE_DIRECTORY}/boot/grub" ] ; then
-         cp -a ${TEMPLATE_DIRECTORY}/boot/grub                  "$BUILD_OUTPUT"/boot/
+      cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
+      cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
+
+      if ! [ -d "${BUILD_OUTPUT}/boot/grub" ] ; then
+         cp -a ${TEMPLATE_DIRECTORY}/boot/grub  "$BUILD_OUTPUT"/boot/
       fi
 
       if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
