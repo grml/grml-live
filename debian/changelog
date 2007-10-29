@@ -15,6 +15,9 @@ grml-live (0.0.7) unstable; urgency=low
       during grml-live execution
     - do not re-execute grml-live is the target ISO exists already
   * Set /etc/grml_version of live-system to the according value.
+    [Closes: issue322]
+  * Support setting /etc/debian_chroot inside chroot (useful if
+    building fails and manual interaction is needed).
   * Log to /var/log/grml-live.log by default now and support
     $ZERO_LOGFILE for cleaning up logs.
   * Added new grml-repository named grml-live which is intented
@@ -31,7 +34,7 @@ grml-live (0.0.7) unstable; urgency=low
     with /etc/grml/fai/apt/preferences so grml-live repository
     can be used and configured at a single place.
   * Use apt-pinning via /etc/grml/fai/config/hooks/instsoft.GRMLBASE
-    already and remove it from /etc/grml/fai/config/scripts/GRMLBASE/33-aptsetup
+    and drop it from /etc/grml/fai/config/scripts/GRMLBASE/33-aptsetup
   * Display version number of grml-live.
   * Log executed grml-live command line.
   * Set FAI_DEBOOTSTRAP_OPTS="--exclude=dhcp-client,info"

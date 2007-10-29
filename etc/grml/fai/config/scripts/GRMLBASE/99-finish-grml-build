@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Oct 15 19:12:13 CEST 2007 [mika]
+# Latest change: Mon Okt 29 10:46:02 CET 2007 [mika]
 ################################################################################
 
 set -u
@@ -14,6 +14,11 @@ set -e
 # for FAI via /etc/grml/fai/config/hooks/instsoft.GRMLBASE
 if [ -r $target/etc/apt/apt.conf ] ; then
    sed -i "s#Acquire::http::Pipeline-Depth.*#// &#" $target/etc/apt/apt.conf
+fi
+
+# remove an existing /etc/debian_chroot file:
+if [ -r $target/etc/debian_chroot ] ; then
+   rm -f $target/etc/debian_chroot
 fi
 
 # /etc/grml_cd makes the live system recognizable as a live system

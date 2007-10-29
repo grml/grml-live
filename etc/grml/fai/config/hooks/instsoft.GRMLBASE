@@ -4,11 +4,14 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sat Oct 27 02:15:35 CEST 2007 [mika]
+# Latest change: Mon Okt 29 23:35:34 CET 2007 [mika]
 ################################################################################
 
 set -u
 set -e
+
+# visualize chroot inside zsh:
+echo grml_chroot > $target/etc/debian_chroot
 
 if [ "$FAI_ACTION" = "softupdate" ] ; then
    echo "Softupdate"
