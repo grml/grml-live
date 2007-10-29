@@ -45,9 +45,11 @@ grml-live (0.0.7) unstable; urgency=low
   * Check for presence of /bin/zsh before setting default shell in
     /etc/grml/fai/config/scripts/GRMLBASE/21-usersetup
   * Add new packages to GRML_FULL:
+    - bittwist
     - ldnsutils
-    - madwifi-modules-2.6.23-grml
     - linux-wlan-ng-modules-2.6.23-grml
+    - madwifi-modules-2.6.23-grml
+    - netrw
   * Add new packages to GRML_MEDIUM:
     - alsa-base
     - alsa-tools
