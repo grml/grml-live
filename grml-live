@@ -465,7 +465,7 @@ if [ -f "$BUILD_OUTPUT"/live/grml.squashfs -a -z "$UPDATE" ] ; then
    log "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'"
    ewarn "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'" ; eend 0
 else
-   mkdir "$BUILD_OUTPUT"/live
+   [ -d "$BUILD_OUTPUT"/live ] || mkdir "$BUILD_OUTPUT"/live
    mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend
    log "Finished execution of stage 'squashfs' [$(date)]"
    einfo "Finished execution of stage 'squashfs'" ; eend 0
