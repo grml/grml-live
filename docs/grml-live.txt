@@ -12,7 +12,7 @@ Synopsis
 
 grml-live [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ]
 [-o <output_directory>] [-r <release_name>] [-s <suite>] [-t
-<template_directory>] [-v <version_number>] [-FVh]
+<template_directory>] [-v <version_number>] [-FVhu]
 
 *******************************************************************************
 Important! This document is growing as requested. If you have questions which
@@ -110,6 +110,11 @@ Specify the Debian suite you want to use for your live-system.  Defaults to
 Specify place of the templates used for building the ISO. By default 
 (and if not manually specified) this is /usr/share/grml-live/templates/.
 
+  -u::
+
+Update existing chroot instead of rebuilding it from scratch. This option is
+based on the softupdate feature of FAI.
+
   -v **VERSION_NUMBER**::
 
 Specify version number of the release.
@@ -198,7 +203,7 @@ FAI itself (being available at /usr/share/doc/fai-doc/).
 Available classes
 -----------------
 
-To be done...
+Documentation to be done...
 
 Files
 -----
@@ -293,6 +298,20 @@ files please refer to the source of the scripts.
 
 This directory provides the files used for building the initramfs/initrd via
 live-initramfs(8).
+
+Available log files
+-------------------
+
+grml-live itself logs to /var/log/grml-live.log. Unless you set ZERO_LOGFILE in
+/etc/grml/grml-live.conf the output is appended to the file. If you set the
+ZERO_LOGFILE configuration option the logfile will be truncated on a new
+invocation of grml-live.
+
+The FAI part of grml-live logs to /var/log/fai/dirinstall/$HOSTNAME - so the
+default being /var/log/fai/dirinstall/grml.
+
+If you are using the update option of grml-live (option -u) the logs are
+available at /var/log/fai/current.
 
 Requirements for the build system
 ---------------------------------
@@ -410,8 +429,12 @@ So as /grml/fai/nfsroot is your NFSROOT place the file under
 
   mv base.tgz /grml/fai/nfsroot/live/filesystem.dir/var/tmp/base.tgz
 
+or even better use /etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz instead.
+Use I386 as $CLASSNAME for i386 builds and AMD64 for amd64 builds.
+
 Now running "grml-live ..." will use this file as main system instead of
-executing debootstrap. Check out the output for the following lines:
+executing debootstrap. Check out the output for the following lines if using
+NFSROOT:
 
   [...]
   Calling task_extrbase
@@ -420,11 +443,12 @@ executing debootstrap. Check out the output for the following lines:
   Calling task_mirror
   [...]
 
-[NOTE]
+or if using /etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz for:
 
-Notice that you can also use /etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz if
-you prefer to use /etc as the main configuration directory instead of
-/path/to/nfsroot/.... (Thanks to Thomas Lange for the tip.)
+  [...]
+  ftar: extracting /etc/grml/fai/config/basefiles///AMD64.tar.gz to
+  /grml-live/grml-live_20071029.22138/grml_chroot//
+  [...]
 
 Set up apt-cacher for use with grml-live
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

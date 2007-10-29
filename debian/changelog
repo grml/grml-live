@@ -1,5 +1,7 @@
 grml-live (0.0.7) unstable; urgency=low
 
+  The "holidays? what? are you joking?!"-release.
+
   * Added FAI patches to /usr/share/grml-live/patches/ - it's
     recommended to apply the patches to FAI until they are accepted
     upstream. See Debian's BTS for more details: #444210, #447080
@@ -26,8 +28,7 @@ grml-live (0.0.7) unstable; urgency=low
     be used manually only if you realy know what you are doing.
     Notice: if something fails inside building the base chroot/
     debootstrap system we can't do anything via grml-live for you
-    right now. Instead grab http://daily.grml.org/base.tgz
-    and place that at $NFSROOT/nfsroot/live/filesystem.dir/var/tmp/base.tgz
+    right now. Instead grab the base.tgz from http://daily.grml.org/
   * Add /usr/share/grml-live/scripts/repodiff.pl (by formorer, thx!)
     for comparing two repositories.
   * Replaced /etc/grml/fai/files/etc/apt/preferences
@@ -35,6 +36,7 @@ grml-live (0.0.7) unstable; urgency=low
     can be used and configured at a single place.
   * Use apt-pinning via /etc/grml/fai/config/hooks/instsoft.GRMLBASE
     and drop it from /etc/grml/fai/config/scripts/GRMLBASE/33-aptsetup
+    later again.
   * Display version number of grml-live.
   * Log executed grml-live command line.
   * Set FAI_DEBOOTSTRAP_OPTS="--exclude=dhcp-client,info"

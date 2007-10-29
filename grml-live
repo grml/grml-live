@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Oct 28 23:52:20 CET 2007 [mika]
+# Latest change: Die Okt 30 00:09:42 CET 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -155,7 +155,7 @@ $PN - build process script for generating a (grml based) Linux Live-ISO
 Usage: $PN [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] \\
                  [-i <iso_name> ] [-o <output_directory>] [-s <suite>] \\
                  [-t <template_directory>] [-s <suite>] \\
-                 [-v <version_number>] [-FVh]
+                 [-v <version_number>] [-FVhu]
 
 Usage examples:
 
@@ -356,12 +356,12 @@ mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for s
 
 # i386:
 if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
-   if [ -d "$BUILD_OUTPUT"/boot ] ; then
+   if [ -d "$BUILD_OUTPUT"/boot -a -z "$UPDATE" ] ; then
       log "$BUILD_OUTPUT/boot exists already, skipping stage 'boot'"
       ewarn "$BUILD_OUTPUT/boot exists already, skipping stage 'boot'" ; eend 0
    else
       # booting stuff:
-      mkdir -p "$BUILD_OUTPUT"/boot/isolinux
+      [ -d "$BUILD_OUTPUT"/boot/isolinux ] || mkdir -p "$BUILD_OUTPUT"/boot/isolinux
       cp /boot/memtest86+.bin "$BUILD_OUTPUT"/boot/isolinux/memtest
 
       # if we don't have an initrd we a) can't boot and b) there was an error
@@ -374,11 +374,11 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          bailout 10
       fi
 
-      cp "$CHROOT_OUTPUT"/boot/vmlinuz*                    "$BUILD_OUTPUT"/boot/isolinux/linux26
-      cp /usr/lib/syslinux/chain.c32                       "$BUILD_OUTPUT"/boot/isolinux/
-      cp /usr/lib/syslinux/isolinux.bin                    "$BUILD_OUTPUT"/boot/isolinux/
-      cp /usr/lib/syslinux/memdisk                         "$BUILD_OUTPUT"/boot/isolinux/
-      cp /usr/lib/syslinux/menu.c32                        "$BUILD_OUTPUT"/boot/isolinux/
+      cp "$CHROOT_OUTPUT"/boot/vmlinuz*  "$BUILD_OUTPUT"/boot/isolinux/linux26
+      cp /usr/lib/syslinux/chain.c32     "$BUILD_OUTPUT"/boot/isolinux/
+      cp /usr/lib/syslinux/isolinux.bin  "$BUILD_OUTPUT"/boot/isolinux/
+      cp /usr/lib/syslinux/memdisk       "$BUILD_OUTPUT"/boot/isolinux/
+      cp /usr/lib/syslinux/menu.c32      "$BUILD_OUTPUT"/boot/isolinux/
 
       [ -n "$TEMPLATE_DIRECTORY" ] || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
       if ! [ -d "${TEMPLATE_DIRECTORY}"/boot ] ; then
@@ -386,15 +386,19 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          eerror "${TEMPLATE_DIRECTORY}/boot does not exist. Exiting." ; eend 1
          bailout 8
       fi
+
       cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*               "$BUILD_OUTPUT"/boot/isolinux/
       cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*               "$BUILD_OUTPUT"/boot/isolinux/
-      cp -a ${TEMPLATE_DIRECTORY}/boot/grub                  "$BUILD_OUTPUT"/boot/
+      if ! [ -d "${TEMPLATE_DIRECTORY}/boot/grub" ] ; then
+         cp -a ${TEMPLATE_DIRECTORY}/boot/grub                  "$BUILD_OUTPUT"/boot/
+      fi
 
       if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
          log "${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
          eerror "${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting." ; eend 1
          bailout 9
       fi
+
       [ -d "$BUILD_OUTPUT"/GRML ] || mkdir "$BUILD_OUTPUT"/GRML
       cp -a ${TEMPLATE_DIRECTORY}/GRML/* "$BUILD_OUTPUT"/GRML/
 
@@ -419,17 +423,20 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       if [ -d "${TEMPLATE_DIRECTORY}/windows/autostart/" ] ; then
          cp ${TEMPLATE_DIRECTORY}/windows/autostart/* "$BUILD_OUTPUT"/
       fi
+
       # windows-binaries:
       if [ -n "$WINDOWS_BINARIES" ] ; then
          if [ -f "$BUILD_OUTPUT"/windows/putty.exe ] ; then
             log "$BUILD_OUTPUT/windows exists already, skipping stage 'WINDOWS_BINARIES'"
             ewarn "$BUILD_OUTPUT/windows exists already, skipping stage 'WINDOWS_BINARIES'" ; eend 0
          else
-            mkdir "$BUILD_OUTPUT"/windows
-            ( cd "$BUILD_OUTPUT"/windows
-              for file in pageant plink pscp psftp putty puttygen ; do
-                 wget -O ${file}.exe ${WINDOWS_BINARIES}/${file}.exe
-              done )
+            if ! [ -d "$BUILD_OUTPUT"/windows ] ; then
+               mkdir "$BUILD_OUTPUT"/windows
+               ( cd "$BUILD_OUTPUT"/windows
+                 for file in pageant plink pscp psftp putty puttygen ; do
+                    wget -O ${file}.exe ${WINDOWS_BINARIES}/${file}.exe
+                 done )
+            fi
          fi
       log "Finished execution of stage 'WINDOWS_BINARIES' [$(date)]"
       einfo "Finished execution of stage 'WINDOWS_BINARIES'" ; eend 0
@@ -444,7 +451,7 @@ else
    eerror 'Error: Unsupported ARCH, sorry. Want to support it? Contribute!' ; eend 1
 fi
 
-if [ -f "$BUILD_OUTPUT"/live/grml.squashfs ] ; then
+if [ -f "$BUILD_OUTPUT"/live/grml.squashfs -a -z "$UPDATE" ] ; then
    log "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'"
    ewarn "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'" ; eend 0
 else
@@ -469,7 +476,7 @@ elif [ "$BOOT_METHOD" = "grub" ] ; then
    BOOT_FILE="boot/grub/stage2_eltorito"
 fi
 
-if [ -f "${ISO_OUTPUT}/${ISO_NAME}" ] ; then
+if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" ] ; then
    log "$ISO_OUTPUT exists already, skipping stage 'iso build'"
    ewarn "$ISO_OUTPUT exists already, skipping stage 'iso build'" ; eend 0
 else
