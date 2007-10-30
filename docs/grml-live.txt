@@ -313,6 +313,9 @@ default being /var/log/fai/dirinstall/grml.
 If you are using the update option of grml-live (option -u) the logs are
 available at /var/log/fai/current.
 
+If you are using the grml-live buildd you will find the logs of the grml-live
+run at /var/log/grml-buildd.stdout and /var/log/grml-buildd.stderr.
+
 Requirements for the build system
 ---------------------------------
 

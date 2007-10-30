@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Oct 28 14:49:02 CET 2007 [mika]
+# Latest change: Die Okt 30 09:47:34 CET 2007 [mika]
 ################################################################################
 
 die() {
@@ -46,7 +46,6 @@ else
 fi
 
 [ -n "$FAI_LOGFILES" ]  || FAI_LOGFILES=/var/log/fai/dirinstall/grml
-[ -d "$FAI_LOGFILES" ]  || mkdir -p $FAI_LOGFILES
 
 echo "my_hdr From: grml-live autobuild daemon <$FROM>" > $MUTT_HEADERS
 
@@ -61,8 +60,8 @@ grml_live_run() {
 
   grml-live -F $GRML_LIVE_ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
             -g $NAME -v $DATE -r grml-live-autobuild -i $ISO_NAME \
-            1>$FAI_LOGFILES/grml-buildd.stdout \
-            2>$FAI_LOGFILES/grml-buildd.stderr ; RC=$?
+            1>/var/log/grml-buildd.stdout \
+            2>/var/log/grml-buildd.stderr ; RC=$?
 
   if [ "$RC" = "0" ] ; then
      RC_INFO=success
@@ -95,11 +94,11 @@ Return code of grml-live run was: $RC
 
 The following errors have been noticed (several might be warnings only):
 
-$(grep error $FAI_LOGFILES/* | grep -ve liberror -ve libgpg-error || echo "* nothing")
+$(grep -i error $FAI_LOGFILES/* /var/log/grml-buildd.std* | grep -ve liberror -ve libgpg-error || echo "* nothing")
 
 The following warnings have been noticed:
 
-$(grep warn $FAI_LOGFILES/* || echo "* nothing")
+$(grep -i warn $FAI_LOGFILES/* /var/log/grml-buildd.std* || echo "* nothing")
 
 Find details in the attached logs." | \
   mutt -s "$SCRIPTNAME [${DATE}] - $RC_INFO" \
