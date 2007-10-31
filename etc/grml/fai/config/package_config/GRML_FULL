@@ -2084,6 +2084,7 @@ qc-usb-modules-2.6.23-grml
 realtime-lsm-module-2.6.23-grml
 rt2400-modules-2.6.23-grml
 rt2500-modules-2.6.23-grml
+rt73-module-2.6.23-grml
 sl-modem-modules-2.6.23-grml
 #spca5xx-modules-2.6.23-grml
 sysprof-module-2.6.23-grml
