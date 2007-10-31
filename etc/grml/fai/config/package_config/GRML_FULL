@@ -122,6 +122,7 @@ ipw-firmware
 lame
 latextug
 lcdtest
+libpam-thinkfinger
 md5deep
 minised
 msgid-chooser
@@ -148,6 +149,7 @@ svn-ssh-wrappers
 tal
 texttools-doc
 thc-ipv6
+thinkfinger-tools
 tlswrap
 tpm-tools
 trapdoor2

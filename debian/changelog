@@ -49,10 +49,12 @@ grml-live (0.0.7) unstable; urgency=low
   * Add new packages to GRML_FULL:
     - bittwist
     - ldnsutils
+    - libpam-thinkfinger
     - linux-wlan-ng-modules-2.6.23-grml
     - madwifi-modules-2.6.23-grml
     - netrw
     - rt73-module-2.6.23-grml
+    - thinkfinger-tools
   * Drop idn from GRML_FULL.
   * Add new packages to GRML_MEDIUM:
     - alsa-base
