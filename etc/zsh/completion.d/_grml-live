@@ -4,16 +4,68 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Sep 17 00:17:42 CEST 2007 [mika]
+# Latest change: Thu, 01 Nov 2007 14:00:40 +0100 [ft]
 ################################################################################
 
-arguments=(
-  '-c:classe(s):($(cd /etc/grml/fai/config/class/ && ls *.var | tr -d '.var'))'
+_grmllive_flavours() { #{{{
+  local expl
+  local -a flavours
+
+  flavours=(
+    grml        grml64
+    grml-medium grml64-medium
+    grml-small  grml64-small
+  )
+  _wanted list expl 'grml flavour(s)' compadd ${expl} -- ${flavours}
+}
+#}}}
+_grmllive_archs() { #{{{
+  local expl runningarch
+  local -a archs
+
+  runningarch="$(dpkg --print-architecture)"
+  archs=( ${runningarch} )
+  [[ ${runningarch} == 'amd64' ]] && archs=( ${archs} 'i386')
+  _wanted list expl 'target architecture' compadd ${expl} -- ${archs}
+}
+#}}}
+_grmllive_classes() { #{{{
+    local expl
+    local -a already static_classes
+
+    static_classes=(RELEASE LATEX_CLEANUP NO_ONLINE REMOVE_DOCS LOCALES)
+    compset -P '*,'
+    already=(${(s<,>)IPREFIX})
+    _wanted list expl 'classe(s)' compadd -S, -F already -q ${expl} -- \
+        /etc/grml/fai/config/class/*(.N:t:r) ${static_classes}
+}
+#}}}
+_grmllive_suites() { #{{{
+  local expl
+  local -a suites
+
+  suites=(
+    stable  testing unstable
+    etch    lenny   sid
+  )
+  _wanted list expl 'Debian suite' compadd ${expl} -- ${suites}
+}
+#}}}
+arguments=( #{{{
   '-F[force execution without prompting for yes/no]'
+  '-a[specifiy architecture to use]:arch(s):_grmllive_archs'
+  '-c[available grml-live classes]:classe(s):_grmllive_classes'
+  '-g[grml flavour to use]:grml flavour(s):_grmllive_flavours'
   '-h[display usage information]'
-  '-s:Debian suite:(stable testing unstable etch lenny sid)'
-  '-v[increase verbosity]'
+  '-i[iso name, ends up in $OUTPUT_DIRECTORY/grml_isos]:iso name:'
+  '-o[output directory]:output directory:_path_files -/'
+  '-s[debian suite to be used for live-system]:Debian suite:_grmllive_suites'
+  '-t[template directory]:template directory:_path_files -/'
+  '-u[update existing chroot if possible]'
+  '-V[increase verbosity]'
 )
+#}}}
+
 _arguments -s $arguments
 
 ## END OF FILE #################################################################
