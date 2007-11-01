@@ -57,6 +57,7 @@ grml-live (0.0.7) unstable; urgency=low
     - netrw
     - rt73-module-2.6.23-grml
     - thinkfinger-tools
+    - tra
   * Drop idn from GRML_FULL.
   * Add new packages to GRML_MEDIUM:
     - alsa-base
