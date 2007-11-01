@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Okt 29 23:35:34 CET 2007 [mika]
+# Latest change: Thu Nov 01 16:18:38 CET 2007 [mika]
 ################################################################################
 
 set -u
@@ -34,6 +34,9 @@ else # no softupdate but fresh installation
 # work around http://trac.lighttpd.net/trac/ticket/657
 # should be removed later on:
 echo "Acquire::http::Pipeline-Depth "0"; // added by grml-live" >> $target/etc/apt/apt.conf
+
+# Recommends just pull in way tooooo much packages, so disable it:
+echo "APT::Install-Recommends "false"; // added by grml-live"   >> $target/etc/apt/apt.conf
 
 # install grml keys:
 gpg --keyserver subkeys.pgp.net      --recv-keys F61E2E7CECDEA787 || \
