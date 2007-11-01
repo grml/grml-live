@@ -33,7 +33,10 @@ _grmllive_classes() { #{{{
     local expl
     local -a already static_classes
 
-    static_classes=(RELEASE LATEX_CLEANUP NO_ONLINE REMOVE_DOCS LOCALES)
+    static_classes=(
+        RELEASE LATEX_CLEANUP NO_ONLINE REMOVE_DOCS LOCALES
+        I386 AMD64
+    )
     compset -P '*,'
     already=(${(s<,>)IPREFIX})
     _wanted list expl 'classe(s)' compadd -S, -F already -q ${expl} -- \
