@@ -42,6 +42,7 @@ grml-live (0.0.7) unstable; urgency=low
   * Log executed grml-live command line.
   * Set FAI_DEBOOTSTRAP_OPTS="--exclude=dhcp-client,info"
     by default.
+  * Use "newest" kernel only if two kernels are present in the chroot.
   * Set $SECONDS to unknown if $start_seconds is not set.
   * Log closing signs (----...) via bailout to make sure they are
     always set - even when exiting with an error.

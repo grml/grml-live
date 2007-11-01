@@ -383,7 +383,8 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          bailout 10
       fi
 
-      cp "$CHROOT_OUTPUT"/boot/vmlinuz*  "$BUILD_OUTPUT"/boot/isolinux/linux26
+      KERNEL_IMAGE="$(ls $CHROOT_OUTPUT/boot/vmlinuz* | sort -r | head -1)"
+      cp "$KERNEL_IMAGE"                 "$BUILD_OUTPUT"/boot/isolinux/linux26
       cp /usr/lib/syslinux/chain.c32     "$BUILD_OUTPUT"/boot/isolinux/
       cp /usr/lib/syslinux/isolinux.bin  "$BUILD_OUTPUT"/boot/isolinux/
       cp /usr/lib/syslinux/memdisk       "$BUILD_OUTPUT"/boot/isolinux/

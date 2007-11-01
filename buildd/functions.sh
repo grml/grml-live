@@ -92,6 +92,8 @@ $ISO_DETAILS
 
 Return code of grml-live run was: $RC
 
+$(grep 'Executed command line:' $GRML_LOGFILE || echo "* executed command line not available")
+
 The following errors have been noticed (several might be warnings only):
 
 $(grep -i error $FAI_LOGFILES/* /var/log/grml-buildd.std* | grep -ve liberror -ve libgpg-error || echo "* nothing")
@@ -99,6 +101,10 @@ $(grep -i error $FAI_LOGFILES/* /var/log/grml-buildd.std* | grep -ve liberror -v
 The following warnings have been noticed:
 
 $(grep -i warn $FAI_LOGFILES/* /var/log/grml-buildd.std* || echo "* nothing")
+
+The following packages could not be installed:
+
+$(grep -i "Couldn't find.*package" $FAI_LOGFILES/software.log | sed 's/\(.*\)"\(.*\)"\(.*\)/\2/' | sort -u || echo "* nothing")
 
 Find details in the attached logs." | \
   mutt -s "$SCRIPTNAME [${DATE}] - $RC_INFO" \
