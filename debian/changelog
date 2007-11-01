@@ -16,6 +16,7 @@ grml-live (0.0.7) unstable; urgency=low
     - buildd/functions.sh: do not mv files if there was an error
       during grml-live execution
     - do not re-execute grml-live is the target ISO exists already
+  * Update zsh completion - thanks to Frank Terbeck!
   * Set /etc/grml_version of live-system to the according value.
     [Closes: issue322]
   * Support setting /etc/debian_chroot inside chroot (useful if
