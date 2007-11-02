@@ -43,6 +43,7 @@ grml-live (0.0.7) unstable; urgency=low
   * Set FAI_DEBOOTSTRAP_OPTS="--exclude=dhcp-client,info"
     by default.
   * Disable Recommends inside chroot installation.
+  * Set shared/default-x-server via debconf to work around #448863.
   * Use "newest" kernel only if two kernels are present in the chroot.
   * Set $SECONDS to unknown if $start_seconds is not set.
   * Log closing signs (----...) via bailout to make sure they are
