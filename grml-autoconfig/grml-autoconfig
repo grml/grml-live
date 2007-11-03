@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Sep 17 17:39:29 CEST 2007 [mika]
+# Latest change: Sam Nov 03 17:22:09 CET 2007 [mika]
 ################################################################################
 
 # http://wiki.debian.org/LSBInitScripts =>
@@ -71,7 +71,7 @@ fi
 if [ -z "$INSTALLED" -a -e /live/cow ] ; then
    if ! grep -q rootfs /etc/mtab ; then
       for i in rootfs "none /sys sysfs" proc /live/image /live/cow /lib/init/rw /dev/shm /dev/pts ; do
-          grep $i /proc/mounts >> /etc/mtab
+          grep $i /proc/mounts | grep -v /dev/.static >> /etc/mtab
       done
    fi
 fi
