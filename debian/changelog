@@ -51,6 +51,8 @@ grml-live (0.0.7) unstable; urgency=low
     always set - even when exiting with an error.
   * Check for presence of /bin/zsh before setting default shell in
     /etc/grml/fai/config/scripts/GRMLBASE/21-usersetup
+  * Check for locales/localepurge before using them in
+    /etc/grml/fai/config/scripts/GRMLBASE/25-locales
   * Add new packages to GRML_FULL:
     - bittwist
     - ldnsutils

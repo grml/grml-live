@@ -102,6 +102,10 @@ The following warnings have been noticed:
 
 $(grep -i warn $FAI_LOGFILES/* /var/log/grml-buildd.std* || echo "* nothing")
 
+There following dependency problems have been noticed:
+
+$(grep -i "[Not Installed]" $FAI_LOGFILES/software.log || echo "* nothing")
+
 The following packages could not be installed:
 
 $(grep -i "Couldn't find.*package" $FAI_LOGFILES/software.log | sed 's/\(.*\)"\(.*\)"\(.*\)/\2/' | sort -u || echo "* nothing")
