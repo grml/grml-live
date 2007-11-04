@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Nov 04 11:29:07 CET 2007 [mika]
+# Latest change: Sun Nov 04 12:11:32 CET 2007 [mika]
 ################################################################################
 
 set -e
@@ -18,9 +18,9 @@ fi
 
 # skip tasks which require only when using class NO_ONLINE:
 if ! ifclass NO_ONLINE ; then
-   cp /etc/grml/fai/grml/grml_cleanup_chroot.no_online $target/root/
-   $ROOTCMD  /root/grml_cleanup_chroot.no_online
-   rm $target/root/grml_cleanup_chroot.no_online
+   cp /etc/grml/fai/grml/grml_cleanup_chroot.online $target/root/
+   $ROOTCMD  /root/grml_cleanup_chroot.online
+   rm $target/root/grml_cleanup_chroot.online
 fi
 
 # remove /usr/share/doc, /usr/share/info,... only in class REMOVE_DOCS:
