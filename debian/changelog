@@ -7,6 +7,8 @@ grml-live (0.0.8) unstable; urgency=low
     /var/run/fai/FAI_INSTALLATION_IN_PROGRESS if we exit grml-live.
     (FAI's softupdate currently does not clean up when canceling
     the process.)
+  * Set EXITSTATUS in /etc/policy-rc.d.conf of chroot to 101 for
+    softupdate action.
 
  -- Michael Prokop <mika@grml.org>  Sun, 04 Nov 2007 01:43:06 +0100
 

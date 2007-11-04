@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Thu Nov 01 16:19:52 CET 2007 [mika]
+# Latest change: Sun Nov 04 11:20:55 CET 2007 [mika]
 ################################################################################
 
 set -u
@@ -17,7 +17,10 @@ if [ -r $target/etc/apt/apt.conf ] ; then
    sed -i "s#APT::Install-Recommends.*#// &#"       $target/etc/apt/apt.conf
 fi
 
-
+# Restore original state from softupdate:
+if [ -r $target/etc/policy-rc.d.conf ] ; then
+   sed -i "s/EXITSTATUS='101'/EXITSTATUS='0'/" $target/etc/policy-rc.d.conf
+fi
 
 # remove an existing /etc/debian_chroot file:
 if [ -r $target/etc/debian_chroot ] ; then
