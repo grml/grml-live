@@ -14,6 +14,9 @@ grml-live (0.0.8) unstable; urgency=low
   * Upgrade via aptitude [safe-]upgrade in update process.
   * Rename /etc/grml/fai/grml/grml_cleanup_chroot.no_online into
     /etc/grml/fai/grml/grml_cleanup_chroot.online
+  * Edit /etc/apt/apt.conf inside
+    /etc/grml/fai/config/scripts/GRMLBASE/99-finish-grml-build only
+    once.
   * Purge removed packages via /etc/grml/fai/grml/grml_cleanup_chroot
   * Add new packages to GRML_FULL:
     - acx100-2.6.23-grml

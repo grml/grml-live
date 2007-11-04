@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Nov 04 11:20:55 CET 2007 [mika]
+# Latest change: Sun Nov 04 22:28:54 CET 2007 [mika]
 ################################################################################
 
 set -u
@@ -13,8 +13,8 @@ set -e
 # Restore usual Debian behaviour which has been changed
 # for FAI via /etc/grml/fai/config/hooks/instsoft.GRMLBASE
 if [ -r $target/etc/apt/apt.conf ] ; then
-   sed -i "s#Acquire::http::Pipeline-Depth.*#// &#" $target/etc/apt/apt.conf
-   sed -i "s#APT::Install-Recommends.*#// &#"       $target/etc/apt/apt.conf
+   sed -i "s#^Acquire::http::Pipeline-Depth.*#// &#" $target/etc/apt/apt.conf
+   sed -i "s#^APT::Install-Recommends.*#// &#"       $target/etc/apt/apt.conf
 fi
 
 # Restore original state from softupdate:
