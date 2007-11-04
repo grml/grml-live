@@ -11,7 +11,7 @@ grml-live (0.0.8) unstable; urgency=low
     softupdate action.
   * Remove /var/log/fai/* in class RELEASE.
   * Generate md5sum of windows binaries.
-  * Upgrade via aptitude upgrade in update process.
+  * Upgrade via aptitude [safe-]upgrade in update process.
   * Rename /etc/grml/fai/grml/grml_cleanup_chroot.no_online into
     /etc/grml/fai/grml/grml_cleanup_chroot.online
   * Purge removed packages via /etc/grml/fai/grml/grml_cleanup_chroot

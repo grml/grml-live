@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Nov 04 11:36:25 CET 2007 [mika]
+# Latest change: Sun Nov 04 14:37:26 CET 2007 [mika]
 ################################################################################
 
 set -u
@@ -43,7 +43,11 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    # FAI softupdate does not execute upgrade, so let's do it on our own:
    $ROOTCMD apt-get update
    if [ -x $target/usr/bin/aptitude ] ; then
-      $ROOTCMD aptitude upgrade
+      if $target/usr/bin/aptitude --help | grep safe-upgrade ; then
+         $ROOTCMD aptitude safe-upgrade
+      else
+         $ROOTCMD aptitude upgrade
+      fi
    else
       $ROOTCMD apt-get upgrade
    fi
