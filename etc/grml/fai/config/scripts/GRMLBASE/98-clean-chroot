@@ -43,9 +43,9 @@ if ifclass GRML_SMALL ; then
    cp $target/etc/runlevel.conf.livecd.small $target/etc/runlevel.conf
 fi
 
-# Remove all FAI logs from chroot:
+# Remove all FAI logs from chroot via grml-live then:
 if ifclass RELEASE ; then
-   rm -rf $target/var/log/fai/*
+   touch $target/var/log/fai/release
 fi
 
 ## END OF FILE #################################################################
