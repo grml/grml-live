@@ -16,7 +16,7 @@ if ifclass RELEASE ; then
   [ -n "$HOSTNAME" ] || HOSTNAME=grml
 
   if [ -r /etc/resolv.conf ] ; then
-     if [ -r /etc/resolvconf/run/resolv.conf ] ; then
+     if [ -r $target/etc/resolvconf/run/resolv.conf ] ; then
         cat /etc/resolv.conf >> $target/etc/resolvconf/run/resolv.conf
      else
         cat /etc/resolv.conf >> $target/etc/resolv.conf
