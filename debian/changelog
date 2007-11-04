@@ -15,6 +15,8 @@ grml-live (0.0.8) unstable; urgency=low
   * Rename /etc/grml/fai/grml/grml_cleanup_chroot.no_online into
     /etc/grml/fai/grml/grml_cleanup_chroot.online
   * Purge removed packages via /etc/grml/fai/grml/grml_cleanup_chroot
+  * Add new packages to GRML_FULL:
+    - tp-smapi-modules-2.6.23-grml
 
  -- Michael Prokop <mika@grml.org>  Sun, 04 Nov 2007 01:43:06 +0100
 
