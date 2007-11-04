@@ -42,6 +42,8 @@ grml-live (0.0.8) unstable; urgency=low
     - ndiswrapper-modules-2.6.23-grml
     - openafs-modules-2.6.23-grml
     - tp-smapi-modules-2.6.23-grml
+  * Remove trapdoor2 from GRML_FULL (the Debian package isn't
+    in a very smooth shape).
 
  -- Michael Prokop <mika@grml.org>  Sun, 04 Nov 2007 01:43:06 +0100
 
