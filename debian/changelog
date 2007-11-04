@@ -14,6 +14,7 @@ grml-live (0.0.8) unstable; urgency=low
   * Upgrade via aptitude upgrade in update process.
   * Rename /etc/grml/fai/grml/grml_cleanup_chroot.no_online into
     /etc/grml/fai/grml/grml_cleanup_chroot.online
+  * Purge removed packages via /etc/grml/fai/grml/grml_cleanup_chroot
 
  -- Michael Prokop <mika@grml.org>  Sun, 04 Nov 2007 01:43:06 +0100
 

@@ -4,7 +4,7 @@
 # Authors:       (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Wed Sep 19 13:38:45 CEST 2007 [mika]
+# Latest change: Sun Nov 04 12:12:57 CET 2007 [mika]
 ################################################################################
 
 # misc stuff
@@ -50,6 +50,10 @@ eend 0
 
 einfo "Setting up /etc/inittab"
 cp /etc/inittab.grml  /etc/inittab
+eend $?
+
+einfo "Purging removed packages"
+dpkg --purge $(dpkg --list | awk '/^rc/ { print $2}')
 eend $?
 
 if [ -x /usr/bin/make -a -r /usr/src/Makefile ] ; then
