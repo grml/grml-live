@@ -122,6 +122,9 @@ ipw-firmware
 lame
 latextug
 lcdtest
+libacme-bleach-perl
+libacme-eyedrops-perl
+libacme-smirch-perl
 libpam-thinkfinger
 md5deep
 minised
@@ -897,7 +900,6 @@ inotail
 inoticoming
 inotify-tools
 input-utils
-ation-report
 intltool-debian
 iodine
 ipcalc
@@ -937,6 +939,7 @@ isic
 ispell
 isync
 itop
+ivtv-utils
 iwatch
 jack
 jackd
@@ -1000,6 +1003,17 @@ less
 lft
 lftp
 libaa-bin
+libpam-chroot
+libpam-devperm
+libpam-dotfile
+libpam-krb5
+libpam-mount
+libpam-pwgen
+libpam-smbpass
+libpam-ssh
+libpam-tmpdir
+libpam-umask
+libtool
 lighttpd
 lilo
 linda
@@ -2065,15 +2079,18 @@ PACKAGES aptitude I386
 # we also want to use linux-kernel-headers-grml instead of linux-libc-dev:
 linux-kernel-headers-grml
 
-#acx100-2.6.23-grml
+acx100-2.6.23-grml
 aufs-modules-2.6.23-grml
-#bcm5700-module-2.6.23-grml
+bcm5700-module-2.6.23-grml
+drbd8-module-2.6.23-grml
+exmap-modules-2.6.23-grml
+fglrx-kernel-2.6.23-grml
 grml-kerneladdons-2.6.23
 gspca-modules-2.6.23-grml
 ipw3945-modules-2.6.23-grml
-#ivtv-modules-2.6.23-grml
+iscsitarget-2.6.23-grml
+ivtv-modules-2.6.23-grml
 kqemu-modules-2.6.23-grml
-#kvm-modules-2.6.23-grml
 linux-doc-2.6.23-grml
 linux-headers-2.6.23-grml
 linux-image-2.6.23-grml
@@ -2081,15 +2098,16 @@ linux-image-2.6.23-grml
 linux-wlan-ng-modules-2.6.23-grml
 loop-aes-modules-2.6.23-grml
 madwifi-modules-2.6.23-grml
+ndiswrapper-modules-2.6.23-grml
 nozomi-modules-2.6.23-grml
 #nvidia-kernel-2.6.23-grml
+openafs-modules-2.6.23-grml
 qc-usb-modules-2.6.23-grml
 realtime-lsm-module-2.6.23-grml
 rt2400-modules-2.6.23-grml
 rt2500-modules-2.6.23-grml
 rt73-module-2.6.23-grml
 sl-modem-modules-2.6.23-grml
-#spca5xx-modules-2.6.23-grml
 sysprof-module-2.6.23-grml
 tp-smapi-modules-2.6.23-grml
 #virtualbox-ose-modules-2.6.23-grml
