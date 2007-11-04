@@ -2,46 +2,18 @@ PACKAGES aptitude
 
 ## Known problems {{{
 
-# 3ware-3dm2-binary: problem with
-#   openssl req -new -x509 -nodes -out /etc/3dm2/3dm2.pem -keyout /etc/3dm2/3dm2.pem -days 365
-# of /var/lib/dpkg/info/3ware-3dm2-binary.postinst
-
 # a2ps fails with:
 #Setting up a2ps (1:4.13c~rc5-1) ...
 #ERROR: emacsen-common being used before being configured.
-#ERROR: This is likely a bug in the a2ps package, which needs to
-#ERROR: add one of the appropriate dependencies.
-#ERROR: See /usr/share/doc/emacsen-common/debian-emacs-policy.gz
-#ERROR: for details.
-#dpkg: error processing a2ps (--configure):
-# subprocess post-installation script returned error exit status 2
+# [...] => #246296
+# ... but the package is usually being installed as a dependency later on
 
-# bandwidthd-pgsql fails with:
-#Preconfiguring packages ...
-#cp: cannot stat `/usr/share/doc/bandwidthd-pgsql/bandwidthd-pgsql.conf': No such file or directory
-#bandwidthd-pgsql failed to preconfigure, with exit status 1
-
-# vifm:
-#Setting up vifm (0.3-2) ...
-#dpkg: error processing vifm (--configure):
-# subprocess post-installation script returned error exit status 1
-
-# ivtv-utils:
+# ivtv-utils (< 1.0.3-1):
 # ships /usr/include/linux/ivtv.h => #443165
 
-## End-of-TODO
+## }}}
 
-## Warnings:
-
-# /var/lib/dpkg/info/tidev-modules-2.6.22-grml.postinst: line 9: update-devfsd: command not found
-
-# The update-modules command is deprecated and should not be used!
-# -> used by at least:
-# dumputils evms ipx irda-utils mt-st rng-tools setserial tidev-modules-2.6.22-grml toshutils udftools
-
-## End-of-Warnings }}}
-
-# grml specific packages {{{
+## grml specific packages {{{
 3ware-cli-binary
 aamath
 advchk
@@ -159,22 +131,21 @@ udev
 upgrade-oldest
 zfs-fuse
 zsh-lovers
-# }}}
+## }}}
 
-## Notice: this packages are known to be x86-only currently [2007-10-05] {{{
-# 3ware-cli-binary aamath aesutil afflib asleap athcool atitvout btsco chntpw
-# cmospwd cpp-2.95 cpuburn-in-binary ctapi-cyberjack ctris dd-rhelp
-# deletemail detox dupmerge dupseek dynamic-disk ecryptfs-utils ext3rminator
-# fdflush firescope fnfx-client fnfxd ftpbackup fuseiso9660 fvwm-crystal-minimal
-# gateguardian gatling gifshuffle gkrellm-x86info glipper-nognome heirloom-sh
-# histring hydra i810switch i855crt i8kutils icmp-mtu icmp-quench icmp-reset
-# irpas lcdtest minised nat-traverse orpheus ppmd prosilla pspax pstack ptfinder
-# rainbowcrack replicator rootsh s3switch salvage-ntfs scrounge-ntfs shadowfs
-# shmux sjog speechd-up spicctrl ssdeep sudosh tlswrap toshset toshutils
-# tpm-tools trapdoor2 trousers unison2.9.1 xserver-xorg-video-amd zfs-fuse
-# }}}
+## Notice: this packages are known to be x86-only currently [2007-11-04] {{{
+# aesutil afflib asleap bar bfa btsco classpath classpath-qtpeer cmospwd
+# cpuburn-in-binary ctapi-cyberjack ctris ddrescue dd-rhelp ded deletemail
+# devscripts dired dupseek dynamic-disk ex ext3rminator firescope ftpbackup
+# fvwm-crystal-minimal gateguardian gatling gcjwebplugin gifshuffle
+# glipper-nognome grml-ddcxinfo grml-reportbug grml-robocup-files grml-samsung-x20
+# histring hydra i855crt icmp-mtu icmp-quench icmp-reset lame lame-extras libewf
+# magicrescue multiseat ncp prosilla pspax ptfinder quadkonsole rootsh
+# salvage-ntfs scrounge-ntfs shadowfs shish shmux speechd-up squashfs ssdeep
+# sudosh tal thc-pptp-bruter tlswrap tpm-tools trapdoor2 trousers yersinia
+## }}}
 
-# official Debian packages {{{
+## Official Debian packages {{{
 2vcard
 3270-common
 4g8
@@ -1806,6 +1777,7 @@ vera
 vfu
 videogen
 viewglob
+vifm
 vim
 vim-addon-manager
 vim-common
@@ -2043,9 +2015,9 @@ zsh-static
 zssh
 zsync
 zzuf
-# }}}
+## }}}
 
-# non-free {{{
+## non-free {{{
 abs-guide
 agrep
 atmel-firmware
@@ -2071,14 +2043,15 @@ sl-modem-daemon
 tth
 unrar
 zd1211-firmware
-# }}}
+## }}}
 
-# x86/32bit (class I386) specific packages {{{
+## x86/32bit (class I386) specific packages {{{
 PACKAGES aptitude I386
 
-# we also want to use linux-kernel-headers-grml instead of linux-libc-dev:
+# we want to use linux-kernel-headers-grml instead of linux-libc-dev:
 linux-kernel-headers-grml
 
+## Current kernel version 2.6.23-grml:
 acx100-2.6.23-grml
 aufs-modules-2.6.23-grml
 bcm5700-module-2.6.23-grml
@@ -2113,6 +2086,7 @@ tp-smapi-modules-2.6.23-grml
 #virtualbox-ose-modules-2.6.23-grml
 #zaptel-modules-2.6.23-grml
 
+## Kernel 2.6.22-grml:
 #aufs-modules-2.6.22-grml
 #drbd8-module-2.6.22-grml
 #exmap-modules-2.6.22-grml
@@ -2137,9 +2111,9 @@ tp-smapi-modules-2.6.23-grml
 #truecrypt-2.6.22-grml
 # }}}
 
-# amd64 specific packages {{{
+## amd64 specific packages {{{
 PACKAGES aptitude AMD64
 linux-image-2.6.23-grml64 aufs-modules-2.6.23-grml64
-# }}}
+## }}}
 
 # vim: foldmethod=marker
