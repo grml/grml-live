@@ -132,6 +132,7 @@ openssh-server
 passwd
 patch
 pciutils
+portmap
 ppp
 pppoeconf
 prism54-firmware

@@ -48,6 +48,8 @@ grml-live (0.0.8) unstable; urgency=low
     - openafs-modules-2.6.23-grml
     - tp-smapi-modules-2.6.23-grml
     - vifm
+  * Add portmap to GRML_SMALL and GRML_MEDIUM (thanks for the feedback,
+    Tom Asbury).
   * Remove trapdoor2 from GRML_FULL (the Debian package isn't
     in a very smooth shape).
 

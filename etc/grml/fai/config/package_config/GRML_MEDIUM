@@ -139,6 +139,7 @@ passwd
 patch
 pciutils
 pcmciautils
+portmap
 ppp
 pppoeconf
 prism54-firmware
