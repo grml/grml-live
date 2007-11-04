@@ -2084,7 +2084,7 @@ aufs-modules-2.6.23-grml
 bcm5700-module-2.6.23-grml
 drbd8-module-2.6.23-grml
 exmap-modules-2.6.23-grml
-fglrx-kernel-2.6.23-grml
+#fglrx-kernel-2.6.23-grml
 grml-kerneladdons-2.6.23
 gspca-modules-2.6.23-grml
 ipw3945-modules-2.6.23-grml
