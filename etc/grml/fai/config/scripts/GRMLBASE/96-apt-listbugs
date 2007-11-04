@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Oct 14 21:08:16 CEST 2007 [mika]
+# Latest change: Sun Nov 04 01:42:58 CET 2007 [mika]
 ################################################################################
 
 set -e
@@ -14,6 +14,10 @@ if ifclass RELEASE ; then
   HOSTNAME=''
   [ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
   [ -n "$HOSTNAME" ] || HOSTNAME=grml
+
+  if [ -r /etc/resolv.conf ] ; then
+     cat /etc/resolv.conf >> $target/etc/resolv.conf
+  fi
 
   if [ -x $target/usr/sbin/apt-listbugs -a -x $target/usr/bin/apt-show-source ] && \
      [ -x $target/etc/apt/grml/listbugs ] ; then
