@@ -2083,7 +2083,7 @@ linux-kernel-headers-grml
 acx100-2.6.23-grml
 aufs-modules-2.6.23-grml
 bcm5700-module-2.6.23-grml
-drbd8-module-2.6.23-grml
+drbd8-2.6.23-grml
 exmap-modules-2.6.23-grml
 #fglrx-kernel-2.6.23-grml
 grml-kerneladdons-2.6.23
