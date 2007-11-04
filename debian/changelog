@@ -1,7 +1,8 @@
 grml-live (0.0.8) unstable; urgency=low
 
   * Copy /etc/resolv.conf to chroot in
-    /etc/grml/fai/config/scripts/GRMLBASE/96-apt-listbugs
+    /etc/grml/fai/config/scripts/GRMLBASE/96-apt-listbugs and
+    /etc/grml/fai/config/hooks/instsoft.GRMLBASE as well.
 
  -- Michael Prokop <mika@grml.org>  Sun, 04 Nov 2007 01:43:06 +0100
 
