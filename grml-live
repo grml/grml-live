@@ -61,6 +61,7 @@ PN=$(basename $0)
 # clean exit {{{
 bailout() {
   [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
+  rm -f /var/run/fai/fai_softupdate_is_running /var/run/fai/FAI_INSTALLATION_IN_PROGRESS
   [ -n "$1" ] && EXIT="$1" || EXIT="1"
   [ -n "$2" ] && eerror "$2">&2
   log "------------------------------------------------------------------------------"
