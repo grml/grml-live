@@ -459,7 +459,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
                ( cd "$BUILD_OUTPUT"/windows
                  for file in pageant plink pscp psftp putty puttygen ; do
                     wget -O ${file}.exe ${WINDOWS_BINARIES}/${file}.exe
-                    md5sum ${WINDOWS_BINARIES}/${file}.exe > ${WINDOWS_BINARIES}/${file}.exe.md5
+                    md5sum ${file}.exe > ${file}.exe.md5
                  done )
             fi
          fi
