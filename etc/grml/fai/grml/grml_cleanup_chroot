@@ -52,7 +52,7 @@ einfo "Setting up /etc/inittab"
 cp /etc/inittab.grml  /etc/inittab
 eend $?
 
-if [ "$(dpkg --list | awk '/^rc/ { print $2}')" != '' ] ;
+if [ "$(dpkg --list | awk '/^rc/ { print $2}')" != '' ] ; then
    einfo "Purging removed packages"
    dpkg --purge $(dpkg --list | awk '/^rc/ { print $2}')
    eend $?
