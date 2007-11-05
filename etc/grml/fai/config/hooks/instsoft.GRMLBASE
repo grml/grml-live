@@ -44,12 +44,12 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    $ROOTCMD apt-get update
    if [ -x $target/usr/bin/aptitude ] ; then
       if strings $target/usr/bin/aptitude | grep safe-upgrade 1>/dev/null ; then
-         $ROOTCMD aptitude safe-upgrade
+         $ROOTCMD aptitude -y safe-upgrade
       else
-         $ROOTCMD aptitude upgrade
+         $ROOTCMD aptitude -y upgrade
       fi
    else
-      $ROOTCMD apt-get upgrade
+      $ROOTCMD apt-get -y upgrade
    fi
 
 else # no softupdate but fresh installation
