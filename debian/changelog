@@ -1,3 +1,9 @@
+grml-live (0.0.9) unstable; urgency=low
+
+  * Remove all files inside /root/ when using class RELEASE.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 05 Nov 2007 22:37:11 +0100
+
 grml-live (0.0.8) unstable; urgency=low
 
   * Copy /etc/resolv.conf to chroot in

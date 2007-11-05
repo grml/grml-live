@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Nov 04 12:11:32 CET 2007 [mika]
+# Latest change: Mon Nov 05 22:37:04 CET 2007 [mika]
 ################################################################################
 
 set -e
@@ -43,9 +43,11 @@ if ifclass GRML_SMALL ; then
    cp $target/etc/runlevel.conf.livecd.small $target/etc/runlevel.conf
 fi
 
-# Remove all FAI logs from chroot via grml-live then:
 if ifclass RELEASE ; then
+   # Remove all FAI logs from chroot via grml-live later then:
    touch $target/etc/grml_fai_release
+   # Remove all files inside /root/ of chroot:
+   rm -rf $target/root/.* $target/root/*
 fi
 
 ## END OF FILE #################################################################
