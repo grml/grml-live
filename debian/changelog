@@ -17,6 +17,8 @@ grml-live (0.0.8) unstable; urgency=low
   * Edit /etc/apt/apt.conf inside
     /etc/grml/fai/config/scripts/GRMLBASE/99-finish-grml-build only
     once.
+  * Use strings instead of --help to detect support of safe-upgrade
+    inside aptitude, otherwise it might fail due to unavailable shared libs.
   * Configure (enable) apt-listchanges + apt-listbugs via
     /etc/grml/fai/config/scripts/GRMLBASE/96-apt-listbugs
   * Purge removed packages via /etc/grml/fai/grml/grml_cleanup_chroot
