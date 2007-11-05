@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Die Okt 30 00:09:42 CET 2007 [mika]
+# Latest change: Mon Nov 05 09:24:45 CET 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -331,7 +331,7 @@ else
    chmod 644 $CHROOT_OUTPUT/etc/grml_version
 
    # Remove all FAI logs from chroot if class RELEASE is used:
-   if [ -f $CHROOT_OUTPUT/var/log/fai/release ] ; then
+   if [ -f $CHROOT_OUTPUT/etc/grml_fai_release ] ; then
       rm -rf $CHROOT_OUTPUT/var/log/fai/*
    fi
 

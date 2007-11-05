@@ -45,7 +45,7 @@ fi
 
 # Remove all FAI logs from chroot via grml-live then:
 if ifclass RELEASE ; then
-   touch $target/var/log/fai/release
+   touch $target/etc/grml_fai_release
 fi
 
 ## END OF FILE #################################################################
