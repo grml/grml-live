@@ -52,9 +52,11 @@ einfo "Setting up /etc/inittab"
 cp /etc/inittab.grml  /etc/inittab
 eend $?
 
-einfo "Purging removed packages"
-dpkg --purge $(dpkg --list | awk '/^rc/ { print $2}')
-eend $?
+if [ "$(dpkg --list | awk '/^rc/ { print $2}')" != '' ] ;
+   einfo "Purging removed packages"
+   dpkg --purge $(dpkg --list | awk '/^rc/ { print $2}')
+   eend $?
+fi
 
 if [ -x /usr/bin/make -a -r /usr/src/Makefile ] ; then
    einfo "Cleaning up /usr/src/linux-headers-$KERNEL"
