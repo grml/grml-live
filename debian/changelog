@@ -17,6 +17,8 @@ grml-live (0.0.8) unstable; urgency=low
   * Edit /etc/apt/apt.conf inside
     /etc/grml/fai/config/scripts/GRMLBASE/99-finish-grml-build only
     once.
+  * Make the log checks inside grml-live aware of the update
+    log-directory /var/log/fai/current.
   * Use strings instead of --help to detect support of safe-upgrade
     inside aptitude, otherwise it might fail due to unavailable shared libs.
   * Configure (enable) apt-listchanges + apt-listbugs via
@@ -49,7 +51,6 @@ grml-live (0.0.8) unstable; urgency=low
     - ndiswrapper-modules-2.6.23-grml
     - openafs-modules-2.6.23-grml
     - tp-smapi-modules-2.6.23-grml
-    - vifm
   * Add portmap to GRML_SMALL and GRML_MEDIUM (thanks for the feedback,
     Tom Asbury).
   * Remove trapdoor2 from GRML_FULL (the Debian package isn't

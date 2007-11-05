@@ -8,6 +8,11 @@ PACKAGES aptitude
 # [...] => #246296
 # ... but the package is usually being installed as a dependency later on
 
+# vifm fails with:
+#Setting up vifm (0.3-2) ...
+#dpkg: error processing vifm (--configure):
+# subprocess post-installation script returned error exit status 1
+
 # ivtv-utils (< 1.0.3-1):
 # ships /usr/include/linux/ivtv.h => #443165
 
@@ -1777,7 +1782,6 @@ vera
 vfu
 videogen
 viewglob
-vifm
 vim
 vim-addon-manager
 vim-common
