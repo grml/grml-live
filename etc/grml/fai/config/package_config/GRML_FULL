@@ -978,12 +978,12 @@ libpam-chroot
 libpam-devperm
 libpam-dotfile
 libpam-krb5
+libpam-modules
 libpam-mount
 libpam-pwgen
 libpam-smbpass
 libpam-ssh
 libpam-tmpdir
-libpam-umask
 libtool
 lighttpd
 lilo

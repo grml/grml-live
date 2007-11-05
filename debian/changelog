@@ -39,12 +39,12 @@ grml-live (0.0.8) unstable; urgency=low
     - libpam-devperm
     - libpam-dotfile
     - libpam-krb5
+    - libpam-modules
     - libpam-mount
     - libpam-pwgen
     - libpam-smbpass
     - libpam-ssh
     - libpam-tmpdir
-    - libpam-umask
     - libtool
     - ndiswrapper-modules-2.6.23-grml
     - openafs-modules-2.6.23-grml
