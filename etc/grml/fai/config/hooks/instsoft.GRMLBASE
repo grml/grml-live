@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Nov 04 14:37:26 CET 2007 [mika]
+# Latest change: Mon Nov 05 22:48:02 CET 2007 [mika]
 ################################################################################
 
 set -u
@@ -32,6 +32,17 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    if [ -r /etc/grml/fai/apt/preferences ] ; then
       cp /etc/grml/fai/apt/preferences $target/etc/apt/preferences
    fi
+
+   # we definitely don't want to fail running fai sofupdate just
+   # because of some well known bugs:
+   [ -d $target/etc/apt/apt.conf.d ] || mkdir $target/etc/apt/apt.conf.d
+   cat > $target/etc/apt/apt.conf.d/10apt-listbugs << EOF
+// Check all packages whether they has critical bugs before they are installed.
+// If you don't like it, comment it out.
+//DPkg::Pre-Install-Pkgs {"/usr/sbin/apt-listbugs apt || exit 10"};
+//DPkg::Tools::Options::/usr/sbin/apt-listbugs "";
+//DPkg::Tools::Options::/usr/sbin/apt-listbugs::Version "2";
+EOF
 
    if [ -r /etc/grml/fai/apt/sources.list ] ; then
       if [ -L $target/etc/apt/sources.list ] ; then

@@ -796,6 +796,8 @@ haproxy
 harden-remoteaudit
 harden-tools
 hasciicam
+hdapsd
+hdaps-utils
 hddtemp
 hdparm
 hexedit

@@ -1,6 +1,10 @@
 grml-live (0.0.9) unstable; urgency=low
 
   * Remove all files inside /root/ when using class RELEASE.
+  * Disable apt-listbugs in [soft]update.
+  * Add new packages to GRML_FULL:
+    - hdapsd
+    - hdaps-utils
 
  -- Michael Prokop <mika@grml.org>  Mon, 05 Nov 2007 22:37:11 +0100
 
