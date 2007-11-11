@@ -367,7 +367,7 @@ your needs. Please don't forget that you should use the grml servers as well
 (see default configuration) so all the grml packages can be downloaded as well.
 
 If you want to use a local (for example NFS mount) mirror additionally, just
-adjust MIRROR_DIRECTORY and MIRROR_SOURCES insede /etc/grml/grml-live.conf as
+adjust MIRROR_DIRECTORY and MIRROR_SOURCES inside /etc/grml/grml-live.conf as
 well.
 
 Unless you specify GRML_LIVE_SOURCES and/or FAI_DEBOOTSTRAP the default from
