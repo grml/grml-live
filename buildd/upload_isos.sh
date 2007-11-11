@@ -15,9 +15,9 @@ cd $ISO_DIR || exit 4
 
 umask 002
 for file in *.iso ; do
-    [ -f "${file}.md5" ] || md5sum $file > ${file}.md5
-    chmod 664 $file
-    chmod 664 ${file}.md5
+    [ -f "${file}.md5" ] || md5sum "$file" > "${file}".md5
+    chmod 664 "$file"
+    chmod 664 "${file}".md5
 done
 rsync --partial -az --quiet $ISO_DIR/* $RSYNC_MIRROR
 
