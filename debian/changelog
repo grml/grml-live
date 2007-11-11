@@ -5,6 +5,9 @@ grml-live (0.0.9) unstable; urgency=low
   * Add new packages to GRML_FULL:
     - hdapsd
     - hdaps-utils
+    - libstdc++2.10-glibc2.2 [for better support of
+      binaries from commercial vendors; thanks to
+      Christian Hofstaedtler]
 
  -- Michael Prokop <mika@grml.org>  Mon, 05 Nov 2007 22:37:11 +0100
 

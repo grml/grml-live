@@ -102,6 +102,7 @@ libacme-bleach-perl
 libacme-eyedrops-perl
 libacme-smirch-perl
 libpam-thinkfinger
+libstdc++2.10-glibc2.2
 md5deep
 minised
 msgid-chooser
