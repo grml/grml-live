@@ -104,7 +104,7 @@ $(grep -i warn $FAI_LOGFILES/* /var/log/grml-buildd.std* || echo "* nothing")
 
 There following dependency problems have been noticed:
 
-$(grep -i "[Not Installed]" $FAI_LOGFILES/software.log || echo "* nothing")
+$(grep -i "Not Installed" $FAI_LOGFILES/software.log || echo "* nothing")
 
 The following packages could not be installed:
 
