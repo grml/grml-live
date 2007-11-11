@@ -3,6 +3,7 @@ grml-live (0.0.9) unstable; urgency=low
   * Remove all files inside /root/ when using class RELEASE.
   * Disable apt-listbugs in [soft]update.
   * Fix 'dependency problems' handling in buildd functions.
+  * Add buildd/remove_isos.sh to remove generated ISOs.
   * Add new packages to GRML_FULL:
     - hdapsd
     - hdaps-utils
