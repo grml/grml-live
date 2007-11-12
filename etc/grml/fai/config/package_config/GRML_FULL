@@ -368,8 +368,6 @@ cdrecord
 cdrskin
 cdtool
 cedet-common
-centericq-common
-centerim-common
 centerim-utf8
 cfengine2
 cfv
@@ -908,7 +906,6 @@ irqbalance
 irssi
 irssi-plugin-xmpp
 irssi-scripts
-irssi-text
 isakmpd
 iscsitarget
 isdnactivecards
@@ -1487,8 +1484,6 @@ rrdtool
 rsnapshot
 rssh
 rsync
-rt2400
-rt2500
 rtorrent
 rubilicious
 ruby
@@ -1496,6 +1491,7 @@ ruby-prof
 ruby1.8
 ruby1.8-examples
 rungetty
+rutilt
 rxvt-beta
 rxvt-unicode
 s3cmd

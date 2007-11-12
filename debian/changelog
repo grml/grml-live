@@ -11,6 +11,9 @@ grml-live (0.0.9) unstable; urgency=low
     - libstdc++2.10-glibc2.2 [for better support of
       binaries from commercial vendors; thanks to
       Christian Hofstaedtler]
+    - rutilt
+  * Drop centericq-common, centerim-common, irssi-text, rt2400
+    and rt2500 from GRML_FULL package list.
 
  -- Michael Prokop <mika@grml.org>  Mon, 05 Nov 2007 22:37:11 +0100
 
