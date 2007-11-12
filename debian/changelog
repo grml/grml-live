@@ -7,6 +7,7 @@ grml-live (0.0.9) unstable; urgency=low
   * Support kernel upgrades via according /etc/kernel-img.conf configuration.
   * Set hostname in instsoft-hook already.
   * Add new packages to GRML_FULL:
+    - etckeeper
     - hdapsd
     - hdaps-utils
     - libstdc++2.10-glibc2.2 [for better support of
