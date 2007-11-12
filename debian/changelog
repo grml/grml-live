@@ -4,6 +4,7 @@ grml-live (0.0.9) unstable; urgency=low
   * Disable apt-listbugs in [soft]update.
   * Fix 'dependency problems' handling in buildd functions.
   * Add buildd/remove_isos.sh to remove generated ISOs.
+  * Support kernel upgrades via according /etc/kernel-img.conf configuration.
   * Add new packages to GRML_FULL:
     - hdapsd
     - hdaps-utils

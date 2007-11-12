@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Nov 04 22:28:54 CET 2007 [mika]
+# Latest change: Mon Nov 12 11:15:56 CET 2007 [mika]
 ################################################################################
 
 set -u
@@ -20,6 +20,13 @@ fi
 # Restore original state from softupdate:
 if [ -r $target/etc/policy-rc.d.conf ] ; then
    sed -i "s/EXITSTATUS='101'/EXITSTATUS='0'/" $target/etc/policy-rc.d.conf
+fi
+
+# Restore usual behaviour:
+if [ -r $target/etc/kernel-img.conf ] ; then
+   if grep -q "silent_modules = Yes" $target/etc/kernel-img.conf ; then
+      sed -i "s/silent_modules = Yes/# &/" $target/etc/kernel-img.conf
+   fi
 fi
 
 # remove an existing /etc/debian_chroot file:

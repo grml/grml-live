@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Nov 05 22:48:02 CET 2007 [mika]
+# Latest change: Mon Nov 12 11:14:32 CET 2007 [mika]
 ################################################################################
 
 set -u
@@ -43,6 +43,13 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
 //DPkg::Tools::Options::/usr/sbin/apt-listbugs "";
 //DPkg::Tools::Options::/usr/sbin/apt-listbugs::Version "2";
 EOF
+
+   # make sure we can handle kernel upgrades:
+   if [ -r $target/etc/kernel-img.conf ] ; then
+      if ! grep -q "silent_modules = Yes" $target/etc/kernel-img.conf ; then
+         echo "silent_modules = Yes" >> $target/etc/kernel-img.conf
+      fi
+   fi
 
    if [ -r /etc/grml/fai/apt/sources.list ] ; then
       if [ -L $target/etc/apt/sources.list ] ; then
