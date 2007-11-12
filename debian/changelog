@@ -5,6 +5,7 @@ grml-live (0.0.9) unstable; urgency=low
   * Fix 'dependency problems' handling in buildd functions.
   * Add buildd/remove_isos.sh to remove generated ISOs.
   * Support kernel upgrades via according /etc/kernel-img.conf configuration.
+  * Set hostname in instsoft-hook already.
   * Add new packages to GRML_FULL:
     - hdapsd
     - hdaps-utils

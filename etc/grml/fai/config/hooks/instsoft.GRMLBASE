@@ -13,6 +13,11 @@ set -e
 # visualize chroot inside zsh:
 echo grml_chroot > $target/etc/debian_chroot
 
+HOSTNAME=''
+[ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
+[ -n "$HOSTNAME" ] || HOSTNAME=grml
+echo "$HOSTNAME" > $target/etc/hostname
+
 if [ "$FAI_ACTION" = "softupdate" ] ; then
    echo "Softupdate of FAI via grml-live running"
 
