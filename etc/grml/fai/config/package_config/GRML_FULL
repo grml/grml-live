@@ -1090,6 +1090,7 @@ minicom
 mirrordir
 mixmaster
 mkcue
+mkelfimage
 mkisofs
 mklibs-copy
 mknbi
