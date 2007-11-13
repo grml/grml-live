@@ -66,7 +66,7 @@ po::powerokwait:/etc/init.d/powerfail stop
 11:2345:respawn:/bin/zsh --login -c "/usr/bin/htop ; /usr/bin/grml-init-screen" >/dev/tty11 2>&1 </dev/tty11
 # running console-log on 12 already
 #12:2345:respawn:/bin/zsh --login -c "/usr/bin/less +F /var/log/syslog ; /usr/bin/grml-screen" >/dev/tty12 2>&1 </dev/tty12
-12:2345:respawn:/bin/zsh --login -c "/usr/bin/multitail /var/log/syslog ; /usr/bin/grml-init-screen" >/dev/tty12 2>&1 </dev/tty12
+12:2345:respawn:/bin/zsh --login -c "/usr/bin/grml-init-multitail ; /usr/bin/grml-init-screen" >/dev/tty12 2>&1 </dev/tty12
 
 # Restart init with new configuration?
 # kill -1 1
