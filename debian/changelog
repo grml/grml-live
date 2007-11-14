@@ -15,6 +15,7 @@ grml-live (0.0.9) unstable; urgency=low
       Christian Hofstaedtler]
     - mkelfimage
     - rutilt
+    - truecrypt-2.6.23-grml
   * Drop centericq-common, centerim-common, irssi-text, rt2400
     and rt2500 from GRML_FULL package list.
 
