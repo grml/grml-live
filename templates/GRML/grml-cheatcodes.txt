@@ -1,6 +1,11 @@
       CHEATCODES AND HINTS FOR GRML
 ==============================================================================
 
+*IMPORTANT NOTICE*: Some bootoptions may not work as expected (and documented) yet
+                    because grml is based on a new framework named grml-live now - see
+                    http://grml.org/grml-live/ for details. Please report all bootoptions
+                    that do not work as expected. Thank you! http://grml.org/bugs/
+
 These options (can be combined) work from the (isolinux/grub) bootprompt:
 
 grml                                Use default settings (same as just pressing return)
@@ -15,7 +20,6 @@ failsafe                            Boot with (almost) no HW-detection
 debug                               Get shells during process of booting for debugging
 bootchart                           Create chart of booting sequence in /var/log/bootchart.tgz
 forensic                            Do not touch any harddisks during hardware recognition
-splash                              Text based bootsplash
 serial                              Activate ttyS0 and start mgetty
 dos                                 Boot FreeDOS
 grub                                Boot into the Grub bootloader
@@ -92,7 +96,9 @@ grml ssh=password                   Set password for user grml and start ssh-ser
 grml startup=script                 Start $script instead of grml-quickconfig on startup
 grml nosyslog                       Do not start syslog-ng
 grml nogpm                          Disable GPM daemon
+grml noconsolefont                  Disable setting of console font (using consolechars)
 grml noblank                        Disable console blanking
+grml tsplash                        Text based bootsplash
 grml small                          Do not start that many consoles
 grml wondershaper=eth0,1000,500     Set up basic traffic shaping
 grml services={postfix,mysql,...}   Start service(s) which have an init-script (/etc/init.d/)
@@ -136,6 +142,7 @@ grml blacklist=modulename           Completely disable loading of specified modu
 grml fwtimeout=50                   Set firmware timeout via /sys/class/firmware/timeout to specified value
 grml nosound                        Mute sound devices (notice: this does not deactivate loading of sound drivers!)
 grml vol=number                     Set mixer volumes to level $number
+grml micvol=number                  Set mixer volume of microphone to level $number (default: 0)
 grml pnpbios=off                    No PnP Bios initialization
 grml acpi=off                       Disable ACPI Bios completely
 grml nousb2                         Disable initialization of USB 2.x controller(s)

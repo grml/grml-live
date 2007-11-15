@@ -11,7 +11,7 @@
  failsafe                                use (nearly) no hardware recognition  
  serial                                               activate serial console  
  forensic              do not touch any harddisks during hardware recognition  
- debug                          get interactive shells during startup process  
+ debug [ break=live-bottom ]    get interactive shells during startup process  
  grub                                   start GRand Unified Bootloader (GRUB)  
  dos                                                        start FreeDOS 1.0  
  qemu                               boot with special options for use in Qemu  
