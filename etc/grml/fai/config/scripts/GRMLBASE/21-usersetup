@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Fri Oct 26 01:22:30 CEST 2007 [mika]
+# Latest change: Thu Nov 15 09:42:42 CET 2007 [mika]
 ################################################################################
 
 set -u
@@ -34,6 +34,35 @@ if grep -q "$USERNAME:x:1000" $target/etc/passwd ; then
 else
    $ROOTCMD useradd -d /home/$USERNAME -m -s /bin/zsh -g 1000 $USERNAME
 fi
+
+# make sure to add the user to all relevant groups:
+add_user_to_group() {
+   [ -n "$1" ] || return 1
+   if grep -q $1 $target/etc/group ; then
+      grep "$1:x:.*$USERNAME" || addgroup $1 $USERNAME
+   fi
+}
+
+add_user_to_group audio
+add_user_to_group camera
+add_user_to_group cdrom
+add_user_to_group dialout
+add_user_to_group dip
+add_user_to_group fax
+add_user_to_group floppy
+add_user_to_group fuse
+add_user_to_group games
+add_user_to_group nvram
+add_user_to_group plugdev
+add_user_to_group scanner
+add_user_to_group sudo
+add_user_to_group tape
+add_user_to_group tty
+add_user_to_group usb
+add_user_to_group users
+add_user_to_group video
+add_user_to_group vlock
+add_user_to_group voice
 
 sed -i 's/^root::/root:*:/'            $target/etc/shadow
 sed -i "s/^$USERNAME:!:/$USERNAME:*:/" $target/etc/shadow
