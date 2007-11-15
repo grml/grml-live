@@ -295,12 +295,16 @@ config_language(){
     eend $RC
  fi
 
- if [ -n "$CONSOLEFONT" ] ; then
-    einfo "Running consolechars using ${CONSOLEFONT}"
-    for vc in `seq 0 ${NUM_CONSOLES}`  ; do
-        consolechars --tty=/dev/tty${vc} -f $CONSOLEFONT ; RC=$?
-    done
-    eend $?
+ if checkbootparam noconsolefont ; then
+    ewarn "Skipping setting console font as requested on boot commandline." ; eend 0
+ else
+    if [ -n "$CONSOLEFONT" ] ; then
+       einfo "Running consolechars using ${CONSOLEFONT}"
+       for vc in `seq 0 ${NUM_CONSOLES}`  ; do
+           consolechars --tty=/dev/tty${vc} -f $CONSOLEFONT ; RC=$?
+       done
+       eend $?
+    fi
  fi
 
  eoutdent
