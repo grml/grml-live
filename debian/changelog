@@ -1,3 +1,12 @@
+grml-autoconfig (0.7.29) unstable; urgency=low
+
+  * New bootoption micvol (usage: micvol=$number) for setting mixer/
+    volume settings of microphone channel. Thanks to Ernst Ahlers
+    for the bugreport ("Rückkopplungspfeifen") and bringing up
+    the idea of setting it to '0' by default.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 15 Nov 2007 22:02:03 +0100
+
 grml-autoconfig (0.7.28) unstable; urgency=low
 
   * Drop the 'consolechars --tty=/dev/tty${vc} -d' stuff from
