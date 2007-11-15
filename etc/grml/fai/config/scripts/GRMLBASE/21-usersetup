@@ -39,7 +39,7 @@ fi
 add_user_to_group() {
    [ -n "$1" ] || return 1
    if grep -q $1 $target/etc/group ; then
-      grep "$1:x:.*$USERNAME" $target/etc/group || addgroup $1 $USERNAME
+      grep "$1:x:.*$USERNAME" $target/etc/group || $ROOTCMD addgroup $1 $USERNAME
    fi
 }
 
