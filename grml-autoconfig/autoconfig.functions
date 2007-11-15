@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Son Sep 30 14:15:11 CEST 2007 [mika]
+# Latest change: Don Nov 15 11:46:04 CET 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -286,6 +286,7 @@ config_language(){
  NUM_CONSOLES=`fgconsole --next-available`
  NUM_CONSOLES=`expr ${NUM_CONSOLES} - 1`
  [ ${NUM_CONSOLES} -eq 1 ] && NUM_CONSOLES=6
+
  if [ -n "$CHARMAP" ] ; then
     einfo "Running consolechars for ${CHARMAP}"
     for vc in `seq 0 ${NUM_CONSOLES}`  ; do
@@ -293,10 +294,11 @@ config_language(){
     done
     eend $RC
  fi
+
  if [ -n "$CONSOLEFONT" ] ; then
     einfo "Running consolechars using ${CONSOLEFONT}"
     for vc in `seq 0 ${NUM_CONSOLES}`  ; do
-        consolechars --tty=/dev/tty${vc} -f $CONSOLEFONT || consolechars --tty=/dev/tty${vc} -d
+        consolechars --tty=/dev/tty${vc} -f $CONSOLEFONT ; RC=$?
     done
     eend $?
  fi
