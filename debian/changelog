@@ -1,3 +1,10 @@
+grml-etc (1.0.23) unstable; urgency=low
+
+  [ Michael Gebetsroither ]
+  * /etc/inittab: switched to grml-init-multitail
+
+ -- Michael Prokop <mika@grml.org>  Thu, 15 Nov 2007 23:17:56 +0100
+
 grml-etc (1.0.22) unstable; urgency=low
 
   * /etc/wvdial.conf.umts: do not enable "Idle Seconds" by default.
