@@ -7,6 +7,8 @@ grml-live (0.0.9) unstable; urgency=low
   * Support kernel upgrades via according /etc/kernel-img.conf configuration.
   * Set hostname in instsoft-hook already.
   * Add user (grml) to all relevant groups.
+  * Improve initrd+kernel copy process (ignore .bak files and
+    copy always exactly one image).
   * Add new packages to GRML_FULL:
     - etckeeper
     - hdapsd
