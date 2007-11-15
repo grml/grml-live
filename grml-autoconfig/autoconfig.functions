@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Don Nov 15 11:46:04 CET 2007 [mika]
+# Latest change: Don Nov 15 22:01:50 CET 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -1509,7 +1509,15 @@ else
             amixer set Front ${VOL}% 1>/dev/null
          fi
       fi
-      ERROR=$(aumix -w $VOL -v $VOL -p $VOL -m $VOL 2>&1) ; RC=$?
+      # by default assume '0' as volume for microphone:
+      if checkbootparam micvol ; then
+         MICVOL="$(getbootparam 'micvol' 2>>$DEBUG)"
+      else
+         MICVOL=0
+      fi
+
+      # finally set the volumes:
+      ERROR=$(aumix -w $VOL -v $VOL -p $VOL -m $MICVOL 2>&1) ; RC=$?
       if [ -n "$ERROR" ] ; then
          eindent
          eerror "Problem setting mixer volumes: $ERROR (no soundcard?)"
