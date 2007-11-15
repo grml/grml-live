@@ -3,6 +3,8 @@ grml-autoconfig (0.7.28) unstable; urgency=low
   * Drop the 'consolechars --tty=/dev/tty${vc} -d' stuff from
     config_language, otherwise we will find ourself at tty5 under
     certain circumstances.
+  * Add bootoption noconsolefont to skip setting console font via
+    consolechars.
 
  -- Michael Prokop <mika@grml.org>  Thu, 15 Nov 2007 11:46:15 +0100
 
