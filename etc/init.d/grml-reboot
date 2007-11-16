@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Die Jun 26 00:08:30 CEST 2007 [mika]
+# Latest change: Fre Nov 16 11:37:58 CET 2007 [mika]
 ################################################################################
 
 export PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -19,7 +19,7 @@ exec >/dev/console 2>&1 </dev/console
 
 # Check if we are running from a GRML-CD or HD
 INSTALLED=""
-[ -e /GRML/etc/grml_cd ] || INSTALLED=yes
+[ -e /etc/grml_cd ] || INSTALLED=yes
 # Assume that we don't want the eject+prompt stuff when running in one
 # of the special modes:
 grep -qe ' toram' -qe ' usb' -qe 'serial' -qe 'fromhd' /proc/cmdline && INSTALLED=yes
@@ -175,10 +175,11 @@ log_end_msg 0
 
 if [ -z "$INSTALLED" -a -z "$NOPROMPT" ]; then
    # do not prompt for removal when running in grml2ram mode:
-   if ! mount | grep -q 'on /cdrom ' ; then
+   if ! mount | grep -qe 'on /cdrom' -qe 'on /live/image' ; then
       echo "CD not mounted, nothing to eject therefore."
    else
-      umount -l /cdrom
+      [ -d /live/image ] && umount -l /live/image
+      [ -d /cdrom ] && umount -l /cdrom
       [ -n "$CDROM" -a -z "$NOEJECT" ] && eject -p "$CDROM" 2>/dev/null
       echo
       read -s -p "${GREEN}Please remove CD, close cdrom drive and hit return [auto 2 minutes].${NORMAL}" -t 120 a
