@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Don Nov 15 22:01:50 CET 2007 [mika]
+# Latest change: Fre Nov 16 08:45:53 CET 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -283,15 +283,17 @@ config_language(){
  fi
 
  # we have to set up all consoles, therefore loop it over all ttys:
- NUM_CONSOLES=`fgconsole --next-available`
- NUM_CONSOLES=`expr ${NUM_CONSOLES} - 1`
+ NUM_CONSOLES=$(fgconsole --next-available)
+ NUM_CONSOLES=$(expr ${NUM_CONSOLES} - 1)
  [ ${NUM_CONSOLES} -eq 1 ] && NUM_CONSOLES=6
+ CUR_CONSOLE=$(fgconsole)
 
  if [ -n "$CHARMAP" ] ; then
     einfo "Running consolechars for ${CHARMAP}"
     for vc in `seq 0 ${NUM_CONSOLES}`  ; do
         consolechars --tty=/dev/tty${vc} -m ${CHARMAP} ; RC=$?
     done
+    [ -n "$CUR_CONSOLE" ] && chvt $CUR_CONSOLE
     eend $RC
  fi
 
@@ -303,6 +305,7 @@ config_language(){
        for vc in `seq 0 ${NUM_CONSOLES}`  ; do
            consolechars --tty=/dev/tty${vc} -f $CONSOLEFONT ; RC=$?
        done
+       [ -n "$CUR_CONSOLE" ] && chvt $CUR_CONSOLE
        eend $?
     fi
  fi
