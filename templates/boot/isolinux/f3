@@ -15,7 +15,7 @@
  grub                                   start GRand Unified Bootloader (GRUB)  
  dos                                                        start FreeDOS 1.0  
  qemu                               boot with special options for use in Qemu  
- vmware                            boot with special options for use in VMware 
+ vmware                           boot with special options for use in VMware  
                                                                                
  A list with all supported boot options can be found at the CD at              
  /cdrom/GRML/grml-cheatcodes.txt                                               
