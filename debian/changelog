@@ -17,6 +17,8 @@ grml-live (0.0.9) unstable; urgency=low
   * Improve initrd+kernel copy process: ignore .bak files (and get rid
     of them) and copy always exactly one image.
   * Add new packages to GRML_FULL:
+    - awesome
+    - cereal
     - etckeeper
     - hdapsd
     - hdaps-utils
@@ -24,7 +26,9 @@ grml-live (0.0.9) unstable; urgency=low
       binaries from commercial vendors; thanks to
       Christian Hofstaedtler]
     - mkelfimage
+    - runit
     - rutilt
+    - supercat
     - truecrypt-2.6.23-grml
   * Drop centericq-common, centerim-common, irssi-text, rt2400
     and rt2500 from GRML_FULL package list.

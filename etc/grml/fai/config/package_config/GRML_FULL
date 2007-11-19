@@ -263,6 +263,7 @@ avahi-daemon
 aview
 away
 awesfx
+awesome
 axel
 axp
 backup-manager
@@ -369,6 +370,7 @@ cdrskin
 cdtool
 cedet-common
 centerim-utf8
+cereal
 cfengine2
 cfv
 cgdb
@@ -1493,6 +1495,7 @@ ruby-prof
 ruby1.8
 ruby1.8-examples
 rungetty
+runit
 rutilt
 rxvt-beta
 rxvt-unicode
@@ -1630,6 +1633,7 @@ sucrack
 sudo
 sudoku
 super
+supercat
 sux
 swaks
 swapd
