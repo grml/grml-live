@@ -1,3 +1,10 @@
+grml-live (0.0.10) unstable; urgency=low
+
+  * Do not enable apt-listbugs if the binary is not available.
+    [Testing: issue340]
+
+ -- Michael Prokop <mika@grml.org>  Mon, 19 Nov 2007 12:49:37 +0100
+
 grml-live (0.0.9) unstable; urgency=low
 
   * Remove all files inside /root/ when using class RELEASE.
