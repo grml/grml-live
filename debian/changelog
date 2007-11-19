@@ -2,6 +2,8 @@ grml-live (0.0.10) unstable; urgency=low
 
   * Do not enable apt-listbugs if the binary is not available.
     [Testing: issue340]
+  * Add keychain package to GRML_MEDIUM.
+  * Add keychain package to GRML_SMALL.
 
  -- Michael Prokop <mika@grml.org>  Mon, 19 Nov 2007 12:49:37 +0100
 

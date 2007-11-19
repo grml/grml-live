@@ -92,6 +92,7 @@ ipw3945d
 ipw-firmware
 jed
 jed-common
+keychain
 klibc-utils
 knockd
 laptop-detect
