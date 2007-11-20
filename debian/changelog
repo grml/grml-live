@@ -4,6 +4,8 @@ grml-live (0.0.10) unstable; urgency=low
     [Testing: issue340]
   * Add keychain package to GRML_MEDIUM.
   * Add keychain package to GRML_SMALL.
+  * Do not create /etc/sysconfig/network-scripts and
+    /etc/sysconfig/provider any longer in cleanup script.
 
  -- Michael Prokop <mika@grml.org>  Mon, 19 Nov 2007 12:49:37 +0100
 

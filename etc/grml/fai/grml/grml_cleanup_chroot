@@ -242,7 +242,6 @@ einfo "Cleaning and removing some misc files and directories"
          /var/lib/games /var/cache/man      \
          /var/lib/nfs   /var/lib/xkb        \
          /var/mail/grml /var/account/pacct
-  mkdir -p /etc/sysconfig/network-scripts /etc/sysconfig/provider
   # Recreate empty utmp and wtmp
   :>/var/run/utmp
   :>/var/run/wtmp
