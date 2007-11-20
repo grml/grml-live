@@ -435,13 +435,6 @@ fi
 }
 # }}}
 
-# update_progress {{{
-update_progress(){
-  # be sure we are non-blocking
-  (echo "$1" > /etc/sysconfig/progress) &
-}
-# }}}
-
 # {{{ timezone
 config_timezone(){
  # don't touch the files if running from harddisk:
