@@ -176,10 +176,6 @@ checkvalue $CONFIG_ACPI_APM && config_acpi_apm
 
 checkvalue $CONFIG_PCMCIA && config_pcmcia
 
-# {{{ Read in what hwsetup has found
-[ -f /etc/sysconfig/grml ] && . /etc/sysconfig/grml
-# }}}
-
 checkvalue $CONFIG_KEYBOARD && config_keyboard
 
 [ -n "$SPLASH" ] &&  /usr/bin/grml-bootsplash "||||||">/dev/tty14
@@ -189,8 +185,6 @@ checkvalue $CONFIG_BLIND && config_blind
 checkvalue $CONFIG_INTERACTIVE && config_interactive
 
 checkvalue $CONFIG_AGP && config_agp
-
-[ -f /etc/sysconfig/grml ] && . /etc/sysconfig/grml
 
 checkvalue $CONFIG_AUTOMOUNTER && config_automounter
 
