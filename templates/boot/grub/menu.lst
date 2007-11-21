@@ -13,19 +13,19 @@ background  = FFCC33
 
 # define entries:
 title %GRML_NAME% %VERSION% - Default boot (using 1024x768 framebuffer)
-kernel /boot/isolinux/linux26 lang=us apm=power-off vga=791 quiet boot=live nomce
+kernel /boot/isolinux/linux26 apm=power-off lang=us vga=791 quiet boot=live nomce
 initrd /boot/isolinux/initrd.gz
 
 title %GRML_NAME% %VERSION% - without framebuffer
-kernel /boot/isolinux/linux26 lang=us apm=power-off vga=normal video=ofonly quiet initrd=initrd.gz boot=live nomce
+kernel /boot/isolinux/linux26 apm=power-off lang=us vga=normal video=ofonly quiet initrd=initrd.gz boot=live nomce
 initrd /boot/isolinux/initrd.gz
 
 title %GRML_NAME% %VERSION% - with 1280x1024 framebuffer
-kernel /boot/isolinux/linux26 lang=us apm=power-off vga=794 quiet initrd=initrd.gz boot=live nomce
+kernel /boot/isolinux/linux26 apm=power-off lang=us vga=794 quiet initrd=initrd.gz boot=live nomce
 initrd /boot/isolinux/initrd.gz
 
 title %GRML_NAME% %VERSION% - with 800x600 framebuffer
-kernel /boot/isolinux/linux26 lang=us apm=power-off vga=788 quiet initrd=initrd.gz boot=live nomce
+kernel /boot/isolinux/linux26 apm=power-off lang=us vga=788 quiet initrd=initrd.gz boot=live nomce
 initrd /boot/isolinux/initrd.gz
 
 title %GRML_NAME% %VERSION% - failsafe boot
@@ -33,7 +33,7 @@ kernel /boot/isolinux/linux26 vga=normal lang=us boot=live noautoconfig atapicd 
 initrd /boot/isolinux/initrd.gz
 
 title %GRML_NAME% %VERSION% - debug mode
-kernel /boot/isolinux/linux26 lang=us apm=power-off vga=791 verbose debug=vc debug initrd=initrd.gz boot=live initcall_debug nomce
+kernel /boot/isolinux/linux26 apm=power-off lang=us vga=791 verbose debug=vc debug initrd=initrd.gz boot=live initcall_debug nomce
 initrd /boot/isolinux/initrd.gz
 
 title %GRML_NAME% %VERSION% - forensic mode
@@ -41,7 +41,7 @@ kernel /boot/isolinux/linux26 vga=791 lang=us nofstab noraid nolvm noautoconfig 
 initrd /boot/isolinux/initrd.gz
 
 title %GRML_NAME% %VERSION% - serial mode
-kernel /boot/isolinux/linux26 lang=us apm=power-off vga=normal video=vesafb:off quiet initrd=initrd.gz boot=live nomce
+kernel /boot/isolinux/linux26 apm=power-off lang=us vga=normal video=vesafb:off quiet initrd=initrd.gz boot=live nomce
 initrd /boot/isolinux/initrd.gz
 
 title Run memtest86+
@@ -52,5 +52,5 @@ kernel /boot/isolinux/memdisk
 initrd /boot/isolinux/balder10.imz
 
 # title %GRML_NAME% %VERSION% - old boot method
-# kernel /boot/isolinux/linux26 ramdisk_size=100000 init=/etc/init lang=us apm=power-off vga=791 nomce quiet grml_dir="live" grml_name="grml.squashfs"
+# kernel /boot/isolinux/linux26 ramdisk_size=100000 init=/etc/init apm=power-off lang=us vga=791 nomce quiet grml_dir="live" grml_name="grml.squashfs"
 # initrd /boot/isolinux/minirt26.gz

@@ -7,6 +7,9 @@ grml-live (0.0.10) unstable; urgency=low
   * Do not create /etc/sysconfig/network-scripts and
     /etc/sysconfig/provider any longer in cleanup script.
   * Fix typo in bootsplash f3 (thanks, jimmy).
+  * Switch order of 'lang=us apm=power-off' to 'apm=poweroff' in
+    isolinyx/syslinux/grub configuration because getbootparam
+    of grml-autoconfig requires a whitespace inside /proc/cmdline.
 
  -- Michael Prokop <mika@grml.org>  Mon, 19 Nov 2007 12:49:37 +0100
 
