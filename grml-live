@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Nov 25 16:35:35 CET 2007 [mika]
+# Latest change: Sun Nov 25 17:16:07 CET 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -31,6 +31,7 @@ if [ -r /var/run/fai/FAI_INSTALLATION_IN_PROGRESS ] ; then
    exit 1
 fi
 
+# see #449236
 if [ -r /var/run/fai/fai_softupdate_is_running ] ; then
    echo "/usr/sbin/fai softupdate already running or was aborted before.">&2
    echo "You may remove /var/run/fai/fai_softupdate_is_running and try again.">&2
@@ -243,7 +244,8 @@ fi
 start_seconds=$(cut -d . -f 1 /proc/uptime)
 log "------------------------------------------------------------------------------"
 log "Starting grml-live [${GRML_LIVE_VERSION}] run on $(date)"
-log "Executed command line: $CMDLINE"
+log "Executed grml-live command line:"
+log "$CMDLINE"
 
 einfo "Logging actions to logfile $LOGFILE"
 # }}}
@@ -324,7 +326,10 @@ else
       mkdir -p "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
       mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
    fi
+   log "Executed FAI command line:"
+   log "fai $VERBOSE -C $GRML_FAI_CONFIG -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
    fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u "$HOSTNAME" $FAI_ACTION "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
+   echo "debug: $?"
 
    log "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]"
    echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]" > $CHROOT_OUTPUT/etc/grml_version

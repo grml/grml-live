@@ -7,6 +7,9 @@ grml-live (0.0.10) unstable; urgency=low
     - LOGDIR is now /var/log/fai/$HOSTNAME/$FAI_ACTION_date+time
     - LOGDIR is /tmp/fai during an installation (not dirinstall), and
       will be copied to the path above at the end of an installation
+  * Log the executed FAI command line to /var/log/grml-live.log.
+  * No longer update chroot system via instsoft.GRMLBASE as FAI
+    should do that now.
   * Do not enable apt-listbugs if the binary is not available.
     [Testing: issue340]
   * Add keychain package to GRML_MEDIUM.
