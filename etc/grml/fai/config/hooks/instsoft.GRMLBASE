@@ -57,12 +57,26 @@ EOF
       fi
    fi
 
+   # FAI softupdate executes upgrade only with the sources.list being
+   # present in the chroot :-/ - so let's do it on our own:
    if [ -r /etc/grml/fai/apt/sources.list ] ; then
       if [ -L $target/etc/apt/sources.list ] ; then
          rm $target/etc/apt/sources.list
       fi
       cp /etc/grml/fai/apt/sources.list $target/etc/apt/sources.list
    fi
+
+   $ROOTCMD apt-get update
+   if [ -x $target/usr/bin/aptitude ] ; then
+      if $ROOTCMD aptitude --help | grep -q safe-upgrade ; then
+         $ROOTCMD aptitude -y safe-upgrade
+      else
+         $ROOTCMD aptitude -y upgrade
+      fi
+   else
+      $ROOTCMD apt-get -y upgrade
+   fi
+
 else # no softupdate but fresh installation
 
 # work around http://trac.lighttpd.net/trac/ticket/657
