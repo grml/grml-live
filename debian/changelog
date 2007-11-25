@@ -13,6 +13,8 @@ grml-live (0.0.10) unstable; urgency=low
   * New option '-C <configuration_file>' for specifying a configuration
     file. Needs heavy testing though, because the files are updated
     during runtime it isn't as easy as expected to be. :-/
+  * Support $ZERO_FAI_LOGFILE inside grml-live configuration for removing
+    old FAI logs.
   * Do not enable apt-listbugs if the binary is not available.
     [Testing: issue340]
   * Add keychain package to GRML_MEDIUM.
