@@ -2,6 +2,11 @@ grml-live (0.0.10) unstable; urgency=low
 
   * Drop patches which are part of FAI 3.2.3 now. Depend on
     FAI version 3.2.3 therefor.
+  * FAI 3.2.3 has a new log schema, adjusted grml-live accordingly.
+    Quoting the NEWS file of FAI:
+    - LOGDIR is now /var/log/fai/$HOSTNAME/$FAI_ACTION_date+time
+    - LOGDIR is /tmp/fai during an installation (not dirinstall), and
+      will be copied to the path above at the end of an installation
   * Do not enable apt-listbugs if the binary is not available.
     [Testing: issue340]
   * Add keychain package to GRML_MEDIUM.
@@ -14,6 +19,8 @@ grml-live (0.0.10) unstable; urgency=low
   * Switch order of 'lang=us apm=power-off' to 'apm=poweroff' in
     isolinyx/syslinux/grub configuration because getbootparam
     of grml-autoconfig requires a whitespace inside /proc/cmdline.
+  * Support grml2ram bootoption inside isolinyx/syslinux/grub
+    configuration.
 
  -- Michael Prokop <mika@grml.org>  Mon, 19 Nov 2007 12:49:37 +0100
 

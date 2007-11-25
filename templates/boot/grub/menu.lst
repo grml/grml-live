@@ -36,6 +36,14 @@ title %GRML_NAME% %VERSION% - debug mode
 kernel /boot/isolinux/linux26 apm=power-off lang=us vga=791 verbose debug=vc debug initrd=initrd.gz boot=live initcall_debug nomce
 initrd /boot/isolinux/initrd.gz
 
+title %GRML_NAME% %VERSION% - copy grml squashfs file to RAM
+kernel /boot/isolinux/linux26 toram=grml.squashfs apm=power-off lang=us vga=791 quiet boot=live nomce
+initrd /boot/isolinux/initrd.gz
+
+title %GRML_NAME% %VERSION% - copy medium to RAM
+kernel /boot/isolinux/linux26 toram apm=power-off lang=us vga=791 quiet boot=live nomce
+initrd /boot/isolinux/initrd.gz
+
 title %GRML_NAME% %VERSION% - forensic mode
 kernel /boot/isolinux/linux26 vga=791 lang=us nofstab noraid nolvm noautoconfig noswap raid=noautodetect quiet initrd=initrd.gz boot=live
 initrd /boot/isolinux/initrd.gz

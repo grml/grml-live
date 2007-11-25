@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Nov 05 09:24:45 CET 2007 [mika]
+# Latest change: Sun Nov 25 16:35:35 CET 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -15,7 +15,7 @@ export LC_ALL=C
 # exit on any error:
 set -e
 
-GRML_LIVE_VERSION='0.0.7'
+GRML_LIVE_VERSION='0.0.10'
 CMDLINE="$0 $@"
 ISO_DATE="$(date +%Y-%m-%d)"
 
@@ -341,11 +341,7 @@ else
 
    # notice: 'fai dirinstall' does not seem to exit appropriate, so:
    ERROR=''
-   if [ -n "$UPDATE" ] ; then
-      CHECKLOG=/var/log/fai/current/
-   else
-      CHECKLOG=/var/log/fai/dirinstall/$HOSTNAME/
-   fi
+   CHECKLOG=/var/log/fai/$HOSTNAME/last
    if [ -r "$CHECKLOG/software.log" ] ; then
       # 1 errors during executing of commands
       # Unable to write mmap - msync (28 No space left on device)
