@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Nov 25 17:16:07 CET 2007 [mika]
+# Latest change: Sun Nov 25 18:29:07 CET 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -95,6 +95,14 @@ if [ -n "$ZERO_LOGFILE" ] ; then
    echo -n > $LOGFILE
 fi
 
+if [ -n "$ZERO_FAI_LOGFILE" ] ; then
+   if [ -d /var/log/fai/"$HOSTNAME" ] ; then
+      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink last)"
+      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink last-softupdate)"
+      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink last-dirinstall)"
+   fi
+fi
+
 NFSROOT_CONF=/etc/grml/fai/make-fai-nfsroot.conf
 
 # }}}
@@ -179,10 +187,11 @@ http://grml.org/bugs/
 
 # command line parsing {{{
 
-while getopts "a:c:g:i:o:r:s:t:v:FhuV" opt; do
+while getopts "a:C:c:g:i:o:r:s:t:v:FhuV" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     c) CLASSES="$OPTARG" ;;
+    C) CONFIG="$OPTARG" ;;
     g) GRML_NAME="$OPTARG" ;;
     i) ISO_NAME="$OPTARG" ;;
     o) OUTPUT="$OPTARG"
@@ -218,6 +227,7 @@ if [ -z "$FORCE" ] ; then
    echo
    echo "  FAI classes:       $CLASSES"
    echo "  main directory:    $OUTPUT"
+   [ -n "$CONFIG" ]        && echo "  configuration:     $CONFIG"
    [ -n "$CHROOT_OUTPUT" ] && echo "  chroot target:     $CHROOT_OUTPUT"
    [ -n "$BUILD_OUTPUT" ]  && echo "  build target:      $BUILD_OUTPUT"
    [ -n "$ISO_OUTPUT" ]    && echo "  ISO target:        $ISO_OUTPUT"
@@ -239,6 +249,26 @@ if [ -z "$FORCE" ] ; then
       bailout 1 "Exiting as requested."
    fi
    echo
+fi
+
+# read local (non-packaged) configuration:
+LOCAL_CONFIG=/etc/grml/grml-live.local
+if [ -r "$LOCAL_CONFIG" ] ; then
+   log "Sourcing $LOCAL_CONFIG"
+   . $LOCAL_CONFIG
+else
+   LOCAL_CONFIG=''
+fi
+
+if [ -n "$CONFIG" ] ; then
+   if ! [ -f "$CONFIG" ] ; then
+      log "Sorry, $CONFIG could not be read. Exiting. [$(date)]"
+      eerror "Sorry, $CONFIG could not be read. Exiting."
+      bailout 1
+   else
+      log "Sourcing $CONFIG"
+      . $CONFIG
+   fi
 fi
 
 start_seconds=$(cut -d . -f 1 /proc/uptime)
@@ -271,10 +301,15 @@ fi
 
 # does this suck? YES!
 if [ -n "$SUITE" ] ; then
-   sed -i "s/SUITE=.*/SUITE=\"$SUITE\"/" $LIVE_CONF
 
-   DIST="\|\ etch\ \|\ stable\ \|\ lenny\ \|\ testing\ \|\ sid\ \|\ unstable\ "
-   sed -i "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" $LIVE_CONF
+   for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
+       if [ -n "$file" ] ; then
+          sed -i "s/SUITE=.*/SUITE=\"$SUITE\"/" $LIVE_CONF
+          DIST="\|\ etch\ \|\ stable\ \|\ lenny\ \|\ testing\ \|\ sid\ \|\ unstable\ "
+          sed -i "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" $file
+       fi
+   done
+
    sed -i "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" /etc/grml/fai/apt/sources.list
    # notice: activate grml-live pool only if we are building against unstable:
    if grep -qe unstable -qe sid /etc/grml/fai/apt/sources.list ; then
@@ -286,7 +321,11 @@ if [ -n "$SUITE" ] ; then
       sed -i 's/.*grml-live.*/# removed grml-live repository/' /etc/grml/fai/apt/sources.list
    fi
 
-   sed -i "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" $LIVE_CONF
+   for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
+       if [ -n "$file" ] ; then
+          sed -i "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" "$file"
+       fi
+   done
    sed -i "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" $NFSROOT_CONF
 fi
 

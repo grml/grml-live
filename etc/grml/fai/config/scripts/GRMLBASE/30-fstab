@@ -11,7 +11,8 @@ set -u
 set -e
 
 USERNAME=''
-[ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
+[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
+[ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
 [ -n "$USERNAME" ] || USERNAME=grml
 
 if [ -r /etc/grml/fai/files/etc/fstab ] ; then

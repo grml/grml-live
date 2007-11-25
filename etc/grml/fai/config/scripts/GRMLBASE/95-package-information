@@ -8,7 +8,8 @@
 ################################################################################
 
 HOSTNAME=''
-[ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
+[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
+[ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 
 if ! [ -d /var/log/fai/"$HOSTNAME"/last/ ] ; then
