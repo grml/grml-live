@@ -531,6 +531,7 @@ if [ -f "$BUILD_OUTPUT"/live/grml.squashfs -a -z "$UPDATE" ] ; then
    ewarn "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'" ; eend 0
 else
    [ -d "$BUILD_OUTPUT"/live ] || mkdir "$BUILD_OUTPUT"/live
+   log "mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend"
    mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend
    log "Finished execution of stage 'squashfs' [$(date)]"
    einfo "Finished execution of stage 'squashfs'" ; eend 0
@@ -558,6 +559,7 @@ else
    mkdir -p "$ISO_OUTPUT" || bailout 6 "Problem with creating $ISO_OUTPUT for stage 'iso build'"
    CURRENT_DIR=$(pwd)
    cd "$BUILD_OUTPUT" &&
+   log "mkisofs -V grml $VERSION -publisher 'grml-live | grml.org' -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b $BOOT_FILE -o ${ISO_OUTPUT}/${ISO_NAME} ."
    mkisofs -V "grml $VERSION" -publisher 'grml-live | grml.org' \
            -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
            -b $BOOT_FILE \

@@ -7,7 +7,8 @@ grml-live (0.0.10) unstable; urgency=low
     - LOGDIR is now /var/log/fai/$HOSTNAME/$FAI_ACTION_date+time
     - LOGDIR is /tmp/fai during an installation (not dirinstall), and
       will be copied to the path above at the end of an installation
-  * Log the executed FAI command line to /var/log/grml-live.log.
+  * Log the executed FAI, squashfs and mkisofs command lines to
+    /var/log/grml-live.log.
   * New option '-C <configuration_file>' for specifying a configuration
     file. Needs heavy testing though, because the files are updated
     during runtime it isn't as easy as expected to be. :-/
