@@ -127,6 +127,11 @@ if ! grep -qe debug -qe verbose /proc/cmdline 2>/dev/null ; then
    [ -r /proc/sys/kernel/printk ] && echo "0" > /proc/sys/kernel/printk
 fi
 
+# Make sure we support squashfs:
+if ! grep -q squashfs /proc/filesystems ; then
+   modprobe -q squashfs || log_grml_failure_msg "Warning: look like you do not have support for squashfs"
+fi
+
 if grep -q 'boot=live' /proc/cmdline 2>/dev/null ; then
    log_grml_begin_msg "Finished early booting sequence." ; echo "$SUCCESS"
    log_grml_begin_msg "Searching for GRML file, this might take a few seconds..."
