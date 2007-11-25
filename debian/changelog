@@ -15,10 +15,13 @@ grml-live (0.0.10) unstable; urgency=low
     old FAI logs.
   * Do not enable apt-listbugs if the binary is not available.
     [Testing: issue340]
-  * Add keychain package to GRML_MEDIUM.
   * Add keychain package to GRML_SMALL.
+  * Add new packages to GRML_MEDIUM:
+    - keychain
+    - squashfs-modules-2.6.23-grml (we build the module external now)
   * Add new packages to GRML_FULL:
     - aosd-cat
+    - squashfs-modules-2.6.23-grml (we build the module external now)
   * Do not create /etc/sysconfig/network-scripts and
     /etc/sysconfig/provider any longer in cleanup script.
   * Fix typo in bootsplash f3 (thanks, jimmy).
