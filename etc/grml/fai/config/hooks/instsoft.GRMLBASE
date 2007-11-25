@@ -64,16 +64,16 @@ EOF
    fi
 
    # FAI softupdate does not execute upgrade, so let's do it on our own:
-   $ROOTCMD apt-get update
-   if [ -x $target/usr/bin/aptitude ] ; then
-      if strings $target/usr/bin/aptitude | grep safe-upgrade 1>/dev/null ; then
-         $ROOTCMD aptitude -y safe-upgrade
-      else
-         $ROOTCMD aptitude -y upgrade
-      fi
-   else
-      $ROOTCMD apt-get -y upgrade
-   fi
+#   $ROOTCMD apt-get update
+#   if [ -x $target/usr/bin/aptitude ] ; then
+#      if strings $target/usr/bin/aptitude | grep safe-upgrade 1>/dev/null ; then
+#         $ROOTCMD aptitude -y safe-upgrade
+#      else
+#         $ROOTCMD aptitude -y upgrade
+#      fi
+#   else
+#      $ROOTCMD apt-get -y upgrade
+#   fi
 
 else # no softupdate but fresh installation
 
