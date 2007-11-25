@@ -1,5 +1,7 @@
 grml-live (0.0.10) unstable; urgency=low
 
+  * Drop patches which are part of FAI 3.2.3 now. Depend on
+    FAI version 3.2.3 therefor.
   * Do not enable apt-listbugs if the binary is not available.
     [Testing: issue340]
   * Add keychain package to GRML_MEDIUM.
