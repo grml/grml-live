@@ -5,10 +5,19 @@ Pin-Priority: 997
 
 // main grml-repository:
 Package: *
-Pin: origin deb.grml.org
+Pin: release o=The grml project,a=grml-testing,l=grml,c=main
 Pin-Priority: 996
+
+Package: *
+Pin: release o=The grml project,a=grml-stable,l=grml,c=main
+Pin-Priority: 995
+
+Package: *
+Pin: origin deb.grml.org
+Pin-Priority: 994
 
 // debian unstable pool (default):
 Package: *
 Pin: release a=unstable,o=Debian
 Pin-Priority: 991
+
