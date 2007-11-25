@@ -361,14 +361,15 @@ if [ -d "$CHROOT_OUTPUT/bin" -a -z "$UPDATE" ] ; then
    ewarn "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'" ; eend 0
 else
    mkdir -p "$CHROOT_OUTPUT" || bailout 5 "Problem with creating $CHROOT_OUTPUT for FAI"
+
    if [ -n "${MIRROR_DIRECTORY}" ] ; then
       mkdir -p "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
       mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
    fi
+
    log "Executed FAI command line:"
    log "fai $VERBOSE -C $GRML_FAI_CONFIG -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
    fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u "$HOSTNAME" $FAI_ACTION "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
-   echo "debug: $?"
 
    log "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]"
    echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]" > $CHROOT_OUTPUT/etc/grml_version
