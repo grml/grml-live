@@ -23,11 +23,11 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    echo "Softupdate of FAI via grml-live running"
 
    if [ -r /etc/resolv.conf ] ; then
-     if [ -r $target/etc/resolvconf/run/resolv.conf ] ; then
-        cat /etc/resolv.conf >> $target/etc/resolvconf/run/resolv.conf
-     else
-        cat /etc/resolv.conf >> $target/etc/resolv.conf
-     fi
+      if [ -r $target/etc/resolvconf/run/resolv.conf ] ; then
+         cat /etc/resolv.conf >> $target/etc/resolvconf/run/resolv.conf
+      else
+         cat /etc/resolv.conf >> $target/etc/resolv.conf
+      fi
    fi
 
    if [ -r $target/etc/policy-rc.d.conf ] ; then
