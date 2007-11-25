@@ -98,8 +98,8 @@ fi
 if [ -n "$ZERO_FAI_LOGFILE" ] ; then
    if [ -d /var/log/fai/"$HOSTNAME" ] ; then
       rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink last)"
-      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink last-softupdate)"
-      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink last-dirinstall)"
+#      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink last-softupdate)"
+#      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink last-dirinstall)"
    fi
 fi
 
