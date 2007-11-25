@@ -30,6 +30,7 @@ grml-live (0.0.10) unstable; urgency=low
   * Make sure we have pinning for grml-stable and grml-testing
     repositories via /etc/grml/fai/apt/preferences, not matter where
     the packages come from (web vs. local mirror/cache for example).
+  * Remove base.tgz from chroot directory.
   * Do not create /etc/sysconfig/network-scripts and
     /etc/sysconfig/provider any longer in cleanup script.
   * Fix typo in bootsplash f3 (thanks, jimmy).
