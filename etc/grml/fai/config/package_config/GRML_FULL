@@ -2079,6 +2079,7 @@ linux-image-2.6.23-grml
 #linux-source-2.6.23-grml
 linux-wlan-ng-modules-2.6.23-grml
 loop-aes-modules-2.6.23-grml
+lzma-modules-2.6.23-grml
 madwifi-modules-2.6.23-grml
 ndiswrapper-modules-2.6.23-grml
 nozomi-modules-2.6.23-grml
