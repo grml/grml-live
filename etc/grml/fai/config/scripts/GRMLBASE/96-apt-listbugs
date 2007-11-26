@@ -45,7 +45,7 @@ if ifclass RELEASE ; then
      [ -x $target/etc/apt/grml/listbugs ] ; then
      for severity in critical grave serious ; do
          SEVERITY=$severity $ROOTCMD /etc/apt/grml/listbugs > \
-         /var/log/fai/dirinstall/$HOSTNAME/bugs.${severity} || true # make sure it does not fail
+         /var/log/fai/$HOSTNAME/last/bugs.${severity} || true # make sure it does not fail
      done
   fi
 

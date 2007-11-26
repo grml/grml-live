@@ -45,7 +45,7 @@ else
    [ -n "$GRML_LOGFILE" ]  || GRML_LOGFILE=/var/log/grml-live.log
 fi
 
-[ -n "$FAI_LOGFILES" ]  || FAI_LOGFILES=/var/log/fai/dirinstall/grml
+[ -n "$FAI_LOGFILES" ]  || FAI_LOGFILES=/var/log/fai/grml/last
 
 echo "my_hdr From: grml-live autobuild daemon <$FROM>" > $MUTT_HEADERS
 
@@ -72,7 +72,7 @@ grml_live_run() {
 
 # create log archive:
 create_logs() {
-  ( cd / && tar zcf $ATTACHMENT var/log/fai/dirinstall/grml $GRML_LOGFILE 1>/dev/null )
+  ( cd / && tar zcf $ATTACHMENT $FAI_LOGFILES $GRML_LOGFILE 1>/dev/null )
 }
 
 # store information of ISO size:

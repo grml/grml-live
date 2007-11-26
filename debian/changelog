@@ -4,6 +4,7 @@ grml-live (0.0.11) unstable; urgency=low
   * Add X.org packages to GRML_MEDIUM.
   * Make sure /etc/X11/X is not a symlink to /bin/true. Check and fix
     via /etc/grml/fai/config/scripts/GRMLBASE/32-xorg.
+  * Adjust grml-buildd for new logdir structure.
 
  -- Michael Prokop <mika@grml.org>  Mon, 26 Nov 2007 15:07:54 +0100
 
