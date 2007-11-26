@@ -70,6 +70,7 @@ grml-files
 grml-firefox
 grml-hwinfo
 grml-laptop
+grml-live
 grml-mercurial-utils
 grml-network
 grml-policyrcd

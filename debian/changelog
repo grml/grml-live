@@ -18,11 +18,13 @@ grml-live (0.0.10) unstable; urgency=low
     [Testing: issue340]
   * Add keychain package to GRML_SMALL.
   * Add new packages to GRML_MEDIUM:
+    - grml-live
     - keychain
     - lzma-modules-2.6.23-grml
     - squashfs-modules-2.6.23-grml (we build the module external now)
   * Add new packages to GRML_FULL:
     - aosd-cat
+    - grml-live
     - lzma-modules-2.6.23-grml
     - squashfs-modules-2.6.23-grml (we build the module external now)
   * Support loading of squashfs module via

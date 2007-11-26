@@ -70,6 +70,7 @@ grml-docs
 grml-etc
 grml-etc-core
 grml-hwinfo
+grml-live
 grml-network
 grml-policyrcd
 grml-rebuildfstab
