@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Nov 25 20:08:06 CET 2007 [mika]
+# Latest change: Mon Nov 26 15:13:41 CET 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -15,7 +15,7 @@ export LC_ALL=C
 # exit on any error:
 set -e
 
-GRML_LIVE_VERSION='0.0.10'
+GRML_LIVE_VERSION='0.0.11'
 CMDLINE="$0 $@"
 ISO_DATE="$(date +%Y-%m-%d)"
 
