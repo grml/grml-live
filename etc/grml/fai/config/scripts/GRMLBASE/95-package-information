@@ -8,15 +8,21 @@
 ################################################################################
 
 HOSTNAME=''
-[ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
+[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
+[ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
+
+if ! [ -d /var/log/fai/"$HOSTNAME"/last/ ] ; then
+   echo "Error: /var/log/fai/"$HOSTNAME"/last/ not available. Exiting.">&2
+   exit 1
+fi
 
 if [ -x $target/usr/bin/dpkg-query ] ; then
    $ROOTCMD dpkg-query -W --showformat='${Package}\t${Installed-Size;10}\n' > \
-   /var/log/fai/dirinstall/$HOSTNAME/packages.size
+   /var/log/fai/$HOSTNAME/last/packages.size
 fi
 
-COLUMNS=200 $ROOTCMD dpkg --list > /var/log/fai/dirinstall/$HOSTNAME/dpkg.list
-COLUMNS=200 $ROOTCMD dpkg --get-selections > /var/log/fai/dirinstall/$HOSTNAME/dpkg.selections
+COLUMNS=200 $ROOTCMD dpkg --list > /var/log/fai/$HOSTNAME/last/dpkg.list
+COLUMNS=200 $ROOTCMD dpkg --get-selections > /var/log/fai/$HOSTNAME/last/dpkg.selections
 
 ## END OF FILE #################################################################

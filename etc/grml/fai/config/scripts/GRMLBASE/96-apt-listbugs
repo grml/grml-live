@@ -29,7 +29,8 @@ fi
 if ifclass RELEASE ; then
 
   HOSTNAME=''
-  [ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
+  [ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
+  [ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
   [ -n "$HOSTNAME" ] || HOSTNAME=grml
 
   if [ -r /etc/resolv.conf ] ; then

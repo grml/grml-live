@@ -74,6 +74,7 @@ grml-docs
 grml-etc
 grml-etc-core
 grml-hwinfo
+grml-live
 grml-network
 grml-policyrcd
 grml-rebuildfstab
@@ -266,8 +267,7 @@ zip
 zsh
 
 PACKAGES aptitude I386 
-linux-image-2.6.23-grml aufs-modules-2.6.23-grml grml-kerneladdons-2.6.23
-# linux-image-2.6.22-grml aufs-modules-2.6.22-grml grml-kerneladdons-2.6.22
+linux-image-2.6.23-grml squashfs-modules-2.6.23-grml lzma-modules-2.6.23-grml aufs-modules-2.6.23-grml grml-kerneladdons-2.6.23
 
 PACKAGES aptitude AMD64
 linux-image-2.6.23-grml64 aufs-modules-2.6.23-grml64

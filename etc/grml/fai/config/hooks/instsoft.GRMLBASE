@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Nov 12 11:14:32 CET 2007 [mika]
+# Latest change: Sun Nov 25 18:28:54 CET 2007 [mika]
 ################################################################################
 
 set -u
@@ -14,7 +14,8 @@ set -e
 echo grml_chroot > $target/etc/debian_chroot
 
 HOSTNAME=''
-[ -r /etc/grml/grml-live.conf ] && . /etc/grml/grml-live.conf
+[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
+[ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 echo "$HOSTNAME" > $target/etc/hostname
 
@@ -22,11 +23,11 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    echo "Softupdate of FAI via grml-live running"
 
    if [ -r /etc/resolv.conf ] ; then
-     if [ -r $target/etc/resolvconf/run/resolv.conf ] ; then
-        cat /etc/resolv.conf >> $target/etc/resolvconf/run/resolv.conf
-     else
-        cat /etc/resolv.conf >> $target/etc/resolv.conf
-     fi
+      if [ -r $target/etc/resolvconf/run/resolv.conf ] ; then
+         cat /etc/resolv.conf >> $target/etc/resolvconf/run/resolv.conf
+      else
+         cat /etc/resolv.conf >> $target/etc/resolv.conf
+      fi
    fi
 
    if [ -r $target/etc/policy-rc.d.conf ] ; then
@@ -56,6 +57,8 @@ EOF
       fi
    fi
 
+   # FAI softupdate executes upgrade only with the sources.list being
+   # present in the chroot :-/ - so let's do it on our own:
    if [ -r /etc/grml/fai/apt/sources.list ] ; then
       if [ -L $target/etc/apt/sources.list ] ; then
          rm $target/etc/apt/sources.list
@@ -63,10 +66,9 @@ EOF
       cp /etc/grml/fai/apt/sources.list $target/etc/apt/sources.list
    fi
 
-   # FAI softupdate does not execute upgrade, so let's do it on our own:
    $ROOTCMD apt-get update
    if [ -x $target/usr/bin/aptitude ] ; then
-      if strings $target/usr/bin/aptitude | grep safe-upgrade 1>/dev/null ; then
+      if $ROOTCMD aptitude --help | grep -q safe-upgrade ; then
          $ROOTCMD aptitude -y safe-upgrade
       else
          $ROOTCMD aptitude -y upgrade

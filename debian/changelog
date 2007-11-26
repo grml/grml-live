@@ -9,16 +9,47 @@ grml-live (0.0.11) unstable; urgency=low
 
 grml-live (0.0.10) unstable; urgency=low
 
+  * Drop patches which are part of FAI 3.2.3 now. Depend on
+    FAI version 3.2.3 therefor.
+  * FAI 3.2.3 has a new log schema, adjusted grml-live accordingly.
+    Quoting the NEWS file of FAI:
+    - LOGDIR is now /var/log/fai/$HOSTNAME/$FAI_ACTION_date+time
+    - LOGDIR is /tmp/fai during an installation (not dirinstall), and
+      will be copied to the path above at the end of an installation
+  * Log the executed FAI, squashfs and mkisofs command lines to
+    /var/log/grml-live.log.
+  * New option '-C <configuration_file>' for specifying a configuration
+    file. Needs heavy testing though, because the files are updated
+    during runtime it isn't as easy as expected to be. :-/
+  * Support $ZERO_FAI_LOGFILE inside grml-live configuration for removing
+    old FAI logs.
   * Do not enable apt-listbugs if the binary is not available.
     [Testing: issue340]
-  * Add keychain package to GRML_MEDIUM.
   * Add keychain package to GRML_SMALL.
+  * Add new packages to GRML_MEDIUM:
+    - grml-live
+    - keychain
+    - lzma-modules-2.6.23-grml
+    - squashfs-modules-2.6.23-grml (we build the module external now)
+  * Add new packages to GRML_FULL:
+    - aosd-cat
+    - grml-live
+    - lzma-modules-2.6.23-grml
+    - squashfs-modules-2.6.23-grml (we build the module external now)
+  * Support loading of squashfs module via
+    /etc/grml/fai/live-initramfs/grml-script.init-top
+  * Make sure we have pinning for grml-stable and grml-testing
+    repositories via /etc/grml/fai/apt/preferences, not matter where
+    the packages come from (web vs. local mirror/cache for example).
+  * Remove base.tgz from chroot directory.
   * Do not create /etc/sysconfig/network-scripts and
     /etc/sysconfig/provider any longer in cleanup script.
   * Fix typo in bootsplash f3 (thanks, jimmy).
   * Switch order of 'lang=us apm=power-off' to 'apm=poweroff' in
     isolinyx/syslinux/grub configuration because getbootparam
     of grml-autoconfig requires a whitespace inside /proc/cmdline.
+  * Support grml2ram bootoption inside isolinyx/syslinux/grub
+    configuration.
 
  -- Michael Prokop <mika@grml.org>  Mon, 19 Nov 2007 12:49:37 +0100
 

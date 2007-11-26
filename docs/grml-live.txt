@@ -17,7 +17,7 @@ grml-live [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ]
 *******************************************************************************
 Important! This document is growing as requested. If you have questions which
 aren't answered by this document yet please let me know: <mika@grml.org>!
-This document currently applies to grml-live version 0.0.6.
+This document currently applies to grml-live version 0.0.10.
 *******************************************************************************
 
 Description
@@ -72,6 +72,22 @@ can specify a class providing a grml-kernel (see
 /etc/grml/fai/config/package_config/ for a full list).  So instead of GRML_SMALL
 you can also use GRML_MEDIUM and GRML_FULL instead.
 
+  -C **CONFIGURATION_FILE**::
+
+The specified file is used as configuration file for grml-live. By default
+/etc/grml/grml-live.conf is used for main configuration. If a file named
+/etc/grml/grml-live.local exists it is used as well (sourced after reading
+/etc/grml/grml-live.conf to allow overriding settings). As a last option the
+specified configuration file is sourced so it is possible to override settings
+of /etc/grml/grml-live.conf as well as of /etc/grml/grml-live.local. Please
+notice that all configuration files have to be adjusted during execution of
+grml-live, so please make sure you use /etc/grml/grml-live.conf as a base for
+your own configuration file. Please also notice that the configuration file
+specified via this option is **not** (yet) supported inside the
+scripts/hooks/classes at /etc/grml/fai/config. Instead use
+/etc/grml/grml-live.conf and/or /etc/grml/grml-live.local for configuration
+stuff used inside /etc/grml/fai/config.
+
   -F::
 
 Force execution and do not prompt for acknowledgment of configuration.
@@ -107,7 +123,7 @@ Specify the Debian suite you want to use for your live-system.  Defaults to
 
   -t **TEMPLATE_DIRECTORY**::
 
-Specify place of the templates used for building the ISO. By default 
+Specify place of the templates used for building the ISO. By default
 (and if not manually specified) this is /usr/share/grml-live/templates/.
 
   -u::
@@ -304,14 +320,11 @@ Available log files
 
 grml-live itself logs to /var/log/grml-live.log. Unless you set ZERO_LOGFILE in
 /etc/grml/grml-live.conf the output is appended to the file. If you set the
-ZERO_LOGFILE configuration option the logfile will be truncated on a new
+ZERO_LOGFILE configuration option the logfile will be truncated on each new
 invocation of grml-live.
 
-The FAI part of grml-live logs to /var/log/fai/dirinstall/$HOSTNAME - so the
-default being /var/log/fai/dirinstall/grml.
-
-If you are using the update option of grml-live (option -u) the logs are
-available at /var/log/fai/current.
+The FAI part of grml-live logs to /var/log/fai/$HOSTNAME/ - so the
+default being /var/log/fai/grml/.
 
 If you are using the grml-live buildd you will find the logs of the grml-live
 run at /var/log/grml-buildd.stdout and /var/log/grml-buildd.stderr.
@@ -339,9 +352,10 @@ FAQ
 Help, I'm using Debian etch and I don't have FAI version >3.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  wget http://www.informatik.uni-koeln.de/fai/download/etch/fai-client_3.2.1_all.deb \
-       http://www.informatik.uni-koeln.de/fai/download/etch/fai-server_3.2.1_all.deb
-  dpkg -i fai-client_3.2.1_all.deb fai-server_3.2.1_all.deb
+  wget http://www.informatik.uni-koeln.de/fai/download/etch/fai-client_3.2.3_all.deb \
+       http://www.informatik.uni-koeln.de/fai/download/etch/fai-server_3.2.3_all.deb \
+       http://www.informatik.uni-koeln.de/fai/download/etch/fai-doc_3.2.3_all.deb
+  dpkg -i fai-client_3.2.3_all.deb fai-server_3.2.3_all.deb fai-doc_3.2.3_all.deb
 
 or check out the link:http://www.informatik.uni-koeln.de/fai/[FAI-homepage] for
 further details.
@@ -349,14 +363,14 @@ further details.
 I've problems with the build process. How to start debugging?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Check out the logs inside /var/log/fai/dirinstall/... If you don't have the time
-to debug the problem in further detail or don't know how to proceed just send a
-copy of your config, logs and the commandline with a short problem description
-to <mika@grml.org>:
+Check out the logs inside /var/log/fai/... If you don't have the time to debug
+the problem in further detail or don't know how to proceed just send a copy of
+your config, logs and the commandline with a short problem description to
+<mika@grml.org>:
 
   # history | grep grml-live > /etc/grml/grml_live.cmdline
   # tar zcf grml_live_problem.tar.gz /etc/grml/grml-live.conf \
-            /var/log/fai/dirinstall /etc/grml/fai
+            /etc/grml/grml-buildd.conf /var/log/fai /etc/grml/fai
 
 Can I use my own (local) Debian mirror?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
