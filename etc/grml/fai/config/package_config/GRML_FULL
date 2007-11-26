@@ -1099,6 +1099,7 @@ mklibs-copy
 mknbi
 mksh
 mktemp
+mlocate
 mmv
 mobilemesh
 moc
@@ -2038,6 +2039,8 @@ figlet
 firmware-ipw3945
 firmware-iwlwifi
 firmware-qlogic
+firmware-rt61
+firmware-rt73
 glimpse
 iozone3
 ipw3945d
@@ -2063,6 +2066,7 @@ linux-kernel-headers-grml
 
 ## Current kernel version 2.6.23-grml:
 acx100-2.6.23-grml
+atl2-modules-2.6.23-grml
 aufs-modules-2.6.23-grml
 bcm5700-module-2.6.23-grml
 drbd8-2.6.23-grml
@@ -2098,31 +2102,6 @@ tp-smapi-modules-2.6.23-grml
 truecrypt-2.6.23-grml
 #virtualbox-ose-modules-2.6.23-grml
 #zaptel-modules-2.6.23-grml
-
-## Kernel 2.6.22-grml:
-#aufs-modules-2.6.22-grml
-#drbd8-module-2.6.22-grml
-#exmap-modules-2.6.22-grml
-#grml-kerneladdons-2.6.22
-#gspca-modules-2.6.22-grml
-#ipw3945-modules-2.6.22-grml
-#iscsitarget-module-2.6.22-grml
-#kqemu-modules-2.6.22-grml
-#linux-doc-2.6.22-grml
-#linux-headers-2.6.22-grml
-#linux-image-2.6.22-grml
-#linux-kernel-headers-grml
-#madwifi-modules-2.6.22-grml
-#misdn-modules-2.6.22-grml
-#ndiswrapper-modules-2.6.22-grml
-#openafs-modules-2.6.22-grml
-#qc-usb-modules-2.6.22-grml
-#realtime-lsm-module-2.6.22-grml
-#sl-modem-modules-2.6.22-grml
-#sysprof-module-2.6.22-grml
-#tidev-modules-2.6.22-grml
-#truecrypt-2.6.22-grml
-# }}}
 
 ## amd64 specific packages {{{
 PACKAGES aptitude AMD64
