@@ -1283,6 +1283,7 @@ paxctl
 pax-utils
 pbuilder
 pbzip2
+pcaputils
 pciutils
 pcmciautils
 pconf-detect
@@ -2040,8 +2041,7 @@ figlet
 firmware-ipw3945
 firmware-iwlwifi
 firmware-qlogic
-firmware-rt61
-firmware-rt73
+firmware-ralink
 glimpse
 iozone3
 ipw3945d

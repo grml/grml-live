@@ -11,6 +11,8 @@ grml-live (0.0.11) unstable; urgency=low
     - firmware-rt73
     - mlocate
     - open-vm-tools
+    - pcaputils
+    - firmware-ralink (replaces firmware-rt61 and firmware-rt73)
 
  -- Michael Prokop <mika@grml.org>  Mon, 26 Nov 2007 15:07:54 +0100
 
