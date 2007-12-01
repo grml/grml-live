@@ -10,6 +10,7 @@ grml-live (0.0.11) unstable; urgency=low
     - firmware-rt61
     - firmware-rt73
     - mlocate
+    - open-vm-tools
 
  -- Michael Prokop <mika@grml.org>  Mon, 26 Nov 2007 15:07:54 +0100
 

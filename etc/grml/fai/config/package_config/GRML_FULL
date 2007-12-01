@@ -1246,6 +1246,7 @@ opensc
 openssh-client
 openssh-server
 openssl
+open-vm-tools
 openvpn
 ophcrack
 opie-client
@@ -2090,6 +2091,7 @@ ndiswrapper-modules-2.6.23-grml
 nozomi-modules-2.6.23-grml
 #nvidia-kernel-2.6.23-grml
 openafs-modules-2.6.23-grml
+#open-vm-modules-2.6.23-grml
 qc-usb-modules-2.6.23-grml
 realtime-lsm-module-2.6.23-grml
 rt2400-modules-2.6.23-grml
