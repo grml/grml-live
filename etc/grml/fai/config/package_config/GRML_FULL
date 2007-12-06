@@ -1973,6 +1973,7 @@ xserver-xorg-video-neomagic
 xserver-xorg-video-newport
 xserver-xorg-video-nsc
 xserver-xorg-video-nv
+xserver-xorg-video-radeonhd
 xserver-xorg-video-rendition
 xserver-xorg-video-s3
 xserver-xorg-video-s3virge
@@ -2011,6 +2012,7 @@ xzoom
 yacpi
 yaird
 yasr
+yatm
 yeahconsole
 yersinia
 youtube-dl

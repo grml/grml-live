@@ -7,12 +7,14 @@ grml-live (0.0.11) unstable; urgency=low
   * Adjust grml-buildd for new logdir structure.
   * Add new packages to GRML_FULL:
     - atl2-modules-2.6.23-grml
+    - firmware-ralink (replaces firmware-rt61 and firmware-rt73)
     - firmware-rt61
     - firmware-rt73
     - mlocate
     - open-vm-tools
     - pcaputils
-    - firmware-ralink (replaces firmware-rt61 and firmware-rt73)
+    - xserver-xorg-video-radeonhd
+    - yatm
 
  -- Michael Prokop <mika@grml.org>  Mon, 26 Nov 2007 15:07:54 +0100
 
