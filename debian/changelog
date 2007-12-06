@@ -1,3 +1,10 @@
+grml-autoconfig (0.7.32) unstable; urgency=low
+
+  * Fix typo in manpage. Thanks to eModul for reporting!
+    [Closes: issue355]
+
+ -- Michael Prokop <mika@grml.org>  Fri, 07 Dec 2007 00:16:00 +0100
+
 grml-autoconfig (0.7.31) unstable; urgency=low
 
   * Drop unused update_progress() and no longer read in
