@@ -30,6 +30,13 @@ License:
     along with this package; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
+License information for the syslinux files shipped as
+/usr/share/grml-live/templates/boot/isolinux/:
+
+   Downloaded from <http://ftp.kernel.org/pub/linux/utils/boot/syslinux/>.
+   Upstream Author: H. Peter Anvin <hpa@zytor.com>
+   Copyright (C) 1994-2007 H. Peter Anvin <hpa@zytor.com>
+
 On Debian systems, the complete text of the GNU General
 Public License can be found in `/usr/share/common-licenses/GPL'.
 

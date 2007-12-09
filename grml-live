@@ -455,11 +455,6 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          bailout 11
       fi
 
-      cp /usr/lib/syslinux/chain.c32     "$BUILD_OUTPUT"/boot/isolinux/
-      cp /usr/lib/syslinux/isolinux.bin  "$BUILD_OUTPUT"/boot/isolinux/
-      cp /usr/lib/syslinux/memdisk       "$BUILD_OUTPUT"/boot/isolinux/
-      cp /usr/lib/syslinux/menu.c32      "$BUILD_OUTPUT"/boot/isolinux/
-
       [ -n "$TEMPLATE_DIRECTORY" ] || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
       if ! [ -d "${TEMPLATE_DIRECTORY}"/boot ] ; then
          log "${TEMPLATE_DIRECTORY}/boot does not exist. Exiting."
