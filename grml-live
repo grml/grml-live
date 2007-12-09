@@ -91,19 +91,6 @@ fi
 touch $LOGFILE
 chown root:adm $LOGFILE
 chmod 640 $LOGFILE
-# clean/zero grml-live logfile:
-if [ -n "$ZERO_LOGFILE" ] ; then
-   echo -n > $LOGFILE
-fi
-
-# clean/zero/remove old FAI directory:
-if [ -n "$ZERO_FAI_LOGFILE" ] ; then
-   if [ -d /var/log/fai/"$HOSTNAME" ] ; then
-      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last)"
-      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last-dirinstall)"
-      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last-softupdate)"
-   fi
-fi
 
 NFSROOT_CONF=/etc/grml/fai/make-fai-nfsroot.conf
 
@@ -232,6 +219,24 @@ else
    log "No $LOCAL_CONFIG found, not sourcing it"
    LOCAL_CONFIG=''
 fi
+
+# clean/zero grml-live logfile:
+if [ -n "$ZERO_LOGFILE" ] ; then
+   echo -n > $LOGFILE
+fi
+
+# clean/zero/remove old FAI directory:
+if [ -n "$ZERO_FAI_LOGFILE" ] ; then
+   if [ -d /var/log/fai/"$HOSTNAME" ] ; then
+      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last)"
+      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last-dirinstall)"
+      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last-softupdate)"
+      rm -f /var/log/fai/"$HOSTNAME"/last \
+            /var/log/fai/"$HOSTNAME"/last-dirinstall \
+            /var/log/fai/"$HOSTNAME"/last-softupdate
+   fi
+fi
+
 # }}}
 
 # ask user whether the setup is ok {{{

@@ -17,6 +17,7 @@ grml-live (0.0.12) unstable; urgency=low
   * Do not exit if cleanup of /root directory in 98-clean-chroot fails.
   * Skip stage updatebase when using softupdate and handle upgrade
     on our own via hooks.
+  * Execute removal of log files after sourcing config files.
 
  -- Michael Prokop <mika@grml.org>  Sun, 09 Dec 2007 17:28:01 +0100
 
