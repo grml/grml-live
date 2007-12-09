@@ -12,6 +12,8 @@ grml-live (0.0.11) unstable; urgency=low
   * Diplay use of $LOCAL_CONFIG in configuration dialog.
   * Remove fai's last-dirinstall and last-softupdate when using
     ZERO_FAI_LOGFILE as well.
+  * Depend on fai-client (>= 3.2.4), fai-server (>= 3.2.4) as version
+    3.2.3 has a serious bug.
   * Add new packages to GRML_FULL:
     - atl2-modules-2.6.23-grml
     - firmware-ralink (replaces firmware-rt61 and firmware-rt73)
