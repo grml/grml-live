@@ -129,7 +129,10 @@ EOF " | \
 store_iso() {
   if [ "$RC" = "0" ] ; then
      [ -d "$ISO_DIR" ] || mkdir "$ISO_DIR"
-     mv $OUTPUT_DIR/grml_isos/$ISO_NAME $ISO_DIR
+     mv "${OUTPUT_DIR}/grml_isos/${ISO_NAME}" "$ISO_DIR"
+     if [ -r "${OUTPUT_DIR}/grml_isos/${ISO_NAME}.md5" ] ; then
+        mv   "${OUTPUT_DIR}/grml_isos/${ISO_NAME}.md5" "${ISO_DIR}"
+     fi
   fi
 }
 
