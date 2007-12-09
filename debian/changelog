@@ -19,6 +19,7 @@ grml-live (0.0.11) unstable; urgency=low
     - xrestop
     - xserver-xorg-video-radeonhd
     - yatm
+  * Remove tinysnmp-tools from GRML_{SMALL,FULL,MEDIUM}, see #444723.
 
  -- Michael Prokop <mika@grml.org>  Mon, 26 Nov 2007 15:07:54 +0100
 
