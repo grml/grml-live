@@ -5,6 +5,8 @@ grml-live (0.0.11) unstable; urgency=low
   * Make sure /etc/X11/X is not a symlink to /bin/true. Check and fix
     via /etc/grml/fai/config/scripts/GRMLBASE/32-xorg.
   * Adjust grml-buildd for new logdir structure.
+  * Add new script /etc/grml/fai/config/scripts/GRMLBASE/40-deborphan
+    which adds shadowfs and bsdtar to the 'never report'-list of deborphan.
   * Add new packages to GRML_FULL:
     - atl2-modules-2.6.23-grml
     - firmware-ralink (replaces firmware-rt61 and firmware-rt73)

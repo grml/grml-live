@@ -1,0 +1,22 @@
+#!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/40-deborphan
+# Purpose:       set up /etc/network/interfaces of live-system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sun Dec 09 14:02:46 CET 2007 [mika]
+################################################################################
+
+set -u
+set -e
+
+if [ -r $target/lib/shadowfs/liblogfs.so -a -x $target/usr/bin/deborphan ] ; then
+   $ROOTCMD deborphan --add-keep shadowfs
+fi
+
+if [ -r $target/usr/bin/bsdtar -a -x $target/usr/bin/deborphan ] ; then
+   $ROOTCMD deborphan --add-keep bsdtar
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
