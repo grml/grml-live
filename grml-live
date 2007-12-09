@@ -240,9 +240,9 @@ if [ -z "$FORCE" ] ; then
    echo "${PN} [${GRML_LIVE_VERSION}]: check your configuration (or use -F to force execution):"
    echo
    echo "  FAI classes:       $CLASSES"
-   echo "  main directory:    $OUTPUT"
    [ -r "$LOCAL_CONFIG" ]  && echo "  local config:      /etc/grml/grml-live.local"
    [ -n "$CONFIG" ]        && echo "  configuration:     $CONFIG"
+   echo "  main directory:    $OUTPUT"
    [ -n "$CHROOT_OUTPUT" ] && echo "  chroot target:     $CHROOT_OUTPUT"
    [ -n "$BUILD_OUTPUT" ]  && echo "  build target:      $BUILD_OUTPUT"
    [ -n "$ISO_OUTPUT" ]    && echo "  ISO target:        $ISO_OUTPUT"
