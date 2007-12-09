@@ -100,6 +100,8 @@ fi
 if [ -n "$ZERO_FAI_LOGFILE" ] ; then
    if [ -d /var/log/fai/"$HOSTNAME" ] ; then
       rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last)"
+      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last-dirinstall)"
+      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last-softupdate)"
    fi
 fi
 
@@ -221,6 +223,17 @@ specify it on the command line using the -c option."
 specify it on the command line using the -o option."
 # }}}
 
+# read local (non-packaged) configuration {{{
+LOCAL_CONFIG=/etc/grml/grml-live.local
+if [ -r "$LOCAL_CONFIG" ] ; then
+   log "Sourcing $LOCAL_CONFIG"
+   . $LOCAL_CONFIG
+else
+   log "No $LOCAL_CONFIG found, not sourcing it"
+   LOCAL_CONFIG=''
+fi
+# }}}
+
 # ask user whether the setup is ok {{{
 if [ -z "$FORCE" ] ; then
    echo
@@ -229,6 +242,7 @@ if [ -z "$FORCE" ] ; then
    echo "  FAI classes:       $CLASSES"
    echo "  main directory:    $OUTPUT"
    [ -n "$CONFIG" ]        && echo "  configuration:     $CONFIG"
+   [ -r "$LOCAL_CONFIG" ]  && echo "  local config:      /etc/grml/grml-live.local"
    [ -n "$CHROOT_OUTPUT" ] && echo "  chroot target:     $CHROOT_OUTPUT"
    [ -n "$BUILD_OUTPUT" ]  && echo "  build target:      $BUILD_OUTPUT"
    [ -n "$ISO_OUTPUT" ]    && echo "  ISO target:        $ISO_OUTPUT"
@@ -251,15 +265,6 @@ if [ -z "$FORCE" ] ; then
       bailout 1 "Exiting as requested."
    fi
    echo
-fi
-
-# read local (non-packaged) configuration:
-LOCAL_CONFIG=/etc/grml/grml-live.local
-if [ -r "$LOCAL_CONFIG" ] ; then
-   log "Sourcing $LOCAL_CONFIG"
-   . $LOCAL_CONFIG
-else
-   LOCAL_CONFIG=''
 fi
 
 if [ -n "$CONFIG" ] ; then
