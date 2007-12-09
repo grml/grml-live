@@ -1,6 +1,7 @@
 grml-live (0.0.11) unstable; urgency=low
 
-  * New option -z to use ZLIB instead of LZMA compression.
+  * New option -z to use ZLIB instead of LZMA compression and
+    support SQUASHFS_OPTIONS in configuration file.
   * Add new class XORG.
   * Add X.org packages to GRML_MEDIUM.
   * Make sure /etc/X11/X is not a symlink to /bin/true. Check and fix
