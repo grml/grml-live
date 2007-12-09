@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Oct 22 19:50:36 CEST 2007 [mika]
+# Latest change: Sun Dec 09 18:10:08 CET 2007 [mika]
 ################################################################################
 
 . /etc/grml/grml-buildd.conf || exit 1
@@ -19,6 +19,7 @@ for file in *.iso ; do
     chmod 664 "$file"
     chmod 664 "${file}".md5
 done
-rsync --partial -az --quiet $ISO_DIR/* $RSYNC_MIRROR
+
+rsync --times --partial -az --quiet $ISO_DIR/* $RSYNC_MIRROR
 
 ## END OF FILE #################################################################

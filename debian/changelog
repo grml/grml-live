@@ -9,8 +9,11 @@ grml-live (0.0.12) unstable; urgency=low
     does not exist yet.
   * Update buildd/cleanup.sh and add buildd/files/.logo.png, 
     buildd/files/.style.css, buildd/files/HEADER.html and
-    buildd/link_latest.sh (create symlinks for latest snapshot ISOs).
-
+    buildd/link_latest.sh (create symlinks for latest snapshot ISOs)
+    and provide upload_logs().
+  * Generate md5sum of ISO if using class 'RELEASE'.
+  * Do not install package 'grml' via GRMLBASE because we want
+    to use grml-small in GRML_SMALL and GRML_MEDIUM.
 
  -- Michael Prokop <mika@grml.org>  Sun, 09 Dec 2007 17:28:01 +0100
 

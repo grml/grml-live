@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Dec 09 17:53:23 CET 2007 [mika]
+# Latest change: Sun Dec 09 18:18:27 CET 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -563,14 +563,27 @@ if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" ] ; then
    ewarn "$ISO_OUTPUT exists already, skipping stage 'iso build'" ; eend 0
 else
    mkdir -p "$ISO_OUTPUT" || bailout 6 "Problem with creating $ISO_OUTPUT for stage 'iso build'"
+
    CURRENT_DIR=$(pwd)
-   cd "$BUILD_OUTPUT" &&
-   log "mkisofs -V grml '$VERSION' -publisher 'grml-live | grml.org' -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b $BOOT_FILE -o ${ISO_OUTPUT}/${ISO_NAME} ."
-   mkisofs -V "grml $VERSION" -publisher 'grml-live | grml.org' \
-           -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
-           -b $BOOT_FILE \
-           -o "${ISO_OUTPUT}/${ISO_NAME}" . ; RC=$?
-   cd $CURRENT_DIR
+   if cd "$BUILD_OUTPUT" ; then
+      log "mkisofs -V grml '$VERSION' -publisher 'grml-live | grml.org' -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b $BOOT_FILE -o ${ISO_OUTPUT}/${ISO_NAME} ."
+      mkisofs -V "grml $VERSION" -publisher 'grml-live | grml.org' \
+              -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
+              -b $BOOT_FILE \
+              -o "${ISO_OUTPUT}/${ISO_NAME}" . ; RC=$?
+
+      # generate md5sum of ISO if we are using class 'RELEASE':
+      case $CLASSES in *RELEASES*)
+         [ "$RC" = 0 ] && \
+         ( cd $ISO_OUTPUT && \
+         md5sum ${ISO_NAME} > ${ISO_NAME}.md5 && \
+         touch -r ${ISO_NAME} ${ISO_NAME}.md5 )
+         ;;
+      esac
+
+      cd $CURRENT_DIR
+   fi
+
    if [ "$RC" = 0 ] ; then
       log "Finished execution of stage 'iso build' [$(date)]"
       einfo "Finished execution of stage 'iso build'" ; eend 0

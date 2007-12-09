@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Die Okt 30 09:47:34 CET 2007 [mika]
+# Latest change: Sun Dec 09 18:38:26 CET 2007 [mika]
 ################################################################################
 
 die() {
@@ -75,6 +75,14 @@ create_logs() {
   ( cd / && tar zcf $ATTACHMENT $FAI_LOGFILES $GRML_LOGFILE 1>/dev/null )
 }
 
+# store logs on remote server:
+upload_logs() {
+  [ -n "$RSYNC_MIRROR" ] || return 1
+#  eval $(grep '^LOGDIR=' $FAI_LOGFILES/variables.log)
+  rsync --times --partial -az --quiet /var/log/grml-buildd.* \
+  $FAI_LOGFILES $GRML_LOGFILE $RSYNC_MIRROR/logs/"${NAME}_${DATE}"/
+}
+
 # store information of ISO size:
 iso_details() {
   if ! [ -f "$OUTPUT_DIR/grml_isos/$ISO_NAME" ] ; then
@@ -86,6 +94,9 @@ iso_details() {
 
 # send status mail:
 send_mail() {
+  # attach logs only if we have some:
+  [ -r "$ATTACHMENT" ] && MUTT_ATTACH="-a $ATTACHMENT" || MUTT_ATTACH=''
+
   echo -en "Automatically generated mail by $SCRIPTNAME
 
 $ISO_DETAILS
@@ -110,10 +121,8 @@ The following packages could not be installed:
 
 $(grep -i "Couldn't find.*package" $FAI_LOGFILES/software.log | sed 's/\(.*\)"\(.*\)"\(.*\)/\2/' | sort -u || echo "* nothing")
 
-Find details in the attached logs." | \
-  mutt -s "$SCRIPTNAME [${DATE}] - $RC_INFO" \
-       -a $ATTACHMENT \
-       $RECIPIENT
+EOF " | \
+  mutt -s "$SCRIPTNAME [${DATE}] - $RC_INFO" $MUTT_ATTACH "$RECIPIENT"
 }
 
 # make sure we store the final iso:

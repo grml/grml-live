@@ -15,6 +15,7 @@ ARCH=i386
 grml_live_run
 
 create_logs
+# upload_logs
 
 iso_details
 
