@@ -356,8 +356,8 @@ fi
 
 if [ -n "$UPDATE" ] ; then
    if ! [ -r "$CHROOT_OUTPUT/etc/grml_version" ] ; then
-      log "Error: It does not look like you have a working chroot system. Updating not possible."
-      eerror "Error: It does not look like you have a working chroot system. Updating not possible."
+      log "Error: does not look like you have a working chroot. Updating not possible."
+      eerror "Error: does not look like you have a working chroot. Updating not possible. (Drop -u option?)"
       eend 1
       bailout 20
    fi
