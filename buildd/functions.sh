@@ -79,7 +79,7 @@ create_logs() {
 upload_logs() {
   [ -n "$RSYNC_MIRROR" ] || return 1
 #  eval $(grep '^LOGDIR=' $FAI_LOGFILES/variables.log)
-  rsync --times --partial -az --quiet /var/log/grml-buildd.* \
+  rsync --exclude dmesg.log --times --partial -az --quiet /var/log/grml-buildd.* \
   $FAI_LOGFILES $GRML_LOGFILE $RSYNC_MIRROR/logs/"${NAME}_${DATE}"/
 }
 
