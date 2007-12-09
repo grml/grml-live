@@ -241,8 +241,8 @@ if [ -z "$FORCE" ] ; then
    echo
    echo "  FAI classes:       $CLASSES"
    echo "  main directory:    $OUTPUT"
-   [ -n "$CONFIG" ]        && echo "  configuration:     $CONFIG"
    [ -r "$LOCAL_CONFIG" ]  && echo "  local config:      /etc/grml/grml-live.local"
+   [ -n "$CONFIG" ]        && echo "  configuration:     $CONFIG"
    [ -n "$CHROOT_OUTPUT" ] && echo "  chroot target:     $CHROOT_OUTPUT"
    [ -n "$BUILD_OUTPUT" ]  && echo "  build target:      $BUILD_OUTPUT"
    [ -n "$ISO_OUTPUT" ]    && echo "  ISO target:        $ISO_OUTPUT"
