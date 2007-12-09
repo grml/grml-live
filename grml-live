@@ -187,7 +187,7 @@ http://grml.org/bugs/
 
 # command line parsing {{{
 
-while getopts "a:C:c:g:i:o:r:s:t:v:FhuV" opt; do
+while getopts "a:C:c:g:i:o:r:s:t:v:FhuVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     c) CLASSES="$OPTARG" ;;
@@ -207,6 +207,7 @@ while getopts "a:C:c:g:i:o:r:s:t:v:FhuV" opt; do
     h) usage ; bailout 0 ;;
     u) UPDATE=1 ;;
     V) VERBOSE="-v" ;;
+    z) SQUASHFS_COMPRESSION="-nolzma" ;;
     ?) echo "invalid option -$OPTARG" >&2; bailout 1 ;;
   esac
 done
@@ -536,7 +537,7 @@ else
 
    # execute squashfs:
    log "mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend"
-   mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend
+   mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend $SQUASHFS_OPTIONS $SQUASHFS_COMPRESSION
    log "Finished execution of stage 'squashfs' [$(date)]"
    einfo "Finished execution of stage 'squashfs'" ; eend 0
 fi

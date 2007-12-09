@@ -12,7 +12,7 @@ Synopsis
 
 grml-live [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ]
 [-o <output_directory>] [-r <release_name>] [-s <suite>] [-t
-<template_directory>] [-v <version_number>] [-FVhu]
+<template_directory>] [-v <version_number>] [-FVhuz]
 
 *******************************************************************************
 Important! This document is growing as requested. If you have questions which
@@ -138,6 +138,10 @@ Specify version number of the release.
   -V::
 
 Increase verbosity in the build process.
+
+  -z::
+
+Use ZLIB instead of LZMA compression in mksquashfs part of the build process.
 
 Usage examples
 --------------
