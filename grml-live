@@ -207,7 +207,7 @@ while getopts "a:C:c:g:i:o:r:s:t:v:FhuVz" opt; do
     h) usage ; bailout 0 ;;
     u) UPDATE=1 ;;
     V) VERBOSE="-v" ;;
-    z) SQUASHFS_COMPRESSION="-nolzma" ;;
+    z) SQUASHFS_ZLIB="-nolzma" ;;
     ?) echo "invalid option -$OPTARG" >&2; bailout 1 ;;
   esac
 done
@@ -242,6 +242,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$FAI_ARGS" ]      && echo "  additional arguments for FAI: $FAI_ARGS"
    [ -n "$LOGFILE" ]       && echo "  Logging to file:   $LOGFILE"
    [ -n "$VERBOSE" ]       && echo "  Using VERBOSE mode."
+   [ -n "$SQUASHFS_ZLIB" ] && echo "  Using ZLIB (instead od LZMA) compression."
    [ -n "$UPDATE" ]        && echo "  Executing UPDATE instead of fresh installation."
    echo
    echo -n "Is this ok for you? [y/N] "
@@ -537,7 +538,7 @@ else
 
    # execute squashfs:
    log "mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend"
-   mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend $SQUASHFS_OPTIONS $SQUASHFS_COMPRESSION
+   mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend $SQUASHFS_OPTIONS $SQUASHFS_ZLIB
    log "Finished execution of stage 'squashfs' [$(date)]"
    einfo "Finished execution of stage 'squashfs'" ; eend 0
 fi
