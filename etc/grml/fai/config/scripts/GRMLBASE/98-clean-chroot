@@ -47,7 +47,7 @@ if ifclass RELEASE ; then
    # Remove all FAI logs from chroot via grml-live later then:
    touch $target/etc/grml_fai_release
    # Remove all files inside /root/ of chroot:
-   rm -rf $target/root/.* $target/root/* || /bin/true
+   rm -rf $target/root && mkdir -m 0755 $target/root
 fi
 
 ## END OF FILE #################################################################

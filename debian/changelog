@@ -14,7 +14,7 @@ grml-live (0.0.12) unstable; urgency=low
   * Generate md5sum of ISO if using class 'RELEASE'.
   * Do not install package 'grml' via GRMLBASE because we want
     to use grml-small in GRML_SMALL and GRML_MEDIUM.
-  * Do not exit if cleanup of /root directory in 98-clean-chroot fails.
+  * Remove and recreate /root directory in 98-clean-chroot.
   * Skip stage updatebase when using softupdate and handle upgrade
     on our own via hooks.
   * Execute removal of log files after sourcing config files.
