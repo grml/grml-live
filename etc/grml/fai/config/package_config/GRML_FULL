@@ -323,6 +323,7 @@ brltty
 brltty-flite
 bsdgames
 bsdiff
+bsd-mailx
 bsdmainutils
 bsdtar
 bsdutils
@@ -1051,7 +1052,6 @@ mailcheck
 maildirsync
 mailfilter
 mailplate
-mailx
 mairix
 make
 makedev
