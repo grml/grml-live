@@ -573,7 +573,7 @@ else
               -o "${ISO_OUTPUT}/${ISO_NAME}" . ; RC=$?
 
       # generate md5sum of ISO if we are using class 'RELEASE':
-      case $CLASSES in *RELEASES*)
+      case $CLASSES in *RELEASE*)
          [ "$RC" = 0 ] && \
          ( cd $ISO_OUTPUT && \
          md5sum ${ISO_NAME} > ${ISO_NAME}.md5 && \
