@@ -13,6 +13,7 @@ grml-live (0.0.11) unstable; urgency=low
     - mlocate
     - open-vm-tools
     - pcaputils
+    - xrestop
     - xserver-xorg-video-radeonhd
     - yatm
 
