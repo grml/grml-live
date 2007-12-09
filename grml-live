@@ -570,7 +570,7 @@ else
    mkdir -p "$ISO_OUTPUT" || bailout 6 "Problem with creating $ISO_OUTPUT for stage 'iso build'"
    CURRENT_DIR=$(pwd)
    cd "$BUILD_OUTPUT" &&
-   log "mkisofs -V grml $VERSION -publisher 'grml-live | grml.org' -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b $BOOT_FILE -o ${ISO_OUTPUT}/${ISO_NAME} ."
+   log "mkisofs -V grml '$VERSION' -publisher 'grml-live | grml.org' -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b $BOOT_FILE -o ${ISO_OUTPUT}/${ISO_NAME} ."
    mkisofs -V "grml $VERSION" -publisher 'grml-live | grml.org' \
            -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
            -b $BOOT_FILE \
