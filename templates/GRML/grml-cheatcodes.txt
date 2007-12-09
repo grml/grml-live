@@ -9,6 +9,8 @@
 These options (can be combined) work from the (isolinux/grub) bootprompt:
 
 grml                                Use default settings (same as just pressing return)
+grml2ram                            Copy grml's squashfs file to RAM and
+                                    run from there (compare with 'grml toram')
 memtest                             Run Memtest86+ instead of Linux
 fb1280x1024                         Use fixed framebuffer graphics (1)
 fb1024x768                          Use fixed framebuffer graphics (2) [notice: grml's default]
@@ -73,7 +75,8 @@ framework of grml.
 
 Booting related options:
 ------------------------
-grml toram                          Copy CD to RAM and run from there
+grml toram                          Copy the whole CD/medium to RAM and run
+                                    from there (compare with 'grml2ram')
 grml tohd=/dev/hda1                 Copy CD to HD partition and run from there
 grml fromhd                         Skip checking for grml on CD-ROM
 grml fromhd=/dev/hda1               Boot from previously copied CD-Image
