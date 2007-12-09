@@ -66,6 +66,8 @@ EOF
       cp /etc/grml/fai/apt/sources.list $target/etc/apt/sources.list
    fi
 
+   # run it on our own, as updatebase is used at the wrong stage for our needs,
+   # see /etc/grml/fai/config/hooks/updatebase.GRMLBASE
    $ROOTCMD apt-get update
    if [ -x $target/usr/bin/aptitude ] ; then
       if $ROOTCMD aptitude --help | grep -q safe-upgrade ; then

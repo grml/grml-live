@@ -1,0 +1,15 @@
+#!/bin/sh
+# Filename:      /etc/grml/fai/config/hooks/updatebase.GRMLBASE
+# Purpose:       skip task updatebase of FAI when running softupdate
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Sun Dec 09 19:07:51 CET 2007 [mika]
+################################################################################
+
+if [ "$FAI_ACTION" = "softupdate" ] ; then
+   skiptask updatebase
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
