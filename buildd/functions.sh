@@ -58,7 +58,7 @@ grml_live_run() {
      fi
   fi
 
-  grml-live -F $GRML_LIVE_ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
+  grml-live -F $* $GRML_LIVE_ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
             -g $NAME -v $DATE -r grml-live-autobuild -i $ISO_NAME \
             1>/var/log/grml-buildd.stdout \
             2>/var/log/grml-buildd.stderr ; RC=$?

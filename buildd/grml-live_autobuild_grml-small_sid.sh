@@ -12,7 +12,7 @@ ARCH=i386
 . /usr/share/grml-live/buildd/functions.sh || exit 1
 
 # execute grml-live:
-grml_live_run
+grml_live_run -z
 
 create_logs
 # upload_logs
