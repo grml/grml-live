@@ -4,6 +4,7 @@ grml-live (0.0.13) unstable; urgency=low
     http://packages.qa.debian.org/b/bsd-mailx/news/20071209T135336Z.html
   * Document grml2ram bootoption in grml-cheatcodes.txt
   * Remove hwtools from GRML_FULL, see #397723
+  * Add unhide to GRML_FULL.
   * buildd:
     - store_iso(): move md5sum file as well
     - support providing options via grml_live_run() so we can disable
