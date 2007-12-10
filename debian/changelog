@@ -2,7 +2,10 @@ grml-live (0.0.13) unstable; urgency=low
 
   * Replace mailx with bsd-mailx in GRML_FULL.
     http://packages.qa.debian.org/b/bsd-mailx/news/20071209T135336Z.html
-  * buildd store_iso(): move md5sum file as well
+  * buildd:
+    - store_iso(): move md5sum file as well
+    - support providing options via grml_live_run() so we can disable
+      LZMA for grml-small builds
 
  -- Michael Prokop <mika@grml.org>  Sun, 09 Dec 2007 22:38:31 +0100
 
