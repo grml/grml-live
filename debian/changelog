@@ -6,6 +6,7 @@ grml-live (0.0.13) unstable; urgency=low
   * Remove hwtools from GRML_FULL, see #397723
   * Add new packages to GRML_FULL:
     - git-svn (thanks for the suggestion, Brad Cable) [Closes: issue361]
+    - grml-paste
     - unhide
   * buildd:
     - store_iso(): move md5sum file as well

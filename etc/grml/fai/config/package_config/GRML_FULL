@@ -73,6 +73,7 @@ grml-laptop
 grml-live
 grml-mercurial-utils
 grml-network
+grml-paste
 grml-policyrcd
 grml-pylib
 grml-rebuildfstab
