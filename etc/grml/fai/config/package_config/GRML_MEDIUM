@@ -266,7 +266,7 @@ zip
 zsh
 
 PACKAGES aptitude I386 
-linux-image-2.6.23-grml squashfs-modules-2.6.23-grml lzma-modules-2.6.23-grml aufs-modules-2.6.23-grml grml-kerneladdons-2.6.23
+linux-image-2.6.23-grml squashfs-modules-2.6.23-grml lzma-modules-2.6.23-grml aufs-modules-2.6.23-grml grml-kerneladdons-2.6.23 truecrypt-2.6.23-grml
 
 PACKAGES aptitude AMD64
 linux-image-2.6.23-grml64 aufs-modules-2.6.23-grml64
