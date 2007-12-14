@@ -3,6 +3,7 @@ grml-live (0.0.13) unstable; urgency=low
   * Replace mailx with bsd-mailx in GRML_FULL.
     http://packages.qa.debian.org/b/bsd-mailx/news/20071209T135336Z.html
   * Document grml2ram bootoption in grml-cheatcodes.txt
+  * Use -no-progress for Squashfs build process.
   * Remove hwtools from GRML_FULL, see #397723
   * Add new packages to GRML_MEDIUM:
     - truecrypt-2.6.23-grml
