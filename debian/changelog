@@ -10,6 +10,7 @@ grml-live (0.0.13) unstable; urgency=low
     /etc/grml/fai/config/scripts/GRMLBASE/96-apt-listbugs
   * Adjust hostname in /etc/postfix/main.cf.
   * Make sure /etc/grml/fai/config/scripts/GRMLBASE/40-deborphan does not fail.
+  * Fix typo in /etc/grml/fai/config/scripts/GRMLBASE/32-xorg
   * Disable Recommends for aptitude as well.
   * Check for presence of live-initramfs in 10-build-initramfs.
   * Install aptitude in softupdate if not present.

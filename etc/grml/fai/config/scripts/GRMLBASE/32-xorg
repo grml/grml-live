@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Nov 26 15:10:25 CET 2007 [mika]
+# Latest change: Sun Dec 16 21:56:07 CET 2007 [mika]
 ################################################################################
 
 set -u
@@ -14,7 +14,7 @@ if [ -r "$target/etc/X11/xorg.conf" ] ; then
    mv -f "$target"/etc/X11/xorg.conf "$target"/etc/X11/xorg.conf.debian
 fi
 
-if [ "$(readlinke $target/etc/X11/X)" = "/bin/true" ] ; then
+if [ "$(readlink $target/etc/X11/X)" = "/bin/true" ] ; then
    echo "Warning: /etc/X11/X is a symlink to /bin/true - fixing for you">&2
    ln -sf /usr/bin/Xorg $target/etc/X11/X
 fi
