@@ -302,6 +302,12 @@ else
   ewarn "clamav[-freshclam] not installed" ; eend 0
 fi
 
+if [ -f /etc/default/snort.dpkg-dist -a -f /etc/default/snort ] ; then
+   einfo "Fixxing /etc/default/snort"
+   mv /etc/default/snort.dpkg-dist /etc/default/snort
+   eend $?
+fi
+
 if ! [ -r /etc/ld.so.nohwcap ] ; then
    einfo "Creating /etc/ld.so.nohwcap"
    touch /etc/ld.so.nohwcap
