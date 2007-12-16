@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Thu Oct 18 14:02:50 CEST 2007 [mika]
+# Latest change: Sun Dec 16 19:11:33 CET 2007 [mika]
 ################################################################################
 
 set -e
@@ -24,8 +24,13 @@ KERNELVERSION=$(echo "${FILE##$target/boot/vmlinuz-}")
 if [ -z "$KERNELVERSION" ] ; then
    echo "Error: No kernel found, can not create initramfs. Exiting.">&2
    exit 1
-else
+fi
+
+if [ -f /usr/share/initramfs-tools/scripts/live ] ; then
    $ROOTCMD update-initramfs -c -t -k $KERNELVERSION
+else
+   echo "Error: live-initramfs does not seem to be present, can not create initramfs. Exiting.">&2
+   exit 1
 fi
 
 ## END OF FILE #################################################################
