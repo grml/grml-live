@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Sep 16 22:55:31 CEST 2007 [mika]
+# Latest change: Sun Dec 16 21:52:23 CET 2007 [mika]
 ################################################################################
 
 set -u
@@ -16,10 +16,10 @@ HOSTNAME=''
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 echo "$HOSTNAME" > $target/etc/hostname
 
-#if [ -r $target/etc/postfix/main.cf ] ; then
-#  sed -i "s/^mydestination = .*/mydestination = $HOSTNAME, localhost, localhost.localdomain/" $target/etc/postfix/main.cf
-#  sed -i "s/^myhostname = .*/myhostname = $HOSTNAME/" $target/etc/postfix/main.cf
-#fi
+if [ -r $target/etc/postfix/main.cf ] ; then
+  sed -i "s/^mydestination = .*/mydestination = $HOSTNAME, localhost, localhost.localdomain/" $target/etc/postfix/main.cf
+  sed -i "s/^myhostname = .*/myhostname = $HOSTNAME/" $target/etc/postfix/main.cf
+fi
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
