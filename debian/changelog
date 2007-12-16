@@ -8,7 +8,15 @@ grml-live (0.0.13) unstable; urgency=low
   * Use -no-progress for Squashfs build process.
   * Improve /etc/resolv.conf handling in
     /etc/grml/fai/config/scripts/GRMLBASE/96-apt-listbugs
+  * Disable Recommends for aptitude as well.
+  * Do some further cleanups via /etc/grml/fai/grml/grml_cleanup_chroot.deborphan
   * Remove hwtools from GRML_FULL, see #397723
+  * Remove several packages from GRMLBASE and integrate them in GRML_MEDIUM
+    instead so we keep grml-small as small as possible:
+    acpi-support, aumix, alsa-utils, dctrl-tools, debconf-utils,
+    grml-debian-keyring, grml-debugtools, grml-files, grml-hwinfo, grml-laptop,
+    grml-mercurial-utils, grml-pylib, grml-sectools, grml-templates,
+    grml-terminalserver, htop, iptstate, locales, multitail, postfix, powernowd, 
   * Add new packages to GRML_MEDIUM:
     - truecrypt-2.6.23-grml
   * Add new packages to GRML_FULL:
