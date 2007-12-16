@@ -392,8 +392,8 @@ else
    chmod 644 $CHROOT_OUTPUT/etc/grml_version
 
    # Remove all FAI logs from chroot if class RELEASE is used:
-   if [ -f $CHROOT_OUTPUT/etc/grml_fai_release ] ; then
-      rm -rf $CHROOT_OUTPUT/var/log/fai/*
+   if [ -f "$CHROOT_OUTPUT"/etc/grml_fai_release ] ; then
+      rm -rf "$CHROOT_OUTPUT"/var/log/fai/*
    fi
 
    umount $CHROOT_OUTPUT/proc 2>/dev/null || /bin/true
