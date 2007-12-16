@@ -8,6 +8,8 @@ grml-live (0.0.13) unstable; urgency=low
   * Use -no-progress for Squashfs build process.
   * Improve /etc/resolv.conf handling in
     /etc/grml/fai/config/scripts/GRMLBASE/96-apt-listbugs
+  * Adjust hostname in /etc/postfix/main.cf.
+  * Make sure /etc/grml/fai/config/scripts/GRMLBASE/40-deborphan does not fail.
   * Disable Recommends for aptitude as well.
   * Check for presence of live-initramfs in 10-build-initramfs.
   * Install aptitude in softupdate if not present.
