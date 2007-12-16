@@ -67,8 +67,7 @@ nature and the need of working in a chroot.
 Build the ISO without updating the chroot via FAI. This option is useful for
 example when working on stable releases: if you have a working base
 system/chroot and do not want to execute any further updates (via "-u" option)
-but intend to only build the ISO. (Notice: This option requires a feature within
-FAI which is not yet part of the official FAI release yet.)
+but intend to only build the ISO.
 
   -c **CLASSES**::
 

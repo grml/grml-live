@@ -1,7 +1,6 @@
 grml-live (0.0.13) unstable; urgency=low
 
-  * New option '-b' for "build-only", requires FAI patch
-    /usr/share/grml-live/patches/fai_chroot_update.patch
+  * New option '-b' for "build-only".
   * Replace mailx with bsd-mailx in GRML_FULL.
     http://packages.qa.debian.org/b/bsd-mailx/news/20071209T135336Z.html
   * Document grml2ram bootoption in grml-cheatcodes.txt
