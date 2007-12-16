@@ -19,6 +19,9 @@ echo "$HOSTNAME" > $target/etc/hostname
 if [ -r $target/etc/postfix/main.cf ] ; then
   sed -i "s/^mydestination = .*/mydestination = $HOSTNAME, localhost, localhost.localdomain/" $target/etc/postfix/main.cf
   sed -i "s/^myhostname = .*/myhostname = $HOSTNAME/" $target/etc/postfix/main.cf
+  echo "postfix postfix/mailname     string $HOSTNAME" | $ROOTCMD debconf-set-selections
+  echo "postfix postfix/destinations string ${HOSTNAME}, localhost.grml.org, localhost" \
+  | $ROOTCMD debconf-set-selections
 fi
 
 ## END OF FILE #################################################################
