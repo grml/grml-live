@@ -41,7 +41,8 @@ fi
 
 # make sure to drop from grml-small what's unnecessary:
 if ifclass GRML_SMALL ; then
-   $ROOTCMD apt-get -y --purge remove groff-base man-db info  man-db  manpages nano
+   $ROOTCMD apt-get -y --purge remove groff-base info \
+                    locales man-db manpages nano
 fi
 
 # misc cleanup:
