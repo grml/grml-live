@@ -43,6 +43,7 @@ VERBOSE=''
 FORCE=''
 UPDATE=''
 BUILD_ONLY=''
+HOSTNAME=''
 
 if [ -r /etc/grml/lsb-functions ] ; then
    . /etc/grml/lsb-functions
