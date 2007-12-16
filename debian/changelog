@@ -12,6 +12,8 @@ grml-live (0.0.13) unstable; urgency=low
   * Check for presence of live-initramfs in 10-build-initramfs.
   * Install aptitude in softupdate if not present.
   * Always drop groff-base, man-db, info, man-db, manpages and nano from grml-small.
+  * Fix snort setup (/etc/default/snort.dpkg-dist) via
+    /etc/grml/fai/grml/grml_cleanup_chroot
   * Do some further cleanups via /etc/grml/fai/grml/grml_cleanup_chroot.deborphan
   * Remove hwtools from GRML_FULL, see #397723
   * Remove several packages from GRMLBASE and integrate them in GRML_MEDIUM
@@ -27,6 +29,7 @@ grml-live (0.0.13) unstable; urgency=low
     - gnupg-pkcs11-scd
     - gparted
     - grml-paste
+    - iscsitarget-module-2.6.23-grml (replaces iscsitarget-2.6.23-grml)
     - unhide
   * buildd:
     - store_iso(): move md5sum file as well

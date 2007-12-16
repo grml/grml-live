@@ -2082,7 +2082,7 @@ exmap-modules-2.6.23-grml
 grml-kerneladdons-2.6.23
 gspca-modules-2.6.23-grml
 ipw3945-modules-2.6.23-grml
-iscsitarget-2.6.23-grml
+iscsitarget-module-2.6.23-grml
 ivtv-modules-2.6.23-grml
 kqemu-modules-2.6.23-grml
 linux-doc-2.6.23-grml
