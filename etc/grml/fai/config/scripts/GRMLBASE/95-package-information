@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sat Oct 13 17:48:38 CEST 2007 [mika]
+# Latest change: Sun Dec 16 16:23:04 CET 2007 [mika]
 ################################################################################
 
 HOSTNAME=''
@@ -22,6 +22,11 @@ if [ -x $target/usr/bin/dpkg-query ] ; then
    /var/log/fai/$HOSTNAME/last/packages.size
 fi
 
+# generate the package list and store it on the ISO itself for grml-docs:
+[ -d $target/usr/share/doc/grml-docs/packages ] || mkdir $target/usr/share/doc/grml-docs/packages
+COLUMNS=200 $ROOTCMD dpkg --list > $target/usr/share/doc/grml-docs/packages/dpkg_list
+
+# store package list for the build process logs as well:
 COLUMNS=200 $ROOTCMD dpkg --list > /var/log/fai/$HOSTNAME/last/dpkg.list
 COLUMNS=200 $ROOTCMD dpkg --get-selections > /var/log/fai/$HOSTNAME/last/dpkg.selections
 
