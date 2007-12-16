@@ -12,12 +12,12 @@ Synopsis
 
 grml-live [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ]
 [-o <output_directory>] [-r <release_name>] [-s <suite>] [-t
-<template_directory>] [-v <version_number>] [-FVhuz]
+<template_directory>] [-v <version_number>] [-bFVhuz]
 
 *******************************************************************************
 Important! This document is growing as requested. If you have questions which
 aren't answered by this document yet please let me know: <mika@grml.org>!
-This document currently applies to grml-live version 0.0.12.
+This document currently applies to grml-live version 0.0.13.
 *******************************************************************************
 
 Description
@@ -61,6 +61,14 @@ Use the specified architecture instead of the currently running one.  This
 allows building a 32bit system on a 64bit host. Please notice that real
 crosscompiling (like building a ppc system on x86) isn't possible due to the
 nature and the need of working in a chroot.
+
+  -b::
+
+Build the ISO without updating the chroot via FAI. This option is useful for
+example when working on stable releases: if you have a working base
+system/chroot and do not want to execute any further updates (via "-u" option)
+but intend to only build the ISO. (Notice: This option requires a feature within
+FAI which is not yet part of the official FAI release yet.)
 
   -c **CLASSES**::
 

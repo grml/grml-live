@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Dec 09 18:18:27 CET 2007 [mika]
+# Latest change: Sun Dec 16 12:39:04 CET 2007 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -15,7 +15,7 @@ export LC_ALL=C
 # exit on any error:
 set -e
 
-GRML_LIVE_VERSION='0.0.12'
+GRML_LIVE_VERSION='0.0.13'
 CMDLINE="$0 $@"
 ISO_DATE="$(date +%Y-%m-%d)"
 
@@ -38,10 +38,17 @@ if [ -r /var/run/fai/fai_softupdate_is_running ] ; then
    exit 1
 fi
 
+if [ -r /var/run/fai/fai_chrootupdate_is_running ] ; then
+   echo "/usr/sbin/fai chrootupdate already running or was aborted before.">&2
+   echo "You may remove /var/run/fai/fai_chrootupdate_is_running and try again.">&2
+   exit 1
+fi
+
 # make sure they are not set by default
 VERBOSE=''
 FORCE=''
 UPDATE=''
+BUILD_ONLY=''
 
 if [ -r /etc/grml/lsb-functions ] ; then
    . /etc/grml/lsb-functions
@@ -62,7 +69,9 @@ PN=$(basename $0)
 # clean exit {{{
 bailout() {
   [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
-  rm -f /var/run/fai/fai_softupdate_is_running /var/run/fai/FAI_INSTALLATION_IN_PROGRESS
+  rm -f /var/run/fai/fai_softupdate_is_running \
+        /var/run/fai/fai_chrootupdate_is_running \
+        /var/run/fai/FAI_INSTALLATION_IN_PROGRESS
   [ -n "$1" ] && EXIT="$1" || EXIT="1"
   [ -n "$2" ] && eerror "$2">&2
   log "------------------------------------------------------------------------------"
@@ -154,7 +163,7 @@ $PN - build process script for generating a (grml based) Linux Live-ISO
 Usage: $PN [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] \\
                  [-i <iso_name> ] [-o <output_directory>] [-s <suite>] \\
                  [-t <template_directory>] [-s <suite>] \\
-                 [-v <version_number>] [-FVhu]
+                 [-v <version_number>] [-bFVhu]
 
 Usage examples:
 
@@ -176,9 +185,10 @@ http://grml.org/bugs/
 
 # command line parsing {{{
 
-while getopts "a:C:c:g:i:o:r:s:t:v:FhuVz" opt; do
+while getopts "a:C:c:g:i:o:r:s:t:v:bFhuVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
+    b) BUILD_ONLY=1 ;;
     c) CLASSES="$OPTARG" ;;
     C) CONFIG="$OPTARG" ;;
     g) GRML_NAME="$OPTARG" ;;
@@ -231,8 +241,10 @@ if [ -n "$ZERO_FAI_LOGFILE" ] ; then
       rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last)"
       rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last-dirinstall)"
       rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last-softupdate)"
+      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last-chrootupdate)"
       rm -f /var/log/fai/"$HOSTNAME"/last \
             /var/log/fai/"$HOSTNAME"/last-dirinstall \
+            /var/log/fai/"$HOSTNAME"/last-chrootupdate \
             /var/log/fai/"$HOSTNAME"/last-softupdate
    fi
 fi
@@ -263,6 +275,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$VERBOSE" ]       && echo "  Using VERBOSE mode."
    [ -n "$SQUASHFS_ZLIB" ] && echo "  Using ZLIB (instead od LZMA) compression."
    [ -n "$UPDATE" ]        && echo "  Executing UPDATE instead of fresh installation."
+   [ -n "$BUILD_ONLY" ]    && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
    echo
    echo -n "Is this ok for you? [y/N] "
    read a
@@ -355,20 +368,22 @@ fi
 
 if [ -n "$UPDATE" ] ; then
    FAI_ACTION=softupdate
+elif [ -n "$BUILD_ONLY" ] ; then
+   FAI_ACTION=chrootupdate
 else
    FAI_ACTION=dirinstall
 fi
 
-if [ -n "$UPDATE" ] ; then
+if [ -n "$UPDATE" -o -n "$BUILD_ONLY" ] ; then
    if ! [ -r "$CHROOT_OUTPUT/etc/grml_version" ] ; then
-      log "Error: does not look like you have a working chroot. Updating not possible."
-      eerror "Error: does not look like you have a working chroot. Updating not possible. (Drop -u option?)"
+      log "Error: does not look like you have a working chroot. Updating/building not possible."
+      eerror "Error: does not look like you have a working chroot. Updating/building not possible. (Drop -u/-b option?)"
       eend 1
       bailout 20
    fi
 fi
 
-if [ -d "$CHROOT_OUTPUT/bin" -a -z "$UPDATE" ] ; then
+if [ -d "$CHROOT_OUTPUT/bin" -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
    log "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'"
    ewarn "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'" ; eend 0
 else
@@ -431,7 +446,7 @@ mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for s
 
 # i386:
 if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
-   if [ -d "$BUILD_OUTPUT"/boot -a -z "$UPDATE" ] ; then
+   if [ -d "$BUILD_OUTPUT"/boot -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
       log "$BUILD_OUTPUT/boot exists already, skipping stage 'boot'"
       ewarn "$BUILD_OUTPUT/boot exists already, skipping stage 'boot'" ; eend 0
    else
@@ -533,7 +548,7 @@ else
    eerror 'Error: Unsupported ARCH, sorry. Want to support it? Contribute!' ; eend 1
 fi
 
-if [ -f "$BUILD_OUTPUT"/live/grml.squashfs -a -z "$UPDATE" ] ; then
+if [ -f "$BUILD_OUTPUT"/live/grml.squashfs -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
    log "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'"
    ewarn "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'" ; eend 0
 else
@@ -563,7 +578,7 @@ elif [ "$BOOT_METHOD" = "grub" ] ; then
    BOOT_FILE="boot/grub/stage2_eltorito"
 fi
 
-if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" ] ; then
+if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
    log "$ISO_OUTPUT exists already, skipping stage 'iso build'"
    ewarn "$ISO_OUTPUT exists already, skipping stage 'iso build'" ; eend 0
 else
