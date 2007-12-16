@@ -11,6 +11,7 @@ grml-live (0.0.13) unstable; urgency=low
     - truecrypt-2.6.23-grml
   * Add new packages to GRML_FULL:
     - git-svn (thanks for the suggestion, Brad Cable) [Closes: issue361]
+    - gnupg-pkcs11-scd
     - grml-paste
     - unhide
   * buildd:

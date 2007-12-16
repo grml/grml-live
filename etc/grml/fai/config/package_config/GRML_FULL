@@ -769,6 +769,7 @@ gnu-fdisk
 gnuhtml2latex
 gnupg
 gnupg-agent
+gnupg-pkcs11-scd
 gnutls-bin
 gocr
 gpart
