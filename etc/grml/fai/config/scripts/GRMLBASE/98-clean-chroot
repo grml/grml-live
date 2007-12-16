@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Dec 16 17:37:09 CET 2007 [mika]
+# Latest change: Sun Dec 16 20:00:39 CET 2007 [mika]
 ################################################################################
 
 set -e
@@ -37,6 +37,11 @@ if ifclass GRML_SMALL || ifclass DEBORPHAN ; then
       $ROOTCMD  /root/grml_cleanup_chroot.deborphan
       rm $target/root/grml_cleanup_chroot.deborphan
    fi
+fi
+
+# make sure to drop from grml-small what's unnecessary:
+if ifclass GRML_SMALL ; then
+   $ROOTCMD apt-get -y --purge remove groff-base man-db info  man-db  manpages nano
 fi
 
 # misc cleanup:
