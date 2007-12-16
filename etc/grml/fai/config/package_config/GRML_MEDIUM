@@ -1,6 +1,7 @@
 PACKAGES aptitude
 
 acpid
+acpi-support
 adduser
 agrep
 alsa-base
@@ -10,6 +11,7 @@ apt
 atftp
 atftpd
 attr
+aumix alsa-utils
 bash
 bing
 binutils
@@ -33,6 +35,7 @@ dctrl-tools
 ddrescue
 debconf
 debconf-i18n
+debconf-utils
 debianutils
 debootstrap
 deborphan
@@ -69,20 +72,28 @@ grml2usb
 grml-autoconfig
 grml-debian-keyring
 grml-debootstrap
+grml-debugtools
 grml-desktop
 grml-docs
 grml-etc
 grml-etc-core
+grml-files
 grml-hwinfo
+grml-laptop
 grml-live
+grml-mercurial-utils
 grml-network
 grml-policyrcd
+grml-pylib
 grml-rebuildfstab
 grml-saveconfig
 grml-scanpartitions
 grml-scripts
+grml-sectools
 grml-shlib
 grml-small
+grml-templates
+grml-terminalserver
 grml-tips
 grml-usleep
 grml-x
@@ -99,6 +110,7 @@ inetutils-inetd
 initramfs-tools
 initscripts
 iproute
+iptstate
 iputils-ping
 ipw3945d
 ipw-firmware
@@ -113,6 +125,7 @@ lilo
 links
 live-initramfs
 localepurge
+locales
 lockfile-progs
 login
 logrotate
@@ -132,6 +145,7 @@ mount
 mpack
 mtools
 mtr-tiny
+multitail
 ncftp
 netbase
 netcat
@@ -147,6 +161,7 @@ patch
 pciutils
 pcmciautils
 portmap
+postfix
 ppp
 pppoeconf
 prism54-firmware
@@ -267,6 +282,7 @@ zsh
 
 PACKAGES aptitude I386 
 linux-image-2.6.23-grml squashfs-modules-2.6.23-grml lzma-modules-2.6.23-grml aufs-modules-2.6.23-grml grml-kerneladdons-2.6.23 truecrypt-2.6.23-grml
+powernowd
 
 PACKAGES aptitude AMD64
 linux-image-2.6.23-grml64 aufs-modules-2.6.23-grml64

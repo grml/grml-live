@@ -1,13 +1,9 @@
 PACKAGES aptitude
 
-acpi-support
-aumix alsa-utils
 busybox
 bzip2
 console-common
 cron
-dctrl-tools
-debconf-utils
 deborphan
 eject
 file
@@ -16,44 +12,29 @@ grml2hd-utils
 grml2usb
 grml-autoconfig
 grml-crypt
-grml-debian-keyring
 grml-debootstrap
-grml-debugtools
 grml-docs
 grml-etc
 grml-etc-core
-grml-files
-grml-hwinfo
-grml-laptop
-grml-mercurial-utils
 grml-network
 grml-policyrcd
-grml-pylib
 grml-rebuildfstab
 grml-saveconfig
 grml-scanpartitions
 grml-scripts
-grml-sectools
 grml-shlib
-grml-templates
-grml-terminalserver
 grml-usleep
 grml-vpn
 hdparm
-htop
 hwinfo
-iptstate
 less
 live-initramfs
-locales
 lvm2
 mdadm
-multitail
 nfs-common
 openssh-client
 openssh-server
 pciutils
-postfix
 resolvconf
 rsync
 strace
@@ -62,6 +43,3 @@ sysutils
 usbutils
 wireless-tools
 wpasupplicant
-
-PACKAGES aptitude I386 
-powernowd
