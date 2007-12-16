@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Nov 19 12:49:27 CET 2007 [mika]
+# Latest change: Sun Dec 16 16:42:37 CET 2007 [mika]
 ################################################################################
 
 set -e
@@ -34,10 +34,10 @@ if ifclass RELEASE ; then
   [ -n "$HOSTNAME" ] || HOSTNAME=grml
 
   if [ -r /etc/resolv.conf ] ; then
-     if [ -r $target/etc/resolvconf/run/resolv.conf ] ; then
-        cat /etc/resolv.conf >> $target/etc/resolvconf/run/resolv.conf
+     if [ -d $target/etc/resolvconf/run ] ; then
+        cat /etc/resolv.conf > $target/etc/resolvconf/run/resolv.conf
      else
-        cat /etc/resolv.conf >> $target/etc/resolv.conf
+        cat /etc/resolv.conf > $target/etc/resolv.conf
      fi
   fi
 

@@ -6,6 +6,8 @@ grml-live (0.0.13) unstable; urgency=low
   * Store package list in /usr/share/doc/grml-docs/packages/dpkg_list
   * Document grml2ram bootoption in grml-cheatcodes.txt
   * Use -no-progress for Squashfs build process.
+  * Improve /etc/resolv.conf handling in
+    /etc/grml/fai/config/scripts/GRMLBASE/96-apt-listbugs
   * Remove hwtools from GRML_FULL, see #397723
   * Add new packages to GRML_MEDIUM:
     - truecrypt-2.6.23-grml
