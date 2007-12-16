@@ -26,7 +26,7 @@ if [ -z "$KERNELVERSION" ] ; then
    exit 1
 fi
 
-if [ -f /usr/share/initramfs-tools/scripts/live ] ; then
+if [ -f $target/usr/share/initramfs-tools/scripts/live ] ; then
    $ROOTCMD update-initramfs -c -t -k $KERNELVERSION
 else
    echo "Error: live-initramfs does not seem to be present, can not create initramfs. Exiting.">&2

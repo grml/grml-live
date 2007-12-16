@@ -10,6 +10,7 @@ grml-live (0.0.13) unstable; urgency=low
     /etc/grml/fai/config/scripts/GRMLBASE/96-apt-listbugs
   * Disable Recommends for aptitude as well.
   * Check for presence of live-initramfs in 10-build-initramfs.
+  * Install aptitude in softupdate if not present.
   * Do some further cleanups via /etc/grml/fai/grml/grml_cleanup_chroot.deborphan
   * Remove hwtools from GRML_FULL, see #397723
   * Remove several packages from GRMLBASE and integrate them in GRML_MEDIUM
