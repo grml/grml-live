@@ -773,6 +773,7 @@ gnupg-pkcs11-scd
 gnutls-bin
 gocr
 gpart
+gparted
 gpgsm
 gpgv
 gphoto2

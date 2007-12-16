@@ -12,6 +12,7 @@ grml-live (0.0.13) unstable; urgency=low
   * Add new packages to GRML_FULL:
     - git-svn (thanks for the suggestion, Brad Cable) [Closes: issue361]
     - gnupg-pkcs11-scd
+    - gparted
     - grml-paste
     - unhide
   * buildd:
