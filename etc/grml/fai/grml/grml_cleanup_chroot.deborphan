@@ -1,0 +1,15 @@
+#!/bin/bash
+# Filename:      /etc/grml/fai/grml/grml_cleanup_chroot.deborphan
+# Purpose:       drop as many packages from grml as possible
+# Authors:       (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Sun Dec 16 18:34:08 CET 2007 [mika]
+################################################################################
+
+apt-get -y --purge remove aptitude
+apt-get -y --purge remove $(deborphan)
+apt-get -y --purge autoremove
+apt-get -y --purge remove $(deborphan)
+
+## END OF FILE #################################################################

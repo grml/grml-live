@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Nov 25 18:28:54 CET 2007 [mika]
+# Latest change: Sun Dec 16 18:31:59 CET 2007 [mika]
 ################################################################################
 
 set -u
@@ -87,6 +87,7 @@ echo "Acquire::http::Pipeline-Depth "0"; // added by grml-live" >> $target/etc/a
 
 # Recommends just pull in way tooooo much packages, so disable it:
 echo "APT::Install-Recommends "false"; // added by grml-live"   >> $target/etc/apt/apt.conf
+echo "Aptitude::Recommends-Important "false"; // added by grml-live" >> $target/etc/apt/apt.conf
 
 # install grml keys:
 gpg --keyserver subkeys.pgp.net      --recv-keys F61E2E7CECDEA787 || \

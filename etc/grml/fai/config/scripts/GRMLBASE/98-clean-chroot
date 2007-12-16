@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Dec 09 18:46:19 CET 2007 [mika]
+# Latest change: Sun Dec 16 17:37:09 CET 2007 [mika]
 ################################################################################
 
 set -e
@@ -28,6 +28,15 @@ if ifclass REMOVE_DOCS ; then
    cp /etc/grml/fai/grml/grml_cleanup_chroot.remove_docs $target/root/
    $ROOTCMD  /root/grml_cleanup_chroot.remove_docs
    rm $target/root/grml_cleanup_chroot.remove_docs
+fi
+
+# drop unnecessary software:
+if ifclass GRML_SMALL || ifclass DEBORPHAN ; then
+   if [ -f /etc/grml/fai/grml/grml_cleanup_chroot.deborphan ] ; then
+      cp /etc/grml/fai/grml/grml_cleanup_chroot.deborphan $target/root/
+      $ROOTCMD  /root/grml_cleanup_chroot.deborphan
+      rm $target/root/grml_cleanup_chroot.deborphan
+   fi
 fi
 
 # misc cleanup:
