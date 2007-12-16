@@ -14,8 +14,8 @@ ARCH=amd64
 # execute grml-live:
 grml_live_run
 
-create_logs
-# upload_logs
+# create_logs
+upload_logs
 
 iso_details
 

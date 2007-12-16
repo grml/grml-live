@@ -14,8 +14,8 @@ ARCH=i386
 # execute grml-live:
 grml_live_run -z
 
-create_logs
-# upload_logs
+# create_logs
+upload_logs
 
 iso_details
 
