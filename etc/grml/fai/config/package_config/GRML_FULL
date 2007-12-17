@@ -2073,6 +2073,7 @@ linux-kernel-headers-grml
 
 ## Current kernel version 2.6.23-grml:
 acx100-2.6.23-grml
+at76-usb-modules-2.6.23-grml
 atl2-modules-2.6.23-grml
 aufs-modules-2.6.23-grml
 bcm5700-module-2.6.23-grml
