@@ -5,6 +5,7 @@ grml-live (0.0.14) unstable; urgency=low
   * Improve check for presence of FAI log directory in
     /etc/grml/fai/config/scripts/GRMLBASE/95-package-information
   * Add new packages to GRML_FULL:
+    - asql
     - at76-usb-modules-2.6.23-grml
 
  -- Michael Prokop <mika@grml.org>  Mon, 17 Dec 2007 00:51:05 +0100
