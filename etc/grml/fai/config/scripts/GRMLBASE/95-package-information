@@ -4,30 +4,31 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Dec 17 00:54:41 CET 2007 [mika]
+# Latest change: Fri Dec 21 23:22:17 CET 2007 [mika]
 ################################################################################
 
 HOSTNAME=''
 [ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
 [ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
-
-if ! [ -w /var/log/fai/"$HOSTNAME"/last/ ] ; then
-   echo "Error: can not write to /var/log/fai/"$HOSTNAME"/last/. Exiting.">&2
-   exit 1
-fi
-
-if [ -x $target/usr/bin/dpkg-query ] ; then
-   $ROOTCMD dpkg-query -W --showformat='${Package}\t${Installed-Size;10}\n' > \
-   /var/log/fai/$HOSTNAME/last/packages.size
-fi
+PACKAGE_LOG=/var/log/fai/"$HOSTNAME"/last/
 
 # generate the package list and store it on the ISO itself for grml-docs:
 [ -d $target/usr/share/doc/grml-docs/packages ] || mkdir $target/usr/share/doc/grml-docs/packages
 COLUMNS=200 $ROOTCMD dpkg --list > $target/usr/share/doc/grml-docs/packages/dpkg_list
 
-# store package list for the build process logs as well:
-COLUMNS=200 $ROOTCMD dpkg --list > /var/log/fai/$HOSTNAME/last/dpkg.list
-COLUMNS=200 $ROOTCMD dpkg --get-selections > /var/log/fai/$HOSTNAME/last/dpkg.selections
+if ! [ -w "$PACKAGE_LOG" ] ; then
+   echo "Error: can not write to ${PACKAGE_LOG}. Exiting.">&2
+   exit 1
+else
+   # store package list for the build process logs as well:
+   COLUMNS=200 $ROOTCMD dpkg --list > "${PACKAGE_LOG}"/dpkg.list
+   COLUMNS=200 $ROOTCMD dpkg --get-selections > "${PACKAGE_LOG}"/dpkg.selections
+   # store list of packages sorted by size:
+   if [ -x $target/usr/bin/dpkg-query ] ; then
+      $ROOTCMD dpkg-query -W --showformat='${Package}\t${Installed-Size;10}\n' > \
+      "${PACKAGE_LOG}"/packages.size
+   fi
+fi
 
 ## END OF FILE #################################################################
