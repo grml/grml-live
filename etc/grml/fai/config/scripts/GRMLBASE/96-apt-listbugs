@@ -4,21 +4,10 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Dec 16 17:18:14 CET 2007 [mika]
+# Latest change: Fri Dec 21 21:40:25 CET 2007 [mika]
 ################################################################################
 
 set -e
-
-# Defaults:
-#apt-listchanges apt-listchanges/confirm boolean false
-#apt-listchanges apt-listchanges/email-address   string  root
-#apt-listchanges apt-listchanges/which   select  news
-#apt-listchanges apt-listchanges/frontend        select  pager
-#apt-listchanges apt-listchanges/save-seen       boolean true
-if [ -x $target/usr/bin/apt-listchanges ] ; then
-   echo 'apt-listchanges apt-listchanges/confirm boolean true' | $ROOTCMD debconf-set-selections
-   echo 'apt-listchanges apt-listchanges/which   select  both' | $ROOTCMD debconf-set-selections
-fi
 
 if [ -r $target/etc/apt/apt.conf.d/10apt-listbugs ] ; then
    if [ -x $target/usr/sbin/apt-listbugs ] ; then
