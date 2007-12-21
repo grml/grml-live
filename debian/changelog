@@ -6,6 +6,8 @@ grml-live (0.0.14) unstable; urgency=low
     /etc/grml/fai/config/scripts/GRMLBASE/95-package-information
   * Configure apt-listchanges via new script
     /etc/grml/fai/config/scripts/GRMLBASE/97-apt-listchanges
+  * Drop findimagedupes from GRML_FULL (too many new dependencies,
+    being: libgraphics-magick-perl libgraphicsmagick1 libwmf0.2-7)
   * Add new packages to GRML_FULL:
     - asql
     - at76-usb-modules-2.6.23-grml
