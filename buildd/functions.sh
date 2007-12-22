@@ -78,7 +78,7 @@ create_logs() {
 # store logs on remote server:
 upload_logs() {
   [ -n "$RSYNC_MIRROR" ] || return 1
-#  eval $(grep '^LOGDIR=' $FAI_LOGFILES/variables.log)
+  umask 022
   rsync --exclude dmesg.log --times --partial -az --quiet /var/log/grml-buildd.* \
   $FAI_LOGFILES $GRML_LOGFILE $RSYNC_MIRROR/logs/"${NAME}_${DATE}"/
 }
@@ -103,7 +103,9 @@ $ISO_DETAILS
 
 Return code of grml-live run was: $RC
 
-$(grep 'Executed command line:' $GRML_LOGFILE || echo "* executed command line not available")
+$(grep -A2 'Executed grml-live' $GRML_LOGFILE || echo "* executed grml-live command line not available")
+
+$(grep -A2 'Executed FAI' $GRML_LOGFILE || echo "* executed FAI command line not available")
 
 The following errors have been noticed (several might be warnings only):
 
