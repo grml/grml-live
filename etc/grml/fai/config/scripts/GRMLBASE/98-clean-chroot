@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Dec 16 20:00:39 CET 2007 [mika]
+# Latest change: Sat Dec 22 09:58:17 CET 2007 [mika]
 ################################################################################
 
 set -e
@@ -23,13 +23,6 @@ if ! ifclass NO_ONLINE ; then
    rm $target/root/grml_cleanup_chroot.online
 fi
 
-# remove /usr/share/doc, /usr/share/info,... only in class REMOVE_DOCS:
-if ifclass REMOVE_DOCS ; then
-   cp /etc/grml/fai/grml/grml_cleanup_chroot.remove_docs $target/root/
-   $ROOTCMD  /root/grml_cleanup_chroot.remove_docs
-   rm $target/root/grml_cleanup_chroot.remove_docs
-fi
-
 # drop unnecessary software:
 if ifclass GRML_SMALL || ifclass DEBORPHAN ; then
    if [ -f /etc/grml/fai/grml/grml_cleanup_chroot.deborphan ] ; then
@@ -45,6 +38,14 @@ if ifclass GRML_SMALL ; then
                     locales man-db manpages nano
 fi
 
+# remove /usr/share/doc, /usr/share/info,... only in class REMOVE_DOCS:
+# (important: remove them *after* deinstalling packages, otherwise
+# removing packages might fail due to lack of /usr/share/man/...)
+if ifclass REMOVE_DOCS ; then
+   cp /etc/grml/fai/grml/grml_cleanup_chroot.remove_docs $target/root/
+   $ROOTCMD  /root/grml_cleanup_chroot.remove_docs
+   rm $target/root/grml_cleanup_chroot.remove_docs
+fi
 # misc cleanup:
 if [ -f /etc/grml/fai/grml/grml_cleanup_chroot ] ; then
    cp /etc/grml/fai/grml/grml_cleanup_chroot $target/root/
