@@ -20,6 +20,7 @@ grml-live (0.0.14) unstable; urgency=low
     - opencryptoki
     - pmailq
     - r6040-modules-2.6.23-grml
+    - scamper
 
  -- Michael Prokop <mika@grml.org>  Mon, 17 Dec 2007 00:51:05 +0100
 
