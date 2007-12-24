@@ -10,8 +10,11 @@ grml-live (0.0.14) unstable; urgency=low
     deleted in /etc/grml/fai/config/scripts/GRMLBASE/98-clean-chroot
   * Create grml-live.log-file with permissions 664.
   * Adjust buildd/functions.sh for new logging.
-  * Drop findimagedupes from GRML_FULL (too many new dependencies,
-    being: libgraphics-magick-perl libgraphicsmagick1 libwmf0.2-7)
+  * Drop packages from GRML_FULL:
+    - findimagedupes: too many new dependencies, being:
+      libgraphics-magick-perl libgraphicsmagick1 libwmf0.2-7
+    - netpipes: conflicts with timelimit (see #457444) and does
+      not support IPv6 yet
   * Add new packages to GRML_FULL:
     - asql
     - at76-usb-modules-2.6.23-grml
