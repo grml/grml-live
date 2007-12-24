@@ -1709,6 +1709,7 @@ textdraw
 tgt
 thttpd
 tidy
+timelimit
 timeout
 tin
 tinyhoneypot
