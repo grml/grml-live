@@ -27,6 +27,8 @@ grml-live (0.0.14) unstable; urgency=low
     - r6040-modules-2.6.23-grml
     - scamper
     - timelimit
+    - virtualbox-ose-guest-modules-2.6.23-grml
+    - virtualbox-ose-guest-utils
 
  -- Michael Prokop <mika@grml.org>  Mon, 17 Dec 2007 00:51:05 +0100
 
