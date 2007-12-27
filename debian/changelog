@@ -1,6 +1,7 @@
 grml-etc (1.1.0) unstable; urgency=low
 
   * A new stable release is coming. :)
+  * Bump Standard-Version to 3.7.3 (no further changes).
 
  -- Michael Prokop <mika@grml.org>  Fri, 28 Dec 2007 00:05:25 +0100
 
