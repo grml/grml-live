@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Fre Nov 16 08:45:53 CET 2007 [mika]
+# Latest change: Don Dez 27 23:58:27 CET 2007 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -395,11 +395,16 @@ if checkbootparam novmware ; then
 else
    if [ -z "$INSTALLED" ] ; then
       if vmware-detect || stringinstring "BOOT_IMAGE=vmware " "$CMDLINE" ; then
-              if ! checkbootparam qemu ; then
+         if ! checkbootparam qemu ; then
             if [ -r /etc/X11/xorg.conf.vmware ] ; then
                einfo "VMware: Copying /etc/X11/xorg.conf.vmware to /etc/X11/xorg.conf"
                cp /etc/X11/xorg.conf.vmware /etc/X11/xorg.conf ; eend $?
             fi
+         fi
+      elif [ -r /proc/acpi/battery/BAT0/info -a -r /etc/X11/xorg.conf.virtualbox ] ; then
+         if grep -q 'OEM info:                innotek' /proc/acpi/battery/BAT0/info ; then
+            einfo 'Virtual Box: Copying /etc/X11/xorg.conf.virtualbox to /etc/X11/xorg.conf'
+            cp /etc/X11/xorg.conf.virtualbox /etc/X11/xorg.conf ; eend $?
          fi
       fi
    fi
