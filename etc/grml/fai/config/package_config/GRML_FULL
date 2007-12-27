@@ -52,7 +52,6 @@ gateguardian
 gatling
 gifshuffle
 glipper-nognome
-grml
 grml2hd
 grml2hd-utils
 grml2usb
@@ -66,7 +65,6 @@ grml-desktop
 grml-docs
 grml-etc
 grml-etc-core
-grml-files
 grml-firefox
 grml-hwinfo
 grml-laptop
@@ -2073,10 +2071,13 @@ zd1211-firmware
 ## x86/32bit (class I386) specific packages {{{
 PACKAGES aptitude I386
 
+## general:
+grml
+grml-files
 # we want to use linux-kernel-headers-grml instead of linux-libc-dev:
 linux-kernel-headers-grml
 
-## Current kernel version 2.6.23-grml:
+## current kernel version 2.6.23-grml:
 acx100-2.6.23-grml
 at76-usb-modules-2.6.23-grml
 atl2-modules-2.6.23-grml
@@ -2118,13 +2119,43 @@ truecrypt-2.6.23-grml
 #virtualbox-ose-modules-2.6.23-grml
 virtualbox-ose-guest-modules-2.6.23-grml virtualbox-ose-guest-utils
 #zaptel-modules-2.6.23-grml
+## }}}
 
 ## amd64 specific packages {{{
 PACKAGES aptitude AMD64
+
+## general:
+grml64
+grml-files64
+
+## current kernel version 2.6.23-grml64:
+acx100-2.6.23-grml64
+atl2-modules-2.6.23-grml64
 aufs-modules-2.6.23-grml64
+drbd8-2.6.23-grml64
+exmap-modules-2.6.23-grml64
+# grml64-kerneladdons-2.6.23
+gspca-modules-2.6.23-grml64
+ipw3945-modules-2.6.23-grml64
+ivtv-modules-2.6.23-grml64
+kqemu-modules-2.6.23-grml64
+linux-doc-2.6.23-grml64
+linux-headers-2.6.23-grml64
 linux-image-2.6.23-grml64
+#linux-source-2.6.23-grml
+loop-aes-modules-2.6.23-grml64
 lzma-modules-2.6.23-grml64
+madwifi-modules-2.6.23-grml64
+ndiswrapper-modules-2.6.23-grml64
+nozomi-modules-2.6.23-grml64
+openafs-modules-2.6.23-grml64
+qc-usb-modules-2.6.23-grml64
+realtime-lsm-module-2.6.23-grml64
+rt2400-modules-2.6.23-grml64
+rt2500-modules-2.6.23-grml64
 squashfs-modules-2.6.23-grml64
+sysprof-module-2.6.23-grml64
+# truecrypt-2.6.23-grml64
 ## }}}
 
 # vim: foldmethod=marker

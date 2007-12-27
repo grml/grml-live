@@ -11,7 +11,9 @@ grml-live (0.0.14) unstable; urgency=low
   * Create grml-live.log-file with permissions 664.
   * Adjust buildd/functions.sh for new logging.
   * Fix kernel related packages for GRML_MEDIUM and GRML_FULL
-    on AMD64 architecture.
+    on AMD64 architecture. Add several new kernel packages for amd64
+    to GRML_FULL.
+  * Split grml + grml-files into x86 vs. amd64 (grml64 + grml-files64).
   * Drop packages from GRML_FULL:
     - findimagedupes: too many new dependencies, being:
       libgraphics-magick-perl libgraphicsmagick1 libwmf0.2-7
