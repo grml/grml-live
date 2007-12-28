@@ -2156,7 +2156,7 @@ rt2400-modules-2.6.23-grml64
 rt2500-modules-2.6.23-grml64
 squashfs-modules-2.6.23-grml64
 sysprof-module-2.6.23-grml64
-# truecrypt-2.6.23-grml64
+truecrypt-2.6.23-grml64
 ## }}}
 
 # vim: foldmethod=marker
