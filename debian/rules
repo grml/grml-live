@@ -40,9 +40,9 @@ install: build
 	cp -a scripts     debian/grml-live/usr/share/grml-live/
 	cp -a patches     debian/grml-live/usr/share/grml-live/
 	cp -a buildd/*.sh debian/grml-live/usr/share/grml-live/buildd/
-	cp remaster/grml-live-remaster debian/grml-live/usr/sbin/grml-live-remaster
-	install -o root -m 640 buildd/grml-buildd.conf debian/grml-live/etc/grml/grml-buildd.conf
-	install -o root -m 755 grml-live debian/grml-live/usr/sbin/grml-live
+	install -o root -m 640 buildd/grml-buildd.conf     debian/grml-live/etc/grml/grml-buildd.conf
+	install -o root -m 755 remaster/grml-live-remaster debian/grml-live/usr/sbin/grml-live-remaster
+	install -o root -m 755 grml-live                   debian/grml-live/usr/sbin/grml-live
 
 # Build architecture-independent files here.
 binary-indep: build install

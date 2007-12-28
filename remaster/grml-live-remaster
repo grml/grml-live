@@ -1,0 +1,90 @@
+#!/bin/sh
+# Filename:      grml-live-remaster
+# Purpose:       remaster a grml from the live cd
+# Authors:       grml-team (grml.org), (c) Michael Schierl <schierlm@gmx.de>, (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+# Latest change: Fri Dec 28 00:59:13 CET 2007 [mika]
+################################################################################
+# DISCLAIMER:
+# this script currently lacks lots of error checking code... any help welcome...
+################################################################################
+
+set -e # exit on any error
+
+VERSION='0.0.1'
+
+# source core functions {{{
+. /etc/grml/lsb-functions
+. /etc/grml/script-functions
+# }}}
+
+# make sure we have what we need {{{
+check4progs mkisofs mksquashfs || exit 1
+check4root || exit 1
+# }}}
+
+if [ x"$1" == x ]; then
+   echo "$0 - version $VERSION"
+   echo ""
+   echo "Usage: $0 destination.iso"
+   echo "  destination.iso should point to a path that is on a hard disk,"
+   echo "  you might want to mount some swap partitions or swap files"
+   echo "  first, because grml-live-remaster will need a lot ot RAM."
+   echo ""
+   echo "Please report bugs and feature requests: http://grml.org/bugs/"
+   exit -1
+fi
+
+if [ ! -d /remaster ]; then
+   mkdir -p /remaster/chroot /remaster/tmp /remaster/cdrom
+   mount -t tmpfs tmpfs /remaster/tmp
+   echo "#:# edit the following two lines to change the boot message" \
+           >/remaster/msg
+   echo "#:#" >>/remaster/msg
+   sed 1,2d /live/image/boot/isolinux/boot.msg >>/remaster/msg
+fi
+
+mount -t squashfs /live/image/live/grml.squashfs /remaster/cdrom -o ro,loop
+mount -t aufs aufs /remaster/chroot -o br:/remaster/tmp=rw:/remaster/cdrom=rr
+
+for i in dev proc root sys tmp; do
+    mount --bind /$i /remaster/chroot/$i
+done
+
+echo "Now edit the contents of the live CD in this chrooted shell:"
+chroot /remaster/chroot
+
+for i in dev proc root sys tmp; do
+        umount /remaster/chroot/$i
+done
+
+$EDITOR /remaster/msg
+
+mkdir /remaster/iso
+for i in /live/image/*; do
+    if [ ! $i == /live/image/live ]; then
+       cp -R $i /remaster/iso
+    fi
+done
+
+rm /remaster/iso/boot/isolinux/boot.msg
+sed 3,4d /live/image/boot/isolinux/boot.msg \
+        >/remaster/iso/boot/isolinux/boot.msg
+sed 1,2d /remaster/msg >>/remaster/iso/boot/isolinux/boot.msg
+
+mkdir /remaster/iso/live
+mksquashfs /remaster/chroot /remaster/iso/live/grml.squashfs
+umount /remaster/chroot /remaster/cdrom
+
+mkisofs -b boot/isolinux/isolinux.bin -no-emul-boot -c boot/isolinux/boot.cat \
+        -boot-info-table -l -r -J -o "$1" /remaster/iso
+rm -R /remaster/iso
+
+echo ""
+echo "ISO generation complete:"
+ls --color -l "$1"
+echo "If you want to customize your ISO, just call grml-live-remaster again."
+
+## END OF FILE #################################################################
+# vim: ai filetype=sh expandtab
