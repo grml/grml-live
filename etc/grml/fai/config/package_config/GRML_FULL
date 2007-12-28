@@ -2130,6 +2130,7 @@ grml-files64
 
 ## current kernel version 2.6.23-grml64:
 acx100-2.6.23-grml64
+at76-usb-modules-2.6.23-grml64
 atl2-modules-2.6.23-grml64
 aufs-modules-2.6.23-grml64
 drbd8-2.6.23-grml64
