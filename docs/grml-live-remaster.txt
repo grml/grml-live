@@ -1,0 +1,53 @@
+grml-live-remaster(8)
+=====================
+
+Name
+----
+
+grml-live-remaster - remaster a grml from the live cd
+
+Synopsis
+--------
+
+grml-live-remaster <destination.iso>
+
+Description
+-----------
+
+grml-live-remaster is a script which lets you remaster a grml directlry from a
+running live CD session.
+
+Options
+-------
+
+  <destination.iso>::
+
+destination.iso should point to a path that is on a hard disk, you might want to
+mount some swap partitions or swap files first, because grml-live-remaster will
+need a lot ot RAM.
+
+Usage examples
+--------------
+
+To live-remaster the system using the partition mounted on /mnt/sda5 invoke:
+
+  # grml-live-remaster /mnt/sda5/grml_remaster_0.1.iso
+
+TODO list
+---------
+
+grml-live-remaster lacks lots of error checking code.
+
+Bugs
+----
+
+Please report feedback, link:http://grml.org/bugs/[bugreports] and wishes
+link:http://grml.org/contact/[to the grml-team]!
+
+Authors
+-------
+Michael Schierl <schierlm@gmx.de>, Michael Prokop <mika@grml.org>
+
+/////////////////////////////////////
+// vim:ai tw=80 ft=asciidoc expandtab
+/////////////////////////////////////

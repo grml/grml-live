@@ -53,9 +53,9 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs 
-	dh_installdocs docs/grml-live.html
+	dh_installdocs docs/grml-live.html docs/grml-live-remaster.html
 	dh_installexamples
-	dh_installman docs/grml-live.8
+	dh_installman docs/grml-live.8 docs/grml-live-remaster.8
 	dh_link
 	dh_strip
 	dh_compress
