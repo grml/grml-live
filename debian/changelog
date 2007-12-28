@@ -1,5 +1,8 @@
 grml-live (0.0.14) unstable; urgency=low
 
+  * Include initial version of the grml-live-remaster script,
+    contributed by Michael Schierl (thanks!) [Closes: issue331]
+  * Bump Standard-Version to 3.7.3 (no further changes).
   * Set debconf configuration for postfix via
     /etc/grml/fai/config/scripts/GRMLBASE/05-hostname
   * Improve check for presence of FAI log directory in
