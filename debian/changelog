@@ -8,6 +8,11 @@ grml-live (0.0.15) unstable; urgency=low
     - truecrypt-2.6.23-grml64
   * Add new packages to GRML_MEDIUM:
     - truecrypt-2.6.23-grml64
+  * templates/boot/grub/menu.lst, templates/boot/isolinux/*.cfg:
+    - drop deprecated entries
+    - add debian2hd for isolinux/syslinux
+    - fix serial bootoption
+    - add grml2hd template for grub
 
  -- Michael Prokop <mika@grml.org>  Fri, 28 Dec 2007 18:48:11 +0100
 
