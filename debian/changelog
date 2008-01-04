@@ -7,6 +7,7 @@ grml-live (0.0.15) unstable; urgency=low
     - gfs2-tools
     - sslscan
     - truecrypt-2.6.23-grml64
+    - unsort
   * Add new packages to GRML_MEDIUM:
     - truecrypt-2.6.23-grml64
   * templates/boot/grub/menu.lst, templates/boot/isolinux/*.cfg:
