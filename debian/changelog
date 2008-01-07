@@ -16,6 +16,10 @@ grml-live (0.0.15) unstable; urgency=low
     - add debian2hd for isolinux/syslinux
     - fix serial bootoption
     - add grml2hd template for grub
+  * /etc/grml/fai/config/scripts/GRMLBASE/98-clean-chroot:
+    remove packages via dpkg instead of apt-get. Thanks for the
+    bugreport to Lupe Christoph. Thanks for the fix, formorer.
+    [Testing: issue367]
 
  -- Michael Prokop <mika@grml.org>  Fri, 28 Dec 2007 18:48:11 +0100
 
