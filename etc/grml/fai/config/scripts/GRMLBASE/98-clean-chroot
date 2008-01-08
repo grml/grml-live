@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Jän 07 11:33:41 CET 2008 [mika]
+# Latest change: Die Jän 08 09:11:17 CET 2008 [mika]
 ################################################################################
 
 set -e
@@ -34,7 +34,9 @@ fi
 
 # make sure to drop from grml-small what's unnecessary:
 if ifclass GRML_SMALL ; then
-   $ROOTCMD dpkg --purge groff-base info locales man-db manpages nano
+   for pkg in groff-base info locales man-db manpages nano; do
+     $ROOTCMD dpkg --purge $pkg || true
+   done
 fi
 
 # remove /usr/share/doc, /usr/share/info,... only in class REMOVE_DOCS:
