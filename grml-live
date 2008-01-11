@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Fri Dec 28 18:48:42 CET 2007 [mika]
+# Latest change: Fri Jan 11 02:00:39 CET 2008 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -265,7 +265,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$FAI_ARGS" ]      && echo "  additional arguments for FAI: $FAI_ARGS"
    [ -n "$LOGFILE" ]       && echo "  Logging to file:   $LOGFILE"
    [ -n "$VERBOSE" ]       && echo "  Using VERBOSE mode."
-   [ -n "$SQUASHFS_ZLIB" ] && echo "  Using ZLIB (instead od LZMA) compression."
+   [ -n "$SQUASHFS_ZLIB" ] && echo "  Using ZLIB (instead of LZMA) compression."
    [ -n "$UPDATE" ]        && echo "  Executing UPDATE instead of fresh installation."
    [ -n "$BUILD_ONLY" ]    && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
    echo
