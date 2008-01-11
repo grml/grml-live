@@ -17,7 +17,7 @@ grml-live [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ]
 *******************************************************************************
 Important! This document is growing as requested. If you have questions which
 aren't answered by this document yet please let me know: <mika@grml.org>!
-This document currently applies to grml-live version 0.0.14.
+This document currently applies to grml-live version 0.1.
 *******************************************************************************
 
 Description
@@ -58,9 +58,11 @@ Options
   -a **ARCHITECTURE**::
 
 Use the specified architecture instead of the currently running one.  This
-allows building a 32bit system on a 64bit host. Please notice that real
+allows building a 32bit system on a 64bit host (though you can't build a 64bit
+system on a 32bit system/kernel of course). Please notice that real
 crosscompiling (like building a ppc system on x86) isn't possible due to the
-nature and the need of working in a chroot.
+nature and the need of working in a chroot. Currently supported values: i386
+and amd64.
 
   -b::
 
@@ -163,6 +165,11 @@ To get a small Debian-unstable and grml-small based Live-CD using
 
   # grml-live -c GRMLBASE,GRML_SMALL,I386 -o /home/mika/grml-live
 
+To get a medium sized, Debian-unstable and grml-based Live-CD for i386
+architecture using /grml/grml-live as build and output directory just run:
+
+  # grml-live -a i386 -c GRMLBASE,GRML_MEDIUM,I386
+
 To get a small, Debian-unstable and grml-based Live-CD using /tmp as build and
 output directory and use grml_0.0-3.iso as ISO name (placed inside
 /tmp/grml_isos) just invoke:
@@ -175,7 +182,7 @@ If you have about 700MB of free space inside /dev/shm (being a tmpfs, usually
 you should have >=1GB of RAM) just run "mount -o remount,suid,dev,rw /dev/shm"
 and use /dev/shm as build and output directory - resulting in very fast build
 process.  But please be aware of the fact that rebooting your system will result
-in an empty /dev/shm, so please another directory for $CHROOT_OUTPUT,
+in an empty /dev/shm, so please use another directory for $CHROOT_OUTPUT,
 $BUILD_OUTPUT and $ISO_OUTPUT if you plan to create more persistent output. :)
 
 Main features of grml-live

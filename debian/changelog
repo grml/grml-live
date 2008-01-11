@@ -1,5 +1,7 @@
-grml-live (0.0.15) unstable; urgency=low
+grml-live (0.1) unstable; urgency=low
 
+  * Bump version number to 0.1 as we ship grml-live with the
+    upcoming stable versions.
   * Use /usr/bin/vim.tiny as alternativ for vi.
   * Add new packages to GRML_FULL:
     - at76-usb-modules-2.6.23-grml64
