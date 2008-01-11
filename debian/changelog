@@ -21,8 +21,9 @@ grml-live (0.1) unstable; urgency=low
   * /etc/grml/fai/config/scripts/GRMLBASE/98-clean-chroot:
     remove packages via dpkg instead of apt-get. Thanks for the
     bugreport and the patch, Lupe Christoph! [Closes: issue367]
+  * Add SQUASHFS_ZLIB template to grml-live.conf.
 
- -- Michael Prokop <mika@grml.org>  Fri, 28 Dec 2007 18:48:11 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 11 Jan 2008 01:56:01 +0100
 
 grml-live (0.0.14) unstable; urgency=low
 

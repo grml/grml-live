@@ -265,7 +265,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$FAI_ARGS" ]      && echo "  additional arguments for FAI: $FAI_ARGS"
    [ -n "$LOGFILE" ]       && echo "  Logging to file:   $LOGFILE"
    [ -n "$VERBOSE" ]       && echo "  Using VERBOSE mode."
-   [ -n "$SQUASHFS_ZLIB" ] && echo "  Using ZLIB (instead od LZMA) compression."
+   [ -n "$SQUASHFS_ZLIB" ] && echo "  Using ZLIB (instead of LZMA) compression."
    [ -n "$UPDATE" ]        && echo "  Executing UPDATE instead of fresh installation."
    [ -n "$BUILD_ONLY" ]    && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
    echo
