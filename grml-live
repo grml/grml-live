@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Fre Jän 11 09:09:02 CET 2008 [mika]
+# Latest change: Fre Jän 11 10:22:19 CET 2008 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -177,6 +177,17 @@ http://grml.org/bugs/
 }
 # }}}
 
+# read local (non-packaged) configuration {{{
+LOCAL_CONFIG=/etc/grml/grml-live.local
+if [ -r "$LOCAL_CONFIG" ] ; then
+   log "Sourcing $LOCAL_CONFIG"
+   . $LOCAL_CONFIG
+else
+   log "No $LOCAL_CONFIG found, not sourcing it"
+   LOCAL_CONFIG=''
+fi
+# }}}
+
 # command line parsing {{{
 
 while getopts "a:C:c:g:i:o:r:s:t:v:bFhuVz" opt; do
@@ -214,22 +225,13 @@ specify it on the command line using the -c option."
 specify it on the command line using the -o option."
 # }}}
 
-# read local (non-packaged) configuration {{{
-LOCAL_CONFIG=/etc/grml/grml-live.local
-if [ -r "$LOCAL_CONFIG" ] ; then
-   log "Sourcing $LOCAL_CONFIG"
-   . $LOCAL_CONFIG
-else
-   log "No $LOCAL_CONFIG found, not sourcing it"
-   LOCAL_CONFIG=''
-fi
-
-# clean/zero grml-live logfile:
+# clean/zero grml-live logfile {{{
 if [ -n "$ZERO_LOGFILE" ] ; then
    echo -n > $LOGFILE
 fi
+# }}}
 
-# clean/zero/remove old FAI directory:
+# clean/zero/remove old FAI directory {{{
 if [ -n "$ZERO_FAI_LOGFILE" ] ; then
    if [ -d /var/log/fai/"$HOSTNAME" ] ; then
       rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last)"
@@ -240,7 +242,6 @@ if [ -n "$ZERO_FAI_LOGFILE" ] ; then
             /var/log/fai/"$HOSTNAME"/last-softupdate
    fi
 fi
-
 # }}}
 
 # ask user whether the setup is ok {{{
