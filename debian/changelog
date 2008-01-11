@@ -22,6 +22,7 @@ grml-live (0.1) unstable; urgency=low
     remove packages via dpkg instead of apt-get. Thanks for the
     bugreport and the patch, Lupe Christoph! [Closes: issue367]
   * Add SQUASHFS_ZLIB template to grml-live.conf.
+  * Use -no-progress option for mksquashfs only if it's supported.
 
  -- Michael Prokop <mika@grml.org>  Fri, 11 Jan 2008 01:56:01 +0100
 
