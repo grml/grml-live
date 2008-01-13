@@ -10,6 +10,7 @@ grml-live (0.0.15) unstable; urgency=low
     - truecrypt-2.6.23-grml64
     - unsort
   * Add new packages to GRML_MEDIUM:
+    - ntfs-3g
     - truecrypt-2.6.23-grml64
   * templates/boot/grub/menu.lst, templates/boot/isolinux/*.cfg:
     - drop deprecated entries

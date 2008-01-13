@@ -151,6 +151,7 @@ netbase
 netcat
 net-tools
 nfs-common
+ntfs-3g
 ntfsprogs
 ntpdate
 nvi
