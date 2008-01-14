@@ -1,3 +1,10 @@
+grml-autoconfig (0.8.1) unstable; urgency=low
+
+  * Support multiple modules in bootoption blacklist.
+    [Closes: issue321]
+
+ -- Michael Prokop <mika@grml.org>  Mon, 14 Jan 2008 21:34:35 +0100
+
 grml-autoconfig (0.8.0) unstable; urgency=low
 
   * Support /etc/X11/xorg.conf.virtualbox in config_vmware()
