@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Fre Nov 16 11:37:58 CET 2007 [mika]
+# Latest change: Mon Jän 14 12:53:18 CET 2008 [mika]
 ################################################################################
 
 export PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -148,7 +148,12 @@ fi
 
 # Detected cdrom device
 if [ -z "$INSTALLED" ]; then
-   CDROM="$(awk '/ \/cdrom /{print $1;exit 0;}' /proc/mounts)"
+   # new live-initramfs layout:
+   if [ -d /live/image ] ; then
+      CDROM="$(awk '/ \/live\/image /{print $1;exit 0;}' /proc/mounts)"
+   else # old unionfs layout:
+      CDROM="$(awk '/ \/cdrom /{print $1;exit 0;}' /proc/mounts)"
+   fi
 fi
 
 # Umount everything but root

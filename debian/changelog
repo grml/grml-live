@@ -1,3 +1,11 @@
+grml-etc (1.1.1) unstable; urgency=low
+
+  * Fix the "grml 1.1-rc1 does not open the CD-ROM tray on reboot/halt"
+    issue. Thanks to Josef Teske and several other bugreporters for
+    reporting this issue. [Closes: issue370]
+
+ -- Michael Prokop <mika@grml.org>  Mon, 14 Jan 2008 20:31:38 +0100
+
 grml-etc (1.1.0) unstable; urgency=low
 
   * A new stable release is coming. :)
