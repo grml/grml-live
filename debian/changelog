@@ -5,12 +5,14 @@ grml-live (0.1) unstable; urgency=low
   * Use /usr/bin/vim.tiny as alternativ for vi.
   * Add new packages to GRML_FULL:
     - at76-usb-modules-2.6.23-grml64
+    - bluez-audio
     - conky (thanks, shehu)
     - epdfview
     - gfs2-tools
     - sslscan
     - truecrypt-2.6.23-grml64
     - unsort
+  * Remove bluetooth-alsa from GRML_FULL.
   * Add new packages to GRML_MEDIUM:
     - ntfs-3g
     - truecrypt-2.6.23-grml64
