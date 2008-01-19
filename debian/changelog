@@ -1,3 +1,12 @@
+grml-autoconfig (0.8.2) unstable; urgency=low
+
+  * grml-autoconfig scripts: if an "auto" configured device can be found in
+    /etc/network/interfaces (except for the loopback device) then suggest
+    setting CONFIG_DHCP=no by default. Thanks for feedback, Bernd Haug!
+    [Closes: issue324]
+
+ -- Michael Prokop <mika@grml.org>  Sat, 19 Jan 2008 23:03:18 +0100
+
 grml-autoconfig (0.8.1) unstable; urgency=low
 
   * Support multiple modules in bootoption blacklist.
