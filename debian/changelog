@@ -1,6 +1,7 @@
 grml-live (0.2) unstable; urgency=low
 
   * Update isolinux.bin to version 3.55-1.
+  * Add loop-aes-testsuite to GRML_FULL.
 
  -- Michael Prokop <mika@grml.org>  Mon, 14 Jan 2008 22:54:10 +0100
 
