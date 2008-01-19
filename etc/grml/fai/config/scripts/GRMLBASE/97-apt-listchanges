@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Fri Dec 21 21:40:16 CET 2007 [mika]
+# Latest change: Sun Jan 20 00:25:52 CET 2008 [mika]
 ################################################################################
 
 set -e
@@ -24,6 +24,7 @@ fi
 
 if [ -r $target/etc/apt/listchanges.conf ] ; then
    sed -i "s/^which=news/which=both/" $target/etc/apt/listchanges.conf
+   sed -i "s/^confirm=0/confirm=1/"   $target/etc/apt/listchanges.conf
 fi
 
 ## END OF FILE #################################################################
