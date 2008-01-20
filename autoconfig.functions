@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Jän 14 21:34:16 CET 2008 [mika]
+# Latest change: Son Jän 20 19:51:41 CET 2008 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -116,26 +116,27 @@ fi
 
 # {{{ debug
 config_debug(){
- if checkbootparam "debug"; then
-   BOOTDEBUG="yes"
- fi
- if stringinstring "BOOT_IMAGE=debug " "$CMDLINE" ; then
-   BOOTDEBUG="yes"
- fi
+ checkbootparam "debug"                        && BOOTDEBUG="yes"
+ stringinstring "BOOT_IMAGE=debug " "$CMDLINE" && BOOTDEBUG="yes"
+
  rundebugshell(){
   if [ -n "$BOOTDEBUG" ]; then
-    einfo "Starting intermediate shell stage $stage as requested by \"debug\" option."
-    eindent
-    if [ -r /etc/grml/screenrc ] ; then
-       einfo "Starting GNU screen to be able to use a full featured shell environment."
-       einfo "Just exit the shells (and therefore screen) to continue boot process..."
-       /bin/zsh -c "screen -c /etc/grml/screenrc"
-    else
-      einfo "Notice that the shell does not provide job handling: ctrl-z, bg and fg won't work!"
-      einfo "Just exit the shell to continue boot process..."
-      /bin/zsh
-    fi
-    eoutdent
+     einfo "Starting intermediate shell stage $stage as requested by \"debug\" option."
+     if [ grep -q "debug=noscreen" "$CMDLINE" ] ; then
+        /bin/zsh
+     else
+        eindent
+        if [ -r /etc/grml/screenrc ] ; then
+           einfo "Starting GNU screen to be able to use a full featured shell environment."
+           einfo "Just exit the shells (and therefore screen) to continue boot process..."
+           /bin/zsh -c "screen -c /etc/grml/screenrc"
+        else
+           einfo "Notice that the shell does not provide job handling: ctrl-z, bg and fg won't work!"
+           einfo "Just exit the shell to continue boot process..."
+           /bin/zsh
+        fi
+        eoutdent
+     fi
   fi
  }
 }
@@ -143,16 +144,16 @@ config_debug(){
 
 # {{{ log
 config_log(){
-if checkbootparam "log"; then
-  export DEBUG="/tmp/grml.log.`date +%Y%m%d`"
-  touch $DEBUG
-  einfo "Bootparameter log found. Log files: ${DEBUG} and /var/log/boot."
-  eindent
-    einfo "Starting bootlogd."
-    bootlogd -r -c 1>>$DEBUG 2>&1 ; eend $?
-  eoutdent
+if checkbootparam "log" || checkbootparam "debug" ; then
+   export DEBUG="/tmp/grml.log.`date +%Y%m%d`"
+   touch $DEBUG
+   einfo "Bootparameter log found. Log files: ${DEBUG} and /var/log/boot"
+   eindent
+     einfo "Starting bootlogd." # known to be *very* unreliable :(
+     bootlogd -r -c 1>>$DEBUG 2>&1 ; eend $?
+   eoutdent
 else
-  DEBUG="/dev/null"
+   DEBUG="/dev/null"
 fi
 }
 # }}}
