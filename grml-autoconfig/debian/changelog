@@ -1,3 +1,11 @@
+grml-autoconfig (0.8.3) unstable; urgency=low
+
+  * config_log(): log as well if bootoption debug is present
+  * config_debug(): support bootoption debug=noscreen to be able to
+    run a non-screen session
+
+ -- Michael Prokop <mika@grml.org>  Sun, 20 Jan 2008 19:52:14 +0100
+
 grml-autoconfig (0.8.2) unstable; urgency=low
 
   * grml-autoconfig scripts: if an "auto" configured device can be found in

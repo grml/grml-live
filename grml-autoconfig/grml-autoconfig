@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sam Nov 03 17:22:09 CET 2007 [mika]
+# Latest change: Son Jän 20 19:44:11 CET 2008 [mika]
 ################################################################################
 
 # http://wiki.debian.org/LSBInitScripts =>
@@ -77,16 +77,16 @@ if [ -z "$INSTALLED" -a -e /live/cow ] ; then
 fi
 
 if [ -z "$SPLASH" ] ; then
-  stage=5
-  rundebugshell
+   stage=5
+   rundebugshell
 fi
 
 if [ -z "$BOOTDEBUG" ] ; then
-  einfo "Setting kernel ring buffer to level 2."
-  echo "2" > /proc/sys/kernel/printk ; eend $?
+   einfo "Setting kernel ring buffer to level 2."
+   echo "2" > /proc/sys/kernel/printk ; eend $?
 else
-  einfo "Setting kernel ring buffer to level 6. Adjust manually via running dmesg -n \$VALUE."
-  echo "6" > /proc/sys/kernel/printk ; eend $?
+   einfo "Setting kernel ring buffer to level 6. Adjust manually via running dmesg -n \$VALUE."
+   echo "6" > /proc/sys/kernel/printk ; eend $?
 fi
 
 checkvalue $CONFIG_SYSLOG && config_syslog
@@ -282,15 +282,15 @@ checkvalue $CONFIG_XSTARTUP && config_x_startup
 
 # {{{ debug
 if [ -z "$SPLASH" ] ; then
-  stage=6
-  rundebugshell
+   stage=6
+   rundebugshell
 fi
 
 if [ -n "$BOOTDEBUG" ] ; then
-  CMDLINE="$(cat /proc/cmdline)"
-  [ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/*)"
-  einfo "Bootoption debug detected. Printing kernel command line:"
-  echo "$CMDLINE"
+   CMDLINE="$(cat /proc/cmdline)"
+   [ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/*)"
+   einfo "Bootoption debug detected. Printing kernel command line:"
+   echo "$CMDLINE"
 fi
 # }}}
 
