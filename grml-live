@@ -546,7 +546,7 @@ else
    [ -f "$CHROOT_OUTPUT/base.tgz" ] && rm -f "$CHROOT_OUTPUT/base.tgz"
 
    # execute squashfs:
-   if mksquashfs --help 2>&1 | grep -- -no-progress ; then
+   if mksquashfs --help 2>&1 | grep -q -- -no-progress ; then
       log "mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend -no-progress"
       mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend -no-progress $SQUASHFS_OPTIONS $SQUASHFS_ZLIB
    else
