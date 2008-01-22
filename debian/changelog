@@ -1,3 +1,16 @@
+grml-live (0.2) unstable; urgency=low
+
+  * Update isolinux.bin to version 3.55-1.
+  * Add loop-aes-testsuite to GRML_FULL.
+  * Set 'confirm=1' in /etc/apt/listchanges.conf.
+  * Add /etc/grml/fai/config/scripts/GRMLBASE/36-cpufrequtils
+    for providing default /etc/default/loadcpufreq configuration.
+  * Move sourcing /etc/grml/grml-live.local *before* the cmdline
+    option parsing so we can override already set defaults interative.
+  * Grep using the quiet option for squashfs features.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 14 Jan 2008 22:54:10 +0100
+
 grml-live (0.1) unstable; urgency=low
 
   * Bump version number to 0.1 as we ship grml-live with the
@@ -7,13 +20,16 @@ grml-live (0.1) unstable; urgency=low
   * Use /usr/bin/vim.tiny as alternativ for vi.
   * Add new packages to GRML_FULL:
     - at76-usb-modules-2.6.23-grml64
+    - bluez-audio
     - conky (thanks, shehu)
     - epdfview
     - gfs2-tools
     - sslscan
     - truecrypt-2.6.23-grml64
     - unsort
+  * Remove bluetooth-alsa from GRML_FULL.
   * Add new packages to GRML_MEDIUM:
+    - ntfs-3g
     - truecrypt-2.6.23-grml64
   * templates/boot/grub/menu.lst, templates/boot/isolinux/*.cfg:
     - drop deprecated entries

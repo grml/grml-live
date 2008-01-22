@@ -311,7 +311,7 @@ bittorrent
 bittwist
 bkhive
 blktrace
-bluetooth-alsa
+bluez-audio
 bluez-hcidump
 bluez-utils
 bmon
@@ -1030,6 +1030,7 @@ logtools
 logwatch
 lomoco
 loop-aes-utils
+loop-aes-testsuite
 lrzsz
 lsb-base
 lsb-release
