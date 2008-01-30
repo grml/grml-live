@@ -282,17 +282,21 @@ zip
 zsh
 
 PACKAGES aptitude I386 
+atl2-modules-2.6.23-grml
 aufs-modules-2.6.23-grml
 grml-kerneladdons-2.6.23
 linux-image-2.6.23-grml
 lzma-modules-2.6.23-grml
+madwifi-modules-2.6.23-grml madwifi-tools
 powernowd
 squashfs-modules-2.6.23-grml
 truecrypt-2.6.23-grml
 
 PACKAGES aptitude AMD64
+atl2-modules-2.6.23-grml64
 aufs-modules-2.6.23-grml64
 linux-image-2.6.23-grml64
 lzma-modules-2.6.23-grml64
+madwifi-modules-2.6.23-grml64 madwifi-tools
 squashfs-modules-2.6.23-grml64
 truecrypt-2.6.23-grml64
