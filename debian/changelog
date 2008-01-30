@@ -1,7 +1,9 @@
 grml-live (0.2) unstable; urgency=low
 
   * Update isolinux.bin to version 3.55-1.
-  * Add loop-aes-testsuite to GRML_FULL.
+  * Add new packages to GRML_FULL:
+    - auctex
+    - loop-aes-testsuite
   * Set 'confirm=1' in /etc/apt/listchanges.conf.
   * Add /etc/grml/fai/config/scripts/GRMLBASE/36-cpufrequtils
     for providing default /etc/default/loadcpufreq configuration.
