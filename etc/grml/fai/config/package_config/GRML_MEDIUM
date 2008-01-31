@@ -60,6 +60,7 @@ file
 file-rc
 findutils
 firmware-ipw3945
+firmware-iwlwifi
 fluxbox
 fnord
 fuse-utils

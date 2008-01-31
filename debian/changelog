@@ -6,6 +6,7 @@ grml-live (0.2) unstable; urgency=low
     - loop-aes-testsuite
   * Add new packages to GRML_MEDIUM:
     - atl2-modules-2.6.23-grml
+    - firmware-iwlwifi
     - madwifi-modules-2.6.23-grml[64]
     - madwifi-tools
   * Set 'confirm=1' in /etc/apt/listchanges.conf.
