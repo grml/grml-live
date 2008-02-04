@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mit Jul 04 12:31:26 CEST 2007 [mika]
+# Latest change: Mon Feb 04 15:32:00 CET 2008 [mika]
 ################################################################################
 
 set -e
@@ -28,10 +28,10 @@ rm_conffile() {
 
     if [ -e "$CONFFILE" ]; then
         md5sum="`md5sum \"$CONFFILE\" | sed -e \"s/ .*//\"`"
-	old_md5sum="`dpkg-query -W -f='${Conffiles}' grml-etc | sed -n -e \"\\\\' $CONFFILE'{s/ obsolete$//;s/.* //p}\"`"
+        old_md5sum="`dpkg-query -W -f='${Conffiles}' grml-etc | sed -n -e \"\\\\' $CONFFILE'{s/ obsolete$//;s/.* //p}\"`"
         if [ "$md5sum" != "$old_md5sum" ]; then
             echo "Obsolete conffile $CONFFILE has been modified by you."
-	    echo "Saving as $CONFFILE.dpkg-bak ..."
+            echo "Saving as $CONFFILE.dpkg-bak ..."
             mv -f "$CONFFILE" "$CONFFILE".dpkg-bak
         fi
     fi
@@ -39,21 +39,29 @@ rm_conffile() {
 
 case "$1" in
    install|upgrade)
-        for cmd in $TO_DIVERT1; do
-                divert_gen $cmd /etc/mgetty
-        done
+        if [ -r /etc/mgetty/login.config ] ; then
+           for cmd in $TO_DIVERT1; do
+               divert_gen $cmd /etc/mgetty
+           done
+        fi
         for cmd in $TO_DIVERT2; do
-                divert_gen $cmd /etc/init.d
+            divert_gen $cmd /etc/init.d
         done
-        for cmd in $TO_DIVERT3; do
-                divert_gen $cmd /etc/kismet
-        done
-        for cmd in $TO_DIVERT4; do
-                divert_gen $cmd /etc/pcmcia
-        done
-        for cmd in $TO_DIVERT5; do
-                divert_gen $cmd /etc/X11/windowlab
-        done
+        if [ -d /etc/kismet ] ; then
+           for cmd in $TO_DIVERT3; do
+               divert_gen $cmd /etc/kismet
+           done
+        fi
+        if [ -d /etc/pcmcia ] ; then
+           for cmd in $TO_DIVERT4; do
+               divert_gen $cmd /etc/pcmcia
+           done
+        fi
+        if [ -d /etc/X11/windowlab ] ; then
+           for cmd in $TO_DIVERT5; do
+               divert_gen $cmd /etc/X11/windowlab
+           done
+        fi
 
         # did I mention that dpkg-divert sucks?
         if [ -n "$2" ] ; then

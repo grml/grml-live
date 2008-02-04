@@ -1,3 +1,9 @@
+grml-etc (1.1.2) unstable; urgency=low
+
+  * Try to work around dpkg-divert issues with missing files.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 04 Feb 2008 15:32:27 +0100
+
 grml-etc (1.1.1) unstable; urgency=low
 
   * Fix the "grml 1.1-rc1 does not open the CD-ROM tray on reboot/halt"
