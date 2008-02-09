@@ -1,3 +1,10 @@
+grml-live (0.3) unstable; urgency=low
+
+  * Add new packages to GRML_MEDIUM:
+    - virtualbox-ose-guest-utils [x86-only]
+
+ -- Michael Prokop <mika@grml.org>  Sat, 09 Feb 2008 19:27:35 +0100
+
 grml-live (0.2) unstable; urgency=low
 
   * Revert isolinux.bin to version 3.31. Newer versions (like 3.55-1)

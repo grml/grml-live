@@ -292,6 +292,7 @@ madwifi-modules-2.6.23-grml madwifi-tools
 powernowd
 squashfs-modules-2.6.23-grml
 truecrypt-2.6.23-grml
+virtualbox-ose-guest-utils
 
 PACKAGES aptitude AMD64
 atl2-modules-2.6.23-grml64
