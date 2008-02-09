@@ -373,7 +373,7 @@ Help, I'm using Debian etch and I don't have FAI version >3.2
   wget http://www.informatik.uni-koeln.de/fai/download/etch/fai-client_3.2.4_all.deb \
        http://www.informatik.uni-koeln.de/fai/download/etch/fai-server_3.2.4_all.deb \
        http://www.informatik.uni-koeln.de/fai/download/etch/fai-doc_3.2.4_all.deb
-  dpkg -i fai-client_3.2.3_all.deb fai-server_3.2.3_all.deb fai-doc_3.2.4_all.deb
+  dpkg -i fai-client_3.2.4_all.deb fai-server_3.2.4_all.deb fai-doc_3.2.4_all.deb
 
 or check out the link:http://www.informatik.uni-koeln.de/fai/[FAI-homepage] for
 further details.
