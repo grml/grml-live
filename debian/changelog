@@ -1,6 +1,7 @@
 grml-live (0.2) unstable; urgency=low
 
-  * Update isolinux.bin to version 3.55-1.
+  * Revert isolinux.bin to version 3.31. Newer versions (like 3.55-1)
+    just fail on several old boxes. [Testing: issue400]
   * Add new packages to GRML_FULL:
     - auctex
     - loop-aes-testsuite
