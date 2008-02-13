@@ -1044,6 +1044,7 @@ lsscsi
 ltrace
 lua50
 luasocket
+luvcview
 lvm2
 lwatch
 lynx
@@ -2151,6 +2152,7 @@ linux-doc-2.6.23-grml64
 linux-headers-2.6.23-grml64
 linux-image-2.6.23-grml64
 #linux-source-2.6.23-grml
+linux-uvc-modules-2.6.23-grml
 loop-aes-modules-2.6.23-grml64
 lzma-modules-2.6.23-grml64
 madwifi-modules-2.6.23-grml64
