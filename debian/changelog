@@ -1,10 +1,11 @@
 grml-live (0.3) unstable; urgency=low
 
-  * Add new packages to GRML_MEDIUM:
-    - virtualbox-ose-guest-utils [x86-only]
-  * Update to "ISOLINUX 3.61 Debian-2008-02-05" again. Versions
-    older than 3.51 don't work with recent kernel versions like
-    2.6.23 anymore. :(
+  * Add virtualbox-ose-guest-utils [x86-only] to GRML_MEDIUM.
+  * Update isolinux.bin to "ISOLINUX 3.61 Debian-2008-02-05" again. Versions
+    older than 3.51 don't work with recent kernel versions like 2.6.23
+    anymore. :(
+  * Update templates/boot/isolinux/memdisk from syslinux package
+    version 2:3.61+dfsg-1.
 
  -- Michael Prokop <mika@grml.org>  Wed, 13 Feb 2008 10:33:43 +0100
 
