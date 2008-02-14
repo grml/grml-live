@@ -283,6 +283,8 @@ zip
 zsh
 
 PACKAGES aptitude I386 
+at76-usb-modules-2.6.23-grml
+atl2-modules-2.6.23-grml
 atl2-modules-2.6.23-grml
 aufs-modules-2.6.23-grml
 grml-kerneladdons-2.6.23
@@ -290,6 +292,7 @@ linux-image-2.6.23-grml
 lzma-modules-2.6.23-grml
 madwifi-modules-2.6.23-grml madwifi-tools
 powernowd
+rt2400-modules-2.6.23-grml rt2500-modules-2.6.23-grml rt73-module-2.6.23-grml firmware-ralink
 squashfs-modules-2.6.23-grml
 truecrypt-2.6.23-grml
 virtualbox-ose-guest-utils

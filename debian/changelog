@@ -3,6 +3,13 @@ grml-live (0.4) unstable; urgency=low
   * Add new packages to GRML_FULL:
     - linux-uvc-modules-2.6.23-grml
     - luvcview
+  * Add new packages to GRML_MEDIUM:
+    - at76-usb-modules-2.6.23-grml
+    - atl2-modules-2.6.23-grml
+    - firmware-ralink
+    - rt2400-modules-2.6.23-grml
+    - rt2500-modules-2.6.23-grml
+    - rt73-module-2.6.23-grml
 
  -- Michael Prokop <mika@grml.org>  Wed, 13 Feb 2008 19:23:47 +0100
 
