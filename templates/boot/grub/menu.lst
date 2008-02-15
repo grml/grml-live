@@ -14,47 +14,47 @@ background  = FFCC33
 # define entries:
 title %GRML_NAME% %VERSION% - Default boot (using 1024x768 framebuffer)
 kernel /boot/grml/linux26 apm=power-off lang=us vga=791 quiet boot=live nomce
-initrd /boot/grml/initrd.gz
+initrd /boot/%GRML_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - without framebuffer
 kernel /boot/grml/linux26 apm=power-off lang=us vga=normal video=ofonly quiet initrd=initrd.gz boot=live nomce
-initrd /boot/grml/initrd.gz
+initrd /boot/%GRML_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - with 1280x1024 framebuffer
 kernel /boot/grml/linux26 apm=power-off lang=us vga=794 quiet initrd=initrd.gz boot=live nomce
-initrd /boot/grml/initrd.gz
+initrd /boot/%GRML_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - with 800x600 framebuffer
 kernel /boot/grml/linux26 apm=power-off lang=us vga=788 quiet initrd=initrd.gz boot=live nomce
-initrd /boot/grml/initrd.gz
+initrd /boot/%GRML_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - failsafe boot
 kernel /boot/grml/linux26 vga=normal lang=us boot=live noautoconfig atapicd noacpi acpi=off nomodules nofirewire noudev nousb nohotplug noapm nopcmcia maxcpus=1 noscsi noagp nodma ide=nodma noswap nofstab nosound nogpm nosyslog nodhcp nocpu nodisc nomodem xmodule=vesa noraid nolvm
-initrd /boot/grml/initrd.gz
+initrd /boot/%GRML_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - debug mode
 kernel /boot/grml/linux26 apm=power-off lang=us vga=791 verbose debug=vc debug initrd=initrd.gz boot=live initcall_debug nomce
-initrd /boot/grml/initrd.gz
+initrd /boot/%GRML_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - copy grml squashfs file to RAM
 kernel /boot/grml/linux26 toram=grml.squashfs apm=power-off lang=us vga=791 quiet boot=live nomce
-initrd /boot/grml/initrd.gz
+initrd /boot/%GRML_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - copy medium to RAM
 kernel /boot/grml/linux26 toram apm=power-off lang=us vga=791 quiet boot=live nomce
-initrd /boot/grml/initrd.gz
+initrd /boot/%GRML_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - grml2hd - install grml to local harddisk [adjust it!]
 kernel /boot/grml/linux26 apm=power-off lang=us vga=791 quiet boot=live nomce partition=/dev/ice1 mbr=/dev/ice
-initrd /boot/grml/initrd.gz
+initrd /boot/%GRML_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - forensic mode
 kernel /boot/grml/linux26 vga=791 lang=us nofstab noraid nolvm noautoconfig noswap raid=noautodetect quiet initrd=initrd.gz boot=live
-initrd /boot/grml/initrd.gz
+initrd /boot/%GRML_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - serial console mode
 kernel /boot/grml/linux26 apm=power-off lang=us vga=normal video=vesafb:off quiet initrd=initrd.gz boot=live nomce console=tty1 console=ttyS0,9600n8
-initrd /boot/grml/initrd.gz
+initrd /boot/%GRML_NAME%/initrd.gz
 
 title Run memtest86+
 kernel /boot/addons/memtest

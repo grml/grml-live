@@ -17,7 +17,7 @@ grml-live [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ]
 *******************************************************************************
 Important! This document is growing as requested. If you have questions which
 aren't answered by this document yet please let me know: <mika@grml.org>!
-This document currently applies to grml-live version 0.3.
+This document currently applies to grml-live version 0.4.
 *******************************************************************************
 
 Description
@@ -104,6 +104,8 @@ Force execution and do not prompt for acknowledgment of configuration.
   -g **GRML_NAME**::
 
 Set the grml flavour name. Common usage examples: grml, grml-small, grml64.
+Please do NOT use blanks inside GRML_NAME, otherwise you might notice problems
+with booting.
 
   -h::
 
