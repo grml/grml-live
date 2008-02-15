@@ -104,8 +104,8 @@ Force execution and do not prompt for acknowledgment of configuration.
   -g **GRML_NAME**::
 
 Set the grml flavour name. Common usage examples: grml, grml-small, grml64.
-Please do NOT use blanks inside GRML_NAME, otherwise you might notice problems
-with booting.
+Please do NOT use blanks and any characters like '-', '/', ';' inside GRML_NAME,
+otherwise you might notice problems with booting.
 
   -h::
 

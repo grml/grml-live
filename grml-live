@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Fri Feb 15 14:28:37 CET 2008 [mika]
+# Latest change: Fri Feb 15 16:08:28 CET 2008 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -222,6 +222,10 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 specify it on the command line using the -c option."
 [ -n "$OUTPUT" ] || bailout 1 "Error: \$OUTPUT unset, please set it in $LIVE_CONF or
 specify it on the command line using the -o option."
+
+# trim characters that are known to cause problems inside $GRML_NAME;
+# for example isolinux does not like '-' inside the directory name
+[ -n "$GRML_NAME" ] && export GRML_NAME="$(echo $GRML_NAME | tr -d ',./;\- ')"
 # }}}
 
 # clean/zero grml-live logfile {{{

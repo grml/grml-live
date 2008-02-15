@@ -19,8 +19,9 @@ grml-live (0.4) unstable; urgency=low
       support of several grml flavours on one single usb pen for the future
     - adjust grub's menu.lst and isolinux.cfg as well as grml-live itself
       for new directory layout
+  * Make sure $GRML_NAME does not contain known problematic characters.
 
- -- Michael Prokop <mika@grml.org>  Fri, 15 Feb 2008 14:28:45 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 15 Feb 2008 16:08:38 +0100
 
 grml-live (0.3) unstable; urgency=low
 
