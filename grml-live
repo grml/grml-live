@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Wed Feb 13 19:24:12 CET 2008 [mika]
+# Latest change: Fri Feb 15 14:28:37 CET 2008 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -441,14 +441,17 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       ewarn "$BUILD_OUTPUT/boot exists already, skipping stage 'boot'" ; eend 0
    else
       # booting stuff:
+      [ -d "$BUILD_OUTPUT"/boot/addons   ] || mkdir -p "$BUILD_OUTPUT"/boot/addons
       [ -d "$BUILD_OUTPUT"/boot/isolinux ] || mkdir -p "$BUILD_OUTPUT"/boot/isolinux
-      cp /boot/memtest86+.bin "$BUILD_OUTPUT"/boot/isolinux/memtest
+      [ -d "$BUILD_OUTPUT"/boot/"${GRML_NAME}" ] || mkdir -p "$BUILD_OUTPUT"/boot/"${GRML_NAME}"
+
+      cp /boot/memtest86+.bin "$BUILD_OUTPUT"/boot/addons/memtest
 
       # if we don't have an initrd we a) can't boot and b) there was an error
       # during build, so check for the file:
       INITRD="$(ls $CHROOT_OUTPUT/boot/initrd* 2>/dev/null| grep -v '.bak$' | sort -r | head -1)"
       if [ -n "$INITRD" ] ; then
-         cp $INITRD "$BUILD_OUTPUT"/boot/isolinux/initrd.gz
+         cp $INITRD "$BUILD_OUTPUT"/boot/"${GRML_NAME}"/initrd.gz
          find $CHROOT_OUTPUT/boot/ -name initrd\*.bak -exec rm {} \;
       else
          log "No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting"
@@ -458,7 +461,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
       KERNEL_IMAGE="$(ls $CHROOT_OUTPUT/boot/vmlinuz* 2>/dev/null | sort -r | head -1)"
       if [ -n "$KERNEL_IMAGE" ] ; then
-         cp "$KERNEL_IMAGE" "$BUILD_OUTPUT"/boot/isolinux/linux26
+         cp "$KERNEL_IMAGE" "$BUILD_OUTPUT"/boot/"${GRML_NAME}"/linux26
       else
          log "No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting"
          eerror "No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
@@ -473,7 +476,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       fi
 
       cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
-      cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
+      cp ${TEMPLATE_DIRECTORY}/boot/addons/*    "$BUILD_OUTPUT"/boot/addons/
 
       if ! [ -d "${BUILD_OUTPUT}/boot/grub" ] ; then
          cp -a ${TEMPLATE_DIRECTORY}/boot/grub  "$BUILD_OUTPUT"/boot/
@@ -549,10 +552,10 @@ else
    # execute squashfs:
    if mksquashfs --help 2>&1 | grep -q -- -no-progress ; then
       log "mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend -no-progress"
-      mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend -no-progress $SQUASHFS_OPTIONS $SQUASHFS_ZLIB
+      mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/"${GRML_NAME}".squashfs -noappend -no-progress $SQUASHFS_OPTIONS $SQUASHFS_ZLIB
    else
       log "mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend"
-      mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/grml.squashfs -noappend $SQUASHFS_OPTIONS $SQUASHFS_ZLIB
+      mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/"${GRML_NAME}".squashfs -noappend $SQUASHFS_OPTIONS $SQUASHFS_ZLIB
    fi
    log "Finished execution of stage 'squashfs' [$(date)]"
    einfo "Finished execution of stage 'squashfs'" ; eend 0

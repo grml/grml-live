@@ -10,8 +10,17 @@ grml-live (0.4) unstable; urgency=low
     - rt2400-modules-2.6.23-grml
     - rt2500-modules-2.6.23-grml
     - rt73-module-2.6.23-grml
+  * Finally fixed the "isolinux does not boot on old hardware" problem.
+    The problem was a too big boot/isolinux directory. Thanks a lot
+    for all the testing to Andrea Mayr and Wernfried Haas!
+    - use /boot/addons/* for allinone.img, balder10.imz, chain.c32,
+      menu.c32 and memtest
+    - place $GRML_NAME in /boot/$GRML_NAME/ - this should easify
+      support of several grml flavours on one single usb pen for the future
+    - adjust grub's menu.lst and isolinux.cfg as well as grml-live itself
+      for new directory layout
 
- -- Michael Prokop <mika@grml.org>  Wed, 13 Feb 2008 19:23:47 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 15 Feb 2008 14:28:45 +0100
 
 grml-live (0.3) unstable; urgency=low
 
