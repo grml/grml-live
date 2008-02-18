@@ -1,3 +1,11 @@
+grml-autoconfig (0.8.4) unstable; urgency=low
+
+  * Make sure we support old directory layout (/cdrom) as
+    well as the new one (/live/image) for specific bootoptions.
+    Thanks to Jon for reporting the bug. [Testing: issue414]
+
+ -- Michael Prokop <mika@grml.org>  Mon, 18 Feb 2008 13:31:11 +0100
+
 grml-autoconfig (0.8.3) unstable; urgency=low
 
   * config_log(): log as well if bootoption debug is present

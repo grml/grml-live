@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Son Jän 20 19:51:41 CET 2008 [mika]
+# Latest change: Mon Feb 18 13:30:57 CET 2008 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -12,6 +12,11 @@ export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin"
 DEBUG="/dev/null"
 KERNEL="$(uname -r)"
 umask 022
+
+# old linuxrc version:
+[ -d /cdrom ]      && export LIVECD_PATH=/cdrom
+# new initramfs layout:
+[ -d /live/image ] && export LIVECD_PATH=/live/image
 
 # Ignore these signals in non-interactive mode: INT, TERM, SEGV
 [ -z "$PS1" ] && trap "" 2 3 11
@@ -91,7 +96,7 @@ mount_sys(){
 # {{{ Read in boot parameters
 [ -f /proc/version ] || mount_proc # make sure we can access /proc/cmdline when sourcing this file too
 CMDLINE="$(cat /proc/cmdline)"
-[ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/* | tr '\n' ' ')"
+[ -d "${LIVECD_PATH}"/bootparams/ ] && CMDLINE="$CMDLINE $(cat ${LIVECD_PATH}/bootparams/* | tr '\n' ' ')"
 # }}}
 
 # {{{ Check if we are running from the grml-CD or HD
@@ -595,13 +600,8 @@ if [ -n "$TESTCD" ]; then
    einfo "Reading files and checking against GRML/md5sums, this may take a while..."
    echo -n "${RED}"
 
-   # /linuxrc grml version:
-   [ -d /cdrom/GRML ]      && TESTCD_PATH=/cdrom/GRML
-   # live-initramfs version:
-   [ -d /live/image/GRML ] && TESTCD_PATH=/live/image/GRML
-
-   if [ -n "$TESTCD_PATH" ] ; then
-      ( cd "$TESTCD_PATH" ; rm -f /tmp/md5sum.log ; md5sum -c md5sums 2>&1 | tee /tmp/md5sum.log ; RC=$? )
+   if [ -n "${LIVECD_PATH}"/GRML ] ; then
+      ( cd "${LIVECD_PATH}"/GRML ; rm -f /tmp/md5sum.log ; md5sum -c md5sums 2>&1 | tee /tmp/md5sum.log ; RC=$? )
    else
       echo "${RED} *** Error: Could not find md5sum file.                           ***"
    fi
@@ -1459,10 +1459,10 @@ fi # checkbootparam home
 # {{{ Check for scripts on CD-ROM
 config_cdrom_scripts(){
 if checkbootparam "script"; then
-  for script in /cdrom/scripts/* ; do
-    einfo " grml script found on CD, executing ${WHITE}${script}${NORMAL}."
-    . $script
-  done
+   for script in "${LIVECD_PATH}"/scripts/* ; do
+       einfo " grml script found on CD, executing ${WHITE}${script}${NORMAL}."
+       . $script
+   done
 fi
 }
 # }}}
@@ -1821,7 +1821,7 @@ if checkbootparam "config" ; then
   einfo "Bootoption config found. config is set to: $CONFIG"
   eindent
     einfo "Trying to extract configuration file ${CONFIG}:"
-    cd / && unp /cdrom/config/$CONFIG $EXTRACTOPTIONS ; eend $?
+    cd / && unp "${LIVECD_PATH}"/config/$CONFIG $EXTRACTOPTIONS ; eend $?
   eoutdent
 fi
 
@@ -1890,18 +1890,18 @@ fi
 # {{{ /cdrom/.*-options
 config_debs(){
 if checkbootparam "debs" ; then
-  DEBS="$(getbootparam 'debs' 2>>$DEBUG)"
-  einfo "Tring to install debian package(s) ${DEBS}"
-  dpkg -i /cdrom/debs/$DEBS* ; eend $?
+   DEBS="$(getbootparam 'debs' 2>>$DEBUG)"
+   einfo "Tring to install debian package(s) ${DEBS}"
+   dpkg -i "${LIVECD_PATH}"/debs/$DEBS* ; eend $?
 fi
 }
 
 config_scripts(){
 if checkbootparam "scripts" ; then
-  SCRIPTS="$(getbootparam 'scripts' 2>>$DEBUG)"
-  [ -z "$SCRIPTS" ] && SCRIPTS='grml.sh'
-  einfo "Bootparameter scripts found. Trying to execute ${SCRIPTS}:"
-  sh -c /cdrom/scripts/$SCRIPTS ; eend $?
+   SCRIPTS="$(getbootparam 'scripts' 2>>$DEBUG)"
+   [ -z "$SCRIPTS" ] && SCRIPTS='grml.sh'
+   einfo "Bootparameter scripts found. Trying to execute ${SCRIPTS}:"
+   sh -c "${LIVECD_PATH}"/scripts/$SCRIPTS ; eend $?
 fi
 }
 # }}}
@@ -2357,11 +2357,11 @@ fi # stringinstring "BOOT_IMAGE=debian2hd
 config_distri(){
 if checkbootparam "distri"; then
   DISTRI="$(getbootparam 'distri' 2>>$DEBUG)"
-  if [ -r /cdrom/desktop/"$DISTRI".jpg ] ; then
-     [ -n "$BOOTDEBUG" ] && einfo "Debug: bootoption distri found and file /cdrom/desktop/$DISTRI present" && eend 0
+  if [ -r "${LIVECD_PATH}"/desktop/"$DISTRI".jpg ] ; then
+     [ -n "$BOOTDEBUG" ] && einfo "Debug: bootoption distri found and file ${LIVECD_PATH}/desktop/${DISTRI} present" && eend 0
      # make sure the desktop.jpg file is not a symlink, so copying does not file then
      [ -L /usr/share/grml/desktop.jpg ] && rm /usr/share/grml/desktop.jpg
-     cp /cdrom/desktop/"$DISTRI".jpg /usr/share/grml/desktop.jpg
+     cp "${LIVECD_PATH}"/desktop/"$DISTRI".jpg /usr/share/grml/desktop.jpg
   fi
 fi
 }
