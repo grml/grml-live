@@ -7,7 +7,6 @@
  fb1280x1024, fb1024x768 or fb800x600   use framebuffer mode (e.g. notebooks)  
  nofb                                                disable framebuffer mode  
  hd / hd1 / hd2 / hd3 / floppy       boot from (1st/2nd/..) harddisk / floppy  
- floppy                                            boot from local floppydisk  
  failsafe                                use (nearly) no hardware recognition  
  serial                                               activate serial console  
  forensic              do not touch any harddisks during hardware recognition  
@@ -16,6 +15,7 @@
  dos                                                        start FreeDOS 1.0  
  qemu                               boot with special options for use in Qemu  
  vmware                           boot with special options for use in VMware  
+ grml2ram                               copy to RAM to RAM and run from there  
                                                                                
  A list with all supported boot options can be found on the CD at              
  /cdrom/GRML/grml-cheatcodes.txt                                               

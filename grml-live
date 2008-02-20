@@ -225,7 +225,7 @@ specify it on the command line using the -o option."
 
 # trim characters that are known to cause problems inside $GRML_NAME;
 # for example isolinux does not like '-' inside the directory name
-[ -n "$GRML_NAME" ] && export GRML_NAME="$(echo $GRML_NAME | tr -d ',./;\- ')"
+[ -n "$GRML_NAME" ] && export SHORT_GRML_NAME="$(echo $GRML_NAME | tr -d ',./;\- ')"
 # }}}
 
 # clean/zero grml-live logfile {{{
@@ -447,7 +447,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       # booting stuff:
       [ -d "$BUILD_OUTPUT"/boot/addons   ] || mkdir -p "$BUILD_OUTPUT"/boot/addons
       [ -d "$BUILD_OUTPUT"/boot/isolinux ] || mkdir -p "$BUILD_OUTPUT"/boot/isolinux
-      [ -d "$BUILD_OUTPUT"/boot/"${GRML_NAME}" ] || mkdir -p "$BUILD_OUTPUT"/boot/"${GRML_NAME}"
+      [ -d "$BUILD_OUTPUT"/boot/"${SHORT_GRML_NAME}" ] || mkdir -p "$BUILD_OUTPUT"/boot/"${SHORT_GRML_NAME}"
 
       cp /boot/memtest86+.bin "$BUILD_OUTPUT"/boot/addons/memtest
 
@@ -455,7 +455,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       # during build, so check for the file:
       INITRD="$(ls $CHROOT_OUTPUT/boot/initrd* 2>/dev/null| grep -v '.bak$' | sort -r | head -1)"
       if [ -n "$INITRD" ] ; then
-         cp $INITRD "$BUILD_OUTPUT"/boot/"${GRML_NAME}"/initrd.gz
+         cp $INITRD "$BUILD_OUTPUT"/boot/"${SHORT_GRML_NAME}"/initrd.gz
          find $CHROOT_OUTPUT/boot/ -name initrd\*.bak -exec rm {} \;
       else
          log "No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting"
@@ -465,7 +465,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
       KERNEL_IMAGE="$(ls $CHROOT_OUTPUT/boot/vmlinuz* 2>/dev/null | sort -r | head -1)"
       if [ -n "$KERNEL_IMAGE" ] ; then
-         cp "$KERNEL_IMAGE" "$BUILD_OUTPUT"/boot/"${GRML_NAME}"/linux26
+         cp "$KERNEL_IMAGE" "$BUILD_OUTPUT"/boot/"${SHORT_GRML_NAME}"/linux26
       else
          log "No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting"
          eerror "No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
@@ -506,14 +506,22 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_OUTPUT"/boot/isolinux/boot.msg
       sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_OUTPUT"/boot/isolinux/boot.msg
 
-      sed -i "s/%GRML_NAME%/$GRML_NAME/"       "$BUILD_OUTPUT"/boot/isolinux/isolinux.cfg
-      sed -i "s/%GRML_NAME%/$GRML_NAME/"       "$BUILD_OUTPUT"/boot/isolinux/syslinux.cfg
+      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME"  "$BUILD_OUTPUT"/boot/isolinux/isolinux.cfg
+      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME"  "$BUILD_OUTPUT"/boot/isolinux/syslinux.cfg
 
       sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_OUTPUT"/boot/isolinux/boot-beep.msg
       sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_OUTPUT"/boot/isolinux/boot-beep.msg
 
       sed -i "s/%VERSION%/$VERSION/"           "$BUILD_OUTPUT"/boot/grub/menu.lst
-      sed -i "s/%GRML_NAME%/$GRML_NAME/"       "$BUILD_OUTPUT"/boot/grub/menu.lst
+      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME"  "$BUILD_OUTPUT"/boot/grub/menu.lst
+
+      # make sure the squashfs filename is set accordingly:
+      GRML_NAME_SQUASHFS="$GRML_NAME.squashfs"
+      sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/syslinux.cfg
+
+      GRML_NAME_SQUASHFS="$(cut_string 40 "$GRML_NAME_SQUASHFS")"
+      GRML_NAME_SQUASHFS="$(extend_string_end 40 "$GRML_NAME_SQUASHFS")"
+      sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/f4
 
       # autostart for Windows:
       if [ -d "${TEMPLATE_DIRECTORY}/windows/autostart/" ] ; then

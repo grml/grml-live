@@ -15,9 +15,9 @@
  grml noeject noprompt      do not eject CD after halt / do not prompt for it  
  grml swspeak               prepare system for use with software synthesizer,  
                                            run "swspeak" after booting system  
+ grml toram                 copy the whole CD/media to RAM and run from there  
+ grml toram=%GRML_NAME_SQUASHFS%            copy only specified squashfs file  
+                                                    to RAM and run from there  
  grml vga=ask  / vga=791            prompt for framebuffer menu / set options  
-                                                                               
- Note: If you want to boot via USB/Firewire and accessing the device does not  
- work try to boot with 'grml scandelay' which adds a delay of a few seconds.   
                                                                                
 1f

@@ -2,8 +2,9 @@ grml-live (0.5) unstable; urgency=low
 
   * Make sure we use ${GRML_NAME}.squashfs instead of hardcoded
     grml.squashfs.
+  * Update grml2ram/toram information inside bootsplashes.
 
- -- Michael Prokop <mika@grml.org>  Sun, 17 Feb 2008 00:44:18 +0100
+ -- Michael Prokop <mika@grml.org>  Wed, 20 Feb 2008 16:41:06 +0100
 
 grml-live (0.4) unstable; urgency=low
 

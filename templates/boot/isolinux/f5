@@ -9,7 +9,6 @@
  grml myconfig=/dev/fd0              load configuration from specified device  
  grml home=/dev/sda1                   use specified device as home directory  
  grml testcd                              check CD data integrity and md5sums  
- grml toram                                 copy CD to RAM and run from there  
  grml services=foo1[,foo2] start specified service(s) [/etc/init.d/name foo1]  
  grml noautoconfig               disable searching for device labeled GRMLCFG  
  grml noswraid                       disable search for software RAID devices  
@@ -20,4 +19,5 @@
                 copy /etc/network then to local system and restart networking  
                                                                                
  A list with all supported boot options: /cdrom/GRML/grml-cheatcodes.txt       
+                                                                               
 1f
