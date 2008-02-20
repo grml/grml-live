@@ -2,22 +2,22 @@
                                                                                
 70 The following options can be used at the boot:-prompt. [1/2]                  
                                                                                
- grml nousb nousb2           disable initialization of USB in initial ramdisk  
- grml nofirewire        disable initialization of firewire in initial ramdisk  
- grml scandelay[=seconds]    delay accessing ISO-device (useful on usb-stick)  
- grml scsi=modulename              load specified SCSI module (don't add .ko)  
- grml scsi=probe                         autoprobe all available scsi modules  
- grml scsi=ask                              prompt for loading of SCSI module  
- grml blacklist=modulename     completely disable loading of specified module  
- grml no{fstab|swap|apm|apic|acpi|scsi|sound}       disable specified feature  
- grml nodma ide=nodma            disable DMA accelleration for ALL IDE-drives  
- grml noudev                          disable startup of udev (use with care)  
+ grml blacklist=firewire-core               disable new (Juju) firewire stack  
+ grml blacklist=ieee1394                           disable old firewire stack  
+ grml blacklist=ipw3945,prism54                     disable specified drivers  
+ grml blacklist=module1[,module2]  disable loading of specified module, e.g.:  
+ grml blacklist=usbcore                                   disable USB drivers  
+ grml debnet        search local partitions for file /etc/network/interfaces,  
+                copy /etc/network then to local system and restart networking  
+ grml gmt tz=Europe/Vienna   use GMT-based time and specified timezone for TZ  
+ grml home=/dev/sda1                   use specified device as home directory  
+ grml keyboard=de xkeyboard=de                                   set keyboard  
+ grml lang=[at|ch|da|de|es|fr|it|...|us]       set keyboard + language (UTF8)  
+ grml lang=[at|ch|da|de|es|fr|it|...|us]-iso   set keyboard + language  (ISO)  
+ grml myconfig=/dev/fd0              load configuration from specified device  
+ grml noautoconfig               disable searching for device labeled GRMLCFG  
+ grml nodhcp                     disable searching for network setup via DHCP  
  grml noeject noprompt      do not eject CD after halt / do not prompt for it  
- grml swspeak               prepare system for use with software synthesizer,  
-                                           run "swspeak" after booting system  
- grml toram                 copy the whole CD/media to RAM and run from there  
- grml toram=%GRML_NAME_SQUASHFS%            copy only specified squashfs file  
-                                                    to RAM and run from there  
- grml vga=ask  / vga=791            prompt for framebuffer menu / set options  
+ grml nofstab / nolabel   disable generating of /etc/fstab / use of fs-labels  
                                                                                
 1f

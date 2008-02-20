@@ -18,6 +18,6 @@
  grml2ram                               copy to RAM to RAM and run from there  
                                                                                
  A list with all supported boot options can be found on the CD at              
- /cdrom/GRML/grml-cheatcodes.txt                                               
+ /live/image/GRML/grml-cheatcodes.txt                                          
                                                                                
 1f
