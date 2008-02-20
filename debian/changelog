@@ -4,6 +4,9 @@ grml-live (0.5) unstable; urgency=low
     grml.squashfs.
   * Update bootsplashes to current implementation, based on
     live-initramfs and grml-autoconfig.
+  * Get rid of gnu-fdisk in GRML_FULL (it's causing just too many
+    headaches, see #461888, #463720 and #445304 for example).
+  * Add sshfs to GRML_MEDIUM.
 
  -- Michael Prokop <mika@grml.org>  Wed, 20 Feb 2008 16:41:06 +0100
 

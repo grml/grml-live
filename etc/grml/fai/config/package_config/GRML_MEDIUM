@@ -184,6 +184,7 @@ setserial
 sharutils
 smartmontools
 socket
+sshfs
 statserial
 strace
 sudo
