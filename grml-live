@@ -506,14 +506,14 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_OUTPUT"/boot/isolinux/boot.msg
       sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_OUTPUT"/boot/isolinux/boot.msg
 
-      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME"  "$BUILD_OUTPUT"/boot/isolinux/isolinux.cfg
-      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME"  "$BUILD_OUTPUT"/boot/isolinux/syslinux.cfg
+      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/isolinux/isolinux.cfg
+      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/isolinux/syslinux.cfg
 
       sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_OUTPUT"/boot/isolinux/boot-beep.msg
       sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_OUTPUT"/boot/isolinux/boot-beep.msg
 
       sed -i "s/%VERSION%/$VERSION/"           "$BUILD_OUTPUT"/boot/grub/menu.lst
-      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME"  "$BUILD_OUTPUT"/boot/grub/menu.lst
+      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/grub/menu.lst
 
       # make sure the squashfs filename is set accordingly:
       GRML_NAME_SQUASHFS="$GRML_NAME.squashfs"
