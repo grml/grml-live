@@ -517,6 +517,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
       # make sure the squashfs filename is set accordingly:
       GRML_NAME_SQUASHFS="$GRML_NAME.squashfs"
+      sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/isolinux.cfg
       sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/syslinux.cfg
 
       GRML_NAME_SQUASHFS="$(cut_string 20 "$GRML_NAME_SQUASHFS")"
