@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Wed Feb 20 17:13:16 CET 2008 [mika]
+# Latest change: Sat Feb 23 11:12:27 CET 2008 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -15,7 +15,7 @@ export LC_ALL=C
 # exit on any error:
 set -e
 
-GRML_LIVE_VERSION='0.5'
+GRML_LIVE_VERSION='0.6'
 CMDLINE="$0 $@"
 ISO_DATE="$(date +%Y-%m-%d)"
 
@@ -573,6 +573,7 @@ else
       log "mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/${GRML_NAME}.squashfs -noappend"
       mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/"${GRML_NAME}".squashfs -noappend $SQUASHFS_OPTIONS $SQUASHFS_ZLIB
    fi
+   echo "${GRML_NAME}.squashfs" > $BUILD_OUTPUT/live/filesystem.module
    log "Finished execution of stage 'squashfs' [$(date)]"
    einfo "Finished execution of stage 'squashfs'" ; eend 0
 fi
