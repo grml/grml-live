@@ -4,15 +4,15 @@
 # Authors:       grml-team (grml.org), (c) Michael Schierl <schierlm@gmx.de>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Fri Dec 28 00:59:13 CET 2007 [mika]
+# Latest change: Sun Feb 24 14:23:27 CET 2008 [mika]
 ################################################################################
 # DISCLAIMER:
-# this script currently lacks lots of error checking code... any help welcome...
+# this script currently lacks LOTS of error checking code... any help welcome...
 ################################################################################
 
 set -e # exit on any error
 
-VERSION='0.0.1'
+VERSION='0.0.2'
 
 # source core functions {{{
 . /etc/grml/lsb-functions
@@ -42,11 +42,21 @@ if [ ! -d /remaster ]; then
    echo "#:# edit the following two lines to change the boot message" \
            >/remaster/msg
    echo "#:#" >>/remaster/msg
-   sed 1,2d /live/image/boot/isolinux/boot.msg >>/remaster/msg
+   if [ -r /live/image/boot/isolinux/boot.msg ] ; then
+      sed 1,2d /live/image/boot/isolinux/boot.msg >>/remaster/msg
+   else
+      sed 1,2d /live/image/boot.msg >>/remaster/msg
+   fi
 fi
 
-mount -t squashfs /live/image/live/grml.squashfs /remaster/cdrom -o ro,loop
-mount -t aufs aufs /remaster/chroot -o br:/remaster/tmp=rw:/remaster/cdrom=rr
+SQUASHFS_FILE="$(find /live/image/live -name \*.squashfs | head -1)"
+if ! grep -q "/remaster/cdrom squashfs" /proc/mounts ;  then
+   mount -t squashfs "$SQUASHFS_FILE" /remaster/cdrom -o ro,loop
+fi
+
+if ! grep -q "aufs /remaster/chroot" /proc/mounts ; then
+   mount -t aufs aufs /remaster/chroot -o br:/remaster/tmp=rw:/remaster/cdrom=rr
+fi
 
 for i in dev proc root sys tmp; do
     mount --bind /$i /remaster/chroot/$i
@@ -61,23 +71,44 @@ done
 
 $EDITOR /remaster/msg
 
-mkdir /remaster/iso
+[ -d /remaster/iso ] || mkdir /remaster/iso
+
 for i in /live/image/*; do
     if [ ! $i == /live/image/live ]; then
        cp -R $i /remaster/iso
     fi
 done
 
-rm /remaster/iso/boot/isolinux/boot.msg
-sed 3,4d /live/image/boot/isolinux/boot.msg \
+if [ -r /remaster/iso/boot/isolinux/boot.msg ] ; then
+   rm /remaster/iso/boot/isolinux/boot.msg
+fi
+
+# make sure we support usb sticks as well:
+if [ -d /live/image/boot/isolinux ] ; then
+   BOOTSTUFF=/live/image/boot/isolinux
+else
+   BOOTSTUFF=/live/image
+fi
+
+[ -d /remaster/iso/boot/isolinux ] || mkdir -p /remaster/iso/boot/isolinux
+
+sed 3,4d "${BOOTSTUFF}"/boot.msg \
         >/remaster/iso/boot/isolinux/boot.msg
 sed 1,2d /remaster/msg >>/remaster/iso/boot/isolinux/boot.msg
 
 mkdir /remaster/iso/live
-mksquashfs /remaster/chroot /remaster/iso/live/grml.squashfs
+mksquashfs /remaster/chroot /remaster/iso/live/"$(basename $SQUASHFS_FILE)"
 umount /remaster/chroot /remaster/cdrom
 
-mkisofs -b boot/isolinux/isolinux.bin -no-emul-boot -c boot/isolinux/boot.cat \
+if [ -f /remaster/iso/boot/isolinux/isolinux.bin ] ; then
+   ISOLINUX=boot/isolinux/isolinux.bin
+   ISOLINUX_BOOTCAT=boot/isolinux/boot.cat
+else
+   ISOLINUX=isolinux.bin
+   ISOLINUX_BOOTCAT=boot.cat
+fi
+
+mkisofs -b $ISOLINUX -no-emul-boot -c $ISOLINUX_BOOTCAT \
         -boot-info-table -l -r -J -o "$1" /remaster/iso
 rm -R /remaster/iso
 

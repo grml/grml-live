@@ -36,7 +36,7 @@ To live-remaster the system using the partition mounted on /mnt/sda5 invoke:
 TODO list
 ---------
 
-grml-live-remaster lacks lots of error checking code.
+grml-live-remaster lacks LOTS of error checking code and needs a lot of love.
 
 Bugs
 ----
