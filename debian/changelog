@@ -1,3 +1,11 @@
+grml-live (0.7) unstable; urgency=low
+
+  * Update templates/boot/addons/allinone.img to current version
+    from http://home.arcor.de/mschierlm/bootdisk/
+    Thanks, Michael Schierl.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 24 Feb 2008 19:24:27 +0100
+
 grml-live (0.6) unstable; urgency=low
 
   * Write squashfs filename to /live/filesystem.module.
