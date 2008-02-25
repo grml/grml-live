@@ -614,7 +614,6 @@ emacs22-bin-common
 emacs22-common
 emacsen-common
 emcast
-emelfm
 emuga
 encfs
 enscribe
@@ -1602,7 +1601,6 @@ snort
 snowdrop
 snownews
 socat
-sound-recorder
 sox
 sp
 speechd-el

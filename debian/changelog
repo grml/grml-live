@@ -3,6 +3,9 @@ grml-live (0.7) unstable; urgency=low
   * Update templates/boot/addons/allinone.img to current version
     from http://home.arcor.de/mschierlm/bootdisk/
     Thanks, Michael Schierl.
+  * Remove packages from GRML_FULL:
+    - sound-recorder (#288211)
+    - emelfm (#364442)
 
  -- Michael Prokop <mika@grml.org>  Sun, 24 Feb 2008 19:24:27 +0100
 
