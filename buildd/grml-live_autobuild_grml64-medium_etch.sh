@@ -4,7 +4,7 @@
 DATE=$(date +%Y%m%d)
 ISO_NAME=grml64-medium_etch_$DATE.iso
 SUITE=etch
-CLASSES='GRMLBASE,GRML_MEDIUM,AMD64'
+CLASSES='GRMLBASE,GRML_MEDIUM,RELEASE,AMD64'
 NAME=grml64-medium
 SCRIPTNAME="$(basename $0)"
 ARCH=amd64
