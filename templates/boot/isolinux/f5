@@ -3,6 +3,7 @@
 70 The following options can be used at the boot:-prompt. [2/2]                  
                                                                                
  grml nolvm                          disable search for Logical Volumes (LVM)  
+ grml noquick                         disable grml-quickconfig startup script  
  grml noswraid                       disable search for software RAID devices  
  grml noudev                disable startup of udev (disables module loading)  
  grml services=foo1[,foo2] start specified service(s) [/etc/init.d/name foo1]  
@@ -16,7 +17,6 @@
  grml toram=%GRML_NAME_SQUASHFS%            copy only specified squashfs file  
                                                     to RAM and run from there  
  grml vga=ask  / vga=791            prompt for framebuffer menu / set options  
-                                                                               
                                                                                
  A list with all supported boot options: /live/image/GRML/grml-cheatcodes.txt  
                                                                                
