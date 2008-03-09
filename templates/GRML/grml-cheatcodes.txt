@@ -102,6 +102,7 @@ grml nogpm                          Disable GPM daemon
 grml noconsolefont                  Disable setting of console font (using consolechars)
 grml noblank                        Disable console blanking
 grml tsplash                        Text based bootsplash
+grml noquick                        Disable grml-quickconfig startup script
 grml small                          Do not start that many consoles
 grml wondershaper=eth0,1000,500     Set up basic traffic shaping
 grml services={postfix,mysql,...}   Start service(s) which have an init-script (/etc/init.d/)
