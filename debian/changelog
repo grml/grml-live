@@ -8,6 +8,7 @@ grml-live (0.7) unstable; urgency=low
     - emelfm (#364442)
   * Readd libewf to GRML_FULL.
   * buildd: use RELEASE-class in all build scripts
+  * Mention noquick bootoption in bootsplash and cheatcode file.
 
  -- Michael Prokop <mika@grml.org>  Sun, 24 Feb 2008 19:24:27 +0100
 
