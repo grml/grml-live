@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Jän 14 12:53:18 CET 2008 [mika]
+# Latest change: Mon Mär 10 18:45:36 CET 2008 [mika]
 ################################################################################
 
 export PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -51,6 +51,10 @@ mysleep() {
 
 # Disable kernel messages
 echo "0" > /proc/sys/kernel/printk
+
+# make sure halt/reboot commands are available even if
+# someone is using shutdown command:
+cat /sbin/halt /sbin/reboot >/dev/null
 
 # We may kill our network connection here before unmounting NFS. Bad luck.
 # poweroff pcmcia devices

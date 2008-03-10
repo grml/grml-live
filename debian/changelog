@@ -1,3 +1,10 @@
+grml-etc (1.1.3) unstable; urgency=low
+
+  * /etc/init.d/grml-reboot: put reboot + halt binaries to
+    the filesystem cache [Testing: issue384]
+
+ -- Michael Prokop <mika@grml.org>  Mon, 10 Mar 2008 18:46:23 +0100
+
 grml-etc (1.1.2) unstable; urgency=low
 
   * Try to work around dpkg-divert issues with missing files.
