@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Mär 10 18:45:36 CET 2008 [mika]
+# Latest change: Mon Mär 10 19:04:15 CET 2008 [mika]
 ################################################################################
 
 export PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -18,11 +18,17 @@ cd /
 exec >/dev/console 2>&1 </dev/console
 
 # Check if we are running from a GRML-CD or HD
-INSTALLED=""
+INSTALLED=''
 [ -e /etc/grml_cd ] || INSTALLED=yes
 # Assume that we don't want the eject+prompt stuff when running in one
 # of the special modes:
 grep -qe ' toram' -qe ' usb' -qe 'serial' -qe 'fromhd' /proc/cmdline && INSTALLED=yes
+
+# check for boot via NFS:
+NFSBOOT=''
+if grep -q nfsdir /proc/cmdline ; then
+   NFSBOOT=1
+fi
 
 case "$0" in
   *halt)
@@ -42,11 +48,27 @@ case "$0" in
 esac
 
 mysleep() {
-  for i in `seq 1 40` ; do
+  for i in $(seq 1 40) ; do
     usleep 75000
     echo -n "$1.${NORMAL}"
   done
   echo ""
+}
+
+# shutdown network
+shutdown_network() {
+   # Shutdown network
+   NETDEVICES="$(/sbin/ifconfig | awk '/^[^ ]+/ {print $1}' | grep -v '^lo$')"
+   if [ -n "$NETDEVICES" ]; then
+      pidof pump >/dev/null 2>&1 && { pump -k ; sleep 2; }
+      killall dhclient dhclient3 2>/dev/null
+      log_begin_msg "Shutting down network device..."
+      for n in $NETDEVICES; do
+          echo "${SUBMSG} ${WHITE}$n${NORMAL}"
+          ifdown $n 1>/dev/null 2>&1
+          ifconfig $n down
+      done ; log_end_msg $?
+   fi
 }
 
 # Disable kernel messages
@@ -95,31 +117,9 @@ sleep 1
 log_begin_msg_nn "Sending all processes the KILL signal: "
 mysleep "$RED" ; log_end_msg $?
 
-# check for nfsdir
-if grep -q nfsdir /proc/cmdline ; then
-   log_begin_msg "Bootoption nfsdir detected, syncing filesystems."
-   sync && sleep 1 ; log_end_msg $?
-else
-   # Unmount network filesystems first before shutting down network
-   NETMOUNTS="$(awk '{if($1~/:/){print $2}}' /proc/mounts 2>/dev/null)"
-   if [ -n "$NETMOUNTS" ]; then
-      log_begin_msg "Unmounting network filesystems."
-      umount -t nfs,nfs4,smbfs -alvf 2>/dev/null
-   fi
-   # Shutdown network
-   NETDEVICES="$(/sbin/ifconfig | awk '/^[^ ]+/ {print $1}' | grep -v '^lo$')"
-   if [ -n "$NETDEVICES" ]; then
-      pidof pump >/dev/null 2>&1 && { pump -k ; sleep 2; }
-      killall dhclient dhclient3 2>/dev/null
-      log_begin_msg "Shutting down network device..."
-      for n in $NETDEVICES; do
-          echo "${SUBMSG} ${WHITE}$n${NORMAL}"
-          ifdown $n 1>/dev/null 2>&1
-          ifconfig $n down
-      done ; log_end_msg $?
-   fi
-   log_begin_msg "Syncing local filesystems..."
-   sync && sleep 1 ; log_end_msg $?
+# shut down network only when not booting via NFS:
+if [ -z "$NFSBOOT" ] ; then
+   shutdown_network
 fi
 
 # Turn off swap, then unmount file systems.
@@ -130,12 +130,15 @@ swapoff -a >/dev/null 2>&1 ; log_end_msg $?
 log_begin_msg "Deactivating udev:"
 echo -n "   ${GREEN}-${NORMAL} "
 /etc/init.d/udev stop ; log_end_msg $?
-[ -n $INSTALLED ] || mkdir -p /dev/pts
-[ -n $INSTALLED ] || cp -a /GRML/dev/console /GRML/dev/tty[0-9]* /GRML/dev/loop* /GRML/dev/initctl /GRML/dev/null /dev/
-[ -n $INSTALLED ] || ln -s /GRML/dev/* /dev/ 2>/dev/null
+
+if [ -z "$INSTALLED" ] ; then
+   mkdir -p /dev/pts
+   cp -a /GRML/dev/console /GRML/dev/tty[0-9]* /GRML/dev/loop* /GRML/dev/initctl /GRML/dev/null /dev/
+   ln -s /GRML/dev/* /dev/ 2>/dev/null
+fi
 
 # Read in boot parameters
-CMDLINE="`cat /proc/cmdline 2>/dev/null`"
+CMDLINE="$(cat /proc/cmdline 2>/dev/null)"
 # noprompt or noeject option given?
 NOPROMPT=${NOPROMPT:-''}
 case "$CMDLINE" in *noprompt*) NOPROMPT="yes"; ;; esac
@@ -160,6 +163,9 @@ if [ -z "$INSTALLED" ]; then
    fi
 fi
 
+log_begin_msg "Syncing local filesystems..."
+sync && sleep 1 ; log_end_msg $?
+
 # Umount everything but root
 log_begin_msg "Unmounting file systems."
 
@@ -172,12 +178,19 @@ fi
 # Free loopback devices if necessary, so we can unmount the host media
 for i in /dev/loop*; do losetup -d $i 2>/dev/null; done
 
-# Remove remaining unused modules (Kernel 2.4)
-# rmmod -a >/dev/null 2>&1
-
 umount -t notmpfs,nosysfs,noproc,nousbfs -adrvf 1>/dev/null 2>&1
 
 log_end_msg 0
+
+# shut down network only when not booting via NFS:
+if [ -n "$NFSBOOT" ] ; then
+   log_begin_msg "Booting via NFS detected"
+   echo -n "   ${GREEN}-${NORMAL} Unmounting network filesystems"
+   umount -t nfs,nfs4,smbfs -alvf 2>/dev/null ; log_end_msg $?
+
+   echo -n "   ${GREEN}-${NORMAL} Finally shutting down network..."
+   shutdown_network ; log_end_msg $?
+fi
 
 # For a harddisk installation: mount / ro
 [ -n "$INSTALLED" ] && mount -n -o remount,ro / 2>/dev/null
