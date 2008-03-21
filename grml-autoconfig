@@ -262,6 +262,8 @@ checkvalue $CONFIG_IPW3945 && config_ipw3945
 
 checkvalue $CONFIG_AUTOMOUNT && config_automount
 
+checkvalue $CONFIG_MYPATH && config_mypath
+
 checkvalue $CONFIG_DISTCC && config_distcc
 
 checkvalue $CONFIG_DISTRI && config_distri

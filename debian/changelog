@@ -1,3 +1,10 @@
+grml-autoconfig (0.8.5) unstable; urgency=low
+
+  * config_mypath(): allow setting additional $PATH via bootoption
+    mypath, usage example: "mypath=/forensic"
+
+ -- Michael Prokop <mika@grml.org>  Sat, 22 Mar 2008 00:42:34 +0100
+
 grml-autoconfig (0.8.4) unstable; urgency=low
 
   * Make sure we support old directory layout (/cdrom) as

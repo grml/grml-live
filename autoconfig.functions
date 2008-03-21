@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Feb 18 13:30:57 CET 2008 [mika]
+# Latest change: Sat Mar 22 00:41:14 CET 2008 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -1902,6 +1902,18 @@ if checkbootparam "scripts" ; then
    [ -z "$SCRIPTS" ] && SCRIPTS='grml.sh'
    einfo "Bootparameter scripts found. Trying to execute ${SCRIPTS}:"
    sh -c "${LIVECD_PATH}"/scripts/$SCRIPTS ; eend $?
+fi
+}
+# }}}
+
+# {{{ mypath
+config_mypath(){
+if checkbootparam "mypath" ; then
+   MY_PATH="$(getbootparam 'mypath' 2>>$DEBUG)"
+   einfo "Bootparameter mypath found, adding ${MY_PATH} to /etc/grml/my_path"
+   touch /etc/grml/my_path
+   chmod 644 /etc/grml/my_path
+   echo "$MY_PATH" >> /etc/grml/my_path ; eend $?
 fi
 }
 # }}}

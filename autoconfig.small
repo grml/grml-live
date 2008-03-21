@@ -3,7 +3,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Don Sep 06 23:57:08 CEST 2007 [mika]
+# Latest change: Sat Mar 22 00:42:16 CET 2008 [mika]
 ################################################################################
 
 ################################################################################
@@ -92,6 +92,7 @@ CONFIG_MODEM='yes'            # check for AC'97 Modem Controller modem
 CONFIG_MODULES='yes'          # load modules specified in /etc/grml/modules
 CONFIG_MOUSE='yes'            # show mouse information (expert-mode)
 CONFIG_MYCONFIG='yes'         # check if we want the config floppy
+CONFIG_MYPATH='yes'           # provide setting additional paths via bootoption mypath
 CONFIG_NETCONFIG='yes'        # download configuration archive provided by bootoption netconfig=...
 CONFIG_NETIPV6='yes'          # check for bootparam ipv6
 CONFIG_PASSWD='yes'           # set password via bootparam passwd
