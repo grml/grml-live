@@ -839,6 +839,7 @@ httptunnel
 hunt
 hwdata
 hwinfo
+i2c-tools
 i810switch
 i8kutils
 ibod
