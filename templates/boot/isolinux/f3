@@ -15,7 +15,7 @@
  dos                                                        start FreeDOS 1.0  
  qemu                               boot with special options for use in Qemu  
  vmware                           boot with special options for use in VMware  
- grml2ram                               copy to RAM to RAM and run from there  
+ grml2ram                                      copy to RAM and run from there  
                                                                                
  A list with all supported boot options can be found on the CD at              
  /live/image/GRML/grml-cheatcodes.txt                                          
