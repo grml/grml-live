@@ -16,6 +16,9 @@ grml-live (0.7) unstable; urgency=low
   * buildd: use RELEASE-class in all build scripts
   * Mention noquick bootoption in bootsplash and cheatcode file.
   * Fix typo in bootsplash f3, thanks to Daniel Martin for reporting.
+  * Make sure username is adjusted in /etc/inittab.grml if username
+    not being "grml". Thanks for reporting, Thomas Lehmann.
+    [Testing: issue436]
 
  -- Michael Prokop <mika@grml.org>  Wed, 26 Mar 2008 22:56:31 +0100
 
