@@ -19,6 +19,8 @@ grml-live (0.7) unstable; urgency=low
   * Make sure username is adjusted in /etc/inittab.grml if username
     not being "grml". Thanks for reporting, Thomas Lehmann.
     [Testing: issue436]
+  * Add check for existence of -nolzma option. If squashfs-tools
+    doesn't support it at all just get rid of the option.
 
  -- Michael Prokop <mika@grml.org>  Wed, 26 Mar 2008 22:56:31 +0100
 

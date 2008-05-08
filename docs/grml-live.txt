@@ -17,7 +17,7 @@ grml-live [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ]
 *******************************************************************************
 Important! This document is growing as requested. If you have questions which
 aren't answered by this document yet please let me know: <mika@grml.org>!
-This document currently applies to grml-live version 0.5.
+This document currently applies to grml-live version 0.7.
 *******************************************************************************
 
 Description
