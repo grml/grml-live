@@ -769,6 +769,7 @@ glark
 gmailfs
 gmrun
 gnuhtml2latex
+gnuit
 gnupg
 gnupg-agent
 gnupg-pkcs11-scd
@@ -891,6 +892,7 @@ inotify-tools
 input-utils
 intltool-debian
 iodine
+iotop
 ipcalc
 iperf
 ipgrab
@@ -956,6 +958,7 @@ kernel-package
 ketchup
 kexec-tools
 keychain
+keynav
 keyutils
 kismet
 klibc-utils
@@ -1225,7 +1228,6 @@ ntfsprogs
 ntlmaps
 ntp
 ntpdate
-nufw
 nullidentd
 num-utils
 nutcpc

@@ -4,10 +4,14 @@ grml-live (0.7) unstable; urgency=low
     from http://home.arcor.de/mschierlm/bootdisk/
     Thanks, Michael Schierl.
   * Add packages to GRML_FULL:
+    - gnuit
     - i2c-tools [thanks to Mario Holbe]
+    - iotop
+    - keynav
   * Remove packages from GRML_FULL:
-    - sound-recorder (#288211)
     - emelfm (#364442)
+    - nufw (#468245)
+    - sound-recorder (#288211)
   * Readd libewf to GRML_FULL.
   * buildd: use RELEASE-class in all build scripts
   * Mention noquick bootoption in bootsplash and cheatcode file.
