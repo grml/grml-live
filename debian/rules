@@ -44,12 +44,12 @@ install: build
 	install -o root -m 755 remaster/grml-live-remaster debian/grml-live/usr/sbin/grml-live-remaster
 	install -o root -m 755 grml-live                   debian/grml-live/usr/sbin/grml-live
 
-# Build architecture-independent files here.
-binary-indep: build install
+# Build architecture-dependent files here.
+binary-all: build install
 # We have nothing to do by default.
 
-# Build architecture-dependent files here.
-binary-arch: build install
+# Build architecture-independent files here.
+binary-indep: build install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs 
