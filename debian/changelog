@@ -1,3 +1,10 @@
+grml-live (0.8) unstable; urgency=low
+
+  * Remove packages from GRML_FULL:
+    - raggle (#479562)
+
+ -- Michael Prokop <mika@grml.org>  Mon, 12 May 2008 19:13:32 +0200
+
 grml-live (0.7) unstable; urgency=low
 
   * Update templates/boot/addons/allinone.img to current version
