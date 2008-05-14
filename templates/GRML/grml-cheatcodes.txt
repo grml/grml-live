@@ -131,7 +131,6 @@ grml noswraid                       Disable scanning for software raid arrays (c
 grml swraid                         Enable automatic assembling of software raid arrays
 grml nolvm                          Disable scanning for Logical Volumes (LVM)
 grml lvm                            Automatically activate Logival Volumes (LVM) during boot
-grml scandelay[=seconds]            Delay accessing ISO-device (useful for booting via usb/firewire)
 grml cdrom=/dev/...                 Use specifed device as CD-ROM device (used for mounting the grml-ISO)
 grml xmodule=ati|fbdev|i810|mga     Use specified X.org-Module (1)
 grml xmodule=nv|radeon|savage|s3    Use specified X.org-Module (2)

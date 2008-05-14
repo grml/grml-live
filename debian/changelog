@@ -3,6 +3,8 @@ grml-live (0.8) unstable; urgency=low
   * Remove packages from GRML_FULL:
     - apmd (the package is just borken, see #475432)
     - raggle (#479562)
+  * Remove scandelay bootoption from grml-cheatcodes.txt (thanks
+    for mentioning in a bugreport, Marc Haber!)
 
  -- Michael Prokop <mika@grml.org>  Mon, 12 May 2008 19:13:32 +0200
 
