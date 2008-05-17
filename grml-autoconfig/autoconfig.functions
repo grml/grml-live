@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sat Mar 22 00:41:14 CET 2008 [mika]
+# Latest change: Sam Mai 17 22:04:08 CEST 2008 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -1612,11 +1612,22 @@ config_wondershaper(){
 # {{{ syslog-ng
 config_syslog(){
  if checkbootparam "nosyslog"; then
-  ewarn "Not starting syslog-ng as requested on boot commandline." ; eend 0
+    ewarn "Not starting syslog daemon as requested on boot commandline." ; eend 0
  else
-  einfo "Starting syslog-ng in background."
-  /etc/init.d/syslog-ng start 1>>$DEBUG &
-  eend 0
+    SYSLOGD=''
+    [ -x /etc/init.d/syslog-ng ] && SYSLOGD='syslog-ng'
+    [ -x /etc/init.d/rsyslog   ] && SYSLOGD='rsyslog'
+    [ -x /etc/init.d/dsyslog   ] && SYSLOGD='dsyslog'
+    [ -x /etc/init.d/sysklogd  ] && SYSLOGD='sysklogd'
+    [ -x /etc/init.d/inetutils-syslogd ] && SYSLOGD='inetutils-syslogd'
+
+    if [ -z "$SYSLOGD" ] ; then
+       eerror "No syslog daemon found." ; eend 1
+    else
+       einfo "Starting $SYSLOGD in background."
+       /etc/init.d/$SYSLOGD start 1>>$DEBUG &
+       eend 0
+    fi
  fi
 }
 # }}}
