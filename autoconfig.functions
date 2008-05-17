@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sam Mai 17 22:04:08 CEST 2008 [mika]
+# Latest change: Sam Mai 17 22:15:54 CEST 2008 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -1924,6 +1924,15 @@ if checkbootparam "mypath" ; then
    einfo "Bootparameter mypath found, adding ${MY_PATH} to /etc/grml/my_path"
    touch /etc/grml/my_path
    chmod 644 /etc/grml/my_path
+   # make sure the directories exist:
+   eindent
+   for i in $(echo $MY_PATH | sed 's/:/\n/g') ; do
+       if ! [ -d "$i" ] ; then
+          einfo "Creating directory $i"
+          mkdir -d "$i" ; eend $?
+       fi
+   done
+   eoutdent
    echo "$MY_PATH" >> /etc/grml/my_path ; eend $?
 fi
 }

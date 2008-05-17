@@ -1,6 +1,7 @@
 grml-autoconfig (0.8.6) unstable; urgency=low
 
   * config_syslog(): support other syslog daemons than syslog-ng as well.
+  * config_mypath(): create directory if it does not exist yet.
 
  -- Michael Prokop <mika@grml.org>  Sat, 17 May 2008 22:06:05 +0200
 
