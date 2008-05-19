@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sam Mai 17 22:15:54 CEST 2008 [mika]
+# Latest change: Tue May 20 01:09:30 CEST 2008 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -1929,11 +1929,11 @@ if checkbootparam "mypath" ; then
    for i in $(echo $MY_PATH | sed 's/:/\n/g') ; do
        if ! [ -d "$i" ] ; then
           einfo "Creating directory $i"
-          mkdir -d "$i" ; eend $?
+          mkdir -p "$i" ; eend $?
        fi
    done
+   grep -q "${MY_PATH}" /etc/grml/my_path || echo "${MY_PATH}" >> /etc/grml/my_path ; eend $?
    eoutdent
-   echo "$MY_PATH" >> /etc/grml/my_path ; eend $?
 fi
 }
 # }}}
