@@ -15,9 +15,16 @@ grml-live [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ]
 <template_directory>] [-v <version_number>] [-bFVhuz]
 
 *******************************************************************************
-Important! This document is growing as requested. If you have questions which
+Important: squashfs-tools in Debian (version 1:3.3-6 for example) currently
+don't work as expected for grml-live.  Please install grml's version 1:3.2r2-9exp1 from
+http://grml.org/squashfs/squashfs-tools_3.2r2-9exp1_i386.deb (for x86) or
+http://grml.org/squashfs/squashfs-tools_3.2r2-9exp1_amd64.deb (for amd64)
+on your build-system instead.
+*******************************************************************************
+
+*******************************************************************************
+Notice! This document is growing as requested. If you have questions which
 aren't answered by this document yet please let me know: <mika@grml.org>!
-This document currently applies to grml-live version 0.7.
 *******************************************************************************
 
 Description
@@ -104,8 +111,8 @@ Force execution and do not prompt for acknowledgment of configuration.
   -g **GRML_NAME**::
 
 Set the grml flavour name. Common usage examples: grml, grml-small, grml64.
-Please do NOT use blanks and any characters like '-', '/', ';' inside GRML_NAME,
-otherwise you might notice problems with booting.
+Please do NOT use blanks and any special characters like '/', ';' inside
+GRML_NAME, otherwise you might notice problems with booting.
 
   -h::
 
@@ -372,10 +379,10 @@ FAQ
 Help, I'm using Debian etch and I don't have FAI version >3.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  wget http://www.informatik.uni-koeln.de/fai/download/etch/fai-client_3.2.5_all.deb \
-       http://www.informatik.uni-koeln.de/fai/download/etch/fai-server_3.2.5_all.deb \
-       http://www.informatik.uni-koeln.de/fai/download/etch/fai-doc_3.2.5_all.deb
-  dpkg -i fai-client_3.2.5_all.deb fai-server_3.2.5_all.deb fai-doc_3.2.5_all.deb
+  wget http://www.informatik.uni-koeln.de/fai/download/etch/fai-client_3.2.6_all.deb \
+       http://www.informatik.uni-koeln.de/fai/download/etch/fai-server_3.2.6_all.deb \
+       http://www.informatik.uni-koeln.de/fai/download/etch/fai-doc_3.2.6_all.deb
+  dpkg -i fai-client_3.2.6_all.deb fai-server_3.2.6_all.deb fai-doc_3.2.6_all.deb
 
 or check out the link:http://www.informatik.uni-koeln.de/fai/[FAI-homepage] for
 further details.
