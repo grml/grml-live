@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Mär 10 19:04:15 CET 2008 [mika]
+# Latest change: Tue May 20 01:28:38 CEST 2008 [mika]
 ################################################################################
 
 export PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -26,7 +26,7 @@ grep -qe ' toram' -qe ' usb' -qe 'serial' -qe 'fromhd' /proc/cmdline && INSTALLE
 
 # check for boot via NFS:
 NFSBOOT=''
-if grep -q nfsdir /proc/cmdline ; then
+if grep -qe nfsroot -qe nfsdir /proc/cmdline ; then
    NFSBOOT=1
 fi
 

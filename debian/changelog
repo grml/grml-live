@@ -1,3 +1,12 @@
+grml-etc (1.1.4) unstable; urgency=low
+
+  * /etc/init.d/grml-reboot: check for nfsroot (and keep check
+    for nfsdir as well to avoid breaking any existing scripts).
+    Thanks for reporting to Wolfgang Karall and thanks for the
+    test case to Jimmy.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 20 May 2008 01:28:51 +0200
+
 grml-etc (1.1.3) unstable; urgency=low
 
   * /etc/init.d/grml-reboot: put reboot + halt binaries to
