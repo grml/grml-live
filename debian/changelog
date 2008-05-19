@@ -5,6 +5,8 @@ grml-live (0.8) unstable; urgency=low
     - raggle (#479562)
   * Remove scandelay bootoption from grml-cheatcodes.txt (thanks
     for mentioning in a bugreport, Marc Haber!)
+  * Add packages to GRML_FULL:
+    - ent (thanks, gebi)
 
  -- Michael Prokop <mika@grml.org>  Mon, 12 May 2008 19:13:32 +0200
 
