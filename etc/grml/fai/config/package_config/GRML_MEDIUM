@@ -221,6 +221,7 @@ xcursor-themes
 xfonts-100dpi
 xfonts-75dpi
 xfonts-base
+xfsdump
 xfsprogs
 xosd-bin
 xserver-xorg
