@@ -88,7 +88,8 @@ grml grml_name=GRML                 SquashFS-File to search for on the CD
 
 Debugging related settings:
 ---------------------------
-debug                               Get shells during process of booting
+debug                               Get shells during process of booting, using GNU screen
+grml debug=noscreen                 Get shells during process of booting, but without using GNU screen
 grml nocolor                        Disable colorized output while booting
 grml log                            Log error messages while booting and
 grml testcd                         Check CD data integrity and md5sums
