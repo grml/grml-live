@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Tue May 20 01:09:30 CEST 2008 [mika]
+# Latest change: Mon Jun 09 17:05:42 CEST 2008 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -128,6 +128,8 @@ config_debug(){
   if [ -n "$BOOTDEBUG" ]; then
      einfo "Starting intermediate shell stage $stage as requested by \"debug\" option."
      if [ grep -q "debug=noscreen" "$CMDLINE" ] ; then
+        einfo "Notice that the shell does not provide job handling: ctrl-z, bg and fg won't work!"
+        einfo "Just exit the shell to continue boot process..."
         /bin/zsh
      else
         eindent
