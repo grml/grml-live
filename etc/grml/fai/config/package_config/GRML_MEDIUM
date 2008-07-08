@@ -191,7 +191,6 @@ sudo
 symlinks
 syslinux
 syslog-ng
-sysutils
 sysvinit
 sysvinit-utils
 tar

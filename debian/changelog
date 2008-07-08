@@ -1,3 +1,9 @@
+grml-live (0.9) unstable; urgency=low
+
+  * Drop sysutils from package lists.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 08 Jul 2008 18:14:38 +0200
+
 grml-live (0.8) unstable; urgency=low
 
   * Remove packages from GRML_FULL:

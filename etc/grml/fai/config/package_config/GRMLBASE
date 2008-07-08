@@ -39,7 +39,6 @@ resolvconf
 rsync
 strace
 syslog-ng
-sysutils
 usbutils
 wireless-tools
 wpasupplicant
