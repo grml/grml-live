@@ -1,8 +1,9 @@
 grml-live (0.9) unstable; urgency=low
 
   * Drop sysutils from package lists.
+  * Add ext3grep to GRML_FULL.
 
- -- Michael Prokop <mika@grml.org>  Tue, 08 Jul 2008 18:14:38 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 14 Jul 2008 03:26:26 +0200
 
 grml-live (0.8) unstable; urgency=low
 
