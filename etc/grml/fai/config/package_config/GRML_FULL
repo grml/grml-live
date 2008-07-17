@@ -117,14 +117,12 @@ ptfinder
 rainbowcrack
 rootsh
 salvage-ntfs
-scrounge-ntfs
 shadowfs
 shish
 shmux
 sitar
 smap
 speechd-up
-ssdeep
 sudosh
 svn-ssh-wrappers
 tal
@@ -148,7 +146,7 @@ zsh-lovers
 # glipper-nognome grml-ddcxinfo grml-reportbug grml-robocup-files grml-samsung-x20
 # histring hydra i855crt icmp-mtu icmp-quench icmp-reset lame lame-extras libewf
 # magicrescue multiseat ncp prosilla pspax ptfinder quadkonsole rootsh
-# salvage-ntfs scrounge-ntfs shadowfs shish shmux speechd-up squashfs ssdeep
+# salvage-ntfs shadowfs shish shmux speechd-up squashfs
 # sudosh tal thc-pptp-bruter tlswrap tpm-tools trapdoor2 trousers yersinia
 ## }}}
 
@@ -1538,6 +1536,7 @@ scponly
 screen
 screenie
 scrot
+scrounge-ntfs
 scsiadd
 scsi-idle
 scsitools
@@ -1624,6 +1623,7 @@ squid-common
 squidview
 src2tex
 srcinst
+ssdeep
 ssed
 ssh
 ssh-askpass
@@ -1661,7 +1661,6 @@ synergy
 syrep
 sysfsutils
 syslinux
-syslog-ng
 sysprof
 sysstat
 systune

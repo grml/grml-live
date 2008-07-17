@@ -159,7 +159,6 @@ strace
 sudo
 symlinks
 syslinux
-syslog-ng
 sysvinit
 sysvinit-utils
 tar

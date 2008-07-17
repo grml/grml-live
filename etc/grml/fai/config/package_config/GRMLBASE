@@ -37,8 +37,8 @@ openssh-server
 pciutils
 resolvconf
 rsync
+rsyslog
 strace
-syslog-ng
 usbutils
 wireless-tools
 wpasupplicant
