@@ -1639,10 +1639,14 @@ config_gpm(){
  if checkbootparam "nogpm"; then
   ewarn "Not starting GPM as requested on boot commandline." ; eend 0
  else
-  einfo "Starting gpm in background."
-#  /etc/init.d/gpm start 1>>$DEBUG &
-  ( while [ ! -e /dev/psaux ]; do sleep 5; done; /etc/init.d/gpm start 1>>$DEBUG ) &
-  eend 0
+   if ! [ -r /dev/input/mice ] ; then
+      eerror "No mouse found - not starting GPM." ; eend 1
+   else
+      einfo "Starting gpm in background."
+      /etc/init.d/gpm start 1>>$DEBUG &
+      # ( while [ ! -e /dev/psaux ]; do sleep 5; done; /etc/init.d/gpm start 1>>$DEBUG ) &
+      eend 0
+   fi
  fi
 }
 # }}}
