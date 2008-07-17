@@ -98,7 +98,7 @@ Service related settings:
 -------------------------
 grml ssh=password                   Set password for user grml and start ssh-server
 grml startup=script                 Start $script instead of grml-quickconfig on startup
-grml nosyslog                       Do not start syslog-ng
+grml nosyslog                       Do not start syslog daemon
 grml nogpm                          Disable GPM daemon
 grml noconsolefont                  Disable setting of console font (using consolechars)
 grml noblank                        Disable console blanking
