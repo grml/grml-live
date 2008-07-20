@@ -11,7 +11,6 @@ UTC=yes
 TIMEZONE=Europe/Vienna
 
 # root password for the new installed linux system; md5 and crypt are possible
-# pw is "fai"
 ROOTPW='x'
 
 # MODULESLIST contains modules that will be loaded by the new system,
