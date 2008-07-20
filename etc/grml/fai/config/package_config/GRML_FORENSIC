@@ -1,5 +1,12 @@
 PACKAGES aptitude
 
+# Created by people from http://www.forensic-geeks.org/
+# Also see:
+# http://forensics.alioth.debian.org/
+# http://alioth.debian.org/projects/forensics
+# http://wiki.debian.org/Teams/DebianForensics
+# http://wiki.debian.org/DebianForensics/TODO
+
 # forensic software:
 afflib
 autopsy
