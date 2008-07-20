@@ -390,11 +390,19 @@ else
 
    log "Executed FAI command line:"
    log "BUILD_ONLY=$BUILD_ONLY fai $VERBOSE -C $GRML_FAI_CONFIG -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
-   BUILD_ONLY="$BUILD_ONLY" fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u "$HOSTNAME" $FAI_ACTION "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
+   BUILD_ONLY="$BUILD_ONLY" fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u \
+   "$HOSTNAME" $FAI_ACTION "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
+   RC="$PIPESTATUS" # notice: bash-only
 
-   log "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]"
-   echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]" > $CHROOT_OUTPUT/etc/grml_version
-   chmod 644 $CHROOT_OUTPUT/etc/grml_version
+   if [ "$RC" != 0 ] ; then
+      log "Error while executing fai [exit code ${RC}]. Exiting."
+      eerror "Error while executing fai [exit code ${RC}]. Exiting." ; eend 1
+      bailout 1
+   else
+      log "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]"
+      echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]" > $CHROOT_OUTPUT/etc/grml_version
+      chmod 644 $CHROOT_OUTPUT/etc/grml_version
+   fi
 
    # Remove all FAI logs from chroot if class RELEASE is used:
    if [ -f "$CHROOT_OUTPUT"/etc/grml_fai_release ] ; then
@@ -410,11 +418,11 @@ else
    CHECKLOG=/var/log/fai/$HOSTNAME/last
    if [ -r "$CHECKLOG/software.log" ] ; then
       # 1 errors during executing of commands
-      # Unable to write mmap - msync (28 No space left on device)
-      # 'No candidate version found for' [/var/log/fai/current/software.log]
       grep 'dpkg: error processing' $CHECKLOG/software.log >> $LOGFILE && ERROR=1
       grep 'E: Method http has died unexpectedly!' $CHECKLOG/software.log >> $LOGFILE && ERROR=2
       grep 'ERROR: chroot' $CHECKLOG/software.log >> $LOGFILE && ERROR=3
+      grep 'E: Failed to fetch' $CHECKLOG/software.log >> $LOGFILE && ERROR=4
+      grep 'Unable to write mmap - msync (28 No space left on device)' $CHECKLOG/software.log >> $LOGFILE && ERROR=5
    fi
 
    if [ -r "$CHECKLOG/shell.log" ] ; then
@@ -424,7 +432,7 @@ else
    if [ -n "$ERROR" ] ; then
       log "There was an error [${ERROR}] during execution of stage 'fai dirinstall' [$(date)]"
       eerror "There was an error during execution of stage 'fai dirinstall'"
-      echo "   Check out $CHECKLOG for details. [exit ${ERROR}]"
+      echo "   Check out ${CHECKLOG}/ for details. [exit ${ERROR}]"
       eend 1
       bailout 1
    else
@@ -607,7 +615,7 @@ else
 
    CURRENT_DIR=$(pwd)
    if cd "$BUILD_OUTPUT" ; then
-      log "mkisofs -V grml '$VERSION' -publisher 'grml-live | grml.org' -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b $BOOT_FILE -o ${ISO_OUTPUT}/${ISO_NAME} ."
+      log "mkisofs -V 'grml $VERSION' -publisher 'grml-live | grml.org' -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b $BOOT_FILE -o ${ISO_OUTPUT}/${ISO_NAME} ."
       mkisofs -V "grml $VERSION" -publisher 'grml-live | grml.org' \
               -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
               -b $BOOT_FILE \
