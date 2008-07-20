@@ -113,8 +113,8 @@ ${RED} | |  _| |_) | |\/| | |
 ${RED} | |_| |  _ <| |  | | |___
 ${RED}  \____|_| \_\_|  |_|_____|
 
-${WHITE}grml.org $GRML_VERSION- Linux for sysadmins and texttool users.
-${NORMAL}"
+${WHITE}grml.org - Linux for sysadmins and texttool users.
+${WHITE}$GRML_VERSION${NORMAL}"
 fi
 
 echo ""
@@ -127,6 +127,7 @@ if checkbootparam "splash" ; then
 fi
 # }}}
 
+## /proc/cmdline handling {{{
 # No kernel messages while probing modules:
 if ! grep -qe debug -qe verbose /proc/cmdline 2>/dev/null ; then
    [ -r /proc/sys/kernel/printk ] && echo "0" > /proc/sys/kernel/printk
@@ -140,7 +141,8 @@ fi
 if grep -q 'boot=live' /proc/cmdline 2>/dev/null ; then
    log_grml_begin_msg "Finished early booting sequence." ; echo "$SUCCESS"
    log_grml_begin_msg "Searching for GRML file, this might take a few seconds..."
-   echo 
+   echo
 fi
+## }}}
 
 # vim: foldmethod=marker expandtab ai ft=sh
