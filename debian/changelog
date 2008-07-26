@@ -3,8 +3,27 @@ grml-live (0.9) unstable; urgency=low
   * Drop sysutils from package lists.
   * Add ext3grep to GRML_FULL.
   * Integrate /etc/grml/fai/config/package_config/GRML_FORENSIC.
+  * Move ssdeep and scrounge-ntfs from grml's repository list to
+    Debian's one.
+  * Drop syslog-ng in all classes and use rsyslog in GRMLBASE.
+  * Document classes in more details. Thanks to Pawel Sadkowski
+    for pointing out. [Closes: issue490]
+  * Drop qtparted from GRML_FULL, we have better maintained
+    gparted now.
+  * Get rid of /etc/grml/fai/config/class/GRML_FULL.var,
+    /etc/grml/fai/config/class/GRML_MEDIUM.var,
+    /etc/grml/fai/config/class/GRML_POWERPC.var and
+    /etc/grml/fai/config/class/GRML_SMALL.var - we manage the
+    configuration through GRMLBASE.var and this way it's much
+    easier to adjust settings according to your needs.
+  * Improve error handling in grml-live, including a check
+    for pipestatus of fai command.
+  * Output grml version in grml's live-initramfs script.
+    Thanks for the idea, Marc Haber. [Closes: issue488]
+  * Drop glimpse from GRML_FULL due to license problems,
+    see #474322.
 
- -- Michael Prokop <mika@grml.org>  Mon, 14 Jul 2008 03:26:26 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 26 Jul 2008 19:28:23 +0200
 
 grml-live (0.8) unstable; urgency=low
 

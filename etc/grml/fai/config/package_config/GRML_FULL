@@ -2058,7 +2058,6 @@ firmware-ipw3945
 firmware-iwlwifi
 firmware-qlogic
 firmware-ralink
-glimpse
 iozone3
 ipw3945d
 irpas

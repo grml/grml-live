@@ -85,8 +85,8 @@ the classes GRMLBASE, GRML_SMALL and I386 are assumed, resulting in a small base
 system (being about ~150MB total ISO size). If using a non-I386 system (like
 amd64) you should specify the appropriate architecture as well. Additionally you
 can specify a class providing a grml-kernel (see
-/etc/grml/fai/config/package_config/ for a full list).  So instead of GRML_SMALL
-you can also use GRML_MEDIUM and GRML_FULL instead.
+<<X7,the 'CLASSES' section in this document>> for details about available classes).
+So instead of GRML_SMALL you can also use GRML_MEDIUM and GRML_FULL.
 
   -C **CONFIGURATION_FILE**::
 
@@ -243,10 +243,32 @@ option: "grml-live -c GRMLBASE,GRML_SMALL,I386,FOOBAR ...".
 More details regarding the class concept can be found in the documentation of
 FAI itself (being available at /usr/share/doc/fai-doc/).
 
+[[X7]]
 Available classes
 -----------------
 
-Documentation to be done...
+The package selection part of the classes can be found in
+/etc/grml/fai/config/package_config whereas some further classes are defined for
+example in /etc/grml/fai/config/scripts/ so specific feature sets can be
+selected. The following classes are predefined:
+
+* DEBORPHAN:
+* GRMLBASE: the main class responsible for getting a minimal subset of what's
+defining a grml system. Important parts of the buildprocess are specified in
+this class as well, so unless you have a really good reason you should always
+use this class.
+* GRML_FORENSIC: tools for forensic investigations which has been created
+by people from link:http://www.forensic-geeks.org/[forensic-geeks.org].
+* GRML_FULL: full featured grml, also know as the "normal", full grml.
+* GRML_MEDIUM:
+* GRML_POWERPC:
+* GRML_SMALL:
+* LATEX_CLEANUP:
+* LOCALES:
+* NO_ONLINE:
+* RELEASE:
+* REMOVE_DOCS:
+* XORG:
 
 Files
 -----
