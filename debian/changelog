@@ -3,6 +3,8 @@ grml-etc (1.1.5) unstable; urgency=low
   * Get rid of dependency from grml-autoconfig (on request from gebi).
   * Drop empty and unused /etc/zsh directory from debian/dirs.
   * Bump Standard-Version to 3.8.0 (no further changes).
+  * Reorder binary-indep and binary-arch in debian/rules to make
+    lintian happy.
 
  -- Michael Prokop <mika@grml.org>  Thu, 31 Jul 2008 22:23:32 +0200
 
