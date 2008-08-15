@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Jun 09 17:05:42 CEST 2008 [mika]
+# Latest change: Fre Aug 15 23:06:21 CEST 2008 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -1242,10 +1242,12 @@ if checkbootparam "nocpu"; then
 else
   # check module dependencies
   cpufreq_check() {
-   if [ -e /lib64 ] ; then
-      [ -e /lib/modules/${KERNEL}/kernel/arch/x86_64/kernel/cpufreq ] || return 1
-   else
-      [ -e /lib/modules/${KERNEL}/kernel/arch/i386/kernel/cpu/cpufreq -o ! -e /lib/modules/${KERNEL}/kernel/drivers/cpufreq ] || return 1
+   if ! [ -e /lib/modules/${KERNEL}/kernel/arch/x86/kernel/cpu/cpufreq ] ; then
+      if [ -e /lib64 ] ; then
+         [ -e /lib/modules/${KERNEL}/kernel/arch/x86_64/kernel/cpufreq ] || return 1
+      else
+         [ -e /lib/modules/${KERNEL}/kernel/arch/i386/kernel/cpu/cpufreq -o ! -e /lib/modules/${KERNEL}/kernel/drivers/cpufreq ] || return 1
+      fi
    fi
   }
 
