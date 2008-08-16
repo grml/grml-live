@@ -3,7 +3,7 @@
 # helper functions {{{
 
 if grep -qe debug -qe verbose /proc/cmdline 2>/dev/null ; then
-   echo "debug: scripts/init-top/grml running"
+   echo "debug: scripts/init-top/grml running">/dev/console
 fi
 
 # get boot command line
@@ -95,7 +95,7 @@ FAILED=" ${NORMAL}[${RED}fail${NORMAL}]"
 DISTRI="$(getbootparam 'distri' 2>/dev/null)"
 
 if [ -r /etc/grml_version ] ; then
-   GRML_VERSION="[$(cat /etc/grml_version)] "
+   GRML_VERSION="$(cat /etc/grml_version)"
 fi
 
 if [ -n "$DISTRI" ] ; then
@@ -113,13 +113,16 @@ ${RED} | |  _| |_) | |\/| | |
 ${RED} | |_| |  _ <| |  | | |___
 ${RED}  \____|_| \_\_|  |_|_____|
 
-${WHITE}grml.org - Linux for sysadmins and texttool users.
-${WHITE}$GRML_VERSION${NORMAL}"
+${WHITE}grml.org - Linux for sysadmins and texttool users.${NORMAL}"
 fi
 
 echo ""
 echo "${WHITE}Welcome to"
 echo "$SPLASH"
+
+echo
+log_grml_begin_msg "Running $GRML_VERSION"
+echo
 
 # don't output anything if running with bootsplash feature
 if checkbootparam "splash" ; then

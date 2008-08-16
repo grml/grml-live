@@ -22,8 +22,10 @@ grml-live (0.9) unstable; urgency=low
     Thanks for the idea, Marc Haber. [Closes: issue488]
   * Drop glimpse from GRML_FULL due to license problems,
     see #474322.
+  * Improve look and feel of booting message (being
+    /etc/grml/fai/live-initramfs/grml-script.init-top).
 
- -- Michael Prokop <mika@grml.org>  Sat, 26 Jul 2008 19:28:23 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 16 Aug 2008 11:58:11 +0200
 
 grml-live (0.8) unstable; urgency=low
 
