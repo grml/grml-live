@@ -18,19 +18,17 @@ grml-live (0.9) unstable; urgency=low
     easier to adjust settings according to your needs.
   * Improve error handling in grml-live, including a check
     for pipestatus of fai command.
-  * Output grml version in grml's live-initramfs script.
+  * Output grml version in grml's live-initramfs script
     Thanks for the idea, Marc Haber. [Closes: issue488]
-  * Drop glimpse from GRML_FULL due to license problems,
-    see #474322.
-  * Improve look and feel of booting message (being
-    /etc/grml/fai/live-initramfs/grml-script.init-top).
+  * Drop glimpse from GRML_FULL due to license problems, see #474322.
   * Display SQUASHFS_OPTIONS in configuration overview.
   * Make sure it's possible to get usage information without being
     root or actually executing the script.
+  * Improve usage information screen.
   * Display progress of squashfs, when building via a buildsystem
     just set -no-progress in $SQUASHFS_OPTIONS instead.
 
- -- Michael Prokop <mika@grml.org>  Sun, 17 Aug 2008 19:41:25 +0200
+ -- Michael Prokop <mika@grml.org>  Sun, 17 Aug 2008 23:51:19 +0200
 
 grml-live (0.8) unstable; urgency=low
 

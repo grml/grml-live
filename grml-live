@@ -26,25 +26,37 @@ usage()
   echo "
 $PN - build process script for generating a (grml based) Linux Live-ISO
 
-Usage: $PN [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] \\
-                 [-i <iso_name> ] [-o <output_directory>] [-s <suite>] \\
-                 [-t <template_directory>] [-s <suite>] \\
-                 [-v <version_number>] [-bFVhu]
+Usage: $PN [options, see as follows]
+
+   -a <architecture>       architecture; available values: i386 and amd64
+   -b                      build the ISO without updating the chroot via FAI
+   -c <classe[s]>          classes to be used for building the ISO via FAI
+   -C <configfile>         configuration file for grml-live
+   -F                      force execution without prompting
+   -g <grml_name>]         set the grml flavour name
+   -h                      display short usage information and exit
+   -i <iso_name>           name of ISO
+   -o <output_directory>   main output directory of the build process
+   -r                      release name
+   -s <suite>              Debian suite; values: etch, lenny, sid
+   -t <template_directory> place of the templates
+   -u                      update existing chroot instead of rebuilding it from scratch
+   -v <version_number>     specify version number of the release
+   -V                      increase verbosity in the build process
+   -z                      use ZLIB instead of LZMA compression
 
 Usage examples:
 
     $PN
-    $PN -c GRMLBASE,GRML_SMALL,I386 -o /grml/
     $PN -c GRMLBASE,GRML_MEDIUM,I386 -o /dev/shm/grml
     $PN -c GRMLBASE,GRML_SMALL,I386 -g grml-small -v 1.0
     $PN -c GRMLBASE,GRML_FULL,I386 -i grml_0.0-1.iso -v 0.0-1
     $PN -c GRMLBASE,GRML_FULL,I386 -s sid -V -r 'grml-live rocks'
 
-More details: man grml-live
-              /usr/share/doc/grml-live/grml-live.html
+More details: man grml-live + /usr/share/doc/grml-live/grml-live.html
+              http://grml.org/grml-live/
 
-Please send your bug reports, feedback,.. to the grml-team.
-http://grml.org/bugs/
+Please send your bug reports and feedback to the grml-team: http://grml.org/bugs/
 "
 }
 

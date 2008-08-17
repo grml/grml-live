@@ -10,22 +10,13 @@ Linux Live system (CD/ISO)
 Synopsis
 --------
 
-grml-live [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] [-i <iso_name> ]
-[-o <output_directory>] [-r <release_name>] [-s <suite>] [-t
-<template_directory>] [-v <version_number>] [-bFVhuz]
+grml-live [-a <architecture>] [-c <classe[s]>] [-C <configfile>] [-g
+<grml_name>] [-i <iso_name> ] [-o <output_directory>] [-r <release_name>] [-s
+<suite>] [-t <template_directory>] [-v <version_number>] [-bFhuVz]
 
-*******************************************************************************
-Important: squashfs-tools in Debian (version 1:3.3-6 for example) currently
-don't work as expected for grml-live.  Please install grml's version 1:3.2r2-9exp1 from
-http://grml.org/squashfs/squashfs-tools_3.2r2-9exp1_i386.deb (for x86) or
-http://grml.org/squashfs/squashfs-tools_3.2r2-9exp1_amd64.deb (for amd64)
-on your build-system instead.
-*******************************************************************************
-
-*******************************************************************************
-Notice! This document is growing as requested. If you have questions which
-aren't answered by this document yet please let me know: <mika@grml.org>!
-*******************************************************************************
+CAUTION: Please check out <<X8,the 'Current state of grml-live with
+squashfs-tools and kernel' section>> for details about current state of involved
+tools before starting with grml-live or if you encounter any problems.
 
 Description
 -----------
@@ -252,23 +243,41 @@ The package selection part of the classes can be found in
 example in /etc/grml/fai/config/scripts/ so specific feature sets can be
 selected. The following classes are predefined:
 
-* DEBORPHAN:
+* DEBORPHAN: get rid of all packages listed in output of Deborphan
+
 * GRMLBASE: the main class responsible for getting a minimal subset of what's
 defining a grml system. Important parts of the buildprocess are specified in
 this class as well, so unless you have a really good reason you should always
 use this class.
+
 * GRML_FORENSIC: tools for forensic investigations which has been created
 by people from link:http://www.forensic-geeks.org/[forensic-geeks.org].
-* GRML_FULL: full featured grml, also know as the "normal", full grml.
-* GRML_MEDIUM:
-* GRML_POWERPC:
-* GRML_SMALL:
-* LATEX_CLEANUP:
-* LOCALES:
-* NO_ONLINE:
-* RELEASE:
-* REMOVE_DOCS:
-* XORG:
+
+* GRML_FULL: full featured grml, also known as the "normal", full grml.
+
+* GRML_MEDIUM: medium sized grml version, known as grml-medium
+
+* GRML_POWERPC: grml for PowerPC architecture, not supported yet (still work in
+progress)
+
+* GRML_SMALL: minimum sized grml version, known as grml-small
+
+* LATEX_CLEANUP: get rid of several very large LaTeX directories
+(like some /usr/share/doc/texlive-*, /usr/share/doc/texmf,...)
+
+* LOCALES: use full featured locales setup (see /etc/locale.gen.grml)
+
+* NO_ONLINE: do not run scripts during the chroot build process which require a
+network connection
+
+* RELEASE: run some specific scripts and commands to provide the workflow for an
+official grml release
+
+* REMOVE_DOCS: get rid of documentation directories (like /usr/share/doc,
+/usr/share/man/, /usr/share/info,...)
+
+* XORG: providing important packages for use with a base grml-featured X.org
+setup
 
 Files
 -----
@@ -395,16 +404,89 @@ total free disk space
 chroot (check out "local mirror" and "NFSROOT" to workaround this problem as far
 as possiblbe)
 
+For further information see next section.
+
+[[X8]]
+Current state of grml-live with squashfs-tools and kernel
+---------------------------------------------------------
+
+To make it easier to track problems this section documents current state of
+grml-live playing together with squashfs-tools (for building the compressed
+file) and the kernel version. Documentation of this section is up2date by 18th
+august 2008.
+
+System
+~~~~~~
+
+* grml-live 0.9
+
+* building grml-medium (Debian/unstable)
+
+* software versions used in the ISO (being installed automatically, recorded
+just as a reference):
+
+  ii  busybox                 1:1.10.2-1              Tiny utilities for small and embedded systems
+  ii  initramfs-tools         0.92f                   tools for generating an initramfs
+  ii  klibc-utils             1.5.12-2                small utilities built with klibc for early boot
+  ii  live-initramfs          1.136.3-2~grml.04       Debian Live initramfs hook
+  ii  lvm2                    2.02.39-2               The Linux Logical Volume Manager
+  ii  mdadm                   2.6.7-3                 tool to administer Linux MD arrays (software RAID)
+  ii  udev                    0.124-0grml3            /dev/ and hotplug management daemon
+
+Using squashfs-tools 1:3.3-7 on the build system
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+squashfs-tools 1:3.3-7 is available via Debian/unstable and Debian/testing
+(lenny) pool running:
+
+  # aptitude install squashfs-tools=1:3.3-7
+
+or directly via downloading the files
+http://grml.org/squashfs/squashfs-tools_3.3-7_i386.deb (for x86) or
+http://grml.org/squashfs/squashfs-tools_3.3-7_amd64.deb (for amd64) [both build
+on and for Debian/etch but working with testing and unstable as well].
+
+Please notice that squashfs-tools 1:3.3-7 does NOT support LZMA compression at
+all (yet). The -nolzma option of mksquashfs is not available therefore (even
+though grml-live will deactivate it for you automatically anyway).
+
+* Kernel 2.6.23-grml: does NOT work, please use squashfs-tools 1:3.2r2-9exp1
+                    instead if you still want to use kernel 2.6.23
+* Kernel 2.6.26-grml: works
+
+Using squashfs-tools 1:3.2r2-9exp1 on the build system
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+squashfs-tools 1:3.2r2-9exp1 is available via the grml-testing repository,
+running:
+
+  # aptitude install squashfs-tools=1:3.2r2-9exp1
+
+or directly via downloading the files
+http://grml.org/squashfs/squashfs-tools_3.2r2-9exp1_i386.deb (for x86) or
+http://grml.org/squashfs/squashfs-tools_3.2r2-9exp1_amd64.deb (for amd64).
+
+Versions with ZLIB compression (SQUASHFS_OPTIONS='-nolzma' or -z
+option in grml-live cmdline):
+
+* Kernel 2.6.23-grml: works
+* Kernel 2.6.26-grml: works
+
+Versions with LZMA compression:
+
+* Kernel 2.6.23-grml: works
+* Kernel 2.6.26-grml: does NOT work, please use zlib mode instead
+
 FAQ
 ---
 
 Help, I'm using Debian etch and I don't have FAI version >3.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  wget http://www.informatik.uni-koeln.de/fai/download/etch/fai-client_3.2.6_all.deb \
-       http://www.informatik.uni-koeln.de/fai/download/etch/fai-server_3.2.6_all.deb \
-       http://www.informatik.uni-koeln.de/fai/download/etch/fai-doc_3.2.6_all.deb
-  dpkg -i fai-client_3.2.6_all.deb fai-server_3.2.6_all.deb fai-doc_3.2.6_all.deb
+  wget http://www.informatik.uni-koeln.de/fai/download/etch/fai-client_3.2.8_all.deb \
+       http://www.informatik.uni-koeln.de/fai/download/etch/fai-server_3.2.8_all.deb \
+       http://www.informatik.uni-koeln.de/fai/download/etch/fai-doc_3.2.8_all.deb
+  dpkg -i fai-client_3.2.8_all.deb fai-server_3.2.8_all.deb fai-doc_3.2.8_all.deb
 
 or check out the link:http://www.informatik.uni-koeln.de/fai/[FAI-homepage] for
 further details.
@@ -598,7 +680,7 @@ link:http://grml.org/contact/[to the grml-team]!
 
 Authors
 -------
-Michael Prokop <mika@grml.org>.
+Michael Prokop <mika@grml.org>
 
 /////////////////////////////////////
 // vim:ai tw=80 ft=asciidoc expandtab
