@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Aug 17 13:02:22 CEST 2008 [mika]
+# Latest change: Sun Aug 17 13:19:16 CEST 2008 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -16,8 +16,46 @@ export LC_ALL=C
 set -e
 
 GRML_LIVE_VERSION='0.9'
+PN="$(basename $0)"
 CMDLINE="$0 $@"
 ISO_DATE="$(date +%Y-%m-%d)"
+
+# usage information {{{
+usage()
+{
+  echo "
+$PN - build process script for generating a (grml based) Linux Live-ISO
+
+Usage: $PN [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] \\
+                 [-i <iso_name> ] [-o <output_directory>] [-s <suite>] \\
+                 [-t <template_directory>] [-s <suite>] \\
+                 [-v <version_number>] [-bFVhu]
+
+Usage examples:
+
+    $PN
+    $PN -c GRMLBASE,GRML_SMALL,I386 -o /grml/
+    $PN -c GRMLBASE,GRML_MEDIUM,I386 -o /dev/shm/grml
+    $PN -c GRMLBASE,GRML_SMALL,I386 -g grml-small -v 1.0
+    $PN -c GRMLBASE,GRML_FULL,I386 -i grml_0.0-1.iso -v 0.0-1
+    $PN -c GRMLBASE,GRML_FULL,I386 -s sid -V -r 'grml-live rocks'
+
+More details: man grml-live
+              /usr/share/doc/grml-live/grml-live.html
+
+Please send your bug reports, feedback,.. to the grml-team.
+http://grml.org/bugs/
+"
+}
+
+# make sure it's possible to get usage information without being
+# root or actually executing the script
+if [ "$1" = '-h' -o "$1" = '--help' ] ; then
+   usage
+   [ "$(id -u 2>/dev/null)" != 0 ] && echo "Please notice that this script requires root permissions."
+   exit 0
+fi
+# }}}
 
 # we need root permissions for the build-process:
 if [ "$(id -u 2>/dev/null)" != 0 ] ; then
@@ -58,7 +96,6 @@ fi
 LIVE_CONF=/etc/grml/grml-live.conf
 . $LIVE_CONF
 
-PN=$(basename $0)
 # }}}
 
 # clean exit {{{
@@ -145,35 +182,6 @@ extend_string_end() {
     local FILL=$(expr $FILL + 1)
   done
   echo -ne "\n"
-}
-# }}}
-
-# usage information {{{
-usage()
-{
-  echo "
-$PN - build process script for generating a (grml based) Linux Live-ISO
-
-Usage: $PN [-a <architecture>] [-c <classe[s]>] [-g <grml_name>] \\
-                 [-i <iso_name> ] [-o <output_directory>] [-s <suite>] \\
-                 [-t <template_directory>] [-s <suite>] \\
-                 [-v <version_number>] [-bFVhu]
-
-Usage examples:
-
-    $PN
-    $PN -c GRMLBASE,GRML_SMALL,I386 -o /grml/
-    $PN -c GRMLBASE,GRML_MEDIUM,I386 -o /dev/shm/grml
-    $PN -c GRMLBASE,GRML_SMALL,I386 -g grml-small -v 1.0
-    $PN -c GRMLBASE,GRML_FULL,I386 -i grml_0.0-1.iso -v 0.0-1
-    $PN -c GRMLBASE,GRML_FULL,I386 -s sid -V -r 'grml-live rocks'
-
-More details: man grml-live
-              /usr/share/doc/grml-live/grml-live.html
-
-Please send your bug reports, feedback,.. to the grml-team.
-http://grml.org/bugs/
-"
 }
 # }}}
 
