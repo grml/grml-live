@@ -1,5 +1,6 @@
 grml-live (0.9) unstable; urgency=low
 
+  * Update to kernel 2.6.26-grml[64].
   * Drop sysutils from package lists.
   * Add ext3grep to GRML_FULL.
   * Integrate /etc/grml/fai/config/package_config/GRML_FORENSIC.
@@ -27,8 +28,9 @@ grml-live (0.9) unstable; urgency=low
   * Improve usage information screen.
   * Display progress of squashfs, when building via a buildsystem
     just set -no-progress in $SQUASHFS_OPTIONS instead.
+  * Use linux-kernel-headers-grml in grml-medium.
 
- -- Michael Prokop <mika@grml.org>  Sun, 17 Aug 2008 23:51:19 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 18 Aug 2008 00:03:14 +0200
 
 grml-live (0.8) unstable; urgency=low
 

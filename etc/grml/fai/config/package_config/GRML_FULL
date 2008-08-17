@@ -2083,48 +2083,45 @@ grml-files
 # we want to use linux-kernel-headers-grml instead of linux-libc-dev:
 linux-kernel-headers-grml
 
-## current kernel version 2.6.23-grml:
-acx100-2.6.23-grml
-at76-usb-modules-2.6.23-grml
-atl2-modules-2.6.23-grml
-aufs-modules-2.6.23-grml
-bcm5700-module-2.6.23-grml
-drbd8-2.6.23-grml
-exmap-modules-2.6.23-grml
-#fglrx-kernel-2.6.23-grml
-grml-kerneladdons-2.6.23
-gspca-modules-2.6.23-grml
-ipw3945-modules-2.6.23-grml
-iscsitarget-module-2.6.23-grml
-ivtv-modules-2.6.23-grml
-kqemu-modules-2.6.23-grml
-linux-doc-2.6.23-grml
-linux-headers-2.6.23-grml
-linux-image-2.6.23-grml
-#linux-source-2.6.23-grml
-linux-wlan-ng-modules-2.6.23-grml
-loop-aes-modules-2.6.23-grml
-lzma-modules-2.6.23-grml
-madwifi-modules-2.6.23-grml
-ndiswrapper-modules-2.6.23-grml
-nozomi-modules-2.6.23-grml
-#nvidia-kernel-2.6.23-grml
-openafs-modules-2.6.23-grml
-#open-vm-modules-2.6.23-grml
-qc-usb-modules-2.6.23-grml
-r6040-modules-2.6.23-grml
-realtime-lsm-module-2.6.23-grml
-rt2400-modules-2.6.23-grml
-rt2500-modules-2.6.23-grml
-rt73-module-2.6.23-grml
-sl-modem-modules-2.6.23-grml
-squashfs-modules-2.6.23-grml
-sysprof-module-2.6.23-grml
-tp-smapi-modules-2.6.23-grml
-truecrypt-2.6.23-grml
-#virtualbox-ose-modules-2.6.23-grml
-virtualbox-ose-guest-modules-2.6.23-grml virtualbox-ose-guest-utils
-#zaptel-modules-2.6.23-grml
+## current kernel version 2.6.26-grml:
+acx100-2.6.26-grml
+at76-usb-modules-2.6.26-grml
+atl2-modules-2.6.26-grml
+aufs-modules-2.6.26-grml
+drbd8-2.6.26-grml
+exmap-modules-2.6.26-grml
+#fglrx-kernel-2.6.26-grml
+grml-kerneladdons-2.6.26
+gspca-modules-2.6.26-grml
+iscsitarget-module-2.6.26-grml
+ivtv-modules-2.6.26-grml
+kqemu-modules-2.6.26-grml
+linux-doc-2.6.26-grml
+linux-headers-2.6.26-grml
+linux-image-2.6.26-grml
+#linux-source-2.6.26-grml
+linux-uvc-modules-2.6.26-grml
+linux-wlan-ng-modules-2.6.26-grml
+loop-aes-modules-2.6.26-grml
+lzma-modules-2.6.26-grml
+madwifi-modules-2.6.26-grml
+ndiswrapper-modules-2.6.26-grml
+#nvidia-kernel-2.6.26-grml
+openafs-modules-2.6.26-grml
+#open-vm-modules-2.6.26-grml
+qc-usb-modules-2.6.26-grml
+rt2400-modules-2.6.26-grml
+rt2500-modules-2.6.26-grml
+rt73-modules-2.6.26-grml
+sl-modem-modules-2.6.26-grml
+speakup-modules-2.6.26-grml
+squashfs-modules-2.6.26-grml
+sysprof-module-2.6.26-grml
+tp-smapi-modules-2.6.26-grml
+truecrypt-2.6.26-grml
+virtualbox-ose-guest-modules-2.6.26-grml virtualbox-ose-guest-utils
+#virtualbox-ose-modules-2.6.26-grml
+#zaptel-modules-2.6.26-grml
 ## }}}
 
 ## amd64 specific packages {{{
@@ -2134,36 +2131,32 @@ PACKAGES aptitude AMD64
 grml64
 grml-files64
 
-## current kernel version 2.6.23-grml64:
-acx100-2.6.23-grml64
-at76-usb-modules-2.6.23-grml64
-atl2-modules-2.6.23-grml64
-aufs-modules-2.6.23-grml64
-drbd8-2.6.23-grml64
-exmap-modules-2.6.23-grml64
-# grml64-kerneladdons-2.6.23
-gspca-modules-2.6.23-grml64
-ipw3945-modules-2.6.23-grml64
-ivtv-modules-2.6.23-grml64
-kqemu-modules-2.6.23-grml64
-linux-doc-2.6.23-grml64
-linux-headers-2.6.23-grml64
-linux-image-2.6.23-grml64
-#linux-source-2.6.23-grml
-linux-uvc-modules-2.6.23-grml
-loop-aes-modules-2.6.23-grml64
-lzma-modules-2.6.23-grml64
-madwifi-modules-2.6.23-grml64
-ndiswrapper-modules-2.6.23-grml64
-nozomi-modules-2.6.23-grml64
-openafs-modules-2.6.23-grml64
-qc-usb-modules-2.6.23-grml64
-realtime-lsm-module-2.6.23-grml64
-rt2400-modules-2.6.23-grml64
-rt2500-modules-2.6.23-grml64
-squashfs-modules-2.6.23-grml64
-sysprof-module-2.6.23-grml64
-truecrypt-2.6.23-grml64
+## current kernel version 2.6.26-grml64:
+acx100-2.6.26-grml64
+at76-usb-modules-2.6.26-grml64
+atl2-modules-2.6.26-grml64
+aufs-modules-2.6.26-grml64
+drbd8-2.6.26-grml64
+exmap-modules-2.6.26-grml64
+# grml64-kerneladdons-2.6.26
+gspca-modules-2.6.26-grml64
+ivtv-modules-2.6.26-grml64
+kqemu-modules-2.6.26-grml64
+linux-doc-2.6.26-grml64
+linux-headers-2.6.26-grml64
+linux-image-2.6.26-grml64
+#linux-source-2.6.26-grml
+loop-aes-modules-2.6.26-grml64
+lzma-modules-2.6.26-grml64
+madwifi-modules-2.6.26-grml64
+ndiswrapper-modules-2.6.26-grml64
+openafs-modules-2.6.26-grml64
+qc-usb-modules-2.6.26-grml64
+rt2400-modules-2.6.26-grml64
+rt2500-modules-2.6.26-grml64
+squashfs-modules-2.6.26-grml64
+sysprof-module-2.6.26-grml64
+truecrypt-2.6.26-grml64
 ## }}}
 
 # vim: foldmethod=marker

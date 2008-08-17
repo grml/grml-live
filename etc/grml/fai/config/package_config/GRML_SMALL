@@ -191,4 +191,4 @@ PACKAGES aptitude I386
 linux-image-2.6.20-grml-small aufs-modules-2.6.20-grml-small
 
 PACKAGES aptitude AMD64
-linux-image-2.6.23-grml64 aufs-modules-2.6.23-grml64
+linux-image-2.6.26-grml64 aufs-modules-2.6.26-grml64 squashfs-modules-2.6.26-grml64 lzma-modules-2.6.26-grml64
