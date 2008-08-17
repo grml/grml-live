@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon May 12 19:13:48 CEST 2008 [mika]
+# Latest change: Sun Aug 17 13:02:22 CEST 2008 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -15,7 +15,7 @@ export LC_ALL=C
 # exit on any error:
 set -e
 
-GRML_LIVE_VERSION='0.8'
+GRML_LIVE_VERSION='0.9'
 CMDLINE="$0 $@"
 ISO_DATE="$(date +%Y-%m-%d)"
 
@@ -268,8 +268,9 @@ if [ -z "$FORCE" ] ; then
    [ -n "$TEMPLATE_DIRECTORY" ] && echo "  Template files:    $TEMPLATE_DIRECTORY"
    [ -n "$FAI_ARGS" ]      && echo "  additional arguments for FAI: $FAI_ARGS"
    [ -n "$LOGFILE" ]       && echo "  Logging to file:   $LOGFILE"
-   [ -n "$VERBOSE" ]       && echo "  Using VERBOSE mode."
    [ -n "$SQUASHFS_ZLIB" ] && echo "  Using ZLIB (instead of LZMA) compression."
+   [ -n "$SQUASHFS_OPTIONS" ] && echo "  Using SQUASHFS_OPTIONS ${SQUASHFS_OPTIONS}"
+   [ -n "$VERBOSE" ]       && echo "  Using VERBOSE mode."
    [ -n "$UPDATE" ]        && echo "  Executing UPDATE instead of fresh installation."
    [ -n "$BUILD_ONLY" ]    && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
    echo
