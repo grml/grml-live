@@ -27,8 +27,10 @@ grml-live (0.9) unstable; urgency=low
   * Display SQUASHFS_OPTIONS in configuration overview.
   * Make sure it's possible to get usage information without being
     root or actually executing the script.
+  * Display progress of squashfs, when building via a buildsystem
+    just set -no-progress in $SQUASHFS_OPTIONS instead.
 
- -- Michael Prokop <mika@grml.org>  Sun, 17 Aug 2008 13:19:24 +0200
+ -- Michael Prokop <mika@grml.org>  Sun, 17 Aug 2008 19:41:25 +0200
 
 grml-live (0.8) unstable; urgency=low
 
