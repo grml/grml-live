@@ -13,9 +13,6 @@ PACKAGES aptitude
 #dpkg: error processing vifm (--configure):
 # subprocess post-installation script returned error exit status 1
 
-# ivtv-utils (< 1.0.3-1):
-# ships /usr/include/linux/ivtv.h => #443165
-
 ## }}}
 
 ## grml specific packages {{{
@@ -2094,7 +2091,6 @@ exmap-modules-2.6.26-grml
 grml-kerneladdons-2.6.26
 gspca-modules-2.6.26-grml
 iscsitarget-module-2.6.26-grml
-ivtv-modules-2.6.26-grml
 kqemu-modules-2.6.26-grml
 linux-doc-2.6.26-grml
 linux-headers-2.6.26-grml
@@ -2140,7 +2136,6 @@ drbd8-2.6.26-grml64
 exmap-modules-2.6.26-grml64
 # grml64-kerneladdons-2.6.26
 gspca-modules-2.6.26-grml64
-ivtv-modules-2.6.26-grml64
 kqemu-modules-2.6.26-grml64
 linux-doc-2.6.26-grml64
 linux-headers-2.6.26-grml64
