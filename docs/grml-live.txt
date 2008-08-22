@@ -14,7 +14,7 @@ grml-live [-a <architecture>] [-c <classe[s]>] [-C <configfile>] [-g
 <grml_name>] [-i <iso_name> ] [-o <output_directory>] [-r <release_name>] [-s
 <suite>] [-t <template_directory>] [-v <version_number>] [-bFhuVz]
 
-CAUTION: Please check out <<X8,the 'Current state of grml-live with
+CAUTION: Please check out <<current_state,the 'Current state of grml-live with
 squashfs-tools and kernel' section>> for details about current state of involved
 tools before starting with grml-live or if you encounter any problems.
 
@@ -76,7 +76,7 @@ the classes GRMLBASE, GRML_SMALL and I386 are assumed, resulting in a small base
 system (being about ~150MB total ISO size). If using a non-I386 system (like
 amd64) you should specify the appropriate architecture as well. Additionally you
 can specify a class providing a grml-kernel (see
-<<X7,the 'CLASSES' section in this document>> for details about available classes).
+<<classes,the 'CLASSES' section in this document>> for details about available classes).
 So instead of GRML_SMALL you can also use GRML_MEDIUM and GRML_FULL.
 
   -C **CONFIGURATION_FILE**::
@@ -235,6 +235,7 @@ More details regarding the class concept can be found in the documentation of
 FAI itself (being available at /usr/share/doc/fai-doc/).
 
 [[X7]]
+[[classes]]
 Available classes
 -----------------
 
@@ -407,6 +408,7 @@ as possiblbe)
 For further information see next section.
 
 [[X8]]
+[[current_state]]
 Current state of grml-live with squashfs-tools and kernel
 ---------------------------------------------------------
 
