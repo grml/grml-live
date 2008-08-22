@@ -1,3 +1,23 @@
+grml-live (0.9) unstable; urgency=low
+
+  * grml-live 0.9 features kernel 2.6.26-grml[64]. Using
+    squashfs-tools 1:3.2r2-9exp1 does not work with kernel
+    2.6.26-grml when using LZMA compression though it works
+    fine when using ZLIB compression.
+
+    Debian provides updated squashfs-tools 1:3.3-7. You can
+    safely upgrade as long as you don't need kernel
+    2.6.23-grml[64] and/or LZMA compression.
+
+    All these details can be found in the grml-live docs. Please
+    check out the section "Current state of grml-live with
+    squashfs-tools and kernel" in the grml-live docs, being
+    shipped with this package as manpage grml-live(8) and
+    /usr/share/doc/grml-live/grml-live.html and being available
+    online at http://grml.org/grml-live/#current_state as well.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 22 Aug 2008 08:32:44 +0200
+
 grml-live (0.0.4) unstable; urgency=low
 
   * The -t option for specifying the output directory has been
