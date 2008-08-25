@@ -29,8 +29,9 @@ grml-live (0.9) unstable; urgency=low
   * Display progress of squashfs, when building via a buildsystem
     just set -no-progress in $SQUASHFS_OPTIONS instead.
   * Use linux-kernel-headers-grml in grml-medium.
+  * Use vim.basic as alternative setting for 'vi'.
 
- -- Michael Prokop <mika@grml.org>  Mon, 18 Aug 2008 00:03:14 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 25 Aug 2008 13:24:25 +0200
 
 grml-live (0.8) unstable; urgency=low
 

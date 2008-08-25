@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Fri Dec 28 23:14:32 CET 2007 [mika]
+# Latest change: Mon Aug 25 13:24:20 CEST 2008 [mika]
 ################################################################################
 
 set -u
@@ -12,10 +12,15 @@ set -e
 
 if [ -r $target/usr/bin/vim.basic ] ; then
    $ROOTCMD update-alternatives --set editor /usr/bin/vim.basic
+   $ROOTCMD update-alternatives --set vi     /usr/bin/vim.basic
 fi
 
+## Too many people don't expect to get that, so deactive by default:
+# if [ -r $target/usr/bin/vim.tiny ] ; then
+#    $ROOTCMD update-alternatives --set vi /usr/bin/vim.tiny
+# fi
+
 if [ -r $target/usr/bin/vim.tiny ] ; then
-   $ROOTCMD update-alternatives --set vi /usr/bin/vim.tiny
 fi
 
 if [ -r $target/usr/bin/uxterm ] ; then
