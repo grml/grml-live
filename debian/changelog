@@ -1,7 +1,7 @@
 grml-live (0.9) unstable; urgency=low
 
   * Update to kernel 2.6.26-grml[64].
-  * Drop sysutils from package lists.
+  * Drop sysutils and cupsys-common from package lists.
   * Add ext3grep to GRML_FULL.
   * Integrate /etc/grml/fai/config/package_config/GRML_FORENSIC.
   * Move ssdeep and scrounge-ntfs from grml's repository list to
