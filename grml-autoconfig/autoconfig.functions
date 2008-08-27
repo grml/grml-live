@@ -1790,13 +1790,13 @@ if checkbootparam noautoconfig || checkbootparam forensic ; then
   ewarn "Skipping running automount of device(s) labeled GRMLCFG as requested." ; eend 0
 else
  if [ -z "$INSTALLED" ] ; then
-  einfo "Searching for device(s) labeled with GRMLCFG." ; eend 0
+  einfo "Searching for device(s) labeled with GRMLCFG. (Disable this via boot option: noautoconfig)" ; eend 0
   eindent
   [ -d /mnt/grml ] || mkdir /mnt/grml
   umount /mnt/grml 1>>$DEBUG 2>&1 # make sure it is not mounted
 # We do need the following fix so floppy disk is available to blkid in any case :-/
   if [ -r /dev/fd0 ] ; then
-     einfo "Floppy device detected. Trying to access floppy disk. (Disable this via boot option: noautoconfig)"
+     einfo "Floppy device detected. Trying to access floppy disk."
 #     dd if=/dev/fd0 of=/dev/null bs=512 count=1 1>>$DEBUG 2>&1
      if timeout 4 dd if=/dev/fd0 of=/dev/null bs=512 count=1 1>>$DEBUG 2>&1 ; then
         blkid /dev/fd0 1>>$DEBUG 2>&1
