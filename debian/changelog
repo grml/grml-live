@@ -31,7 +31,7 @@ grml-live (0.9) unstable; urgency=low
   * Use linux-kernel-headers-grml in grml-medium.
   * Use vim.basic as alternative setting for 'vi'.
 
- -- Michael Prokop <mika@grml.org>  Mon, 25 Aug 2008 13:24:25 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 01 Sep 2008 15:17:11 +0200
 
 grml-live (0.8) unstable; urgency=low
 

@@ -4,7 +4,6 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Aug 17 19:44:27 CEST 2008 [mika]
 ################################################################################
 
 # read configuration files, set some misc variables {{{
@@ -43,7 +42,8 @@ Usage: $PN [options, see as follows]
    -u                      update existing chroot instead of rebuilding it from scratch
    -v <version_number>     specify version number of the release
    -V                      increase verbosity in the build process
-   -z                      use ZLIB instead of LZMA compression
+   -z                      use ZLIB instead of LZMA compression (depends on
+                           squashfs-tools version)
 
 Usage examples:
 
