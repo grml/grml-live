@@ -423,6 +423,7 @@ else
       log "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]"
       echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]" > $CHROOT_OUTPUT/etc/grml_version
       chmod 644 $CHROOT_OUTPUT/etc/grml_version
+      chroot $CHROOT_OUTPUT update-initramfs -u -t # make sure new /etc/grml_version reaches the initramfs
    fi
 
    # Remove all FAI logs from chroot if class RELEASE is used:

@@ -1,3 +1,10 @@
+grml-live (0.9.1) unstable; urgency=low
+
+  * Rebuild initramfs to make sure that the up2date /etc/grml_version
+    is available in the live initramfs. [Closes: issue516]
+
+ -- Michael Prokop <mika@grml.org>  Mon, 01 Sep 2008 23:51:50 +0200
+
 grml-live (0.9.0) unstable; urgency=low
 
   * Update to kernel 2.6.26-grml[64].
