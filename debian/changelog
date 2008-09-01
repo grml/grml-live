@@ -1,4 +1,4 @@
-grml-live (0.9) unstable; urgency=low
+grml-live (0.9.0) unstable; urgency=low
 
   * Update to kernel 2.6.26-grml[64].
   * Drop sysutils and cupsys-common from package lists.
@@ -30,8 +30,9 @@ grml-live (0.9) unstable; urgency=low
     just set -no-progress in $SQUASHFS_OPTIONS instead.
   * Use linux-kernel-headers-grml in grml-medium.
   * Use vim.basic as alternative setting for 'vi'.
+  * 
 
- -- Michael Prokop <mika@grml.org>  Mon, 01 Sep 2008 15:17:11 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 01 Sep 2008 15:17:39 +0200
 
 grml-live (0.8) unstable; urgency=low
 
