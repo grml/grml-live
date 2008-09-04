@@ -1,9 +1,15 @@
+grml-live (0.9.2) unstable; urgency=low
+
+  * Improve checks for -[no]lzma for different squashfs-tools.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 04 Sep 2008 13:28:48 +0200
+
 grml-live (0.9.1) unstable; urgency=low
 
   * Rebuild initramfs to make sure that the up2date /etc/grml_version
     is available in the live initramfs. [Closes: issue516]
 
- -- Michael Prokop <mika@grml.org>  Mon, 01 Sep 2008 23:51:50 +0200
+ -- Michael Prokop <mika@grml.org>  Thu, 04 Sep 2008 13:27:35 +0200
 
 grml-live (0.9.0) unstable; urgency=low
 
