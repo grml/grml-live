@@ -4,12 +4,15 @@
 # Authors:       (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sun Dec 16 18:34:08 CET 2007 [mika]
+# Latest change: Sat Sep 06 20:03:58 CEST 2008 [mika]
 ################################################################################
 
-apt-get -y --purge remove aptitude
-apt-get -y --purge remove $(deborphan)
+# remove all packages not necessary anymore:
 apt-get -y --purge autoremove
-apt-get -y --purge remove $(deborphan)
+
+# remove packages until deborphan does not find anymore:
+while [ "$(deborphan)" != "" ] ; do
+  apt-get -y --purge remove $(deborphan)
+done
 
 ## END OF FILE #################################################################
