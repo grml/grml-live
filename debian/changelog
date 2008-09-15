@@ -4,8 +4,11 @@ grml-live (0.9.3) unstable; urgency=low
     /etc/grml/fai/grml/grml_cleanup_chroot.deborphan and
     get rid of aptitude via
     /etc/grml/fai/config/scripts/GRMLBASE/98-clean-chroot
+  * Add PREREQ header to grml's initramfs-tools script, otherwise
+    booting fails with "PANIC: Circular dependancy.  Exiting."
+    Thanks for debugging help, maximilian attems.
 
- -- Michael Prokop <mika@grml.org>  Sat, 06 Sep 2008 20:05:16 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 15 Sep 2008 12:51:15 +0200
 
 grml-live (0.9.2) unstable; urgency=low
 

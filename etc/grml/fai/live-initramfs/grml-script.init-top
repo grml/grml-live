@@ -1,5 +1,22 @@
 #!/bin/sh
 
+# prereq header {{{
+# without this header booting will fail with:
+# "PANIC: Circular dependancy.  Exiting."
+PREREQ=""
+prereqs()
+{
+        echo "$PREREQ"
+}
+case $1 in
+# get pre-requisites
+prereqs)
+        prereqs
+        exit 0
+        ;;
+esac
+# }}}
+
 # helper functions {{{
 
 if grep -qe debug -qe verbose /proc/cmdline 2>/dev/null ; then
