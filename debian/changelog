@@ -7,8 +7,9 @@ grml-live (0.9.3) unstable; urgency=low
   * Add PREREQ header to grml's initramfs-tools script, otherwise
     booting fails with "PANIC: Circular dependancy.  Exiting."
     Thanks for debugging help, maximilian attems.
+  * Use apt-get instead of dpkg in removal of packages in grml-small.
 
- -- Michael Prokop <mika@grml.org>  Mon, 15 Sep 2008 12:51:15 +0200
+ -- Michael Prokop <mika@grml.org>  Thu, 18 Sep 2008 01:32:18 +0200
 
 grml-live (0.9.2) unstable; urgency=low
 
