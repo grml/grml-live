@@ -743,6 +743,32 @@ case "$LANGUAGE" in
                 KDEKEYBOARDS="de,us,fr"
                 TZ="Europe/Moscow"
                 ;;
+        se-iso)
+                # Swedish version
+                LANGUAGE="se"
+                COUNTRY="se"
+                LANG="sv_SE"
+                KEYTABLE="se-latin1"
+                XKEYBOARD="se"
+                KDEKEYBOARD="se"
+                CHARSET="iso8859-1"
+                # Additional KDE Keyboards
+                KDEKEYBOARDS="us"
+                TZ="Europe/Stockholm"
+                ;;
+        se|se-utf8)
+                # Swedish version (UTF8)
+                LANGUAGE="sv_SE:sv"
+                COUNTRY="se"
+                LANG="sv_SE.UTF-8"
+                KEYTABLE="se"
+                XKEYBOARD="se"
+                KDEKEYBOARD="se"
+                CHARSET="utf8"
+                # Additional KDE Keyboards
+                KDEKEYBOARDS="us"
+                TZ="Europe/Stockholm"
+                ;;
         sk-iso)
                 # Slovak version (guessed)
                 COUNTRY="sk"
