@@ -1341,20 +1341,42 @@ fi # checkbootparam nocpu
 # {{{ autostart of ssh
 config_ssh(){
 if checkbootparam ssh ; then
-  SSH_PASSWD="$(getbootparam 'ssh' 2>>$DEBUG)"
-  einfo "Bootoption passwd found."
-  if [ -n "$SSH_PASSWD" ] ; then
-    echo "grml:$SSH_PASSWD" | chpasswd -m
-    einfo "Starting secure shell server in background."
-    /etc/init.d/rmnologin start 1>>$DEBUG 2>>$DEBUG
-    /etc/init.d/ssh start 1>>$DEBUG 2>>$DEBUG &
-    eend 0
-  else
-    eerror "No given password for ssh found. Autostart of SSH will not work." ; eend 1
-  fi
-  eindent
-    ewarn "Warning: please change the password for user grml set via bootparameter as soon as possible!"
-  eoutdent
+   SSH_PASSWD=''
+   SSH_PASSWD="$(getbootparam 'ssh' 2>>$DEBUG)"
+   einfo "Bootoption ssh found, trying to set password for user grml."
+   eindent
+   if [ -z "$SSH_PASSWD" ] ; then
+      if [ -x /usr/bin/pwgen ] ; then
+         SSH_PASSWD="$(pwgen -1 8)"
+      elif [ -x /usr/bin/hexdump ] ; then
+         SSH_PASSWD="$(dd if=/dev/urandom bs=14 count=1 2>/dev/null | hexdump | awk '{print $3 $4}')"
+      elif [ -n "$RANDOM" ] ; then
+         SSH_PASSWD="grml${RANDOM}"
+      else
+         SSH_PASSWD=''
+         eerror "Empty passphrase and neither pwgen nor hexdump nor \$RANDOM found. Skipping."
+         eend 1
+      fi
+
+      if [ -n "$SSH_PASSWD" ] ; then
+         ewarn "No given password for ssh found. Using random password: $SSH_PASSWD" ; eend 0
+      fi
+   fi
+   eoutdent
+
+   # finally check if we have a password we can use:
+   if [ -n "$SSH_PASSWD" ] ; then
+      echo "grml:$SSH_PASSWD" | chpasswd -m
+   fi
+
+   einfo 'Starting secure shell server in background.'
+   /etc/init.d/rmnologin start 1>>$DEBUG 2>>$DEBUG
+   /etc/init.d/ssh start 1>>$DEBUG 2>>$DEBUG &
+   eend $?
+
+   eindent
+   ewarn 'Warning: please change the password for user grml as soon as possible!'
+   eoutdent
 fi
 }
 # }}}
