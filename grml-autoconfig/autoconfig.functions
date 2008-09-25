@@ -1346,7 +1346,11 @@ if checkbootparam ssh ; then
    einfo "Bootoption ssh found, trying to set password for user grml."
    eindent
    if [ -z "$SSH_PASSWD" ] ; then
-      if [ -x /usr/bin/pwgen ] ; then
+      if [ -x /usr/bin/apg ] ; then
+         SSH_PASSWD="$(apg -M NL -a 0 -m 8 -x 12 -n 1)"
+      elif [ -x /usr/bin/gpw ] ; then
+         SSH_PASSWD="$(gpw 1)"
+      elif [ -x /usr/bin/pwgen ] ; then
          SSH_PASSWD="$(pwgen -1 8)"
       elif [ -x /usr/bin/hexdump ] ; then
          SSH_PASSWD="$(dd if=/dev/urandom bs=14 count=1 2>/dev/null | hexdump | awk '{print $3 $4}')"
