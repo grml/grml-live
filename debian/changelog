@@ -1,7 +1,7 @@
 grml-autoconfig (0.8.13) unstable; urgency=low
 
   * Use random password if bootoption 'ssh' doesn't have an option.
-    Thanks for the idea to Marc Haber!
+    Thanks to Michael Holzt and Marc Haber!
   * Update swedish language settings, thanks again to Martin Karresand.
 
  -- Michael Prokop <mika@grml.org>  Thu, 25 Sep 2008 17:25:30 +0200
