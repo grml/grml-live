@@ -8,8 +8,9 @@ grml-live (0.9.3) unstable; urgency=low
     booting fails with "PANIC: Circular dependancy.  Exiting."
     Thanks for debugging help, maximilian attems.
   * Use apt-get instead of dpkg in removal of packages in grml-small.
+  * Add tig to GRML_FULL, thanks Rhonda.
 
- -- Michael Prokop <mika@grml.org>  Thu, 18 Sep 2008 01:32:18 +0200
+ -- Michael Prokop <mika@grml.org>  Thu, 25 Sep 2008 20:05:19 +0200
 
 grml-live (0.9.2) unstable; urgency=low
 
