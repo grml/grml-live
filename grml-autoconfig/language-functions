@@ -745,28 +745,28 @@ case "$LANGUAGE" in
                 ;;
         se-iso)
                 # Swedish version
-                LANGUAGE="se"
+                LANGUAGE="sv_SE:sv"
                 COUNTRY="se"
-                LANG="sv_SE"
+                LANG="sv_SE.iso885915"
                 KEYTABLE="se-latin1"
                 XKEYBOARD="se"
                 KDEKEYBOARD="se"
-                CHARSET="iso8859-1"
+                CHARSET="sv_SE.iso885915"
                 # Additional KDE Keyboards
-                KDEKEYBOARDS="us"
+                KDEKEYBOARDS="us,fi"
                 TZ="Europe/Stockholm"
                 ;;
         se|se-utf8)
                 # Swedish version (UTF8)
                 LANGUAGE="sv_SE:sv"
                 COUNTRY="se"
-                LANG="sv_SE.UTF-8"
-                KEYTABLE="se"
+                LANG="sv_SE.utf8"
+                KEYTABLE="se-latin1"
                 XKEYBOARD="se"
                 KDEKEYBOARD="se"
                 CHARSET="utf8"
                 # Additional KDE Keyboards
-                KDEKEYBOARDS="us"
+                KDEKEYBOARDS="us,fi"
                 TZ="Europe/Stockholm"
                 ;;
         sk-iso)
