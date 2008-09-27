@@ -413,27 +413,34 @@ Current state of grml-live with squashfs-tools and kernel
 ---------------------------------------------------------
 
 To make it easier to track problems this section documents current state of
-grml-live playing together with squashfs-tools (for building the compressed
-file) and the kernel version. Documentation of this section is up2date by 18th
-august 2008.
+grml-live playing together with squashfs-tools / squashfs-lzma-tools (for
+building the compressed file) and the kernel version. Documentation of this
+section is up2date by 27th of september 2008.
 
 System
 ~~~~~~
 
-* grml-live 0.9
+* grml-live, version 0.9.4
 
 * building grml-medium (Debian/unstable)
 
 * software versions used in the ISO (being installed automatically, recorded
 just as a reference):
 
-  ii  busybox                 1:1.10.2-1              Tiny utilities for small and embedded systems
-  ii  initramfs-tools         0.92f                   tools for generating an initramfs
-  ii  klibc-utils             1.5.12-2                small utilities built with klibc for early boot
-  ii  live-initramfs          1.136.3-2~grml.04       Debian Live initramfs hook
-  ii  lvm2                    2.02.39-2               The Linux Logical Volume Manager
-  ii  mdadm                   2.6.7-3                 tool to administer Linux MD arrays (software RAID)
-  ii  udev                    0.124-0grml3            /dev/ and hotplug management daemon
+  ii  busybox             1:1.10.2-2          Tiny utilities for small and embedded systems
+  ii  initramfs-tools     0.92f.grml01        tools for generating an initramfs
+  ii  klibc-utils         1.5.12-2            small utilities built with klibc for early boot
+  ii  live-initramfs      1.139.1-2grml.01    Debian Live initramfs hook
+  ii  lvm2                2.02.39-2           The Linux Logical Volume Manager
+  ii  mdadm               2.6.7-3.1           tool to administer Linux MD arrays (software RAID)
+  ii  udev                0.125-6grml0        /dev/ and hotplug management daemon
+
+Using squashfs-lzma-tools 3.3-1 on the build system
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+squashfs-lzma-tools from the grml repository supports kernel 2.6.26-grml
+(version >=grml.05) using both lzma and zlib (-nolzma) compression. It's the
+recommended package for building ISOs with grml-live currently.
 
 Using squashfs-tools 1:3.3-7 on the build system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -449,8 +456,9 @@ http://grml.org/squashfs/squashfs-tools_3.3-7_amd64.deb (for amd64) [both build
 on and for Debian/etch but working with testing and unstable as well].
 
 Please notice that squashfs-tools 1:3.3-7 does NOT support LZMA compression at
-all (yet). The -nolzma option of mksquashfs is not available therefore (even
-though grml-live will deactivate it for you automatically anyway).
+all. The -nolzma option of mksquashfs is not available therefore (even
+though grml-live will deactivate it for you automatically anyway). Please
+use squashfs-lzma-tools instead.
 
 * Kernel 2.6.23-grml: does NOT work, please use squashfs-tools 1:3.2r2-9exp1
                     instead if you still want to use kernel 2.6.23

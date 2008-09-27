@@ -1,3 +1,10 @@
+grml-live (0.9.4) unstable; urgency=low
+
+  * Update docs, depend on squashfs-lzma-tools (but allow usage
+    of squashfs-tools as well).
+
+ -- Michael Prokop <mika@grml.org>  Sat, 27 Sep 2008 16:43:36 +0200
+
 grml-live (0.9.3) unstable; urgency=low
 
   * Improve the way deborphan works in
