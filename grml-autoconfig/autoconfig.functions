@@ -4,7 +4,6 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Fre Aug 15 23:06:21 CEST 2008 [mika]
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
@@ -819,27 +818,72 @@ fi
 
 # {{{ run software synthesizer via speakup
 config_swspeak(){
-if checkbootparam swspeak ; then
- if [ -d /proc/speakup/ ] ; then
-  einfo "Bootoption swspeak found. Kernel supports speakup." ; eend 0
-  eindent
-   if [ -x /etc/init.d/speech-dispatcher ] ; then
-     einfo "Starting speech-dispatcher."
-     /etc/init.d/speech-dispatcher start 1>>DEBUG ; eend $?
-     einfo "Activating sftsyn in Kernel."
-     echo sftsyn >/proc/speakup/synth_name ; eend $?
-     einfo "Just run swspeak if you want to use software synthesizer via speakup."
-     flite -o play -t "Finished activating software speakup. Just run swspeak when booting finished."
-   else
-    eerror "speech-dispatcher not available. swspeak will not work without it." ; eend 1
-    flite -o play -t "speech-dispatcher not available. speakup will not work without it."
+   if checkbootparam swspeak ; then
+      einfo "Bootoption swspeak found."
+
+      if ! [ -d /proc/speakup/ ] ; then
+         ewarn" Kernel does not support software speakup - trying to load kernel module:" ; eend 0
+         eindent
+         einfo "Loading speakup_soft"
+         if modprobe speakup_soft ; then
+            eend 0
+         else
+            flite -o play -t "Fatal error setting up software speakup"
+            eend 1
+            return 1
+         fi
+         eoutdent
+      fi
+
+      if [ -d /proc/speakup/ ] ; then
+         einfo "Kernel supports speakup." ; eend 0
+         eindent
+         if [ -x /etc/init.d/speech-dispatcher ] ; then
+            einfo "Starting speech-dispatcher."
+            /etc/init.d/speech-dispatcher start 1>>DEBUG ; eend $?
+            einfo "Activating sftsyn in Kernel."
+            echo sftsyn >/proc/speakup/synth_name ; eend $?
+            einfo "Just run swspeak if you want to use software synthesizer via speakup."
+            flite -o play -t "Finished activating software speakup. Just run swspeak when booting finished."
+         else
+            eerror "speech-dispatcher not available. swspeak will not work without it." ; eend 1
+            flite -o play -t "speech-dispatcher not available. speakup will not work without it."
+         fi
+         eoutdent
+      else
+         eerror "Kernel does not seem to support speakup. Skipping swspeak." ; eend 1
+         flite -o play -t "Kernel does not seem to support speakup. Sorry."
+      fi
    fi
-  eoutdent
- else
-  eerror "Kernel does not seem to support speakup. Skipping swspeak." ; eend 1
-  flite -o play -t "Kernel does not seem to support speakup. Sorry."
- fi
-fi
+}
+# }}}
+
+# {{{ support hardware synthesizer via speakup
+config_hwspeak(){
+   if checkbootparam hwspeak ; then
+      einfo "Bootoption hwspeak found."
+
+      if ! [ -d /proc/speakup/ ] ; then
+         ewarn" Kernel does not support hardware speakup - trying to load kernel modules:" ; eend 0
+         eindent
+         for module in $(find "/lib/modules/${KERNEL}/extra/speakup/" -name \*.ko | \
+                         sed 's#.*speakup/##g ; s#.ko$##g' | \
+                         grep -ve speakup_soft -ve speakup_dummy | sort -u) ; do
+            einfo "Trying to load $module"
+            modprobe $module
+            eend $?
+         done
+         eoutdent
+      fi
+
+      if [ -d /proc/speakup/ ] ; then
+         einfo "Kernel supports speakup now." ; eend 0
+         flite -o play -t "Kernel supports speakup now."
+      else
+         eerror "Kernel or hardware do not seem to support speakup. Skipping hwspeak." ; eend 1
+         flite -o play -t "Kernel or hardware do not seem to support speakup. Sorry."
+      fi
+   fi
 }
 # }}}
 

@@ -3,8 +3,10 @@ grml-autoconfig (0.8.13) unstable; urgency=low
   * Use random password if bootoption 'ssh' doesn't have an option.
     Thanks to Michael Holzt and Marc Haber!
   * Update swedish language settings, thanks again to Martin Karresand.
+  * Rework config_swspeak to support new speakup modules layout.
+  * Add config_hwspeak for supporting hardware speakup from userspace.
 
- -- Michael Prokop <mika@grml.org>  Thu, 25 Sep 2008 17:25:30 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 27 Sep 2008 14:27:20 +0200
 
 grml-autoconfig (0.8.12) unstable; urgency=low
 
