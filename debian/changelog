@@ -8,8 +8,10 @@ grml-live (0.9.4) unstable; urgency=low
     kernel 2.6.26-grml[64].
   * GRML_MEDIUM: replace rt73-module-2.6.26-grml with
     rt73-modules-2.6.26-grml.
+  * Activate grml-testing repository for devel releases and
+    daily snapshots.
 
- -- Michael Prokop <mika@grml.org>  Sat, 27 Sep 2008 18:51:26 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 27 Sep 2008 22:33:05 +0200
 
 grml-live (0.9.3) unstable; urgency=low
 
