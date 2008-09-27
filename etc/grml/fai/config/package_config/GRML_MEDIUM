@@ -294,7 +294,7 @@ aufs-modules-2.6.26-grml
 linux-image-2.6.26-grml
 madwifi-modules-2.6.26-grml madwifi-tools
 powernowd
-rt2400-modules-2.6.26-grml rt2500-modules-2.6.26-grml rt73-module-2.6.26-grml firmware-ralink
+rt2400-modules-2.6.26-grml rt2500-modules-2.6.26-grml rt73-modules-2.6.26-grml firmware-ralink
 #truecrypt-2.6.26-grml
 virtualbox-ose-guest-utils
 
