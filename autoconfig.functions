@@ -821,8 +821,8 @@ config_swspeak(){
    if checkbootparam swspeak ; then
       einfo "Bootoption swspeak found."
 
-      if ! [ -d /proc/speakup/ ] ; then
-         ewarn" Kernel does not support software speakup - trying to load kernel module:" ; eend 0
+      if [ ! -d /proc/speakup/ ] && ! grep -q speakup /proc/modules ; then
+         ewarn "Kernel does not support software speakup - trying to load kernel module:" ; eend 0
          eindent
          einfo "Loading speakup_soft"
          if modprobe speakup_soft ; then
@@ -835,7 +835,7 @@ config_swspeak(){
          eoutdent
       fi
 
-      if [ -d /proc/speakup/ ] ; then
+      if [ -d /proc/speakup/ ] || grep -q speakup /proc/modules ; then
          einfo "Kernel supports speakup." ; eend 0
          eindent
          if [ -x /etc/init.d/speech-dispatcher ] ; then
@@ -863,7 +863,7 @@ config_hwspeak(){
    if checkbootparam hwspeak ; then
       einfo "Bootoption hwspeak found."
 
-      if ! [ -d /proc/speakup/ ] ; then
+      if [ ! -d /proc/speakup/ ] && ! grep -q speakup /proc/modules ; then
          ewarn" Kernel does not support hardware speakup - trying to load kernel modules:" ; eend 0
          eindent
          for module in $(find "/lib/modules/${KERNEL}/extra/speakup/" -name \*.ko | \
@@ -876,7 +876,7 @@ config_hwspeak(){
          eoutdent
       fi
 
-      if [ -d /proc/speakup/ ] ; then
+      if [ -d /proc/speakup/ ] || grep -q speakup /proc/modules ; then
          einfo "Kernel supports speakup now." ; eend 0
          flite -o play -t "Kernel supports speakup now."
       else
