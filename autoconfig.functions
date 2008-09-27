@@ -846,8 +846,15 @@ config_swspeak(){
          if [ -x /etc/init.d/speech-dispatcher ] ; then
             einfo "Starting speech-dispatcher."
             /etc/init.d/speech-dispatcher start 1>>DEBUG ; eend $?
-            einfo "Activating sftsyn in Kernel."
-            echo sftsyn >/proc/speakup/synth_name ; eend $?
+            if [ -r /proc/speakup/synth_name ] ; then
+               einfo "Activating sftsyn via /proc in Kernel."
+               echo sftsyn > /proc/speakup/synth_name ; eend $?
+            elif [ -r /sys/modules/speakup/parameters/synth ] ; then
+               einfo "Activating sftsyn via /sys in Kernel."
+               echo sftsyn > /sys/modules/speakup/parameters/synth ; eend $?
+            else
+               eerror "Error when configuring sftsyn via /proc or /sys." ; eend 1
+            fi
             einfo "Just run swspeak if you want to use software synthesizer via speakup."
             flitewrapper "Finished activating software speakup. Just run swspeak when booting finished."
          else
