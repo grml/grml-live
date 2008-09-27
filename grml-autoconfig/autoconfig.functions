@@ -76,6 +76,11 @@ checkgrmlsmall(){
 checkgrmlusb(){
   grep -q usb /etc/grml_version 2>>$DEBUG && return 0 || return 1
 }
+
+# execute flite only if it's present
+flitewrapper() {
+   [ -x /usr/bin/flite ] && flite -o play -t "$*"
+}
 ### }}}
 
 # {{{ filesystems (proc, pts, sys) and fixes
@@ -828,7 +833,7 @@ config_swspeak(){
          if modprobe speakup_soft ; then
             eend 0
          else
-            flite -o play -t "Fatal error setting up software speakup"
+            flitewrapper "Fatal error setting up software speakup"
             eend 1
             return 1
          fi
@@ -844,15 +849,15 @@ config_swspeak(){
             einfo "Activating sftsyn in Kernel."
             echo sftsyn >/proc/speakup/synth_name ; eend $?
             einfo "Just run swspeak if you want to use software synthesizer via speakup."
-            flite -o play -t "Finished activating software speakup. Just run swspeak when booting finished."
+            flitewrapper "Finished activating software speakup. Just run swspeak when booting finished."
          else
             eerror "speech-dispatcher not available. swspeak will not work without it." ; eend 1
-            flite -o play -t "speech-dispatcher not available. speakup will not work without it."
+            flitewrapper "speech-dispatcher not available. speakup will not work without it."
          fi
          eoutdent
       else
          eerror "Kernel does not seem to support speakup. Skipping swspeak." ; eend 1
-         flite -o play -t "Kernel does not seem to support speakup. Sorry."
+         flitewrapper "Kernel does not seem to support speakup. Sorry."
       fi
    fi
 }
@@ -877,11 +882,11 @@ config_hwspeak(){
       fi
 
       if [ -d /proc/speakup/ ] || grep -q speakup /proc/modules ; then
-         einfo "Kernel supports speakup now." ; eend 0
-         flite -o play -t "Kernel supports speakup now."
+         einfo "Kernel should support speakup now." ; eend 0
+         flitewrapper "Kernel should support speakup now."
       else
          eerror "Kernel or hardware do not seem to support speakup. Skipping hwspeak." ; eend 1
-         flite -o play -t "Kernel or hardware do not seem to support speakup. Sorry."
+         flitewrapper "Kernel or hardware do not seem to support speakup. Sorry."
       fi
    fi
 }
@@ -1771,7 +1776,7 @@ config_netconfig(){
 config_blindsound(){
  if checkbootparam "blind" ; then
     beep
-    flite -o play -t "welcome to the gremel system"
+    flitewrapper "welcome to the gremel system"
  fi
 }
 # }}}
@@ -1779,7 +1784,7 @@ config_blindsound(){
 # {{{ welcome sound
 config_welcome(){
  if checkbootparam welcome ; then
-  flite -o play -t "welcome to the gremel system"
+    flitewrapper "welcome to the gremel system"
  fi
 }
 # }}}
