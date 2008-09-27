@@ -2,8 +2,12 @@ grml-live (0.9.4) unstable; urgency=low
 
   * Update docs, depend on squashfs-lzma-tools (but allow usage
     of squashfs-tools as well).
+  * Use squashfs-lzma-tools instead of squashfs-tools.
+  * Drop lzma-modules-2.6.26-grml[64] and
+    squashfs-modules-2.6.26-grml[64] as we have it in-tree of
+    kernel 2.6.26-grml[64].
 
- -- Michael Prokop <mika@grml.org>  Sat, 27 Sep 2008 16:43:36 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 27 Sep 2008 17:41:13 +0200
 
 grml-live (0.9.3) unstable; urgency=low
 

@@ -62,6 +62,7 @@ grml-desktop
 grml-docs
 grml-etc
 grml-etc-core
+grml-files
 grml-firefox
 grml-hwinfo
 grml-laptop
@@ -1612,7 +1613,7 @@ splint
 splitvt
 sqlite
 sqlite3
-squashfs-tools
+squashfs-lzma-tools
 squid
 squid-common
 squidview
@@ -2076,7 +2077,6 @@ PACKAGES aptitude I386
 
 ## general:
 grml
-grml-files
 # we want to use linux-kernel-headers-grml instead of linux-libc-dev:
 linux-kernel-headers-grml
 
@@ -2111,7 +2111,6 @@ rt2500-modules-2.6.26-grml
 rt73-modules-2.6.26-grml
 sl-modem-modules-2.6.26-grml
 speakup-modules-2.6.26-grml
-squashfs-modules-2.6.26-grml
 sysprof-module-2.6.26-grml
 tp-smapi-modules-2.6.26-grml
 truecrypt-2.6.26-grml
@@ -2125,7 +2124,6 @@ PACKAGES aptitude AMD64
 
 ## general:
 grml64
-grml-files64
 
 ## current kernel version 2.6.26-grml64:
 acx100-2.6.26-grml64
@@ -2149,7 +2147,6 @@ openafs-modules-2.6.26-grml64
 qc-usb-modules-2.6.26-grml64
 rt2400-modules-2.6.26-grml64
 rt2500-modules-2.6.26-grml64
-squashfs-modules-2.6.26-grml64
 sysprof-module-2.6.26-grml64
 truecrypt-2.6.26-grml64
 ## }}}
