@@ -4,7 +4,6 @@
 # Authors:       (c) Florian Keller <Florian.Keller@zuerich.ch>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mon Nov 06 23:04:08 CET 2006 [mika]
 ################################################################################
 
 if [ -z "$1" ] ; then
