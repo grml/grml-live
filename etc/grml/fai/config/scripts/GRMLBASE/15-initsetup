@@ -4,16 +4,19 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Sep 16 22:57:36 CEST 2007 [mika]
+# Latest change: Sun Sep 28 20:08:14 CEST 2008 [mika]
 ################################################################################
 
 set -u
 set -e
 
-if grep -q 'small' $target/etc/grml_version ; then
-   cp $target/etc/runlevel.conf.livecd.small $target/etc/runlevel.conf
-else
-   cp $target/etc/runlevel.conf.livecd $target/etc/runlevel.conf
+# if we have a small ISO let's adjust runlevel.conf:
+if [ -n "$GRML_NAME" ] ; then
+   if echo "$GRML_NAME" | grep -q small ; then
+      cp $target/etc/runlevel.conf.livecd.small $target/etc/runlevel.conf
+   else
+      cp $target/etc/runlevel.conf.livecd $target/etc/runlevel.conf
+   fi
 fi
 
 ## END OF FILE #################################################################

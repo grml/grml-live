@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sat Sep 27 22:31:49 CEST 2008 [mika]
+# Latest change: Sun Sep 28 20:08:30 CEST 2008 [mika]
 ################################################################################
 
 set -u
@@ -16,10 +16,9 @@ $ROOTCMD ln -s /etc/apt/sources.list.grml /etc/apt/sources.list
 
 # if we have a devel-version or a daily snapshot
 # let's activate grml-testing by default:
-if [ -r "$target"/etc/grml_version ] ; then
-   # if awk '{print $1}' /etc/grml_version | grep -q devel ; then
-   if grep -e devel -e autobuild /etc/grml_version 1>/dev/null ; then
-      sed -i 's|^#\(.*deb.*deb.grml.org.*grml-testing\)|\1|' /etc/apt/sources.list
+if [ -n "$GRML_NAME" -o -n "$RELEASENAME" ] ; then
+   if echo "$GRML_NAME" "$RELEASENAME" | grep -e devel -e autobuild 1>/dev/null ; then
+      sed -i 's|^#\(.*deb.*deb.grml.org.*grml-testing\)|\1|' "$target"/etc/apt/sources.list
    fi
 fi
 

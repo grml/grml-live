@@ -246,6 +246,10 @@ specify it on the command line using the -o option."
 # trim characters that are known to cause problems inside $GRML_NAME;
 # for example isolinux does not like '-' inside the directory name
 [ -n "$GRML_NAME" ] && export SHORT_GRML_NAME="$(echo $GRML_NAME | tr -d ',./;\- ')"
+
+# export variables to have them available in fai scripts:
+[ -n "$GRML_NAME" ]   && export "$GRML_NAME"
+[ -n "$RELEASENAME" ] && export "$RELEASENAME"
 # }}}
 
 # clean/zero grml-live logfile {{{
