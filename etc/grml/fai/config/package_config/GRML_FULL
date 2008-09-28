@@ -898,6 +898,7 @@ ipppd
 iprelay
 iproute
 ipsec-tools
+ipset
 iptables
 iptraf
 iptstate

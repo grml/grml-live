@@ -10,8 +10,9 @@ grml-live (0.9.4) unstable; urgency=low
     rt73-modules-2.6.26-grml.
   * Activate grml-testing repository for devel releases and
     daily snapshots.
+  * Add ipset to GRML_FULL.
 
- -- Michael Prokop <mika@grml.org>  Sat, 27 Sep 2008 22:33:05 +0200
+ -- Michael Prokop <mika@grml.org>  Sun, 28 Sep 2008 15:28:14 +0200
 
 grml-live (0.9.3) unstable; urgency=low
 
