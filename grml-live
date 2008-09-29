@@ -248,8 +248,8 @@ specify it on the command line using the -o option."
 [ -n "$GRML_NAME" ] && export SHORT_GRML_NAME="$(echo $GRML_NAME | tr -d ',./;\- ')"
 
 # export variables to have them available in fai scripts:
-[ -n "$GRML_NAME" ]   && export "$GRML_NAME"
-[ -n "$RELEASENAME" ] && export "$RELEASENAME"
+[ -n "$GRML_NAME" ]   && export GRML_NAME="$GRML_NAME"
+[ -n "$RELEASENAME" ] && export RELEASENAME="$RELEASENAME"
 # }}}
 
 # clean/zero grml-live logfile {{{
