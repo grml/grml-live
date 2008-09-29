@@ -428,8 +428,16 @@ else
       echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]" > $CHROOT_OUTPUT/etc/grml_version
       chmod 644 $CHROOT_OUTPUT/etc/grml_version
       einfo "Rebuilding initramfs"
-      chroot $CHROOT_OUTPUT update-initramfs -u -t # make sure new /etc/grml_version reaches the initramfs
+      # make sure new /etc/grml_version reaches the initramfs:
+      chroot $CHROOT_OUTPUT update-initramfs -u -t
       eend $?
+      # get rid of unnecessary files when building grml-small:
+      if echo "$CLASSES" | grep -q GRML_SMALL ; then
+         einfo "Removing initrd and vmlinuz files in $CHROOT_OUTPUT/boot"
+         rm -f "$CHROOT_OUTPUT"/boot/initrd.img-*
+         rm -f "$CHROOT_OUTPUT"/boot/vmlinuz-*
+         eend $?
+      fi
    fi
 
    # Remove all FAI logs from chroot if class RELEASE is used:
