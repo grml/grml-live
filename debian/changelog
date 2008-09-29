@@ -20,8 +20,10 @@ grml-live (0.9.4) unstable; urgency=low
     - remove nvi (see #490361)
     - remove ppoeconf (just too big with its dependencies)
     - remove prism54-firmware (for saving disk space)
+  * Support environment variable $NO_ADDONS to avoid usage of
+    addons directory.
 
- -- Michael Prokop <mika@grml.org>  Mon, 29 Sep 2008 13:23:44 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 29 Sep 2008 13:29:18 +0200
 
 grml-live (0.9.3) unstable; urgency=low
 
