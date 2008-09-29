@@ -21,10 +21,10 @@ set -u
       # it configures (in our case non-existent) manpages as well :-/
       # $ROOTCMD update-alternatives --set editor /usr/bin/vim.tiny
       # $ROOTCMD update-alternatives --set vi     /usr/bin/vim.tiny
-      $ROOTCMD ln -sf /usr/bin/editor /etc/alternatives/editor
-      $ROOTCMD ln -sf /etc/alternatives/editor /usr/bin/vim.tiny
-      $ROOTCMD ln -sf /usr/bin/vi /etc/alternatives/vi
-      $ROOTCMD ln -sf /etc/alternatives/vi /usr/bin/vim.tiny
+      $ROOTCMD ln -sf /etc/alternatives/editor /usr/bin/editor
+      $ROOTCMD ln -sf /usr/bin/vim.tiny /etc/alternatives/editor 
+      $ROOTCMD ln -sf /etc/alternatives/vi /usr/bin/vi
+      $ROOTCMD ln -sf /usr/bin/vim.tiny /etc/alternatives/vi 
    fi
 fi
 
