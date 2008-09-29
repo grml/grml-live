@@ -27,7 +27,7 @@ fi
 if ifclass GRML_SMALL ; then
    $ROOTCMD apt-get -y --purge remove aptitude
    for pkg in groff-base info locales man-db manpages nano; do
-     $ROOTCMD apt-get --purge $pkg || true
+     $ROOTCMD apt-get --purge remove --yes $pkg || true
    done
 fi
 

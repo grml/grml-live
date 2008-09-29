@@ -50,7 +50,7 @@ file-rc
 findutils
 firmware-ipw3945
 fnord
-fuse-utils
+# fuse-utils
 gawk
 gpm
 grep
@@ -71,7 +71,7 @@ grml-saveconfig
 grml-scanpartitions
 grml-scripts
 grml-shlib
-grml-small
+# grml-small
 grml-tips
 grml-usleep
 grub
@@ -127,7 +127,7 @@ net-tools
 nfs-common
 ntfsprogs
 ntpdate
-nvi
+# nvi -> see #490361
 openssh-client
 openssh-server
 passwd

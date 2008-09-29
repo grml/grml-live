@@ -4,21 +4,25 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Aug 25 15:07:12 CEST 2008 [mika]
+# Latest change: Mon Sep 29 13:15:35 CEST 2008 [mika]
 ################################################################################
 
 set -u
 set -e
 
+## Editor:
+# Too many people don't expect to get that, so use it only for grml-small:
+if ifclass GRML_SMALL ; then
+   if [ -r $target/usr/bin/vim.tiny ] ; then
+      $ROOTCMD update-alternatives --set editor /usr/bin/vim.tiny
+      $ROOTCMD update-alternatives --set vi     /usr/bin/vim.tiny
+   fi
+fi
+
 if [ -r $target/usr/bin/vim.basic ] ; then
    $ROOTCMD update-alternatives --set editor /usr/bin/vim.basic
    $ROOTCMD update-alternatives --set vi     /usr/bin/vim.basic
 fi
-
-## Too many people don't expect to get that, so deactive by default:
-# if [ -r $target/usr/bin/vim.tiny ] ; then
-#    $ROOTCMD update-alternatives --set vi /usr/bin/vim.tiny
-# fi
 
 if [ -r $target/usr/bin/uxterm ] ; then
    $ROOTCMD update-alternatives --set x-terminal-emulator /usr/bin/uxterm

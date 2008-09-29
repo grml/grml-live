@@ -140,6 +140,7 @@ einfo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
   rm -f /var/lib/apt/lists/*Packages
   rm -f /var/lib/apt/lists/*Release
   rm -f /var/lib/apt/lists/*Sources
+  rm -f /var/lib/apt/lists/*IndexDiff
   rm -f /var/lib/apt/lists/*.gpg
   rm -f /var/cache/apt-show-versions/*
   rm -f /var/cache/debconf/templates.dat-old
@@ -150,6 +151,30 @@ einfo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
   rm -f /var/lib/dpkg/status-old
   rm -f /var/lib/dpkg/available-old
 eend $?
+
+if ifclass GRML_SMALL ; then
+   einfo "Removing /var/cache/debconf/templates.dat"
+   rm -f /var/cache/debconf/templates.dat
+   eend $?
+
+   einfo "Removing /usr/share/ssh/blacklist.*"
+   rm -f /usr/share/ssh/blacklist.DSA-1024 /usr/share/ssh/blacklist.RSA-2048
+   eend $?
+fi
+
+# get rid of large kernel modules:
+if ifclass GRML_SMALL ; then
+  if [ -r "/lib/modules/${KERNEL}/kernel/fs/ocfs2/ocfs2.ko" ] ; then
+    einfo "Removing /lib/modules/${KERNEL}/kernel/fs/ocfs2/ocfs2.ko"
+    rm -f "/lib/modules/${KERNEL}/kernel/fs/ocfs2/ocfs2.ko"
+    eend $?
+  fi
+  if [ -r "/lib/modules/${KERNEL}/kernel/drivers/isdn/hisax/hisax.ko" ] ; then
+    einfo "Removing /lib/modules/${KERNEL}/kernel/drivers/isdn/hisax/hisax.ko"
+    rm -f "/lib/modules/${KERNEL}/kernel/drivers/isdn/hisax/hisax.ko"
+    eend $?
+  fi
+fi
 
 if [ -x /usr/bin/grep-dctrl ] ; then
    einfo "Cleaning up /var/lib/dpkg/status"
@@ -171,6 +196,10 @@ eend $?
 
 einfo "Removing ssh-keys"
   rm -f /etc/ssh/*key*
+eend $?
+
+einfo "Removing unused/backup files"
+  find / -name *~ -print0 | xargs -0 rm -f
 eend $?
 
 # remove only "temporary" or saved files in the given directories

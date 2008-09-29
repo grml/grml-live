@@ -14,11 +14,14 @@ grml-live (0.9.4) unstable; urgency=low
   * GRML_MEDIUM:
     - replace rt73-module-2.6.26-grml with rt73-modules-2.6.26-grml.
   * GRML_SMALL:
+    - several improvements to keep the ISO size as small as possible
     - use kernel 2.6.26-grml instead of 2.6.26-grml-small
+    - remove fuse-utils
+    - remove nvi (see #490361)
     - remove ppoeconf (just too big with its dependencies)
     - remove prism54-firmware (for saving disk space)
 
- -- Michael Prokop <mika@grml.org>  Mon, 29 Sep 2008 11:28:31 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 29 Sep 2008 13:23:44 +0200
 
 grml-live (0.9.3) unstable; urgency=low
 

@@ -24,6 +24,7 @@ rm -rf /usr/share/gtk-doc/
 rm -rf /usr/share/man/
 rm -rf /usr/man
 rm -rf /usr/share/info
+rm -rf /var/cache/man/*
 eend $?
 
 einfo "Creating /usr/share/info/..."
