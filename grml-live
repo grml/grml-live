@@ -431,12 +431,15 @@ else
       # make sure new /etc/grml_version reaches the initramfs:
       chroot $CHROOT_OUTPUT update-initramfs -u -t
       eend $?
-      # get rid of unnecessary files when building grml-small:
-      if echo "$CLASSES" | grep -q GRML_SMALL ; then
+      # get rid of unnecessary files when building grml-small for final release:
+      if echo "$CLASSES" | grep -q GRML_SMALL && \
+         echo "$CLASSES" | grep -q RELEASE ; then
          einfo "Removing initrd and vmlinuz files in $CHROOT_OUTPUT/boot"
          rm -f "$CHROOT_OUTPUT"/boot/initrd.img-*
          rm -f "$CHROOT_OUTPUT"/boot/vmlinuz-*
          eend $?
+         ewarn "Notice: you have to rebuild grml-small from scratch on next run."
+         eend 0
       fi
    fi
 
