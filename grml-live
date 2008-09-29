@@ -431,16 +431,6 @@ else
       # make sure new /etc/grml_version reaches the initramfs:
       chroot $CHROOT_OUTPUT update-initramfs -u -t
       eend $?
-      # get rid of unnecessary files when building grml-small for final release:
-      if echo "$CLASSES" | grep -q GRML_SMALL && \
-         echo "$CLASSES" | grep -q RELEASE ; then
-         einfo "Removing initrd and vmlinuz files in $CHROOT_OUTPUT/boot"
-         rm -f "$CHROOT_OUTPUT"/boot/initrd.img-*
-         rm -f "$CHROOT_OUTPUT"/boot/vmlinuz-*
-         eend $?
-         ewarn "Notice: you have to rebuild grml-small from scratch on next run."
-         eend 0
-      fi
    fi
 
    # Remove all FAI logs from chroot if class RELEASE is used:
@@ -636,6 +626,16 @@ else
          SQUASHFS_OPTIONS="$(echo $SQUASHFS_OPTIONS | sed 's/-lzma//g')"
          eend 0
       fi
+   fi
+
+   # support exclusion of files via exclude-file:
+   if [ -n "$SQUASHFS_EXCLUDES_FILE" -a "$SQUASHFS_EXCLUDES_FILE" ] ; then
+      SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -ef $SQUASHFS_EXCLUDES_FILE"
+   fi
+
+   # get rid of unnecessary files when building grml-small for final release:
+   if echo "$CLASSES" | grep -q GRML_SMALL ; then
+      SQUASHFS_OPTIONS="$SQUASHFS_OUTPUT -e initrd.img* vmlinuz*"
    fi
 
    SQUASHFS_OUTPUT="$(mktemp -t grml-live.XXXXXX)"
