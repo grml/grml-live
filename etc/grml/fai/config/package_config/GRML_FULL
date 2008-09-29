@@ -2100,7 +2100,6 @@ linux-image-2.6.26-grml
 linux-uvc-modules-2.6.26-grml
 linux-wlan-ng-modules-2.6.26-grml
 loop-aes-modules-2.6.26-grml
-lzma-modules-2.6.26-grml
 madwifi-modules-2.6.26-grml
 ndiswrapper-modules-2.6.26-grml
 #nvidia-kernel-2.6.26-grml
@@ -2141,7 +2140,6 @@ linux-headers-2.6.26-grml64
 linux-image-2.6.26-grml64
 #linux-source-2.6.26-grml
 loop-aes-modules-2.6.26-grml64
-lzma-modules-2.6.26-grml64
 madwifi-modules-2.6.26-grml64
 ndiswrapper-modules-2.6.26-grml64
 openafs-modules-2.6.26-grml64

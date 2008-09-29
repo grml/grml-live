@@ -4,11 +4,12 @@ grml-live (0.9.4) unstable; urgency=low
   * Use squashfs-lzma-tools instead of squashfs-tools:
     Depend on squashfs-lzma-tools - but allow usage
     of squashfs-tools as well).
-  * Drop lzma-modules-2.6.26-grml[64] and
-    squashfs-modules-2.6.26-grml[64] as we have it
-    in-tree of kernel 2.6.26-grml[64].
   * Activate grml-testing repository for devel releases and
     daily snapshots. [Testing: issue531]
+  * All flavours:
+    - drop lzma-modules-2.6.26-grml[64] and
+      squashfs-modules-2.6.26-grml[64] as we have it
+      in-tree of kernel 2.6.26-grml[64].
   * GRML_FULL:
     - add ipset
   * GRML_MEDIUM:
@@ -26,7 +27,7 @@ grml-live (0.9.4) unstable; urgency=low
   * Initial support for SQUASHFS_EXCLUDES_FILE.
   * Do not include vmlinuz and initrd when building grml-small.
 
- -- Michael Prokop <mika@grml.org>  Mon, 29 Sep 2008 14:43:11 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 29 Sep 2008 15:38:38 +0200
 
 grml-live (0.9.3) unstable; urgency=low
 
