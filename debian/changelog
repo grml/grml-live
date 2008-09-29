@@ -16,8 +16,9 @@ grml-live (0.9.4) unstable; urgency=low
   * GRML_SMALL:
     - use kernel 2.6.26-grml instead of 2.6.26-grml-small
     - remove ppoeconf (just too big with its dependencies)
+    - remove prism54-firmware (for saving disk space)
 
- -- Michael Prokop <mika@grml.org>  Mon, 29 Sep 2008 11:24:14 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 29 Sep 2008 11:28:31 +0200
 
 grml-live (0.9.3) unstable; urgency=low
 
