@@ -17,7 +17,7 @@ set +u
 if ifclass GRML_SMALL ; then
 set -u
    if [ -r $target/usr/bin/vim.tiny ] ; then
-      $ROOTCMD update-alternatives --set editor /usr/bin/vim.tiny
+      # $ROOTCMD update-alternatives --set editor /usr/bin/vim.tiny
       $ROOTCMD update-alternatives --set vi     /usr/bin/vim.tiny
    fi
 else
