@@ -4,25 +4,28 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Mon Sep 29 13:58:14 CEST 2008 [mika]
+# Latest change: Mon Sep 29 14:16:38 CEST 2008 [mika]
 ################################################################################
 
 set -u
 set -e
 
 ## Editor:
-# Too many people don't expect to get that, so use it only for grml-small:
-# avoid "debug: unbound variable"
+# Too many people don't expect to get that, so use it only for grml-small
+# avoid "debug: unbound variable":
 set +u
 if ifclass GRML_SMALL ; then
 set -u
    if [ -r $target/usr/bin/vim.tiny ] ; then
+      # update-alternates does not work without /usr/share/man because
+      # it configures (in our case non-existent) manpages as well :-/
       # $ROOTCMD update-alternatives --set editor /usr/bin/vim.tiny
-      $ROOTCMD update-alternatives --set vi     /usr/bin/vim.tiny
+      # $ROOTCMD update-alternatives --set vi     /usr/bin/vim.tiny
+      $ROOTCMD ln -sf /usr/bin/editor /etc/alternatives/editor
+      $ROOTCMD ln -sf /etc/alternatives/editor /usr/bin/vim.tiny
+      $ROOTCMD ln -sf /usr/bin/vi /etc/alternatives/vi
+      $ROOTCMD ln -sf /etc/alternatives/vi /usr/bin/vim.tiny
    fi
-else
-   # avoid "debug: unbound variable" for ifclass running with 'set -u'
-   true
 fi
 
 if [ -r $target/usr/bin/vim.basic ] ; then
