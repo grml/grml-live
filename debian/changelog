@@ -1,6 +1,6 @@
 grml-live (0.9.4) unstable; urgency=low
 
-  * Update docs.
+  * Update docs (some minor fixes, migration from hg to git,..)
   * Use squashfs-lzma-tools instead of squashfs-tools:
     Depend on squashfs-lzma-tools - but allow usage
     of squashfs-tools as well).
@@ -27,7 +27,7 @@ grml-live (0.9.4) unstable; urgency=low
   * Initial support for SQUASHFS_EXCLUDES_FILE.
   * Do not include vmlinuz and initrd when building grml-small.
 
- -- Michael Prokop <mika@grml.org>  Mon, 29 Sep 2008 15:38:38 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 30 Sep 2008 13:10:07 +0200
 
 grml-live (0.9.3) unstable; urgency=low
 

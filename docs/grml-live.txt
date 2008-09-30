@@ -666,7 +666,7 @@ link:http://deb.grml.org/pool/main/g/grml-live/[deb.grml.org].  If you want to
 build a Debian package on your own (using for example a specific version or the
 current development tree), just execute:
 
-  hg clone http://hg.grml.org/grml-live
+  git clone git://git.grml.org/grml-live
   cd grml-live
   debuild -us -uc
 
@@ -674,12 +674,12 @@ Source
 ------
 
 The source of grml-live is available at
-link:http://hg.grml.org/grml-live/[http://hg.grml.org/grml-live/]
+link:http://git.grml.org/?p=grml-live.git[http://git.grml.org/?p=grml-live.git]
 
 TODO list
 ---------
 
-Check out link:http://wiki.grml.org/doku.php?id=grml-live[grml-live@grml-wiki]
+Check out link:http://wiki.grml.org/doku.php?id=grml-live[grml-live in the grml-wiki]
 for details.
 
 Bugs

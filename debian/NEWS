@@ -1,3 +1,21 @@
+grml-live (0.9.4) unstable; urgency=low
+
+  * grml provides its own squashfs-tools again which support LZMA
+    compression with kernel 2.6.26-grml[64], please install the
+    Debian package squashfs-lzma-tools of the grml repository.
+    More details can be found in the grml-live docs. Please
+    check out the section "Current state of grml-live with
+    squashfs-tools and kernel" in the grml-live docs, being
+    shipped with this package as manpage grml-live(8) and
+    /usr/share/doc/grml-live/grml-live.html and being available
+    online at http://grml.org/grml-live/#current_state as well.
+
+  * grml is migrating from Mercurial (hg) to Git as version control
+    system. If you are interested in using very recent grml-live
+    versions from our VCS please make sure to check out the docs.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 30 Sep 2008 13:12:07 +0200
+
 grml-live (0.9) unstable; urgency=low
 
   * grml-live 0.9 features kernel 2.6.26-grml[64]. Using
