@@ -18,13 +18,11 @@ RootMenu = "Pekwm @ grml" {
 	}
 	Submenu = "Communication" {
 		Entry = "mutt" { Actions = "Exec $TERM -title mutt -e mutt &" }
-		Entry = "muttng" { Actions = "Exec $TERM -title muttng -e muttng &" }
 		Entry = "slrn" { Actions = "Exec $TERM -title slrn -e slrn &" }
 		Entry = "centericq" { Actions = "Exec $TERM -title centericq -e centericq &" }
 	}
 	Submenu = "Configuration" {
 		Entry = "grml-mutt" { Actions = "Exec $TERM -title grml-mutt -e grml-mutt &" }
-		Entry = "grml-muttng" { Actions = "Exec $TERM -title grml-muttng -e grml-muttng &" }
 		Entry = "grml-nessus" { Actions = "Exec $TERM -title grml-nessus -e grml-nessus &" }
 		Entry = "grml-postfix" { Actions = "Exec $TERM -title grml-postfix -e grml-postfix &" }
 		Entry = "grml-slrn" { Actions = "Exec $TERM -title grml-slrn -e grml-slrn &" }

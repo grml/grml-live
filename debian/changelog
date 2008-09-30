@@ -1,3 +1,10 @@
+grml-desktop (0.2.0) unstable; urgency=low
+
+  * Drop obsolete muttng from /etc/skel/.fluxbox/menu and
+    /etc/skel/.pekwm/menu, thanks jpjacobs!
+
+ -- Michael Prokop <mika@grml.org>  Tue, 30 Sep 2008 23:36:31 +0200
+
 grml-desktop (0.1-7) unstable; urgency=low
 
   * Update /etc/skel/.fluxbox/init + /etc/skel/.fluxbox/keys.
