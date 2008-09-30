@@ -2,8 +2,12 @@ grml-desktop (0.2.0) unstable; urgency=low
 
   * Drop obsolete muttng from /etc/skel/.fluxbox/menu and
     /etc/skel/.pekwm/menu, thanks jpjacobs!
+  * Drop ion stuff and remove it from Suggests as well,
+    use window manager 'awesome' instead!
+  * Adjust VCS headers (move from hg to git).
+  * Bump Standard Version to 3.8.0 (no further changes).
 
- -- Michael Prokop <mika@grml.org>  Tue, 30 Sep 2008 23:36:31 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 30 Sep 2008 23:44:42 +0200
 
 grml-desktop (0.1-7) unstable; urgency=low
 

@@ -3,15 +3,15 @@ Section: grml
 Priority: extra
 Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends: debhelper (>= 5)
-Standards-Version: 3.7.2
-Homepage: http://hg.grml.org/grml-desktop/
-XS-Vcs-hg: http://hg.grml.org/grml-desktop/
-XS-Vcs-Browser: http://hg.grml.org/grml-desktop/
+Standards-Version: 3.8.0
+Homepage: http://git.grml.org/?p=grml-desktop.git
+XS-Vcs-git: git://git.grml.org/grml-desktop.git
+XS-Vcs-Browser: http://git.grml.org/?p=grml-desktop.git
 
 Package: grml-desktop
 Architecture: all
 Depends: idesk
-Suggests: fluxbox, fvwm | fvwm2 | fvwm-crystal, ion2, ion3, pekwm
+Suggests: fluxbox, fvwm | fvwm2 | fvwm-crystal, awesome, pekwm
 Conflicts: grml-etc (<< 0.9.14)
 Description: configuration files for the X desktop at grml
  This packages provides several configuration files for
