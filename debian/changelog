@@ -12,6 +12,8 @@ grml-live (0.9.4) unstable; urgency=low
       in-tree of kernel 2.6.26-grml[64].
   * GRML_FULL:
     - add ipset
+    - drop wodim and genisoimage as we have a fully functional
+      cdrtools suite in grml
   * GRML_MEDIUM:
     - replace rt73-module-2.6.26-grml with rt73-modules-2.6.26-grml.
   * GRML_SMALL:
@@ -27,7 +29,7 @@ grml-live (0.9.4) unstable; urgency=low
   * Initial support for SQUASHFS_EXCLUDES_FILE.
   * Do not include vmlinuz and initrd when building grml-small.
 
- -- Michael Prokop <mika@grml.org>  Tue, 30 Sep 2008 13:10:07 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 01 Oct 2008 21:34:43 +0200
 
 grml-live (0.9.3) unstable; urgency=low
 
