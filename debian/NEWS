@@ -10,9 +10,10 @@ grml-live (0.9.4) unstable; urgency=low
     /usr/share/doc/grml-live/grml-live.html and being available
     online at http://grml.org/grml-live/#current_state as well.
 
-  * grml is migrating from Mercurial (hg) to Git as version control
+  * grml migrated from Mercurial (hg) to Git as version control
     system. If you are interested in using very recent grml-live
     versions from our VCS please make sure to check out the docs.
+    http://git.grml.org/?p=grml-live.git
 
  -- Michael Prokop <mika@grml.org>  Tue, 30 Sep 2008 13:12:07 +0200
 

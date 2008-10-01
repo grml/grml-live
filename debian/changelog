@@ -28,6 +28,8 @@ grml-live (0.9.4) unstable; urgency=low
     addons directory.
   * Initial support for SQUASHFS_EXCLUDES_FILE.
   * Do not include vmlinuz and initrd when building grml-small.
+  * We switched from Mercurial to Git - replaced all hg-URLs
+    with git.grml.org
 
  -- Michael Prokop <mika@grml.org>  Wed, 01 Oct 2008 21:34:43 +0200
 
