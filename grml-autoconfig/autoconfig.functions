@@ -826,7 +826,7 @@ config_swspeak(){
    if checkbootparam swspeak ; then
       einfo "Bootoption swspeak found."
 
-      if [ ! -d /proc/speakup/ ] && ! grep -q speakup /proc/modules ; then
+      if [ ! -d /proc/speakup/ ] && ! grep -q speakup_soft /proc/modules ; then
          ewarn "Kernel does not support software speakup - trying to load kernel module:" ; eend 0
          eindent
          einfo "Loading speakup_soft"
@@ -840,27 +840,11 @@ config_swspeak(){
          eoutdent
       fi
 
-      if [ -d /proc/speakup/ ] || grep -q speakup /proc/modules ; then
+      if [ -d /proc/speakup/ ] || grep -q speakup_soft /proc/modules ; then
          einfo "Kernel supports speakup." ; eend 0
          eindent
-         if [ -x /etc/init.d/speech-dispatcher ] ; then
-            einfo "Starting speech-dispatcher."
-            /etc/init.d/speech-dispatcher start 1>>DEBUG ; eend $?
-            if [ -r /proc/speakup/synth_name ] ; then
-               einfo "Activating sftsyn via /proc in Kernel."
-               echo sftsyn > /proc/speakup/synth_name ; eend $?
-            elif [ -r /sys/modules/speakup/parameters/synth ] ; then
-               einfo "Activating sftsyn via /sys in Kernel."
-               echo sftsyn > /sys/modules/speakup/parameters/synth ; eend $?
-            else
-               eerror "Error when configuring sftsyn via /proc or /sys." ; eend 1
-            fi
             einfo "Just run swspeak if you want to use software synthesizer via speakup."
             flitewrapper "Finished activating software speakup. Just run swspeak when booting finished."
-         else
-            eerror "speech-dispatcher not available. swspeak will not work without it." ; eend 1
-            flitewrapper "speech-dispatcher not available. speakup will not work without it."
-         fi
          eoutdent
       else
          eerror "Kernel does not seem to support speakup. Skipping swspeak." ; eend 1
