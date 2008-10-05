@@ -4,7 +4,6 @@
 # Authors:       grml-team (grml.org), (c) Klaus Knopper, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Tue May 20 01:28:38 CEST 2008 [mika]
 ################################################################################
 
 export PATH=/sbin:/bin:/usr/bin:/usr/sbin
@@ -130,12 +129,6 @@ swapoff -a >/dev/null 2>&1 ; log_end_msg $?
 log_begin_msg "Deactivating udev:"
 echo -n "   ${GREEN}-${NORMAL} "
 /etc/init.d/udev stop ; log_end_msg $?
-
-if [ -z "$INSTALLED" ] ; then
-   mkdir -p /dev/pts
-   cp -a /GRML/dev/console /GRML/dev/tty[0-9]* /GRML/dev/loop* /GRML/dev/initctl /GRML/dev/null /dev/
-   ln -s /GRML/dev/* /dev/ 2>/dev/null
-fi
 
 # Read in boot parameters
 CMDLINE="$(cat /proc/cmdline 2>/dev/null)"
