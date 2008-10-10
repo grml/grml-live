@@ -1,3 +1,10 @@
+grml-etc (1.1.8) unstable; urgency=low
+
+  * /etc/skel/.msmtprc: clarify that the ssh commands needs to be
+    executed in the shell and isn't for msmtprc itself.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 11 Oct 2008 00:27:39 +0200
+
 grml-etc (1.1.7) unstable; urgency=low
 
   * /etc/init.d/grml-reboot: do no longer access files in /GRML/dev/.
