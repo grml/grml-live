@@ -5,7 +5,6 @@
 
 # misc options:
 timeout 30
-root (cd)
 # color red/blue green/black
 splashimage=/boot/grub/splash.xpm.gz
 foreground  = 000000
