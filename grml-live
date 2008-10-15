@@ -112,16 +112,15 @@ LIVE_CONF=/etc/grml/grml-live.conf
 
 # clean exit {{{
 bailout() {
-  [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
   rm -f /var/run/fai/fai_softupdate_is_running \
         /var/run/fai/FAI_INSTALLATION_IN_PROGRESS
+  [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
   [ -n "$1" ] && EXIT="$1" || EXIT="1"
   [ -n "$2" ] && eerror "$2">&2
   log "------------------------------------------------------------------------------"
   exit "$EXIT"
 }
-# trap bailout 1 2 3 6 9 14 15
-trap bailout 1 2 3 15
+trap bailout 1 2 3 3 6 9 14 15
 # }}}
 
 # check for important variables {{{
@@ -209,7 +208,7 @@ fi
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:g:i:o:r:s:t:v:bFhuVz" opt; do
+while getopts "a:C:c:g:i:o:r:s:t:v:bFuVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     b) BUILD_ONLY=1 ;;
@@ -227,7 +226,6 @@ while getopts "a:C:c:g:i:o:r:s:t:v:bFhuVz" opt; do
     t) TEMPLATE_DIRECTORY="$OPTARG";;
     v) VERSION="$OPTARG" ;;
     F) FORCE=1 ;;
-    h) usage ; bailout 0 ;;
     u) UPDATE=1 ;;
     V) VERBOSE="-v" ;;
     z) SQUASHFS_ZLIB="-nolzma" ;;
