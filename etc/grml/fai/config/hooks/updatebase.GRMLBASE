@@ -9,18 +9,18 @@
 if [ "$FAI_ACTION" = "softupdate" ] ; then
 
    ## we want to use our own sources.list:
-   # skiptask updatebase
+   skiptask updatebase
 
    ## make sure we don't start any daemons - removed
    ## later on via /etc/grml/fai/config/scripts/GRMLBASE/98-clean-chroot
-#   if ! [ -r $target/usr/sbin/policy-rc.d ] ; then
-#      cat > $target/usr/sbin/policy-rc.d << EOF
-##!/bin/sh
-## FAI_ACTION=updatebase
-#exit 101
-#EOF
-#      chmod 755 $target/usr/sbin/policy-rc.d
-#   fi
+   if ! [ -r $target/usr/sbin/policy-rc.d ] ; then
+      cat > $target/usr/sbin/policy-rc.d << EOF
+#!/bin/sh
+# FAI_ACTION=updatebase
+exit 101
+EOF
+      chmod 755 $target/usr/sbin/policy-rc.d
+   fi
 
    # skip the task if we want to build a new ISO only:
    [ -n "$BUILD_ONLY" ] && skiptask instsoft || /bin/true

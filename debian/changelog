@@ -4,10 +4,12 @@ grml-live (0.9.5) unstable; urgency=low
     [Closes: issue552]
   * Drop xserver-xorg-video-newport from all flavours.
   * Replace all unzoo package references with zoo, see #497775.
-  * Drop 'skiptask updatebase' workaround in
-    /etc/grml/fai/config/hooks/updatebase.GRMLBASE.
+  * Handle policy-rc.d in /etc/grml/fai/config/hooks/updatebase.GRMLBASE
+    because we have to skip FAI's updatebase task and lack /proc therefore.
+    New packages that are being installed and want to start any daemons
+    might fail, let's try to do our best to avoid that.
 
- -- Michael Prokop <mika@grml.org>  Wed, 15 Oct 2008 23:20:54 +0200
+ -- Michael Prokop <mika@grml.org>  Thu, 16 Oct 2008 01:03:24 +0200
 
 grml-live (0.9.4) unstable; urgency=low
 
