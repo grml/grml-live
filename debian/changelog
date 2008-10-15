@@ -4,11 +4,9 @@ grml-live (0.9.5) unstable; urgency=low
     [Closes: issue552]
   * Drop xserver-xorg-video-newport from all flavours.
   * Replace all unzoo package references with zoo, see #497775.
-  * Install policy-rc.d via /etc/grml/fai/config/hooks/updatebase.GRMLBASE,
-    otherwise installing additional software will fail if any daemons
-    are started up and /proc (mounted via FAI's updatebase) is missing.
+  * Drop the /etc/grml/fai/apt/sources.list workaround for softupdate for now.
 
- -- Michael Prokop <mika@grml.org>  Wed, 15 Oct 2008 23:03:15 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 15 Oct 2008 23:20:54 +0200
 
 grml-live (0.9.4) unstable; urgency=low
 
