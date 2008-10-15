@@ -20,7 +20,7 @@ EOF
       chmod 755 $target/usr/sbin/policy-rc.d
    fi
    # skip the task if we want to build a new ISO only:
-   [ -n "$BUILD_ONLY" ] && skiptask instsoft
+   [ -n "$BUILD_ONLY" ] && skiptask instsoft || /bin/true
 fi
 
 ## END OF FILE #################################################################
