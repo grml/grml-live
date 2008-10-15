@@ -172,7 +172,6 @@ ucf
 udev
 unp
 unzip
-unzoo
 usbutils
 update-inetd
 util-linux
@@ -185,6 +184,7 @@ wireless-tools
 wpasupplicant
 xfsprogs
 zip
+zoo
 zsh
 
 PACKAGES aptitude I386

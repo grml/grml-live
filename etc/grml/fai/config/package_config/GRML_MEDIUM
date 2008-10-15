@@ -203,7 +203,6 @@ ucf
 udev
 unp
 unzip
-unzoo
 update-inetd
 usbutils
 util-linux
@@ -279,6 +278,7 @@ xserver-xorg-video-vmware
 xserver-xorg-video-voodoo
 xterm
 zip
+zoo
 zsh
 
 PACKAGES aptitude I386

@@ -3,8 +3,9 @@ grml-live (0.9.5) unstable; urgency=low
   * Drop "root (cd)" from grub/menu.lst. Thanks, Tong Sun.
     [Closes: issue552]
   * Drop xserver-xorg-video-newport from all flavours.
+  * Replace all unzoo package references with zoo, see #497775.
 
- -- Michael Prokop <mika@grml.org>  Wed, 15 Oct 2008 22:06:29 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 15 Oct 2008 22:58:56 +0200
 
 grml-live (0.9.4) unstable; urgency=low
 
