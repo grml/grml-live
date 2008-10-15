@@ -56,18 +56,14 @@ EOF
       fi
    fi
 
-   # 081015: deactivated because it seems to be unnecessary for
-   #         stable release maintenance - keep the code for now
-   #         if we re-notice any problems
-   #
    # FAI softupdate executes upgrade only with the sources.list being
    # present in the chroot :-/ - so let's do it on our own:
-#   if [ -r /etc/grml/fai/apt/sources.list ] ; then
-#      if [ -L $target/etc/apt/sources.list ] ; then
-#         rm $target/etc/apt/sources.list
-#      fi
-#      cp /etc/grml/fai/apt/sources.list $target/etc/apt/sources.list
-#   fi
+   if [ -r /etc/grml/fai/apt/sources.list ] ; then
+      if [ -L $target/etc/apt/sources.list ] ; then
+         rm $target/etc/apt/sources.list
+      fi
+      cp /etc/grml/fai/apt/sources.list $target/etc/apt/sources.list
+   fi
 
    # run it on our own, as updatebase is used at the wrong stage for our needs,
    # see /etc/grml/fai/config/hooks/updatebase.GRMLBASE

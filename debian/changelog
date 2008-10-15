@@ -4,7 +4,8 @@ grml-live (0.9.5) unstable; urgency=low
     [Closes: issue552]
   * Drop xserver-xorg-video-newport from all flavours.
   * Replace all unzoo package references with zoo, see #497775.
-  * Drop the /etc/grml/fai/apt/sources.list workaround for softupdate for now.
+  * Drop 'skiptask updatebase' workaround in
+    /etc/grml/fai/config/hooks/updatebase.GRMLBASE.
 
  -- Michael Prokop <mika@grml.org>  Wed, 15 Oct 2008 23:20:54 +0200
 

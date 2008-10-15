@@ -7,11 +7,12 @@
 ################################################################################
 
 if [ "$FAI_ACTION" = "softupdate" ] ; then
-   # we want to use our own sources.list:
+
+   ## we want to use our own sources.list:
    # skiptask updatebase
 
-   # make sure we don't start any daemons - removed
-   # later on via /etc/grml/fai/config/scripts/GRMLBASE/98-clean-chroot
+   ## make sure we don't start any daemons - removed
+   ## later on via /etc/grml/fai/config/scripts/GRMLBASE/98-clean-chroot
 #   if ! [ -r $target/usr/sbin/policy-rc.d ] ; then
 #      cat > $target/usr/sbin/policy-rc.d << EOF
 ##!/bin/sh
