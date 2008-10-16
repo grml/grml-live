@@ -8,8 +8,9 @@ grml-live (0.9.5) unstable; urgency=low
     because we have to skip FAI's updatebase task and lack /proc therefore.
     New packages that are being installed and want to start any daemons
     might fail, let's try to do our best to avoid that.
+  * Try to get rid of any hanging $CHROOT_OUTPUT/dev[/pts] mountpoints.
 
- -- Michael Prokop <mika@grml.org>  Thu, 16 Oct 2008 01:03:24 +0200
+ -- Michael Prokop <mika@grml.org>  Thu, 16 Oct 2008 11:22:58 +0200
 
 grml-live (0.9.4) unstable; urgency=low
 

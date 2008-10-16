@@ -436,8 +436,12 @@ else
       rm -rf "$CHROOT_OUTPUT"/var/log/fai/*
    fi
 
+   # make sure we don't leave any mounts - FAI doesn't remove them always
    umount $CHROOT_OUTPUT/proc 2>/dev/null || /bin/true
    umount $CHROOT_OUTPUT/sys  2>/dev/null || /bin/true
+   umount $CHROOT_OUTPUT/dev/pts 2>/dev/null || /bin/true
+   umount $CHROOT_OUTPUT/dev 2>/dev/null || /bin/true
+
    [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
 
    # notice: 'fai dirinstall' does not seem to exit appropriate, so:
