@@ -485,7 +485,8 @@ option in grml-live cmdline):
 Versions with LZMA compression:
 
 * Kernel 2.6.23-grml: works
-* Kernel 2.6.26-grml: does NOT work, please use zlib mode instead
+* Kernel 2.6.26-grml: does NOT work, please use zlib mode instead or switch
+  to Debian package squashfs-lzma-tools (see section above).
 
 FAQ
 ---
