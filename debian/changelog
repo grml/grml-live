@@ -9,8 +9,11 @@ grml-live (0.9.5) unstable; urgency=low
     might fail, let's try to do our best to avoid that.
   * Try to get rid of any hanging $CHROOT_OUTPUT/dev[/pts] mountpoints.
   * Drop clamav-getfiles from GRML_FULL.
+  * Update debian/control:
+    - move from XS-Vcs-* to Vcs-*
+    - use Build-Depends-Indep
 
- -- Michael Prokop <mika@grml.org>  Sat, 25 Oct 2008 12:13:05 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 25 Oct 2008 12:18:37 +0200
 
 grml-live (0.9.4) unstable; urgency=low
 

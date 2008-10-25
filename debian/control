@@ -2,11 +2,12 @@ Source: grml-live
 Section: grml
 Priority: extra
 Maintainer: Michael Prokop <mika@grml.org>
-Build-Depends: debhelper (>= 5), asciidoc, xsltproc, docbook-xsl
+Build-Depends: debhelper (>= 5)
+Build-Depends-Indep: asciidoc, xsltproc, docbook-xsl
 Standards-Version: 3.8.0
 Homepage: http://grml.org/grml-live/
-XS-Vcs-git: git://git.grml.org/grml-live.git
-XS-Vcs-Browser: http://git.grml.org/?p=grml-live.git
+Vcs-git: git://git.grml.org/grml-live.git
+Vcs-Browser: http://git.grml.org/?p=grml-live.git
 
 Package: grml-live
 Architecture: all
