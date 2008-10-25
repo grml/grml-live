@@ -1,3 +1,9 @@
+grml-live (0.9.6) unstable; urgency=low
+
+  * Add espeakup to GRML_FULL.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 25 Oct 2008 13:49:43 +0200
+
 grml-live (0.9.5) unstable; urgency=low
 
   * Drop "root (cd)" from grub/menu.lst. Thanks, Tong Sun. [Closes: issue552]
