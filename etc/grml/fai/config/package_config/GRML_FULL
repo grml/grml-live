@@ -382,7 +382,6 @@ clamav
 clamav-base
 clamav-daemon
 clamav-freshclam
-clamav-getfiles
 clamav-testfiles
 clex
 clive

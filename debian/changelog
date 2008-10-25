@@ -1,7 +1,6 @@
 grml-live (0.9.5) unstable; urgency=low
 
-  * Drop "root (cd)" from grub/menu.lst. Thanks, Tong Sun.
-    [Closes: issue552]
+  * Drop "root (cd)" from grub/menu.lst. Thanks, Tong Sun. [Closes: issue552]
   * Drop xserver-xorg-video-newport from all flavours.
   * Replace all unzoo package references with zoo, see #497775.
   * Handle policy-rc.d in /etc/grml/fai/config/hooks/updatebase.GRMLBASE
@@ -9,8 +8,9 @@ grml-live (0.9.5) unstable; urgency=low
     New packages that are being installed and want to start any daemons
     might fail, let's try to do our best to avoid that.
   * Try to get rid of any hanging $CHROOT_OUTPUT/dev[/pts] mountpoints.
+  * Drop clamav-getfiles from GRML_FULL.
 
- -- Michael Prokop <mika@grml.org>  Thu, 16 Oct 2008 11:22:58 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 25 Oct 2008 12:13:05 +0200
 
 grml-live (0.9.4) unstable; urgency=low
 
