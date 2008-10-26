@@ -266,7 +266,9 @@ progress)
 * LATEX_CLEANUP: get rid of several very large LaTeX directories
 (like some /usr/share/doc/texlive-*, /usr/share/doc/texmf,...)
 
-* LOCALES: use full featured locales setup (see /etc/locale.gen.grml)
+* LOCALES: use full featured locales setup (see /etc/locale.gen.grml). This
+avoids to get rid of /usr/share/locale - which happens by default otherwise - as
+well.
 
 * NO_ONLINE: do not run scripts during the chroot build process which require a
 network connection

@@ -8,11 +8,9 @@
 
 set -e
 
-# make sure:
-# localepurge     localepurge/nopurge     multiselect ....
-# is set so localepurge works as expected
-if [ -x $target/usr/sbin/localepurge ] ; then
-   $ROOTCMD dpkg-reconfigure -f noninteractive localepurge
+if [ -z "$ROOTCMD" ] ; then
+   echo "variable \$ROOTCMD not set, exiting to avoid any possible damage">&2
+   exit 1
 fi
 
 # use full locales setup only in classes GRML_FULL and LOCALES
@@ -24,6 +22,13 @@ else
    cp $target/etc/locale.gen.minimal $target/etc/locale.gen
 fi
 
+# make sure:
+# localepurge     localepurge/nopurge     multiselect ....
+# is set so localepurge works as expected
+if [ -x $target/usr/sbin/localepurge ] ; then
+   $ROOTCMD dpkg-reconfigure -f noninteractive localepurge
+fi
+
 if [ -x $target/usr/sbin/locale-gen ] ; then
    $ROOTCMD locale-gen
 else
@@ -32,6 +37,14 @@ fi
 
 if [ -x $target/usr/sbin/localepurge ] ; then
    $ROOTCMD localepurge
+fi
+
+# get rid of LC_MESSAGES unless using class LOCALES
+if ! ifclass LOCALES ; then
+   echo 'Removing /usr/share/locale'
+   $ROOTCMD rm -rf /usr/share/locale
+   $ROOTCMD mkdir /usr/share/locale
+   # TODO: /usr/share/i18n/locales
 fi
 
 ## END OF FILE #################################################################

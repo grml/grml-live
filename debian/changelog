@@ -3,8 +3,13 @@ grml-live (0.9.6) unstable; urgency=low
   * Add espeakup to GRML_FULL.
   * Execute dpkg-reconfigure for localepurge with noninteractive frontend.
     [Closes: issue554]
+  * Rework locale handling. From now on /usr/share/locale gets removed
+    by default (though /usr/share/i18n/locales won't be touched for
+    now), unless using class LOCALES. Reason: We have >70MB inside
+    /usr/share/locale on GRML_FULL, just too much to ship by default,
+  * Remove localepurge from GRML_SMALL.
 
- -- Michael Prokop <mika@grml.org>  Sun, 26 Oct 2008 01:13:39 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 27 Oct 2008 00:50:44 +0100
 
 grml-live (0.9.5) unstable; urgency=low
 
