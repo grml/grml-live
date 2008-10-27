@@ -576,6 +576,7 @@ dvd+rw-tools
 dvi2tty
 dvipng
 dviutils
+dwdiff
 dwm
 dwm-tools
 dynafont
@@ -651,6 +652,7 @@ fai-server
 fake
 fakechroot
 fakeroot
+faketime
 farpd
 fatresize
 fatsort
@@ -658,6 +660,7 @@ fbgrab
 fbi
 fblogo
 fbset
+fcoretools
 fcrackzip
 fdflush
 fdupes

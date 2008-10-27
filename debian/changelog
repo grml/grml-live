@@ -1,6 +1,10 @@
 grml-live (0.9.6) unstable; urgency=low
 
-  * Add espeakup to GRML_FULL.
+  * Add new packages to GRML_FULL:
+    - dwdiff (front-end for the diff program that operates word by word)
+    - espeakup (connector between espeak and speakup)
+    - faketime (report faked system time to programs)
+    - fcoretools (Tools to advise the IO scheduler)
   * Execute dpkg-reconfigure for localepurge with noninteractive frontend.
     [Closes: issue554]
   * Rework locale handling. From now on /usr/share/locale gets removed
@@ -9,7 +13,7 @@ grml-live (0.9.6) unstable; urgency=low
     /usr/share/locale on GRML_FULL, just too much to ship by default,
   * Remove localepurge from GRML_SMALL.
 
- -- Michael Prokop <mika@grml.org>  Mon, 27 Oct 2008 00:50:44 +0100
+ -- Michael Prokop <mika@grml.org>  Mon, 27 Oct 2008 12:37:47 +0100
 
 grml-live (0.9.5) unstable; urgency=low
 
