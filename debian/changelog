@@ -1,6 +1,7 @@
 grml-live (0.9.6) unstable; urgency=low
 
   * Add new packages to GRML_FULL:
+    - cciss-vol-status (HP SmartArray RAID Volume Status Checker)
     - dwdiff (front-end for the diff program that operates word by word)
     - espeakup (connector between espeak and speakup)
     - faketime (report faked system time to programs)
@@ -13,7 +14,7 @@ grml-live (0.9.6) unstable; urgency=low
     /usr/share/locale on GRML_FULL, just too much to ship by default,
   * Remove localepurge from GRML_SMALL.
 
- -- Michael Prokop <mika@grml.org>  Mon, 27 Oct 2008 12:37:47 +0100
+ -- Michael Prokop <mika@grml.org>  Mon, 27 Oct 2008 14:03:37 +0100
 
 grml-live (0.9.5) unstable; urgency=low
 
