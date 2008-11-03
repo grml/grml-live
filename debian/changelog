@@ -6,6 +6,7 @@ grml-live (0.9.6) unstable; urgency=low
     - espeakup (connector between espeak and speakup)
     - faketime (report faked system time to programs)
     - fcoretools (Tools to advise the IO scheduler)
+    - qiv (A quick image viewer for X)
     - speakup-modules-2.6.26-grml64 (support speakup on amd64 as well)
   * Execute dpkg-reconfigure for localepurge with noninteractive frontend.
     [Closes: issue554]
@@ -17,7 +18,7 @@ grml-live (0.9.6) unstable; urgency=low
   * Remove mozilla-imagezoom from GRML_FULL (the "extension installed"
     message at startup sucks).
 
- -- Michael Prokop <mika@grml.org>  Mon, 03 Nov 2008 14:49:07 +0100
+ -- Michael Prokop <mika@grml.org>  Mon, 03 Nov 2008 19:32:49 +0100
 
 grml-live (0.9.5) unstable; urgency=low
 
