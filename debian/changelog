@@ -13,8 +13,10 @@ grml-live (0.9.6) unstable; urgency=low
     now), unless using class LOCALES. Reason: We have >70MB inside
     /usr/share/locale on GRML_FULL, just too much to ship by default,
   * Remove localepurge from GRML_SMALL.
+  * Remove mozilla-imagezoom from GRML_FULL (the "extension installed"
+    message at startup sucks).
 
- -- Michael Prokop <mika@grml.org>  Mon, 27 Oct 2008 14:03:37 +0100
+ -- Michael Prokop <mika@grml.org>  Mon, 03 Nov 2008 14:49:07 +0100
 
 grml-live (0.9.5) unstable; urgency=low
 
