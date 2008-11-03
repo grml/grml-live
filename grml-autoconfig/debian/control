@@ -4,9 +4,9 @@ Priority: optional
 Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends: debhelper (>= 4.0.0)
 Standards-Version: 3.8.0
-Homepage: http://hg.grml.org/grml-autoconfig/
-XS-Vcs-hg: http://hg.grml.org/grml-autoconfig/
-XS-Vcs-Browser: http://hg.grml.org/grml-autoconfig/
+Homepage: http://git.grml.org/?p=grml-autoconfig.git
+Vcs-git: git://git.grml.org/grml-autoconfig.git
+Vcs-Browser: http://git.grml.org/?p=grml-autoconfig.git
 
 Package: grml-autoconfig
 Architecture: all
@@ -20,5 +20,3 @@ Description: main bootup process of a grml system
  grml-autoconfig is also a script which is an interface to
  the configuration system (see /etc/grml/autoconfig) of
  the framework.
- .
-  Homepage: http:/grml.org/
