@@ -6,6 +6,7 @@ grml-live (0.9.6) unstable; urgency=low
     - espeakup (connector between espeak and speakup)
     - faketime (report faked system time to programs)
     - fcoretools (Tools to advise the IO scheduler)
+    - speakup-modules-2.6.26-grml64 (support speakup on amd64 as well)
   * Execute dpkg-reconfigure for localepurge with noninteractive frontend.
     [Closes: issue554]
   * Rework locale handling. From now on /usr/share/locale gets removed

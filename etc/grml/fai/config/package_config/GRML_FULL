@@ -2113,7 +2113,6 @@ sl-modem-modules-2.6.26-grml
 speakup-modules-2.6.26-grml
 sysprof-module-2.6.26-grml
 tp-smapi-modules-2.6.26-grml
-truecrypt-2.6.26-grml
 virtualbox-ose-guest-modules-2.6.26-grml virtualbox-ose-guest-utils
 #virtualbox-ose-modules-2.6.26-grml
 #zaptel-modules-2.6.26-grml
@@ -2146,8 +2145,8 @@ openafs-modules-2.6.26-grml64
 qc-usb-modules-2.6.26-grml64
 rt2400-modules-2.6.26-grml64
 rt2500-modules-2.6.26-grml64
+speakup-modules-2.6.26-grml64
 sysprof-module-2.6.26-grml64
-truecrypt-2.6.26-grml64
 ## }}}
 
 # vim: foldmethod=marker
