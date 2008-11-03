@@ -7,6 +7,10 @@
 
 # The default language/keyboard to use. This CAN NOT be autoprobed.
 case "$LANGUAGE" in
+        C|POSIX)
+                LANG="C"
+                LANGUAGE="C"
+                ;;
         at-iso)
                 # Austrian version
                 COUNTRY="at"

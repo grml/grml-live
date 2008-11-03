@@ -1,3 +1,12 @@
+grml-autoconfig (0.8.15) unstable; urgency=low
+
+  * Use us instead of en-utf8 as default locale (this is what we
+    are using as bootparam by default as well).
+  * Support C/POSIX locales within language setup.
+  * Use POSIX locales on grml-small.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 03 Nov 2008 01:26:49 +0100
+
 grml-autoconfig (0.8.14) unstable; urgency=low
 
   * Rework config_swspeak once more, move most parts of the logic

@@ -204,12 +204,16 @@ config_language(){
 
  # set default to 'en' in live-cd mode if $LANGUAGE is not yet set:
  if [ -z "$INSTALLED" ] ; then
-    [ -n "$LANGUAGE" ] || LANGUAGE='en-utf8'
+    [ -n "$LANGUAGE" ] || LANGUAGE='us'
  fi
 
  # if bootoption lang is used update /etc/default/locale, otherwise *not*!
- if [ -n "$BOOT_LANGUAGE" ] ; then
-    [ -x /usr/sbin/grml-setlang ] && /usr/sbin/grml-setlang "$LANGUAGE"
+ if [ -n "$BOOT_LANGUAGE" -a -x /usr/sbin/grml-setlang ] ; then
+    if checkgrmlsmall ; then
+       /usr/sbin/grml-setlang "POSIX"
+    else
+       /usr/sbin/grml-setlang "$LANGUAGE"
+    fi
  fi
 
  # set console font
