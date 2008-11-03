@@ -4,8 +4,9 @@ grml-autoconfig (0.8.15) unstable; urgency=low
     are using as bootparam by default as well).
   * Support C/POSIX locales within language setup.
   * Use POSIX locales on grml-small.
+  * Adjust VCS headers (we use git nowadays).
 
- -- Michael Prokop <mika@grml.org>  Mon, 03 Nov 2008 01:26:49 +0100
+ -- Michael Prokop <mika@grml.org>  Mon, 03 Nov 2008 01:29:36 +0100
 
 grml-autoconfig (0.8.14) unstable; urgency=low
 
