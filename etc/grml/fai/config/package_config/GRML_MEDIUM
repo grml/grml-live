@@ -115,6 +115,7 @@ iptstate
 iputils-ping
 ipw3945d
 ipw-firmware
+irqbalance
 jed
 jed-common
 keychain
