@@ -6,20 +6,24 @@ grml-live (0.9.6) unstable; urgency=low
     - espeakup (connector between espeak and speakup)
     - faketime (report faked system time to programs)
     - fcoretools (Tools to advise the IO scheduler)
+    - latencytop (A tool for developers to visualize system latencies)
     - qiv (A quick image viewer for X)
     - speakup-modules-2.6.26-grml64 (support speakup on amd64 as well)
+  * Add irqbalance to GRML_MEDIUM.
+    - irqbalance (Daemon to balance interrupts for SMP systems)
+    - latencytop (A tool for developers to visualize system latencies)
+    - powertop (Linux tool to find out what is using power on a laptop)
+  * Remove localepurge from GRML_SMALL.
+  * Remove mozilla-imagezoom from GRML_FULL (the "extension installed"
   * Execute dpkg-reconfigure for localepurge with noninteractive frontend.
     [Closes: issue554]
   * Rework locale handling. From now on /usr/share/locale gets removed
     by default (though /usr/share/i18n/locales won't be touched for
     now), unless using class LOCALES. Reason: We have >70MB inside
     /usr/share/locale on GRML_FULL, just too much to ship by default,
-  * Remove localepurge from GRML_SMALL.
-  * Remove mozilla-imagezoom from GRML_FULL (the "extension installed"
     message at startup sucks).
-  * Add irqbalance to GRML_MEDIUM.
 
- -- Michael Prokop <mika@grml.org>  Fri, 07 Nov 2008 14:26:45 +0100
+ -- Michael Prokop <mika@grml.org>  Sun, 09 Nov 2008 22:28:16 +0100
 
 grml-live (0.9.5) unstable; urgency=low
 
