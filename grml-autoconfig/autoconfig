@@ -107,6 +107,7 @@ CONFIG_SWSPEAK='yes'          # run software synthesizer via speakup
 CONFIG_TESTCD='yes'           # CD checker
 CONFIG_TIME='yes'             # set clock, check for bootparam utc/gmt [only in live-mode]
 CONFIG_TIMEZONE='yes'         # get bootparam 'tz' and set it as /etc/localtime [only in live-mode]
+CONFIG_TOHD='yes'             # bootoption tohd=...
 CONFIG_USERFSTAB='yes'        # check for username of uid 1000
 CONFIG_VMWARE='yes'           # vmware specific stuff (use xorg.conf.vmware)
 CONFIG_WELCOME='yes'          # play welcome sound (audio)
