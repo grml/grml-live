@@ -2319,6 +2319,47 @@ fi
 }
 # }}}
 
+# {{{ tohd= bootoption
+config_tohd()
+{
+  if checkbootparam "tohd" ; then
+     local TARGET="$(getbootparam 'tohd' 2>>$DEBUG)"
+     if [ -z "$TARGET" ] ; then
+        eerror "Error: tohd specified without any partition, can not continue." ; eend 1
+        eerror "Please use something like tohd=/dev/sda9." ; eend 1
+        return 1
+     fi
+
+     if ! [ -b "$TARGET" ] ; then
+        eerror "Error: $TARGET is not a valid block device, sorry." ; eend 1
+        return 1
+     fi
+
+     if grep -q $TARGET /proc/mounts ; then
+	eerror "$TARGET already mounted, skipping execution of tohd therefore."
+	eend 1
+	return 1
+     fi
+
+     local MOUNTDIR=$(mktemp -d)
+
+     if mount -o rw "$TARGET" "$MOUNTDIR" ; then
+        einfo "Copyring live system to $TARGET - this might take a while"
+        rsync -a --progress /live/image/live $MOUNTDIR
+	sync
+	umount "$MOUNTDIR"
+        eend $?
+	einfo "Booting with \"grml bootfrom=$TARGET\" should work now." ; eend 0
+     else
+        eerror "Error when trying to mount $TARGET, sorry."; eend 1
+        return 1
+     fi
+
+     rmdir "$MOUNTDIR"
+  fi
+}
+# }}}
+
 # {{{ grml2hd: automatic installation
 config_grml2hd(){
 

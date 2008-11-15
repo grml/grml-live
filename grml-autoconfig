@@ -276,6 +276,8 @@ if [ -n "$SPLASH" ] ; then
    chvt 1
 fi
 
+checkvalue $CONFIG_TOHD && config_tohd
+
 checkvalue $CONFIG_GRML2HD && config_grml2hd
 
 checkvalue $CONFIG_DEBOOTSTRAP && config_debootstrap
