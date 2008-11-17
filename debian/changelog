@@ -22,8 +22,9 @@ grml-live (0.9.6) unstable; urgency=low
     now), unless using class LOCALES. Reason: We have >70MB inside
     /usr/share/locale on GRML_FULL, just too much to ship by default,
     message at startup sucks).
+  * Update grml-cheatcodes.txt.
 
- -- Michael Prokop <mika@grml.org>  Sun, 09 Nov 2008 22:28:16 +0100
+ -- Michael Prokop <mika@grml.org>  Mon, 17 Nov 2008 12:05:08 +0100
 
 grml-live (0.9.5) unstable; urgency=low
 

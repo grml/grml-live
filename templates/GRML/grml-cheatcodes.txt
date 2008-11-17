@@ -1,12 +1,10 @@
       CHEATCODES AND HINTS FOR GRML
 ==============================================================================
 
-*IMPORTANT NOTICE*: Some bootoptions may not work as expected (and documented) yet
-                    because grml is based on a new framework named grml-live now - see
-                    http://grml.org/grml-live/ for details. Please report all bootoptions
-                    that do not work as expected. Thank you! http://grml.org/bugs/
+These options work from the (isolinux/grub) bootprompt of grml based (live) systems.
 
-These options (can be combined) work from the (isolinux/grub) bootprompt:
+The following kernel options are available (do NOT use them as 'grml $OPTION',
+use them as '$OPTION'!):
 
 grml                                Use default settings (same as just pressing return)
 grml2ram                            Copy grml's squashfs file to RAM and
@@ -28,11 +26,8 @@ grub                                Boot into the Grub bootloader
 qemu                                Boot with special options for use in Qemu
 vmware                              Boot with special options for use in VMware
 
-Important: if you notice any problems with one of the
-following options please report it to the grml-team:
-http://grml.org/bugs/
-
-Notice: not all of the following cheatcodes are available on all the grml flavours.
+The following boot options can be combined.
+Notice: not all of the them are available on all the grml flavours.
 For example the X window system is not part of grml-small.
 
 Regional settings:
@@ -61,37 +56,52 @@ grml home=/dev/hda2                 Mount specified partition as grml homedir
 grml home=/dev/sda1/grml.img        Mount loopback file as /home/grml
 grml home=scan                      Automatic search for grml homedir (using file grml.img)
 grml hostname=...                   Set hostname
-grml debnet                         Search through local partitions for file /etc/network/interfaces,
-                                    copy /etc/network to local system and restart networking then
 grml distri=...                     Set distribution name to given argument. If a jpg file named like the
                                     given distri name can be found in directory desktop on the ISO
 				    (/cdrom/desktop/"$DISTRI") it will be taken as wallpaper for grml
-grml unionfs                        Use unionfs instead of aufs as overlay filesystem
+grml debnet                         Search through local partitions for file /etc/network/interfaces,
+                                    copy /etc/network to local system and restart networking then
 
-Notice: Take a look at http://grml.org/config/ and
-/usr/share/doc/grml-saveconfig/grml-config.html
-for more information regarding the configuration
-framework of grml.
+Notice: Take a look at http://grml.org/config/ and /usr/share/doc/grml-saveconfig/grml-config.html
+for more information regarding the configuration framework of grml.
 
 Booting related options:
 ------------------------
-grml toram                          Copy the whole CD/medium to RAM and run
-                                    from there (compare with 'grml2ram')
-grml tohd=/dev/hda1                 Copy CD to HD partition and run from there
-grml fromhd                         Skip checking for grml on CD-ROM
-grml fromhd=/dev/hda1               Boot from previously copied CD-Image
-grml bootfrom=/dev/hda1             Access Image then boot from previously
-                                    copied CD-Image
-grml bootfrom=/dev/hda1/GRML.iso    Access image, boot from ISO-Image
-grml grml_dir=GRML                  Directory to search for on the CD
-grml grml_name=GRML                 SquashFS-File to search for on the CD
+grml2ram                            Copy grml's squashfs file to RAM and run from there
+grml toram                          Copy the whole CD/medium to RAM and run from there
+grml toram=filename.squashfs        Copy the specified file to RAM and run from there
+                                    Usage example: grml toram=grml-medium.squashfs
+                                    Notice: grml2ram is an alias for this option which
+                                    corresponds with the grml flavour settings by default.
+
+grml tohd=/dev/sda1                 Copy grml's squashfs file to harddisk partition for later
+                                    use via "grml bootfrom=/dev/sda1"
+grml bootfrom=/dev/sda1             Use the squashfs file from directory 'live' of the specified device.
+                                    Setup can be done booting 'grml tohd=/dev/sda1' or
+                                    running 'rsync -a --progress /live/image/live /mnt/sda1/'.
+grml isofrom=/dev/sda1/grml.iso     Use specified ISO image for booting.
+                                    Useful when booting as a rescue system from harddisk - just boot
+                                    the according grml kernel and initrd using the bootoptions
+                                    "boot=live isofrom=/dev/sda1/grml.iso".
+                                    Notice: "fromiso" does the same as "isofrom", it's just there
+                                    to prevent any typing errors.
+
+grml live-media-path=live           Sets the path to the live filesystem on the medium.
+                                    By default, it is set to /live.
+grml module=grml                    Instead of using the default "$name.module" another file can
+                                    be specified without the extension ".module"; it should be placed
+                                    on "/live" directory of the live medium.
+                                    Useful for Multiboot USB pen, see
+                                    http://wiki.grml.org/doku.php?id=tips#multiboot_usb_pen
 
 Debugging related settings:
 ---------------------------
-debug                               Get shells during process of booting, using GNU screen
-grml debug=noscreen                 Get shells during process of booting, but without using GNU screen
+debug                               Get shells during process of booting, using GNU screen, most verbose
+grml debug                          Get shells during process of booting, using GNU screen, verbose
+grml debug=noscreen                 Get shells during process of booting, verbose, but without using GNU screen
 grml nocolor                        Disable colorized output while booting
-grml log                            Log error messages while booting and
+grml log                            Log error messages while booting to /tmp/grml.log.`date +%Y%m%d`"
+                                    and /var/log/boot.
 grml testcd                         Check CD data integrity and md5sums
 
 Service related settings:
@@ -122,6 +132,10 @@ Accessibility related settings:
 grml blind                          Start Braille-Terminal (no X)
 grml swspeak                        Prepare system for use with software synthesizer through speakup
                                     Run 'swspeak' after booting up to activate sound output
+grml swspeak=espeak                 Use espeakup (if available) as connector to speakup.
+                                    Run 'swspeak' after booting up to activate sound output
+grml swspeak=speechd                Use speech-dispatcher / speechd-up (if available) as connector to speakup.
+                                    Run 'swspeak' after booting up to activate sound output
 grml brltty=type,port,table         Parameters for Braille device (e.g.: brltty=al,/dev/ttyS0,text.de.tbl)
 grml speakup_synth=...              Use speakup kernel module with given hardware type
 
@@ -132,7 +146,6 @@ grml noswraid                       Disable scanning for software raid arrays (c
 grml swraid                         Enable automatic assembling of software raid arrays
 grml nolvm                          Disable scanning for Logical Volumes (LVM)
 grml lvm                            Automatically activate Logival Volumes (LVM) during boot
-grml cdrom=/dev/...                 Use specifed device as CD-ROM device (used for mounting the grml-ISO)
 grml xmodule=ati|fbdev|i810|mga     Use specified X.org-Module (1)
 grml xmodule=nv|radeon|savage|s3    Use specified X.org-Module (2)
 grml xmodule=radeon|svga|i810       Use specified X.org-Module (3)
@@ -141,8 +154,8 @@ grml no{dma,fstab,modem}            Skip parts of HW-detection (2)
 grml no{pcmcia,scsi,swap,usb}       Skip parts of HW-detection (3)
 grml 915resolution=...              Start resolution modify tool for Intel graphic chipset
                                     usage: $MODE,$XRESO,$YRESO
-grml blacklist=modulename           Completely disable loading of specified module via
-                                    blacklisting through /etc/modprobe.d/grml
+grml blacklist=modulename[,module2] Completely disable loading of specified module(s) via
+                                    blacklisting through udev's /etc/modprobe.d/grml
 grml fwtimeout=50                   Set firmware timeout via /sys/class/firmware/timeout to specified value
 grml nosound                        Mute sound devices (notice: this does not deactivate loading of sound drivers!)
 grml vol=number                     Set mixer volumes to level $number
@@ -178,6 +191,7 @@ debian2hd <options>                 ... whereas valid options for debian2hd are:
   password=     set passwort of user root without prompting for it, e.g.: password=AiTh5ahn
 
   Usage example for automatic installation:
+
     debian2hd target=/dev/hda1 grub=hd0 groot=hd0,0 mirror=ftp://ftp.tugraz.at/mirror/debian password=foobar
 
   See http://grml.org/grml-debootstrap/ for more information.
@@ -207,15 +221,6 @@ BIOS updates can help.) Sometimes, switching to the text console with
 Control-Alt-F1 and back to the X-screen with Control-Alt-F7 solves the
 problem without rebooting, since the X server reinitializes the mouse
 driver during that procedure.
-
-*) Bootfrom needs access to a running grml-System with the same Kernel
-as the Bootkernel, before it is able to mount the partition / ISO-Image.
-This should allow a poor mans install from NTFS-Partitions and makes it
-also possible to boot an ISO-Image directly. You can also use wildcards
-in the ISO-Filename, but it must be unique. So: If you have just one
-grml.iso on /dev/hda1 you can access it as: bootfrom=/dev/hda1/G*.iso,
-but if there are several, you need to make clear, which one you want.
-(Feature added by Fabian Franz.)
 
 *) If your grml-CD makes strange noises during boot, or you see frequent
 errors like "squashfs: read error", or programs are crashing randomly,
@@ -252,13 +257,13 @@ the configuration framework of grml.
         -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat
 
 as option to mkisofs. Otherwise your CD won't be bootable. The
-directory GRML, containig the compressed filesystem file "GRML",
+directory live, containing the squashfs compressed filesystem file,
 must be located in the top level directory of the CD.
 
 *) Caution: screensavers: Don't start xlock/vlock or any other screensaver
 that requires a password. There are no default passwords on grml,
 i.e. all accounts are LOCKED unless you explicitly set a password.
-See also README_Security.txt about this issue.
+See also README.txt about this issue.
 Hint: If you accidentially started a screensaver switch to one of the
 textconsoles by Control-Alt-F1 and kill the screensaver (or just set a
 password for the grml user). Take a look at the script grml-lock.
