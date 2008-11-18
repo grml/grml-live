@@ -3,7 +3,6 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>, (c) Andreas Gredler <jimmy@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Mit Okt 24 09:54:11 CEST 2007 [mika]
 ################################################################################
 
 # Usage examples:
@@ -120,5 +119,20 @@ Baud = 460800
 Init2 = ATZ
 Init3 = ATQ0 V1 E1 S0=0 &C1 &D2 +FCLASS=0
 Init5 = AT+CGDCONT=1,"IP","web.yesss.at";
+
+# web.vodafone.de
+[Dialer voda]
+Phone = *99***1#
+Username = irrelevant
+Password = irrelevant
+Stupid Mode = 1
+Dial Command = ATDT
+Modem = /dev/ttyUSB0
+Baud = 921600
+Init2 = ATZ
+Init3 = ATE0V1&D2&C1S0=0+IFC=2,2
+ISDN = 0
+Modem Type = Analog Modem
+Init5 =AT+CGDCONT=1,"IP","web.vodafone.de";
 
 ## END OF FILE ##################################################################
