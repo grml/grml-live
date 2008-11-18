@@ -681,8 +681,8 @@ else
 
    CURRENT_DIR=$(pwd)
    if cd "$BUILD_OUTPUT" ; then
-      log "mkisofs -V 'grml $VERSION' -publisher 'grml-live | grml.org' -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b $BOOT_FILE -o ${ISO_OUTPUT}/${ISO_NAME} ."
-      mkisofs -V "grml $VERSION" -publisher 'grml-live | grml.org' \
+      log "mkisofs -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b $BOOT_FILE -o ${ISO_OUTPUT}/${ISO_NAME} ."
+      mkisofs -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
               -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
               -b $BOOT_FILE \
               -o "${ISO_OUTPUT}/${ISO_NAME}" . ; RC=$?
