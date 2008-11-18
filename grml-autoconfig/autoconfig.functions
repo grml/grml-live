@@ -360,26 +360,29 @@ config_userfstab(){
 config_time(){
  # don't touch the files if running from harddisk:
  if [ -z "$INSTALLED" ]; then
-    UTC=""
+    # The default hardware clock timezone is stated as representing local time.
+    UTC="--localtime"
     checkbootparam utc >>$DEBUG 2>&1 && UTC="-u"
     checkbootparam gmt >>$DEBUG 2>&1 && UTC="-u"
     # hwclock uses the TZ variable
-    [ -r /etc/timezone ] && TZ=$(cat /etc/timezone)
-    [ -n "$TZ" ] || TZ=Europe/Vienna
+    KTZ="$(getbootparam tz 2>>$DEBUG)"
+    [ -z "$KTZ" ] && [ -r /etc/timezone ] && KTZ=$(cat /etc/timezone)
+    [ -z "$KTZ" ] && KTZ=Europe/Vienna
 
     if ! [ -r /dev/rtc ] ; then
-      ewarn "Realtime clock not available, skipping execution of hwclock therefore." ; eend 0
-    else
-      ERROR=$(TZ="$TZ" hwclock $UTC -s 2>&1 | head -1) ; RC=$?
-      if [ -n "$ERROR" ] ; then
-         eindent
-         ERROR=$(TZ="$TZ" hwclock $UTC -s --directisa 2>&1 | head -1)
-         if [ -n "$ERROR" ] ; then
-            eerror "Problem running hwclock: $ERROR" ; eend 1
-         fi
-         eoutdent
-      fi
+      ewarn "Warning: realtime clock not available, trying to execute hwclock anyway." ; eend 0
     fi
+
+    ERROR=$(TZ="$TZ" hwclock $UTC -s 2>&1 | head -1) ; RC=$?
+    if [ -n "$ERROR" ] ; then
+       eindent
+       ERROR=$(TZ="$TZ" hwclock $UTC -s --directisa 2>&1 | head -1)
+       if [ -n "$ERROR" ] ; then
+          eerror "Problem running hwclock: $ERROR" ; eend 1
+       fi
+       eoutdent
+    fi
+
  fi
 }
 # }}}
