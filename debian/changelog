@@ -23,8 +23,11 @@ grml-live (0.9.6) unstable; urgency=low
     /usr/share/locale on GRML_FULL, just too much to ship by default,
     message at startup sucks).
   * Update grml-cheatcodes.txt.
+  * Provide grml's gpg key via /etc/grml/fai/files/etc/apt/grml.key
+    so we support offline operation as well. Based on an idea by
+    Thomas Lehmann, thanks!
 
- -- Michael Prokop <mika@grml.org>  Mon, 17 Nov 2008 12:05:08 +0100
+ -- Michael Prokop <mika@grml.org>  Tue, 18 Nov 2008 23:42:32 +0100
 
 grml-live (0.9.5) unstable; urgency=low
 
