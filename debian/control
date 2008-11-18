@@ -4,9 +4,9 @@ Priority: optional
 Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends: debhelper (>= 4.0.0)
 Standards-Version: 3.8.0
-Homepage: http://hg.grml.org/grml-etc/
-XS-Vcs-hg: http://hg.grml.org/grml-etc/
-XS-Vcs-Browser: http://hg.grml.org/grml-etc/
+Homepage: http://git.grml.org/?p=grml-etc.git
+Vcs-git: git://git.grml.org/grml-etc.git
+Vcs-Browser: http://git.grml.org/?p=grml-etc.git
 
 Package: grml-etc
 Architecture: all

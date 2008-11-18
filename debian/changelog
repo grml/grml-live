@@ -1,6 +1,7 @@
 grml-etc (1.1.9) unstable; urgency=low
 
   * /etc/wvdial.conf.umts: add usage example for web.vodafone.de
+  * Update VCS headers in debian/control.
 
  -- Michael Prokop <mika@grml.org>  Wed, 19 Nov 2008 00:29:53 +0100
 
