@@ -1,3 +1,13 @@
+grml-autoconfig (0.8.17) unstable; urgency=low
+
+  * Some updates in config_time(), thanks to Thomas Lehmann:
+    - use UTC="--localtime" by default
+    - evaluate tz bootoption in this function as well
+    - execute hwclock even if /dev/rtc isn't available, just display
+      warning regarding the lack of /dev/rtc
+
+ -- Michael Prokop <mika@grml.org>  Wed, 19 Nov 2008 00:23:55 +0100
+
 grml-autoconfig (0.8.16) unstable; urgency=low
 
   * Support tohd=... bootoption.
