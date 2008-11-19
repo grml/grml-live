@@ -1,0 +1,77 @@
+Redesign of grml-live(8)
+========================
+
+Name
+----
+
+(Re-)Design of grml-live
+
+Synopsis
+--------
+
+None.
+
+Description
+-----------
+
+grml-live mainly executes the following main stages:
+
+* fai dirinstall: link:http://www.informatik.uni-koeln.de/fai/[FAI] (Fully
+Automatic Installation) does the chroot related work
+
+* mksquashfs: generate the compressed squashfs file which provides the chroot in
+compressed format
+
+* mkisofs: generates the ISO itself, based on the output by mksquashfs and some
+further bootmanger related stuff
+
+This document describes the planned design for a re-implementation of
+grml-live in Python.
+
+[NOTE]
+
+This document is work in progress. Seriously.
+
+grml-live interface
+-------------------
+
+The grml-live interface itself (no matter whether text based or a graphical
+interface) uses the provided mechanisms by lib-grml-live.
+
+lib-grml-live
+-------------
+
+Helper Functions:
+
+* log(): log into syslog, /var/log/grml-live.log
+* console_info(): display information on plain console
+* usage(): display usage information
+
+Validation:
+
+* check_permissions(): check for id == 0
+* check_diskspace(): check for enough free space(?)
+* check_programms(): check for all the necessary tools
+
+Configuration handling:
+
+* parse_config_files(mainconfig=/etc/grml/grml-live.conf, localconfig=/etc/grml/grml-live.local): read /etc/grml/grml-live.local and /etc/grml/grml-live.conf
+* cmdline_opts(): parse commandline, overrides configuration from parse_config()
+* update_config_files(): write active configuration to configuration files (like /etc/grml/fai/apt/sources.list)
+
+Installation of files:
+
+* install_chroot(): execute 'fai dirinstall'
+* install_bootmanager(): install bootmanager (grub and/or isolinux)
+* install_initrd(): install initrd from chroot into booting area
+* install_kernel(): install kernel from chroot into booting area
+* install_addons(): install addons into booting area
+* install_bootsplash(): install bootsplash (image)
+* install_bootmessages(): install bootmessages
+* install_windows_binaries(): install windows (related) binaries
+
+Create ISO:
+
+* create_squashfs(): execute mksquashfs
+* create_md5sums(): create md5sums
+* create_iso(): execute mkisofs
