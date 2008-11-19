@@ -1,3 +1,10 @@
+grml-etc (1.1.10) unstable; urgency=low
+
+  * Add /etc/skel/.ipython/ipy_user_conf.py from '%upgrade'
+    within ipython so user's don't explore this problem.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 19 Nov 2008 13:25:33 +0100
+
 grml-etc (1.1.9) unstable; urgency=low
 
   * /etc/wvdial.conf.umts: add usage example for web.vodafone.de
