@@ -12,7 +12,7 @@ Synopsis
 
 grml-live [-a <architecture>] [-c <classe[s]>] [-C <configfile>] [-g
 <grml_name>] [-i <iso_name> ] [-o <output_directory>] [-r <release_name>] [-s
-<suite>] [-t <template_directory>] [-v <version_number>] [-bFhuVz]
+<suite>] [-t <template_directory>] [-v <version_number>] [-bFhquVz]
 
 CAUTION: Please check out <<current_state,the 'Current state of grml-live with
 squashfs-tools and kernel' section>> for details about current state of involved
@@ -120,6 +120,12 @@ Main output directory of the build process of FAI.  Some directories are created
 inside this target directory, being: grml_cd (where the files for creating the
 ISO are located, including the compressed squashfs file), grml_chroot (the
 chroot system) and grml_isos (where the resulting ISO is stored).
+
+  -q::
+
+Build the ISO without (re-)creating the squashfs compressed file using mksquashfs.
+This option is useful if you just want to update parts outside the chroot in the ISO.
+Consider combining this option with the build-only option '-b'.
 
   -r **RELEASENAME**::
 

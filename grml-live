@@ -36,6 +36,7 @@ Usage: $PN [options, see as follows]
    -h                      display short usage information and exit
    -i <iso_name>           name of ISO
    -o <output_directory>   main output directory of the build process
+   -q                      skip mksquashfs
    -r                      release name
    -s <suite>              Debian suite; values: etch, lenny, sid
    -t <template_directory> place of the templates
@@ -208,7 +209,7 @@ fi
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:g:i:o:r:s:t:v:bFuVz" opt; do
+while getopts "a:C:c:g:i:o:r:s:t:v:bFuqVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     b) BUILD_ONLY=1 ;;
@@ -221,6 +222,7 @@ while getopts "a:C:c:g:i:o:r:s:t:v:bFuVz" opt; do
        BUILD_OUTPUT="$OUTPUT/grml_cd"
        ISO_OUTPUT="$OUTPUT/grml_isos"
        ;;
+    q) SKIP_MKSQUASHFS=1 ;;
     r) RELEASENAME="$OPTARG" ;;
     s) SUITE="$OPTARG" ;;
     t) TEMPLATE_DIRECTORY="$OPTARG";;
@@ -294,6 +296,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$SQUASHFS_OPTIONS" ] && echo "  Using SQUASHFS_OPTIONS ${SQUASHFS_OPTIONS}"
    [ -n "$VERBOSE" ]       && echo "  Using VERBOSE mode."
    [ -n "$UPDATE" ]        && echo "  Executing UPDATE instead of fresh installation."
+   [ -n "$SKIP_MKSQUASHFS" ] && echo "  Skipping creation of SQUASHFS file."
    [ -n "$BUILD_ONLY" ]    && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
    echo
    echo -n "Is this ok for you? [y/N] "
@@ -604,6 +607,9 @@ fi
 if [ -f "$BUILD_OUTPUT"/live/${GRML_NAME}.squashfs -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
    log "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'"
    ewarn "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'" ; eend 0
+elif [ -f "$BUILD_OUTPUT"/live/${GRML_NAME}.squashfs -a -n "$SKIP_MKSQUASHFS" ] ; then
+   log "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs' as requested"
+   ewarn "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs' as requested" ; eend 0
 else
    [ -d "$BUILD_OUTPUT"/live ] || mkdir "$BUILD_OUTPUT"/live
    # make sure we don't leave (even an empty) base.tgz:
