@@ -172,6 +172,7 @@ aespipe
 aewan
 afio
 aggregate
+aiccu
 aircrack-ng
 airsnort
 ajaxterm
@@ -1450,6 +1451,7 @@ quota
 racoon
 radeontool
 radio
+radvd
 rain
 rake
 randomize-lines

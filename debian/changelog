@@ -1,9 +1,12 @@
 grml-live (0.9.7) unstable; urgency=low
 
-  * Add genext2fs to GRML_FULL and GRML_MEDIUM (for use within
-    live-snapshot).
+  * Add packages to GRML_FULL:
+    - aiccu (thanks, Christian Vogel)
+    - genext2fs
+    - radvd (thanks, Christian Vogel)
+  * Add genext2fs to GRML_MEDIUM (for use within live-snapshot).
 
- -- Michael Prokop <mika@grml.org>  Thu, 20 Nov 2008 12:41:39 +0100
+ -- Michael Prokop <mika@grml.org>  Thu, 20 Nov 2008 14:59:34 +0100
 
 grml-live (0.9.6) unstable; urgency=low
 
@@ -152,7 +155,6 @@ grml-live (0.9.0) unstable; urgency=low
     just set -no-progress in $SQUASHFS_OPTIONS instead.
   * Use linux-kernel-headers-grml in grml-medium.
   * Use vim.basic as alternative setting for 'vi'.
-  * 
 
  -- Michael Prokop <mika@grml.org>  Mon, 01 Sep 2008 15:17:39 +0200
 
@@ -372,7 +374,7 @@ grml-live (0.0.13) unstable; urgency=low
     acpi-support, aumix, alsa-utils, dctrl-tools, debconf-utils,
     grml-debian-keyring, grml-debugtools, grml-files, grml-hwinfo, grml-laptop,
     grml-mercurial-utils, grml-pylib, grml-sectools, grml-templates,
-    grml-terminalserver, htop, iptstate, locales, multitail, postfix, powernowd, 
+    grml-terminalserver, htop, iptstate, locales, multitail, postfix, powernowd,
   * Add new packages to GRML_MEDIUM:
     - truecrypt-2.6.23-grml
   * Add new packages to GRML_FULL:
@@ -398,7 +400,7 @@ grml-live (0.0.12) unstable; urgency=low
     Drop syslinux from Depends.
   * Mention -u option if using the option by accident and the chroot
     does not exist yet.
-  * Update buildd/cleanup.sh and add buildd/files/.logo.png, 
+  * Update buildd/cleanup.sh and add buildd/files/.logo.png,
     buildd/files/.style.css, buildd/files/HEADER.html and
     buildd/link_latest.sh (create symlinks for latest snapshot ISOs)
     and provide upload_logs().
@@ -731,7 +733,7 @@ grml-live (0.0.4) unstable; urgency=low
     TEMPLATE_DIRECTORY can be used in /etc/grml/grml-live.conf
   * Check for /var/run/fai/FAI_INSTALLATION_IN_PROGRESS and exit then.
   * /etc/grml/fai/config/hooks/instsoft.GRMLBASE:
-    - disable pipeline workaround 
+    - disable pipeline workaround
     - create /dev/MAKEDEV in chroot to work around the
       "./MAKEDEV: No such file or directory" problem of some packages
   * Use /var/log/grml-live.log as log file as /var/log/fai/* is too
@@ -748,7 +750,7 @@ grml-live (0.0.4) unstable; urgency=low
     /etc/grml/fai/config/scripts/GRMLBASE/34-hosts
   * Adjust filename in header of /etc/grml/fai/config/scripts/GRMLBASE/*.
   * Use iceweasel/firefox as x-www-browser and w3m as www-browser (if
-    available). 
+    available).
   * Check for presence of the initrd.
   * Improve adjustment of suite for $FAI_DEBOOTSTRAP.
   * Add /usr/share/grml-live/examples/buildd/
