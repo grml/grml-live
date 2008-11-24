@@ -12,7 +12,7 @@ Synopsis
 
 grml-live [-a <architecture>] [-c <classe[s]>] [-C <configfile>] [-g
 <grml_name>] [-i <iso_name> ] [-o <output_directory>] [-r <release_name>] [-s
-<suite>] [-t <template_directory>] [-v <version_number>] [-bFhquVz]
+<suite>] [-t <template_directory>] [-v <version_number>] [-bBFhquVz]
 
 CAUTION: Please check out <<current_state,the 'Current state of grml-live with
 squashfs-tools and kernel' section>> for details about current state of involved
@@ -68,6 +68,13 @@ Build the ISO without updating the chroot via FAI. This option is useful for
 example when working on stable releases: if you have a working base
 system/chroot and do not want to execute any further updates (via "-u" option)
 but intend to only build the ISO.
+
+  -B::
+
+Build the ISO without touching the chroot at all. This option is useful if
+you modified anything that FAI or grml-live might adjust via grml's FAI
+scripts.  It's like the '-b' option but even more advanced. Use only if you
+really know that you do not want to update the chroot.
 
   -c **CLASSES**::
 

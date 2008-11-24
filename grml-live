@@ -29,6 +29,7 @@ Usage: $PN [options, see as follows]
 
    -a <architecture>       architecture; available values: i386 and amd64
    -b                      build the ISO without updating the chroot via FAI
+   -B                      build the ISO without touching the chroot (skips cleanup)
    -c <classe[s]>          classes to be used for building the ISO via FAI
    -C <configfile>         configuration file for grml-live
    -F                      force execution without prompting
@@ -94,6 +95,7 @@ VERBOSE=''
 FORCE=''
 UPDATE=''
 BUILD_ONLY=''
+BUILD_DIRTY=''
 HOSTNAME=''
 
 if [ -r /etc/grml/lsb-functions ] ; then
@@ -209,10 +211,11 @@ fi
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:g:i:o:r:s:t:v:bFuqVz" opt; do
+while getopts "a:C:c:g:i:o:r:s:t:v:bBFuqVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     b) BUILD_ONLY=1 ;;
+    B) BUILD_DIRTY=1 ;;
     c) CLASSES="$OPTARG" ;;
     C) CONFIG="$OPTARG" ;;
     g) GRML_NAME="$OPTARG" ;;
@@ -277,27 +280,28 @@ if [ -z "$FORCE" ] ; then
    echo "${PN} [${GRML_LIVE_VERSION}]: check your configuration (or use -F to force execution):"
    echo
    echo "  FAI classes:       $CLASSES"
-   [ -r "$LOCAL_CONFIG" ]  && echo "  local config:      /etc/grml/grml-live.local"
-   [ -n "$CONFIG" ]        && echo "  configuration:     $CONFIG"
+   [ -r "$LOCAL_CONFIG" ]       && echo "  local config:      /etc/grml/grml-live.local"
+   [ -n "$CONFIG" ]             && echo "  configuration:     $CONFIG"
    echo "  main directory:    $OUTPUT"
-   [ -n "$CHROOT_OUTPUT" ] && echo "  chroot target:     $CHROOT_OUTPUT"
-   [ -n "$BUILD_OUTPUT" ]  && echo "  build target:      $BUILD_OUTPUT"
-   [ -n "$ISO_OUTPUT" ]    && echo "  ISO target:        $ISO_OUTPUT"
-   [ -n "$GRML_NAME" ]     && echo "  grml name:         $GRML_NAME"
-   [ -n "$RELEASENAME" ]   && echo "  release name:      $RELEASENAME"
-   [ -n "$VERSION" ]       && echo "  grml version:      $VERSION"
-   [ -n "$SUITE" ]         && echo "  Debian suite:      $SUITE"
-   [ -n "$ARCH" ]          && echo "  Architecture:      $ARCH"
-   [ -n "$BOOT_METHOD" ]   && echo "  Boot method:       $BOOT_METHOD"
+   [ -n "$CHROOT_OUTPUT" ]      && echo "  chroot target:     $CHROOT_OUTPUT"
+   [ -n "$BUILD_OUTPUT" ]       && echo "  build target:      $BUILD_OUTPUT"
+   [ -n "$ISO_OUTPUT" ]         && echo "  ISO target:        $ISO_OUTPUT"
+   [ -n "$GRML_NAME" ]          && echo "  grml name:         $GRML_NAME"
+   [ -n "$RELEASENAME" ]        && echo "  release name:      $RELEASENAME"
+   [ -n "$VERSION" ]            && echo "  grml version:      $VERSION"
+   [ -n "$SUITE" ]              && echo "  Debian suite:      $SUITE"
+   [ -n "$ARCH" ]               && echo "  Architecture:      $ARCH"
+   [ -n "$BOOT_METHOD" ]        && echo "  Boot method:       $BOOT_METHOD"
    [ -n "$TEMPLATE_DIRECTORY" ] && echo "  Template files:    $TEMPLATE_DIRECTORY"
-   [ -n "$FAI_ARGS" ]      && echo "  additional arguments for FAI: $FAI_ARGS"
-   [ -n "$LOGFILE" ]       && echo "  Logging to file:   $LOGFILE"
-   [ -n "$SQUASHFS_ZLIB" ] && echo "  Using ZLIB (instead of LZMA) compression."
-   [ -n "$SQUASHFS_OPTIONS" ] && echo "  Using SQUASHFS_OPTIONS ${SQUASHFS_OPTIONS}"
-   [ -n "$VERBOSE" ]       && echo "  Using VERBOSE mode."
-   [ -n "$UPDATE" ]        && echo "  Executing UPDATE instead of fresh installation."
-   [ -n "$SKIP_MKSQUASHFS" ] && echo "  Skipping creation of SQUASHFS file."
-   [ -n "$BUILD_ONLY" ]    && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
+   [ -n "$FAI_ARGS" ]           && echo "  additional arguments for FAI: $FAI_ARGS"
+   [ -n "$LOGFILE" ]            && echo "  Logging to file:   $LOGFILE"
+   [ -n "$SQUASHFS_ZLIB" ]      && echo "  Using ZLIB (instead of LZMA) compression."
+   [ -n "$SQUASHFS_OPTIONS" ]   && echo "  Using SQUASHFS_OPTIONS ${SQUASHFS_OPTIONS}"
+   [ -n "$VERBOSE" ]            && echo "  Using VERBOSE mode."
+   [ -n "$UPDATE" ]             && echo "  Executing UPDATE instead of fresh installation."
+   [ -n "$SKIP_MKSQUASHFS" ]    && echo "  Skipping creation of SQUASHFS file."
+   [ -n "$BUILD_ONLY" ]         && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
+   [ -n "$BUILD_DIRTY" ]        && echo "  Executing BUILD_DIRTY to leave chroot untouched."
    echo
    echo -n "Is this ok for you? [y/N] "
    read a
@@ -386,94 +390,99 @@ fi
 # }}}
 
 # CHROOT_OUTPUT - execute FAI {{{
-[ -n "$CHROOT_OUTPUT" ] || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
-
-if [ -n "$UPDATE" -o -n "$BUILD_ONLY" ] ; then
-   FAI_ACTION=softupdate
+if [ -n "$BUILD_DIRTY" ]; then
+  einfo "Skipping FAI" ; eend 0
 else
-   FAI_ACTION=dirinstall
-fi
+   [ -n "$CHROOT_OUTPUT" ] || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
 
-if [ -n "$UPDATE" -o -n "$BUILD_ONLY" ] ; then
-   if ! [ -r "$CHROOT_OUTPUT/etc/grml_version" ] ; then
-      log "Error: does not look like you have a working chroot. Updating/building not possible."
-      eerror "Error: does not look like you have a working chroot. Updating/building not possible. (Drop -u/-b option?)"
-      eend 1
-      bailout 20
-   fi
-fi
-
-if [ -d "$CHROOT_OUTPUT/bin" -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
-   log "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'"
-   ewarn "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'" ; eend 0
-else
-   mkdir -p "$CHROOT_OUTPUT" || bailout 5 "Problem with creating $CHROOT_OUTPUT for FAI"
-
-   if [ -n "${MIRROR_DIRECTORY}" ] ; then
-      mkdir -p "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
-      mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
-   fi
-
-   log "Executed FAI command line:"
-   log "BUILD_ONLY=$BUILD_ONLY fai $VERBOSE -C $GRML_FAI_CONFIG -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
-   BUILD_ONLY="$BUILD_ONLY" fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u \
-   "$HOSTNAME" $FAI_ACTION "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
-   RC="$PIPESTATUS" # notice: bash-only
-
-   if [ "$RC" != 0 ] ; then
-      log "Error while executing fai [exit code ${RC}]. Exiting."
-      eerror "Error while executing fai [exit code ${RC}]. Exiting." ; eend 1
-      bailout 1
+   if [ -n "$UPDATE" -o -n "$BUILD_ONLY" ] ; then
+      FAI_ACTION=softupdate
    else
-      log "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]"
-      echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]" > $CHROOT_OUTPUT/etc/grml_version
-      chmod 644 $CHROOT_OUTPUT/etc/grml_version
-      einfo "Rebuilding initramfs"
-      # make sure new /etc/grml_version reaches the initramfs:
-      chroot $CHROOT_OUTPUT update-initramfs -u -t
-      eend $?
+      FAI_ACTION=dirinstall
    fi
 
-   # Remove all FAI logs from chroot if class RELEASE is used:
-   if [ -f "$CHROOT_OUTPUT"/etc/grml_fai_release ] ; then
-      rm -rf "$CHROOT_OUTPUT"/var/log/fai/*
+   if [ -n "$UPDATE" -o -n "$BUILD_ONLY" ] ; then
+      if ! [ -r "$CHROOT_OUTPUT/etc/grml_version" ] ; then
+         log "Error: does not look like you have a working chroot. Updating/building not possible."
+         eerror "Error: does not look like you have a working chroot. Updating/building not possible. (Drop -u/-b option?)"
+         eend 1
+         bailout 20
+      fi
    fi
 
-   # make sure we don't leave any mounts - FAI doesn't remove them always
-   umount $CHROOT_OUTPUT/proc 2>/dev/null || /bin/true
-   umount $CHROOT_OUTPUT/sys  2>/dev/null || /bin/true
-   umount $CHROOT_OUTPUT/dev/pts 2>/dev/null || /bin/true
-   umount $CHROOT_OUTPUT/dev 2>/dev/null || /bin/true
-
-   [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
-
-   # notice: 'fai dirinstall' does not seem to exit appropriate, so:
-   ERROR=''
-   CHECKLOG=/var/log/fai/$HOSTNAME/last
-   if [ -r "$CHECKLOG/software.log" ] ; then
-      # 1 errors during executing of commands
-      grep 'dpkg: error processing' $CHECKLOG/software.log >> $LOGFILE && ERROR=1
-      grep 'E: Method http has died unexpectedly!' $CHECKLOG/software.log >> $LOGFILE && ERROR=2
-      grep 'ERROR: chroot' $CHECKLOG/software.log >> $LOGFILE && ERROR=3
-      grep 'E: Failed to fetch' $CHECKLOG/software.log >> $LOGFILE && ERROR=4
-      grep 'Unable to write mmap - msync (28 No space left on device)' $CHECKLOG/software.log >> $LOGFILE && ERROR=5
-   fi
-
-   if [ -r "$CHECKLOG/shell.log" ] ; then
-      grep 'FAILED with exit code' $CHECKLOG/shell.log >> $LOGFILE && ERROR=2
-   fi
-
-   if [ -n "$ERROR" ] ; then
-      log "There was an error [${ERROR}] during execution of stage 'fai dirinstall' [$(date)]"
-      eerror "There was an error during execution of stage 'fai dirinstall'"
-      echo "   Check out ${CHECKLOG}/ for details. [exit ${ERROR}]"
-      eend 1
-      bailout 1
+   if [ -d "$CHROOT_OUTPUT/bin" -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
+      log "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'"
+      ewarn "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'" ; eend 0
    else
-      log "Finished execution of stage 'fai dirinstall' [$(date)]"
-      einfo "Finished execution of stage 'fai dirinstall'"
+      mkdir -p "$CHROOT_OUTPUT" || bailout 5 "Problem with creating $CHROOT_OUTPUT for FAI"
+
+      if [ -n "${MIRROR_DIRECTORY}" ] ; then
+         mkdir -p "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
+         mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
+      fi
+
+      log "Executed FAI command line:"
+      log "BUILD_ONLY=$BUILD_ONLY fai $VERBOSE -C $GRML_FAI_CONFIG -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
+      BUILD_ONLY="$BUILD_ONLY" fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u \
+      "$HOSTNAME" $FAI_ACTION "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
+      RC="$PIPESTATUS" # notice: bash-only
+
+      if [ "$RC" != 0 ] ; then
+         log "Error while executing fai [exit code ${RC}]. Exiting."
+         eerror "Error while executing fai [exit code ${RC}]. Exiting." ; eend 1
+         bailout 1
+      else
+         log "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]"
+         echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]" > $CHROOT_OUTPUT/etc/grml_version
+         chmod 644 $CHROOT_OUTPUT/etc/grml_version
+         einfo "Rebuilding initramfs"
+         # make sure new /etc/grml_version reaches the initramfs:
+         chroot $CHROOT_OUTPUT update-initramfs -u -t
+         eend $?
+      fi
+
+      # Remove all FAI logs from chroot if class RELEASE is used:
+      if [ -f "$CHROOT_OUTPUT"/etc/grml_fai_release ] ; then
+         rm -rf "$CHROOT_OUTPUT"/var/log/fai/*
+      fi
+
+      # make sure we don't leave any mounts - FAI doesn't remove them always
+      umount $CHROOT_OUTPUT/proc 2>/dev/null || /bin/true
+      umount $CHROOT_OUTPUT/sys  2>/dev/null || /bin/true
+      umount $CHROOT_OUTPUT/dev/pts 2>/dev/null || /bin/true
+      umount $CHROOT_OUTPUT/dev 2>/dev/null || /bin/true
+
+      [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
+
+      # notice: 'fai dirinstall' does not seem to exit appropriate, so:
+      ERROR=''
+      CHECKLOG=/var/log/fai/$HOSTNAME/last
+      if [ -r "$CHECKLOG/software.log" ] ; then
+         # 1 errors during executing of commands
+         grep 'dpkg: error processing' $CHECKLOG/software.log >> $LOGFILE && ERROR=1
+         grep 'E: Method http has died unexpectedly!' $CHECKLOG/software.log >> $LOGFILE && ERROR=2
+         grep 'ERROR: chroot' $CHECKLOG/software.log >> $LOGFILE && ERROR=3
+         grep 'E: Failed to fetch' $CHECKLOG/software.log >> $LOGFILE && ERROR=4
+         grep 'Unable to write mmap - msync (28 No space left on device)' $CHECKLOG/software.log >> $LOGFILE && ERROR=5
+      fi
+
+      if [ -r "$CHECKLOG/shell.log" ] ; then
+         grep 'FAILED with exit code' $CHECKLOG/shell.log >> $LOGFILE && ERROR=2
+      fi
+
+      if [ -n "$ERROR" ] ; then
+         log "There was an error [${ERROR}] during execution of stage 'fai dirinstall' [$(date)]"
+         eerror "There was an error during execution of stage 'fai dirinstall'"
+         echo "   Check out ${CHECKLOG}/ for details. [exit ${ERROR}]"
+         eend 1
+         bailout 1
+      else
+         log "Finished execution of stage 'fai dirinstall' [$(date)]"
+         einfo "Finished execution of stage 'fai dirinstall'"
+      fi
+
    fi
-fi
+fi # BUILD_DIRTY?
 # }}}
 
 # BUILD_OUTPUT - execute arch specific stuff and squashfs {{{
@@ -604,7 +613,7 @@ else
    eerror 'Error: Unsupported ARCH, sorry. Want to support it? Contribute!' ; eend 1
 fi
 
-if [ -f "$BUILD_OUTPUT"/live/${GRML_NAME}.squashfs -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
+if [ -f "$BUILD_OUTPUT"/live/${GRML_NAME}.squashfs -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" ] ; then
    log "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'"
    ewarn "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'" ; eend 0
 elif [ -f "$BUILD_OUTPUT"/live/${GRML_NAME}.squashfs -a -n "$SKIP_MKSQUASHFS" ] ; then
@@ -679,7 +688,7 @@ elif [ "$BOOT_METHOD" = "grub" ] ; then
    BOOT_FILE="boot/grub/stage2_eltorito"
 fi
 
-if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
+if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" ] ; then
    log "$ISO_OUTPUT exists already, skipping stage 'iso build'"
    ewarn "$ISO_OUTPUT exists already, skipping stage 'iso build'" ; eend 0
 else
