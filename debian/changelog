@@ -8,8 +8,9 @@ grml-live (0.9.7) unstable; urgency=low
   * Add genext2fs to GRML_MEDIUM (for use within live-snapshot).
   * Support execution without touching the chroot at all using option "-B".
     Thanks for the patch, Jimmy.
+  * Update current state section of documentation.
 
- -- Michael Prokop <mika@grml.org>  Tue, 02 Dec 2008 17:06:19 +0100
+ -- Michael Prokop <mika@grml.org>  Tue, 02 Dec 2008 23:54:29 +0100
 
 grml-live (0.9.6) unstable; urgency=low
 

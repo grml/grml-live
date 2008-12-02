@@ -430,12 +430,13 @@ Current state of grml-live with squashfs-tools and kernel
 To make it easier to track problems this section documents current state of
 grml-live playing together with squashfs-tools / squashfs-lzma-tools (for
 building the compressed file) and the kernel version. Documentation of this
-section is up2date by 27th of september 2008.
+section is up2date by 02nd of december 2008, please report any bugs you
+encounter.
 
 System
 ~~~~~~
 
-* grml-live, version 0.9.4
+* grml-live, version 0.9.6
 
 * building grml-medium (Debian/unstable)
 
@@ -445,17 +446,23 @@ just as a reference):
   ii  busybox             1:1.10.2-2          Tiny utilities for small and embedded systems
   ii  initramfs-tools     0.92f.grml01        tools for generating an initramfs
   ii  klibc-utils         1.5.12-2            small utilities built with klibc for early boot
-  ii  live-initramfs      1.139.1-2grml.01    Debian Live initramfs hook
+  ii  live-initramfs      1.139.1-4grml.03    Debian Live initramfs hook
   ii  lvm2                2.02.39-2           The Linux Logical Volume Manager
-  ii  mdadm               2.6.7-3.1           tool to administer Linux MD arrays (software RAID)
+  ii  mdadm               2.6.7.1-1           tool to administer Linux MD arrays (software RAID)
   ii  udev                0.125-6grml0        /dev/ and hotplug management daemon
 
 Using squashfs-lzma-tools 3.3-1 on the build system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-squashfs-lzma-tools from the grml repository supports kernel 2.6.26-grml
+squashfs-lzma-tools from the grml repository supports kernel 2.6.26-grml[64]
 (version >=grml.05) using both lzma and zlib (-nolzma) compression. It's the
-recommended package for building ISOs with grml-live currently.
+recommended package for building ISOs with grml-live currently!
+
+The packages can be downloaded from
+link:http://deb.grml.org/pool/main/s/squashfs-lzma/[http://deb.grml.org/pool/main/s/squashfs-lzma/].
+
+[NOTE]
+Please use squashfs-lzma-tools 3.3-1 if you want to remaster release 2008.11 of grml.
 
 Using squashfs-tools 1:3.3-7 on the build system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -470,14 +477,15 @@ http://grml.org/squashfs/squashfs-tools_3.3-7_i386.deb (for x86) or
 http://grml.org/squashfs/squashfs-tools_3.3-7_amd64.deb (for amd64) [both build
 on and for Debian/etch but working with testing and unstable as well].
 
-Please notice that squashfs-tools 1:3.3-7 does NOT support LZMA compression at
-all. The -nolzma option of mksquashfs is not available therefore (even
-though grml-live will deactivate it for you automatically anyway). Please
-use squashfs-lzma-tools instead.
+Please notice that squashfs-tools 1:3.3-7 does NOT support LZMA compression
+at all (so you won't be able to remaster release 2008.11 for example). The
+-nolzma option of mksquashfs is not available therefore (even though
+grml-live will deactivate it for you automatically anyway). Please use
+squashfs-lzma-tools instead.
 
 * Kernel 2.6.23-grml: does NOT work, please use squashfs-tools 1:3.2r2-9exp1
-                    instead if you still want to use kernel 2.6.23
-* Kernel 2.6.26-grml: works
+                      instead if you still want to use kernel 2.6.23
+* Kernel 2.6.26-grml: works (without LZMA compression of course!)
 
 Using squashfs-tools 1:3.2r2-9exp1 on the build system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
