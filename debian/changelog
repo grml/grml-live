@@ -4,11 +4,12 @@ grml-live (0.9.7) unstable; urgency=low
     - aiccu (thanks, Christian Vogel)
     - genext2fs
     - radvd (thanks, Christian Vogel)
+    - tf (thanks, Rhonda)
   * Add genext2fs to GRML_MEDIUM (for use within live-snapshot).
   * Support execution without touching the chroot at all using option "-B".
     Thanks for the patch, Jimmy.
 
- -- Michael Prokop <mika@grml.org>  Mon, 24 Nov 2008 15:02:10 +0100
+ -- Michael Prokop <mika@grml.org>  Tue, 02 Dec 2008 17:06:19 +0100
 
 grml-live (0.9.6) unstable; urgency=low
 
