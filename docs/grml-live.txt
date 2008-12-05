@@ -418,7 +418,7 @@ total free disk space
 
 * fast network access for retreiving the Debian packages used for creating the
 chroot (check out "local mirror" and "NFSROOT" to workaround this problem as far
-as possiblbe)
+as possible)
 
 For further information see next section.
 
