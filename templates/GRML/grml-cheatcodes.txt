@@ -227,25 +227,25 @@ driver during that procedure.
 
 *) If your grml-CD makes strange noises during boot, or you see frequent
 errors like "squashfs: read error", or programs are crashing randomly,
-then your CD image is probably defective or incomplete, or your CD-burner
-created a defective CD due to wrong writing speed or bad media. This is
-the most common error reported.  Please boot with "grml testcd" to check
-if the CD is OK, and/or even better, verify the MD5 checksums that are
-present on the mirrors before writing the CD.  Check your CD low-level
-via running 'readcd -c2scan dev=/dev/cdrom'. In some cases, defective
-IDE controllers cause this error if you have DMA enabled. Also, please
-read the grml-FAQ.
+then your CD image is probably defective or incomplete, your CD-burner
+created a defective CD due to wrong writing speed or bad media or your
+CD-ROM drive is broken. This is the most common error reported.  Please
+boot with "grml testcd" to check if the CD is OK, and/or even better,
+verify the MD5 checksums that are present on the mirrors before writing
+the CD.  Check your CD low-level via running 'readcd -c2scan
+dev=/dev/cdrom'. In some cases, defective IDE controllers cause this
+error if you have DMA enabled. Also, please read the grml-FAQ.
 
 *) In case of a failing hardware autodetection, try booting with any of
 the "no-" options as shown in the table above, like in
    grml noagp noapm noapic acpi=off nodma
 to skip some critical parts of the autodetection system.
 
-*) Some boards apparently don't pass the proper memory size to the
-linux-kernel. It may cause the message "Panic: cannot mount root file
-system" and the system hangs. Use "grml mem=128M" to solve that
-problem if your system has 128MByte memory for example (caution:
-you MUST use a capital "M" here).
+*) Some boards (especially those with E-ISA slots) apparently don't pass
+the proper memory size to the linux-kernel. It may cause the message
+"Panic: cannot mount root file system" and the system hangs. Use "grml
+mem=128M" to solve that problem if your system has 128MByte memory for
+example (caution: you MUST use a capital "M" here).
 
 *) The "myconfig=/dev/partition" option allows you to reconfigure the
 system after autoconfiguration by running a bourne shell script called
