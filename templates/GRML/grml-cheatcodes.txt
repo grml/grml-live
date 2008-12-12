@@ -61,6 +61,9 @@ grml distri=...                     Set distribution name to given argument. If 
 				    (/cdrom/desktop/"$DISTRI") it will be taken as wallpaper for grml
 grml debnet                         Search through local partitions for file /etc/network/interfaces,
                                     copy /etc/network to local system and restart networking then
+grml mypath=...                     Add specified option into $PATH of Zsh.
+                                    For example when using "grml mypath=/foobar" then /foobar
+                                    will be added to the end of $PATH inside Zsh.
 
 Notice: Take a look at http://grml.org/config/ and /usr/share/doc/grml-saveconfig/grml-config.html
 for more information regarding the configuration framework of grml.
