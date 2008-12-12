@@ -9,8 +9,10 @@ grml-live (0.9.7) unstable; urgency=low
   * Support execution without touching the chroot at all using option "-B".
     Thanks for the patch, Jimmy.
   * Update current state section of documentation.
+  * Update cheatcode documentation (thanks to Moritz Augsburger).
+  * Drop cryopid from GRML_FULL, see #507882.
 
- -- Michael Prokop <mika@grml.org>  Tue, 02 Dec 2008 23:54:29 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 12 Dec 2008 12:17:35 +0100
 
 grml-live (0.9.6) unstable; urgency=low
 
