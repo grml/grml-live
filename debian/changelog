@@ -1,10 +1,17 @@
-grml-etc (1.1.10) unstable; urgency=low
+grml-etc (1.1.11) unstable; urgency=low
 
   * Change dpkg-divert handling in preinst. This hopefully
     addresses the changes introduced with #508392 in dpkg.
   * Drop unused files from overrides.
 
  -- Michael Prokop <mika@grml.org>  Tue, 30 Dec 2008 13:26:10 +0100
+
+grml-etc (1.1.10) unstable; urgency=low
+
+  * Add /etc/skel/.ipython/ipy_user_conf.py from '%upgrade'
+    within ipython so user's don't explore this problem.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 19 Nov 2008 13:25:33 +0100
 
 grml-etc (1.1.9) unstable; urgency=low
 
