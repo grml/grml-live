@@ -7,9 +7,7 @@ grml-etc: package-installs-into-etc-rc.d etc/rc3.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc4.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc5.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc6.d/important_notice
-grml-etc: script-not-executable ./etc/skel/.pekwm/start
 grml-etc: script-not-executable ./etc/resolv.conf.template
-grml-etc: executable-not-elf-or-script ./etc/skel/.gkrellm2/themes/Modern/gkrellmrc
 grml-etc: file-in-etc-rc.d-marked-as-conffile /etc/rcS.d/important_notice
 grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/firewall
 grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/grml-home

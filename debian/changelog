@@ -2,8 +2,9 @@ grml-etc (1.1.10) unstable; urgency=low
 
   * Change dpkg-divert handling in preinst. This hopefully
     addresses the changes introduced with #508392 in dpkg.
+  * Drop unused files from overrides.
 
- -- Michael Prokop <mika@grml.org>  Tue, 30 Dec 2008 13:19:58 +0100
+ -- Michael Prokop <mika@grml.org>  Tue, 30 Dec 2008 13:26:10 +0100
 
 grml-etc (1.1.9) unstable; urgency=low
 
