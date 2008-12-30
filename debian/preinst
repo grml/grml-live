@@ -39,29 +39,25 @@ rm_conffile() {
 
 case "$1" in
    install|upgrade)
-        if [ -r /etc/mgetty/login.config ] ; then
-           for cmd in $TO_DIVERT1; do
-               divert_gen $cmd /etc/mgetty
-           done
-        fi
+        for cmd in $TO_DIVERT1; do
+            divert_gen $cmd /etc/mgetty
+        done
+
         for cmd in $TO_DIVERT2; do
             divert_gen $cmd /etc/init.d
         done
-        if [ -d /etc/kismet ] ; then
-           for cmd in $TO_DIVERT3; do
-               divert_gen $cmd /etc/kismet
-           done
-        fi
-        if [ -d /etc/pcmcia ] ; then
-           for cmd in $TO_DIVERT4; do
-               divert_gen $cmd /etc/pcmcia
-           done
-        fi
-        if [ -d /etc/X11/windowlab ] ; then
-           for cmd in $TO_DIVERT5; do
-               divert_gen $cmd /etc/X11/windowlab
-           done
-        fi
+
+        for cmd in $TO_DIVERT3; do
+            divert_gen $cmd /etc/kismet
+        done
+
+        for cmd in $TO_DIVERT4; do
+            divert_gen $cmd /etc/pcmcia
+        done
+
+        for cmd in $TO_DIVERT5; do
+            divert_gen $cmd /etc/X11/windowlab
+        done
 
         # did I mention that dpkg-divert sucks?
         if [ -n "$2" ] ; then
