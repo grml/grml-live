@@ -21,7 +21,6 @@ da_DK.ISO-8859-15 ISO-8859-15
 da_DK.UTF-8 UTF-8
 de_AT@euro ISO-8859-15
 de_AT ISO-8859-1
-de_AT.UTF-8@euro UTF-8
 de_AT.UTF-8 UTF-8
 de_BE@euro ISO-8859-15
 de_BE ISO-8859-1
@@ -30,7 +29,6 @@ de_CH ISO-8859-1
 de_CH.UTF-8 UTF-8
 de_DE@euro ISO-8859-15
 de_DE ISO-8859-1
-de_DE.UTF-8@euro UTF-8
 de_DE.UTF-8 UTF-8
 el_GR ISO-8859-7
 el_GR.UTF-8 UTF-8

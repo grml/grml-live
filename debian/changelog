@@ -1,3 +1,11 @@
+grml-etc (1.1.12) unstable; urgency=low
+
+  * /etc/locale.gen.grml and /etc/locale.gen.minimal: drop
+    the "UTF-8@euro" lines, some applications seem to have
+    problems with that locale so let's drop it for now.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 10 Jan 2009 00:52:29 +0100
+
 grml-etc (1.1.11) unstable; urgency=low
 
   * Change dpkg-divert handling in preinst. This hopefully
