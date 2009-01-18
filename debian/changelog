@@ -1,8 +1,9 @@
 grml-live (0.9.8) unstable; urgency=low
 
   * Improve help text of the release option in usage info.
+  * Drop fblog from GRML_FULL (obsolete with 2.6 kernels, #427139).
 
- -- Michael Prokop <mika@grml.org>  Tue, 30 Dec 2008 14:04:06 +0100
+ -- Michael Prokop <mika@grml.org>  Sun, 18 Jan 2009 19:56:46 +0100
 
 grml-live (0.9.7) unstable; urgency=low
 
