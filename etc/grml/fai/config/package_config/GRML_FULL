@@ -995,6 +995,7 @@ less
 lft
 lftp
 libaa-bin
+libcap2-bin
 libpam-chroot
 libpam-devperm
 libpam-dotfile
