@@ -1858,50 +1858,70 @@ if checkbootparam extract ; then
 fi
 }
 
+config_unpack(){
+MOUNTDEVICE="$1"
+MESSAGE="$2"
+
+if [ ! -b "$MOUNTDEVICE" ] ; then
+   return;
+fi
+
+
+[ -d /mnt/grml ] || mkdir /mnt/grml
+umount /mnt/grml 1>>$DEBUG 2>&1 # make sure it is not mounted
+mount -o ro -t auto $MOUNTDEVICE /mnt/grml ; RC="$?"
+if [[ $RC == 0 ]]; then
+   einfo "Successfully mounted $MOUNTDEVICE $MESSAGE to /mnt/grml (readonly)." ; eend 0
+   eindent
+   CONFIG=''
+   CONFIG="$(/bin/ls -1d /mnt/grml/[Cc][Oo][Nn][Ff][Ii][Gg].[Tt][Bb][Zz] 2>>$DEBUG)"
+   if checkbootparam config ; then
+      FILENAME="$(getbootparam 'config' 2>>$DEBUG)"
+      if [ -e /mnt/grml/${FILENAME} ] ; then
+         einfo "Using /mnt/grml/$FILENAME instead of config.tbz"
+         CONFIG="/mnt/grml/$FILENAME"
+      fi
+   fi
+   if [ -n "$CONFIG" ]; then
+     einfo "Found file ${WHITE}${CONFIG}${NORMAL} - trying to extract it."
+     cd /
+     unp $CONFIG $EXTRACTOPTIONS ; eend $?
+   else
+     ewarn "Sorry, could not find file $FILENAME on device $MOUNTDEVICE $MESSAGE label GRMLCFG." ; eend 1
+   fi
+
+   SCRIPT=''
+   SCRIPT="$(/bin/ls -1d /mnt/grml/[Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
+   if [ -n "$SCRIPT" ]; then
+     einfo "Found script ${WHITE}${SCRIPT}${NORMAL} - trying to execute it."
+     $SCRIPT ; eend $?
+   fi
+   eoutdent
+   else
+   einfo "Could not mount $MOUNTDEVICE to /mnt/grml - sorry." ; eend 1
+fi # mount $MOUNTDEVICE
+grep -q '/mnt/grml' /proc/mounts && umount /mnt/grml
+
+}
+
 config_automount(){
 if checkbootparam noautoconfig || checkbootparam forensic ; then
   ewarn "Skipping running automount of device(s) labeled GRMLCFG as requested." ; eend 0
 else
  if [ -z "$INSTALLED" ] ; then
-  einfo "Searching for device(s) labeled with GRMLCFG. (Disable this via boot option: noautoconfig)" ; eend 0
-  eindent
-  [ -d /mnt/grml ] || mkdir /mnt/grml
-  umount /mnt/grml 1>>$DEBUG 2>&1 # make sure it is not mounted
-# We do need the following fix so floppy disk is available to blkid in any case :-/
-  if [ -r /dev/fd0 ] ; then
-     einfo "Floppy device detected. Trying to access floppy disk."
-#     dd if=/dev/fd0 of=/dev/null bs=512 count=1 1>>$DEBUG 2>&1
-     if timeout 4 dd if=/dev/fd0 of=/dev/null bs=512 count=1 1>>$DEBUG 2>&1 ; then
-        blkid /dev/fd0 1>>$DEBUG 2>&1
+     einfo "Searching for device(s) labeled with GRMLCFG. (Disable this via boot option: noautoconfig)" ; eend 0
+     eindent
+   # We do need the following fix so floppy disk is available to blkid in any case :-/
+     if [ -r /dev/fd0 ] ; then
+        einfo "Floppy device detected. Trying to access floppy disk."
+   #     dd if=/dev/fd0 of=/dev/null bs=512 count=1 1>>$DEBUG 2>&1
+        if timeout 4 dd if=/dev/fd0 of=/dev/null bs=512 count=1 1>>$DEBUG 2>&1 ; then
+           blkid /dev/fd0 1>>$DEBUG 2>&1
+        fi
      fi
+     DEVICE=$(blkid -t LABEL=GRMLCFG | head -1 | awk -F: '{print $1}')
+     config_unpack "$DEVICE" "labeled GRMCFG"
   fi
-  DEVICE=$(blkid -t LABEL=GRMLCFG | head -1 | awk -F: '{print $1}')
-  [ -n "$DEVICE" ] && mount -t auto -o ro $DEVICE /mnt/grml ; RC="$?"
-  if [[ $RC == 0 ]]; then
-    einfo "Mounting device $DEVICE labeled GRMLCFG succeeded." ; eend 0
-
-    CONFIG=''
-    CONFIG="$(/bin/ls -1d /mnt/grml/[Cc][Oo][Nn][Ff][Ii][Gg].[Tt][Bb][Zz] 2>>$DEBUG)"
-    if [ -n "$CONFIG" ]; then
-      einfo "Found file ${WHITE}${CONFIG}${NORMAL} - trying to extract it."
-      cd /
-      unp $CONFIG $EXTRACTOPTIONS ; eend $?
-    else
-      ewarn "Sorry, could not find file config.tbz on device with label GRMLCFG." ; eend 1
-    fi
-
-    SCRIPT=''
-    SCRIPT="$(/bin/ls -1d /mnt/grml/[Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
-    if [ -n "$SCRIPT" ]; then
-      einfo "Found script ${WHITE}${SCRIPT}${NORMAL} - trying to execute it."
-      $SCRIPT ; eend $?
-    fi
-    grep -q '/mnt/grml' /proc/mounts && umount /mnt/grml
-  else
-    ewarn "No devices with label GRMLCFG found." ; eend 0
-  fi
-  eoutdent
- fi
 fi
 }
 
@@ -1920,37 +1940,7 @@ fi
 if checkbootparam myconfig ; then
  MOUNTDEVICE="$(getbootparam 'myconfig' 2>>$DEBUG)"
  if [ -n "$MOUNTDEVICE" ]; then
-   if checkbootparam file ; then
-    FILENAME="$(getbootparam 'file' 2>>$DEBUG)"
-    [ -n "$FILENAME" ] || FILENAME='config.tbz'
-   fi
-   [ -d /mnt/grml ] || mkdir /mnt/grml
-   umount /mnt/grml 1>>$DEBUG 2>&1 # make sure it is not mounted
-   mount -o ro -t auto $MOUNTDEVICE /mnt/grml ; RC="$?"
-    if [[ $RC == 0 ]]; then
-      einfo "Successfully mounted $MOUNTDEVICE to /mnt/grml (readonly)." ; eend 0
-      eindent
-      CONFIG=''
-      CONFIG="$(/bin/ls -1d /mnt/grml/[Cc][Oo][Nn][Ff][Ii][Gg].[Tt][Bb][Zz] 2>>$DEBUG)"
-      if [ -n "$CONFIG" ]; then
-        einfo "Found file ${WHITE}${CONFIG}${NORMAL} - trying to extract it."
-        cd /
-        unp $CONFIG $EXTRACTOPTIONS ; eend $?
-      else
-        ewarn "Sorry, could not find file config.tbz on device with label GRMLCFG." ; eend 1
-      fi
-
-      SCRIPT=''
-      SCRIPT="$(/bin/ls -1d /mnt/grml/[Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
-      if [ -n "$SCRIPT" ]; then
-        einfo "Found script ${WHITE}${SCRIPT}${NORMAL} - trying to execute it."
-        $SCRIPT ; eend $?
-      fi
-      eoutdent
-    else
-      einfo "Could not mount $MOUNTDEVICE to /mnt/grml - sorry." ; eend 1
-    fi # mount $MOUNTDEVICE
-   grep -q '/mnt/grml' /proc/mounts && umount /mnt/grml
+     config_unpack "$MOUNTDEVICE"
  else
    einfo "Sorry, no device for bootoption myconfig provided. Skipping." ; eend 1
  fi # [ -n "$MOUNTDEVICE" ]
