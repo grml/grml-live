@@ -5,6 +5,8 @@ grml-live (0.9.8) unstable; urgency=low
   * Add libcap2-bin to GRML_FULL.
   * Upgrade isolinux.bin to version from syslinux-common 2:3.73+dfsg-1.
     [Testing: issue569]
+  * Integrate /etc/grml/fai/config/scripts/GRMLBASE/18-timesetup to
+    improve UTC handling. Thanks for the script, Thomas Lehmann!
 
  -- Michael Prokop <mika@grml.org>  Thu, 12 Feb 2009 14:20:39 +0100
 

@@ -1,0 +1,33 @@
+#!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/18-timesetup
+# Purpose:       apply default time and timezone settings
+# Authors:       (c) Thomas Lehmann <thomas.lehmann@kvt.de>
+# Bug-Reports:   send to author and see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+###############################################################################
+
+set -u
+set -e
+
+# tell if hwclock is running in UTC or local time
+if [ -n "$UTC" ] ; then
+   echo "Setting hwclock parameter UTC to $UTC"
+   sed -i "s|^UTC=.*$|UTC="$UTC"|" $target/etc/default/rcS
+fi
+
+# default timezone settings
+if [ -n "$TIMEZONE" ] ; then
+   echo "Setting default timezone to $TIMEZONE"
+   # update debconf
+   area=$(echo $TIMEZONE | cut -d '/' -f1)
+   zone=$(echo $TIMEZONE | cut -d '/' -f2)
+   echo "tzdata tzdata/Areas       select $area" | $ROOTCMD debconf-set-selections
+   echo "tzdata tzdata/Zones/$area select $zone" | $ROOTCMD debconf-set-selections
+   # update files
+   echo $TIMEZONE > $target/etc/timezone
+   rm -f $target/etc/localtime
+   cp -f $target/usr/share/zoneinfo/$TIMEZONE $target/etc/localtime
+fi
+
+## END OF FILE ################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
