@@ -362,21 +362,28 @@ config_time(){
  if [ -z "$INSTALLED" ]; then
     # The default hardware clock timezone is stated as representing local time.
     UTC="--localtime"
-    checkbootparam utc >>$DEBUG 2>&1 && UTC="-u"
-    checkbootparam gmt >>$DEBUG 2>&1 && UTC="-u"
+    grep -q "^UTC=" /etc/default/rcS || echo "UTC=no" >> /etc/default/rcS
+    checkbootparam utc       >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=yes|" /etc/default/rcS
+    checkbootparam gmt       >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=yes|" /etc/default/rcS
+    checkbootparam localtime >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=no|"  /etc/default/rcS
+    grep -q -i "^UTC=yes" /etc/default/rcS && UTC="-u"
     # hwclock uses the TZ variable
     KTZ="$(getbootparam tz 2>>$DEBUG)"
     [ -z "$KTZ" ] && [ -r /etc/timezone ] && KTZ=$(cat /etc/timezone)
-    [ -z "$KTZ" ] && KTZ=Europe/Vienna
+    if [ ! -f "/usr/share/zoneinfo/$KTZ" ] ; then
+       ewarn "Warning: unknown timezone $KTZ" ; eend 1
+       KTZ="Europe/Vienna"
+       ewarn "Falling back to timezone $KTZ" ; eend 0
+    fi
 
     if ! [ -r /dev/rtc ] ; then
       ewarn "Warning: realtime clock not available, trying to execute hwclock anyway." ; eend 0
     fi
 
-    ERROR=$(TZ="$TZ" hwclock $UTC -s 2>&1 | head -1) ; RC=$?
+    ERROR=$(TZ="$KTZ" hwclock $UTC -s 2>&1 | head -1) ; RC=$?
     if [ -n "$ERROR" ] ; then
        eindent
-       ERROR=$(TZ="$TZ" hwclock $UTC -s --directisa 2>&1 | head -1)
+       ERROR=$(TZ="$KTZ" hwclock $UTC -s --directisa 2>&1 | head -1)
        if [ -n "$ERROR" ] ; then
           eerror "Problem running hwclock: $ERROR" ; eend 1
        fi
@@ -465,10 +472,21 @@ config_timezone(){
  if [ -z "$INSTALLED" ]; then
     KTZ="$(getbootparam tz 2>>$DEBUG)"
     if [ -n "$KTZ" ] ; then
-       einfo "Setting timezone."
-       [ -f "/usr/share/zoneinfo/$KTZ" ] && TZ="$KTZ"
-       rm -f /etc/localtime
-       cp "/usr/share/zoneinfo/$TZ" /etc/localtime ; eend $?
+       if [ ! -f "/usr/share/zoneinfo/$KTZ" ]
+       then
+          ewarn "Warning: unknown timezone $KTZ"; eend 0
+       else
+          einfo "Setting timezone."
+          # update debconf
+          area=$(echo $KTZ | cut -d '/' -f1)
+          zone=$(echo $KTZ | cut -d '/' -f2)
+          echo "tzdata tzdata/Areas       select $area" | debconf-set-selections
+          echo "tzdata tzdata/Zones/$area select $zone" | debconf-set-selections
+          # update files
+          echo $KTZ > /etc/timezone
+          rm -f /etc/localtime
+          cp "/usr/share/zoneinfo/$KTZ" /etc/localtime ; eend $?
+       fi
     fi
  fi
 }
