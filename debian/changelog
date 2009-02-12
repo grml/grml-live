@@ -1,3 +1,12 @@
+grml-etc (1.1.13) unstable; urgency=low
+
+  * /etc/skel/.ipython/ipythonrc: Do not activate the
+    IPython.Extensions.InterpreterExec module by default anymore.
+    Upstream does not ship this configuration snippet as well.
+    Thanks for reporting and debugging, wuehlmaus! [Closes: issue618]
+
+ -- Michael Prokop <mika@grml.org>  Thu, 12 Feb 2009 18:24:11 +0100
+
 grml-etc (1.1.12) unstable; urgency=low
 
   * /etc/locale.gen.grml and /etc/locale.gen.minimal: drop

@@ -3,7 +3,6 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Fre Mai 25 02:40:10 CEST 2007 [mika]
 ################################################################################
 
 #***************************************************************************
@@ -246,10 +245,14 @@ pprint 1
 # are described in detail in the Customization section of the IPython HTML/PDF
 # manual.
 
-# Use \# to represent the current prompt number, and quote them to protect spaces.
+# Use \# to represent the current prompt number, and quote them to protect
+# spaces.
 prompt_in1 'In [\#]: '
-# \D is replaced by as many dots as there are digits in the current value of \#.
+
+# \D is replaced by as many dots as there are digits in the
+# current value of \#.
 prompt_in2 '   .\D.: '
+
 prompt_out 'Out[\#]: '
 
 #prompt_in1 '[ip] \C_LightBlue\u@\C_White\h \Y1 \# \C_White% '
@@ -303,6 +306,7 @@ screen_length 0
 # By choosing these you can organize your output any way you want.
 
 #separate_in \n
+# Do *not* separate prompt lines, instead use default [z]sh behaviour:
 separate_in 0
 separate_out 0
 separate_out2 0
@@ -502,7 +506,9 @@ import_mod
 
 # Load all the actual syntax extensions for shell-like operation, which live
 # in the InterpreterExec standard extension.
-import_all IPython.Extensions.InterpreterExec
+# Warning: constructs like '[ x*3 for x in [1,2,3]]' might not work when
+# activating this module - see http://bts.grml.org/grml/issue618
+# import_all IPython.Extensions.InterpreterExec
 
 #---------------------------------------------------------------------------
 # Section: modules to import some functions from: 'from ... import ...'
