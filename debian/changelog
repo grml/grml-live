@@ -1,3 +1,9 @@
+grml-live (0.9.9) unstable; urgency=low
+
+  * Update to kernel 2.6.28-grml[64].
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Feb 2009 09:36:08 +0100
+
 grml-live (0.9.8) unstable; urgency=low
 
   * Improve help text of the release option in usage info.

@@ -187,8 +187,8 @@ zoo
 zsh
 
 PACKAGES aptitude I386
-linux-image-2.6.26-grml aufs-modules-2.6.26-grml
+linux-image-2.6.28-grml aufs-modules-2.6.28-grml
 #linux-image-2.6.20-grml-small aufs-modules-2.6.20-grml-small
 
 PACKAGES aptitude AMD64
-linux-image-2.6.26-grml64 aufs-modules-2.6.26-grml64
+linux-image-2.6.28-grml64 aufs-modules-2.6.28-grml64
