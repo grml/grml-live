@@ -28,7 +28,7 @@ RootMenu = "Pekwm @ grml" {
 		Entry = "grml-slrn" { Actions = "Exec $TERM -title grml-slrn -e grml-slrn &" }
 	}
 	Submenu = "Debian" {
-	INCLUDE = "/etc/X11/pekwm/deb-menu"
+		INCLUDE = "/etc/pekwm/debian-menu"
 	}
 	Entry = "----------" { Actions = "NoAction" }
 		Entry = "Reload" { Actions = "Reload" }
