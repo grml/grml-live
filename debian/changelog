@@ -2,8 +2,10 @@ grml-desktop (0.2.2) unstable; urgency=low
 
   * /etc/skel/.pekwm/menu: replace /etc/X11/pekwm/deb-menu
     with /etc/pekwm/debian-menu. [Closes: issue438]
+  * Replace XS-VCS* headers with VCS*.
+  * Completely drop configure stuff from debian/rules.
 
- -- Michael Prokop <mika@grml.org>  Sat, 14 Feb 2009 17:38:26 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Feb 2009 17:43:40 +0100
 
 grml-desktop (0.2.1) unstable; urgency=low
 
