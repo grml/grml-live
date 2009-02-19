@@ -1,7 +1,9 @@
 grml-live (0.9.9) unstable; urgency=low
 
   * Update to kernel 2.6.28-grml[64].
-  * Drop package tspc from GRML_FULL (see #462738 and #515193)
+  * Changes in GRML_FULL:
+    - drop package tspc (see #462738 and #515193)
+    - replace gqview with geeqie (thanks, Spida)
   * Add mc to GRML_MEDIUM (on request by Christian Kuehlborn).
   * Document noautoconfig in grml-cheatcodes. Thanks to Ralf Moll!
   * buildd:
@@ -11,7 +13,7 @@ grml-live (0.9.9) unstable; urgency=low
     - use "$NAME-daily-$SUITE" in functions.sh as build name so
       identifying ISOs while running them is easier
 
- -- Michael Prokop <mika@grml.org>  Thu, 19 Feb 2009 23:00:25 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 20 Feb 2009 00:26:21 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 
