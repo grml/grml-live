@@ -139,6 +139,7 @@ lvm2
 makedev
 mawk
 mbr
+mc
 mdadm
 memtester
 mgetty
