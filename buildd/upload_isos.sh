@@ -4,7 +4,6 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Dec 16 22:07:02 CET 2007 [mika]
 ################################################################################
 
 . /etc/grml/grml-buildd.conf || exit 1
@@ -20,8 +19,8 @@ for file in *.iso ; do
     chmod 664 "${file}".md5
 done
 
-for flavour in grml-small_etch grml-small_sid grml-medium_etch grml-medium_sid grml_sid grml_etch \
-               grml64-small_etch grml64-small_sid grml64-medium_etch grml64-medium_sid grml64_sid grml64_etch ; do
+for flavour in grml-small_lenny grml-small_sid grml-medium_lenny grml-medium_sid grml_sid grml_lenny \
+               grml64-small_lenny grml64-small_sid grml64-medium_lenny grml64-medium_sid grml64_sid grml64_lenny ; do
     rsync --times --partial -az --quiet $flavour* $RSYNC_MIRROR/$flavour/
 done
 

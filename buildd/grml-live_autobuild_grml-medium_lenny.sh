@@ -2,10 +2,10 @@
 
 # settings for grml_live_run:
 DATE=$(date +%Y%m%d)
-ISO_NAME=grml_etch_$DATE.iso
-SUITE=etch
-CLASSES='GRMLBASE,GRML_FULL,LATEX_CLEANUP,RELEASE,I386'
-NAME=grml
+ISO_NAME=grml-medium_lenny_$DATE.iso
+SUITE=lenny
+CLASSES='GRMLBASE,GRML_MEDIUM,RELEASE,I386'
+NAME=grml-medium
 SCRIPTNAME="$(basename $0)"
 ARCH=i386
 

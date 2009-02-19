@@ -4,8 +4,14 @@ grml-live (0.9.9) unstable; urgency=low
   * Drop package tspc from GRML_FULL (see #462738 and #515193)
   * Add mc to GRML_MEDIUM (on request by Christian Kuehlborn).
   * Document noautoconfig in grml-cheatcodes. Thanks to Ralf Moll!
+  * buildd:
+    - rename all etch* related scripts to lenny*
+    - adjust scripts to use "lenny" instead of "stable" for building
+      [to avoid that "etch" is used as build name but lenny is used]
+    - use "$NAME-daily-$SUITE" in functions.sh as build name so
+      identifying ISOs while running them is easier
 
- -- Michael Prokop <mika@grml.org>  Thu, 19 Feb 2009 19:14:14 +0100
+ -- Michael Prokop <mika@grml.org>  Thu, 19 Feb 2009 23:00:25 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 

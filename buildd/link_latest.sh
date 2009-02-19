@@ -14,8 +14,8 @@ set -e
 [ -n "$MIRROR_DIRECTORY" ] || exit 1
 cd $MIRROR_DIRECTORY || exit 2
 
-for flavour in grml-small_etch grml-small_sid grml-medium_etch grml-medium_sid grml_sid grml_etch \
-               grml64-small_etch grml64-small_sid grml64-medium_etch grml64-medium_sid grml64_sid grml64_etch ; do
+for flavour in grml-small_lenny grml-small_sid grml-medium_lenny grml-medium_sid grml_sid grml_lenny \
+               grml64-small_lenny grml64-small_sid grml64-medium_lenny grml64-medium_sid grml64_sid grml64_lenny ; do
   ISO="$(ls -1 $flavour/*.iso | tail -1)"
   if [ -n "$ISO" ] ; then
      ln -sf $ISO $(basename ${ISO%%_[0-9]*})_latest.iso

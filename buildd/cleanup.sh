@@ -4,7 +4,6 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Dec 09 18:02:43 CET 2007 [mika]
 ################################################################################
 
 set -e
@@ -20,8 +19,8 @@ cd $MIRROR_DIRECTORY || exit 2
 DAYS=3
 
 REMOVE_ME=""
-for flavour in grml-small_etch grml-small_sid grml-medium_etch grml-medium_sid grml_sid grml_etch \
-               grml64-small_etch grml64-small_sid grml64-medium_etch grml64-medium_sid grml64_sid grml64_etch ; do
+for flavour in grml-small_lenny grml-small_sid grml-medium_lenny grml-medium_sid grml_sid grml_lenny \
+               grml64-small_lenny grml64-small_sid grml64-medium_lenny grml64-medium_sid grml64_sid grml64_lenny ; do
   FILE_COUNT=$(ls -1 $flavour/$flavour*.iso | wc -l)
   if [ "$FILE_COUNT" -gt "$DAYS" ] ; then
      FILES=$(ls -1 $flavour/$flavour*.iso | tail -"$DAYS")

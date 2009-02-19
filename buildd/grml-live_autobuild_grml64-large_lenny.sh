@@ -2,10 +2,10 @@
 
 # settings for grml_live_run:
 DATE=$(date +%Y%m%d)
-ISO_NAME=grml64-medium_etch_$DATE.iso
-SUITE=etch
-CLASSES='GRMLBASE,GRML_MEDIUM,RELEASE,AMD64'
-NAME=grml64-medium
+ISO_NAME=grml64_lenny_$DATE.iso
+SUITE=lenny
+CLASSES='GRMLBASE,GRML_FULL,LATEX_CLEANUP,RELEASE,AMD64'
+NAME=grml64
 SCRIPTNAME="$(basename $0)"
 ARCH=amd64
 
@@ -23,4 +23,8 @@ send_mail
 
 store_iso
 
-bailout
+if [ "$RC" = "0" ] ; then
+   bailout
+else
+   echo "building ISO failed, keeping build files [${OUTPUT_DIR}]"
+fi

@@ -2,12 +2,12 @@
 
 # settings for grml_live_run:
 DATE=$(date +%Y%m%d)
-ISO_NAME=grml64-small_etch_$DATE.iso
-SUITE=etch
-CLASSES='GRMLBASE,GRML_SMALL,REMOVE_DOCS,RELEASE,AMD64'
-NAME=grml64-small
+ISO_NAME=grml-small_lenny_$DATE.iso
+SUITE=lenny
+CLASSES='GRMLBASE,GRML_SMALL,REMOVE_DOCS,RELEASE,I386'
+NAME=grml-small
 SCRIPTNAME="$(basename $0)"
-ARCH=amd64
+ARCH=i386
 
 . /usr/share/grml-live/buildd/functions.sh || exit 1
 
