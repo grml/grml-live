@@ -64,6 +64,7 @@ grml debnet                         Search through local partitions for file /et
 grml mypath=...                     Add specified option into $PATH of Zsh.
                                     For example when using "grml mypath=/foobar" then /foobar
                                     will be added to the end of $PATH inside Zsh.
+grml noautoconfig                   Disable searching for device labeled GRMLCFG.
 
 Notice: Take a look at http://grml.org/config/ and /usr/share/doc/grml-saveconfig/grml-config.html
 for more information regarding the configuration framework of grml.

@@ -2,8 +2,9 @@ grml-live (0.9.9) unstable; urgency=low
 
   * Update to kernel 2.6.28-grml[64].
   * Drop package tspc from GRML_FULL (see #462738 and #515193)
+  * Document noautoconfig in grml-cheatcodes. Thanks to Ralf Moll!
 
- -- Michael Prokop <mika@grml.org>  Sat, 14 Feb 2009 17:26:38 +0100
+ -- Michael Prokop <mika@grml.org>  Thu, 19 Feb 2009 18:54:05 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 
