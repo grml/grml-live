@@ -26,7 +26,7 @@ for flavour in grml-small_lenny grml-small_sid grml-medium_lenny grml-medium_sid
      FILES=$(ls -1 $flavour/$flavour*.iso | tail -"$DAYS")
      OLD_FILES=$(ls $flavour/$flavour*.iso | grep -v "$FILES")
      for file in $OLD_FILES ; do
-         REMOVE_ME="$REMOVE_ME $(find $file -mtime +$DAYS)"
+         REMOVE_ME="$REMOVE_ME $(find "$file" -mtime +$DAYS)"
      done
   fi
 done
@@ -35,9 +35,10 @@ done
 
 for file in $REMOVE_ME ; do
     # remove ISOs:
-    test -f ${file}     && rm -f $file
-    # ... but keep their md5sum:
-    test -f ${file}.md5 && mv ${file}.md5 .archive
+    test -f "${file}"      && rm -f "$file"
+    # ... but keep their md5sum / sha1sum:
+    test -f "${file}".md5  && mv "${file}".md5   .archive
+    test -f "${file}".sha1 && mv "${file}".sha1 .archive
 done
 
 # inform on successful removal:

@@ -12,8 +12,7 @@
 cd $ISO_DIR || exit 3
 
 for file in *.iso ; do
-    rm -f "$file"
-    rm -f "${file}".md5
+    rm -f "$file" "${file}".md5 "${file}".sha1
 done
 
 ## END OF FILE #################################################################

@@ -19,6 +19,7 @@ for flavour in grml-small_lenny grml-small_sid grml-medium_lenny grml-medium_sid
   if [ -n "$ISO" ] ; then
      ln -sf $ISO $(basename ${ISO%%_[0-9]*})_latest.iso
      ln -sf ${ISO}.md5 $(basename ${ISO%%_[0-9]*})_latest.iso.md5
+     ln -sf ${ISO}.sha1 $(basename ${ISO%%_[0-9]*})_latest.iso.sha1
   fi
 done
 

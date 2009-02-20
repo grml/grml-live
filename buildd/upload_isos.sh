@@ -14,9 +14,9 @@ cd $ISO_DIR || exit 4
 
 umask 002
 for file in *.iso ; do
-    [ -f "${file}.md5" ] || md5sum "$file" > "${file}".md5
-    chmod 664 "$file"
-    chmod 664 "${file}".md5
+    [ -f "${file}.md5" ]  || md5sum "$file" > "${file}".md5
+    [ -f "${file}.sha1" ] || sha1sum "$file" > "${file}".sha1
+    chmod 664 "${file}" "${file}".md5 "${file}".sha1
 done
 
 for flavour in grml-small_lenny grml-small_sid grml-medium_lenny grml-medium_sid grml_sid grml_lenny \

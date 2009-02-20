@@ -134,6 +134,9 @@ store_iso() {
      if [ -r "${OUTPUT_DIR}/grml_isos/${ISO_NAME}.md5" ] ; then
         mv   "${OUTPUT_DIR}/grml_isos/${ISO_NAME}.md5" "${ISO_DIR}"
      fi
+     if [ -r "${OUTPUT_DIR}/grml_isos/${ISO_NAME}.sha1" ] ; then
+        mv   "${OUTPUT_DIR}/grml_isos/${ISO_NAME}.sha1" "${ISO_DIR}"
+     fi
   fi
 }
 
