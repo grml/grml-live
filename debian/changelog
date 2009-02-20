@@ -1,3 +1,10 @@
+grml-autoconfig (0.8.18) unstable; urgency=low
+
+  * Change forensic bootoption handling, as we add 'forensic' to
+    the kernel append line as well.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 20 Feb 2009 18:24:36 +0100
+
 grml-autoconfig (0.8.17) unstable; urgency=low
 
   [ Michael Prokop ]

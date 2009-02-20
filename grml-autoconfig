@@ -91,12 +91,8 @@ fi
 checkvalue $CONFIG_SYSLOG && config_syslog
 
 if checkbootparam "forensic" ; then
-   eerror "Bootopion forensic found. Important notice!"
-   eerror " Do *not* boot with something like 'grml forensic ...' but with 'forensic ...' instead!"
-   eerror " To avoid damage to your system a debugshell will be started after a delay of 10 seconds." ; eend 1
-   eerror " If you want to continue booting just exit the shell, but think about what you are doing!" ; eend 1
-   sleep 10
-   rundebugshell
+   ewarn "Bootopion forensic found. Important notice:" ; eend 0
+   ewarn " Do *NOT* boot with something like 'grml forensic ...' but always use 'forensic ...' instead!" ; eend 0
 fi
 
 if [ -n "$SPLASH" ] ; then
