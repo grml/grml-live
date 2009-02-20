@@ -18,8 +18,12 @@ grml-live (0.9.9) unstable; urgency=low
     'apt-get -t experimental ...'
   * Consequently drop 'Latest change' lines from all files.
   * Support generation of sha1sum [Testing: issue622]
+  * Drop first, unnecessary APPEND line in isolinux.cfg and syslinux.cfg.
+    [Closes: issue492]
+  * Do no longer use the bootoption lang=us by default. We use it by default
+    in grml-autoconfig anyway and this shortens our /proc/cmdline.
 
- -- Michael Prokop <mika@grml.org>  Fri, 20 Feb 2009 16:31:04 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 20 Feb 2009 17:06:24 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 
