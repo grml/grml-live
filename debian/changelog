@@ -12,8 +12,13 @@ grml-live (0.9.9) unstable; urgency=low
       [to avoid that "etch" is used as build name but lenny is used]
     - use "$NAME-daily-$SUITE" in functions.sh as build name so
       identifying ISOs while running them is easier
+  * Support squeeze as valid suite name.
+  * Comment Debian/unstable in /etc/grml/fai/apt/preferences by default.
+    This should avoid issues with something like
+    'apt-get -t experimental ...'
+  * Consequently drop 'Latest change' lines from all files.
 
- -- Michael Prokop <mika@grml.org>  Fri, 20 Feb 2009 00:26:21 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 20 Feb 2009 16:03:42 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 

@@ -4,7 +4,6 @@
 # Authors:       grml-team (grml.org), (c) Alexander Wirt <formorer@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Oct 28 18:00:49 CET 2007 [mika]
 ################################################################################
 # Notice: adjust $c_file[12] according to your needs, by default the script
 # compares the i386 pool with the amd64 pool of grml.

@@ -3,7 +3,6 @@
 # Purpose:       remove docs in grml chroot
 # Authors:       (c) Michael Prokop <mika@grml.org>
 # License:       This file is licensed under the GPL v2.
-# Latest change: Wed Sep 19 13:38:58 CEST 2007 [mika]
 ################################################################################
 
 . /etc/grml/lsb-functions || exit 6

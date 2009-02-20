@@ -4,7 +4,6 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Nov 11 11:45:45 CET 2007 [mika]
 ################################################################################
 
 . /etc/grml/grml-buildd.conf || exit 1

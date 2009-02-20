@@ -4,7 +4,6 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Thu, 01 Nov 2007 14:00:40 +0100 [ft]
 ################################################################################
 
 _grmllive_flavours() { #{{{
@@ -48,7 +47,7 @@ _grmllive_suites() { #{{{
   local -a suites
 
   suites=(
-    etch    lenny   sid
+    etch lenny squeeze sid
   )
   _wanted list expl 'Debian suite' compadd ${expl} -- ${suites}
 }

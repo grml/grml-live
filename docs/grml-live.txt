@@ -141,7 +141,8 @@ Specify name of the release.
   -s **SUITE**::
 
 Specify the Debian suite you want to use for your live-system.  Defaults to
-"etch" (being current Debian/stable). Supported values are: etch, lenny, sid.
+"lenny" (being current Debian/stable). Supported values are: etch, lenny, squeeze,
+sid.
 
   -t **TEMPLATE_DIRECTORY**::
 
@@ -598,7 +599,7 @@ How do I create a base.tgz for use as NFSROOT?
 First of all build the chroot system:
 
   mkdir /tmp/nfsroot && cd /tmp/nfsroot
-  debootstrap etch /tmp/nfsroot/ http://ftp.de.debian.org/debian
+  debootstrap lenny /tmp/nfsroot/ http://ftp.de.debian.org/debian
   tar zcf base.tgz ./
 
 Then check out where your NFSROOT is located:
@@ -643,10 +644,10 @@ FAI_DEBOOTSTRAP:
   GRML_LIVE_SOURCES="
   deb http://localhost:3142/deb.grml.org grml-stable  main
   deb http://localhost:3142/deb.grml.org grml-testing main
-  deb http://localhost:3142/ftp.de.debian.org/debian etch main contrib non-free
+  deb http://localhost:3142/ftp.de.debian.org/debian lenny main contrib non-free
   "
   [...]
-  FAI_DEBOOTSTRAP="etch http://localhost:3142/ftp.de.debian.org/debian etch main contrib non-free"
+  FAI_DEBOOTSTRAP="lenny http://localhost:3142/ftp.de.debian.org/debian lenny main contrib non-free"
 
 Make sure apt-cacher is running (/etc/init.d/apt-cacher restart). That's it.
 All downloaded files will be cached in /var/cache/apt-cacher/ now.
@@ -662,9 +663,9 @@ FAI_DEBOOTSTRAP:
   GRML_LIVE_SOURCES="
   deb http://localhost:9999/grml            grml-stable  main
   deb http://localhost:9999/grml            grml-testing main
-  deb http://localhost:9999/debian etch     main contrib non-free
+  deb http://localhost:9999/debian lenny    main contrib non-free
   "
-  FAI_DEBOOTSTRAP="etch http://localhost:9999/debian"
+  FAI_DEBOOTSTRAP="lenny http://localhost:9999/debian"
 
 Configure approx:
 

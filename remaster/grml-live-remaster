@@ -4,7 +4,6 @@
 # Authors:       grml-team (grml.org), (c) Michael Schierl <schierlm@gmx.de>, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
-# Latest change: Sun Feb 24 14:23:27 CET 2008 [mika]
 ################################################################################
 # DISCLAIMER:
 # this script currently lacks LOTS of error checking code... any help welcome...

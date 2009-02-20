@@ -4,7 +4,6 @@
 # Authors:       (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Sat Sep 06 20:03:58 CEST 2008 [mika]
 ################################################################################
 
 # remove all packages not necessary anymore:

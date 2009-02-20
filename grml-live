@@ -39,7 +39,7 @@ Usage: $PN [options, see as follows]
    -o <output_directory>   main output directory of the build process
    -q                      skip mksquashfs
    -r <release_name<       release name
-   -s <suite>              Debian suite; values: etch, lenny, sid
+   -s <suite>              Debian suite; values: etch, lenny, squeeze, sid
    -t <template_directory> place of the templates
    -u                      update existing chroot instead of rebuilding it from scratch
    -v <version_number>     specify version number of the release
@@ -356,7 +356,7 @@ if [ -n "$SUITE" ] ; then
    for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
        if [ -n "$file" ] ; then
           sed -i "s/SUITE=.*/SUITE=\"$SUITE\"/" $LIVE_CONF
-          DIST="\|\ etch\ \|\ stable\ \|\ lenny\ \|\ testing\ \|\ sid\ \|\ unstable\ "
+          DIST="\|\ etch\ \|\ stable\ \|\ lenny\ \|\ squeeze \|\ testing\ \|\ sid\ \|\ unstable\ "
           sed -i "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" $file
        fi
    done

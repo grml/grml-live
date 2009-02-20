@@ -15,9 +15,7 @@ Pin-Priority: 995
 Package: *
 Pin: origin deb.grml.org
 Pin-Priority: 994
-
 // debian unstable pool (default):
-Package: *
-Pin: release a=unstable,o=Debian
-Pin-Priority: 991
-
+//Package: *
+//Pin: release a=unstable,o=Debian
+//Pin-Priority: 991
