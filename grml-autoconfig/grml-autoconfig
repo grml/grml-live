@@ -56,6 +56,7 @@ mount_sys
 # {{{ Read in boot parameters
 CMDLINE="$(cat /proc/cmdline)"
 [ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/* | tr '\n' ' ')"
+[ -d /live/image/bootparams/ ] && CMDLINE="$CMDLINE $(cat /live/image/bootparams/* | tr '\n' ' ')"
 # }}}
 
 # {{{ main grml-autoconfig
@@ -290,6 +291,7 @@ fi
 if [ -n "$BOOTDEBUG" ] ; then
    CMDLINE="$(cat /proc/cmdline)"
    [ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/*)"
+   [ -d /live/image/bootparams/ ] && CMDLINE="$CMDLINE $(cat /live/image/bootparams/*)"
    einfo "Bootoption debug detected. Printing kernel command line:"
    echo "$CMDLINE"
 fi
