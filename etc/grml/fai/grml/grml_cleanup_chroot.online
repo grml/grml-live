@@ -9,18 +9,28 @@
 # misc stuff
   umask 022
   . /etc/grml/lsb-functions || exit 6
+  [ -x /usr/bin/timeout ] && TIMEOUT="10" || TIMEOUT=""
 
 if [ -x /usr/bin/freshclam ] ; then
   einfo "Updating clamav database via running freshclam"
-  /usr/bin/freshclam ; eend $?
+  if [ -n "$TIMEOUT" ] ; then
+     timeout $TIMEOUT /usr/bin/freshclam ; eend $?
+  else
+     /usr/bin/freshclam ; eend $?
+  fi
 else
   ewarn "freshclam not installed" ; eend 0
 fi
 
 if [ -x /usr/bin/update-pciids ] ; then
   einfo "Updating PCI- and USB-ids"
-  update-pciids || echo "Warning: update-pciids was not successfull">&2
-  update-usbids || echo "Warning: update-usbids was not successfull">&2
+  if [ -n "$TIMEOUT" ] ; then
+     timeout $TIMEOUT update-pciids || echo "Warning: update-pciids was not successfull">&2
+     timeout $TIMEOUT update-usbids || echo "Warning: update-usbids was not successfull">&2
+  else
+     update-pciids || echo "Warning: update-pciids was not successfull">&2
+     update-usbids || echo "Warning: update-usbids was not successfull">&2
+  fi
   eend $?
 else
   ewarn "update-pciids/update-usbids not installed" ; eend 0
@@ -28,7 +38,11 @@ fi
 
 if [ -x /usr/sbin/nessus-update-plugins ] ; then
    einfo "Updating nessus-plugins"
-   nessus-update-plugins || echo "Warning: nessus-update-plugins was not successfull">&2
+   if [ -n "$TIMEOUT" ] ; then
+      timeout $TIMEOUT nessus-update-plugins || echo "Warning: nessus-update-plugins was not successfull">&2
+   else
+      nessus-update-plugins || echo "Warning: nessus-update-plugins was not successfull">&2
+   fi
    eend $?
 else
   ewarn "nessus-update-plugins not installed" ; eend 0

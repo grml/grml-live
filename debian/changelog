@@ -22,8 +22,10 @@ grml-live (0.9.9) unstable; urgency=low
     [Closes: issue492]
   * Do no longer use the bootoption lang=us by default. We use it by default
     in grml-autoconfig anyway and this shortens our /proc/cmdline.
+  * Run commands requiring network access through 'timeout 10' by default
+    if possible. [Closes: issue396]
 
- -- Michael Prokop <mika@grml.org>  Fri, 20 Feb 2009 17:06:24 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 20 Feb 2009 17:47:11 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 
