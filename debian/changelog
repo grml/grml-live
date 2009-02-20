@@ -24,8 +24,10 @@ grml-live (0.9.9) unstable; urgency=low
     in grml-autoconfig anyway and this shortens our /proc/cmdline.
   * Run commands requiring network access through 'timeout 10' by default
     if possible. [Closes: issue396]
+  * Do not use build server's hostname for /etc/mailname and
+    /etc/bacula/bacula-fd.conf. [Testing: issue412]
 
- -- Michael Prokop <mika@grml.org>  Fri, 20 Feb 2009 17:47:11 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 20 Feb 2009 17:54:41 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 

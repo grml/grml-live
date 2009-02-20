@@ -13,7 +13,13 @@ HOSTNAME=''
 [ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
 [ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
+
+# the hostname of the chroot usually isn't the same as the one for the live-system
+BUILD_HOSTNAME="$($ROOTCMD hostname)"
+[ -n "$BUILD_HOSTNAME" ] || BUILD_HOSTNAME="grml"
+
 echo "$HOSTNAME" > $target/etc/hostname
+echo "$HOSTNAME" > $target/etc/mailname
 
 if [ -r $target/etc/postfix/main.cf ] ; then
   sed -i "s/^mydestination = .*/mydestination = $HOSTNAME, localhost, localhost.localdomain/" $target/etc/postfix/main.cf
@@ -21,6 +27,10 @@ if [ -r $target/etc/postfix/main.cf ] ; then
   echo "postfix postfix/mailname     string $HOSTNAME" | $ROOTCMD debconf-set-selections
   echo "postfix postfix/destinations string ${HOSTNAME}, localhost.grml.org, localhost" \
   | $ROOTCMD debconf-set-selections
+fi
+
+if [ -r $target/etc/bacula/bacula-fd.conf ] ; then
+  sed -i "s/$BUILD_HOSTNAME/$HOSTNAME/g" $target/etc/bacula/bacula-fd.conf
 fi
 
 ## END OF FILE #################################################################
