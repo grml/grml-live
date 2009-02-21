@@ -9,6 +9,23 @@
 set -u
 set -e
 
+# keep a backup of the original runlevel.conf file for reference
+# but only save it as /etc/runlevel.conf.original if it's not the
+# according livecd version, this should prevent from overriding
+# /etc/runlevel.conf.original if re-running grml-live -b ...
+if ! cmp /etc/runlevel.conf /etc/runlevel.conf.livecd 1>/dev/null || \
+   ! cmp /etc/runlevel.conf /etc/runlevel.conf.livecd.small 1>/dev/null ; then
+
+   # make sure to store old backup files if they differ as well
+   if [ -r $target/etc/runlevel.conf.original ] ; then
+      if ! cmp $target/etc/runlevel.conf $target/etc/runlevel.conf.original 1>/dev/null ; then
+         cp $target/etc/runlevel.conf.original $target/etc/runlevel.conf.original."$(date +%Y%m%d_%k:%M:%S)"
+      fi
+   fi
+
+   cp $target/etc/runlevel.conf $target/etc/runlevel.conf.original
+fi
+
 # if we have a small ISO let's adjust runlevel.conf:
 if [ -n "$GRML_NAME" ] ; then
    if echo "$GRML_NAME" | grep -q small ; then

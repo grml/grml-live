@@ -28,8 +28,10 @@ grml-live (0.9.9) unstable; urgency=low
     /etc/bacula/bacula-fd.conf. [Testing: issue412]
   * Add "forensic" to the append line when using the forensic kerneloption
     so we can grep for it in any case.
+  * 15-initsetup: keep a backup of the original runlevel.conf file.
+    Thanks to Thomas Lehmann for the idea! [Closes: issue570]
 
- -- Michael Prokop <mika@grml.org>  Fri, 20 Feb 2009 18:18:36 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 21 Feb 2009 14:25:49 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 
