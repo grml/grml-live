@@ -1,0 +1,3 @@
+# NOTE: This directory is *NOT* meant for manual customisation! Files in this
+# directory are written by grml-live only and any changes might be overriden.
+# You might consider using /etc/grml/fai/files/etc/apt instead!
