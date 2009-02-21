@@ -30,8 +30,10 @@ grml-live (0.9.9) unstable; urgency=low
     so we can grep for it in any case.
   * 15-initsetup: keep a backup of the original runlevel.conf file.
     Thanks to Thomas Lehmann for the idea! [Closes: issue570]
+  * instsoft.GRMLBASE: support installation of multiple gpg keys
+    via /etc/grml/fai/files/etc/apt/*.key
 
- -- Michael Prokop <mika@grml.org>  Sat, 21 Feb 2009 14:25:49 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 21 Feb 2009 14:37:57 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 
