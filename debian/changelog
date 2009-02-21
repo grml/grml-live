@@ -32,8 +32,10 @@ grml-live (0.9.9) unstable; urgency=low
     Thanks to Thomas Lehmann for the idea! [Closes: issue570]
   * instsoft.GRMLBASE: support installation of multiple gpg keys
     via /etc/grml/fai/files/etc/apt/*.key
+  * isolinux.cfg/syslinux.cfg: Drop duplicated 'MENU DEFAULT'.
+    Thanks to Thomas Lehmann for the bugreport!
 
- -- Michael Prokop <mika@grml.org>  Sat, 21 Feb 2009 14:37:57 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 21 Feb 2009 14:50:23 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 
