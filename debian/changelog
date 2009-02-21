@@ -34,8 +34,14 @@ grml-live (0.9.9) unstable; urgency=low
     via /etc/grml/fai/files/etc/apt/*.key
   * isolinux.cfg/syslinux.cfg: Drop duplicated 'MENU DEFAULT'.
     Thanks to Thomas Lehmann for the bugreport!
+  * Move /etc/grml/fai/apt/preferences to /etc/grml/fai/files/etc/apt/.
+    This simplifies the directory layout a bit. Clarify its usage
+    in /etc/grml/fai/apt/important_note.txt
+  * Install all files from /etc/grml/fai/files/etc/apt. This supports
+    usage of directories like /etc/apt/apt.conf.d. Thanks for the
+    hint to Thomas Lehmann. [Closes: issue632]
 
- -- Michael Prokop <mika@grml.org>  Sat, 21 Feb 2009 14:50:23 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 21 Feb 2009 15:20:44 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 

@@ -33,11 +33,6 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
       sed -i "s/EXITSTATUS=.*/EXITSTATUS='101'/" $target/etc/policy-rc.d.conf
    fi
 
-   # make sure we prefer grml repository:
-   if [ -r /etc/grml/fai/apt/preferences ] ; then
-      cp /etc/grml/fai/apt/preferences $target/etc/apt/preferences
-   fi
-
    # we definitely don't want to fail running fai sofupdate just
    # because of some well known bugs:
    [ -d $target/etc/apt/apt.conf.d ] || mkdir $target/etc/apt/apt.conf.d
@@ -84,20 +79,17 @@ EOF
 
 else # no softupdate but fresh installation
 
-# work around http://trac.lighttpd.net/trac/ticket/657
-# should be removed later on:
-echo "Acquire::http::Pipeline-Depth "0"; // added by grml-live" >> $target/etc/apt/apt.conf
-
-# Recommends just pull in way tooooo much packages, so disable it:
-echo "APT::Install-Recommends "false"; // added by grml-live"   >> $target/etc/apt/apt.conf
-# Notice: deprecated since aptitude (0.4.11-1):
-echo "Aptitude::Recommends-Important "false"; // added by grml-live" >> $target/etc/apt/apt.conf
+# install all apt related files
+if [ -r /etc/grml/fai/files/etc/apt ] ; then
+   cp -a /etc/grml/fai/files/etc/apt/* $target/etc/apt/
+fi
 
 # install all present (but at least the grml) gpg keys:
 if [ -r /etc/grml/fai/files/etc/apt/grml.key ] ; then
    for file in /etc/grml/fai/files/etc/apt/*.key ; do
       FILE="$(basename $file)"
-      cp $file $target/etc/apt/"$FILE"
+      # installed via 'cp -a /etc/grml/fai/files/etc/apt/* $target/etc/apt/' above already
+      # cp $file $target/etc/apt/"$FILE"
       $ROOTCMD apt-key add /etc/apt/"$FILE"
    done
 else
@@ -107,9 +99,19 @@ else
    $ROOTCMD apt-key add /etc/apt/grml.key
 fi
 
-# make sure we prefer grml repository:
-if [ -r /etc/grml/fai/files/etc/apt/preferences ] ; then
-   cp /etc/grml/fai/apt/preferences $target/etc/apt/preferences
+# work around http://trac.lighttpd.net/trac/ticket/657
+if ! grep -q 'Acquire::http::Pipeline-Depth.*0' $target/etc/apt/apt.conf ; then
+   echo "Acquire::http::Pipeline-Depth 0; // added by grml-live" >> $target/etc/apt/apt.conf
+fi
+
+# Recommends just pull in way tooooo much packages, so disable it:
+if ! grep -q 'APT::Install-Recommends.*false' $target/etc/apt/apt.conf ; then
+   echo "APT::Install-Recommends false; // added by grml-live"   >> $target/etc/apt/apt.conf
+fi
+
+# Notice: deprecated with aptitude (0.4.11-1):
+if ! grep -q 'Aptitude::Recommends-Important.*false' $target/etc/apt/apt.conf ; then
+   echo "Aptitude::Recommends-Important false; // added by grml-live" >> $target/etc/apt/apt.conf
 fi
 
 # make sure we have file-rc available before
