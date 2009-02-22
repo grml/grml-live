@@ -48,7 +48,7 @@ grml-live (0.9.9) unstable; urgency=low
     provides MirBSD as bootoption 'bsd' at grml's bootprompt. Thanks to
     Thorsten "mirabilos" Glaser for his work!
 
- -- Michael Prokop <mika@grml.org>  Mon, 23 Feb 2009 00:10:53 +0100
+ -- Michael Prokop <mika@grml.org>  Mon, 23 Feb 2009 00:51:37 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 

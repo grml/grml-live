@@ -1,0 +1,425 @@
+BSD-Licence(7)		     BSD Reference Manual		BSD-Licence(7)
+
+NAME
+     This is the BSD-Licence for the MirOS bsd4grml base system.
+
+DESCRIPTION
+     This document provides a list of all advertising clauses required to be
+     reproduced when distributing MirOS, as well as the terms and conditions
+     covering the operating system.
+
+MIROS PROJECT
+     MirOS is Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009
+	   The MirOS Project <miros-dev@mirbsd.org>
+     and its contributors.
+
+     It is available under the terms listed below. We strive to make MirOS
+     available on OSD conformant licences and believe that it is DFSG free.
+     This subset included with grml certainly is.
+
+MirOS' origins
+     MirBSD is Copyright (C) 1999, 2002, 2003 ff.
+	   Thorsten "mirabilos" Glaser <tg@mirbsd.de>
+     All rights reserved.
+
+     Provided that these terms and disclaimer and all copyright notices are
+     retained or reproduced in an accompanying document, permission is granted
+     to deal in this work without restriction, including unlimited rights to
+     use, publicly perform, distribute, sell, modify, merge, give away, or
+     sublicence.
+
+     Where legally impermissible the licensor does not disclaim liability for
+     direct physical injury or death caused solely by defects in the work un-
+     less it is modified by a third party.
+
+     This work is provided "AS IS" and WITHOUT WARRANTY of any kind, to the
+     utmost extent permitted by applicable law, neither express nor implied;
+     without malicious intent or gross negligence. In no event may a licensor,
+     author or contributor be held liable for indirect, direct, other damage,
+     loss, or other issues arising in any way out of dealing in the work, even
+     if advised of the possibility of such damage or existence of a defect,
+     except proven that it results out of said person's immediate fault when
+     using the work as intended.
+
+     This licence agreement shall be governed in all aspects by the law of
+     Germany; designated place of court is Bonn, NRW, Germany.
+     (Gerichtsstand ist Bonn, NRW/Deutschland. Es gilt deutsches Recht.)
+
+     I as the MirOS Project leader and MirBSD's owner hereby assert a
+     collective-work copyright on "MirBSD" including the MirPorts Framework
+     and the (OpenBSD-derived) kernel and userland, as well as the MirOS Port-
+     able Subprojects (for example, mksh, MirMake and jupp), but excluding
+     single ports, the contributed sections (the modules gcc, x11 and contrib)
+     and any part of MirBSD with copyright assignments in place (appropriate
+     CVS access control ought to be set). Please note that this copyright
+     still applies to some work contained within the X11 and contrib modules.
+
+NON-BSD SOFTWARE
+     MirOS aggregates third-party work, which is owned by their respective au-
+     thors and covered by their respective licences (Sendmail, Apache, LGPL,
+     GPL). In this edition, the e3 editor (GPLv2) and the tinyirc IRC client
+     (GPLv1) are aggregated on the rescue kernel. Their sources accompany this
+     document, as demanded by the GNU GPL. The tinyirc author has agreed for
+     it to be crunched into the instbin binary; full source code for the other
+     binaries and libraries linked is available from our CVS repository.
+
+UCB
+     All of the documentation and software included in the second BSD Network-
+     ing Software Release is copyrighted by The Regents of the University of
+     California.
+
+     Copyright 1979, 1980, 1983, 1986, 1988, 1989, 1991, 2003 The Regents of
+     the University of California.
+     All rights reserved.
+
+     Redistribution and use in source and binary forms, with or without modif-
+     ication, are permitted provided that the following conditions are met:
+     1.	  Redistributions of source code must retain the above copyright no-
+	  tice, this list of conditions and the following disclaimer.
+     2.	  Redistributions in binary form must reproduce the above copyright
+	  notice, this list of conditions and the following disclaimer in the
+	  documentation and/or other materials provided with the distribution.
+     3.	  Neither the name of the University nor the names of its contributors
+	  may be used to endorse or promote products derived from this
+	  software without specific prior written permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
+     EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+     WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR
+     ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+     DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+     OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+     HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+     ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBIL-
+     ITY OF SUCH DAMAGE.
+
+IEEE
+     The Institute of Electrical and Electronics Engineers and the American
+     National Standards Committee X3, on Information Processing Systems have
+     given us permission to reprint portions of their documentation.
+
+     In the following statement, the phrase "this text" refers to portions of
+     the system documentation.
+
+     Portions of this text are reprinted and reproduced in electronic form in
+     the second BSD Networking Software Release, from IEEE Std 1003.1-1988,
+     IEEE Standard Portable Operating System Interface for Computer Environ-
+     ments (POSIX), copyright C 1988 by the Institute of Electrical and Elec-
+     tronics Engineers, Inc. In the event of any discrepancy between these
+     versions and the original IEEE Standard, the original IEEE Standard is
+     the referee document.
+
+ANSI
+     In the following statement, the phrase "This material" refers to portions
+     of the system documentation.
+
+     This material is reproduced with permission from American National Stan-
+     dards Committee X3, on Information Processing Systems. Computer and Busi-
+     ness Equipment Manufacturers Association (CBEMA), 311 First St., NW,
+     Suite 500, Washington, DC 20001-2178. The developmental work of Program-
+     ming Language C was completed by the X3J11 Technical Committee.
+
+DARPA
+     Portions of the manual reflect system enhancements made at Berkeley and
+     sponsored in part by the Defense Advanced Research Projects Agency (DoD),
+     Arpa Order No. 4871 monitored by the Naval Electronics Systems Command
+     under contract No. N00039-84-C-0089. The views and conclusions contained
+     in these documents are those of the authors and should not be interpreted
+     as representing official policies, either expressed or implied, of the
+     Defense Research Projects Agency or of the US Government.
+
+SCO
+  SCOPE
+     In the following statement, the licence applies to all material from AT&T
+     UNIX as well as from the formerly encumbered BSD releases, from which
+     much historical material has flown into MirOS, for example nroff(1) and
+     large parts of documentation.
+
+  January 23, 2002
+     Dear UNIX(R) enthusiasts,
+     Caldera International, Inc. hereby grants a fee free license that in-
+     cludes the rights use, modify and distribute this named source code, in-
+     cluding creating derived binary products created from the source code.
+     The source code for which Caldera International, Inc. grants rights are
+     limited to the following UNIX Operating Systems that operate on the 16-
+     Bit PDP-11 CPU and early versions of the 32-Bit UNIX Operating System,
+     with specific exclusion of UNIX System III and UNIX System V and succes-
+     sor operating systems:
+   + o 32-bit 32V UNIX
+   + o 16 bit UNIX Versions 1, 2, 3, 4, 5, 6, 7
+
+     Caldera International, Inc. makes no guarantees or commitments that any
+     source code is available from Caldera International, Inc.
+
+     The following copyright notice applies to the source code files for which
+     this license is granted.
+
+  THE CALDERA LICENSE
+     Copyright (C) Caldera International Inc. 2001-2002.
+     All rights reserved.
+
+     Redistribution and use in source and binary forms, with or without modif-
+     ication, are permitted provided that the following conditions are met:
+
+     Redistributions of source code and documentation must retain the above
+     copyright notice, this list of conditions and the following disclaimer.
+     Redistributions in binary form must reproduce the above copyright notice,
+     this list of conditions and the following disclaimer in the documentation
+     and/or other materials provided with the distribution. All advertising
+     materials mentioning features or use of this software must display the
+     following acknowledgement:
+
+	   This product includes software developed or owned by Caldera
+	   International, Inc.
+
+     Neither the name of Caldera International, Inc. nor the names of other
+     contributors may be used to endorse or promote products derived from this
+     software without specific prior written permission.
+
+     USE OF THE SOFTWARE PROVIDED FOR UNDER THIS LICENSE BY CALDERA INTERNA-
+     TIONAL, INC. AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRAN-
+     TIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTA-
+     BILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+     SHALL CALDERA INTERNATIONAL, INC. BE LIABLE FOR ANY DIRECT, INDIRECT IN-
+     CIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+     DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+     THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (IN-
+     CLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     Very truly yours,
+     /signed/ Bill Broderick
+     Bill Broderick
+     Director, Licensing Services
+
+TRADEMARKS
+     All trademarks are properties of their respective holders. Particularily,
+     the UNIX(R) trademark changed its owner so often it's impossible to track
+     it down.
+
+ADVERTISING CLAUSES
+     The following attribution clauses are required to be reproduced when ad-
+     vertising for MirOS:
+   + o This model includes software developed by Christopher G. Demetriou.
+   + o This model includes software developed by Christos Zoulas
+   + o This product contains software developed by Ignatios Souvatzis for
+	 the NetBSD project.
+   + o This product includes cryptographic software written by Eric Young
+	 (eay@mincom.oz.au)
+   + o This product includes software designed by William Allen Simpson.
+   + o This product includes software developed at the Information Technolo-
+	 gy Division, US Naval Research Laboratory.
+   + o This product includes software developed by Aaron Brown and Harvard
+	 University.
+   + o This product includes software developed by Aaron Campbell.
+   + o This product includes software developed by Adam Glass and Charles M.
+	 Hannum.
+   + o This product includes software developed by Adam Glass.
+   + o This product includes software developed by Amancio Hasty and Roger
+	 Hardiman.
+   + o This product includes software developed by Angelos D. Keromytis.
+   + o This product includes software developed by Berkeley Software Design,
+	 Inc.
+   + o This product includes software developed by Bill Paul.
+   + o This product includes software developed by Charles D. Cranor and
+	 Washington University.
+   + o This product includes software developed by Charles D. Cranor, Wash-
+	 ington University, and the University of California, Berkeley
+   + o This product includes software developed by Charles D. Cranor, Wash-
+	 ington University, the University of California, Berkeley and its
+	 contributors.
+   + o This product includes software developed by Charles D. Cranor.
+   + o This product includes software developed by Charles Hannum, by the
+	 University of Vermont and State Agricultural College and Garrett A.
+	 Wollman, by William F. Jolitz, and by the University of California,
+	 Berkeley, Lawrence Berkeley Laboratory, and its contributors.
+   + o This product includes software developed by Charles Hannum.
+   + o This product includes software developed by Charles M. Hannum.
+   + o This product includes software developed by Christopher G. Demetriou
+	 for the NetBSD Project.
+   + o This product includes software developed by Christopher G. Demetriou.
+   + o This product includes software developed by Christos Zoulas for the
+	 NetBSD Project.
+   + o This product includes software developed by Christos Zoulas.
+   + o This product includes software developed by Colin Wood for the NetBSD
+	 Project.
+   + o This product includes software developed by Computing Services at
+	 Carnegie Mellon University (http://www.cmu.edu/computing/).
+   + o This product includes software developed by Daan Vreeken.
+   + o This product includes software developed by David Dawes, Jean-
+	 Baptiste Marchand, Julien Montagne, Thomas Roell, Michael Smith,
+	 Jerome Verdon and Kazutaka Yokota.
+   + o This product includes software developed by David Hulton.
+   + o This product includes software developed by David Jones and Gordon
+	 Ross
+   + o This product includes software developed by David Miller.
+   + o This product includes software developed by Dean Huxley.
+   + o This product includes software developed by Eric S. Raymond
+   + o This product includes software developed by Eric Young
+	 (eay@mincom.oz.au)
+   + o This product includes software developed by Gardner Buchanan.
+   + o This product includes software developed by Gordon Ross
+   + o This product includes software developed by Gordon W. Ross
+   + o This product includes software developed by Gordon W. Ross and Leo
+	 Weppelman.
+   + o This product includes software developed by HAYAKAWA Koichi.
+   + o This product includes software developed by HD Associates
+   + o This product includes software developed by Harvard University and
+	 its contributors.
+   + o This product includes software developed by Harvard University.
+   + o This product includes software developed by Hellmuth Michaelis and
+	 Joerg Wunsch
+   + o This product includes software developed by Hellmuth Michaelis, Brian
+	 Dunford-Shore, Joerg Wunsch, Scott Turner and Charles Hannum.
+   + o This product includes software developed by Herb Peyerl
+   + o This product includes software developed by Iain Hibbert
+   + o This product includes software developed by Ichiro FUKUHARA.
+   + o This product includes software developed by Ignatios Souvatzis for
+	 the NetBSD project.
+   + o This product includes software developed by Jason R. Thorpe for And
+	 Communications, http://www.and.com/
+   + o This product includes software developed by Joachim Koenig-Baltes.
+   + o This product includes software developed by Jochen Pohl for The
+	 NetBSD Project.
+   + o This product includes software developed by Jonathan Stone
+   + o This product includes software developed by Jonathan Stone and Jason
+	 R. Thorpe for the NetBSD Project.
+   + o This product includes software developed by Julian Highfield.
+   + o This product includes software developed by Kenneth Stailey and Ian
+	 Darwin.
+   + o This product includes software developed by Kenneth Stailey.
+   + o This product includes software developed by LAN Media Corporation and
+	 its contributors.
+   + o This product includes software developed by Leo Weppelman.
+   + o This product includes software developed by Manuel Bouyer.
+   + o This product includes software developed by Marc Horowitz.
+   + o This product includes software developed by Mark Tinguely and Jim
+	 Lowe
+   + o This product includes software developed by Marshall M. Midden.
+   + o This product includes software developed by Matthias Pfaller.
+   + o This product includes software developed by Michael Graff for the
+	 NetBSD Project.
+   + o This product includes software developed by Michael L. Hitch.
+   + o This product includes software developed by Michael Long.
+   + o This product includes software developed by Michael Shalayeff.
+   + o This product includes software developed by Mike Pritchard.
+   + o This product includes software developed by Niels Provos.
+   + o This product includes software developed by Niklas Hallqvist, C Stone
+	 and Job de Haas.
+   + o This product includes software developed by Niklas Hallqvist.
+   + o This product includes software developed by Paul Kranenburg.
+   + o This product includes software developed by Paul Mackerras
+	 <paulus@samba.org>.
+   + o This product includes software developed by Peter Galbavy.
+   + o This product includes software developed by Phase One, Inc.
+   + o This product includes software developed by Philip A. Nelson.
+   + o This product includes software developed by Ralf S. Engelschall
+	 <rse@engelschall.com> for use in the mod_ssl project
+	 (http://www.modssl.org/).
+   + o This product includes software developed by Rodney W. Grimes.
+   + o This product includes software developed by Roland C. Dowdeswell.
+   + o This product includes software developed by Rolf Grossmann.
+   + o This product includes software developed by Serge V. Vakulenko.
+   + o This product includes software developed by Tatoku Ogaito for the
+	 NetBSD Project.
+   + o This product includes software developed by Terrence R. Lambert.
+   + o This product includes software developed by Thomas Skibo.
+   + o This product includes software developed by TooLs GmbH.
+   + o This product includes software developed by Winning Strategies, Inc.
+   + o This product includes software developed by Zembu Labs, Inc.
+   + o This product includes software developed by the Apache Software Foun-
+	 dation (http://www.apache.org/).
+   + o This product includes software developed by the Charles D. Cranor,
+	 Washington University, University of California, Berkeley and its
+	 contributors.
+   + o This product includes software developed by the Computer Systems En-
+	 gineering Group at Lawrence Berkeley Laboratory.
+   + o This product includes software developed by the Harvard University
+	 and its contributors.
+   + o This product includes software developed by the Kungliga Tekniska
+	 Högskolan and its contributors.
+   + o This product includes software developed by the Network Research
+	 Group at Lawrence Berkeley Laboratory.
+   + o This product includes software developed by the OpenSSL Project for
+	 use in the OpenSSL Toolkit. (http://www.openssl.org/)
+   + o This product includes software developed by the SMCC Technology
+	 Development Group at Sun Microsystems, Inc.
+   + o This product includes software developed by the University of Cali-
+	 fornia, Berkeley and its contributors, as well as Christoph Herrmann
+	 and Thomas-Henning von Kamptz.
+   + o This product includes software developed by the University of Cali-
+	 fornia, Berkeley and its contributors.
+   + o This product includes software developed by the University of Cali-
+	 fornia, Lawrence Berkeley Laboratories.
+   + o This product includes software developed by the University of Cali-
+	 fornia, Lawrence Berkeley Laboratory and its contributors.
+   + o This product includes software developed by the University of Vermont
+	 and State Agricultural College and Garrett A. Wollman, by William F.
+	 Jolitz, and by the University of California, Berkeley, Lawrence
+	 Berkeley Laboratory, and its contributors.
+   + o This product includes software developed by the University of Vermont
+	 and State Agricultural College and Garrett A. Wollman.
+   + o This product includes software developed by the author.
+   + o This product includes software developed for the FreeBSD project.
+   + o This product includes software developed for the NetBSD Project by
+	 Christopher G. Demetriou.
+   + o This product includes software developed for the NetBSD Project by
+	 Frank van der Linden
+   + o This product includes software developed for the NetBSD Project by
+	 Jason Downs and Jason R. Thorpe.
+   + o This product includes software developed for the NetBSD Project by
+	 Jason R. Thorpe.
+   + o This product includes software developed for the NetBSD Project by
+	 John M. Vinopal.
+   + o This product includes software developed for the NetBSD Project by
+	 Juergen Hannken-Illjes.
+   + o This product includes software developed for the NetBSD Project by
+	 Perry E. Metzger.
+   + o This product includes software developed for the NetBSD Project by
+	 Wasabi Systems, Inc.
+   + o This product includes software developed for the NetBSD Project. See
+	 http://www.netbsd.org/ for information about NetBSD.
+   + o This product includes software developed or owned by Caldera Interna-
+	 tional, Inc.
+   + o This product uses a modified version of Henry Spencer's regular ex-
+	 pression library.
+   + o This product uses zlib by Jean-loup Gailly.
+   + o This software is a component of "386BSD" developed by William F. Jol-
+	 itz, TeleMuse.
+   + o This software was developed by Holger Veit and Brian Moore for use
+	 with "386BSD" and similar operating systems.
+
+     All trademarks and registered trademarks are properties of their respec-
+     tive owners.
+
+NO-ENDORSEMENT CLAUSE
+     Neither the name of licensor, nor the names of the authors and contribu-
+     tors may be used to endorse or promote products derived from this work
+     without specific prior written permission.
+
+AUTHORS
+     This manual was carefully put together first for the release of MirOS #8
+     by Thorsten "mirabilos" Glaser <tg@mirbsd.org>. It is still maintained
+     for MirOS #11.
+
+SOURCE ACCESS CLAUSE
+     Some licences require access to source code. When said code is not part
+     of the original distribution medium or placed alongside it, it is either
+     available via standard means, specifically AnonCVS, AnonRSYNC, or HTTP
+     distfile download, from the project server, or, in some cases, available
+     upon request for a reasonable time period, such as three years.
+
+SEE ALSO
+     http://mirbsd.de/
+
+     https://www.mirbsd.org/
+
+BUGS
+     Although collected carefully, there might be some. Please report to the
+     MirOS project at <miros-discuss@mirbsd.org> if you think you have
+     discovered a bug.
+
+MirOS			       January 17, 2009				     6
