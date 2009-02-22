@@ -347,21 +347,21 @@ elif [ -n "$GRML_LIVE_SOURCES" ] ; then
 fi
 
 if [ -n "$FAI_DEBOOTSTRAP" ] ; then
-   sed -i "s#^FAI_DEBOOTSTRAP=.*#FAI_DEBOOTSTRAP=\"$FAI_DEBOOTSTRAP\"#" $NFSROOT_CONF
+   sed "s#^FAI_DEBOOTSTRAP=.*#FAI_DEBOOTSTRAP=\"$FAI_DEBOOTSTRAP\"#" "$NFSROOT_CONF" | sponge "$NFSROOT_CONF"
 fi
 
 # does this suck? YES!
 if [ -n "$SUITE" ] ; then
 
+   DIST=" etch\| stable\| lenny\| squeeze\| testing\| sid\| unstable"
+   sed "s/\(deb .\+\)\([ \t]*\) $DIST\([ \t]*\)\(main \)/\1\2 $SUITE \3\4/" /etc/grml/fai/apt/sources.list | sponge /etc/grml/fai/apt/sources.list
    for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
        if [ -n "$file" ] ; then
-          sed -i "s/SUITE=.*/SUITE=\"$SUITE\"/" $LIVE_CONF
-          DIST="\|\ etch\ \|\ stable\ \|\ lenny\ \|\ squeeze \|\ testing\ \|\ sid\ \|\ unstable\ "
-          sed -i "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" $file
+          sed "s/SUITE=.*/SUITE=\"$SUITE\"/" $LIVE_CONF | sponge $LIVE_CONF
+          sed "s/\(deb .\+\)\([ \t]*\) $DIST\([ \t]*\)\(main \)/\1\2 $SUITE \3\4/" "$file" | sponge "$file"
        fi
    done
 
-   sed -i "s/\(deb .\+\)\([ \t]+\)$DIST\([ \t]+\)\(main \)/\1\2 $SUITE \3\4/" /etc/grml/fai/apt/sources.list
    # notice: activate grml-live pool only if we are building against unstable:
    if grep -qe unstable -qe sid /etc/grml/fai/apt/sources.list ; then
       grep -q 'grml-live.*main' /etc/grml/fai/apt/sources.list || \
@@ -369,23 +369,24 @@ if [ -n "$SUITE" ] ; then
            sed 's/grml-stable/grml-live/' >> /etc/grml/fai/apt/sources.list
    else
       grep -q 'grml-live.*main' /etc/grml/fai/apt/sources.list && \
-      sed -i 's/.*grml-live.*/# removed grml-live repository/' /etc/grml/fai/apt/sources.list
+      sed 's/.*grml-live.*/# removed grml-live repository/' /etc/grml/fai/apt/sources.list | sponge /etc/grml/fai/apt/sources.list
    fi
 
    for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
        if [ -n "$file" ] ; then
-          sed -i "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" "$file"
+          sed "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" "$file" | sponge "$file"
        fi
    done
-   sed -i "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" $NFSROOT_CONF
+
+   sed "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" "$NFSROOT_CONF" | sponge "$NFSROOT_CONF"
 fi
 
 # set $ARCH
 [ -n "$ARCH" ] || ARCH="$(dpkg --print-architecture)"
-if grep -q -- 'FAI_DEBOOTSTRAP_OPTS.*--arch' $NFSROOT_CONF ; then
-   sed -i "s/--arch [a-z0-9]* /--arch $ARCH /" $NFSROOT_CONF
+if grep -q -- 'FAI_DEBOOTSTRAP_OPTS.*--arch' "$NFSROOT_CONF" ; then
+   sed "s/--arch [a-z0-9]* /--arch $ARCH /" "$NFSROOT_CONF" | sponge "$NFSROOT_CONF"
 else
-   sed -i "s|FAI_DEBOOTSTRAP_OPTS=\"\(.*\)|FAI_DEBOOTSTRAP_OPTS=\"--arch $ARCH \1|" $NFSROOT_CONF
+   sed "s|FAI_DEBOOTSTRAP_OPTS=\"\(.*\)|FAI_DEBOOTSTRAP_OPTS=\"--arch $ARCH \1|" "$NFSROOT_CONF" | sponge "$NFSROOT_CONF"
 fi
 # }}}
 

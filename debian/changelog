@@ -40,8 +40,15 @@ grml-live (0.9.9) unstable; urgency=low
   * Install all files from /etc/grml/fai/files/etc/apt. This supports
     usage of directories like /etc/apt/apt.conf.d. Thanks for the
     hint to Thomas Lehmann. [Closes: issue632]
+  * Replace all "sed -i 's/././' foo" calls with
+    'sed -i 's/././' foo | sponge foo' instead inside main grml-live script
+    so we don't destroy any existing symlinks. Depend on moreutils therefor.
+    [Closes: issue631]
+  * Integrate bsd4grml [hash: 987ce9a6f9ce205ba64794ed3fcac603]. This
+    provides MirBSD as bootoption 'bsd' at grml's bootprompt. Thanks to
+    Thorsten "mirabilos" Glaser for his work!
 
- -- Michael Prokop <mika@grml.org>  Sat, 21 Feb 2009 15:20:44 +0100
+ -- Michael Prokop <mika@grml.org>  Mon, 23 Feb 2009 00:10:53 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 
