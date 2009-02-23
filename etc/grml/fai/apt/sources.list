@@ -1,3 +1,7 @@
+# NOTE: This file is *NOT* meant for manual customisation! This file is
+# modified by grml-live and any changes might be overriden.
+# You might consider using GRML_LIVE_SOURCES in /etc/grml/grml-live.conf*
+# and using /etc/grml/fai/files/etc/apt instead!'
 deb http://deb.grml.org/            grml-stable  main
 deb http://deb.grml.org/            grml-testing main
 deb http://ftp.de.debian.org/debian lenny        main contrib non-free

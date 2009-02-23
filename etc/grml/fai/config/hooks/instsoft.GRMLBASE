@@ -82,6 +82,8 @@ else # no softupdate but fresh installation
 # install all apt related files
 if [ -r /etc/grml/fai/files/etc/apt ] ; then
    cp -a /etc/grml/fai/files/etc/apt/* $target/etc/apt/
+   # remove grml-live's sources.list file from chroot:
+   grep -q GRML_LIVE_SOURCES $target/etc/apt/important_note.txt && rm $target/etc/apt/important_note.txt
 fi
 
 # install all present (but at least the grml) gpg keys:
@@ -98,6 +100,9 @@ else
    gpg --export F61E2E7CECDEA787 > $target/etc/apt/grml.key
    $ROOTCMD apt-key add /etc/apt/grml.key
 fi
+
+# make sure the file exists
+[ -e $target/etc/apt/apt.conf ] || touch $target/etc/apt/apt.conf
 
 # work around http://trac.lighttpd.net/trac/ticket/657
 if ! grep -q 'Acquire::http::Pipeline-Depth.*0' $target/etc/apt/apt.conf ; then

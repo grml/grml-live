@@ -353,6 +353,11 @@ fi
 # does this suck? YES!
 if [ -n "$SUITE" ] ; then
 
+   # /usr/share/debootstrap/scripts/unstable does not exist, instead use 'sid':
+   case $SUITE in
+      unstable) SUITE='sid' ;;
+   esac
+
    DIST=" etch\| stable\| lenny\| squeeze\| testing\| sid\| unstable"
    sed "s/\(deb .\+\)\([ \t]*\) $DIST\([ \t]*\)\(main \)/\1\2 $SUITE \3\4/" /etc/grml/fai/apt/sources.list | sponge /etc/grml/fai/apt/sources.list
    for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
