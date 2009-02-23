@@ -1,7 +1,7 @@
 grml-autoconfig (0.8.18) unstable; urgency=low
 
   * Drop support for /etc/grml/autoconfig.small. It causes
-    more headaches and work than beneftig. Instead make sure
+    more headaches and work than benefit. Instead make sure
     to properly support grml-small in the "grml-large"
     configuration. [Testing: issue573]
   * Change forensic bootoption handling, as we add 'forensic' to
