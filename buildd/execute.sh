@@ -17,7 +17,6 @@ upload_logs
 iso_details
 
 # create logs for adding to mail, but only if it fails
-create_logs
 send_mail -e
 
 # move the ISO to final destination
