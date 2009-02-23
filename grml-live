@@ -359,11 +359,11 @@ if [ -n "$SUITE" ] ; then
    esac
 
    DIST=" etch\| stable\| lenny\| squeeze\| testing\| sid\| unstable"
-   sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE \4\5/" /etc/grml/fai/apt/sources.list | sponge /etc/grml/fai/apt/sources.list
+   sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE\4\5/" /etc/grml/fai/apt/sources.list | sponge /etc/grml/fai/apt/sources.list
    for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
        if [ -n "$file" ] ; then
           sed "s/^SUITE=.*/SUITE=\"$SUITE\"/" $file | sponge $file
-          sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE \4\5/""$file" | sponge "$file"
+          sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE\4\5/" "$file" | sponge "$file"
        fi
    done
 
@@ -377,13 +377,11 @@ if [ -n "$SUITE" ] ; then
       sed 's/.*grml-live.*/# removed grml-live repository/' /etc/grml/fai/apt/sources.list | sponge /etc/grml/fai/apt/sources.list
    fi
 
-   for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
+   for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" "$NFSROOT_CONF" ; do
        if [ -n "$file" ] ; then
           sed "s|^FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" "$file" | sponge "$file"
        fi
    done
-
-   sed "s|^FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" "$NFSROOT_CONF" | sponge "$NFSROOT_CONF"
 fi
 
 # set $ARCH
