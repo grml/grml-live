@@ -141,8 +141,9 @@ Specify name of the release.
   -s **SUITE**::
 
 Specify the Debian suite you want to use for your live-system.  Defaults to
-"lenny" (being current Debian/stable). Supported values are: etch, lenny, squeeze,
-sid.
+"lenny" (being current Debian/stable). Supported values are: etch, lenny, sid.
+Debian "squeeze" (current Debian/testing) requires base.tgz
+(/etc/grml/fai/config/basefiles/....tar.gz) until it's supported by debootstrap.
 
   -t **TEMPLATE_DIRECTORY**::
 
@@ -339,10 +340,10 @@ This file specifies the package list for creating the NFSROOT.
 This file specifies which mirrors should be considered for retrieving the Debian
 packages when creating the main chroot (including all the software you would
 like to see included). Important: this file should *not* be adjusted manually!
-Instead use the GRML_LIVE_SOURCES variable inside /etc/grml/grml-live.conf which
-modifies /etc/grml/fai/apt/sources.list on-the-fly via grml-live then. If you
-want to generally adjust apt configuration check out /etc/grml/fai/files/etc/apt
-instead.
+Instead use the GRML_LIVE_SOURCES variable inside /etc/grml/grml-live.conf or
+/etc/grml/grml-live.local which modifies /etc/grml/fai/apt/sources.list
+on-the-fly via grml-live then. If you want to generally adjust apt configuration
+check out /etc/grml/fai/files/etc/apt instead.
 
   /etc/grml/fai/config/
 
@@ -634,8 +635,8 @@ or if using /etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz for:
   /grml-live/grml-live_20071029.22138/grml_chroot//
   [...]
 
-Set up apt-cacher for use with grml-live
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Set up apt-cacher / apt-cacher-ng for use with grml-live
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Make sure /etc/grml/grml-live.conf provides according GRML_LIVE_SOURCES and
 FAI_DEBOOTSTRAP:
@@ -650,8 +651,9 @@ FAI_DEBOOTSTRAP:
   [...]
   FAI_DEBOOTSTRAP="lenny http://localhost:3142/ftp.de.debian.org/debian lenny main contrib non-free"
 
-Make sure apt-cacher is running (/etc/init.d/apt-cacher restart). That's it.
-All downloaded files will be cached in /var/cache/apt-cacher/ now.
+Make sure apt-cacher / apt-cacher-ng is running ('/etc/init.d/apt-cacher
+restart' or '/etc/init.d/apt-cacher-ng restart'). That's it.  All downloaded
+files will be cached in /var/cache/apt-cacher/ or /var/cache/apt-cacher-ng then.
 
 Set up approx for use with grml-live
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
