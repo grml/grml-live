@@ -54,8 +54,10 @@ grml-live (0.9.9) unstable; urgency=low
     with debootstrap).
   * Support NO_ADDONS via configuration file.
   * Always skip mksquashfs part when using -q option.
+  * Adjust configuration files on the fly only when the according lines
+    aren't comments.
 
- -- Michael Prokop <mika@grml.org>  Mon, 23 Feb 2009 10:39:57 +0100
+ -- Michael Prokop <mika@grml.org>  Mon, 23 Feb 2009 11:22:13 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 

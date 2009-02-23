@@ -359,11 +359,11 @@ if [ -n "$SUITE" ] ; then
    esac
 
    DIST=" etch\| stable\| lenny\| squeeze\| testing\| sid\| unstable"
-   sed "s/\(deb .\+\)\([ \t]*\) $DIST\([ \t]*\)\(main \)/\1\2 $SUITE \3\4/" /etc/grml/fai/apt/sources.list | sponge /etc/grml/fai/apt/sources.list
+   sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE \4\5/" /etc/grml/fai/apt/sources.list | sponge /etc/grml/fai/apt/sources.list
    for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
        if [ -n "$file" ] ; then
-          sed "s/SUITE=.*/SUITE=\"$SUITE\"/" $LIVE_CONF | sponge $LIVE_CONF
-          sed "s/\(deb .\+\)\([ \t]*\) $DIST\([ \t]*\)\(main \)/\1\2 $SUITE \3\4/" "$file" | sponge "$file"
+          sed "s/^SUITE=.*/SUITE=\"$SUITE\"/" $file | sponge $file
+          sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE \4\5/""$file" | sponge "$file"
        fi
    done
 
@@ -379,11 +379,11 @@ if [ -n "$SUITE" ] ; then
 
    for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
        if [ -n "$file" ] ; then
-          sed "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" "$file" | sponge "$file"
+          sed "s|^FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" "$file" | sponge "$file"
        fi
    done
 
-   sed "s|FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" "$NFSROOT_CONF" | sponge "$NFSROOT_CONF"
+   sed "s|^FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" "$NFSROOT_CONF" | sponge "$NFSROOT_CONF"
 fi
 
 # set $ARCH
@@ -391,7 +391,7 @@ fi
 if grep -q -- 'FAI_DEBOOTSTRAP_OPTS.*--arch' "$NFSROOT_CONF" ; then
    sed "s/--arch [a-z0-9]* /--arch $ARCH /" "$NFSROOT_CONF" | sponge "$NFSROOT_CONF"
 else
-   sed "s|FAI_DEBOOTSTRAP_OPTS=\"\(.*\)|FAI_DEBOOTSTRAP_OPTS=\"--arch $ARCH \1|" "$NFSROOT_CONF" | sponge "$NFSROOT_CONF"
+   sed "s|^FAI_DEBOOTSTRAP_OPTS=\"\(.*\)|FAI_DEBOOTSTRAP_OPTS=\"--arch $ARCH \1|" "$NFSROOT_CONF" | sponge "$NFSROOT_CONF"
 fi
 # }}}
 
