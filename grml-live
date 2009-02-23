@@ -541,7 +541,14 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
 
       if [ -z "$NO_ADDONS" ] ; then
-         cp ${TEMPLATE_DIRECTORY}/boot/addons/*    "$BUILD_OUTPUT"/boot/addons/
+         # copy only files so we can handle bsd4grml on its own
+         for file in ${TEMPLATE_DIRECTORY}/boot/addons/* ; do
+             test -f $file && cp $file "$BUILD_OUTPUT"/boot/addons/
+         done
+
+         if [ -z "$NO_ADDONS_BSD4GRML" ] ; then
+            cp -a ${TEMPLATE_DIRECTORY}/boot/addons/bsd4grml "$BUILD_OUTPUT"/boot/addons/
+         fi
       fi
 
       if ! [ -d "${BUILD_OUTPUT}/boot/grub" ] ; then
@@ -622,9 +629,9 @@ fi
 if [ -f "$BUILD_OUTPUT"/live/${GRML_NAME}.squashfs -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" ] ; then
    log "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'"
    ewarn "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'" ; eend 0
-elif [ -f "$BUILD_OUTPUT"/live/${GRML_NAME}.squashfs -a -n "$SKIP_MKSQUASHFS" ] ; then
-   log "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs' as requested"
-   ewarn "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs' as requested" ; eend 0
+elif [ -n "$SKIP_MKSQUASHFS" ] ; then
+   log "Skipping stage 'squashfs' as requested via option -q"
+   ewarn "Skipping stage 'squashfs' as requested via option -q" ; eend 0
 else
    [ -d "$BUILD_OUTPUT"/live ] || mkdir "$BUILD_OUTPUT"/live
    # make sure we don't leave (even an empty) base.tgz:

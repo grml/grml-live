@@ -46,13 +46,16 @@ grml-live (0.9.9) unstable; urgency=low
     [Closes: issue631]
   * Integrate bsd4grml [hash: 987ce9a6f9ce205ba64794ed3fcac603]. This
     provides MirBSD as bootoption 'bsd' at grml's bootprompt. Thanks to
-    Thorsten "mirabilos" Glaser for his work!
+    Thorsten "mirabilos" Glaser for his work! Add support for
+    configuring NO_ADDONS_BSD4GRML via configuration file.
   * Add informational header to /etc/grml/fai/apt/sources.list and
     update docs regarding the file.
   * If specified SUITE is unstable use 'sid' instead (to avoid breakages
     with debootstrap).
+  * Support NO_ADDONS via configuration file.
+  * Always skip mksquashfs part when using -q option.
 
- -- Michael Prokop <mika@grml.org>  Mon, 23 Feb 2009 02:04:05 +0100
+ -- Michael Prokop <mika@grml.org>  Mon, 23 Feb 2009 10:39:57 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 
