@@ -1,4 +1,5 @@
 grml-live: extra-license-file usr/share/grml-live/templates/GRML/LICENSE.txt
+grml-live: extra-license-file usr/share/grml-live/templates/boot/addons/bsd4grml/LICENCE.TXT
 grml-live: executable-not-elf-or-script ./usr/share/grml-live/templates/windows/autostart/autorun.pif
 grml-live: executable-not-elf-or-script ./usr/share/grml-live/templates/windows/autostart/autorun.inf
 grml-live: executable-not-elf-or-script ./usr/share/grml-live/templates/windows/autostart/autorun.bat
