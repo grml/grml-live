@@ -18,6 +18,7 @@ GRML_LIVE_VERSION='0.9.9'
 PN="$(basename $0)"
 CMDLINE="$0 $@"
 ISO_DATE="$(date +%Y-%m-%d)"
+SOURCES_LIST_FILE='/etc/grml/fai/apt/sources.list'
 
 # usage information {{{
 usage()
@@ -338,12 +339,24 @@ if [ -n "$MIRROR_DIRECTORY" ] ; then
       eerror "Sorry, $MIRROR_DIRECTORY/debian does not seem to exist. Exiting."
       bailout 1
    fi
-   echo "$MIRROR_SOURCES" > /etc/grml/fai/apt/sources.list
+   cat > "$SOURCES_LIST_FILE" << EOF
+# NOTE: This file is *NOT* meant for manual customisation! This file is
+# modified by grml-live and any changes might be overriden.
+# You might consider using GRML_LIVE_SOURCES in /etc/grml/grml-live.conf*
+# and using /etc/grml/fai/files/etc/apt instead!'
+EOF
+   echo "$MIRROR_SOURCES" >> "$SOURCES_LIST_FILE"
    if [ -n "$GRML_LIVE_SOURCES" ] ; then
-      echo "$GRML_LIVE_SOURCES" >> /etc/grml/fai/apt/sources.list
+      echo "$GRML_LIVE_SOURCES" >> "$SOURCES_LIST_FILE"
    fi
 elif [ -n "$GRML_LIVE_SOURCES" ] ; then
-   echo "$GRML_LIVE_SOURCES" > /etc/grml/fai/apt/sources.list
+   cat > "$SOURCES_LIST_FILE" << EOF
+# NOTE: This file is *NOT* meant for manual customisation! This file is
+# modified by grml-live and any changes might be overriden.
+# You might consider using GRML_LIVE_SOURCES in /etc/grml/grml-live.conf*
+# and using /etc/grml/fai/files/etc/apt instead!'
+EOF
+   echo "$GRML_LIVE_SOURCES" >> "$SOURCES_LIST_FILE"
 fi
 
 if [ -n "$FAI_DEBOOTSTRAP" ] ; then
@@ -359,7 +372,7 @@ if [ -n "$SUITE" ] ; then
    esac
 
    DIST=" etch\| stable\| lenny\| squeeze\| testing\| sid\| unstable"
-   sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE\4\5/" /etc/grml/fai/apt/sources.list | sponge /etc/grml/fai/apt/sources.list
+   sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE\4\5/" "$SOURCES_LIST_FILE" | sponge "$SOURCES_LIST_FILE"
    for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
        if [ -n "$file" ] ; then
           sed "s/^SUITE=.*/SUITE=\"$SUITE\"/" $file | sponge $file
@@ -368,13 +381,13 @@ if [ -n "$SUITE" ] ; then
    done
 
    # notice: activate grml-live pool only if we are building against unstable:
-   if grep -qe unstable -qe sid /etc/grml/fai/apt/sources.list ; then
-      grep -q 'grml-live.*main' /etc/grml/fai/apt/sources.list || \
-      grep grml-stable /etc/grml/fai/apt/sources.list | \
-           sed 's/grml-stable/grml-live/' >> /etc/grml/fai/apt/sources.list
+   if grep -qe unstable -qe sid "$SOURCES_LIST_FILE" ; then
+      grep -q 'grml-live.*main' "$SOURCES_LIST_FILE" || \
+      grep grml-stable "$SOURCES_LIST_FILE" | \
+           sed 's/grml-stable/grml-live/' >> "$SOURCES_LIST_FILE"
    else
-      grep -q 'grml-live.*main' /etc/grml/fai/apt/sources.list && \
-      sed 's/.*grml-live.*/# removed grml-live repository/' /etc/grml/fai/apt/sources.list | sponge /etc/grml/fai/apt/sources.list
+      grep -q 'grml-live.*main' "$SOURCES_LIST_FILE" && \
+      sed 's/.*grml-live.*/# removed grml-live repository/' "$SOURCES_LIST_FILE" | sponge "$SOURCES_LIST_FILE"
    fi
 
    for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" "$NFSROOT_CONF" ; do
