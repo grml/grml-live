@@ -1,4 +1,3 @@
-#!/bin/sh
 # Filename:      /usr/share/grml-live/buildd/functions.sh
 # Purpose:       main function file for grml-live buildd
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
@@ -24,10 +23,10 @@ type -p mutt 1>/dev/null 2>&1 || die "mutt binary not found. Exiting."
 
 # some defaults:
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11
-DATE=$(date +%Y%m%d)
-TMP_DIR=$(mktemp -d)
-MUTT_HEADERS=$(mktemp)
-[ -n "$TMP_DIR" ] || die "Could not create \$TMP_DIR. Exiting."
+DATE="$(date +%Y%m%d)"
+TMP_DIR="$(mktemp -d)"
+MUTT_HEADERS="$(mktemp)"
+[ -n "$TMP_DIR" ]      || die "Could not create \$TMP_DIR. Exiting."
 [ -n "$MUTT_HEADERS" ] || die "Could not create $\MUTT_HEADERS. Exiting."
 [ -n "$ARCH" ] && GRML_LIVE_ARCH="-a $ARCH"
 
@@ -35,7 +34,7 @@ MUTT_HEADERS=$(mktemp)
 [ -n "$OUTPUT_DIR" ]    || OUTPUT_DIR="${STORAGE}/grml-live_${DATE}.$$"
 [ -n "$ISO_DIR" ]       || ISO_DIR=$STORAGE/grml-isos
 [ -n "$RECIPIENT" ]     || RECIPIENT=root@localhost
-[ -n "$ATTACHMENT" ]    || ATTACHMENT=$TMP_DIR/grml-live-logs_$DATE.tar.gz
+[ -n "$ATTACHMENT" ]    || ATTACHMENT="$TMP_DIR/grml-live-logs_$DATE.tar.gz"
 [ -n "$FROM" ]          || FROM=root@localhost
 
 if [ -n "$LOGFILE" ] ; then
@@ -57,8 +56,20 @@ grml_live_run() {
      fi
   fi
 
+  # workaround the 32 chars limit of mkisofs -V ....
+  # 'grml64-small-daily-squeeze 090223' is too long
+  case $SUITE in
+    sid)      CODENAME=sid   ;;
+    squeeze)  CODENAME=squ   ;;
+    lenny)    CODENAME=lenny ;;
+    etch)     CODENAME=etch  ;;
+  esac
+
+  grml_name="$NAME-daily-$CODENAME"
+  shortdate="$(date +%y%m%d)"
+
   grml-live -F $* $GRML_LIVE_ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
-            -g "$NAME-daily-$SUITE" -v $DATE -r grml-live-autobuild -i $ISO_NAME \
+            -g "$grml_name" -v "$shortdate" -r grml-live-autobuild -i $ISO_NAME \
             1>/var/log/grml-buildd.stdout \
             2>/var/log/grml-buildd.stderr ; RC=$?
 
@@ -71,7 +82,7 @@ grml_live_run() {
 
 # create log archive:
 create_logs() {
-  ( cd / && tar zcf $ATTACHMENT $FAI_LOGFILES $GRML_LOGFILE 1>/dev/null )
+  ( cd / && tar zcf $ATTACHMENT $FAI_LOGFILES /var/log/grml-buildd.stderr /var/log/grml-buildd.stdout $GRML_LOGFILE 1>/dev/null )
 }
 
 # store logs on remote server:
@@ -93,6 +104,8 @@ iso_details() {
 
 # send status mail:
 send_mail() {
+  # create logs only if using 'send_mail -e'
+  [ "$1" = "-e" ] && create_logs
   # attach logs only if we have some:
   [ -r "$ATTACHMENT" ] && MUTT_ATTACH="-a $ATTACHMENT" || MUTT_ATTACH=''
 
@@ -122,8 +135,11 @@ The following packages could not be installed:
 
 $(grep -i "Couldn't find.*package" $FAI_LOGFILES/software.log | sed 's/\(.*\)"\(.*\)"\(.*\)/\2/' | sort -u || echo "* nothing")
 
+See attached files:
+/var/log/grml-buildd.stderr /var/log/grml-buildd.stdout $ATTACHMENT
+
 EOF " | \
-  mutt -s "$SCRIPTNAME [${DATE}] - $RC_INFO" $MUTT_ATTACH "$RECIPIENT"
+  mutt -s "$SCRIPTNAME [${DATE}] - $RC_INFO" -a /var/log/grml-buildd.stderr -a /var/log/grml-buildd.stdout $MUTT_ATTACH "$RECIPIENT"
 }
 
 # make sure we store the final iso:

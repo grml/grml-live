@@ -1,3 +1,14 @@
+grml-live (0.9.10) unstable; urgency=low
+
+  * buildd:
+    - Add workaround to get around the mkisofs volume label limit.
+      Otherwise with something like 'grml64-medium-daily-squeeze 20090223'
+      we would get:
+      "mkisofs: Volume ID string too long (cur. XX max. 32 chars)."
+    - add buildd/execute.sh to further simplify buildd/*.sh setup
+
+ -- Michael Prokop <mika@grml.org>  Tue, 24 Feb 2009 00:12:01 +0100
+
 grml-live (0.9.9) unstable; urgency=low
 
   * Update to kernel 2.6.28-grml[64].
@@ -59,7 +70,6 @@ grml-live (0.9.9) unstable; urgency=low
   * Always skip mksquashfs part when using -q option.
   * Adjust configuration files on the fly only when the according lines
     aren't comments.
-  * 
 
  -- Michael Prokop <mika@grml.org>  Mon, 23 Feb 2009 12:43:18 +0100
 

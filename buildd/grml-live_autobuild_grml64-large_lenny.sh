@@ -9,22 +9,5 @@ NAME=grml64
 SCRIPTNAME="$(basename $0)"
 ARCH=amd64
 
-. /usr/share/grml-live/buildd/functions.sh || exit 1
-
-# execute grml-live:
-grml_live_run
-
-# create_logs
-upload_logs
-
-iso_details
-
-send_mail
-
-store_iso
-
-if [ "$RC" = "0" ] ; then
-   bailout
-else
-   echo "building ISO failed, keeping build files [${OUTPUT_DIR}]"
-fi
+# finally just source main file
+. /usr/share/grml-live/buildd/execute.sh   || exit 1

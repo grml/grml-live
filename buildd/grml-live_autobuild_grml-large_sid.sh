@@ -9,18 +9,5 @@ NAME=grml
 SCRIPTNAME="$(basename $0)"
 ARCH=i386
 
-. /usr/share/grml-live/buildd/functions.sh || exit 1
-
-# execute grml-live:
-grml_live_run
-
-# create_logs
-upload_logs
-
-iso_details
-
-send_mail
-
-store_iso
-
-bailout
+# finally just source main file
+. /usr/share/grml-live/buildd/execute.sh   || exit 1
