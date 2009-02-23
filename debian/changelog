@@ -4,7 +4,10 @@ grml-live (0.9.9) unstable; urgency=low
   * Changes in GRML_FULL:
     - drop package tspc (see #462738 and #515193)
     - replace gqview with geeqie (thanks, Spida)
-  * Add mc to GRML_MEDIUM (on request by Christian Kuehlborn).
+  * Changes in GRML_MEDIUM:
+    - add beep (on request by gebi)
+    - add dstat (on request by gebi)
+    - add mc (on request by Christian Kuehlborn)
   * Document noautoconfig in grml-cheatcodes. Thanks to Ralf Moll!
   * buildd:
     - rename all etch* related scripts to lenny*
@@ -56,8 +59,9 @@ grml-live (0.9.9) unstable; urgency=low
   * Always skip mksquashfs part when using -q option.
   * Adjust configuration files on the fly only when the according lines
     aren't comments.
+  * 
 
- -- Michael Prokop <mika@grml.org>  Mon, 23 Feb 2009 11:22:13 +0100
+ -- Michael Prokop <mika@grml.org>  Mon, 23 Feb 2009 12:43:18 +0100
 
 grml-live (0.9.8) unstable; urgency=low
 

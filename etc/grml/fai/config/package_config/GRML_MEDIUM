@@ -13,6 +13,7 @@ atftpd
 attr
 aumix alsa-utils
 bash
+beep
 bing
 binutils
 bridge-utils
@@ -50,6 +51,7 @@ dns2tcp
 dosfstools
 dpkg
 dselect
+dstat
 e2fsprogs
 e3
 ed
