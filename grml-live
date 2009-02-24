@@ -603,6 +603,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       GRML_NAME_SQUASHFS="$(cut_string 20 "$GRML_NAME_SQUASHFS")"
       GRML_NAME_SQUASHFS="$(extend_string_end 20 "$GRML_NAME_SQUASHFS")"
       sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/f4
+      sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/f5
 
       # autostart for Windows:
       if [ -d "${TEMPLATE_DIRECTORY}/windows/autostart/" ] ; then
