@@ -77,6 +77,7 @@ grml_live_run() {
      RC_INFO=success
   else
      RC_INFO=error
+     return 1
   fi
 }
 
@@ -104,7 +105,7 @@ iso_details() {
 
 # send status mail:
 send_mail() {
-  # create logs only if using 'send_mail -e'
+  # create logs if using 'send_mail -e'
   [ "$1" = "-e" ] && create_logs
   # attach logs only if we have some:
   [ -r "$ATTACHMENT" ] && MUTT_ATTACH="-a $ATTACHMENT" || MUTT_ATTACH=''
@@ -139,7 +140,7 @@ See attached files:
 /var/log/grml-buildd.stderr /var/log/grml-buildd.stdout $ATTACHMENT
 
 EOF " | \
-  mutt -s "$SCRIPTNAME [${DATE}] - $RC_INFO" -a /var/log/grml-buildd.stderr -a /var/log/grml-buildd.stdout $MUTT_ATTACH "$RECIPIENT"
+  mutt -s "$SCRIPTNAME [${DATE}] - $RC_INFO" -a /var/log/grml-buildd.stderr $MUTT_ATTACH "$RECIPIENT"
 }
 
 # make sure we store the final iso:
