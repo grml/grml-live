@@ -1,3 +1,4 @@
+#!/bin/sh
 # Filename:      /usr/share/grml-live/buildd/execute.sh
 # Purpose:       main execution file for grml-live buildd
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>

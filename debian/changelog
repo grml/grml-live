@@ -7,8 +7,9 @@ grml-live (0.9.10) unstable; urgency=low
       "mkisofs: Volume ID string too long (cur. XX max. 32 chars)."
     - add buildd/execute.sh to further simplify buildd/*.sh setup
     - send_mail(): do not append /var/log/grml-buildd.stdout by default
+    - add shebang line to buildd/[execute|functions].sh to make lintian happy
 
- -- Michael Prokop <mika@grml.org>  Tue, 24 Feb 2009 01:27:19 +0100
+ -- Michael Prokop <mika@grml.org>  Tue, 24 Feb 2009 01:34:22 +0100
 
 grml-live (0.9.9) unstable; urgency=low
 
