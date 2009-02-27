@@ -10,8 +10,10 @@ grml-live (0.9.10) unstable; urgency=low
     - add shebang line to buildd/[execute|functions].sh to make lintian happy
   * Replace placeholder %GRML_NAME_SQUASHFS% with according value in
     bootsplash f5. [Closes: issue619]
+  * Drop dropbear from GRML_FULL. The "ssh server inside initramfs"
+    is just too annoying for us. [Closes: issue617]
 
- -- Michael Prokop <mika@grml.org>  Tue, 24 Feb 2009 10:20:34 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 27 Feb 2009 13:11:31 +0100
 
 grml-live (0.9.9) unstable; urgency=low
 
