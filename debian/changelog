@@ -1,3 +1,10 @@
+grml-live (0.9.11) unstable; urgency=low
+
+  * Remove base64 from GRML_FULL as coreutils (>= 6.0-1) provide
+    a base64 binary now.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 01 Mar 2009 17:53:23 +0100
+
 grml-live (0.9.10) unstable; urgency=low
 
   * buildd:
