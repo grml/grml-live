@@ -1,3 +1,9 @@
+grml-live (0.9.12) UNRELEASED; urgency=low
+
+  * GRML_FULL/GRML_FORENSIC: replace libewf with libewf1.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 05 Mar 2009 14:36:04 +0100
+
 grml-live (0.9.11) unstable; urgency=low
 
   * Remove base64 from GRML_FULL as coreutils (>= 6.0-1) provide
