@@ -3,8 +3,9 @@ grml-live (0.9.12) UNRELEASED; urgency=low
   * GRML_FULL/GRML_FORENSIC: replace libewf with libewf1.
   * Add noapic, noresume, selinux=0 and edd=off to 'failsafe'
     bootoption and use maxcpus=0 instead of maxcpus=1.
+  * Add nfs-kernel-server to GRML_MEDIUM [Closes: issue471]
 
- -- Michael Prokop <mika@grml.org>  Sat, 07 Mar 2009 01:08:25 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Mar 2009 13:01:12 +0100
 
 grml-live (0.9.11) unstable; urgency=low
 

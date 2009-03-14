@@ -158,6 +158,7 @@ netbase
 netcat
 net-tools
 nfs-common
+nfs-kernel-server
 ntfs-3g
 ntfsprogs
 ntpdate
