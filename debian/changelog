@@ -5,8 +5,10 @@ grml-live (0.9.12) UNRELEASED; urgency=low
     bootoption and use maxcpus=0 instead of maxcpus=1.
   * Add nfs-kernel-server to GRML_MEDIUM [Closes: issue471]
   * Add dvtm to GRML_FULL (thanks to plh).
+  * Remove madwifi* from GRML_FULL and GRML_MEDIUM (being replaced
+    by ath5k and ath9k of linux kernel 2.6.28, see #519446).
 
- -- Michael Prokop <mika@grml.org>  Mon, 16 Mar 2009 13:40:17 +0100
+ -- Michael Prokop <mika@grml.org>  Tue, 17 Mar 2009 00:43:39 +0100
 
 grml-live (0.9.11) unstable; urgency=low
 

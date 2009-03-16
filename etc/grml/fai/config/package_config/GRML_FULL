@@ -1059,7 +1059,6 @@ m4
 macchanger
 macutils
 madison-lite
-madwifi-tools
 magicrescue
 mailcheck
 maildirsync
@@ -2103,7 +2102,6 @@ linux-image-2.6.28-grml
 linux-uvc-modules-2.6.28-grml
 linux-wlan-ng-modules-2.6.28-grml
 loop-aes-modules-2.6.28-grml
-madwifi-modules-2.6.28-grml
 ndiswrapper-modules-2.6.28-grml
 #nvidia-kernel-2.6.28-grml
 openafs-modules-2.6.28-grml
@@ -2119,6 +2117,8 @@ tp-smapi-modules-2.6.28-grml
 virtualbox-ose-guest-modules-2.6.28-grml virtualbox-ose-guest-utils
 #virtualbox-ose-modules-2.6.28-grml
 #zaptel-modules-2.6.28-grml
+# madwifi is replaced by ath5k and ath9k - see http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=519446
+#madwifi-modules-2.6.28-grml madwifi-tools
 ## }}}
 
 ## amd64 specific packages {{{
@@ -2142,7 +2142,7 @@ linux-headers-2.6.28-grml64
 linux-image-2.6.28-grml64
 #linux-source-2.6.28-grml
 loop-aes-modules-2.6.28-grml64
-madwifi-modules-2.6.28-grml64
+#madwifi-modules-2.6.28-grml64 madwifi-tools
 ndiswrapper-modules-2.6.28-grml64
 openafs-modules-2.6.28-grml64
 qc-usb-modules-2.6.28-grml64

@@ -299,7 +299,7 @@ atl2-modules-2.6.28-grml
 aufs-modules-2.6.28-grml
 #grml-kerneladdons-2.6.28
 linux-image-2.6.28-grml
-madwifi-modules-2.6.28-grml madwifi-tools
+#madwifi-modules-2.6.28-grml madwifi-tools
 powernowd
 rt2400-modules-2.6.28-grml rt2500-modules-2.6.28-grml rt73-modules-2.6.28-grml firmware-ralink
 #truecrypt-2.6.28-grml
@@ -309,5 +309,5 @@ PACKAGES aptitude AMD64
 atl2-modules-2.6.28-grml64
 aufs-modules-2.6.28-grml64
 linux-image-2.6.28-grml64
-madwifi-modules-2.6.28-grml64 madwifi-tools
+#madwifi-modules-2.6.28-grml64 madwifi-tools
 #truecrypt-2.6.28-grml64
