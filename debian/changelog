@@ -4,8 +4,9 @@ grml-live (0.9.12) UNRELEASED; urgency=low
   * Add noapic, noresume, selinux=0 and edd=off to 'failsafe'
     bootoption and use maxcpus=0 instead of maxcpus=1.
   * Add nfs-kernel-server to GRML_MEDIUM [Closes: issue471]
+  * Add dvtm to GRML_FULL (thanks to plh).
 
- -- Michael Prokop <mika@grml.org>  Sat, 14 Mar 2009 13:01:12 +0100
+ -- Michael Prokop <mika@grml.org>  Mon, 16 Mar 2009 13:40:17 +0100
 
 grml-live (0.9.11) unstable; urgency=low
 

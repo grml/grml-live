@@ -574,6 +574,7 @@ dvd+rw-tools
 dvi2tty
 dvipng
 dviutils
+dvtm
 dwdiff
 dwm
 dwm-tools
@@ -2080,8 +2081,8 @@ PACKAGES aptitude I386
 
 ## general:
 grml
-# we want to use linux-kernel-headers-grml instead of linux-libc-dev:
-linux-kernel-headers-grml
+# use linux-kernel-headers-grml instead of linux-libc-dev?
+# linux-kernel-headers-grml
 
 ## current kernel version 2.6.28-grml:
 acx100-2.6.28-grml
