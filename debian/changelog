@@ -1,14 +1,16 @@
 grml-live (0.9.12) UNRELEASED; urgency=low
 
-  * GRML_FULL/GRML_FORENSIC: replace libewf with libewf1.
   * Add noapic, noresume, selinux=0 and edd=off to 'failsafe'
     bootoption and use maxcpus=0 instead of maxcpus=1.
-  * Add nfs-kernel-server to GRML_MEDIUM [Closes: issue471]
   * Add dvtm to GRML_FULL (thanks to plh).
+  * GRML_FULL and GRML_FORENSIC: replace libewf with libewf1.
+  * Add packages to GRML_MEDIUM:
+    - nfs-kernel-server [Closes: issue471]
+    - aufs-tools (thanks for suggestion, Tong Sun) [Closes: issue652]
   * Remove madwifi* from GRML_FULL and GRML_MEDIUM (being replaced
     by ath5k and ath9k of linux kernel 2.6.28, see #519446).
 
- -- Michael Prokop <mika@grml.org>  Tue, 17 Mar 2009 00:43:39 +0100
+ -- Michael Prokop <mika@grml.org>  Tue, 24 Mar 2009 02:49:45 +0100
 
 grml-live (0.9.11) unstable; urgency=low
 
