@@ -3,7 +3,6 @@
 ! Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 ! Bug-Reports:   see http://grml.org/bugs/
 ! License:       This file is licensed under the GPL v2.
-! Latest change: Fre Feb 23 00:00:36 CET 2007 [mika]
 !###############################################################################
 ! Clear the other modifiers:
 ! clear    Lock
@@ -105,13 +104,13 @@ add mod4 = Multi_key
 ! Compose  + "<"  +  "<" = «
 ! Compose  + "0"  +  "*" = °
 ! Compose  + "u"  +  "/" = µ
-! Compose  + "|"  +  "|" = 
+! Compose  + "|"  +  "|" =
 ! Compose  + " "  +  " " =   ("Geschütztes Leerzeichen")
 ! Compose  + "("  +  "r" = ®
 ! Compose  + "_"  +  "_" = ¯
 ! Compose  + "-"  +  ":" = ÷
 ! Compose  + "x"  +  "x" = ×
-! Compose  + """  +  """ = 
+! Compose  + """  +  """ =
 !###############################################################################
 
 !###############################################################################
@@ -133,7 +132,7 @@ keycode  22 = BackSpace Terminate_Server
 keycode  23 = Tab ISO_Left_Tab
 keycode  24 = q Q at
 keycode  25 = w W lstroke Lstroke lstroke Lstroke
-keycode  26 = e E currency cent
+keycode  26 = e E EuroSign cent
 keycode  27 = r R
 keycode  28 = t T
 keycode  29 = y Y ydiaeresis
@@ -370,13 +369,13 @@ keycode 255 =
 !###############################################################################
 ! % xmodmap -p
 ! xmodmap:  up to 3 keys per modifier, (keycodes in parentheses):
-! 
+!
 ! shift       Shift_L (0x32),  Shift_R (0x3e)
 ! lock        Control_L (0x42)
 ! control     Control_L (0x25),  Control_R (0x6d)
 ! mod1        Alt_L (0x40),  Alt_L (0x7d),  Meta_L (0x9c)
 ! mod2        Num_Lock (0x4d)
-! mod3      
+! mod3
 ! mod4        Super_L (0x7f),  Hyper_L (0x80),  Multi_key (0x73)
 ! mod5        Mode_switch (0x5d),  ISO_Level3_Shift (0x7c)
 !
