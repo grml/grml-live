@@ -881,19 +881,48 @@ config_swspeak(){
 
 # {{{ support hardware synthesizer via speakup
 config_hwspeak(){
-   if checkbootparam hwspeak ; then
+   if checkbootparam speakup.synth ; then
+      einfo "Bootoption speakup.synth found."
+      eindent
+
+      module="$(getbootparam speakup.synth 2>>$DEBUG)"
+      if [ -z "$module" ] ; then
+         eerror "Sorry, no speakup module specified for bootoption speakup.synth."
+         flitewrapper "Sorry, no speakup module specified for bootoption speakup.synth."
+      else
+         einfo "Trying to load $module"
+         modprobe $module
+         eend $?
+      fi
+
+      if [ -d /proc/speakup/ ] || grep -q speakup /proc/modules ; then
+         einfo "Kernel should support speakup now." ; eend 0
+         flitewrapper "Kernel should support speakup now."
+      else
+         eerror "Kernel or hardware do not seem to support speakup. Skipping hwspeak." ; eend 1
+         flitewrapper "Kernel or hardware do not seem to support speakup. Sorry."
+      fi
+
+      eoutdent
+
+   # hwspeak:
+   elif checkbootparam hwspeak ; then
       einfo "Bootoption hwspeak found."
 
       if [ ! -d /proc/speakup/ ] && ! grep -q speakup /proc/modules ; then
-         ewarn" Kernel does not support hardware speakup - trying to load kernel modules:" ; eend 0
+         ewarn "Kernel does not support hardware speakup - trying to load kernel modules:" ; eend 0
          eindent
-         for module in $(find "/lib/modules/${KERNEL}/extra/speakup/" -name \*.ko | \
-                         sed 's#.*speakup/##g ; s#.ko$##g' | \
-                         grep -ve speakup_soft -ve speakup_dummy | sort -u) ; do
-            einfo "Trying to load $module"
-            modprobe $module
-            eend $?
-         done
+         if ! [ -d "/lib/modules/${KERNEL}/extra/speakup/" ] ; then
+            eerror "Kernel does not provide speakup modules, sorry." ; eend 1
+         else
+           for module in $(find "/lib/modules/${KERNEL}/extra/speakup/" -name \*.ko | \
+                           sed 's#.*speakup/##g ; s#.ko$##g' | \
+                           grep -ve speakup_soft -ve speakup_dummy | sort -u) ; do
+              einfo "Trying to load $module"
+              modprobe $module
+              eend $?
+           done
+         fi
          eoutdent
       fi
 

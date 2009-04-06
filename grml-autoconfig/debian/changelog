@@ -1,3 +1,10 @@
+grml-autoconfig (0.8.19) unstable; urgency=low
+
+  * Add support for speakup.synth=... bootoption. [Testing: issue610]
+    [Closes: issue620]
+
+ -- Michael Prokop <mika@grml.org>  Mon, 06 Apr 2009 12:47:34 +0200
+
 grml-autoconfig (0.8.18) unstable; urgency=low
 
   * Drop support for /etc/grml/autoconfig.small. It causes
