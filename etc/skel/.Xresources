@@ -3,47 +3,58 @@
 ! Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 ! Bug-Reports:   see http://grml.org/bugs/
 ! License:       This file is licensed under the GPL v2.
-! Latest change: Fre Mär 30 20:32:58 CEST 2007 [mika]
 !###############################################################################
-! Notice:   apply changes via running `xrdb -merge ~/.Xresources'
+! Notice:   apply changes via running 'xrdb -merge ~/.Xresources'
 !           run "xprop WM_CLASS" to find out title of windows
 !###############################################################################
 
-! If you don't have any iso8859-15 fonts, use iso8859-1
+! If you do not have any iso8859-15 fonts, use iso8859-1
 !*font:     		-misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
 
-xterm*font:     	-misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
-xterm*font2:		-misc-fixed-medium-r-normal-*-*-70-*-*-c-*-iso8859-15
-xterm*font3:     	-misc-fixed-medium-r-normal-*-*-100-*-*-c-*-iso8859-15
-xterm*font4:     	-misc-fixed-medium-r-normal-*-*-120-*-*-c-*-iso8859-15
-xterm*font5:     	-misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
-
-! debian's x-terminal-emulator has the following WM_CLASS:
 XTerm*font:     	-misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
+XTerm*font2:		-misc-fixed-medium-r-normal-*-*-70-*-*-c-*-iso8859-15
+XTerm*font3:     	-misc-fixed-medium-r-normal-*-*-100-*-*-c-*-iso8859-15
+XTerm*font4:     	-misc-fixed-medium-r-normal-*-*-120-*-*-c-*-iso8859-15
+XTerm*font5:     	-misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
+
 XTerm*.background: black
 XTerm*.foreground: lightgrey
+XTerm*utf8: 1
 
-XTerm*utf8: 0
+UXTerm*font:            -misc-fixed-medium-r-normal-*-*-140-*-*-*-*-iso10646-1
+UXTerm*font1:           -misc-fixed-*-*-*-*-6-*-*-*-*-*-iso10646-*
+UXTerm*font2:           -misc-fixed-medium-r-normal--8-80-75-75-c-50-iso10646-1
+UXTerm*font3:           -misc-fixed-medium-r-normal--14-130-75-75-c-70-iso10646-1
+UXTerm*font4:           -misc-fixed-medium-r-normal--13-120-75-75-c-80-iso10646-1
+UXTerm*font5:           -misc-fixed-medium-r-normal--18-120-100-100-c-90-iso10646-1
+UXTerm*font6:           -misc-fixed-medium-r-normal--20-200-75-75-c-100-iso10646-1
+UXTerm*utf8Fonts.font:          -misc-fixed-medium-r-normal--18-120-100-100-c-90-iso10646-1
+UXTerm*utf8Fonts.wideFont:      -misc-fixed-medium-r-normal-ko-18-120-100-100-c-180-iso10646-1
 
-xterm*.background: black
-xterm*.foreground: lightgrey
-!xterm.vt100.boldMode: false
-!xterm.vt100.background: black
-!xterm*foreground:   yellow
-!xterm.eightBitInput:    true
-!xterm*multiScroll:  on
-!xterm*jumpScroll:   on
-!xterm*font: -misc-console-medium-r-*-*-*-*-*-*-*-*-iso10646-1
-!xterm*boldFont: -misc-console-medium-r-*-*-*-*-*-*-*-*-iso10646-1
-!xterm*font: -misc-fixed-medium-r-normal--14-140-75-75-c-90-iso8859-15
-!xterm*boldFont: -misc-fixed-medium-r-normal--14-140-75-75-c-90-iso8859-15
-!xterm*ScrollBar: on
-!xterm*SaveLines: 2000
-!xterm.eightBitOutput:   true
-!xterm.vt100.colorBDMode: false
-!xterm.vt100.boldColors: true
-!xterm.width: 640
-!xterm.height: 480
+! enable UTF8
+! XTerm*utf8: 0
+! start via xterm -class UXTerm or 'uxterm'
+UXTerm*utf8: 1
+UXTerm*eightBitInput: false
+UXTerm*metaSendsEscape: true
+
+!XTerm.vt100.boldMode: false
+!XTerm.vt100.background: black
+!XTerm*foreground:   yellow
+!XTerm.eightBitInput:    true
+!XTerm*multiScroll:  on
+!XTerm*jumpScroll:   on
+!XTerm*font: -misc-console-medium-r-*-*-*-*-*-*-*-*-iso10646-1
+!XTerm*boldFont: -misc-console-medium-r-*-*-*-*-*-*-*-*-iso10646-1
+!XTerm*font: -misc-fixed-medium-r-normal--14-140-75-75-c-90-iso8859-15
+!XTerm*boldFont: -misc-fixed-medium-r-normal--14-140-75-75-c-90-iso8859-15
+!XTerm*ScrollBar: on
+!XTerm*SaveLines: 2000
+!XTerm.eightBitOutput:   true
+!XTerm.vt100.colorBDMode: false
+!XTerm.vt100.boldColors: true
+!XTerm.width: 640
+!XTerm.height: 480
 
 !XTerm*font: -misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-15
 !XTerm*boldFont: -misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-15
@@ -142,6 +153,55 @@ rxvt*.borderColor: white
 rxvt*.scrollColor: black
 rxvt*.font:        -misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
 
+! urxvt
+URxvt.font: 9x15
+URxvt.italicFont:        xft:Bitstream Vera Sans Mono:italic:autohint=true
+URxvt.boldItalicFont:    xft:Bitstream Vera Sans Mono:bold:italic:autohint=true
+!URxvt.background: black
+URxvt.background: rgba:0000/0000/0000/ccdd
+URxvt.foreground: white
+URxvt.color0: black
+URxvt.color1: red3
+URxvt.color2: green3
+URxvt.color3: yellow3
+URxvt.color4: DodgerBlue1
+URxvt.color5: magenta3
+URxvt.color6: cyan3
+URxvt.color7: gray90
+URxvt.color8: gray50
+URxvt.color9: red
+URxvt.color10: green
+URxvt.color11: yellow
+URxvt.color12: SteelBlue1
+URxvt.color13: magenta
+URxvt.color14: cyan
+URxvt.color15: white
+URxvt.colorUL: white
+URxvt.underlineColor: white
+URxvt.colorBD: white
+URxvt.colorIT: green
+URxvt.fading: 30
+
+URxvt.scrollBar: off
+URxvt*scrollstyle: xterm
+URxvt*borderLess: True
+
+! extensions:
+URxvt.perl-ext: default,matcher,tabbed
+URxvt.perl-ext-common: default,matcher,tabbed
+URxvt.urlLauncher: firefox
+URxvt.matcher.button: 1
+URxvt*matcher.pattern.1: \\b(mailto|http|https|ftp|file):[/]*[\\w-]\\.[\\w./?&@#-]*[\\w/-]
+URxvt*matcher.pattern.2: \\bwww\\.[\\w-]\\.[\\w./?&@#-]*[\\w/-]
+URxvt.matcher.rend.0: fg8
+
+! support stop scrolling on tty output
+URxvt.saveLines:         100000
+URxvt*scrollTtyOutput:   false
+URxvt*scrollWithBuffer:  true
+URxvt*scrollTtyKeypress: true
+
+! aterm
 aterm*.background:  white
 aterm*.foreground:  black
 aterm*.cursorColor: orange
@@ -149,14 +209,7 @@ aterm*.borderColor: white
 aterm*.scrollColor: black
 aterm*.font:        -misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
 
-urxvt*.background:  black
-urxvt*.foreground:  lightgrey
-urxvt*.cursorColor: orange
-urxvt*.borderColor: white
-urxvt*.scrollColor: black
-urxvt*.font:        -misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
-
-!XTerm Profiles - use via 'xterm -name profilename'
+! XTerm Profiles - use via 'xterm -name profilename'
 light*foreground: black
 light*background: gray90
 light*cursorColor: blue
@@ -199,12 +252,6 @@ presentation*color12: lightblue
 presentation*color4: lightblue
 presentation*font: -misc-fixed-medium-r-normal-*-*-210-*-*-c-*-iso8859-15
 
-! enable UTF8
-! XTerm*utf8: 0
-! start via xterm -class UXTerm or 'uxterm'
-UXTerm*eightBitInput: false
-UXTerm*metaSendsEscape: true
-
 !Emacs*font: -misc-fixed-medium-r-normal-*-13-*-*-*-*-*-*-*
 !Emacs*menubar*Font: -misc-fixed-medium-r-normal-*-13-*-*-*-*-*-*-*
 !Emacs*EmacsFrame*buffers-tab.attributeFont: -misc-fixed-medium-r-normal-*-13-*-*-*-*-*-*-*
@@ -226,5 +273,19 @@ nedit*topShadowColor:               #fefefe
 nedit*XmText.background:            white
 nedit*XmTextField.background:       white
 nedit*XmList.background:            white
+
+!yeahconsole http://phrat.de/downloads.html
+!yeahconsole*term: urxvt
+!yeahconsole*term:urxvt
+!yeahconsole*background:black
+!yeahconsole*foreground:grey
+!yeahconsole*aniDelay:18
+!yeahconsole*stepSize:15
+!yeahconsole*consoleHeight:30
+!yeahconsole*toggleKey:Win+y
+!yeahconsole*keyBigger:Win+KP_Add
+!yeahconsole*keySmaller:Win+KP_Subtract
+!yeahconsole*keyFull:Win+F11
+!yeahconsole*restart:1
 
 !# END OF FILE #################################################################
