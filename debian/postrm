@@ -4,7 +4,6 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Fre Sep 15 15:39:48 CEST 2006 [mika]
 ################################################################################
 
 set -e
@@ -20,6 +19,16 @@ undivert_gen() {
     DEXT=${3:-original}
     dpkg-divert --remove --rename --package grml-etc \
         --divert $2/$1.$DEXT $2/$1 #> /dev/null
+}
+
+replace_grml_with_orig_inittab() {
+  if grep -q '^l0:0:wait:/etc/init.d/grml-halt$' /etc/inittab ; then
+     sed -i 's|^l0:0:wait:/etc/init.d/grml-halt|l0:0:wait:/etc/init.d/rc 0|' /etc/inittab
+  fi
+
+  if grep -q '^l6:6:wait:/etc/init.d/grml-reboot$' /etc/inittab ; then
+     sed -i 's|^l6:6:wait:/etc/init.d/grml-reboot|l6:6:wait:/etc/init.d/rc 6|' /etc/inittab
+  fi
 }
 
 case "$1" in
@@ -42,9 +51,17 @@ case "$1" in
         for cmd in $TO_UNDIVERT6; do
                 undivert_gen $cmd /etc/X11/windowlab
         done
+
+	replace_grml_with_orig_inittab
      ;;
-   remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+
+   remove|abort-install|disappear)
+        replace_grml_with_orig_inittab
      ;;
+
+   upgrade|failed-upgrade|abort-install|abort-upgrade)
+     ;;
+
     *)
       echo "postrm called with unknown argument $1" >&2
       exit 1

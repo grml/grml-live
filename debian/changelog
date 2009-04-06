@@ -4,8 +4,16 @@ grml-etc (1.1.13) unstable; urgency=low
     IPython.Extensions.InterpreterExec module by default anymore.
     Upstream does not ship this configuration snippet as well.
     Thanks for reporting and debugging, wuehlmaus! [Closes: issue618]
+  * /etc/skel/.Xresources: improve xterm/ uxterm font setup.
+    This should fix our longstanding unicode problem. Thanks to
+    Thorsten Glaser for help. [Closes: issue468]
+    Additionally add configuration for urxvt.
+  * /etc/skel/.Xmodmap: Use 'EuroSign' instead of 'currency'.
+  * Debian postrm: when removing the package use /etc/init.d/rc instead
+    of /etc/init.d/grml-[reboot|halt].
+  * Slightly improve message for removing media from tray on reboot/halt.
 
- -- Michael Prokop <mika@grml.org>  Thu, 12 Feb 2009 18:24:11 +0100
+ -- Michael Prokop <mika@grml.org>  Mon, 06 Apr 2009 11:32:27 +0200
 
 grml-etc (1.1.12) unstable; urgency=low
 
