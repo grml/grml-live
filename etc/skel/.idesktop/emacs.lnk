@@ -1,7 +1,7 @@
 table Icon
   Caption: emacs
   ToolTip.Caption: the GNU project emacs editor
-  Command: /usr/bin/emacs
+  Command: grml-exec-wrapper emacs
   Icon: /home/grml/.idesktop/icons/l33t_TXT_emacs.png
   X: 534
   Y: 13

@@ -1,7 +1,7 @@
 table Icon
   Caption: grml-config-root
   ToolTip.Caption: configure system-wide settings
-  Command: /usr/bin/x-terminal-emulator -T "grml-config-root" -e sudo /usr/sbin/grml-config-root
+  Command: grml-exec-wrapper -p grml-config-root x-terminal-emulator -T "grml-config-root" -e sudo grml-config-root
   Icon: /home/grml/.idesktop/icons/l33t_DEV_kcontrol.png
   X: 318
   Y: 331

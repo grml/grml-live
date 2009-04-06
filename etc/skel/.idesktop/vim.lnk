@@ -1,7 +1,7 @@
 table Icon
   Caption: gvim
   ToolTip.Caption: Vi IMproved, a programmers text editor - the graphical version
-  Command: /usr/bin/gvim
+  Command: grml-exec-wrapper gvim
   Icon: /home/grml/.idesktop/icons/l33t_TXT_vim.png
   X: 424
   Y: 13

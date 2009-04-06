@@ -1,6 +1,6 @@
 table Icon
   Caption: vmware
-  Command: /usr/bin/vmware
+  Command: grml-exec-wrapper vmware
   Icon: /home/grml/.idesktop/icons/l33t_EMU_vmware.png
   X: 1044
   Y: 433

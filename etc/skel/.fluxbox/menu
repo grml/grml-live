@@ -1,21 +1,21 @@
 [begin] (Fluxbox) {} <>
     [exec] (xterm) {x-terminal-emulator} <>
     [submenu] (handy stuff) {} <>
-        [exec] (dillo webbrowser) {dillo} 
-        [exec] (firefox webbrowser) {firefox} 
-        [exec] (w3m webbrowser) {x-terminal-emulator -T "w3m" -e /usr/bin/w3m /usr/share/doc/grml-docs/startpage.html} <>
-        [exec] (gkrellm) {gkrellm} <>
-        [exec] (configure fluxbox [fluxbare]) {fluxbare} <>
-        [exec] (transparent terminal [aterm]) {aterm -tr} <>
-        [exec] (file manager [rox-filer]) {rox-filer} <>
+        [exec] (dillo webbrowser) {grml-exec-wrapper dillo} 
+        [exec] (firefox webbrowser) {grml-exec-wrapper firefox} 
+        [exec] (w3m webbrowser) {grml-exec-wrapper -p w3m x-terminal-emulator -T "w3m" -e /usr/bin/w3m /usr/share/doc/grml-docs/startpage.html} <>
+        [exec] (gkrellm) {grml-exec-wrapper gkrellm} <>
+        [exec] (configure fluxbox [fluxbare]) {grml-exec-wrapper fluxbare} <>
+        [exec] (transparent terminal [aterm]) {grml-exec-wrapper aterm -tr} <>
+        [exec] (file manager [rox-filer]) {grml-exec-wrapper rox-filer} <>
     [end]
     [submenu] (grml) {} <>
-        [exec] (grml info screen) {dillo /usr/share/doc/grml-docs/startpage.html} <>
-        [exec] (lock X) {x-terminal-emulator -T "grml-lock" -e /usr/bin/grml-lock} <>
-        [exec] (configure mailclient mutt) {x-terminal-emulator -T "grml-mutt" -e /usr/bin/grml-mutt} <>
-        [exec] (configure newsreader slrn) {x-terminal-emulator -T "grml-slrn" -e /usr/bin/grml-slrn} <>
+        [exec] (grml info screen) {grml-exec-wrapper dillo /usr/share/doc/grml-docs/startpage.html} <>
+        [exec] (lock X) {grml-exec-wrapper -p grml-lock x-terminal-emulator -T "grml-lock" -e /usr/bin/grml-lock} <>
+        [exec] (configure mailclient mutt) {grml-exec-wrapper -p grml-mutt x-terminal-emulator -T "grml-mutt" -e /usr/bin/grml-mutt} <>
+        [exec] (configure newsreader slrn) {grml-exec-wrapper -p grml-slrn x-terminal-emulator -T "grml-slrn" -e /usr/bin/grml-slrn} <>
         [exec] (configure network) {sudo x-terminal-emulator -T "grml-network" -e /usr/sbin/grml-network} <>
-        [exec] (configure and run terminalserver) {sudo x-terminal-emulator -T "grml-terminalserver" -e /usr/sbin/grml-terminalserver} <>
+        [exec] (configure and run terminalserver) {grml-exec-wrapper -p grml-terminalserver sudo x-terminal-emulator -T "grml-terminalserver" -e /usr/sbin/grml-terminalserver} <>
     [end]
     [submenu] (Debian) {} <>
         [include] (/etc/X11/fluxbox/menudefs.hook) {} <>

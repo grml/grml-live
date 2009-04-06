@@ -1,7 +1,7 @@
 table Icon
   Caption: pinfo
   ToolTip.Caption: curses based lynx-style info browser
-  Command: x-terminal-emulator -T "pinfo" -e /usr/bin/pinfo
+  Command: grml-exec-wrapper -p pinfo x-terminal-emulator -T "pinfo" -e pinfo
   Icon: /home/grml/.idesktop/icons/l33t_DES_nephros-manual.png
   X: 28
   Y: 451

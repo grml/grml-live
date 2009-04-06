@@ -1,3 +1,10 @@
+grml-desktop (0.2.3) unstable; urgency=low
+
+  * Use grml-exec-wrapper in menu of fluxbox and in idesktop.
+    Add grml-scripts >=1.1.18 to depends. [Closes: issue431]
+
+ -- Michael Prokop <mika@grml.org>  Mon, 06 Apr 2009 09:50:08 +0200
+
 grml-desktop (0.2.2) unstable; urgency=low
 
   * /etc/skel/.pekwm/menu: replace /etc/X11/pekwm/deb-menu

@@ -1,6 +1,6 @@
 table Icon
   Caption: gimp
-  Command: /usr/bin/gimp
+  Command: grml-exec-wrapper gimp
   Icon: /home/grml/.idesktop/icons/l33t_GRA_gimp.png
   X: 1054
   Y: 573

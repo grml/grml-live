@@ -1,7 +1,7 @@
 table Icon
   Caption: aumix
   ToolTip.Caption: adjust sound mixer settings
-  Command: /usr/bin/x-terminal-emulator -T "aumix" -e /usr/bin/aumix
+  Command: grml-exec-wrapper -p aumix x-terminal-emulator -T "aumix" -e aumix
   Icon: /home/grml/.idesktop/icons/l33t_AUD_kmix.png
   X: 18
   Y: 331

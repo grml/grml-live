@@ -10,7 +10,7 @@ Vcs-Browser: http://git.grml.org/?p=grml-desktop.git
 
 Package: grml-desktop
 Architecture: all
-Depends: idesk
+Depends: idesk, grml-scripts (>= 1.1.18)
 Suggests: fluxbox, fvwm | fvwm2 | fvwm-crystal, awesome, pekwm
 Conflicts: grml-etc (<< 0.9.14)
 Description: configuration files for the X desktop at grml
