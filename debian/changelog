@@ -9,11 +9,13 @@ grml-etc (1.1.13) unstable; urgency=low
     Thorsten Glaser for help. [Closes: issue468]
     Additionally add configuration for urxvt.
   * /etc/skel/.Xmodmap: Use 'EuroSign' instead of 'currency'.
-  * Debian postrm: when removing the package use /etc/init.d/rc instead
-    of /etc/init.d/grml-[reboot|halt].
+  * Debian postrm:
+    - when removing the package use /etc/init.d/rc instead
+      of /etc/init.d/grml-[reboot|halt].
+    - make sure the ssh init script even exists if something is failing
   * Slightly improve message for removing media from tray on reboot/halt.
 
- -- Michael Prokop <mika@grml.org>  Mon, 06 Apr 2009 11:32:27 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 06 Apr 2009 11:45:44 +0200
 
 grml-etc (1.1.12) unstable; urgency=low
 

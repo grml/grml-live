@@ -52,6 +52,13 @@ case "$1" in
                 undivert_gen $cmd /etc/X11/windowlab
         done
 
+	# make sure the ssh init script even exists if something is failing...
+	if ls /etc/init.d/ssh* 1>/dev/null 2>&1 ; then
+	  if [ ! -f /etc/init.d/ssh -a /etc/init.d/ssh.original.dpkg-new ] ; then
+	     mv /etc/init.d/ssh.original.dpkg-new /etc/init.d/ssh
+	  fi
+	fi
+
 	replace_grml_with_orig_inittab
      ;;
 
