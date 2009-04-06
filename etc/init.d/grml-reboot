@@ -197,7 +197,7 @@ if [ -z "$INSTALLED" -a -z "$NOPROMPT" ]; then
       [ -d /cdrom ] && umount -l /cdrom
       [ -n "$CDROM" -a -z "$NOEJECT" ] && eject -p "$CDROM" 2>/dev/null
       echo
-      read -s -p "${GREEN}Please remove CD, close cdrom drive and hit return [auto 2 minutes].${NORMAL}" -t 120 a
+      read -s -p "${GREEN}Please remove the disc, close the tray (if any) and press ENTER to continue [auto 2 minutes].${NORMAL}" -t 120 a
    fi
 fi
 
