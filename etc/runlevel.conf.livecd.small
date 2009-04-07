@@ -16,6 +16,7 @@
 # <sort> <off-> <on-levels>     <command>
 01	-	2		/etc/init.d/bootsplash_start.sh
 01	-	S		/etc/init.d/bootlocal.first
+01	0,1,6	-		/etc/init.d/haltlocal.first
 02	-	S		/etc/init.d/mountkernfs.sh
 03	-	S		/etc/init.d/udev
 04	-	S		/etc/init.d/mountdevsubfs.sh
@@ -36,6 +37,7 @@
 25	-	-		/etc/init.d/libdevmapper1.02.1
 26	-	-		/etc/init.d/lvm2
 29	-	2		/etc/init.d/bootlocal.middle
+29	0,1,6	-		/etc/init.d/haltlocal.middle
 30	-	0,6		/etc/init.d/urandom
 30	-	2,3,4,5		/etc/init.d/grml-autoconfig
 30	0,6	-		/etc/init.d/etc-setserial
@@ -62,4 +64,5 @@
 99	-	2		/etc/init.d/grml-misc
 99	-	2		/etc/init.d/bootsplash_end.sh
 99	-	2		/etc/init.d/bootlocal.last
+99	0,1,6	-		/etc/init.d/haltlocal.last
 # THE LAST LINE IS NEVER READ!
