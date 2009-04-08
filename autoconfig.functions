@@ -891,7 +891,7 @@ config_hwspeak(){
          flitewrapper "Sorry, no speakup module specified for bootoption speakup.synth."
       else
          einfo "Trying to load $module"
-         modprobe $module
+         modprobe "speakup_${module}"
          eend $?
       fi
 
