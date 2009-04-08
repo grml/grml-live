@@ -1,3 +1,9 @@
+grml-autoconfig (0.8.20) unstable; urgency=low
+
+  * Use "speakup_..." for speakup bootoption. Thanks to Michael Whapples!
+
+ -- Michael Prokop <mika@grml.org>  Wed, 08 Apr 2009 14:36:42 +0200
+
 grml-autoconfig (0.8.19) unstable; urgency=low
 
   * Add support for speakup.synth=... bootoption. [Testing: issue610]
