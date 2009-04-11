@@ -1,4 +1,4 @@
-grml-live (0.9.12) UNRELEASED; urgency=low
+grml-live (0.9.12) unstable; urgency=low
 
   * Add noapic, noresume, selinux=0 and edd=off to 'failsafe'
     bootoption and use maxcpus=0 instead of maxcpus=1.
@@ -9,8 +9,9 @@ grml-live (0.9.12) UNRELEASED; urgency=low
     - aufs-tools (thanks for suggestion, Tong Sun) [Closes: issue652]
   * Remove madwifi* from GRML_FULL and GRML_MEDIUM (being replaced
     by ath5k and ath9k of linux kernel 2.6.28, see #519446).
+  * Update bsd4grml to version 20090411.
 
- -- Michael Prokop <mika@grml.org>  Tue, 24 Mar 2009 02:49:45 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 11 Apr 2009 12:26:02 +0200
 
 grml-live (0.9.11) unstable; urgency=low
 

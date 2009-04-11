@@ -1,7 +1,7 @@
-BSD-Licence(7)		     BSD Reference Manual		BSD-Licence(7)
+BSD-Licence(7)               BSD Reference Manual               BSD-Licence(7)
 
 NAME
-     This is the BSD-Licence for the MirOS bsd4grml base system.
+     This is the BSD-Licence for the MirOS bsd4grml system.
 
 DESCRIPTION
      This document provides a list of all advertising clauses required to be
@@ -10,7 +10,7 @@ DESCRIPTION
 
 MIROS PROJECT
      MirOS is Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009
-	   The MirOS Project <miros-dev@mirbsd.org>
+           The MirOS Project <miros-dev@mirbsd.org>
      and its contributors.
 
      It is available under the terms listed below. We strive to make MirOS
@@ -19,7 +19,7 @@ MIROS PROJECT
 
 MirOS' origins
      MirBSD is Copyright (C) 1999, 2002, 2003 ff.
-	   Thorsten "mirabilos" Glaser <tg@mirbsd.de>
+           Thorsten "mirabilos" Glaser <tg@mirbsd.de>
      All rights reserved.
 
      Provided that these terms and disclaimer and all copyright notices are
@@ -74,14 +74,14 @@ UCB
 
      Redistribution and use in source and binary forms, with or without modif-
      ication, are permitted provided that the following conditions are met:
-     1.	  Redistributions of source code must retain the above copyright no-
-	  tice, this list of conditions and the following disclaimer.
-     2.	  Redistributions in binary form must reproduce the above copyright
-	  notice, this list of conditions and the following disclaimer in the
-	  documentation and/or other materials provided with the distribution.
-     3.	  Neither the name of the University nor the names of its contributors
-	  may be used to endorse or promote products derived from this
-	  software without specific prior written permission.
+     1.   Redistributions of source code must retain the above copyright no-
+          tice, this list of conditions and the following disclaimer.
+     2.   Redistributions in binary form must reproduce the above copyright
+          notice, this list of conditions and the following disclaimer in the
+          documentation and/or other materials provided with the distribution.
+     3.   Neither the name of the University nor the names of its contributors
+          may be used to endorse or promote products derived from this
+          software without specific prior written permission.
 
      THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS "AS IS" AND ANY
      EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -171,8 +171,8 @@ SCO
      materials mentioning features or use of this software must display the
      following acknowledgement:
 
-	   This product includes software developed or owned by Caldera
-	   International, Inc.
+           This product includes software developed or owned by Caldera
+           International, Inc.
 
      Neither the name of Caldera International, Inc. nor the names of other
      contributors may be used to endorse or promote products derived from this
@@ -206,191 +206,191 @@ ADVERTISING CLAUSES
    + o This model includes software developed by Christopher G. Demetriou.
    + o This model includes software developed by Christos Zoulas
    + o This product contains software developed by Ignatios Souvatzis for
-	 the NetBSD project.
+         the NetBSD project.
    + o This product includes cryptographic software written by Eric Young
-	 (eay@mincom.oz.au)
+         (eay@mincom.oz.au)
    + o This product includes software designed by William Allen Simpson.
    + o This product includes software developed at the Information Technolo-
-	 gy Division, US Naval Research Laboratory.
+         gy Division, US Naval Research Laboratory.
    + o This product includes software developed by Aaron Brown and Harvard
-	 University.
+         University.
    + o This product includes software developed by Aaron Campbell.
    + o This product includes software developed by Adam Glass and Charles M.
-	 Hannum.
+         Hannum.
    + o This product includes software developed by Adam Glass.
    + o This product includes software developed by Amancio Hasty and Roger
-	 Hardiman.
+         Hardiman.
    + o This product includes software developed by Angelos D. Keromytis.
    + o This product includes software developed by Berkeley Software Design,
-	 Inc.
+         Inc.
    + o This product includes software developed by Bill Paul.
    + o This product includes software developed by Charles D. Cranor and
-	 Washington University.
+         Washington University.
    + o This product includes software developed by Charles D. Cranor, Wash-
-	 ington University, and the University of California, Berkeley
+         ington University, and the University of California, Berkeley
    + o This product includes software developed by Charles D. Cranor, Wash-
-	 ington University, the University of California, Berkeley and its
-	 contributors.
+         ington University, the University of California, Berkeley and its
+         contributors.
    + o This product includes software developed by Charles D. Cranor.
    + o This product includes software developed by Charles Hannum, by the
-	 University of Vermont and State Agricultural College and Garrett A.
-	 Wollman, by William F. Jolitz, and by the University of California,
-	 Berkeley, Lawrence Berkeley Laboratory, and its contributors.
+         University of Vermont and State Agricultural College and Garrett A.
+         Wollman, by William F. Jolitz, and by the University of California,
+         Berkeley, Lawrence Berkeley Laboratory, and its contributors.
    + o This product includes software developed by Charles Hannum.
    + o This product includes software developed by Charles M. Hannum.
    + o This product includes software developed by Christopher G. Demetriou
-	 for the NetBSD Project.
+         for the NetBSD Project.
    + o This product includes software developed by Christopher G. Demetriou.
    + o This product includes software developed by Christos Zoulas for the
-	 NetBSD Project.
+         NetBSD Project.
    + o This product includes software developed by Christos Zoulas.
    + o This product includes software developed by Colin Wood for the NetBSD
-	 Project.
+         Project.
    + o This product includes software developed by Computing Services at
-	 Carnegie Mellon University (http://www.cmu.edu/computing/).
+         Carnegie Mellon University (http://www.cmu.edu/computing/).
    + o This product includes software developed by Daan Vreeken.
    + o This product includes software developed by David Dawes, Jean-
-	 Baptiste Marchand, Julien Montagne, Thomas Roell, Michael Smith,
-	 Jerome Verdon and Kazutaka Yokota.
+         Baptiste Marchand, Julien Montagne, Thomas Roell, Michael Smith,
+         Jerome Verdon and Kazutaka Yokota.
    + o This product includes software developed by David Hulton.
    + o This product includes software developed by David Jones and Gordon
-	 Ross
+         Ross
    + o This product includes software developed by David Miller.
    + o This product includes software developed by Dean Huxley.
    + o This product includes software developed by Eric S. Raymond
    + o This product includes software developed by Eric Young
-	 (eay@mincom.oz.au)
+         (eay@mincom.oz.au)
    + o This product includes software developed by Gardner Buchanan.
    + o This product includes software developed by Gordon Ross
    + o This product includes software developed by Gordon W. Ross
    + o This product includes software developed by Gordon W. Ross and Leo
-	 Weppelman.
+         Weppelman.
    + o This product includes software developed by HAYAKAWA Koichi.
    + o This product includes software developed by HD Associates
    + o This product includes software developed by Harvard University and
-	 its contributors.
+         its contributors.
    + o This product includes software developed by Harvard University.
    + o This product includes software developed by Hellmuth Michaelis and
-	 Joerg Wunsch
+         Joerg Wunsch
    + o This product includes software developed by Hellmuth Michaelis, Brian
-	 Dunford-Shore, Joerg Wunsch, Scott Turner and Charles Hannum.
+         Dunford-Shore, Joerg Wunsch, Scott Turner and Charles Hannum.
    + o This product includes software developed by Herb Peyerl
    + o This product includes software developed by Iain Hibbert
    + o This product includes software developed by Ichiro FUKUHARA.
    + o This product includes software developed by Ignatios Souvatzis for
-	 the NetBSD project.
+         the NetBSD project.
    + o This product includes software developed by Jason R. Thorpe for And
-	 Communications, http://www.and.com/
+         Communications, http://www.and.com/
    + o This product includes software developed by Joachim Koenig-Baltes.
    + o This product includes software developed by Jochen Pohl for The
-	 NetBSD Project.
+         NetBSD Project.
    + o This product includes software developed by Jonathan Stone
    + o This product includes software developed by Jonathan Stone and Jason
-	 R. Thorpe for the NetBSD Project.
+         R. Thorpe for the NetBSD Project.
    + o This product includes software developed by Julian Highfield.
    + o This product includes software developed by Kenneth Stailey and Ian
-	 Darwin.
+         Darwin.
    + o This product includes software developed by Kenneth Stailey.
    + o This product includes software developed by LAN Media Corporation and
-	 its contributors.
+         its contributors.
    + o This product includes software developed by Leo Weppelman.
    + o This product includes software developed by Manuel Bouyer.
    + o This product includes software developed by Marc Horowitz.
    + o This product includes software developed by Mark Tinguely and Jim
-	 Lowe
+         Lowe
    + o This product includes software developed by Marshall M. Midden.
    + o This product includes software developed by Matthias Pfaller.
    + o This product includes software developed by Michael Graff for the
-	 NetBSD Project.
+         NetBSD Project.
    + o This product includes software developed by Michael L. Hitch.
    + o This product includes software developed by Michael Long.
    + o This product includes software developed by Michael Shalayeff.
    + o This product includes software developed by Mike Pritchard.
    + o This product includes software developed by Niels Provos.
    + o This product includes software developed by Niklas Hallqvist, C Stone
-	 and Job de Haas.
+         and Job de Haas.
    + o This product includes software developed by Niklas Hallqvist.
    + o This product includes software developed by Paul Kranenburg.
    + o This product includes software developed by Paul Mackerras
-	 <paulus@samba.org>.
+         <paulus@samba.org>.
    + o This product includes software developed by Peter Galbavy.
    + o This product includes software developed by Phase One, Inc.
    + o This product includes software developed by Philip A. Nelson.
    + o This product includes software developed by Ralf S. Engelschall
-	 <rse@engelschall.com> for use in the mod_ssl project
-	 (http://www.modssl.org/).
+         <rse@engelschall.com> for use in the mod_ssl project
+         (http://www.modssl.org/).
    + o This product includes software developed by Rodney W. Grimes.
    + o This product includes software developed by Roland C. Dowdeswell.
    + o This product includes software developed by Rolf Grossmann.
    + o This product includes software developed by Serge V. Vakulenko.
    + o This product includes software developed by Tatoku Ogaito for the
-	 NetBSD Project.
+         NetBSD Project.
    + o This product includes software developed by Terrence R. Lambert.
    + o This product includes software developed by Thomas Skibo.
    + o This product includes software developed by TooLs GmbH.
    + o This product includes software developed by Winning Strategies, Inc.
    + o This product includes software developed by Zembu Labs, Inc.
    + o This product includes software developed by the Apache Software Foun-
-	 dation (http://www.apache.org/).
+         dation (http://www.apache.org/).
    + o This product includes software developed by the Charles D. Cranor,
-	 Washington University, University of California, Berkeley and its
-	 contributors.
+         Washington University, University of California, Berkeley and its
+         contributors.
    + o This product includes software developed by the Computer Systems En-
-	 gineering Group at Lawrence Berkeley Laboratory.
+         gineering Group at Lawrence Berkeley Laboratory.
    + o This product includes software developed by the Harvard University
-	 and its contributors.
+         and its contributors.
    + o This product includes software developed by the Kungliga Tekniska
-	 Högskolan and its contributors.
+         Högskolan and its contributors.
    + o This product includes software developed by the Network Research
-	 Group at Lawrence Berkeley Laboratory.
+         Group at Lawrence Berkeley Laboratory.
    + o This product includes software developed by the OpenSSL Project for
-	 use in the OpenSSL Toolkit. (http://www.openssl.org/)
+         use in the OpenSSL Toolkit. (http://www.openssl.org/)
    + o This product includes software developed by the SMCC Technology
-	 Development Group at Sun Microsystems, Inc.
+         Development Group at Sun Microsystems, Inc.
    + o This product includes software developed by the University of Cali-
-	 fornia, Berkeley and its contributors, as well as Christoph Herrmann
-	 and Thomas-Henning von Kamptz.
+         fornia, Berkeley and its contributors, as well as Christoph Herrmann
+         and Thomas-Henning von Kamptz.
    + o This product includes software developed by the University of Cali-
-	 fornia, Berkeley and its contributors.
+         fornia, Berkeley and its contributors.
    + o This product includes software developed by the University of Cali-
-	 fornia, Lawrence Berkeley Laboratories.
+         fornia, Lawrence Berkeley Laboratories.
    + o This product includes software developed by the University of Cali-
-	 fornia, Lawrence Berkeley Laboratory and its contributors.
+         fornia, Lawrence Berkeley Laboratory and its contributors.
    + o This product includes software developed by the University of Vermont
-	 and State Agricultural College and Garrett A. Wollman, by William F.
-	 Jolitz, and by the University of California, Berkeley, Lawrence
-	 Berkeley Laboratory, and its contributors.
+         and State Agricultural College and Garrett A. Wollman, by William F.
+         Jolitz, and by the University of California, Berkeley, Lawrence
+         Berkeley Laboratory, and its contributors.
    + o This product includes software developed by the University of Vermont
-	 and State Agricultural College and Garrett A. Wollman.
+         and State Agricultural College and Garrett A. Wollman.
    + o This product includes software developed by the author.
    + o This product includes software developed for the FreeBSD project.
    + o This product includes software developed for the NetBSD Project by
-	 Christopher G. Demetriou.
+         Christopher G. Demetriou.
    + o This product includes software developed for the NetBSD Project by
-	 Frank van der Linden
+         Frank van der Linden
    + o This product includes software developed for the NetBSD Project by
-	 Jason Downs and Jason R. Thorpe.
+         Jason Downs and Jason R. Thorpe.
    + o This product includes software developed for the NetBSD Project by
-	 Jason R. Thorpe.
+         Jason R. Thorpe.
    + o This product includes software developed for the NetBSD Project by
-	 John M. Vinopal.
+         John M. Vinopal.
    + o This product includes software developed for the NetBSD Project by
-	 Juergen Hannken-Illjes.
+         Juergen Hannken-Illjes.
    + o This product includes software developed for the NetBSD Project by
-	 Perry E. Metzger.
+         Perry E. Metzger.
    + o This product includes software developed for the NetBSD Project by
-	 Wasabi Systems, Inc.
+         Wasabi Systems, Inc.
    + o This product includes software developed for the NetBSD Project. See
-	 http://www.netbsd.org/ for information about NetBSD.
+         http://www.netbsd.org/ for information about NetBSD.
    + o This product includes software developed or owned by Caldera Interna-
-	 tional, Inc.
+         tional, Inc.
    + o This product uses a modified version of Henry Spencer's regular ex-
-	 pression library.
+         pression library.
    + o This product uses zlib by Jean-loup Gailly.
    + o This software is a component of "386BSD" developed by William F. Jol-
-	 itz, TeleMuse.
+         itz, TeleMuse.
    + o This software was developed by Holger Veit and Brian Moore for use
-	 with "386BSD" and similar operating systems.
+         with "386BSD" and similar operating systems.
 
      All trademarks and registered trademarks are properties of their respec-
      tive owners.
@@ -422,4 +422,4 @@ BUGS
      MirOS project at <miros-discuss@mirbsd.org> if you think you have
      discovered a bug.
 
-MirOS			       January 17, 2009				     6
+MirOS                          January 17, 2009                              6
