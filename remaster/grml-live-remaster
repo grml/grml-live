@@ -12,6 +12,7 @@
 set -e # exit on any error
 
 VERSION='0.0.2'
+GRML_LIVE_EDITOR=${VISUAL:-${EDITOR:-vi}}
 
 # source core functions {{{
 . /etc/grml/lsb-functions
@@ -68,7 +69,7 @@ for i in dev proc root sys tmp; do
         umount /remaster/chroot/$i
 done
 
-$EDITOR /remaster/msg
+${GRML_LIVE_EDITOR} /remaster/msg
 
 [ -d /remaster/iso ] || mkdir /remaster/iso
 
