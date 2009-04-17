@@ -1,8 +1,9 @@
 grml-etc (1.1.14) unstable; urgency=low
 
-  * Add support for bootlocal.* [Closes: issue170]
+  [ Frank Terbeck ]
+  * Add support for haltlocal.* [Closes: issue170]
 
- -- Frank Terbeck <ft@grml.org>  Tue, 07 Apr 2009 13:32:54 +0200
+ -- Michael Prokop <mika@grml.org>  Fri, 17 Apr 2009 09:31:42 +0200
 
 grml-etc (1.1.13) unstable; urgency=low
 
