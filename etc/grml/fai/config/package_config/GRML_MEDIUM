@@ -303,7 +303,7 @@ linux-image-2.6.28-grml
 powernowd
 rt2400-modules-2.6.28-grml rt2500-modules-2.6.28-grml rt73-modules-2.6.28-grml firmware-ralink
 #truecrypt-2.6.28-grml
-virtualbox-ose-guest-utils
+virtualbox-ose-guest-modules-2.6.28-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
 
 PACKAGES aptitude AMD64
 atl2-modules-2.6.28-grml64

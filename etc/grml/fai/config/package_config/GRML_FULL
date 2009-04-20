@@ -2114,7 +2114,7 @@ sl-modem-modules-2.6.28-grml
 speakup-modules-2.6.28-grml
 sysprof-module-2.6.28-grml
 tp-smapi-modules-2.6.28-grml
-virtualbox-ose-guest-modules-2.6.28-grml virtualbox-ose-guest-utils
+virtualbox-ose-guest-modules-2.6.28-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
 #virtualbox-ose-modules-2.6.28-grml
 #zaptel-modules-2.6.28-grml
 # madwifi is replaced by ath5k and ath9k - see http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=519446
