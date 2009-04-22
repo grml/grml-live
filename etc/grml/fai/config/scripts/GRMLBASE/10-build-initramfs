@@ -8,8 +8,17 @@
 
 set -e
 
-cp /etc/grml/fai/live-initramfs/live.conf $target/etc/live.conf
-cp /etc/grml/fai/live-initramfs/grml-script.init-top "$target/usr/share/initramfs-tools/scripts/init-top/grml"
+if ! [ -f "$target/etc/live.conf" ] ; then
+  echo "Warning: $target/etc/live.conf does not exist yet,"
+  echo "         ... installing /etc/grml/fai/live-initramfs/live.conf"
+  cp /etc/grml/fai/live-initramfs/live.conf "$target/etc/live.conf"
+fi
+
+if [ -f /etc/grml/fai/live-initramfs/grml-script.init-top ] ; then
+  cp /etc/grml/fai/live-initramfs/grml-script.init-top "$target/usr/share/initramfs-tools/scripts/init-top/grml"
+else
+  echo "Warning: /etc/grml/fai/live-initramfs/grml-script.init-top could not be read"
+fi
 
 FILE=$(ls -1 $target/boot/vmlinuz-* 2>/dev/null| sort -r | head -1)
 KERNELVERSION=$(echo "${FILE##$target/boot/vmlinuz-}")
