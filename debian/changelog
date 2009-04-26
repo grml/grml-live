@@ -3,12 +3,13 @@ grml-live (0.9.13) UNRELEASED; urgency=low
   * Bump Standard-Version to 3.8.1 (no further changes).
   * Add virtualbox-ose-guest-x11 to GRML_FULL and GRML_MEDIUM.
   * Add virtualbox-ose-guest-modules-2.6.28-grml to GRML_MEDIUM.
+  * Add speakup-tools to GRML_FULL.
   * Install /etc/grml/fai/live-initramfs/live.conf only if
     /etc/live.conf does not exist in the target yet.
   * Update isolinux.bin to version 2:3.75+dfsg-1 (3.75 Debian-2009-04-17)
     from Debian.
 
- -- Michael Prokop <mika@grml.org>  Thu, 23 Apr 2009 19:10:13 +0200
+ -- Michael Prokop <mika@grml.org>  Sun, 26 Apr 2009 18:10:42 +0200
 
 grml-live (0.9.12) unstable; urgency=low
 
