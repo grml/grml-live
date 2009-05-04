@@ -13,8 +13,8 @@
  debug [ break=live-bottom ]    get interactive shells during startup process  
  grub                                   start GRand Unified Bootloader (GRUB)  
  dos                                                        start FreeDOS 1.0  
- qemu                               boot with special options for use in Qemu  
- vmware                           boot with special options for use in VMware  
+ bsd                                                           boot MirOS BSD  
+ hdt                                             boot Hardware Detection Tool  
  grml2ram                                      copy to RAM and run from there  
                                                                                
  A list with all supported boot options can be found on the CD at              
