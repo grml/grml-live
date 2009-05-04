@@ -436,10 +436,9 @@ ctorrent
 ctrlproxy
 cu
 cuetools
+cups-bsd
+cups-client
 cups-pdf
-cupsys
-cupsys-bsd
-cupsys-client
 curl
 curlftpfs
 cvs
@@ -2087,7 +2086,6 @@ grml
 ## current kernel version 2.6.28-grml:
 acx100-2.6.28-grml
 at76-usb-modules-2.6.28-grml
-atl2-modules-2.6.28-grml
 aufs-modules-2.6.28-grml
 drbd8-2.6.28-grml
 exmap-modules-2.6.28-grml
@@ -2131,7 +2129,6 @@ grml64
 ## current kernel version 2.6.28-grml64:
 acx100-2.6.28-grml64
 at76-usb-modules-2.6.28-grml64
-atl2-modules-2.6.28-grml64
 aufs-modules-2.6.28-grml64
 drbd8-2.6.28-grml64
 exmap-modules-2.6.28-grml64
