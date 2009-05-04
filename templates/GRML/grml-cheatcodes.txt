@@ -21,8 +21,10 @@ debug                               Get shells during process of booting for deb
 bootchart                           Create chart of booting sequence in /var/log/bootchart.tgz
 forensic                            Do not touch any harddisks during hardware recognition
 serial                              Activate ttyS0 and start mgetty
+grub                                Boot Grub bootloader (special all-in-one-image)
 dos                                 Boot FreeDOS
-grub                                Boot into the Grub bootloader
+bsd                                 Boot MirOS BSD
+hdt                                 Boot Hardware Detection Tool (from syslinux project)
 qemu                                Boot with special options for use in Qemu
 vmware                              Boot with special options for use in VMware
 
@@ -150,6 +152,7 @@ grml noswraid                       Disable scanning for software raid arrays (c
 grml swraid                         Enable automatic assembling of software raid arrays
 grml nolvm                          Disable scanning for Logical Volumes (LVM)
 grml lvm                            Automatically activate Logival Volumes (LVM) during boot
+grml readonly                       Make sure all harddisk devices (/dev/hd* /dev/sd*) are forced to read-only mode
 grml xmodule=ati|fbdev|i810|mga     Use specified X.org-Module (1)
 grml xmodule=nv|radeon|savage|s3    Use specified X.org-Module (2)
 grml xmodule=radeon|svga|i810       Use specified X.org-Module (3)

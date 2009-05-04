@@ -11,8 +11,8 @@
  serial                                               activate serial console  
  forensic              do not touch any harddisks during hardware recognition  
  debug [ break=live-bottom ]    get interactive shells during startup process  
- grub                                   start GRand Unified Bootloader (GRUB)  
- dos                                                        start FreeDOS 1.0  
+ grub                                    boot GRand Unified Bootloader (GRUB)  
+ dos                                                         boot FreeDOS 1.0  
  bsd                                                           boot MirOS BSD  
  hdt                                             boot Hardware Detection Tool  
  grml2ram                                      copy to RAM and run from there  

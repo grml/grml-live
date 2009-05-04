@@ -13,8 +13,9 @@ grml-live (0.9.13) UNRELEASED; urgency=low
     Thanks for the point, formorer!
     Use pci.ids from http://pciids.sourceforge.net/
   * Mention bsd and hdt in isolinux' bootsplash f3.
+  * Mention readonly, hdt and bsd bootoptions in grml-cheatcodes.txt.
 
- -- Michael Prokop <mika@grml.org>  Mon, 04 May 2009 21:27:19 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 04 May 2009 21:43:08 +0200
 
 grml-live (0.9.12) unstable; urgency=low
 
