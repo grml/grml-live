@@ -13,7 +13,7 @@
  grml testcd                              check CD data integrity and md5sums  
  grml swspeak               prepare system for use with software synthesizer,  
                                            run "swspeak" after booting system  
- grml toram                 copy the whole CD/media to RAM and run from there  
+ grml toram / grml2ram      copy the whole CD/media to RAM and run from there  
  grml toram=%GRML_NAME_SQUASHFS%            copy only specified squashfs file  
                                                     to RAM and run from there  
  grml vga=ask  / vga=791            prompt for framebuffer menu / set options  
