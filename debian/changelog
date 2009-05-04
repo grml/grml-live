@@ -16,11 +16,13 @@ grml-live (0.9.13) UNRELEASED; urgency=low
     - Add virtualbox-ose-guest-x11 to GRML_FULL and GRML_MEDIUM.
     - Add virtualbox-ose-guest-modules-2.6.28-grml to GRML_MEDIUM.
     - Add speakup-tools to GRML_FULL.
+    - Replace cupsys-bsd with cups-bsd and cupsys-client with cups-client.
     - Drop atl2-modules-2.6.28* from package list (merged in mainline)
     - Drop cupsys transitional package.
-    - Replace cupsys-bsd with cups-bsd and cupsys-client with cups-client.
+    - Drop clive from GRML_FULL as it depends on a fscking large perl
+      package (see #526999).
 
- -- Michael Prokop <mika@grml.org>  Mon, 04 May 2009 22:50:30 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 04 May 2009 23:08:21 +0200
 
 grml-live (0.9.12) unstable; urgency=low
 
