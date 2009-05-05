@@ -27,14 +27,12 @@ xserver-xorg-video-ark
 xserver-xorg-video-ati
 xserver-xorg-video-chips
 xserver-xorg-video-cirrus
-xserver-xorg-video-cyrix
 xserver-xorg-video-dummy
 xserver-xorg-video-fbdev
 xserver-xorg-video-glint
 xserver-xorg-video-i128
 xserver-xorg-video-i740
 xserver-xorg-video-i810
-xserver-xorg-video-imstt
 xserver-xorg-video-intel
 xserver-xorg-video-ivtv
 xserver-xorg-video-mga

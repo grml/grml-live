@@ -1,3 +1,11 @@
+grml-live (0.9.14) unstable; urgency=low
+
+  * Software related changes:
+    - Drop abandoned packages xserver-xorg-video-imstt (#523683) and
+      xserver-xorg-video-vga (#523687).
+
+ -- Michael Prokop <mika@grml.org>  Tue, 05 May 2009 12:10:18 +0200
+
 grml-live (0.9.13) unstable; urgency=low
 
   * Split package into grml-live and grml-live-addons.
