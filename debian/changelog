@@ -1,5 +1,19 @@
 grml-live (0.9.13) UNRELEASED; urgency=low
 
+  * Split package into grml-live and grml-live-addons.
+    Add grml-live-addons to Recommends of package grml-live.
+    Package grml-live-addons provides the templates/boot/addons
+    files that require >7MB of disk space overall so we don't
+    want to ship it with default grml:
+    - allinone.img
+    - balder10.imz
+    - bsd4grml/
+    - chain.c32
+    - hdt.c32
+    - memdisk
+    - menu.c32
+    - pci.ids
+  * Add ${misc:Depends} to binary packages' depend.
   * Bump Standard-Version to 3.8.1 (no further changes).
   * Install /etc/grml/fai/live-initramfs/live.conf only if
     /etc/live.conf does not exist in the target yet.
@@ -22,7 +36,7 @@ grml-live (0.9.13) UNRELEASED; urgency=low
     - Drop clive from GRML_FULL as it depends on a fscking large perl
       package (see #526999).
 
- -- Michael Prokop <mika@grml.org>  Mon, 04 May 2009 23:08:21 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 05 May 2009 09:30:16 +0200
 
 grml-live (0.9.12) unstable; urgency=low
 

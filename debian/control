@@ -11,9 +11,20 @@ Vcs-Browser: http://git.grml.org/?p=grml-live.git
 
 Package: grml-live
 Architecture: all
-Depends: fai-client (>= 3.2.4), fai-server (>= 3.2.4), memtest86+ [i386 amd64], mkisofs | genisoimage, squashfs-lzma-tools | squashfs-tools, wget, moreutils
+Depends: ${misc:Depends}, fai-client (>= 3.2.4), fai-server (>= 3.2.4), memtest86+ [i386 amd64], mkisofs | genisoimage, squashfs-lzma-tools | squashfs-tools, wget, moreutils
+Recommends: grml-live-addons
 Suggests: fai-doc
 Description: build system for creating a grml (based) live-cd
  This package provides the build system for creating
  a Debian / grml based Linux live cd. It is based on
  FAI (Fully Automatic Installation).
+
+Package: grml-live-addons
+Architecture: all
+Depends: ${misc:Depends}, grml-live
+Conflicts: grml-live (<< 0.9.13)
+Description: templates/boot/addons for grml-live
+ This package provides the boot addons known as the
+ features providing bootoptions bsd, dos, grub and hdt.
+ You can safely skip this package if you don't need
+ the addons.

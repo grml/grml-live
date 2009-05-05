@@ -9,6 +9,8 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+b=$(CURDIR)/debian/build
+
 build: build-stamp
 
 build-stamp:
@@ -24,51 +26,63 @@ clean:
 	# Add here commands to clean up after the build process.
 	cd docs && $(MAKE) clean && cd ../
 
-	dh_clean 
+	dh_clean
+	# clean up the stuff dh_clean leaves behind
+	-rm -rf debian/build
 
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k 
-	dh_installdirs etc/grml/fai/live-initramfs usr/sbin usr/share/doc/grml-live \
-	  	       usr/share/grml-live usr/share/grml-live/buildd usr/sbin
+	dh_clean -k
+	dh_installdirs
 
-	# Add here commands to install the package into debian/grml-live.
-	cp -a etc         debian/grml-live/
-	cp -a examples    debian/grml-live/usr/share/doc/grml-live/
-	cp -a templates   debian/grml-live/usr/share/grml-live/
-	cp -a scripts     debian/grml-live/usr/share/grml-live/
-	cp -a patches     debian/grml-live/usr/share/grml-live/
-	cp -a buildd/*.sh debian/grml-live/usr/share/grml-live/buildd/
-	install -o root -m 640 buildd/grml-buildd.conf     debian/grml-live/etc/grml/grml-buildd.conf
-	install -o root -m 755 remaster/grml-live-remaster debian/grml-live/usr/sbin/grml-live-remaster
-	install -o root -m 755 grml-live                   debian/grml-live/usr/sbin/grml-live
+grml-live: install
+	@echo "--- Building: $@"
+	dh_installdirs       -p$@ -P$(b)/$@
+	dh_link              -p$@ -P$(b)/$@
+	dh_installdocs       -p$@ -P$(b)/$@
+	dh_installchangelogs -p$@ -P$(b)/$@
+	dh_install           -p$@ -P$(b)/$@
+	dh_strip             -p$@ -P$(b)/$@
+	dh_compress          -p$@ -P$(b)/$@
+	mkdir -p $(b)/$(@)/usr/share/lintian/overrides/
+	cp -av debian/overrides.$(@) $(b)/$(@)/usr/share/lintian/overrides/$(@)
+	dh_fixperms          -p$@ -P$(b)/$@
+	# make sure they are executable:
+	chmod 755 $(b)/$(@)/etc/grml/fai/config/hooks/*
+	dh_makeshlibs        -p$@ -P$(b)/$@ -V
+	dh_installdeb        -p$@ -P$(b)/$@
+	dh_shlibdeps         -p$@ -P$(b)/$@
+	dh_installdebconf    -p$@ -P$(b)/$@
+	dh_gencontrol        -p$@ -P$(b)/$@
+	dh_md5sums           -p$@ -P$(b)/$@
+	dh_builddeb          -p$@ -P$(b)/$@
+
+grml-live-addons: install
+	@echo "--- Building: $@"
+	dh_installdirs       -p$@ -P$(b)/$@
+	dh_link              -p$@ -P$(b)/$@
+	dh_installdocs       -p$@ -P$(b)/$@
+	dh_installchangelogs -p$@ -P$(b)/$@
+	dh_install           -p$@ -P$(b)/$@
+	dh_strip             -p$@ -P$(b)/$@
+	dh_compress          -p$@ -P$(b)/$@
+	mkdir -p $(b)/$(@)/usr/share/lintian/overrides/
+	cp -av debian/overrides.$(@) $(b)/$(@)/usr/share/lintian/overrides/$(@)
+	dh_fixperms          -p$@ -P$(b)/$@
+	dh_makeshlibs        -p$@ -P$(b)/$@ -V
+	dh_installdeb        -p$@ -P$(b)/$@
+	dh_shlibdeps         -p$@ -P$(b)/$@
+	dh_installdebconf    -p$@ -P$(b)/$@
+	dh_gencontrol        -p$@ -P$(b)/$@
+	dh_md5sums           -p$@ -P$(b)/$@
+	dh_builddeb          -p$@ -P$(b)/$@
 
 # Build architecture-dependent files here.
 binary-all: build install
-# We have nothing to do by default.
 
 # Build architecture-independent files here.
-binary-indep: build install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs 
-	dh_installdocs docs/grml-live.html docs/grml-live-remaster.html
-	dh_installexamples
-	dh_installman docs/grml-live.8 docs/grml-live-remaster.8
-	dh_link
-	dh_strip
-	dh_compress
-	mkdir -p $(CURDIR)/debian/grml-live/usr/share/lintian/overrides/
-	cp -av debian/overrides $(CURDIR)/debian/grml-live/usr/share/lintian/overrides/grml-live
-	dh_fixperms
-	# make sure they are executable:
-	chmod 755 debian/grml-live/etc/grml/fai/config/hooks/*
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
+binary-indep: build install grml-live grml-live-addons
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install
