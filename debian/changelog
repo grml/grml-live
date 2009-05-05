@@ -1,4 +1,4 @@
-grml-live (0.9.13) UNRELEASED; urgency=low
+grml-live (0.9.13) unstable; urgency=low
 
   * Split package into grml-live and grml-live-addons.
     Add grml-live-addons to Recommends of package grml-live.
@@ -31,14 +31,15 @@ grml-live (0.9.13) UNRELEASED; urgency=low
     - Add virtualbox-ose-guest-modules-2.6.28-grml to GRML_MEDIUM.
     - Add speakup-tools to GRML_FULL.
     - Replace cupsys-bsd with cups-bsd and cupsys-client with cups-client.
-    - Drop atl2-modules-2.6.28* from package list (merged in mainline)
+    - Drop atl2-modules-2.6.28* from package list (merged in mainline).
     - Drop cupsys transitional package.
     - Drop clive from GRML_FULL as it depends on a fscking large perl
       package (see #526999).
     - Drop gcc-4.1 gcc-4.1-base, gcc-4.2-base, gettext-base, groff-base,
-      imlib11, imlib-base and perl-base from GRML_FULL.
+      imlib11, imlib-base and perl-base from GRML_FULL (deprecated and
+      unnecessary packages).
 
- -- Michael Prokop <mika@grml.org>  Tue, 05 May 2009 09:39:34 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 05 May 2009 09:46:26 +0200
 
 grml-live (0.9.12) unstable; urgency=low
 
