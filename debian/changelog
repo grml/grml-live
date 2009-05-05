@@ -35,8 +35,10 @@ grml-live (0.9.13) UNRELEASED; urgency=low
     - Drop cupsys transitional package.
     - Drop clive from GRML_FULL as it depends on a fscking large perl
       package (see #526999).
+    - Drop gcc-4.1 gcc-4.1-base, gcc-4.2-base, gettext-base, groff-base,
+      imlib11, imlib-base and perl-base from GRML_FULL.
 
- -- Michael Prokop <mika@grml.org>  Tue, 05 May 2009 09:30:16 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 05 May 2009 09:39:34 +0200
 
 grml-live (0.9.12) unstable; urgency=low
 

@@ -722,9 +722,6 @@ gamin
 gawk
 gcal
 gcc
-gcc-4.1
-gcc-4.1-base
-gcc-4.2-base
 gcolor2
 gcom
 gdb
@@ -737,7 +734,6 @@ genext2fs
 geresh
 getmail4
 gettext
-gettext-base
 gettext-el
 gfs2-tools
 gfs-tools
@@ -784,7 +780,6 @@ graphviz
 grep
 grepmail
 groff
-groff-base
 grub
 gscanbus
 gsfonts
@@ -868,8 +863,6 @@ imagemagick
 imapcopy
 imapfilter
 imediff2
-imlib11
-imlib-base
 imsniff
 im-switch
 imwheel
@@ -1314,7 +1307,6 @@ pdumpfs
 pekwm
 perforate
 perl
-perl-base
 perl-doc
 perlmagick
 perl-modules
