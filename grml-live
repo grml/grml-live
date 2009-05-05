@@ -552,13 +552,17 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
 
       if [ -z "$NO_ADDONS" ] ; then
-         # copy only files so we can handle bsd4grml on its own
-         for file in ${TEMPLATE_DIRECTORY}/boot/addons/* ; do
-             test -f $file && cp $file "$BUILD_OUTPUT"/boot/addons/
-         done
-
-         if [ -z "$NO_ADDONS_BSD4GRML" ] ; then
-            cp -a ${TEMPLATE_DIRECTORY}/boot/addons/bsd4grml "$BUILD_OUTPUT"/boot/addons/
+         if ! [ -d /usr/share/grml-live/templates/boot/addons/bsd4grml ] ; then
+           ewarn "Boot addons not found, skipping therefor. (Consider installing package grml-live-addons)" ; eend 0
+         else
+           # copy only files so we can handle bsd4grml on its own
+           for file in ${TEMPLATE_DIRECTORY}/boot/addons/* ; do
+               test -f $file && cp $file "$BUILD_OUTPUT"/boot/addons/
+           done
+  
+           if [ -z "$NO_ADDONS_BSD4GRML" ] ; then
+              cp -a ${TEMPLATE_DIRECTORY}/boot/addons/bsd4grml "$BUILD_OUTPUT"/boot/addons/
+           fi
          fi
       fi
 
