@@ -22,6 +22,29 @@ else
    cp $target/etc/locale.gen.minimal $target/etc/locale.gen
 fi
 
+# get rid of locales unless using class LOCALES
+# TODO
+# * this should be improved in the long run, ideas welcome :)
+# * what about /usr/share/i18n/locales?
+if ! ifclass LOCALES ; then
+   echo 'Removing /usr/share/locale'
+
+   # get rid of the original
+   $ROOTCMD rm -rf /usr/share/locale
+
+   # restore *empty* directories because otherwise installation/upgrade of packages might fail
+   [ -d "$target"/usr/share/locale ] || mkdir "$target"/usr/share/locale
+   $ROOTCMD ln -s /etc/locale.alias /usr/share/locale/locale.alias
+
+   # make sure the directories of removed locales exist; ugly hack but no other solution present :(
+   echo 'Creating empty /usr/share/locale/*/LC_MESSAGES directories'
+   for f in $($ROOTCMD dpkg -S LC_MESSAGES | awk '{print $2}' | grep '/usr/share/locale/' | sed 's#LC_MESSAGES.*##' | sort -u) ; do
+      if ! [ -d "$target/$f"/LC_MESSAGES ] ; then
+         $ROOTCMD mkdir -p "$f"/LC_MESSAGES
+      fi
+   done
+fi
+
 # make sure:
 # localepurge     localepurge/nopurge     multiselect ....
 # is set so localepurge works as expected
@@ -37,14 +60,6 @@ fi
 
 if [ -x $target/usr/sbin/localepurge ] ; then
    $ROOTCMD localepurge
-fi
-
-# get rid of LC_MESSAGES unless using class LOCALES
-if ! ifclass LOCALES ; then
-   echo 'Removing /usr/share/locale'
-   $ROOTCMD rm -rf /usr/share/locale
-   $ROOTCMD mkdir /usr/share/locale
-   # TODO: /usr/share/i18n/locales
 fi
 
 ## END OF FILE #################################################################
