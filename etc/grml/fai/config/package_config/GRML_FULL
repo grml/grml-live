@@ -172,7 +172,6 @@ afio
 aggregate
 aiccu
 aircrack-ng
-airsnort
 ajaxterm
 alien
 alsa-base
@@ -224,7 +223,6 @@ arptables
 arpwatch
 array-info
 arrayprobe
-array-util
 ascii
 ascii2binary
 asciidoc
@@ -252,7 +250,6 @@ autoconf
 automake
 automake1.4
 automake1.7
-automake1.8
 automake1.9
 autopsy
 autossh
@@ -290,7 +287,6 @@ beep
 bfbtester
 biabam
 bibcursed
-biew
 bin86
 binclock
 bind9
@@ -410,7 +406,6 @@ cpio
 cpipe
 cplay
 cpp
-cpp-2.95
 cpp-4.1
 cproto
 cpu
@@ -456,7 +451,6 @@ dares
 dares-qt
 dash
 davfs2
-db4.3-util
 dbishell
 dbs
 dbus
@@ -482,7 +476,6 @@ debian-goodies
 debian-reference-common
 debian-reference-en
 debianutils
-debmake
 debmirror
 debootstrap
 deborphan
@@ -577,7 +570,6 @@ dvtm
 dwdiff
 dwm
 dwm-tools
-dynafont
 dzen2
 e2fslibs
 e2fsprogs
@@ -585,7 +577,6 @@ e2tools
 e2undel
 e3
 ebtables
-eciadsl
 ecryptfs-utils
 ed
 edac-utils
@@ -594,7 +585,6 @@ eflite
 eieio
 eject
 electric-fence
-elfkickers
 elfsh
 elinks
 elmo
@@ -696,7 +686,6 @@ fortunes-min
 fping
 fprobe
 fprobe-ulog
-fragroute
 freeglut3
 freeradius
 freeradius-ldap
@@ -705,8 +694,6 @@ ftp
 ftpcopy
 ftp-upload
 ftpwatch
-fttools
-funionfs
 funny-manpages
 fusedav
 fuseiso
@@ -782,7 +769,6 @@ grep
 grepmail
 groff
 grub
-gscanbus
 gsfonts
 gsfonts-x11
 gsm-utils
@@ -799,7 +785,6 @@ harden-remoteaudit
 harden-tools
 hasciicam
 hdapsd
-hdaps-utils
 hddtemp
 hdparm
 hexedit
@@ -900,7 +885,6 @@ iputils-tracepath
 ipv6calc
 ipvsadm
 ipx
-ipxripd
 ipython
 irb
 irb1.8
@@ -934,7 +918,6 @@ jhead
 jigit
 jigl
 jikes
-jmon
 joe
 john
 joystick
@@ -1003,7 +986,6 @@ lilo
 linda
 links
 links2
-linneighborhood
 lintian
 linuxdoc-tools
 linuxlogo
@@ -1035,7 +1017,6 @@ lsdvd
 lshw
 lslk
 lsof
-lspowertweak
 lsscsi
 ltrace
 lua50
@@ -1105,7 +1086,6 @@ mksh
 mktemp
 mlocate
 mmv
-mobilemesh
 moc
 modconf
 module-assistant
@@ -1138,7 +1118,6 @@ mrxvt
 mrxvt-common
 msmtp
 msort
-ms-sys
 mtd-tools
 mtools
 mtpaint
@@ -1150,7 +1129,6 @@ multipath-tools
 multitail
 multitee
 muscletools
-mutella
 mutt
 muttprofile
 mysql-client
@@ -1170,9 +1148,6 @@ ncurses-base
 ncurses-bin
 ncurses-term
 ndisc6
-ndiswrapper-common
-ndiswrapper-utils
-ndiswrapper-utils-1.1
 ndiswrapper-utils-1.9
 ne
 nedit
@@ -1225,7 +1200,6 @@ nutcpc
 nvi
 nvidia-xconfig
 nvtv
-o3read
 obconf
 obexftp
 obexpushd
@@ -1349,12 +1323,9 @@ postfix-ldap
 postfix-pcre
 postgresql-client-8.2
 postgresql-client-common
-potion
 powermgmt-base
 powernowd
 powertop
-powertweakd
-powertweak-gtk
 pperl
 ppmd
 ppp
@@ -1530,7 +1501,6 @@ screenie
 scrot
 scrounge-ntfs
 scsiadd
-scsi-idle
 scsitools
 sdate
 sdd
@@ -1564,7 +1534,6 @@ sing
 sipsak
 sip-tester
 sitecopy
-sjog
 sl
 slapd
 slat
@@ -1630,7 +1599,6 @@ starttls
 statgrab
 statserial
 stealth
-stegdetect
 steghide
 stow
 strace
@@ -1727,7 +1695,6 @@ tpconfig
 tpp
 t-prot
 tra
-traceproto
 traceroute
 transfig
 trayer
@@ -1748,7 +1715,6 @@ twolame
 txt2man
 txt2pdbdoc
 txt2regex
-type1inst
 tzdata
 ucf
 udftools
@@ -1763,9 +1729,7 @@ unhide
 uni2ascii
 unicode
 unifont
-unionfs-tools
 unison
-unison2.9.1
 units
 uniutils
 unixcw
@@ -1775,7 +1739,6 @@ unrtf
 unsort
 unzip
 update-inetd
-upstreamdev
 upx-ucl
 urlscan
 urlview
@@ -1813,8 +1776,6 @@ vinetto
 vkeybd
 vlan
 vlock
-vnc-common
-vncommand
 vnstat
 vobcopy
 vorbisgain
@@ -1930,7 +1891,6 @@ xmms2-plugin-id3v2
 xmms2-plugin-jack
 xmms2-plugin-mad
 xmms2-plugin-vorbis
-xmove
 xnee
 xnest
 xosd-bin
@@ -1991,12 +1951,10 @@ xserver-xorg-video-trident
 xserver-xorg-video-tseng
 xserver-xorg-video-v4l
 xserver-xorg-video-vesa
-xserver-xorg-video-vga
 xserver-xorg-video-via
 xserver-xorg-video-vmware
 xserver-xorg-video-voodoo
 xsltproc
-xsteg
 xtail
 xterm
 xtermcontrol
@@ -2010,7 +1968,6 @@ xutils-dev
 xvfb
 xvkbd
 xvncviewer
-xwatchwin
 xwit
 xzoom
 yacpi
