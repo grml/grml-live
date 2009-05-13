@@ -21,6 +21,7 @@ grml-live (0.9.14) unstable; urgency=low
     - Drop funionfs (replaced by unionfs-fuse, #515955)
     - Drop gscanbus (obsolete, unmaintained, #429559)
     - Drop hdaps-utils (out of date, obsolete, #526172)
+    - Drop hpijs (saving us 1352kB + 27,0MB from its dependencies disk space)
     - Drop ipxripd (obsolete, few users, #462178)
     - Drop jmon (orphaned, better alternatives, dead upstream, #510520)
     - Drop linneighborhood (unmaintained, better alternatives, #466489)
@@ -48,7 +49,7 @@ grml-live (0.9.14) unstable; urgency=low
     - Drop xserver-xorg-video-vga (abandoned, #523687)
     - Drop xwatchwin (orphaned, no rdepends, #491903)
 
- -- Michael Prokop <mika@grml.org>  Mon, 11 May 2009 23:15:03 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 13 May 2009 11:32:50 +0200
 
 grml-live (0.9.13) unstable; urgency=low
 
