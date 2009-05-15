@@ -3,6 +3,7 @@ grml-live (0.9.14) unstable; urgency=low
   The "hey, let's have a post-lenny drop-party" Release.
   * Update /usr/share/locale handling: restore *empty* directories
     because otherwise installation/upgrade of packages might fail.
+  * Document findiso bootoption in grml-cheatcodes.txt.
   * Software related changes:
     - Readd clive as the dependency on libterm-progressbar-perl was
       dropped (see #526999)
@@ -49,7 +50,7 @@ grml-live (0.9.14) unstable; urgency=low
     - Drop xserver-xorg-video-vga (abandoned, #523687)
     - Drop xwatchwin (orphaned, no rdepends, #491903)
 
- -- Michael Prokop <mika@grml.org>  Wed, 13 May 2009 11:32:50 +0200
+ -- Michael Prokop <mika@grml.org>  Fri, 15 May 2009 10:06:42 +0200
 
 grml-live (0.9.13) unstable; urgency=low
 
