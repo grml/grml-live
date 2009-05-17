@@ -328,7 +328,6 @@ busybox
 bvi
 bwm-ng
 bzip2
-bzr
 c3270
 cabber
 cabextract
@@ -406,7 +405,6 @@ cpio
 cpipe
 cplay
 cpp
-cpp-4.1
 cproto
 cpu
 cpuburn
@@ -507,7 +505,6 @@ dietlibc
 dietlibc-dev
 diff
 diffstat
-dillo
 ding
 dir2ogg
 dirdiff
@@ -704,7 +701,6 @@ fvwm
 fwlogwatch
 fxload
 g++
-g++-4.1
 gaffitter
 gamin
 gawk

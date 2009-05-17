@@ -43,7 +43,6 @@ deborphan
 dhcp3-client
 dialog
 diff
-dillo
 dmidecode
 dmraid
 dmsetup
@@ -128,7 +127,7 @@ laptop-detect
 latencytop
 less
 lilo
-links
+links2
 live-initramfs
 localepurge
 locales

@@ -1,3 +1,15 @@
+grml-live (0.9.15) unstable; urgency=low
+
+  * As dillo isn't available in Debian/unstable due to removal
+    of libgtk1.2 we'll replace it with xlinks2 from package links2:
+    - GRML_FULL: drop dillo
+    - GRML_MEDIUM: replace links with links2 and drop dillo
+    - XORG: replace dillo with links2
+  * Drop cpp-4.1 and g++-4.1 from GRML_FULL.
+  * Drop bzr from GRML_FULL (19MB is just too much).
+
+ -- Michael Prokop <mika@grml.org>  Sun, 17 May 2009 12:26:41 +0200
+
 grml-live (0.9.14) unstable; urgency=low
 
   The "hey, let's have a post-lenny drop-party" Release.

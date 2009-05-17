@@ -68,7 +68,7 @@ xosd-bin
 eterm
 # x-terminal:
 xterm
-# small X browser:
-dillo
+# links2 provides a small X browser named xlinks2:
+links2
 # smooth cursor themes:
 xcursor-themes
