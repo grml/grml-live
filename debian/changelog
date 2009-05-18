@@ -3,6 +3,7 @@ grml-etc (1.1.15) unstable; urgency=low
   * Add /etc/skel/.links2 providing a bookmark file (mainly to
     disable the help-usage info at startup of xlinks2 now as we
     use xlinks2 instead of dillo).
+  * Bump Standard Version to 3.8.1 and Compat Version to 5.
 
  -- Michael Prokop <mika@grml.org>  Mon, 18 May 2009 09:14:39 +0200
 
