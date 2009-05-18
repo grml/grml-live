@@ -3,8 +3,10 @@ grml-live (0.9.16) unstable; urgency=low
   * Disable 'nttcp' (non-free) in GRML_FULL.
   * Drop ttf-bitstream-vera from GRML_FULL (superseeded by its
     improved version named ttf-dejavu, see #461308).
+  * Drop snownews from GRML_FULL (orphaned, inactive upstream,
+    better alternatives like newsbeuter, see #468778).
 
- -- Michael Prokop <mika@grml.org>  Mon, 18 May 2009 22:20:22 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 18 May 2009 22:22:42 +0200
 
 grml-live (0.9.15) unstable; urgency=low
 
