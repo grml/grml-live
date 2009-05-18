@@ -1,12 +1,14 @@
 grml-live (0.9.16) unstable; urgency=low
 
-  * Disable nttcp and lmbench (both non-free) in GRML_FULL.
-  * Drop ttf-bitstream-vera from GRML_FULL (superseeded by its
-    improved version named ttf-dejavu, see #461308).
-  * Drop snownews from GRML_FULL (orphaned, inactive upstream,
-    better alternatives like newsbeuter, see #468778).
+  * Software related changes:
+    - Add u3-tool to GRML_FULL.
+    - Disable nttcp and lmbench (both non-free) in GRML_FULL.
+    - Drop ttf-bitstream-vera from GRML_FULL (superseeded by its
+      improved version named ttf-dejavu, see #461308).
+    - Drop snownews from GRML_FULL (orphaned, inactive upstream,
+      better alternatives like newsbeuter, see #468778).
 
- -- Michael Prokop <mika@grml.org>  Tue, 19 May 2009 00:11:09 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 19 May 2009 00:12:20 +0200
 
 grml-live (0.9.15) unstable; urgency=low
 
