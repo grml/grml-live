@@ -1,3 +1,9 @@
+grml-live (0.9.16) unstable; urgency=low
+
+  * Disable 'nttcp' (non-free) in GRML_FULL.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 18 May 2009 22:14:34 +0200
+
 grml-live (0.9.15) unstable; urgency=low
 
   The "hey, let's have a grml release party" Release.
