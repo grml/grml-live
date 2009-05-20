@@ -2,8 +2,10 @@ grml-autoconfig (0.8.22) unstable; urgency=low
 
   * Fix bootoption "ssh": current versions of chpasswd don't support
     option '-m' anymore (foo, this sucks!). [Testing: issue671]
+  * Improve ""Sorry, could not find file ..." message if there isn't
+    any config.tbz present. [Testing: issue670]
 
- -- Michael Prokop <mika@grml.org>  Wed, 20 May 2009 18:02:23 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 20 May 2009 18:12:44 +0200
 
 grml-autoconfig (0.8.21) unstable; urgency=low
 
