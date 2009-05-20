@@ -1464,7 +1464,12 @@ if checkbootparam ssh ; then
 
    # finally check if we have a password we can use:
    if [ -n "$SSH_PASSWD" ] ; then
-      echo "grml:$SSH_PASSWD" | chpasswd -m
+      # chpasswd sucks, seriously.
+      if chpasswd --help 2>&1 | grep -q -- '-m,' ; then
+        echo "grml:$SSH_PASSWD" | chpasswd -m
+      else
+        echo "grml:$SSH_PASSWD" | chpasswd
+      fi
    fi
 
    einfo 'Starting secure shell server in background.'
