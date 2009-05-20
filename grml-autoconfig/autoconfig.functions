@@ -1929,17 +1929,19 @@ if [[ $RC == 0 ]]; then
    CONFIG="$(/bin/ls -1d /mnt/grml/[Cc][Oo][Nn][Ff][Ii][Gg].[Tt][Bb][Zz] 2>>$DEBUG)"
    if checkbootparam config ; then
       FILENAME="$(getbootparam 'config' 2>>$DEBUG)"
-      if [ -e /mnt/grml/${FILENAME} ] ; then
+      if [ -e /mnt/grml/"${FILENAME}" ] ; then
          einfo "Using /mnt/grml/$FILENAME instead of config.tbz"
-         CONFIG="/mnt/grml/$FILENAME"
+         CONFIG="/mnt/grml/${FILENAME}"
       fi
+   else
+      FILENAME="$(basename $CONFIG)"
    fi
    if [ -n "$CONFIG" ]; then
      einfo "Found file ${WHITE}${CONFIG}${NORMAL} - trying to extract it."
      cd /
      unp $CONFIG $EXTRACTOPTIONS ; eend $?
    else
-     ewarn "Sorry, could not find file $FILENAME on device $MOUNTDEVICE $MESSAGE label GRMLCFG." ; eend 1
+     ewarn "Sorry, could not find file ${FILENAME} on device ${MOUNTDEVICE} ${MESSAGE}." ; eend 1
    fi
 
    SCRIPT=''
@@ -1952,6 +1954,7 @@ if [[ $RC == 0 ]]; then
    else
    einfo "Could not mount $MOUNTDEVICE to /mnt/grml - sorry." ; eend 1
 fi # mount $MOUNTDEVICE
+
 grep -q '/mnt/grml' /proc/mounts && umount /mnt/grml
 
 }
@@ -1966,7 +1969,6 @@ else
    # We do need the following fix so floppy disk is available to blkid in any case :-/
      if [ -r /dev/fd0 ] ; then
         einfo "Floppy device detected. Trying to access floppy disk."
-   #     dd if=/dev/fd0 of=/dev/null bs=512 count=1 1>>$DEBUG 2>&1
         if timeout 4 dd if=/dev/fd0 of=/dev/null bs=512 count=1 1>>$DEBUG 2>&1 ; then
            blkid /dev/fd0 1>>$DEBUG 2>&1
         fi
