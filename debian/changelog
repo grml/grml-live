@@ -1,3 +1,11 @@
+grml-live (0.9.17) unstable; urgency=low
+
+  [ Frank Terbeck ]
+  * grml-live-remaster: Support $VISUAL and fall back to 'vi' if
+    EDITOR is empty. [Closes: issue664]
+
+ -- Michael Prokop <mika@grml.org>  Wed, 20 May 2009 23:25:43 +0200
+
 grml-live (0.9.16) unstable; urgency=low
 
   * Software related changes:
