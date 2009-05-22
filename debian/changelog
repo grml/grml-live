@@ -4,7 +4,11 @@ grml-live (0.9.17) unstable; urgency=low
   * grml-live-remaster: Support $VISUAL and fall back to 'vi' if
     EDITOR is empty. [Closes: issue664]
 
- -- Michael Prokop <mika@grml.org>  Wed, 20 May 2009 23:25:43 +0200
+  [ Michael Prokop ]
+  * Drop package snort from GRML_FULL and all the workarounds for it.
+    It's once again uninstallable in Debian/unstable.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 22 May 2009 09:31:19 +0200
 
 grml-live (0.9.16) unstable; urgency=low
 

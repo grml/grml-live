@@ -124,10 +124,6 @@ fi
 $ROOTCMD apt-get update
 $ROOTCMD aptitude -f -y install file-rc
 
-# Workaround #443481 of snort for Debian/etch:
-mkdir -p $target/etc/snort
-echo 'LOGDIR=/var/log/snort' >> $target/etc/snort/snort.common.parameters
-
 # we definitely don't want to fail running fai dirinstall just
 # because of some well known bugs:
 [ -d $target/etc/apt/apt.conf.d ] || mkdir $target/etc/apt/apt.conf.d
