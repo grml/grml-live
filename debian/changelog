@@ -9,8 +9,10 @@ grml-live (0.9.17) unstable; urgency=low
     It's once again uninstallable in Debian/unstable.
   * Drop package sing from GRML_FULL (being kind of unmaintained in
     Debian and uninstallable).
+  * Drop package nemesis from GRML_FULL (unmaintained upstream and
+    uninstallable in Debian, see #423201).
 
- -- Michael Prokop <mika@grml.org>  Fri, 22 May 2009 09:38:50 +0200
+ -- Michael Prokop <mika@grml.org>  Fri, 22 May 2009 09:41:01 +0200
 
 grml-live (0.9.16) unstable; urgency=low
 
