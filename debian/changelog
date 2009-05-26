@@ -5,17 +5,19 @@ grml-live (0.9.17) unstable; urgency=low
     EDITOR is empty. [Closes: issue664]
 
   [ Michael Prokop ]
-  * Drop package snort from GRML_FULL and all the workarounds for it.
-    It's once again uninstallable in Debian/unstable.
-  * Drop package sing from GRML_FULL (being kind of unmaintained in
-    Debian and uninstallable).
-  * Drop package nemesis from GRML_FULL (unmaintained upstream and
-    uninstallable in Debian, see #423201).
   * Mention speakup.synth=... and hwspeak in grml-cheatcodes.txt.
   * 15-initsetup: warn if /etc/runlevel.conf (and therefore live-rc)
     does not exist and skip rest of the script then.
+  * Software related changes:
+    - Drop package snort from GRML_FULL and all the workarounds for it.
+      It's once again uninstallable in Debian/unstable.
+    - Drop package sing from GRML_FULL (being kind of unmaintained in
+      Debian and uninstallable).
+    - Drop package nemesis from GRML_FULL (unmaintained upstream and
+      uninstallable in Debian, see #423201).
+    - Drop package paketto from GRML_FULL (removed from Debian, see #530486).
 
- -- Michael Prokop <mika@grml.org>  Tue, 26 May 2009 10:41:03 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 26 May 2009 12:54:48 +0200
 
 grml-live (0.9.16) unstable; urgency=low
 
