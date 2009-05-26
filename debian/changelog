@@ -11,9 +11,11 @@ grml-live (0.9.17) unstable; urgency=low
     Debian and uninstallable).
   * Drop package nemesis from GRML_FULL (unmaintained upstream and
     uninstallable in Debian, see #423201).
-  * Mention speakup.synth=... in grml-cheatcodes.txt.
+  * Mention speakup.synth=... and hwspeak in grml-cheatcodes.txt.
+  * 15-initsetup: warn if /etc/runlevel.conf (and therefore live-rc)
+    does not exist and skip rest of the script then.
 
- -- Michael Prokop <mika@grml.org>  Fri, 22 May 2009 12:24:56 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 26 May 2009 10:41:03 +0200
 
 grml-live (0.9.16) unstable; urgency=low
 

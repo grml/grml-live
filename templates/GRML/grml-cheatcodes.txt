@@ -65,10 +65,10 @@ grml distri=...                     Set distribution name to given argument. If 
 				    (/cdrom/desktop/"$DISTRI") it will be taken as wallpaper for grml
 grml debnet                         Search through local partitions for file /etc/network/interfaces,
                                     copy /etc/network to local system and restart networking then
-grml mypath=...                     Add specified option into $PATH of Zsh.
+grml mypath=...                     Add specified option into $PATH of Zsh
                                     For example when using "grml mypath=/foobar" then /foobar
-                                    will be added to the end of $PATH inside Zsh.
-grml noautoconfig                   Disable searching for device labeled GRMLCFG.
+                                    will be added to the end of $PATH inside Zsh
+grml noautoconfig                   Disable searching for device labeled GRMLCFG
 
 Notice: Take a look at http://grml.org/config/ and /usr/share/doc/grml-saveconfig/grml-config.html
 for more information regarding the configuration framework of grml.
@@ -80,27 +80,27 @@ grml toram                          Copy the whole CD/medium to RAM and run from
 grml toram=filename.squashfs        Copy the specified file to RAM and run from there
                                     Usage example: grml toram=grml-medium.squashfs
                                     Notice: grml2ram is an alias for this option which
-                                    corresponds with the grml flavour settings by default.
+                                    corresponds with the grml flavour settings by default
 
 grml tohd=/dev/sda1                 Copy grml's squashfs file to harddisk partition for later
                                     use via "grml bootfrom=/dev/sda1"
-grml bootfrom=/dev/sda1             Use the squashfs file from directory 'live' of the specified device.
+grml bootfrom=/dev/sda1             Use the squashfs file from directory 'live' of the specified device
                                     Setup can be done booting 'grml tohd=/dev/sda1' or
-                                    running 'rsync -a --progress /live/image/live /mnt/sda1/'.
-grml isofrom=/dev/sda1/grml.iso     Use specified ISO image for booting.
+                                    running 'rsync -a --progress /live/image/live /mnt/sda1/'
+grml isofrom=/dev/sda1/grml.iso     Use specified ISO image for booting
                                     Useful when booting as a rescue system from harddisk - just boot
                                     the according grml kernel and initrd using the bootoptions
-                                    "boot=live isofrom=/dev/sda1/grml.iso".
+                                    "boot=live isofrom=/dev/sda1/grml.iso"
                                     Notice: "fromiso" does the same as "isofrom", it's just there
-                                    to prevent any typing errors.
+                                    to prevent any typing errors
 grml findiso=/grml_2009.05.iso      Look for the specified ISO file on all disks where it usually
                                     looks for the .squashfs file (so you don't have to know the device name
                                     as in isofrom=....). [Available since grml 2009.05]
-grml live-media-path=live           Sets the path to the live filesystem on the medium.
-                                    By default, it is set to /live.
+grml live-media-path=live           Sets the path to the live filesystem on the medium
+                                    By default, it is set to /live
 grml module=grml                    Instead of using the default "$name.module" another file can
                                     be specified without the extension ".module"; it should be placed
-                                    on "/live" directory of the live medium.
+                                    on "/live" directory of the live medium
                                     Useful for Multiboot USB pen, see
                                     http://wiki.grml.org/doku.php?id=tips#multiboot_usb_pen
 
@@ -111,7 +111,7 @@ grml debug                          Get shells during process of booting, using 
 grml debug=noscreen                 Get shells during process of booting, verbose, but without using GNU screen
 grml nocolor                        Disable colorized output while booting
 grml log                            Log error messages while booting to /tmp/grml.log.`date +%Y%m%d`"
-                                    and /var/log/boot.
+                                    and /var/log/boot
 grml testcd                         Check CD data integrity and md5sums
 
 Service related settings:
@@ -140,11 +140,12 @@ grml startx{=windowmanager}         Start X window system automatically
 Accessibility related settings:
 -------------------------------
 grml blind                          Start Braille-Terminal (no X)
+grml hwspeak                        Probe all available speakup hardware modules
 grml swspeak                        Prepare system for use with software synthesizer through speakup
                                     Run 'swspeak' after booting up to activate sound output
-grml swspeak=espeak                 Use espeakup (if available) as connector to speakup.
+grml swspeak=espeak                 Use espeakup (if available) as connector to speakup
                                     Run 'swspeak' after booting up to activate sound output
-grml swspeak=speechd                Use speech-dispatcher / speechd-up (if available) as connector to speakup.
+grml swspeak=speechd                Use speech-dispatcher / speechd-up (if available) as connector to speakup
                                     Run 'swspeak' after booting up to activate sound output
 grml brltty=type,port,table         Parameters for Braille device (e.g.: brltty=al,/dev/ttyS0,text.de.tbl)
 grml speakup.synth=...              Use speakup kernel module with given hardware type
