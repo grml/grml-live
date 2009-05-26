@@ -9,6 +9,12 @@
 set -u
 set -e
 
+if ! [ -r /etc/runlevel.conf ] ; then
+   echo 'Warning: /etc/runlevel.conf does not exist...'
+   echo '... assuming we do not have file-rc, skipping 15-initsetup'
+   exit 0
+fi
+
 # keep a backup of the original runlevel.conf file for reference
 # but only save it as /etc/runlevel.conf.original if it's not the
 # according livecd version, this should prevent from overriding
