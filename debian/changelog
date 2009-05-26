@@ -15,8 +15,9 @@ grml-live (0.9.17) unstable; urgency=low
     - Drop package nemesis from GRML_FULL (unmaintained upstream and
       uninstallable in Debian, see #423201 and #529508).
     - Drop package paketto from GRML_FULL (removed from Debian, see #530486).
+    - Drop package ifupdown-scripts-zg2 from GRML_FULL.
 
- -- Michael Prokop <mika@grml.org>  Tue, 26 May 2009 12:54:48 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 26 May 2009 16:57:15 +0200
 
 grml-live (0.9.16) unstable; urgency=low
 
