@@ -69,12 +69,12 @@ EOF
 
    if [ -x $target/usr/bin/aptitude ] ; then
       if $ROOTCMD aptitude --help | grep -q safe-upgrade ; then
-         $ROOTCMD aptitude -y safe-upgrade
+         APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD aptitude -y safe-upgrade
       else
-         $ROOTCMD aptitude -y upgrade
+         APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD aptitude -y upgrade
       fi
    else
-      $ROOTCMD apt-get -y upgrade
+      APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD apt-get -y upgrade
    fi
 
 else # no softupdate but fresh installation

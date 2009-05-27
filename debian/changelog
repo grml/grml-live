@@ -16,8 +16,10 @@ grml-live (0.9.17) unstable; urgency=low
       uninstallable in Debian, see #423201 and #529508).
     - Drop package paketto from GRML_FULL (removed from Debian, see #530486).
     - Drop package ifupdown-scripts-zg2 from GRML_FULL.
+  * Set APT_LISTCHANGES_FRONTEND and APT_LISTBUGS_FRONTEND to 'none'
+    on upgrade actions in /etc/grml/fai/config/hooks/instsoft.GRMLBASE.
 
- -- Michael Prokop <mika@grml.org>  Tue, 26 May 2009 16:57:15 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 27 May 2009 17:53:11 +0200
 
 grml-live (0.9.16) unstable; urgency=low
 
