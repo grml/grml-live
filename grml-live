@@ -569,6 +569,9 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       if ! [ -d "${BUILD_OUTPUT}/boot/grub" ] ; then
          cp -a ${TEMPLATE_DIRECTORY}/boot/grub  "$BUILD_OUTPUT"/boot/
       fi
+      # make sure we have recent template files available, otherwise updating
+      # the strings like $GRML_NAME and $VERSION might be out of date
+      cp ${TEMPLATE_DIRECTORY}/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
 
       if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
          log "${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
@@ -603,6 +606,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       GRML_NAME_SQUASHFS="$GRML_NAME.squashfs"
       sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/isolinux.cfg
       sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/syslinux.cfg
+      sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/grub/menu.lst
 
       GRML_NAME_SQUASHFS="$(cut_string 20 "$GRML_NAME_SQUASHFS")"
       GRML_NAME_SQUASHFS="$(extend_string_end 20 "$GRML_NAME_SQUASHFS")"

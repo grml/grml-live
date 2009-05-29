@@ -18,8 +18,12 @@ grml-live (0.9.17) unstable; urgency=low
     - Drop package ifupdown-scripts-zg2 from GRML_FULL.
   * Set APT_LISTCHANGES_FRONTEND and APT_LISTBUGS_FRONTEND to 'none'
     on upgrade actions in /etc/grml/fai/config/hooks/instsoft.GRMLBASE.
+  * Update /boot/grub/* files in build output on every invocation of
+    grml-live (as we do it for isolinux stuff too), so the variables
+    inside menu.cfg are up2date if rebuilding the ISO. [Testing: issue676]
+  * Use variable for $FLAVOUR.squashfs in grub's menu.lst as well.
 
- -- Michael Prokop <mika@grml.org>  Wed, 27 May 2009 17:53:11 +0200
+ -- Michael Prokop <mika@grml.org>  Fri, 29 May 2009 12:55:05 +0200
 
 grml-live (0.9.16) unstable; urgency=low
 

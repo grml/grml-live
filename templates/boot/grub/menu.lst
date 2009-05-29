@@ -36,7 +36,7 @@ kernel /boot/%GRML_NAME%/linux26 apm=power-off lang=us vga=791 verbose debug=vc 
 initrd /boot/%GRML_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - copy grml squashfs file to RAM
-kernel /boot/%GRML_NAME%/linux26 toram=grml.squashfs apm=power-off lang=us vga=791 quiet boot=live nomce
+kernel /boot/%GRML_NAME%/linux26 toram=%GRML_NAME_SQUASHFS% apm=power-off lang=us vga=791 quiet boot=live nomce
 initrd /boot/%GRML_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - copy medium to RAM
