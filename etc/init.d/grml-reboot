@@ -74,8 +74,9 @@ shutdown_network() {
 echo "0" > /proc/sys/kernel/printk
 
 # make sure halt/reboot commands are available even if
-# someone is using shutdown command:
-cat /sbin/halt /sbin/reboot >/dev/null
+# someone is using shutdown command or nfsroot is used:
+cat /sbin/halt /sbin/reboot /etc/init.d/$command /etc/init.d/ups-monitor \
+       /etc/apcupsd/powerfail >/dev/null 2>&1
 
 # We may kill our network connection here before unmounting NFS. Bad luck.
 # poweroff pcmcia devices
