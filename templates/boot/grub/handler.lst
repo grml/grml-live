@@ -1,0 +1,10 @@
+parser.lua: lua
+parser.sh: sh
+reader.normal: normal
+terminal_input.at_keyboard: at_keyboard
+terminal_input.serial: serial
+terminal_input.usb_keyboard: usb_keyboard
+terminal_output.gfxterm: gfxterm
+terminal_output.serial: serial
+terminal_output.vga: vga
+terminal_output.vga_text: vga_text

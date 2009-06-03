@@ -14,7 +14,7 @@ export LC_ALL=C
 # exit on any error:
 set -e
 
-GRML_LIVE_VERSION='0.9.17'
+GRML_LIVE_VERSION='0.9.18'
 PN="$(basename $0)"
 CMDLINE="$0 $@"
 ISO_DATE="$(date +%Y-%m-%d)"
@@ -559,7 +559,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
            for file in ${TEMPLATE_DIRECTORY}/boot/addons/* ; do
                test -f $file && cp $file "$BUILD_OUTPUT"/boot/addons/
            done
-  
+
            if [ -z "$NO_ADDONS_BSD4GRML" ] ; then
               cp -a ${TEMPLATE_DIRECTORY}/boot/addons/bsd4grml "$BUILD_OUTPUT"/boot/addons/
            fi
@@ -601,6 +601,9 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
       sed -i "s/%VERSION%/$VERSION/"           "$BUILD_OUTPUT"/boot/grub/menu.lst
       sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/grub/menu.lst
+
+      sed -i "s/%VERSION%/$VERSION/"           "$BUILD_OUTPUT"/boot/grub/grub.cfg
+      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/grub/grub.cfg
 
       # make sure the squashfs filename is set accordingly:
       GRML_NAME_SQUASHFS="$GRML_NAME.squashfs"
@@ -734,6 +737,33 @@ else
               -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
               -b $BOOT_FILE \
               -o "${ISO_OUTPUT}/${ISO_NAME}" . ; RC=$?
+
+      # support disabling hybrid ISO image
+      if [ "$HYBRID_METHOD" = "disable" ] ; then\
+         log "Skipping creation of hybrid ISO file as requested via HYBRID_METHOD=disable"
+         einfo "Skipping creation of hybrid ISO file as requested via HYBRID_METHOD=disable"
+         eend 0
+      # use isohybrid only on request
+      elif [ "$HYBRID_METHOD" = "isohybrid" ] ; then
+         if ! which isohybrid >/dev/null 2>&1 ; then
+           bailout 12 "isohybrid binary not found - please install syslinux/syslinux-common"
+         else
+           log "Creating hybrid ISO file with isohybrid method"
+           einfo "Creating hybrid ISO file with isohybrid method"
+           isohybrid "${ISO_OUTPUT}/${ISO_NAME}"
+           eend $?
+         fi
+      # by default use our manifold boot method:
+      else
+         if ! [ -r boot/grub/core.img ] ; then
+           ewarn "boot/grub/core.img not found, not creating manifold boot ISO file"
+         else
+           log "Creating hybrid ISO file with manifold method"
+           einfo "Creating hybrid ISO file with manifold method"
+           echo 1 63 | mksh /usr/share/grml-live/scripts/bootgrub.mksh | cat - boot/grub/core.img | dd conv=notrunc of="${ISO_OUTPUT}/${ISO_NAME}" conv=notrunc
+           eend $?
+         fi
+      fi
 
       # generate md5sum and sha1sum of ISO if we are using class 'RELEASE':
       case $CLASSES in *RELEASE*)
