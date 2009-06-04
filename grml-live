@@ -625,6 +625,27 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/f4
       sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/f5
 
+      # jump back to grub from bsd4grml:
+      if [ -e "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6 ]; then
+         if [ -e "$BUILD_OUTPUT"/boot/grub/core.img ]; then
+            GRUB_VERSION=2
+         else
+            GRUB_VERSION=1
+         fi
+         if [ -e "$BUILD_OUTPUT"/boot/grub/stage2 ]; then
+            GRUB_LEGACY=stage2
+         else
+            GRUB_LEGACY=stage2_eltorito
+         fi
+
+         # why not ed(1)?
+         for file in "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6 \
+                     "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.cfg; do
+             sed -i -e "s!%GRUB_VERSION%!$GRUB_VERSION!g" \
+                    -e "s!%GRUB_LEGACY%!$GRUB_LEGACY!g" "$file"
+         done
+      fi
+
       # autostart for Windows:
       if [ -d "${TEMPLATE_DIRECTORY}/windows/autostart/" ] ; then
          cp ${TEMPLATE_DIRECTORY}/windows/autostart/* "$BUILD_OUTPUT"/

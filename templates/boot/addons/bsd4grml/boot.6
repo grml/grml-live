@@ -1,8 +1,6 @@
-#echo
-#echo Switching to GNU GRUB-legacy
-#echo
-#machine exec grub /boot/grub/stage2
 echo
-echo Switching to GNU GRUB 2
+echo Switching to GNU GRUB %GRUB_VERSION%
 echo
-machine exec grub /boot/grub/core.img
+macro grub1 machine exec grub /boot/grub/%GRUB_LEGACY%
+macro grub2 machine exec grub /boot/grub/core.img
+grub%GRUB_VERSION%
