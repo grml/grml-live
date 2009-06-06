@@ -2,8 +2,9 @@ grml-live (0.9.18) UNRELEASED; urgency=low
 
   * Integrate grub2 for hybrid boot. Big thanks to Thorsten Glaser
     for his work and help.
+  * Add safecopy to GRML_FULL (thanks to Wernfried Haas for the hint).
 
- -- Michael Prokop <mika@grml.org>  Wed, 03 Jun 2009 23:59:23 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 06 Jun 2009 12:11:20 +0200
 
 grml-live (0.9.17) unstable; urgency=low
 
