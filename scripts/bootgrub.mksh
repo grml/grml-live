@@ -1,6 +1,6 @@
 #!/usr/bin/env mksh
 # $Id$
-# $miros: src/sys/arch/i386/stand/bootxx/mkbxinst.sh,v 1.19 2009/06/07 17:53:29 tg Exp $
+# $miros: src/sys/arch/i386/stand/bootxx/mkbxinst.sh,v 1.20 2009/06/07 18:00:43 tg Exp $
 #-
 # Copyright (c) 2007, 2008, 2009
 #	Thorsten Glaser <tg@mirbsd.org>
@@ -222,7 +222,7 @@ if (( psz )); then
 	thecode[mbrpno++]=0
 	(( thecode[mbrpno++] = (partp ? partp : 0x27) ))
 	(( thecode[mbrpno++] = g_code[1] - 1 ))
-	(( cylno = g_code[0] > 1023 ? 1023 : g_code[0] ))
+	(( cylno = g_code[0] > 1024 ? 1023 : g_code[0] - 1 ))
 	(( thecode[mbrpno++] = g_code[2] | ((cylno & 0x0300) >> 2) ))
 	(( thecode[mbrpno++] = cylno & 0x00FF ))
 	thecode[mbrpno++]=0
