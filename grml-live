@@ -562,7 +562,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
       if [ -z "$NO_ADDONS" ] ; then
          if ! [ -d /usr/share/grml-live/templates/boot/addons/bsd4grml ] ; then
-           ewarn "Boot addons not found, skipping therefor. (Consider installing package grml-live-addons)" ; eend 0
+           ewarn "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)" ; eend 0
          else
            # copy only files so we can handle bsd4grml on its own
            for file in ${TEMPLATE_DIRECTORY}/boot/addons/* ; do
