@@ -1,13 +1,23 @@
 #!/bin/sh
 # Filename:      grml-live-remaster
 # Purpose:       remaster a grml from the live cd
-# Authors:       grml-team (grml.org), (c) Michael Schierl <schierlm@gmx.de>, (c) Michael Prokop <mika@grml.org>
+# Authors:       grml-team (grml.org),
+#                (c) Michael Schierl <schierlm@gmx.de>,
+#                (c) Michael Prokop <mika@grml.org>,
+#                (c) Thorsten Glaser <tg@mirbsd.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 # DISCLAIMER:
 # this script currently lacks LOTS of error checking code... any help welcome...
 ################################################################################
+
+# define function getfilesize before "set -e"
+if stat --help >/dev/null 2>&1; then
+	getfilesize='stat -c %s'	# GNU stat
+else
+	getfilesize='stat -f %z'	# BSD stat
+fi
 
 set -e # exit on any error
 
@@ -20,7 +30,7 @@ GRML_LIVE_EDITOR=${VISUAL:-${EDITOR:-vi}}
 # }}}
 
 # make sure we have what we need {{{
-check4progs mkisofs mksquashfs || exit 1
+check4progs mkisofs mksquashfs stat || exit 1
 check4root || exit 1
 # }}}
 
@@ -109,8 +119,16 @@ else
 fi
 
 mkisofs -b $ISOLINUX -no-emul-boot -c $ISOLINUX_BOOTCAT \
-        -boot-info-table -l -r -J -o "$1" /remaster/iso
+        -boot-info-table -boot-load-size 4 -no-pad \
+        -l -r -J -o "$1" /remaster/iso
+# pad for partition table
+siz=$($getfilesize "$1")
+cyls=$((siz / 512 / 32 / 16 + 1))	# C=$cyls H=16 S=32 (= 256 KiB units)
+siz=$((cyls * 16 * 32 * 512))		# size after padding
+dd if=/dev/zero bs=1 count=1 seek=$((siz - 1)) of="$1" 2>/dev/null
 rm -R /remaster/iso
+
+# here is the place to apply bootgrub.mksh ☺
 
 echo ""
 echo "ISO generation complete:"

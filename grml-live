@@ -1,7 +1,9 @@
 #!/bin/bash
 # Filename:      grml-live
 # Purpose:       build process script for generating a (grml based) Linux Live-ISO
-# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Authors:       grml-team (grml.org),
+#                (c) Michael Prokop <mika@grml.org>,
+#                (c) Thorsten Glaser <tg@mirbsd.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
@@ -10,6 +12,13 @@
 
 export LANG=C
 export LC_ALL=C
+
+# define function getfilesize before "set -e"
+if stat --help >/dev/null 2>&1; then
+	getfilesize='stat -c %s'	# GNU stat
+else
+	getfilesize='stat -f %z'	# BSD stat
+fi
 
 # exit on any error:
 set -e
@@ -735,8 +744,15 @@ else
       log "mkisofs -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b $BOOT_FILE -o ${ISO_OUTPUT}/${ISO_NAME} ."
       mkisofs -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
               -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
-              -b $BOOT_FILE \
+              -b $BOOT_FILE -no-pad \
               -o "${ISO_OUTPUT}/${ISO_NAME}" . ; RC=$?
+
+      # pad the output ISO to multiples of 256 KiB for partition table support
+      siz=$($getfilesize "${ISO_OUTPUT}/${ISO_NAME}")
+      cyls=$((siz / 512 / 32 / 16 + 1))		# C=$cyls H=16 S=32
+      siz=$((cyls * 16 * 32 * 512))		# size after padding
+      dd if=/dev/zero bs=1 count=1 seek=$((siz - 1)) \
+         of="${ISO_OUTPUT}/${ISO_NAME}" 2>/dev/null
 
       # support disabling hybrid ISO image
       if [ "$HYBRID_METHOD" = "disable" ] ; then\
