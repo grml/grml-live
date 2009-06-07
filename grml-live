@@ -777,7 +777,7 @@ else
            log "Creating hybrid ISO file with manifold method"
            einfo "Creating hybrid ISO file with manifold method"
            echo 1 63 | \
-               mksh /usr/share/grml-live/scripts/bootgrub.mksh -A -M 1 -g $cyls:16:32 | \
+               mksh /usr/share/grml-live/scripts/bootgrub.mksh -A -M 1 -p 0x83 -g $cyls:16:32 | \
                cat - boot/grub/core.img | \
                dd conv=notrunc of="${ISO_OUTPUT}/${ISO_NAME}" conv=notrunc 2>/dev/null
            eend $?
