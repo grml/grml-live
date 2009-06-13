@@ -3,6 +3,8 @@ grml-live (0.9.18) UNRELEASED; urgency=low
   * Integrate grub2 for hybrid boot. Big thanks to Thorsten Glaser
     for his work and help.
   * Add safecopy to GRML_FULL (thanks to Wernfried Haas for the hint).
+  * grml-cheatcodes: mention libata specific bootoptions.
+    Thanks to Christian Vogel! [Closes: issue685]
 
  -- Michael Prokop <mika@grml.org>  Sat, 06 Jun 2009 12:11:20 +0200
 
