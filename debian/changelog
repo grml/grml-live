@@ -1,4 +1,4 @@
-grml-live (0.9.18) UNRELEASED; urgency=low
+grml-live (0.9.18) unstable; urgency=low
 
   * Integrate grub2 for hybrid boot. Big thanks to Thorsten Glaser
     for his work and help.
@@ -11,7 +11,7 @@ grml-live (0.9.18) UNRELEASED; urgency=low
     - Pad official ISOs to multiples of 256 KiB for partition table support. 
   * Add bc to Depends as bootgrub.mksh requires it.
 
- -- Michael Prokop <mika@grml.org>  Sat, 13 Jun 2009 11:29:00 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 13 Jun 2009 12:11:19 +0200
 
 grml-live (0.9.17) unstable; urgency=low
 
