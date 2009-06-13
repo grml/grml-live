@@ -182,8 +182,11 @@ grml pci=irqmask=0x0e98             Try this, if PS/2 mouse doesn't work *)
 grml pci=bios                       Workaround for bad PCI controllers
 grml ide2=0x180 nopcmcia            Boot from PCMCIA-CD-ROM (some notebooks)
 grml mem=128M                       Specify Memory size in MByte
-grml dma                            Enable DMA accelleration for ALL IDE-Drives
-grml nodma ide=nodma                Disable DMA accelleration for ALL IDE-Drives
+grml libata.force=[ID:]VAL          Force configurations for libata.
+                                    Usage example: grml libata.force=1:pio4 
+                                    to force pio4 mode on device "ata1:00:"
+grml libata.dma=0                   Disable DMA on PATA and SATA devices
+grml libata.ignore_hpa=1            Disable host protected area (which should enable the whole disk)
 grml vga=normal [video=ofonly]      No-framebuffer mode (does not influence X)
 grml vga=ask [video=ofonly]         Display menu for framebuffer mode
 
