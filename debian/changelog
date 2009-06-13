@@ -5,8 +5,12 @@ grml-live (0.9.18) UNRELEASED; urgency=low
   * Add safecopy to GRML_FULL (thanks to Wernfried Haas for the hint).
   * grml-cheatcodes: mention libata specific bootoptions.
     Thanks to Christian Vogel! [Closes: issue685]
+  * Apply patches by Thorsten Glaser <tg@mirbsd.org>:
+    - Fix jumping back from the bsd4grml loader (ldbsd.com) to GNU GRUB
+    - Update bootgrub.mksh from MirBSD
+    - Pad official ISOs to multiples of 256 KiB for partition table support. 
 
- -- Michael Prokop <mika@grml.org>  Sat, 06 Jun 2009 12:11:20 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 13 Jun 2009 10:59:36 +0200
 
 grml-live (0.9.17) unstable; urgency=low
 
