@@ -14,9 +14,9 @@
 
 # define function getfilesize before "set -e"
 if stat --help >/dev/null 2>&1; then
-	getfilesize='stat -c %s'	# GNU stat
+  getfilesize='stat -c %s'      # GNU stat
 else
-	getfilesize='stat -f %z'	# BSD stat
+  getfilesize='stat -f %z'      # BSD stat
 fi
 
 set -e # exit on any error
@@ -123,12 +123,12 @@ mkisofs -b $ISOLINUX -no-emul-boot -c $ISOLINUX_BOOTCAT \
         -l -r -J -o "$1" /remaster/iso
 # pad for partition table
 siz=$($getfilesize "$1")
-cyls=$((siz / 512 / 32 / 16 + 1))	# C=$cyls H=16 S=32 (= 256 KiB units)
-siz=$((cyls * 16 * 32 * 512))		# size after padding
+cyls=$((siz / 512 / 32 / 16 + 1))       # C=$cyls H=16 S=32 (= 256 KiB units)
+siz=$((cyls * 16 * 32 * 512))           # size after padding
 dd if=/dev/zero bs=1 count=1 seek=$((siz - 1)) of="$1" 2>/dev/null
 rm -R /remaster/iso
 
-# here is the place to apply bootgrub.mksh ☺
+# here is the place where we could apply bootgrub.mksh
 
 echo ""
 echo "ISO generation complete:"
