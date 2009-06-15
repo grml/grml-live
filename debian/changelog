@@ -1,3 +1,16 @@
+grml-etc (1.1.17) unstable; urgency=low
+
+  * Redesign /etc/init.d/grml-reboot:
+    - always shut down network near the end of the script
+    - make sure to always get rid of network mounts, thanks
+      to Daniel Tiefnig for the bugreport [Closes: issue686]
+    - check for removable devices and USB devices to improve
+      wording of "Please remove the device..." (thanks for the
+      hint to Peter Palfrader)
+    - add further checks for findiso/bootfrom/... bootoptions
+
+ -- Michael Prokop <mika@grml.org>  Mon, 15 Jun 2009 23:40:46 +0200
+
 grml-etc (1.1.16) unstable; urgency=low
 
   * /etc/init.d/grml-reboot: apply patch by Andreas Thienemann

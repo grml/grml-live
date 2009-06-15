@@ -1,7 +1,7 @@
 #!/bin/sh
 # Filename:      grml-reboot
 # Purpose:       reboot grml system
-# Authors:       grml-team (grml.org), (c) Klaus Knopper, (c) Michael Prokop <mika@grml.org>
+# Authors:       grml-team (grml.org)
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
 ################################################################################
@@ -16,17 +16,48 @@ cd /
 # Clean input/output
 exec >/dev/console 2>&1 </dev/console
 
+# default variables
+INSTALLED=false
+REMOVABLE=false
+USB_DEVICE=false
+NOPROMPT=${NOPROMPT:-false}
+NOEJECT=${NOEJECT:-false}
+CMDLINE="$(cat /proc/cmdline 2>/dev/null)"
+
 # Check if we are running from a GRML-CD or HD
-INSTALLED=''
-[ -e /etc/grml_cd ] || INSTALLED=yes
+[ -e /etc/grml_cd ] || INSTALLED=true
+
 # Assume that we don't want the eject+prompt stuff when running in one
 # of the special modes:
-grep -qe ' toram' -qe ' usb' -qe 'serial' -qe 'fromhd' /proc/cmdline && INSTALLED=yes
+grep -qe 'toram' -qe '2ram' -qe 'usb' -qe 'serial' \
+     -qe 'fromhd' -qe 'isofrom' -qe 'fromiso' -qe 'findiso' \
+     /proc/cmdline && INSTALLED=true
 
-# check for boot via NFS:
-NFSBOOT=''
-if grep -qe nfsroot -qe nfsdir /proc/cmdline ; then
-   NFSBOOT=1
+# detect cdrom device
+if ! $INSTALLED ; then
+   # new live-initramfs layout:
+   if [ -d /live/image ] ; then
+      CDROM="$(awk '/ \/live\/image /{print $1;exit 0;}' /proc/mounts)"
+      MOUNTPATH="/live/image"
+   else # old unionfs layout:
+      CDROM="$(awk '/ \/cdrom /{print $1;exit 0;}' /proc/mounts)"
+      MOUNTPATH="/cdrom"
+   fi
+
+   # try to remove only removable devices
+   DEVICE=""
+   if [ -n "$CDROM" ] ; then
+     DEVICE="${CDROM##/dev/}"
+     DEVICE="${DEVICE%%[0-9]*}"
+
+     if [ -n "$DEVICE" ] ; then
+       # is it a removable device?
+       [ "$(cat /sys/block/${DEVICE}/removable 2>/dev/null)" = "1" ] && REMOVABLE=true
+       # is it a usb device?
+       readlink /sys/block/${DEVICE} 2>/dev/null | grep -q '/usb' && USB_DEVICE=true
+       $USB_DEVICE && USB_INFO="$(cat /sys/block/${DEVICE}/device/model 2>/dev/null)"
+     fi
+   fi
 fi
 
 case "$0" in
@@ -54,22 +85,6 @@ mysleep() {
   echo ""
 }
 
-# shutdown network
-shutdown_network() {
-   # Shutdown network
-   NETDEVICES="$(/sbin/ifconfig | awk '/^[^ ]+/ {print $1}' | grep -v '^lo$')"
-   if [ -n "$NETDEVICES" ]; then
-      pidof pump >/dev/null 2>&1 && { pump -k ; sleep 2; }
-      killall dhclient dhclient3 2>/dev/null
-      log_begin_msg "Shutting down network device..."
-      for n in $NETDEVICES; do
-          echo "${SUBMSG} ${WHITE}$n${NORMAL}"
-          ifdown $n 1>/dev/null 2>&1
-          ifconfig $n down
-      done ; log_end_msg $?
-   fi
-}
-
 # Disable kernel messages
 echo "0" > /proc/sys/kernel/printk
 
@@ -79,7 +94,6 @@ cat /sbin/halt /sbin/reboot /etc/init.d/$command /etc/init.d/ups-monitor \
        /etc/apcupsd/powerfail >/dev/null 2>&1
 
 # We may kill our network connection here before unmounting NFS. Bad luck.
-# poweroff pcmcia devices
 if [ -d /sys/bus/pcmcia -a -x /sbin/pccardctl ] ; then
    # make sure we don't lose any data, see issue219 for details
    log_begin_msg "Syncing devices..."
@@ -89,7 +103,7 @@ if [ -d /sys/bus/pcmcia -a -x /sbin/pccardctl ] ; then
    log_end_msg $?
 fi
 
-if [ -n "$INSTALLED" ] ; then
+if $INSTALLED ; then
    log_begin_msg_nn "Running /etc/init.d/rc ${level}: "
    /etc/init.d/rc $level 1>/dev/null 2>&1 &
    mysleep "$GREEN"
@@ -117,11 +131,6 @@ sleep 1
 log_begin_msg_nn "Sending all processes the KILL signal: "
 mysleep "$RED" ; log_end_msg $?
 
-# shut down network only when not booting via NFS:
-if [ -z "$NFSBOOT" ] ; then
-   shutdown_network
-fi
-
 # Turn off swap, then unmount file systems.
 log_begin_msg "Turning off swap."
 swapoff -a >/dev/null 2>&1 ; log_end_msg $?
@@ -131,40 +140,28 @@ log_begin_msg "Deactivating udev:"
 echo -n "   ${GREEN}-${NORMAL} "
 /etc/init.d/udev stop ; log_end_msg $?
 
-# Read in boot parameters
-CMDLINE="$(cat /proc/cmdline 2>/dev/null)"
-# noprompt or noeject option given?
-NOPROMPT=${NOPROMPT:-''}
-case "$CMDLINE" in *noprompt*) NOPROMPT="yes"; ;; esac
-NOEJECT=${NOEJECT:-''}
-case "$CMDLINE" in *noeject*) NOEJECT="yes"; ;; esac
-[ -r /etc/noprompt ] && NOPROMPT='yes'
-[ -r /etc/noeject ]  && NOPROMPT='yes' && NOEJECT='yes'
+# noprompt and noeject handling
+case "$CMDLINE" in
+  *noprompt*) NOPROMPT=true ; ;;
+  *noeject*)  NOEJECT=true ; ;;
+esac
+[ -r /etc/noprompt ] && NOPROMPT=true
+[ -r /etc/noeject ]  && NOPROMPT=true && NOEJECT=true
 
 # Turn on autoeject of CD-ROMs
-if [ -z "$NOEJECT" ]; then
+if $NOEJECT ; then
    for dev in /proc/sys/dev/cdrom*/lock;      do [ -f "$dev" ] && echo 0 > "$dev"; done
    for dev in /proc/sys/dev/cdrom*/autoeject; do [ -f "$dev" ] && echo 1 > "$dev"; done
 fi
 
-# Detected cdrom device
-if [ -z "$INSTALLED" ]; then
-   # new live-initramfs layout:
-   if [ -d /live/image ] ; then
-      CDROM="$(awk '/ \/live\/image /{print $1;exit 0;}' /proc/mounts)"
-   else # old unionfs layout:
-      CDROM="$(awk '/ \/cdrom /{print $1;exit 0;}' /proc/mounts)"
-   fi
-fi
-
+# Umount file systems
 log_begin_msg "Syncing local filesystems..."
 sync && sleep 1 ; log_end_msg $?
 
-# Umount everything but root
 log_begin_msg "Unmounting file systems."
 
 # Be safe in case someone messed with /etc/mtab
-if [ -z "$INSTALLED" ] ; then
+if ! $INSTALLED ; then
    rm -f /etc/mtab
    ln -snf /proc/mounts /etc/mtab
 fi
@@ -176,29 +173,44 @@ umount -t notmpfs,nosysfs,noproc,nousbfs -adrvf 1>/dev/null 2>&1
 
 log_end_msg 0
 
-# shut down network only when not booting via NFS:
-if [ -n "$NFSBOOT" ] ; then
-   log_begin_msg "Booting via NFS detected"
-   echo -n "   ${GREEN}-${NORMAL} Unmounting network filesystems"
-   umount -t nfs,nfs4,smbfs -alvf 2>/dev/null ; log_end_msg $?
+# Network stuff
+log_begin_msg "Unmounting network filesystems"
+umount -t nfs,nfs4,smbfs -alvf 2>/dev/null ; log_end_msg $?
 
-   echo -n "   ${GREEN}-${NORMAL} Finally shutting down network..."
-   shutdown_network ; log_end_msg $?
+NETDEVICES="$(/sbin/ifconfig | awk '/^[^ ]+/ {print $1}' | grep -v '^lo$')"
+if [ -n "$NETDEVICES" ]; then
+   pidof pump >/dev/null 2>&1 && { pump -k ; sleep 2; }
+   killall dhclient dhclient3 2>/dev/null
+   log_begin_msg "Shutting down network device..."
+   for n in $NETDEVICES; do
+       echo "${SUBMSG} ${WHITE}$n${NORMAL}"
+       ifdown $n 1>/dev/null 2>&1
+       ifconfig $n down
+   done ; log_end_msg $?
 fi
 
 # For a harddisk installation: mount / ro
-[ -n "$INSTALLED" ] && mount -n -o remount,ro / 2>/dev/null
+$INSTALLED && mount -n -o remount,ro / 2>/dev/null
 
-if [ -z "$INSTALLED" -a -z "$NOPROMPT" ]; then
+# Prompt for removal of live system device
+if ! $INSTALLED && ! $NOPROMPT ; then
    # do not prompt for removal when running in grml2ram mode:
    if ! mount | grep -qe 'on /cdrom' -qe 'on /live/image' ; then
-      echo "CD not mounted, nothing to eject therefore."
+      echo "Live System not mounted, nothing to eject therefore."
    else
-      [ -d /live/image ] && umount -l /live/image
-      [ -d /cdrom ] && umount -l /cdrom
-      [ -n "$CDROM" -a -z "$NOEJECT" ] && eject -p "$CDROM" 2>/dev/null
+      [ -d "$MOUNTPATH" ] && umount -l "$MOUNTPATH"
+      if ! $NOEJECT && [ -n "$CDROM" ]  ; then
+         $REMOVABLE && eject -p "$CDROM" 2>/dev/null
+      fi
       echo
-      read -s -p "${GREEN}Please remove the disc, close the tray (if any) and press ENTER to continue [auto 2 minutes].${NORMAL}" -t 120 a
+      if $USB_DEVICE ; then
+        # if we do not have any information about the usb model then fallback to the device name instead
+        [ -n "$USB_INFO" ] || USB_INFO=" (${CDROM})"
+        read -s -p "${GREEN}Please remove the USB device${USB_INFO} and press ENTER to continue [auto 2 minutes].${NORMAL}" -t 120 a
+      else
+        [ -n "$CDROM" ] && CDROM=" (${CDROM})"
+        read -s -p "${GREEN}Please remove the live system${CDROM}, close the tray (if any) and press ENTER to continue [auto 2 minutes].${NORMAL}" -t 120 a
+      fi
    fi
 fi
 
