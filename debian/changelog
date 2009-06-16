@@ -1,3 +1,9 @@
+grml-live (0.9.19) unstable; urgency=low
+
+  * Add nfswatch to GRML_FULL.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 16 Jun 2009 17:00:06 +0200
+
 grml-live (0.9.18) unstable; urgency=low
 
   * Integrate grub2 for hybrid boot. Big thanks to Thorsten Glaser
