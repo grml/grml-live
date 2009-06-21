@@ -1,3 +1,12 @@
+grml-desktop (0.2.4) unstable; urgency=low
+
+  * /etc/skel/.fluxbox/menu and /etc/skel/.pekwm/menu: drop
+    dillo (not available in Debian/unstable and therefore not
+    shipped with current versions of grml) and provide menuentry
+    for xlinks2 instead. [Testing: issue681]
+
+ -- Michael Prokop <mika@grml.org>  Sun, 21 Jun 2009 12:32:01 +0200
+
 grml-desktop (0.2.3) unstable; urgency=low
 
   * Use grml-exec-wrapper in menu of fluxbox and in idesktop.

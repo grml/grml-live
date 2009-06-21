@@ -12,8 +12,8 @@ RootMenu = "Pekwm @ grml" {
 	Entry = "emacs" { Actions = "Exec emacs &" }
 	Entry = "----------" { Actions = "NoAction" }
 	Submenu = "WWW" {
-		Entry = "dillo" { Actions = "Exec dillo &" }
 		Entry = "firefox" { Actions = "Exec mozilla-firefox &" }
+		Entry = "xlinks2" { Actions = "Exec xlinks2 -mode 640x480 &" }
 		Entry = "w3m" { Actions = "Exec $TERM -title w3m -e w3m http://grml.org/ &" }
 	}
 	Submenu = "Communication" {
