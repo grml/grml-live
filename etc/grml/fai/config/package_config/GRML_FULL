@@ -93,7 +93,6 @@ icmp-quench
 icmp-reset
 ipw-firmware
 lame
-latextug
 lcdtest
 libacme-bleach-perl
 libacme-eyedrops-perl
@@ -242,7 +241,6 @@ atop
 atsar
 attr
 aub
-auctex
 aufs-tools
 aumix
 auto-apt
@@ -339,7 +337,6 @@ calife
 camserv
 capiutils
 catdoc
-catdvi
 cbm
 cbrowser
 ccache
@@ -424,7 +421,6 @@ cscope
 csh
 csstidy
 csync2
-ctioga
 ctorrent
 ctrlproxy
 cu
@@ -561,7 +557,6 @@ dvdbackup
 dvdisaster
 dvd+rw-tools
 dvi2tty
-dvipng
 dviutils
 dvtm
 dwdiff
@@ -744,7 +739,6 @@ gkrellweather
 glark
 gmailfs
 gmrun
-gnuhtml2latex
 gnuit
 gnupg
 gnupg-agent
@@ -940,15 +934,10 @@ krb5-user
 ksh
 kvm
 labrea
-lacheck
 lanmap
 laptop-detect
 laptop-mode-tools
 latencytop
-latex-beamer
-latexmk
-latex-mk
-latex-xcolor
 lbdb
 lcap
 ldapscripts
@@ -1260,7 +1249,6 @@ pcopy
 pcregrep
 pcscd
 pdfcube
-pdfjam
 pdksh
 pdmenu
 pdns-backend-ldap
@@ -1280,7 +1268,6 @@ perl-modules
 perl-suid
 perl-tk
 pfqueue
-pgf
 pia
 pilot-link
 pinentry-curses
@@ -1329,7 +1316,6 @@ pppstatus
 pptpd
 pptp-linux
 preload
-preview-latex-style
 prismstumbler
 pristine-tar
 privbind
@@ -1648,19 +1634,8 @@ telnet-ssl
 testdisk
 tetradraw
 tetrinet-client
-tex-common
 texi2html
-texify
 texinfo
-texlive-base
-texlive-base-bin
-texlive-common
-texlive-doc-base
-texlive-fonts-recommended
-texlive-lang-german
-texlive-latex-base
-texlive-latex-recommended
-texpower
 textdraw
 tf
 tgt
@@ -1696,7 +1671,6 @@ tshark
 tsocks
 tss
 ttf-dejavu
-tthsum
 ttmkfdir
 ttysnoop
 tweak
@@ -1757,7 +1731,6 @@ vim-addon-manager
 vim-common
 vim-gtk
 vim-gui-common
-vim-latexsuite
 vim-python
 vim-ruby
 vim-runtime
@@ -2008,7 +1981,6 @@ netperf
 python-profiler
 rar
 sl-modem-daemon
-tth
 unrar
 zd1211-firmware
 ## }}}

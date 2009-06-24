@@ -278,6 +278,9 @@ progress)
 
 * GRML_SMALL: minimum sized grml version, known as grml-small
 
+* LATEX: LaTeX(-related) packages like auctex, texlive,...
+(which used to be shipped by grml before the LaTeX removal)
+
 * LATEX_CLEANUP: get rid of several very large LaTeX directories
 (like some /usr/share/doc/texlive-*, /usr/share/doc/texmf,...)
 

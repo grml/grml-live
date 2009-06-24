@@ -1,9 +1,20 @@
 grml-live (0.9.19) unstable; urgency=low
 
-  * Add nfswatch to GRML_FULL.
-  * Add postmark to GRML_FULL.
+  * Software related changes in GRML_FULL:
+    - add nfswatch
+    - add postmark
+    - drop all LaTeX related packages (following the result
+      of the recent "Removal of LaTeX on grml" poll):
+      auctex catdvi ctioga dvipng gnuhtml2latex lacheck latex-beamer
+      latexmk latex-mk latextug latex-xcolor pdfjam pgf
+      preview-latex-style tex-common texify texlive-base
+      texlive-base-bin texlive-common texlive-doc-base
+      texlive-fonts-recommended texlive-lang-german texlive-latex-base
+      texlive-latex-recommended texpower tth tthsum vim-latexsuite
+   - Add class LATEX which provides all the LaTeX (related) packages
+     that have been removed from GRML_FULL.
 
- -- Michael Prokop <mika@grml.org>  Wed, 17 Jun 2009 18:24:43 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 24 Jun 2009 12:31:44 +0200
 
 grml-live (0.9.18) unstable; urgency=low
 
