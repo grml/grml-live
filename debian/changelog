@@ -5,6 +5,7 @@ grml-live (0.9.19) UNRELEASED; urgency=low
     - add conkeror (thanks to Axel Beckert) [Closes: issue698]
     - add gptsync
     - add nfswatch
+    - add nilfs2-tools
     - add pigz
     - add postmark
     - add tableau-parm
@@ -19,7 +20,7 @@ grml-live (0.9.19) UNRELEASED; urgency=low
    - Add class LATEX which provides all the LaTeX (related) packages
      that have been removed from GRML_FULL.
 
- -- Michael Prokop <mika@grml.org>  Mon, 06 Jul 2009 23:31:07 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 06 Jul 2009 23:51:24 +0200
 
 grml-live (0.9.18) unstable; urgency=low
 
