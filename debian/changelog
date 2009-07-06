@@ -4,6 +4,7 @@ grml-live (0.9.19) UNRELEASED; urgency=low
     - add btrfs-tools
     - add gptsync
     - add nfswatch
+    - add pigz
     - add postmark
     - add tableau-parm
     - drop all LaTeX related packages (following the result
@@ -17,7 +18,7 @@ grml-live (0.9.19) UNRELEASED; urgency=low
    - Add class LATEX which provides all the LaTeX (related) packages
      that have been removed from GRML_FULL.
 
- -- Michael Prokop <mika@grml.org>  Mon, 06 Jul 2009 23:19:44 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 06 Jul 2009 23:29:06 +0200
 
 grml-live (0.9.18) unstable; urgency=low
 

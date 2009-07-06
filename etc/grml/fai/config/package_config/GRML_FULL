@@ -1271,6 +1271,7 @@ perl-suid
 perl-tk
 pfqueue
 pia
+pigz
 pilot-link
 pinentry-curses
 pinfo
