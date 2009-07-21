@@ -1,6 +1,10 @@
 PACKAGES aptitude
 
 # Created by people from http://www.forensic-geeks.org/
+# and the grml-forensic team, see
+# http://wiki.grml.org/doku.php?id=grml-forensic
+# http://wiki.grml.org/doku.php?id=forensic
+#
 # Also see:
 # http://forensics.alioth.debian.org/
 # http://alioth.debian.org/projects/forensics
@@ -12,14 +16,19 @@ afflib
 autopsy
 chkrootkit
 chntpw
+cryptcat
 dcfldd
 ddrescue
 disktype
+dsniff
 fdupes
 foremost
 galleta
 gpart
+gphoto2
 grokevt
+hdparm
+hping3
 hwinfo
 libewf1
 lshw
@@ -28,9 +37,14 @@ mboxgrep
 md5deep
 memdump
 missidentify
+netdiscover
+nmap
 outguess
 pasco
+readpst
+recoverdm
 reglookup
+rifiuti
 rkhunter
 scalpel
 scrounge-ntfs
@@ -38,8 +52,16 @@ sdd
 sleuthkit
 ssdeep
 tableau-parm
+tcpdump
+tcpflow
+tcpreplay
+tcptrace
+tcptrack
 testdisk
 wipe
+zfs-fuse
+
+# pdftk
 
 # Packages which aren't (official) available (yet):
 # air            =>
@@ -54,9 +76,7 @@ wipe
 # libguytools    => #479016
 # photorec       =>
 # pyflag         =>
-# recoverdm      => #469062
 # recoverphotos  =>
 # regviewer      =>
 # revit          => #469067
-# rifiuti        => #469963
 # sha15deep      =>

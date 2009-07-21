@@ -19,9 +19,27 @@ grml-live (0.9.19) UNRELEASED; urgency=low
       texlive-latex-recommended texpower tth tthsum vim-latexsuite
    - Add class LATEX which provides all the LaTeX (related) packages
      that have been removed from GRML_FULL.
-  * Drop stegdetect from GRML_FORENSIC (see #507908).
+  * Software related changes in GRML_FORENSIC:
+    - drop stegdetect (see #507908)
+    - add cryptcat
+    - add dsniff
+    - add gphoto2
+    - add hdparm
+    - add hping3
+    - add netdiscover
+    - add nmap
+    - add readpst
+    - add recoverdm
+    - add rifiuti
+    - add tcpdump
+    - add tcpflow
+    - add tcpreplay
+    - add tcptrace
+    - add tcptrack
+    - add zfs-fuse
+    Thanks to Hans-Peter Merkel for his tool list.
 
- -- Michael Prokop <mika@grml.org>  Tue, 21 Jul 2009 10:15:20 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 21 Jul 2009 11:37:33 +0200
 
 grml-live (0.9.18) unstable; urgency=low
 
