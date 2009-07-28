@@ -21,25 +21,20 @@ grml-live (0.9.19) UNRELEASED; urgency=low
      that have been removed from GRML_FULL.
   * Software related changes in GRML_FORENSIC:
     - drop stegdetect (see #507908)
-    - add cryptcat
-    - add dsniff
-    - add gphoto2
-    - add hdparm
-    - add hping3
-    - add netdiscover
-    - add nmap
-    - add readpst
-    - add recoverdm
-    - add rifiuti
-    - add tcpdump
-    - add tcpflow
-    - add tcpreplay
-    - add tcptrace
-    - add tcptrack
-    - add zfs-fuse
-    Thanks to Hans-Peter Merkel for his tool list.
+    - add several further packages: 
+      acpi apache2 apache2-utils at bluez-utils cpufrequtils cryptcat
+      cups cups-pdf dc dsniff dvd+rw-tools gphoto2 hdparm hping3
+      mysql-client netdiscover nmap os-prober poppler-utils pppconfig
+      rdesktop readahead readpst recoverdm rifiuti rifiuti2 rpm samba
+      samdump2 sdparm sg3-utils smbclient socat sqlite3 tcpdump
+      tcpflow tcpreplay tcptrace tcptrack tcpxtract tct time unhide
+      untex uuid-runtime vinetto w3m wamerican whois wireshark wv
+      wvdial zfs-fuse
+    Thanks also to Hans-Peter Merkel for his tool list.
+  * Drop hdparm from GRML_FULL, GRML_MEDIUM and GRML_SMALL as it
+    is part of GRMLBASE already.
 
- -- Michael Prokop <mika@grml.org>  Tue, 21 Jul 2009 11:37:33 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 28 Jul 2009 14:55:25 +0200
 
 grml-live (0.9.18) unstable; urgency=low
 

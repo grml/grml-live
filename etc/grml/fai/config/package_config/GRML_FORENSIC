@@ -12,44 +12,73 @@ PACKAGES aptitude
 # http://wiki.debian.org/DebianForensics/TODO
 
 # forensic software:
+acl
 afflib
 autopsy
+bkhive
 chkrootkit
 chntpw
+clamav
+clamav-base
+clamav-freshclam
+clamtk
 cryptcat
 dcfldd
+dcraw
 ddrescue
 disktype
+dnsutils
 dsniff
 fdupes
+fdutils
 foremost
 galleta
 gpart
+gparted
 gphoto2
+grepmail
 grokevt
-hdparm
+hfsplus
+hfsutils
+hfsutils-tcltk
 hping3
 hwinfo
+iputils-arping
+iputils-tracepath
+jfsutils
+kpartx
 libewf1
 lshw
+lsscsi
+ltrace
 magicrescue
 mboxgrep
 md5deep
 memdump
+mii-diag
 missidentify
+mscompress
 netdiscover
 nmap
+odt2txt
+ophcrack
 outguess
+p7zip-full
+parted
 pasco
+rdd
 readpst
 recoverdm
 reglookup
 rifiuti
+rifiuti2
 rkhunter
+samdump2
 scalpel
 scrounge-ntfs
 sdd
 sleuthkit
+socat
 ssdeep
 tableau-parm
 tcpdump
@@ -57,16 +86,66 @@ tcpflow
 tcpreplay
 tcptrace
 tcptrack
+tcpxtract
+tct
 testdisk
+unhide
+untex
+vinetto
 wipe
+wireshark
+wv
 zfs-fuse
 
-# pdftk
+# system tools
+acpi
+bluez-utils
+cpufrequtils
+dc
+dvd+rw-tools
+os-prober
+readahead
+rpm
+sdparm
+sg3-utils
+smbclient
+whois
+
+# services
+apache2 apache2-utils
+at
+cups
+cups-pdf
+mysql-client
+pppconfig
+samba
+sqlite3
+uuid-runtime
+
+# desktop tools/stuff
+poppler-utils
+rdesktop
+time
+w3m
+wamerican
+wvdial
+
+# desktop
+#xfce4
+#xfce4-icon-theme
+# vs.
+#lxde
+
+# TODO
+# * pdftk
+# * vncviewer? (tsclient)
 
 # Packages which aren't (official) available (yet):
+# afflib         => on the way
 # air            =>
 # bmap           =>
 # carvefs        =>
+# chaosreader    => on the way
 # dc3dd          => #468958
 # e2recover      =>
 # fatback        =>
@@ -80,3 +159,4 @@ zfs-fuse
 # regviewer      =>
 # revit          => #469067
 # sha15deep      =>
+# xmount         => on the way
