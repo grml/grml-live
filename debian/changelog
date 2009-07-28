@@ -33,8 +33,9 @@ grml-live (0.9.19) unstable; urgency=low
     Thanks also to Hans-Peter Merkel for his tool list.
   * Drop hdparm from GRML_FULL, GRML_MEDIUM and GRML_SMALL as it
     is part of GRMLBASE already.
+  * Bump Standard Version to 3.8.2 (no further changes).
 
- -- Michael Prokop <mika@grml.org>  Tue, 28 Jul 2009 14:55:25 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 28 Jul 2009 15:23:51 +0200
 
 grml-live (0.9.18) unstable; urgency=low
 
