@@ -1,4 +1,4 @@
-grml-live (0.9.19) UNRELEASED; urgency=low
+grml-live (0.9.19) unstable; urgency=low
 
   * Software related changes in GRML_FULL:
     - add btrfs-tools
