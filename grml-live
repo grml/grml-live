@@ -23,7 +23,7 @@ fi
 # exit on any error:
 set -e
 
-GRML_LIVE_VERSION='0.9.19'
+GRML_LIVE_VERSION='0.9.20'
 PN="$(basename $0)"
 CMDLINE="$0 $@"
 ISO_DATE="$(date +%Y-%m-%d)"

@@ -1,3 +1,9 @@
+grml-live (0.9.20) UNRELEASED; urgency=low
+
+  * Add gnupg2 to GRML_FULL. Thanks to Walter Haidinger.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 29 Jul 2009 09:23:32 +0200
+
 grml-live (0.9.19) unstable; urgency=low
 
   * Software related changes in GRML_FULL:
