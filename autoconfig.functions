@@ -32,6 +32,16 @@ fi
 iszsh && setopt no_nomatch # || echo "Warning: not running under zsh!"
 # }}}
 
+# {{{ Read in boot parameters
+if [ -z "$CMDLINE" ]; then
+  # if CMDLINE was set from the outside, we're debugging. Otherwise, take
+  # CMDLINE from Kernel and config files
+  CMDLINE="$(cat /proc/cmdline)"
+  [ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/* | tr '\n' ' ')"
+  [ -d /live/image/bootparams/ ] && CMDLINE="$CMDLINE $(cat /live/image/bootparams/* | tr '\n' ' ')"
+fi
+# }}}
+
 ### {{{ Utility Functions
 
 # Simple shell grep
@@ -95,12 +105,6 @@ mount_pts(){
 mount_sys(){
   [ -d /sys/devices ] || mount -t sysfs /sys /sys 2>/dev/null
 }
-# }}}
-
-# {{{ Read in boot parameters
-[ -f /proc/version ] || mount_proc # make sure we can access /proc/cmdline when sourcing this file too
-CMDLINE="$(cat /proc/cmdline)"
-[ -d "${LIVECD_PATH}"/bootparams/ ] && CMDLINE="$CMDLINE $(cat ${LIVECD_PATH}/bootparams/* | tr '\n' ' ')"
 # }}}
 
 # {{{ Check if we are running from the grml-CD or HD
@@ -1587,6 +1591,8 @@ fi # checkbootparam home
 # }}}
 
 # {{{ Check for scripts on CD-ROM
+# this is also executed when the scripts option is called. Is this a bug
+# or intended?
 config_cdrom_scripts(){
 if checkbootparam "script"; then
    for script in "${LIVECD_PATH}"/scripts/* ; do
@@ -1913,97 +1919,65 @@ if checkbootparam extract ; then
 fi
 }
 
-config_unpack(){
-MOUNTDEVICE="$1"
-MESSAGE="$2"
-
-if [ ! -b "$MOUNTDEVICE" ] ; then
-   return;
-fi
-
-
-[ -d /mnt/grml ] || mkdir /mnt/grml
-umount /mnt/grml 1>>$DEBUG 2>&1 # make sure it is not mounted
-mount -o ro -t auto $MOUNTDEVICE /mnt/grml ; RC="$?"
-if [[ $RC == 0 ]]; then
-   einfo "Successfully mounted $MOUNTDEVICE $MESSAGE to /mnt/grml (readonly)." ; eend 0
-   eindent
-   CONFIG=''
-   CONFIG="$(/bin/ls -1d /mnt/grml/[Cc][Oo][Nn][Ff][Ii][Gg].[Tt][Bb][Zz] 2>>$DEBUG)"
-   if checkbootparam config ; then
-      FILENAME="$(getbootparam 'config' 2>>$DEBUG)"
-      if [ -e /mnt/grml/"${FILENAME}" ] ; then
-         einfo "Using /mnt/grml/$FILENAME instead of config.tbz"
-         CONFIG="/mnt/grml/${FILENAME}"
-      fi
-   else
-      [ -n "$CONFIG" ] && FILENAME="$(basename $CONFIG)" || FILENAME="config.tbz"
-   fi
-
-   if [ -n "$CONFIG" ]; then
-     einfo "Found file ${WHITE}${CONFIG}${NORMAL} - trying to extract it."
-     cd /
-     unp $CONFIG $EXTRACTOPTIONS ; eend $?
-   else
-     ewarn "Sorry, could not find file ${FILENAME} on device ${MOUNTDEVICE} ${MESSAGE}." ; eend 1
-   fi
-
-   SCRIPT=''
-   SCRIPT="$(/bin/ls -1d /mnt/grml/[Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
-   if [ -n "$SCRIPT" ]; then
-     einfo "Found script ${WHITE}${SCRIPT}${NORMAL} - trying to execute it."
-     $SCRIPT ; eend $?
-   fi
-   eoutdent
-   else
-   einfo "Could not mount $MOUNTDEVICE to /mnt/grml - sorry." ; eend 1
-fi # mount $MOUNTDEVICE
-
-grep -q '/mnt/grml' /proc/mounts && umount /mnt/grml
-
-}
-
-config_automount(){
+config_finddcsdir() {
+#  - If no GRMLCFG partition is found and noautoconfig is _not_ given
+#    on the command line, nothing is changed and the dcs files are
+#    searched within the .iso, $dcs-dir is set to the root directory
+#    within the .iso
+#  - If a GRMLCFG partition is found, $dcs-dir is set to the root of
+#    the GRMLCFG partition unless noautoconfig is set. If noautoconfig is
+#    set, $dcs-dir is set to the root directory within the .iso.
+#  - If myconfig=foo is set on the command line, $dcs-dir is set to
+#    foo, even if a GRMLCFG partition is present.
+DCSDIR=""
 if checkbootparam noautoconfig || checkbootparam forensic ; then
   ewarn "Skipping running automount of device(s) labeled GRMLCFG as requested." ; eend 0
 else
- if [ -z "$INSTALLED" ] ; then
-     einfo "Searching for device(s) labeled with GRMLCFG. (Disable this via boot option: noautoconfig)" ; eend 0
-     eindent
-   # We do need the following fix so floppy disk is available to blkid in any case :-/
-     if [ -r /dev/fd0 ] ; then
+  if [ -z "$INSTALLED" ] ; then
+    if checkbootparam myconfig ; then
+      DCSDEVICE="$(getbootparam 'myconfig' 2>>$DEBUG)"
+      if [ -z "$DCSDEVICE" ]; then
+        einfo "No device for bootoption myconfig provided." ; eend 1
+      fi # [ -z "$DCSDEVICE" ]
+    elif checkvalue $CONFIG_MYCONFIG; then # checkbootparam myconfig
+      einfo "Searching for device(s) labeled with GRMLCFG. (Disable this via boot option: noautoconfig)" ; eend 0
+      eindent
+      # We do need the following fix so floppy disk is available to blkid in any case :-/
+      if [ -r /dev/fd0 ] ; then
         einfo "Floppy device detected. Trying to access floppy disk."
         if timeout 4 dd if=/dev/fd0 of=/dev/null bs=512 count=1 1>>$DEBUG 2>&1 ; then
            blkid /dev/fd0 1>>$DEBUG 2>&1
         fi
-     fi
-     DEVICE=$(blkid -t LABEL=GRMLCFG | head -1 | awk -F: '{print $1}')
-     config_unpack "$DEVICE" "labeled GRMCFG"
+      fi
+      DCSDEVICE=$(blkid -t LABEL=GRMLCFG | head -1 | awk -F: '{print $1}')
+    fi
+    if [ -n "$DCSDEVICE" ]; then
+      einfo "debs, config, scripts are read from $DCSDEVICE." ; eend 0
+      DCSDIR="$(< /proc/mounts awk -v DCSDEV=$DCSDEVICE '{if ($1 == DCSDEV) { print $2 }}')"
+      if [ -n "$DCSDIR" ]; then
+        einfo "$DCSDEVICE already mounted on $DCSDIR"; eend 0
+      else
+        [ -d /mnt/grml ] || mkdir /mnt/grml
+        umount /mnt/grml 1>>$DEBUG 2>&1 # make sure it is not mounted
+        mount -o ro -t auto $MOUNTDEVICE /mnt/grml ; RC="$?"
+        if [[ $RC == 0 ]]; then
+          einfo "Successfully mounted $DCSDEVICE to /mnt/grml (readonly)." ; eend 0
+          eindent
+        fi
+        DCSDIR="/mnt/grml"
+      fi
+    fi
   fi
 fi
-}
-
-config_myconfig(){
-
-if checkbootparam "config" ; then
-  CONFIG="$(getbootparam 'config' 2>>$DEBUG)"
-  [ -z "$CONFIG" ] && CONFIG='config.tbz'
-  einfo "Bootoption config found. config is set to: $CONFIG"
-  eindent
-    einfo "Trying to extract configuration file ${CONFIG}:"
-    cd / && unp "${LIVECD_PATH}"/config/$CONFIG $EXTRACTOPTIONS ; eend $?
-  eoutdent
+if [ -n "$DCSDIR" ]; then
+  einfo "Debs, config, scripts will be read from $DCSDIR." ; eend 0
+else
+  einfo "Debs, config, scripts will be read from the CD image directly." ; eend 0
 fi
+}			      
 
-if checkbootparam myconfig ; then
- MOUNTDEVICE="$(getbootparam 'myconfig' 2>>$DEBUG)"
- if [ -n "$MOUNTDEVICE" ]; then
-     config_unpack "$MOUNTDEVICE"
- else
-   einfo "Sorry, no device for bootoption myconfig provided. Skipping." ; eend 1
- fi # [ -n "$MOUNTDEVICE" ]
-fi # checkbootparam myconfig
 
+config_partconf() {
 if checkbootparam "partconf" ; then
  MOUNTDEVICE="$(getbootparam 'partconf' 2>>$DEBUG)"
  if [ -n "$MOUNTDEVICE" ]; then
@@ -2031,18 +2005,61 @@ fi
 config_debs(){
 if checkbootparam "debs" ; then
    DEBS="$(getbootparam 'debs' 2>>$DEBUG)"
+   if ! echo $DEBS | grep -q '/'; then
+     # backwards compatibility: if no path is given get debs from debs/
+     DEBS="debs/$DEBS"
+   fi
    einfo "Tring to install debian package(s) ${DEBS}"
-   dpkg -i "${LIVECD_PATH}"/debs/$DEBS* ; eend $?
+   DEBS="$(eval echo ${DCSDIR}/$DEBS)"
+   dpkg -i $DEBS ; eend $?
 fi
 }
 
 config_scripts(){
 if checkbootparam "scripts" ; then
    SCRIPTS="$(getbootparam 'scripts' 2>>$DEBUG)"
-   [ -z "$SCRIPTS" ] && SCRIPTS='grml.sh'
-   einfo "Bootparameter scripts found. Trying to execute ${SCRIPTS}:"
-   sh -c "${LIVECD_PATH}"/scripts/$SCRIPTS ; eend $?
+   if [ -z "$SCRIPTS" ]; then
+     SCRIPTS="$(cd ${DCSDIR}/scripts; /bin/ls -1d [Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
+   fi
+   if ! echo $SCRIPTS | grep -q '/'; then
+     # backwards compatibility: if no path is given get scripts from scripts/
+     SCRIPTS="scripts/$SCRIPTS"
+   fi
+   SCRIPTS="${DCSDIR}/$SCRIPTS"
+   if [ -d "$SCRIPTS" ]; then
+     einfo "Bootparameter scripts found. Trying to execute from directory ${SCRIPTS}:"
+     run-parts $SCRIPTS
+   else
+     einfo "Bootparameter scripts found. Trying to execute ${SCRIPTS}:"
+     sh -c $SCRIPTS
+   fi
 fi
+}
+
+config_config(){
+if checkbootparam config ; then
+  CONFIG="$(getbootparam 'config' 2>>$DEBUG)"
+  if [ -z "$CONFIG" ]; then
+    CONFIG="$(cd ${DCSDIR}; ls -1d [Cc][Oo][Nn][Ff][Ii][Gg].[Tt][Bb][Zz] 2>>$DEBUG)"
+  fi
+  if [ -n "$CONFIG" ]; then
+    if [ -d "${DCSDIR}/${CONFIG}" ] ; then
+      einfo "Taking configuration from directory ${DCSDIR}/${CONFIG}"
+    
+      cp -a ${DCSDIR}/${CONFIG}/* /
+    elif [ -f "${DCSDIR}/${CONFIG}" ]; then
+      einfo "Extracting configuration from file ${DCSDIR}/${CONFIG}"
+
+      cd /
+      unp ${DCSDIR}/${CONFIG} $EXTRACTOPTIONS ; eend $?
+    else
+      ewarn "Sorry, could not find configuration file or directory ${DCSDIR}/${FILENAME}." ; eend 1
+    fi
+  fi
+fi
+# umount /mnt/grml if it was mounted by finddcsdir
+# this doesn't really belong here
+grep -q '/mnt/grml' /proc/mounts && umount /mnt/grml
 }
 # }}}
 

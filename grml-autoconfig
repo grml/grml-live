@@ -53,12 +53,6 @@ mount_pts
 mount_sys
 # }}}
 
-# {{{ Read in boot parameters
-CMDLINE="$(cat /proc/cmdline)"
-[ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/* | tr '\n' ' ')"
-[ -d /live/image/bootparams/ ] && CMDLINE="$CMDLINE $(cat /live/image/bootparams/* | tr '\n' ' ')"
-# }}}
-
 # {{{ main grml-autoconfig
 checkvalue $CONFIG_DEBUG && config_debug
 
@@ -206,11 +200,15 @@ checkvalue $CONFIG_EXTRACT  && config_extract
 
 checkvalue $CONFIG_HOMEDIR && config_homedir
 
-checkvalue $CONFIG_MYCONFIG && config_myconfig
+checkvalue $CONFIG_FINDDCSDIR && config_finddcsdir
 
 checkvalue $CONFIG_DEBS && config_debs
 
 checkvalue $CONFIG_SCRIPTS && config_scripts
+
+checkvalue $CONFIG_CONFIG && config_config
+
+checkvalue $CONFIG_PARTCONF && config_partconf
 
 [ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||||||||">/dev/tty14
 
@@ -257,8 +255,6 @@ checkvalue $CONFIG_CREATE_MNT_DIRS && create_mnt_dirs
 checkvalue $CONFIG_915RESOLUTION && config_915resolution
 
 checkvalue $CONFIG_IPW3945 && config_ipw3945
-
-checkvalue $CONFIG_AUTOMOUNT && config_automount
 
 checkvalue $CONFIG_MYPATH && config_mypath
 

@@ -55,7 +55,8 @@ CONFIG_BLANKING='yes'         # check for bootoption noblank to disable console 
 CONFIG_BLINDSOUND='yes'       # play 'beep' and play welcome message
 CONFIG_BLIND='yes'            # check for blind option or brltty
 CONFIG_CDROM_PERM='yes'       # for burning on IDE-CD-Roms, k3b (and others) check for special permissions
-CONFIG_CDROM_SCRIPTS='yes'    # run scripts from /cdrom/scripts
+CONFIG_CDROM_SCRIPTS='no'    # run scripts from /cdrom/scripts
+CONFIG_CONFIG='yes'	      # do we want config unpacking to work?
 CONFIG_CONSOLE='yes'          # activate mgetty when using console=... as bootparam
 CONFIG_CREATE_MNT_DIRS='no'   # create /mnt-directories
 CONFIG_DEBOOTSTRAP='yes'      # support automatic installation of Debian via grml-deboostrap
@@ -68,6 +69,7 @@ CONFIG_DISTRI='yes'           # support some customization via bootoption distri
 CONFIG_DMA='yes'              # Enable DMA for all IDE drives
 CONFIG_EXTRACT='yes'          # specify which (only in combination with bootparam myconfig/netconfig useful)
 CONFIG_FAST='yes'             # skip startup of w3m on tty1
+CONFIG_FINDDCSDIR='yes'	      # search for a debs, config, scripts directory
 CONFIG_FIREWIRE_DEV='no'      # bugfix for kernel >=2.6.11 - create some firewire-devices
 CONFIG_FIX_PASSWD='yes'       # fix unionfs-problem with passwd
 CONFIG_FIX_UNIONFS='yes'      # fix/workaround for unionfs
@@ -95,9 +97,11 @@ CONFIG_MYCONFIG='yes'         # check if we want the config floppy
 CONFIG_MYPATH='yes'           # provide setting additional paths via bootoption mypath
 CONFIG_NETCONFIG='yes'        # download configuration archive provided by bootoption netconfig=...
 CONFIG_NETIPV6='yes'          # check for bootparam ipv6
+CONFIG_PARTCONF='yes'	      # do we want partconf to work?
 CONFIG_PASSWD='yes'           # set password via bootparam passwd
 CONFIG_PCMCIA='no'            # check for pcmcia and start cardmgr
 CONFIG_QEMU='yes'             # qemu specific stuff
+CONFIG_SCRIPTS='yes'	      # execute scripts from the scripts option
 CONFIG_SERVICES='yes'         # check for services to run, provided via bootparam
 CONFIG_SETKEYCODES='yes'      # run setkeycodes when bootoption setkeycodes found
 CONFIG_SMALL='yes'            # use a less "bloat" /etc/inittab for small computer with less RAM
