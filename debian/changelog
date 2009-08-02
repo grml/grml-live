@@ -1,19 +1,20 @@
 grml-live (0.9.20) UNRELEASED; urgency=low
 
   * Add gnupg2 to GRML_FULL. Thanks to Walter Haidinger.
-  * Drop ext2resize frml GRML_FULL (see #400797).
   * Drop all references to xserver-xorg-input-elo2300 (see #527699).
-  * Drop workbone from GRML_FULL (see #429178).
-  * Drop windowlab from GRML_FULL (see #410618).
-  * Drop rgpsp from GRML_FULL (owner set to Debian QA Group and
-    package doesn't seem to be that important for grml).
-  * Drop libpam-pwgen from GRML_FULL (see #511613).
-  * Drop hping2 from GRML_FULL (hping3 is available in all relevant
-    Debian releases nowadays, see #533275).
-  * Drop gqcam from GRML_FULL (still depends on gtk1.2).
-  * Drop gdk-imlib11 from GRML_FULL (see #522810).
-  * Drop fcoretools from GRML_FULL (see #534542).
-  * Drop cheops from GRML_FULL (depends on libgtk1.2).
+  * Cleanups in GRML_FULL:
+    - Drop ext2resize (see #400797).
+    - Drop workbone (see #429178).
+    - Drop windowlab (see #410618).
+    - Drop rgpsp (owner set to Debian QA Group and package doesn't
+      seem to be that important for grml).
+    - Drop libpam-pwgen (see #511613).
+    - Drop hping2 (hping3 is available in all relevant Debian
+      releases nowadays, see #533275).
+    - Drop gqcam (still depends on gtk1.2).
+    - Drop gdk-imlib11 (see #522810).
+    - Drop fcoretools (see #534542).
+    - Drop cheops (depends on libgtk1.2).
 
  -- Michael Prokop <mika@grml.org>  Sun, 02 Aug 2009 11:30:06 +0200
 
