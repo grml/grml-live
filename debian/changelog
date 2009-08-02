@@ -2,8 +2,10 @@ grml-etc (1.1.18) unstable; urgency=low
 
   * Drop /etc/X11/windowlab/windowlab.menurc as windowlab
     was removed from Debian and grml-live as well.
+  * Bump Standard Version to 3.8.2 (no further changes).
+  * Bump Build-Depends to debhelper >= 5.
 
- -- Michael Prokop <mika@grml.org>  Sun, 02 Aug 2009 11:09:48 +0200
+ -- Michael Prokop <mika@grml.org>  Sun, 02 Aug 2009 11:10:58 +0200
 
 grml-etc (1.1.17) unstable; urgency=low
 
