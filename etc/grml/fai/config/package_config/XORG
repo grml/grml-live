@@ -7,7 +7,6 @@ xserver-xorg
 xserver-xorg-core
 xserver-xorg-input-aiptek
 xserver-xorg-input-all
-xserver-xorg-input-elo2300
 xserver-xorg-input-elographics
 xserver-xorg-input-evdev
 xserver-xorg-input-evtouch
