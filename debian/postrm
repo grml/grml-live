@@ -13,7 +13,6 @@ TO_UNDIVERT2="ssh"
 TO_UNDIVERT3="kismet.conf"
 TO_UNDIVERT4="wlan-ng.conf"
 TO_UNDIVERT5="smb.conf"
-TO_UNDIVERT6="windowlab.menurc"
 
 undivert_gen() {
     DEXT=${3:-original}
@@ -47,9 +46,6 @@ case "$1" in
         done
         for cmd in $TO_UNDIVERT5; do
                 undivert_gen $cmd /etc/samba
-        done
-        for cmd in $TO_UNDIVERT6; do
-                undivert_gen $cmd /etc/X11/windowlab
         done
 
 	# make sure the ssh init script even exists if something is failing...

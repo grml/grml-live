@@ -13,7 +13,6 @@ TO_DIVERT1="login.config mgetty.config"
 TO_DIVERT2="ssh"
 TO_DIVERT3="kismet.conf"
 TO_DIVERT4="wlan-ng.conf"
-TO_DIVERT5="windowlab.menurc"
 
 divert_gen() {
     DEXT=${3:-original}
@@ -53,10 +52,6 @@ case "$1" in
 
         for cmd in $TO_DIVERT4; do
             divert_gen $cmd /etc/pcmcia
-        done
-
-        for cmd in $TO_DIVERT5; do
-            divert_gen $cmd /etc/X11/windowlab
         done
 
         # did I mention that dpkg-divert sucks?

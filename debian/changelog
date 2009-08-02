@@ -1,3 +1,10 @@
+grml-etc (1.1.18) unstable; urgency=low
+
+  * Drop /etc/X11/windowlab/windowlab.menurc as windowlab
+    was removed from Debian and grml-live as well.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 02 Aug 2009 11:09:48 +0200
+
 grml-etc (1.1.17) unstable; urgency=low
 
   * Redesign /etc/init.d/grml-reboot:
