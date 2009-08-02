@@ -1,8 +1,9 @@
 grml-live (0.9.20) UNRELEASED; urgency=low
 
   * Add gnupg2 to GRML_FULL. Thanks to Walter Haidinger.
+  * Drop ext2resize frml GRML_FULL (see #400797).
 
- -- Michael Prokop <mika@grml.org>  Wed, 29 Jul 2009 09:23:32 +0200
+ -- Michael Prokop <mika@grml.org>  Sun, 02 Aug 2009 11:01:39 +0200
 
 grml-live (0.9.19) unstable; urgency=low
 
