@@ -13,8 +13,9 @@ grml-live (0.9.20) UNRELEASED; urgency=low
   * Drop gqcam from GRML_FULL (still depends on gtk1.2).
   * Drop gdk-imlib11 from GRML_FULL (see #522810).
   * Drop fcoretools from GRML_FULL (see #534542).
+  * Drop cheops from GRML_FULL (depends on libgtk1.2).
 
- -- Michael Prokop <mika@grml.org>  Sun, 02 Aug 2009 11:28:44 +0200
+ -- Michael Prokop <mika@grml.org>  Sun, 02 Aug 2009 11:30:06 +0200
 
 grml-live (0.9.19) unstable; urgency=low
 
