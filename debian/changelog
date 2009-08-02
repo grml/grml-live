@@ -11,8 +11,9 @@ grml-live (0.9.20) UNRELEASED; urgency=low
   * Drop hping2 from GRML_FULL (hping3 is available in all relevant
     Debian releases nowadays, see #533275).
   * Drop gqcam from GRML_FULL (still depends on gtk1.2).
+  * Drop gdk-imlib11 from GRML_FULL (see #522810).
 
- -- Michael Prokop <mika@grml.org>  Sun, 02 Aug 2009 11:26:41 +0200
+ -- Michael Prokop <mika@grml.org>  Sun, 02 Aug 2009 11:27:31 +0200
 
 grml-live (0.9.19) unstable; urgency=low
 
