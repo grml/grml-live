@@ -3,8 +3,9 @@ grml-live (0.9.20) UNRELEASED; urgency=low
   * Add gnupg2 to GRML_FULL. Thanks to Walter Haidinger.
   * Drop ext2resize frml GRML_FULL (see #400797).
   * Drop all references to xserver-xorg-input-elo2300 (see #527699).
+  * Drop workbone from GRML_FULL (see #429178).
 
- -- Michael Prokop <mika@grml.org>  Sun, 02 Aug 2009 11:04:49 +0200
+ -- Michael Prokop <mika@grml.org>  Sun, 02 Aug 2009 11:06:17 +0200
 
 grml-live (0.9.19) unstable; urgency=low
 
