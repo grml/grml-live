@@ -1,6 +1,6 @@
 #!/bin/sh
 # Filename:      /etc/grml/fai/config/scripts/GRMLBASE/40-deborphan
-# Purpose:       set up /etc/network/interfaces of live-system
+# Purpose:       configure packages for deborphan (usually exception rules)
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
@@ -15,6 +15,14 @@ fi
 
 if [ -r $target/usr/bin/bsdtar -a -x $target/usr/bin/deborphan ] ; then
    $ROOTCMD deborphan --add-keep bsdtar || /bin/true
+fi
+
+if [ -r $target/usr/bin/ewfinfo -a -x $target/usr/bin/deborphan ] ; then
+   $ROOTCMD deborphan --add-keep libewf1 || /bin/true
+fi
+
+if [ -r $target//usr/lib/libstdc++-libc6.2-2.so.3 -a -x $target/usr/bin/deborphan ] ; then
+   $ROOTCMD deborphan --add-keep libstdc++2.10-glibc2.2 || /bin/true
 fi
 
 ## END OF FILE #################################################################

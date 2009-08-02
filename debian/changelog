@@ -19,8 +19,10 @@ grml-live (0.9.20) UNRELEASED; urgency=low
     - Drop workbone (see #429178).
   * Add check for valid Debian suite name to avoid breakage of sources.list
     if someone calls grml-live with a typo in the -s option.
+  * Add exception for libewf1 and libstdc++2.10-glibc2.2 in
+    /etc/grml/fai/config/scripts/GRMLBASE/40-deborphan.
 
- -- Michael Prokop <mika@grml.org>  Mon, 03 Aug 2009 01:28:48 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 03 Aug 2009 01:39:30 +0200
 
 grml-live (0.9.19) unstable; urgency=low
 
