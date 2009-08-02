@@ -378,6 +378,15 @@ if [ -n "$SUITE" ] ; then
    # /usr/share/debootstrap/scripts/unstable does not exist, instead use 'sid':
    case $SUITE in
       unstable) SUITE='sid' ;;
+      # make sure that we *NEVER* write any broken suite name to sources.list,
+      # otherwise we won't be able to adjust it one next (correct) execution
+      stable)   ;;
+      testing)  ;;
+      etch)     ;;
+      lenny)    ;;
+      squeeze)  ;;
+      sid)      ;;
+      *) echo "Sorry, $SUITE is not a valid Debian suite, exiting.">&2; bailout 1 ;;
    esac
 
    DIST=" etch\| stable\| lenny\| squeeze\| testing\| sid\| unstable"

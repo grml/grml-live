@@ -17,6 +17,8 @@ grml-live (0.9.20) UNRELEASED; urgency=low
       to be that important for grml).
     - Drop windowlab (see #410618).
     - Drop workbone (see #429178).
+  * Add check for valid Debian suite name to avoid breakage of sources.list
+    if someone calls grml-live with a typo in the -s option.
 
  -- Michael Prokop <mika@grml.org>  Mon, 03 Aug 2009 01:28:48 +0200
 
