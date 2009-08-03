@@ -24,11 +24,14 @@ grml-live (0.9.20) UNRELEASED; urgency=low
   * buildd:
     - add support for building squeeze based ISOs.
     - add cronjob based on what the grml team is using at daily.grml.org
+    - use '-a' instead of '-rltD' as rsync option to sync logs
+    - use timestamp with hour, minute and second to match with FAI style
   * /etc/grml/fai/config/hooks/updatebase.GRMLBASE: install apt configuration
     also when updating the chroot (this happens if we have a base.tgz available
     on fresh installations).
+  * Document usage of STOP_ON_ERROR in /etc/grml/fai/fai.conf.
 
- -- Michael Prokop <mika@grml.org>  Mon, 03 Aug 2009 21:13:08 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 03 Aug 2009 22:55:21 +0200
 
 grml-live (0.9.19) unstable; urgency=low
 
