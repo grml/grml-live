@@ -24,7 +24,7 @@ type -p mutt 1>/dev/null 2>&1 || die "mutt binary not found. Exiting."
 
 # some defaults:
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11
-DATE="$(date +%Y%m%d)"
+DATE=$(date +'%Y%m%d_%H%M%S')
 TMP_DIR="$(mktemp -d)"
 MUTT_HEADERS="$(mktemp)"
 [ -n "$TMP_DIR" ]      || die "Could not create \$TMP_DIR. Exiting."
@@ -90,8 +90,7 @@ create_logs() {
 # store logs on remote server:
 upload_logs() {
   [ -n "$RSYNC_MIRROR" ] || return 1
-  umask 002
-  rsync --exclude dmesg.log --times --partial --copy-links -az --quiet /var/log/grml-buildd.* \
+  rsync --exclude dmesg.log --times --partial --copy-links -rltDz --quiet /var/log/grml-buildd.* \
   $FAI_LOGFILES $GRML_LOGFILE $RSYNC_MIRROR/logs/"${NAME}_${DATE}"/
 }
 
