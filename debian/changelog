@@ -21,8 +21,9 @@ grml-live (0.9.20) UNRELEASED; urgency=low
     if someone calls grml-live with a typo in the -s option.
   * Add exception for libewf1 and libstdc++2.10-glibc2.2 in
     /etc/grml/fai/config/scripts/GRMLBASE/40-deborphan.
+  * buildd: add support for building squeeze based ISOs.
 
- -- Michael Prokop <mika@grml.org>  Mon, 03 Aug 2009 01:39:30 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 03 Aug 2009 14:52:42 +0200
 
 grml-live (0.9.19) unstable; urgency=low
 

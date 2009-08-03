@@ -19,14 +19,15 @@ cd $MIRROR_DIRECTORY || exit 2
 DAYS=3
 
 REMOVE_ME=""
-for flavour in grml-small_lenny grml-small_sid grml-medium_lenny grml-medium_sid grml_sid grml_lenny \
-               grml64-small_lenny grml64-small_sid grml64-medium_lenny grml64-medium_sid grml64_sid grml64_lenny ; do
+for flavour in grml-medium_lenny   grml-medium_squeeze   grml-medium_sid   grml-small_lenny   grml-small_squeeze  grml-small_sid \
+               grml64-medium_lenny grml64-medium_squeeze grml64-medium_sid grml64-small_lenny grml64-small_squeeze grml64-small_sid \
+               grml64_lenny grml64_squeeze grml64_sid grml_lenny grml_squeeze grml_sid ; do
   FILE_COUNT=$(ls -1 $flavour/$flavour*.iso | wc -l)
   if [ "$FILE_COUNT" -gt "$DAYS" ] ; then
      FILES=$(ls -1 $flavour/$flavour*.iso | tail -"$DAYS")
      OLD_FILES=$(ls $flavour/$flavour*.iso | grep -v "$FILES")
      for file in $OLD_FILES ; do
-         REMOVE_ME="$REMOVE_ME $(find "$file" -mtime +$DAYS)"
+         REMOVE_ME="$REMOVE_ME $(find $file -mtime +$DAYS)"
      done
   fi
 done
@@ -34,11 +35,10 @@ done
 [ -d .archive ] || mkdir .archive
 
 for file in $REMOVE_ME ; do
-    # remove ISOs:
-    test -f "${file}"      && rm -f "$file"
+    test -f ${file}     && rm -f $file
     # ... but keep their md5sum / sha1sum:
-    test -f "${file}".md5  && mv "${file}".md5   .archive
-    test -f "${file}".sha1 && mv "${file}".sha1 .archive
+    test -f ${file}.md5  && mv ${file}.md5   .archive
+    test -f ${file}.sha1 && mv ${file}.sha1 .archive
 done
 
 # inform on successful removal:

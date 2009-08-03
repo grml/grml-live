@@ -19,9 +19,18 @@ for file in *.iso ; do
     chmod 664 "${file}" "${file}".md5 "${file}".sha1
 done
 
-for flavour in grml-small_lenny grml-small_sid grml-medium_lenny grml-medium_sid grml_sid grml_lenny \
-               grml64-small_lenny grml64-small_sid grml64-medium_lenny grml64-medium_sid grml64_sid grml64_lenny ; do
-    rsync --times --partial -az --quiet $flavour* $RSYNC_MIRROR/$flavour/
+for distri in lenny squeeze sid ; do
+  for flavour in grml-small_$distri   grml-medium_$distri   grml_$distri \
+                 grml64-small_$distri grml64-medium_$distri grml64_$distri ; do
+                 if ls $flavour* 1>/dev/null 2>&1 ; then
+                   rsync --times --partial -az --quiet $flavour* $RSYNC_MIRROR/$flavour/
+                 fi
+  done
 done
+
+#for flavour in grml-small_lenny grml-small_squeeze grml-small_sid grml-medium_lenny grml-medium_sid grml_sid grml_lenny \
+#               grml64-small_lenny grml64-small_sid grml64-medium_lenny grml64-medium_sid grml64_sid grml64_lenny ; do
+#    rsync --times --partial -az --quiet $flavour* $RSYNC_MIRROR/$flavour/
+#done
 
 ## END OF FILE #################################################################
