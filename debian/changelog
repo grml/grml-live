@@ -30,8 +30,9 @@ grml-live (0.9.20) UNRELEASED; urgency=low
     also when updating the chroot (this happens if we have a base.tgz available
     on fresh installations).
   * Document usage of STOP_ON_ERROR in /etc/grml/fai/fai.conf.
+  * Really add support for genisoimage (thanks for the bugreport, Worf).
 
- -- Michael Prokop <mika@grml.org>  Mon, 03 Aug 2009 22:55:21 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 03 Aug 2009 23:06:59 +0200
 
 grml-live (0.9.19) unstable; urgency=low
 

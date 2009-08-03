@@ -764,6 +764,18 @@ elif [ "$BOOT_METHOD" = "grub" ] ; then
 fi
 
 if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" ] ; then
+
+   # support mkisofs as well as genisoimage
+   if which mkisofs >/dev/null 2>&1; then
+      MKISOFS=mkisofs
+   elif which genisoimage >/dev/null 2>&1; then
+      MKISOFS=genisoimage
+   else
+      log "Sorry, neither mkisofs nor genisoimage available - can not create ISO."
+      eerror "Sorry, neither mkisofs nor genisoimage available - can not create ISO." ; eend 1
+      bailout
+   fi
+
    log "$ISO_OUTPUT exists already, skipping stage 'iso build'"
    ewarn "$ISO_OUTPUT exists already, skipping stage 'iso build'" ; eend 0
 else
@@ -771,8 +783,8 @@ else
 
    CURRENT_DIR=$(pwd)
    if cd "$BUILD_OUTPUT" ; then
-      log "mkisofs -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b $BOOT_FILE -o ${ISO_OUTPUT}/${ISO_NAME} ."
-      mkisofs -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
+      log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b $BOOT_FILE -o ${ISO_OUTPUT}/${ISO_NAME} ."
+      $MKISOFS -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
               -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
               -b $BOOT_FILE -no-pad \
               -o "${ISO_OUTPUT}/${ISO_NAME}" . ; RC=$?
