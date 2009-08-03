@@ -1,0 +1,36 @@
+Daily grml snapshots
+====================
+
+This directory contains automatically generated grml snapshots which were
+build using grml-live:
+
+  http://grml.org/grml-live/
+
+Feel free to use the ISOs but please notice that they are neither official
+devel releases nor stable releases - so: PLEASE USE THEM WITH CAUTION!
+
+Please report any bugs you notice!   http://grml.org/bugs/
+Thanks for helping us improve grml!
+
+Explanation of filenames (the date describes the time of building the ISO):
+
+  * grml_lenny:            normal, 32bit version based on Debian/lenny   (stable)
+  * grml_squeeze:          normal, 32bit version based on Debian/squeeze (testing)
+  * grml_sid:              normal, 32bit version based on Debian/sid     (unstable)
+  * grml-medium_lenny:     medium, 32bit version based on Debian/lenny   (stable)
+  * grml-medium_squeeze:   medium, 32bit version based on Debian/squeeze (testing)
+  * grml-medium_sid:       medium, 32bit version based on Debian/sid     (unstable)
+  * grml-small_lenny:      small,  32bit version based on Debian/lenny   (stable)
+  * grml-small_squeeze:    small,  32bit version based on Debian/squeeze (testing)
+  * grml-small_sid:        small,  32bit version based on Debian/sid     (unstable)
+  * grml64_lenny:          normal, 64bit version based on Debian/lenny   (stable)
+  * grml64_squeeze:        normal, 64bit version based on Debian/squeeze (testing)
+  * grml64_sid:            normal, 64bit version based on Debian/sid     (unstable)
+  * grml64-medium-lenny:   medium, 64bit version based on Debian/lenny   (stable)
+  * grml64-medium-squeeze: medium, 64bit version based on Debian/squeeze (testing)
+  * grml64-medium-sid:     medium, 64bit version based on Debian/sid     (unstable)
+  * grml64-small-lenny:    small,  64bit version based on Debian/lenny   (stable)
+  * grml64-small-squeeze:  small,  64bit version based on Debian/squeeze (testing)
+  * grml64-small-sid:      small,  64bit version based on Debian/sid     (unstable)
+
+       Michael 'mika' Prokop - http://grml.org/
