@@ -33,8 +33,10 @@ grml-live (0.9.20) UNRELEASED; urgency=low
   * Really add support for genisoimage (thanks for the bugreport, Worf).
   * Set subdirectories of $OUTPUT independent of cmdline parsing so
     it is possible to set it via conffile as well.
+  * Validate whether the specified architecture class matches the
+    architecture (option), otherwise installation of kernel will fail.
 
- -- Michael Prokop <mika@grml.org>  Tue, 04 Aug 2009 13:16:10 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 04 Aug 2009 19:26:20 +0200
 
 grml-live (0.9.19) unstable; urgency=low
 

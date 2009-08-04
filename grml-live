@@ -416,6 +416,22 @@ if [ -n "$SUITE" ] ; then
    done
 fi
 
+# validate whether the specified architecture class matches the
+# architecture (option), otherwise installation of kernel will fail
+if echo $CLASSES | grep -qi i386 ; then
+   if ! [[ "$ARCH" == "i386" ]] ; then
+      eerror "You specified the I386 class but are trying to build something else (AMD64?)."
+      eerror "-> Either invoke grml-live with '-i i386' or adjust the architecture class. Exiting."
+      bailout
+   fi
+elif echo $CLASSES | grep -qi amd64 ; then
+   if ! [[ "$ARCH" == "amd64" ]] ; then
+      eerror "You specified the AMD64 class but are trying to build something else (I386?)."
+      eerror "-> Either invoke grml-live with '-i amd64' or adjust the architecture class. Exiting."
+      bailout
+   fi
+fi
+
 # set $ARCH
 [ -n "$ARCH" ] || ARCH="$(dpkg --print-architecture)"
 if grep -q -- 'FAI_DEBOOTSTRAP_OPTS.*--arch' "$NFSROOT_CONF" ; then
@@ -768,9 +784,9 @@ if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$
 
    # support mkisofs as well as genisoimage
    if which mkisofs >/dev/null 2>&1; then
-      MKISOFS=mkisofs
+      MKISOFS='mkisofs'
    elif which genisoimage >/dev/null 2>&1; then
-      MKISOFS=genisoimage
+      MKISOFS='genisoimage'
    else
       log "Sorry, neither mkisofs nor genisoimage available - can not create ISO."
       eerror "Sorry, neither mkisofs nor genisoimage available - can not create ISO." ; eend 1
@@ -785,7 +801,7 @@ else
    CURRENT_DIR=$(pwd)
    if cd "$BUILD_OUTPUT" ; then
       log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b $BOOT_FILE -o ${ISO_OUTPUT}/${ISO_NAME} ."
-      $MKISOFS -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
+      "$MKISOFS" -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
               -l -r -J -no-emul-boot -boot-load-size 4 -boot-info-table    \
               -b $BOOT_FILE -no-pad \
               -o "${ISO_OUTPUT}/${ISO_NAME}" . ; RC=$?
