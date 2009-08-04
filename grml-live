@@ -781,6 +781,10 @@ elif [ "$BOOT_METHOD" = "grub" ] ; then
 fi
 
 if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" ] ; then
+   log "$ISO_OUTPUT exists already, skipping stage 'iso build'"
+   ewarn "$ISO_OUTPUT exists already, skipping stage 'iso build'" ; eend 0
+else
+   mkdir -p "$ISO_OUTPUT" || bailout 6 "Problem with creating $ISO_OUTPUT for stage 'iso build'"
 
    # support mkisofs as well as genisoimage
    if which mkisofs >/dev/null 2>&1; then
@@ -792,11 +796,6 @@ if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$
       eerror "Sorry, neither mkisofs nor genisoimage available - can not create ISO." ; eend 1
       bailout
    fi
-
-   log "$ISO_OUTPUT exists already, skipping stage 'iso build'"
-   ewarn "$ISO_OUTPUT exists already, skipping stage 'iso build'" ; eend 0
-else
-   mkdir -p "$ISO_OUTPUT" || bailout 6 "Problem with creating $ISO_OUTPUT for stage 'iso build'"
 
    CURRENT_DIR=$(pwd)
    if cd "$BUILD_OUTPUT" ; then
