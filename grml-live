@@ -872,8 +872,8 @@ fi
 
 # finalize {{{
 [ -n "$start_seconds" ] && SECONDS="$[$(cut -d . -f 1 /proc/uptime)-$start_seconds]" || SECONDS="unknown"
-einfo "Sucessfully finished execution of $PN [running ${SECONDS} seconds]" ; eend 0
-log "Sucessfully finished execution of $PN [running ${SECONDS} seconds]"
+einfo "Successfully finished execution of $PN [running ${SECONDS} seconds]" ; eend 0
+log "Successfully finished execution of $PN [running ${SECONDS} seconds]"
 bailout 0
 # }}}
 
