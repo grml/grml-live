@@ -167,6 +167,7 @@ Increase verbosity in the build process.
 
 Use ZLIB instead of LZMA compression in mksquashfs part of the build process.
 
+[[usage-examples]]
 Usage examples
 --------------
 
@@ -200,6 +201,7 @@ process.  But please be aware of the fact that rebooting your system will result
 in an empty /dev/shm, so please use another directory for $CHROOT_OUTPUT,
 $BUILD_OUTPUT and $ISO_OUTPUT if you plan to create more persistent output. :)
 
+[[main-features]]
 Main features of grml-live
 --------------------------
 
@@ -216,6 +218,7 @@ Debian repositories
 
 * multi-arch support (work in progress)
 
+[[class-concept]]
 The class concept
 -----------------
 
@@ -300,6 +303,7 @@ official grml release
 * XORG: providing important packages for use with a base grml-featured X.org
 setup
 
+[[files]]
 Files
 -----
 
@@ -395,6 +399,7 @@ files please refer to the source of the scripts.
 This directory provides the files used for building the initramfs/initrd via
 live-initramfs(8).
 
+[[log-files]]
 Available log files
 -------------------
 
@@ -409,6 +414,7 @@ default being /var/log/fai/grml/.
 If you are using the grml-live buildd you will find the logs of the grml-live
 run at /var/log/grml-buildd.stdout and /var/log/grml-buildd.stderr.
 
+[[requirements]]
 Requirements for the build system
 ---------------------------------
 
@@ -508,6 +514,7 @@ Using with LZMA compression:
 * Kernel 2.6.28-grml: does NOT work, please use zlib mode instead or switch
   to Debian package squashfs-lzma-tools (see section above).
 
+[[faq]]
 FAQ
 ---
 
@@ -609,6 +616,7 @@ worked as expected the last line of the shell output should look like:
 
 and the ISO can be found inside /grml-live/grml-live/grml_isos/ then.
 
+[[fai-on-etch]]
 Help, I'm using Debian etch and I don't have FAI version >3.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -620,6 +628,7 @@ Help, I'm using Debian etch and I don't have FAI version >3.2
 or check out the link:http://www.informatik.uni-koeln.de/fai/[FAI-homepage] for
 further details.
 
+[[how-to-debug]]
 I've problems with the build process. How to start debugging?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -632,6 +641,7 @@ your config, logs and the commandline with a short problem description to
   # tar zcf grml_live_problem.tar.gz /etc/grml/grml-live.conf \
             /etc/grml/grml-buildd.conf /var/log/fai /etc/grml/fai
 
+[[local-debian-mirror]]
 Can I use my own (local) Debian mirror?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -654,6 +664,7 @@ taken as first entry in the generated sources.list so it's prefered over
 non-local mirrors. Using a fallback mirror (via providing several mirrors in
 GRML_LIVE_SOURCES as used by default) is a recommended setting.
 
+[[add-additional-debian-packages]]
 How do I add additional Debian package(s) to my CD/ISO?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -671,6 +682,7 @@ and specify it when invoking grml-live then:
 
   # grml-live -c GRMLBASE,GRML_SMALL,I386,MIKA
 
+[[reset-grml-live-configuration]]
 I fscked up my grml-live configuration. How do I reset it to the defaults?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -687,6 +699,7 @@ good chance to start using it now. Check out
 link:http://michael-prokop.at/blog/2007/03/14/maintain-etc-with-mercurial-on-debian/[http://michael-prokop.at/blog/2007/03/14/maintain-etc-with-mercurial-on-debian/]
 for more details how to maintain /etc using the mercurial VCS.
 
+[[create-a-base-tgz]]
 How do I create a base.tgz for use as NFSROOT?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -727,6 +740,7 @@ or if using /etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz for:
   /grml-live/grml-live_20071029.22138/grml_chroot//
   [...]
 
+[[apt-cacher]]
 Set up apt-cacher / apt-cacher-ng for use with grml-live
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -747,6 +761,7 @@ Make sure apt-cacher / apt-cacher-ng is running ('/etc/init.d/apt-cacher
 restart' or '/etc/init.d/apt-cacher-ng restart'). That's it.  All downloaded
 files will be cached in /var/cache/apt-cacher/ or /var/cache/apt-cacher-ng then.
 
+[[approx]]
 Set up approx for use with grml-live
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -772,12 +787,14 @@ Configure approx:
 Don't forget to restart approx (/etc/init.d/approx restart). That's it.
 All downloaded files will be cached in /var/cache/approx now.
 
+[[question]]
 I've a question which isn't answered by this document
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Don't hesitate to ask on IRC (channel #grml on irc.freenode.org) or just drop me
 a mail: <mika@grml.org>
 
+[[download]]
 Download / install grml-live as a Debian package
 ------------------------------------------------
 
@@ -790,24 +807,28 @@ current development tree), just execute:
   cd grml-live
   debuild -us -uc
 
+[[source]]
 Source
 ------
 
 The source of grml-live is available at
 link:http://git.grml.org/?p=grml-live.git[http://git.grml.org/?p=grml-live.git]
 
+[[todo-list]]
 TODO list
 ---------
 
 Check out link:http://wiki.grml.org/doku.php?id=grml-live[grml-live in the grml-wiki]
 for details.
 
+[[bugs]]
 Bugs
 ----
 
 Please report feedback, link:http://grml.org/bugs/[bugreports] and wishes
 link:http://grml.org/contact/[to the grml-team]!
 
+[[authors]]
 Authors
 -------
 Michael Prokop <mika@grml.org>
