@@ -1,4 +1,4 @@
-grml-live (0.9.20) UNRELEASED; urgency=low
+grml-live (0.9.20) unstable; urgency=low
 
   * Add gnupg2 to GRML_FULL. Thanks to Walter Haidinger.
   * Drop all references to xserver-xorg-input-elo2300 (see #527699).
@@ -38,7 +38,7 @@ grml-live (0.9.20) UNRELEASED; urgency=low
   * Add 'How do I deploy grml-live on a plain Debian installation' to FAQ.
   * Build grml-live documentation with table of content.
 
- -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 00:26:44 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 00:34:53 +0200
 
 grml-live (0.9.19) unstable; urgency=low
 
