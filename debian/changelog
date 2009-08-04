@@ -31,8 +31,10 @@ grml-live (0.9.20) UNRELEASED; urgency=low
     on fresh installations).
   * Document usage of STOP_ON_ERROR in /etc/grml/fai/fai.conf.
   * Really add support for genisoimage (thanks for the bugreport, Worf).
+  * Set subdirectories of $OUTPUT independent of cmdline parsing so
+    it is possible to set it via conffile as well.
 
- -- Michael Prokop <mika@grml.org>  Mon, 03 Aug 2009 23:06:59 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 04 Aug 2009 13:16:10 +0200
 
 grml-live (0.9.19) unstable; urgency=low
 

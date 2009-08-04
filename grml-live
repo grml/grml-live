@@ -230,11 +230,7 @@ while getopts "a:C:c:g:i:o:r:s:t:v:bBFuqVz" opt; do
     C) CONFIG="$OPTARG" ;;
     g) GRML_NAME="$OPTARG" ;;
     i) ISO_NAME="$OPTARG" ;;
-    o) OUTPUT="$OPTARG"
-       CHROOT_OUTPUT="$OUTPUT/grml_chroot"
-       BUILD_OUTPUT="$OUTPUT/grml_cd"
-       ISO_OUTPUT="$OUTPUT/grml_isos"
-       ;;
+    o) OUTPUT="$OPTARG" ;;
     q) SKIP_MKSQUASHFS=1 ;;
     r) RELEASENAME="$OPTARG" ;;
     s) SUITE="$OPTARG" ;;
@@ -255,6 +251,11 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 specify it on the command line using the -c option."
 [ -n "$OUTPUT" ] || bailout 1 "Error: \$OUTPUT unset, please set it in $LIVE_CONF or
 specify it on the command line using the -o option."
+
+# set subdirectories according to $OUTPUT:
+CHROOT_OUTPUT="$OUTPUT/grml_chroot"
+BUILD_OUTPUT="$OUTPUT/grml_cd"
+ISO_OUTPUT="$OUTPUT/grml_isos"
 
 # trim characters that are known to cause problems inside $GRML_NAME;
 # for example isolinux does not like '-' inside the directory name
