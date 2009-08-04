@@ -5,7 +5,7 @@ doc: doc_man doc_html
 doc_html: html-stamp
 
 html-stamp: grml-live.txt grml-live-remaster.txt
-	asciidoc -b xhtml11 -a icons grml-live.txt
+	asciidoc -b xhtml11 -a icons -a toc -a numbered grml-live.txt
 	asciidoc -b xhtml11 -a icons grml-live-remaster.txt
 	touch html-stamp
 

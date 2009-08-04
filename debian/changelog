@@ -35,8 +35,10 @@ grml-live (0.9.20) UNRELEASED; urgency=low
     it is possible to set it via conffile as well.
   * Validate whether the specified architecture class matches the
     architecture (option), otherwise installation of kernel will fail.
+  * Add 'How do I deploy grml-live on a plain Debian installation' to FAQ.
+  * Build grml-live documentation with table of content.
 
- -- Michael Prokop <mika@grml.org>  Tue, 04 Aug 2009 19:26:20 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 00:26:44 +0200
 
 grml-live (0.9.19) unstable; urgency=low
 
