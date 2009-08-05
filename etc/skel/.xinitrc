@@ -4,7 +4,6 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Die Sep 04 01:42:40 CEST 2007 [mika]
 ################################################################################
 
 # is something goes wrong fall back to plain x-terminal-emulator:
@@ -68,6 +67,6 @@
   [ -r /etc/grml_cd ] && grml-info &
 
 # default entry, use e.g. 'grml-x windowmanager' for changing or just adjust manually
-  exec /usr/bin/wm-ng
+  exec /usr/bin/x-window-manager
 
 ## END OF FILE #################################################################

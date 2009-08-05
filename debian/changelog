@@ -1,3 +1,10 @@
+grml-etc (1.1.19) unstable; urgency=low
+
+  * Use x-window-manager as default window manager in xinitrc.
+    Thanks to Michael Whapples for the idea. [Testing: issue716]
+
+ -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 04:16:22 +0200
+
 grml-etc (1.1.18) unstable; urgency=low
 
   * Drop /etc/X11/windowlab/windowlab.menurc as windowlab
