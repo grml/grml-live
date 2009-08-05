@@ -33,8 +33,9 @@ grml-autoconfig (0.8.24) unstable; urgency=low
     [Testing: issue715]
   * Drop config_cdrom_scripts(): the bootoption "script" is triggered
     by bootoption "scripts" and was never officially documented.
+  * Switch wording from 'CD' to 'live mode' where possible.
 
- -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 15:30:25 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 15:36:21 +0200
 
 grml-autoconfig (0.8.23) unstable; urgency=low
 
