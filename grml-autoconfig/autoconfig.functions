@@ -1857,7 +1857,9 @@ create_mnt_dirs(){
 
 # {{{ start X window system via grml-x
 config_x_startup(){
-if checkbootparam startx ; then
+# make sure we start X only if startx is used *before* a nostartx option
+# so it's possible to disable automatic X startup using nostart
+if checkbootparam startx && ! grep -q 'startx.*nostartx' "$CMDLINE" ; then
  if [ -x /usr/X11R6/bin/X ] ; then
   if [ -z "$INSTALLED" ] ; then
    WINDOWMANAGER="$(getbootparam 'startx' 2>>$DEBUG)"
@@ -1892,12 +1894,12 @@ EOF
    fi
 
   else
-    eerror "We are not running from CD - startx will not work, skipping it.
-     Please use something like xdm, gdm or kdm for starting X on a harddisk system!" ; eend 1
+    eerror "We are not running from CD - startx will not work, skipping it."
+    eerror " -> Please use something like xdm, gdm or kdm for starting X on a harddisk system!" ; eend 1
   fi
  else
-   eerror "/usr/X11R6/bin/X is not present on this grml flavour.
-   Boot parameter startx does not work therefore." ; eend 1
+   eerror "/usr/X11R6/bin/X is not present on this grml flavour."
+   eerror "  -> Boot parameter startx does not work therefore." ; eend 1
  fi
 fi
 }
