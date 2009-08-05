@@ -4,8 +4,17 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Thu Nov 03 17:03:03 CET 2005 [mika]
 ################################################################################
+
+# http://wiki.debian.org/LSBInitScripts =>
+### BEGIN INIT INFO
+# Provides:          grml-autoconfig
+# Required-Start:
+# Required-Stop:
+# Should-Start:      udev
+# Default-Start:     S 2 3 4 5
+# Default-Stop:
+### END INIT INFO
 
 /usr/bin/strace -f -eopen,stat64,execve -o /etc/grml/strace.autoconfig /etc/init.d/grml-autoconfig "$*" &
 
