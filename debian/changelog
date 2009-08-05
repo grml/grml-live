@@ -1,3 +1,13 @@
+grml-live (0.9.21) UNRELEASED; urgency=low
+
+  * Split the single /etc/apt/sources.list file into structured files
+    in /etc/apt/sources.list.d/. We are using:
+    - /etc/apt/sources.list.d/grml.list for all grml related repositories
+    - /etc/apt/sources.list.d/debian.list for official Debian repositories
+    [Testing: issue349]
+
+ -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 02:23:29 +0200
+
 grml-live (0.9.20) unstable; urgency=low
 
   * Add gnupg2 to GRML_FULL. Thanks to Walter Haidinger.
@@ -63,7 +73,7 @@ grml-live (0.9.19) unstable; urgency=low
      that have been removed from GRML_FULL.
   * Software related changes in GRML_FORENSIC:
     - drop stegdetect (see #507908)
-    - add several further packages: 
+    - add several further packages:
       acpi apache2 apache2-utils at bluez-utils cpufrequtils cryptcat
       cups cups-pdf dc dsniff dvd+rw-tools gphoto2 hdparm hping3
       mysql-client netdiscover nmap os-prober poppler-utils pppconfig
@@ -89,7 +99,7 @@ grml-live (0.9.18) unstable; urgency=low
   * Apply patches by Thorsten Glaser <tg@mirbsd.org>:
     - Fix jumping back from the bsd4grml loader (ldbsd.com) to GNU GRUB
     - Update bootgrub.mksh from MirBSD
-    - Pad official ISOs to multiples of 256 KiB for partition table support. 
+    - Pad official ISOs to multiples of 256 KiB for partition table support.
   * Add bc to Depends as bootgrub.mksh requires it.
 
  -- Michael Prokop <mika@grml.org>  Sat, 13 Jun 2009 12:11:19 +0200

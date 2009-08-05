@@ -447,6 +447,12 @@ if [ -n "$BUILD_DIRTY" ]; then
 else
    [ -n "$CHROOT_OUTPUT" ] || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
 
+   # inform fai about the suite we build
+   if [ -n "$SUITE" ] ; then
+      [ -d "$CHROOT_OUTPUT/etc/grml" ] || mkdir -p "$CHROOT_OUTPUT/etc/grml"
+      echo "SUITE=$SUITE" > "$CHROOT_OUTPUT/etc/grml/grml-live-build-info"
+   fi
+
    if [ -n "$UPDATE" -o -n "$BUILD_ONLY" ] ; then
       FAI_ACTION=softupdate
    else
