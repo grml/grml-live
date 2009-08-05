@@ -136,6 +136,10 @@ grml distcc=$NETWORK,$INTERFACE     Activate distcc-daemon to listen on specifie
 grml gcc=3.4 gpp=3.4                Link /usr/bin/gcc, /usr/bin/cpp and /usr/bin/c++ to specified version
 grml startx{=windowmanager}         Start X window system automatically
                                     Default window manager (if not provided): wm-ng (wrapper around fluxbox)
+grml nostartx                       If using startx as default bootoption the nostartx *disables* automatic
+                                    startup of X again. (This bootoption is relevant for grml based derivatives
+                                    which decide to enable startx by default only, plain grml does not use
+                                    automatic startup of X by default.)
 
 Accessibility related settings:
 -------------------------------
