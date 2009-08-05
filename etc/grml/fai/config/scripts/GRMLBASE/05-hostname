@@ -27,6 +27,9 @@ if [ -r $target/etc/postfix/main.cf ] ; then
   echo "postfix postfix/mailname     string $HOSTNAME" | $ROOTCMD debconf-set-selections
   echo "postfix postfix/destinations string ${HOSTNAME}, localhost.grml.org, localhost" \
   | $ROOTCMD debconf-set-selections
+  # make sure to execute newaliases after adjusting configuration,
+  # otherwise the old hostname will be left inside /etc/aliases.db
+  $ROOTCMD newaliases
 fi
 
 if [ -r $target/etc/bacula/bacula-fd.conf ] ; then

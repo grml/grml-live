@@ -5,8 +5,11 @@ grml-live (0.9.21) UNRELEASED; urgency=low
     - /etc/apt/sources.list.d/grml.list for all grml related repositories
     - /etc/apt/sources.list.d/debian.list for official Debian repositories
     [Testing: issue349]
+  * When adjusting postfix configuration: make sure to execute newaliases
+    command after adjusting configuration, otherwise the old hostname
+    will be left inside /etc/aliases.db.
 
- -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 02:23:29 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 03:32:43 +0200
 
 grml-live (0.9.20) unstable; urgency=low
 
