@@ -1974,7 +1974,7 @@ if [ -n "$DCSDIR" ]; then
 else
   einfo "Debs, config, scripts will be read from the CD image directly." ; eend 0
 fi
-}			      
+}
 
 
 config_partconf() {
@@ -2045,7 +2045,7 @@ if checkbootparam config ; then
   if [ -n "$CONFIG" ]; then
     if [ -d "${DCSDIR}/${CONFIG}" ] ; then
       einfo "Taking configuration from directory ${DCSDIR}/${CONFIG}"
-    
+
       cp -a ${DCSDIR}/${CONFIG}/* /
     elif [ -f "${DCSDIR}/${CONFIG}" ]; then
       einfo "Extracting configuration from file ${DCSDIR}/${CONFIG}"

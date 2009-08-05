@@ -1,11 +1,38 @@
-grml-autoconfig (0.8.24) UNRELEASED; urgency=low
+grml-autoconfig (0.8.24) unstable; urgency=low
 
   * Check for space after bootoption 'fast' so we do not conflict
     with new kernel bootoption fastboot.
   * New bootoption 'nostartx': if using startx as default bootoption
     the bootoption 'nostartx' disables automatic startup of X.
+  * Apply patch by Marc Haber regarding re-work of debs, config
+    and scripts handling (thanks a lot!):
+    - debs, config and scripts are always searched and read from the
+      same place ($dcs-dir). Which place this is varies, depending on
+      GRMLCFG, noautoconfig and myconfig.
+    - debs are searched in $dcs-dir/debs. If debs=foo is given, foo is
+      taken as a shell wildcard for the debs being installed, paths are
+      allowed and relative to $dcs-dir.
+    - config archives (config.tbz) are searched directly in $dcs-dir. If
+      config=foo is given and foo is a file, that file is unpacked and its
+      content taken as configuration archive. If config=foo is given and foo
+      is a directory, the contents of the directory tree is copied over the
+      live CD configuration. paths are allowed and relative to $dcs-dir
+    - scripts are searched in $dcs-dir/scripts. If scripts=foo is given
+      and foo is a file, that file is executed. If scripts=foo is given and
+      foo is a directory, all files inside that directory are executed.
+      Paths are allowed and relative to $dcs-dir.
+    - If no GRMLCFG partition is found and noautoconfig is _not_ given
+      on the command line, nothing is changed and the dcs files are
+      searched within the .iso, $dcs-dir is set to the root directory
+      within the .iso
+    - If a GRMLCFG partition is found, $dcs-dir is set to the root of
+      the GRMLCFG partition unless noautoconfig is set. If noautoconfig is
+      set, $dcs-dir is set to the root directory within the .iso.
+    - If myconfig=foo is set on the command line, $dcs-dir is set to
+      foo, even if a GRMLCFG partition is present.
+    [Testing: issue715]
 
- -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 15:13:59 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 15:21:14 +0200
 
 grml-autoconfig (0.8.23) unstable; urgency=low
 
