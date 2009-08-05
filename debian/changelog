@@ -11,8 +11,10 @@ grml-live (0.9.21) UNRELEASED; urgency=low
   * grml_cleanup_chroot: get rid of /etc/lvm/cache/.cache and
     /etc/lvm/backup/main as well.
   * grml_cleanup_chroot: drop the /usr/include/linux checks.
+  * 90-update-alternatives: use wm-ng as default x-window-manager.
+    [Closes: issue716]
 
- -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 03:51:58 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 04:19:14 +0200
 
 grml-live (0.9.20) unstable; urgency=low
 

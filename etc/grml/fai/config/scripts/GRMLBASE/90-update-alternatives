@@ -21,9 +21,9 @@ set -u
       # $ROOTCMD update-alternatives --set editor /usr/bin/vim.tiny
       # $ROOTCMD update-alternatives --set vi     /usr/bin/vim.tiny
       $ROOTCMD ln -sf /etc/alternatives/editor /usr/bin/editor
-      $ROOTCMD ln -sf /usr/bin/vim.tiny /etc/alternatives/editor 
+      $ROOTCMD ln -sf /usr/bin/vim.tiny /etc/alternatives/editor
       $ROOTCMD ln -sf /etc/alternatives/vi /usr/bin/vi
-      $ROOTCMD ln -sf /usr/bin/vim.tiny /etc/alternatives/vi 
+      $ROOTCMD ln -sf /usr/bin/vim.tiny /etc/alternatives/vi
    fi
 fi
 
@@ -48,6 +48,10 @@ fi
 
 if [ -r $target/usr/bin/w3m ] ; then
    $ROOTCMD update-alternatives --set www-browser /usr/bin/w3m
+fi
+
+if [ -r $target/usr/bin/wm-ng ] ; then
+   $ROOTCMD update-alternatives --set x-window-manager /usr/bin/wm-ng
 fi
 
 ## END OF FILE #################################################################
