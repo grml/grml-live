@@ -73,22 +73,6 @@ if [ -x /usr/bin/make -a -r /usr/src/Makefile ] ; then
    eend $?
 fi
 
-if [ -L /usr/include/linux ] ; then
-  einfo "/usr/include/linux is ok" ; eend 0
-elif [ -n "$GRML64" ] ; then
-    if [ -d /usr/src/linux-headers-"$KERNEL" ] ; then
-       einfo "grml64 detected, assuming /usr/src/linux-headers-$KERNEL is ok." ; eend 0
-    else
-       ewarn "Warning: /usr/src/linux-headers-$KERNEL not found, exiting." ; eend 0
-    fi
-elif [ -d /usr/src/linux-headers-"$KERNEL" ] ; then
-     ewarn "Warning: /usr/include/linux is NOT a symlink to /usr/src/linux/include/linux/ (possible an error)"
-     ewarn "Common reason: you forgot to install linux-kernel-headers-grml and use linux-libc-dev instead"
-     eend 0
-else
-     ewarn "Warning: linux-headers-$KERNEL not installed." ; eend 0
-fi
-
 einfo "Creating ~/.zshrc"
   touch ~/.zshrc
 eend $?
@@ -190,7 +174,7 @@ eend $?
 
 einfo "Removing x-server-conffiles"
   rm -f /etc/X11/xorg.conf /etc/X11/XF86Config-4 \
-        /etc/X11/XF86Config /etc/XF86Config /etc/XF86Config-4 
+        /etc/X11/XF86Config /etc/XF86Config /etc/XF86Config-4
 eend $?
 
 einfo "Removing ssh-keys"
@@ -369,7 +353,7 @@ eend $?
 # list dangling symlinks: ls **/*(-@)
 #
 # Security-audit:
-# find / \! -type l -perm -2000 -ls > audit/sgid-files 
+# find / \! -type l -perm -2000 -ls > audit/sgid-files
 # find / \! -type l -perm -0002 -ls > audit/world-writeable-files
 # find / \! -type l -perm -4000 -ls > audit/suid-files
 # find / ( -perm 4000 -o -perm -2000 \) -exec ls -ld {} \;
@@ -383,7 +367,7 @@ eend $?
 # file /usr/sbin/* | grep -v ', stripped' | grep -v 'perl' | grep -v 'Bourne' | grep -v 'python' | grep -v 'symbolic link'
 #
 # Is software by grml-repos up2date?
-# grep-dctrl --field Maintainer 'Michael Prokop' /var/lib/apt/lists/grml.org_repos_._* | grep Package | awk '{print $2}' | xargs echo 
+# grep-dctrl --field Maintainer 'Michael Prokop' /var/lib/apt/lists/grml.org_repos_._* | grep Package | awk '{print $2}' | xargs echo
 #
 # runlevel.conf:
 # for file in /etc/init.d/* ; do grep $file -q /etc/runlevel.conf.hdinstall || echo $file not found ; done
