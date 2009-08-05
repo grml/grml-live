@@ -13,8 +13,10 @@ grml-live (0.9.21) UNRELEASED; urgency=low
   * grml_cleanup_chroot: drop the /usr/include/linux checks.
   * 90-update-alternatives: use wm-ng as default x-window-manager.
     [Closes: issue716]
+  * Provide information about grml-live version and Debian/suite
+    through /etc/grml_live_version in the generated ISO. [Closes: issue637]
 
- -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 04:19:14 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 04:27:20 +0200
 
 grml-live (0.9.20) unstable; urgency=low
 
