@@ -1,7 +1,7 @@
 #!/bin/zsh
 # Filename:      autoconfig.functions
 # Purpose:       basic system configuration and hardware setup for grml system
-# Authors:       grml-team (grml.org), (c) Klaus Knopper <knopper@knopper.net>, (c) Michael Prokop <mika@grml.org>
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
 ################################################################################
