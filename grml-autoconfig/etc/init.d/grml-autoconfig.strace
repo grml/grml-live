@@ -16,6 +16,23 @@
 # Default-Stop:
 ### END INIT INFO
 
+# {{{ placeholder functions for start/restart/reload/stop
+[[ $1 == "start" ]] && true
+
+if [[ $1 == "restart" ]] ; then
+  echo "$0 restart - empty placeholder. Doing nothing but running."
+fi
+
+if [[ $1 == "force-reload" ]] ; then
+  echo "$0 force-reload - empty placeholder. Doing nothing but running."
+fi
+
+if [[ $1 == "stop" ]] ; then
+  echo "$0 stop - empty placeholder. Doing nothing but exiting."
+  exit 1
+fi
+# }}}
+
 /usr/bin/strace -f -eopen,stat64,execve -o /etc/grml/strace.autoconfig /etc/init.d/grml-autoconfig "$*" &
 
 ## END OF FILE #################################################################
