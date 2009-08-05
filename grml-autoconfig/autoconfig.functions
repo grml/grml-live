@@ -2341,7 +2341,7 @@ if checkbootparam "debnet" ; then
        mkdir /etc/network/run
        umount /mnt ; eend $?
      einfo "Starting network."
-       /etc/init.d/networking start ; eend $?
+       invoke-rc.d networking start ; eend $?
    else
      eerror "/etc/network/interfaces not found." ; eend 1
    fi
