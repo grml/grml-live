@@ -16,8 +16,10 @@ grml-live (0.9.21) UNRELEASED; urgency=low
   * Provide information about grml-live version and Debian/suite
     through /etc/grml_live_version in the generated ISO. [Closes: issue637]
   * grml-cheatcodes: document bootoption 'nostartx'.
+  * Check for existence of $target/etc/apt/important_note.txt before
+    operating on it.
 
- -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 15:16:57 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 16:44:16 +0200
 
 grml-live (0.9.20) unstable; urgency=low
 

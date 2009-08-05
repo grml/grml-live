@@ -83,7 +83,9 @@ else # no softupdate but fresh installation
 if [ -r /etc/grml/fai/files/etc/apt ] ; then
    cp -a /etc/grml/fai/files/etc/apt/* $target/etc/apt/
    # remove grml-live's sources.list file from chroot:
-   grep -q GRML_LIVE_SOURCES $target/etc/apt/important_note.txt && rm $target/etc/apt/important_note.txt
+   if [ -r $target/etc/apt/important_note.txt ] ; then
+      grep -q GRML_LIVE_SOURCES $target/etc/apt/important_note.txt && rm $target/etc/apt/important_note.txt
+   fi
 fi
 
 # install all present (but at least the grml) gpg keys:
