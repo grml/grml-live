@@ -8,8 +8,10 @@ grml-live (0.9.21) UNRELEASED; urgency=low
   * When adjusting postfix configuration: make sure to execute newaliases
     command after adjusting configuration, otherwise the old hostname
     will be left inside /etc/aliases.db.
+  * grml_cleanup_chroot: get rid of /etc/lvm/cache/.cache and
+    /etc/lvm/backup/main as well.
 
- -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 03:32:43 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 03:36:36 +0200
 
 grml-live (0.9.20) unstable; urgency=low
 
