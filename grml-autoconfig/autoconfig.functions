@@ -34,10 +34,10 @@ iszsh && setopt no_nomatch # || echo "Warning: not running under zsh!"
 
 # {{{ Read in boot parameters
 if [ -z "$CMDLINE" ]; then
-  # if CMDLINE was set from the outside, we're debugging. Otherwise, take
-  # CMDLINE from Kernel and config files
+  # if CMDLINE was set from the outside, we're debugging.
+  # Otherwise, take CMDLINE from Kernel and config files.
   CMDLINE="$(cat /proc/cmdline)"
-  [ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/* | tr '\n' ' ')"
+  [ -d /cdrom/bootparams/ ]      && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/* | tr '\n' ' ')"
   [ -d /live/image/bootparams/ ] && CMDLINE="$CMDLINE $(cat /live/image/bootparams/* | tr '\n' ' ')"
 fi
 # }}}
@@ -1587,19 +1587,6 @@ EOT
      fi # if trymount ...
    fi # -n $MYHOMEDIR
 fi # checkbootparam home
-}
-# }}}
-
-# {{{ Check for scripts on CD-ROM
-# this is also executed when the scripts option is called. Is this a bug
-# or intended?
-config_cdrom_scripts(){
-if checkbootparam "script"; then
-   for script in "${LIVECD_PATH}"/scripts/* ; do
-       einfo " grml script found on CD, executing ${WHITE}${script}${NORMAL}."
-       . $script
-   done
-fi
 }
 # }}}
 

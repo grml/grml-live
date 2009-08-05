@@ -53,6 +53,12 @@ mount_pts
 mount_sys
 # }}}
 
+# {{{ Read in boot parameters
+CMDLINE="$(cat /proc/cmdline)"
+[ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/* | tr '\n' ' ')"
+[ -d /live/image/bootparams/ ] && CMDLINE="$CMDLINE $(cat /live/image/bootparams/* | tr '\n' ' ')"
+# }}}
+
 # {{{ main grml-autoconfig
 checkvalue $CONFIG_DEBUG && config_debug
 
@@ -211,8 +217,6 @@ checkvalue $CONFIG_CONFIG && config_config
 checkvalue $CONFIG_PARTCONF && config_partconf
 
 [ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||||||||">/dev/tty14
-
-checkvalue $CONFIG_CDROM_SCRIPTS && config_cdrom_scripts
 
 # device symlinks {{{
   [ -r /mnt/floppy ] || mkdir /mnt/floppy

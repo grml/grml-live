@@ -31,8 +31,10 @@ grml-autoconfig (0.8.24) unstable; urgency=low
     - If myconfig=foo is set on the command line, $dcs-dir is set to
       foo, even if a GRMLCFG partition is present.
     [Testing: issue715]
+  * Drop config_cdrom_scripts(): the bootoption "script" is triggered
+    by bootoption "scripts" and was never officially documented.
 
- -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 15:21:14 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 15:30:25 +0200
 
 grml-autoconfig (0.8.23) unstable; urgency=low
 
