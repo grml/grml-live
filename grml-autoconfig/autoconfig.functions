@@ -107,7 +107,7 @@ mount_sys(){
 }
 # }}}
 
-# {{{ Check if we are running from the grml-CD or HD
+# {{{ Check if we are running in live mode or from HD
 INSTALLED=""
 [ -e /etc/grml_cd ] || INSTALLED="yes"
 
@@ -1887,7 +1887,7 @@ EOF
    fi
 
   else
-    eerror "We are not running from CD - startx will not work, skipping it."
+    eerror "We are not running in live mode - startx will not work, skipping it."
     eerror " -> Please use something like xdm, gdm or kdm for starting X on a harddisk system!" ; eend 1
   fi
  else
@@ -1956,10 +1956,11 @@ else
     fi
   fi
 fi
+
 if [ -n "$DCSDIR" ]; then
   einfo "Debs, config, scripts will be read from $DCSDIR." ; eend 0
 else
-  einfo "Debs, config, scripts will be read from the CD image directly." ; eend 0
+  einfo "Debs, config, scripts will be read from the live image directly." ; eend 0
 fi
 }
 
@@ -2391,9 +2392,9 @@ config_tohd()
      fi
 
      if grep -q $TARGET /proc/mounts ; then
-	eerror "$TARGET already mounted, skipping execution of tohd therefore."
-	eend 1
-	return 1
+        eerror "$TARGET already mounted, skipping execution of tohd therefore."
+        eend 1
+        return 1
      fi
 
      local MOUNTDIR=$(mktemp -d)
@@ -2401,10 +2402,10 @@ config_tohd()
      if mount -o rw "$TARGET" "$MOUNTDIR" ; then
         einfo "Copyring live system to $TARGET - this might take a while"
         rsync -a --progress /live/image/live $MOUNTDIR
-	sync
-	umount "$MOUNTDIR"
+        sync
+        umount "$MOUNTDIR"
         eend $?
-	einfo "Booting with \"grml bootfrom=$TARGET\" should work now." ; eend 0
+        einfo "Booting with \"grml bootfrom=$TARGET\" should work now." ; eend 0
      else
         eerror "Error when trying to mount $TARGET, sorry."; eend 1
         return 1
