@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Filename:      /usr/share/grml-live/buildd/functions.sh
 # Purpose:       main function file for grml-live buildd
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
@@ -13,7 +13,7 @@ die() {
 
 . /etc/grml/grml-buildd.conf || die "Could not source /etc/grml/grml-buildd.conf. Exiting."
 
-type -p mutt 1>/dev/null 2>&1 || die "mutt binary not found. Exiting."
+which mutt >/dev/null 2>&1 || die "mutt binary not found. Exiting."
 
 # exit if important variables aren't set:
 [ -n "$STORAGE" ]  || die "\$STORAGE is not set. Exiting."
@@ -29,7 +29,6 @@ TMP_DIR="$(mktemp -d)"
 MUTT_HEADERS="$(mktemp)"
 [ -n "$TMP_DIR" ]      || die "Could not create \$TMP_DIR. Exiting."
 [ -n "$MUTT_HEADERS" ] || die "Could not create $\MUTT_HEADERS. Exiting."
-[ -n "$ARCH" ] && GRML_LIVE_ARCH="-a $ARCH"
 
 # make sure we have same safe defaults:
 [ -n "$OUTPUT_DIR" ]    || OUTPUT_DIR="${STORAGE}/grml-live_${DATE}.$$"
@@ -37,6 +36,7 @@ MUTT_HEADERS="$(mktemp)"
 [ -n "$RECIPIENT" ]     || RECIPIENT=root@localhost
 [ -n "$ATTACHMENT" ]    || ATTACHMENT="$TMP_DIR/grml-live-logs_$DATE.tar.gz"
 [ -n "$FROM" ]          || FROM=root@localhost
+[ -n "$ARCH" ]          || ARCH="$(dpkg --print-architecture)"
 
 if [ -n "$LOGFILE" ] ; then
    GRML_LOGFILE="$LOGFILE"
@@ -69,7 +69,7 @@ grml_live_run() {
   grml_name="$NAME-daily-$CODENAME"
   shortdate="$(date +%y%m%d)"
 
-  grml-live -F $* $GRML_LIVE_ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
+  grml-live -F $* -a $ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
             -g "$grml_name" -v "$shortdate" -r grml-live-autobuild -i $ISO_NAME \
             1>/var/log/grml-buildd.stdout \
             2>/var/log/grml-buildd.stderr ; RC=$?

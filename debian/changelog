@@ -18,8 +18,10 @@ grml-live (0.9.21) UNRELEASED; urgency=low
   * grml-cheatcodes: document bootoption 'nostartx'.
   * Check for existence of $target/etc/apt/important_note.txt before
     operating on it.
+  * buildd: drop GRML_LIVE_ARCH but instead use default architecture
+    if not specified.
 
- -- Michael Prokop <mika@grml.org>  Wed, 05 Aug 2009 16:44:16 +0200
+ -- Michael Prokop <mika@grml.org>  Fri, 07 Aug 2009 16:08:31 +0200
 
 grml-live (0.9.20) unstable; urgency=low
 
