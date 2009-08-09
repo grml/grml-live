@@ -113,11 +113,11 @@ INSTALLED=""
 
 # testcd
 TESTCD=""
-checkbootparam "testcd" >>$DEBUG 2>&1 && TESTCD="yes"
+checkbootparam 'testcd' >>$DEBUG 2>&1 && TESTCD="yes"
 # }}}
 
 # {{{ source lsb-functions , color handling
-if checkbootparam "nocolor"; then
+if checkbootparam 'nocolor'; then
   RC_NOCOLOR=yes
   . /etc/grml/lsb-functions
   einfo "Disabling colors in bootsequence as requested on commandline." ; eend 0
@@ -129,7 +129,7 @@ fi
 
 # {{{ debug
 config_debug(){
- checkbootparam "debug"                        && BOOTDEBUG="yes"
+ checkbootparam 'debug'                        && BOOTDEBUG="yes"
  stringinstring "BOOT_IMAGE=debug " "$CMDLINE" && BOOTDEBUG="yes"
 
  rundebugshell(){
@@ -159,7 +159,7 @@ config_debug(){
 
 # {{{ log
 config_log(){
-if checkbootparam "log" || checkbootparam "debug" ; then
+if checkbootparam 'log' || checkbootparam 'debug' ; then
    export DEBUG="/tmp/grml.log.`date +%Y%m%d`"
    touch $DEBUG
    einfo "Bootparameter log found. Log files: ${DEBUG} and /var/log/boot"
@@ -175,7 +175,7 @@ fi
 
 # {{{ set firmware timeout via bootparam
 config_fwtimeout(){
- if checkbootparam fwtimeout ; then
+ if checkbootparam 'fwtimeout' ; then
    TIMEOUT="$(getbootparam 'fwtimeout' 2>>$DEBUG)"
    einfo "Bootoption fwtimeout found. (Re)Loading firmware_class module."
    rmmod firmware_class 1>>$DEBUG 2>&1
@@ -203,7 +203,7 @@ config_language(){
  grep -q ' lang=.*-utf8' /proc/cmdline && UTF8='yes' || UTF8=''
 
  # check for bootoption which overrides config from /etc/grml/autoconfig:
- BOOT_LANGUAGE="$(getbootparam lang 2>>$DEBUG)"
+ BOOT_LANGUAGE="$(getbootparam 'lang' 2>>$DEBUG)"
  [ -n "$BOOT_LANGUAGE" ] && LANGUAGE="$BOOT_LANGUAGE"
 
  # set default to 'en' in live-cd mode if $LANGUAGE is not yet set:
@@ -222,7 +222,7 @@ config_language(){
 
  # set console font
  if [ -z "$CONSOLEFONT" ] ; then
-    if ! checkbootparam "nodefaultfont" >>$DEBUG 2>&1 ; then
+    if ! checkbootparam 'nodefaultfont' >>$DEBUG 2>&1 ; then
        # [ -n "$UTF8" ] && CONSOLEFONT='LatArCyrHeb-16' || CONSOLEFONT='Lat15-Terminus16'
        # if [ -r /usr/share/consolefonts/Lat15-Terminus16.psf.gz ] ; then
        if [ -r /usr/share/consolefonts/Uni3-Terminus16.psf.gz ] ; then
@@ -245,7 +245,7 @@ config_language(){
  [ -r /etc/sysconfig/keyboard ] && . /etc/sysconfig/keyboard
 
  # now allow keyboard override by boot commandline for later use:
- KKEYBOARD="$(getbootparam keyboard 2>>$DEBUG)"
+ KKEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
  [ -n "$KKEYBOARD" ] && KEYTABLE="$KKEYBOARD"
  # notce: de/at is a bad choice, so take de-latin1-nodeadkeys instead:
  [[ "$KKEYBOARD" == 'de' ]] && KEYTABLE=de-latin1-nodeadkeys
@@ -257,7 +257,7 @@ config_language(){
    local LANGUAGE="$BOOT_LANGUAGE"
    . /etc/grml/language-functions
    # allow setting xkeyboard explicitly different than console keyboard
-   KXKEYBOARD="$(getbootparam xkeyboard 2>>$DEBUG)"
+   KXKEYBOARD="$(getbootparam 'xkeyboard' 2>>$DEBUG)"
    if [ -n "$KXKEYBOARD" ]; then
       XKEYBOARD="$KXKEYBOARD"
       KDEKEYBOARD="$KXKEYBOARD"
@@ -269,7 +269,7 @@ config_language(){
    # duplicate of previous code to make sure /etc/grml/language-functions
    # does not overwrite our values....
    # now allow keyboard override by boot commandline for later use:
-   KKEYBOARD="$(getbootparam keyboard 2>>$DEBUG)"
+   KKEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
    [ -n "$KKEYBOARD" ] && KEYTABLE="$KKEYBOARD"
    # notce: de/at is a bad choice, so take de-latin1-nodeadkeys instead:
    [[ "$KKEYBOARD" == 'de' ]] && KEYTABLE=de-latin1-nodeadkeys
@@ -317,7 +317,7 @@ config_language(){
     eend $RC
  fi
 
- if checkbootparam noconsolefont ; then
+ if checkbootparam 'noconsolefont' ; then
     ewarn "Skipping setting console font as requested on boot commandline." ; eend 0
  else
     if [ -n "$CONSOLEFONT" ] ; then
@@ -336,7 +336,7 @@ config_language(){
 
 # {{{ Set hostname
 config_hostname(){
- if checkbootparam hostname ; then
+ if checkbootparam 'hostname' ; then
   HOSTNAME="$(getbootparam 'hostname' 2>>$DEBUG)"
   einfo "Setting hostname to $HOSTNAME as requested."
   sed -i "s/^127.0.0.1.*localhost/127.0.0.1 $HOSTNAME localhost/" /etc/hosts
@@ -367,12 +367,12 @@ config_time(){
     # The default hardware clock timezone is stated as representing local time.
     UTC="--localtime"
     grep -q "^UTC=" /etc/default/rcS || echo "UTC=no" >> /etc/default/rcS
-    checkbootparam utc       >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=yes|" /etc/default/rcS
-    checkbootparam gmt       >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=yes|" /etc/default/rcS
-    checkbootparam localtime >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=no|"  /etc/default/rcS
+    checkbootparam 'utc'       >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=yes|" /etc/default/rcS
+    checkbootparam 'gmt'       >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=yes|" /etc/default/rcS
+    checkbootparam 'localtime' >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=no|"  /etc/default/rcS
     grep -q -i "^UTC=yes" /etc/default/rcS && UTC="-u"
     # hwclock uses the TZ variable
-    KTZ="$(getbootparam tz 2>>$DEBUG)"
+    KTZ="$(getbootparam 'tz' 2>>$DEBUG)"
     [ -z "$KTZ" ] && [ -r /etc/timezone ] && KTZ=$(cat /etc/timezone)
     if [ ! -f "/usr/share/zoneinfo/$KTZ" ] ; then
        ewarn "Warning: unknown timezone $KTZ" ; eend 1
@@ -420,12 +420,12 @@ config_kernel(){
 
 # {{{ vmware specific stuff
 config_vmware(){
-if checkbootparam novmware ; then
+if checkbootparam 'novmware' ; then
    ewarn "Skipping running vmware specific stuff as requested on boot commandline." ; eend 0
 else
    if [ -z "$INSTALLED" ] ; then
       if vmware-detect || stringinstring "BOOT_IMAGE=vmware " "$CMDLINE" ; then
-         if ! checkbootparam qemu ; then
+         if ! checkbootparam 'qemu' ; then
             if [ -r /etc/X11/xorg.conf.vmware ] ; then
                einfo "VMware: Copying /etc/X11/xorg.conf.vmware to /etc/X11/xorg.conf"
                cp /etc/X11/xorg.conf.vmware /etc/X11/xorg.conf ; eend $?
@@ -444,7 +444,7 @@ fi
 
 # {{{ qemu specific stuff
 config_qemu(){
-if checkbootparam qemu ; then
+if checkbootparam 'qemu' ; then
    if [ -r /etc/X11/xorg.conf.example ] ; then
       einfo "Qemu: Copying /etc/X11/xorg.conf.example to /etc/X11/xorg.conf"
       cp /etc/X11/xorg.conf.example /etc/X11/xorg.conf ; eend $?
@@ -474,7 +474,7 @@ fi
 config_timezone(){
  # don't touch the files if running from harddisk:
  if [ -z "$INSTALLED" ]; then
-    KTZ="$(getbootparam tz 2>>$DEBUG)"
+    KTZ="$(getbootparam 'tz' 2>>$DEBUG)"
     if [ -n "$KTZ" ] ; then
        if [ ! -f "/usr/share/zoneinfo/$KTZ" ]
        then
@@ -503,7 +503,7 @@ RAM=$(/usr/bin/gawk '/MemTotal/{print $2}' /proc/meminfo)
 # MEM=$(/usr/bin/gawk 'BEGIN{m=0};/MemFree|Cached|SwapFree/{m+=$2};END{print m}' /proc/meminfo)
 eindent
 
-if checkbootparam "small"; then
+if checkbootparam 'small'; then
   einfo "Information: ${RAM} kB of RAM available." ; eend 0
   einfo "Bootoption small detected. Activating small system."
   if [ -r /etc/inittab.small ] ; then
@@ -545,7 +545,7 @@ eoutdent
 
 # skip startup of w3m {{{
 config_fast(){
-if checkbootparam "fast "; then
+if checkbootparam 'fast '; then
   ewarn "Bootoption fast detected. Skipping startup of grml-quickconfig."
     sed -i 's#^1:.*#1:12345:respawn:/usr/bin/openvt -f -c 1 -w -- /bin/zsh#' /etc/inittab
   /sbin/telinit q ; eend $?
@@ -555,11 +555,11 @@ fi
 
 # activate serial console {{{
 config_console(){
-if checkbootparam "console"; then
+if checkbootparam 'console'; then
   einfo "Bootoption (for serial) console detected."
   eindent
     if [ -r /etc/mgetty/mgetty.config ] ; then
-       MODE=$(getbootparam console | awk -F, '{print $2}')
+       MODE=$(getbootparam 'console' | awk -F, '{print $2}')
        MODE=${MODE%%n*}
        [ -n "$MODE" ] || MODE=9600 # default mode
        einfo "Setting speed in /etc/mgetty/mgetty.config to $MODE bps"
@@ -602,7 +602,7 @@ config_local_net(){
 # so let's create raw1394 device manually
 # http://www.michael-prokop.at/blog/index.php?p=352
 config_firewire_dev(){
-if checkbootparam "nofirewiredev" ; then
+if checkbootparam 'nofirewiredev' ; then
   ewarn "Skipping creating some firewire devices as requested on boot commandline." ; eend 0
 else
 #if [ "${KERNEL%-*}" == "2.6.11" ] ; then
@@ -659,7 +659,7 @@ fi
 
 # {{{ hardware detection via discover
 config_discover(){
-if checkbootparam "nodisc" ; then
+if checkbootparam 'nodisc' ; then
   ewarn "Skipping hardware detection via discover as requested on boot commandline." ; eend 0
 else
  if [ -x /sbin/discover ] ; then
@@ -678,7 +678,7 @@ fi
 
 # {{{ hardware detection via hwinfo
 config_hwinfo(){
-if checkbootparam hwinfo >>$DEBUG 2>&1; then
+if checkbootparam 'hwinfo' >>$DEBUG 2>&1; then
   einfo "Discovering hardware via hwinfo:"
   MODULES=$(su grml hwinfo | grep "Cmd: \"modprobe" | awk '{print $5}' | sed 's/"//')
   echo -n "  Loading modules: "
@@ -690,7 +690,7 @@ fi
 
 # {{{ disable hotplug agents on request
 config_hotplug_agent(){
-if checkbootparam "noagent" ; then
+if checkbootparam 'noagent' ; then
   AGENT="$(getbootparam 'noagent' 2>>$DEBUG)"
   AGENTLIST=$(echo "$AGENT" | sed 's/,/\\n/g')
   AGENTNL=$(echo "$AGENT" | sed 's/,/ /g')
@@ -705,7 +705,7 @@ fi
 
 # {{{ blacklist of hotplug-modules
 config_hotplug_blacklist(){
-if checkbootparam "black" ; then
+if checkbootparam 'black' ; then
   BLACK="$(getbootparam 'black' 2>>$DEBUG)"
   BLACKLIST=$(echo "$BLACK" | sed 's/,/\\n/g')
   BLACKNL=$(echo "$BLACK" | sed 's/,/ /g')
@@ -719,7 +719,7 @@ fi
 
 # {{{ run hotplug
 config_hotplug(){
-if checkbootparam "nohotplug" ; then
+if checkbootparam 'nohotplug' ; then
   ewarn "Skipping running hotplug as requested on boot commandline." ; eend 0
 else
   if [ -r /etc/init.d/hotplug ] ; then
@@ -739,7 +739,7 @@ fi
 
 # {{{ blacklist specific module [ used in /etc/init.d/udev ]
 config_blacklist(){
-if checkbootparam "blacklist" ; then
+if checkbootparam 'blacklist' ; then
  if [ -z "$INSTALLED" ]; then
   einfo "Bootoption blacklist found."
   BLACK="$(getbootparam 'blacklist' 2>>$DEBUG)"
@@ -768,9 +768,9 @@ fi
 # {{{ ACPI
 config_acpi_apm(){
 if [ -d /proc/acpi ]; then
-  if checkbootparam "noacpi"; then
+  if checkbootparam 'noacpi'; then
     ewarn "Skipping ACPI Bios detection as requested via noacpi on boot commandline." ; eend 0
-  elif checkbootparam "nogrmlacpi" ; then
+  elif checkbootparam 'nogrmlacpi' ; then
     ewarn "Skipping ACPI Bios detection as requested via nogrmlacpi on boot commandline." ; eend 0
   else
     einfo "ACPI Bios found, activating modules (disable via bootoption noacpi / nogrmlacpi): "
@@ -807,7 +807,7 @@ if [ -d /proc/acpi ]; then
   fi
 else
 # APM
-  if checkbootparam "noapm"; then
+  if checkbootparam 'noapm'; then
     ewarn "Skipping APM Bios detection as requested on boot commandline." ; eend 0
   else
     modprobe apm power_off=1 >>$DEBUG 2>&1
@@ -827,7 +827,7 @@ fi
 # {{{ PCMCIA Check/Setup
 # This needs to be done before other modules are being loaded (by hwsetup)
 config_pcmcia(){
-if checkbootparam "nopcmcia"; then
+if checkbootparam 'nopcmcia'; then
   ewarn "Skipping PCMCIA detection as requested on boot commandline." ; eend 0
 else
   if /usr/sbin/laptop-detect ; then
@@ -853,7 +853,7 @@ fi
 
 # {{{ run software synthesizer via speakup
 config_swspeak(){
-   if checkbootparam swspeak ; then
+   if checkbootparam 'swspeak' ; then
       einfo "Bootoption swspeak found."
 
       if [ ! -d /proc/speakup/ ] && ! grep -q speakup_soft /proc/modules ; then
@@ -886,11 +886,11 @@ config_swspeak(){
 
 # {{{ support hardware synthesizer via speakup
 config_hwspeak(){
-   if checkbootparam speakup.synth ; then
+   if checkbootparam 'speakup.synth' ; then
       einfo "Bootoption speakup.synth found."
       eindent
 
-      module="$(getbootparam speakup.synth 2>>$DEBUG)"
+      module="$(getbootparam 'speakup.synth' 2>>$DEBUG)"
       if [ -z "$module" ] ; then
          eerror "Sorry, no speakup module specified for bootoption speakup.synth."
          flitewrapper "Sorry, no speakup module specified for bootoption speakup.synth."
@@ -911,7 +911,7 @@ config_hwspeak(){
       eoutdent
 
    # hwspeak:
-   elif checkbootparam hwspeak ; then
+   elif checkbootparam 'hwspeak' ; then
       einfo "Bootoption hwspeak found."
 
       if [ ! -d /proc/speakup/ ] && ! grep -q speakup /proc/modules ; then
@@ -945,8 +945,8 @@ config_hwspeak(){
 # {{{ Check for blind option or brltty
 config_blind(){
 BLIND=""
-checkbootparam "blind" && BLIND="yes"
-BRLTTY="$(getbootparam brltty 2>>$DEBUG)"
+checkbootparam 'blind' && BLIND="yes"
+BRLTTY="$(getbootparam 'brltty' 2>>$DEBUG)"
 
 if [ -n "$BLIND" -o -n "$BRLTTY" ]; then
   if [ -x /sbin/brltty ]; then
@@ -993,7 +993,7 @@ config_interactive(){
 
 # {{{ AGP
 config_agp(){
-if checkbootparam forceagp ; then
+if checkbootparam 'forceagp' ; then
 # Probe for AGP. Hope this can fail safely
   stringinfile "AGP" "/proc/pci" 2>>$DEBUG && { modprobe agpgart || modprobe agpgart agp_try_unsupported=1; } >>$DEBUG 2>&1 && einfo "AGP bridge detected." ; eend 0
 fi
@@ -1002,7 +1002,7 @@ fi
 
 # {{{ automount(er)
 config_automounter(){
-if checkbootparam automounter ; then
+if checkbootparam 'automounter' ; then
   RUNLEVEL="$(runlevel)"
   AUTOMOUNTER=""
   [ -x /etc/init.d/autofs ] && [ "$RUNLEVEL" != "N 1" ] && [ "$RUNLEVEL" != "N S" ] && AUTOMOUNTER="yes"
@@ -1076,7 +1076,7 @@ check_partitions 1>/dev/null 2>&1 # avoid output "check_partitions:3: read-only 
 # {{{ Enable DMA for all IDE drives now if not disabled
 # Notice: Already done by linuxrc, but make sure it's done also on harddisk-installed systems
 config_dma(){
-if checkbootparam "nodma"; then
+if checkbootparam 'nodma'; then
   ewarn "Skipping DMA accelleration as requested on boot commandline." ; eend 0
 else
   for d in $(cd /proc/ide 2>>$DEBUG && echo hd[a-z]); do
@@ -1098,12 +1098,12 @@ fi
 config_fstab(){
 
 NOSWAP="yes" # we do not use swap by default!
-if checkbootparam "swap" || checkbootparam "anyswap" ; then
+if checkbootparam 'swap' || checkbootparam 'anyswap' ; then
    NOSWAP=''
-   checkbootparam "anyswap" && export ANYSWAP='yes' || export ANYSWAP=""
+   checkbootparam 'anyswap' && export ANYSWAP='yes' || export ANYSWAP=""
 fi
 
-if checkbootparam "nofstab" || checkbootparam "forensic" ; then
+if checkbootparam 'nofstab' || checkbootparam 'forensic' ; then
   ewarn "Skipping /etc/fstab creation as requested on boot commandline." ; eend 0
 else
   einfo "Scanning for harddisk partitions and creating /etc/fstab. (Disable this via boot option: nofstab)"
@@ -1121,7 +1121,7 @@ if [ -z "$INSTALLED" ] ; then
    [ -z "$NOSWAP" ] && einfo "Searching for swap partition(s) as requested."
    GRML_IMG=""
    GRML_SWP=""
-   HOMEDIR="$(getbootparam home)"
+   HOMEDIR="$(getbootparam 'home')"
    if [ -n "$partitions" ]; then
       while read p m f relax; do
         case "$p" in *fd0*|*proc*|*sys*|*\#*) continue;; esac
@@ -1231,7 +1231,7 @@ fi
 # {{{ IPv6 configuration
 # Load IPv6 kernel module and print IP adresses
 config_ipv6(){
-if checkbootparam "ipv6"; then
+if checkbootparam 'ipv6'; then
   einfo "Enabling IPv6 as requested on boot commandline (sleeping for 2 seconds)"
   modprobe ipv6
   # we probably need some time until stateless autoconfiguration has happened
@@ -1259,7 +1259,7 @@ fi
 
 # {{{ Fat-Client-Version: DHCP Broadcast for IP address
 config_dhcp(){
-if checkbootparam "nodhcp"; then
+if checkbootparam 'nodhcp'; then
   ewarn "Skipping DHCP broadcast/network detection as requested on boot commandline." ; eend 0
 else
   NETDEVICES="$(awk -F: '/eth.:|tr.:|wlan.:/{print $1}' /proc/net/dev 2>>$DEBUG)"
@@ -1336,7 +1336,7 @@ return 1
 
 # {{{ CPU-detection
 config_cpu(){
-if checkbootparam "nocpu"; then
+if checkbootparam 'nocpu'; then
   ewarn "Skipping CPU detection as requested on boot commandline." ; eend 0
 else
   # check module dependencies
@@ -1439,7 +1439,7 @@ fi # checkbootparam nocpu
 
 # {{{ autostart of ssh
 config_ssh(){
-if checkbootparam ssh ; then
+if checkbootparam 'ssh' ; then
    SSH_PASSWD=''
    SSH_PASSWD="$(getbootparam 'ssh' 2>>$DEBUG)"
    einfo "Bootoption ssh found, trying to set password for user grml."
@@ -1491,7 +1491,7 @@ fi
 
 # {{{ set password for user grml
 config_passwd(){
-if checkbootparam passwd >>$DEBUG 2>&1; then
+if checkbootparam 'passwd' >>$DEBUG 2>&1; then
   einfo "Bootoption passwd found."
   PASSWD="$(getbootparam 'passwd' 2>>$DEBUG)"
   if [ -n "$PASSWD" ] ; then
@@ -1508,8 +1508,8 @@ fi
 
 # {{{ Check for persistent homedir option and eventually mount /home from there, or use a loopback file.
 config_homedir(){
-if checkbootparam home ; then
-   HOMEDIR="$(getbootparam home)"
+if checkbootparam 'home' ; then
+   HOMEDIR="$(getbootparam 'home')"
    MYHOMEDEVICE=""
    MYHOMEMOUNTPOINT=""
    MYHOMEDIR=""
@@ -1601,7 +1601,7 @@ else
      return
   fi
 
-  if checkbootparam vol ; then
+  if checkbootparam 'vol' ; then
     VOL="$(getbootparam 'vol' 2>>$DEBUG)"
     if [ -z "$VOL" ] ; then
       eerror "Bootoption vol found but no volume level/parameter given. Using defaults." ; eend 1
@@ -1611,7 +1611,7 @@ else
     VOL='75' # default
   fi
 
-  if checkbootparam nosound ; then
+  if checkbootparam 'nosound' ; then
     einfo "Muting sound devices on request."
     # some IBM notebooks require the following stuff:
     if [ -x /usr/bin/amixer ] ; then
@@ -1637,7 +1637,7 @@ else
          fi
       fi
       # by default assume '0' as volume for microphone:
-      if checkbootparam micvol ; then
+      if checkbootparam 'micvol' ; then
          MICVOL="$(getbootparam 'micvol' 2>>$DEBUG)"
       else
          MICVOL=0
@@ -1659,7 +1659,7 @@ fi
 
 # {{{ modem detection
 config_modem(){
-if checkbootparam "nomodem"; then
+if checkbootparam 'nomodem'; then
   ewarn "Skipping check for AC97 modem controller as requested on boot commandline." ; eend 0
 else
   if [ -x /etc/init.d/sl-modem-daemon ] ; then
@@ -1674,7 +1674,7 @@ fi
 
 # {{{ keyboard add-ons
 config_setkeycodes(){
-if checkbootparam "setkeycodes" ; then
+if checkbootparam 'setkeycodes' ; then
  einfo "Setting keycodes as requested via bootparameter 'setkeycodes'."
   # MS MM keyboard add-on
   # fix
@@ -1702,8 +1702,8 @@ fi
 
 # {{{ wondershaper
 config_wondershaper(){
- if checkbootparam "wondershaper" ; then
-    WONDER="$(getbootparam wondershaper 2>>$DEBUG)"
+ if checkbootparam 'wondershaper' ; then
+    WONDER="$(getbootparam 'wondershaper' 2>>$DEBUG)"
     CMD=wondershaper
     DEVICE=""
     DOWNSTREAM=""
@@ -1734,7 +1734,7 @@ config_wondershaper(){
 
 # {{{ syslog-ng
 config_syslog(){
- if checkbootparam "nosyslog"; then
+ if checkbootparam 'nosyslog'; then
     ewarn "Not starting syslog daemon as requested on boot commandline." ; eend 0
  else
     SYSLOGD=''
@@ -1757,7 +1757,7 @@ config_syslog(){
 
 # {{{ gpm
 config_gpm(){
- if checkbootparam "nogpm"; then
+ if checkbootparam 'nogpm'; then
   ewarn "Not starting GPM as requested on boot commandline." ; eend 0
  else
    if ! [ -r /dev/input/mice ] ; then
@@ -1774,8 +1774,8 @@ config_gpm(){
 
 # {{{ services
 config_services(){
- if checkbootparam "services" ; then
-    SERVICE="$(getbootparam services 2>>$DEBUG)"
+ if checkbootparam 'services' ; then
+    SERVICE="$(getbootparam 'services' 2>>$DEBUG)"
     SERVICELIST=$(echo "$SERVICE" | sed 's/,/\\n/g')
     SERVICENL=$(echo "$SERVICE" | sed 's/,/ /g')
     einfo "Starting service(s) ${SERVICENL} in background."
@@ -1789,7 +1789,7 @@ config_services(){
 
 # {{{ config files
 config_netconfig(){
- if checkbootparam netconfig ; then
+ if checkbootparam 'netconfig' ; then
   CONFIG="$(getbootparam 'netconfig' 2>>$DEBUG)"
   CONFIGFILE='/tmp/netconfig.grml'
 
@@ -1818,7 +1818,7 @@ config_netconfig(){
 
 # {{{ blindsound
 config_blindsound(){
- if checkbootparam "blind" ; then
+ if checkbootparam 'blind' ; then
     beep
     flitewrapper "welcome to the gremel system"
  fi
@@ -1827,7 +1827,7 @@ config_blindsound(){
 
 # {{{ welcome sound
 config_welcome(){
- if checkbootparam welcome ; then
+ if checkbootparam 'welcome' ; then
     flitewrapper "welcome to the gremel system"
  fi
 }
@@ -1852,7 +1852,7 @@ create_mnt_dirs(){
 config_x_startup(){
 # make sure we start X only if startx is used *before* a nostartx option
 # so it's possible to disable automatic X startup using nostart
-if checkbootparam startx && ! grep -q 'startx.*nostartx' "$CMDLINE" ; then
+if checkbootparam 'startx' && ! grep -q 'startx.*nostartx' "$CMDLINE" ; then
  if [ -x /usr/X11R6/bin/X ] ; then
   if [ -z "$INSTALLED" ] ; then
    WINDOWMANAGER="$(getbootparam 'startx' 2>>$DEBUG)"
@@ -1900,7 +1900,7 @@ fi
 
 # {{{ configuration framework
 config_extract(){
-if checkbootparam extract ; then
+if checkbootparam 'extract' ; then
  EXTRACT="$(getbootparam 'extract' 2>>$DEBUG)"
  EXTRACTOPTIONS="-- -x $EXTRACT"
 fi
@@ -1917,11 +1917,11 @@ config_finddcsdir() {
 #  - If myconfig=foo is set on the command line, $dcs-dir is set to
 #    foo, even if a GRMLCFG partition is present.
 DCSDIR=""
-if checkbootparam noautoconfig || checkbootparam forensic ; then
+if checkbootparam 'noautoconfig' || checkbootparam 'forensic' ; then
   ewarn "Skipping running automount of device(s) labeled GRMLCFG as requested." ; eend 0
 else
   if [ -z "$INSTALLED" ] ; then
-    if checkbootparam myconfig ; then
+    if checkbootparam 'myconfig' ; then
       DCSDEVICE="$(getbootparam 'myconfig' 2>>$DEBUG)"
       if [ -z "$DCSDEVICE" ]; then
         einfo "No device for bootoption myconfig provided." ; eend 1
@@ -1966,7 +1966,7 @@ fi
 
 
 config_partconf() {
-if checkbootparam "partconf" ; then
+if checkbootparam 'partconf' ; then
  MOUNTDEVICE="$(getbootparam 'partconf' 2>>$DEBUG)"
  if [ -n "$MOUNTDEVICE" ]; then
    [ -d /mnt/grml ] || mkdir /mnt/grml
@@ -1991,7 +1991,7 @@ fi
 
 # {{{ /cdrom/.*-options
 config_debs(){
-if checkbootparam "debs" ; then
+if checkbootparam 'debs' ; then
    DEBS="$(getbootparam 'debs' 2>>$DEBUG)"
    if ! echo $DEBS | grep -q '/'; then
      # backwards compatibility: if no path is given get debs from debs/
@@ -2004,7 +2004,7 @@ fi
 }
 
 config_scripts(){
-if checkbootparam "scripts" ; then
+if checkbootparam 'scripts' ; then
    SCRIPTS="$(getbootparam 'scripts' 2>>$DEBUG)"
    if [ -z "$SCRIPTS" ]; then
      SCRIPTS="$(cd ${DCSDIR}/scripts; /bin/ls -1d [Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
@@ -2025,7 +2025,7 @@ fi
 }
 
 config_config(){
-if checkbootparam config ; then
+if checkbootparam 'config' ; then
   CONFIG="$(getbootparam 'config' 2>>$DEBUG)"
   if [ -z "$CONFIG" ]; then
     CONFIG="$(cd ${DCSDIR}; ls -1d [Cc][Oo][Nn][Ff][Ii][Gg].[Tt][Bb][Zz] 2>>$DEBUG)"
@@ -2053,7 +2053,7 @@ grep -q '/mnt/grml' /proc/mounts && umount /mnt/grml
 
 # {{{ mypath
 config_mypath(){
-if checkbootparam "mypath" ; then
+if checkbootparam 'mypath' ; then
    MY_PATH="$(getbootparam 'mypath' 2>>$DEBUG)"
    einfo "Bootparameter mypath found, adding ${MY_PATH} to /etc/grml/my_path"
    touch /etc/grml/my_path
@@ -2074,8 +2074,8 @@ fi
 
 # {{{ distcc
 config_distcc(){
-if checkbootparam "distcc" ; then
- OPTIONS="$(getbootparam distcc 2>>$DEBUG)"
+if checkbootparam 'distcc' ; then
+ OPTIONS="$(getbootparam 'distcc' 2>>$DEBUG)"
  if [ -n "$OPTIONS" ]; then
     NET=""
     INTERFACE=""
@@ -2124,8 +2124,8 @@ if checkbootparam "distcc" ; then
  fi
 fi
 
-if checkbootparam "gcc"; then
- GCC="$(getbootparam gcc 2>>$DEBUG)"
+if checkbootparam 'gcc'; then
+ GCC="$(getbootparam 'gcc' 2>>$DEBUG)"
  eindent
  einfo "Pointing /usr/bin/gcc to /usr/bin/gcc-${GCC}."
  eoutdent
@@ -2133,8 +2133,8 @@ if checkbootparam "gcc"; then
  ln -s /usr/bin/gcc-${GCC} /usr/bin/gcc ; eend $?
 fi
 
-if checkbootparam "gpp"; then
- GPP="$(getbootparam gpp 2>>$DEBUG)"
+if checkbootparam 'gpp'; then
+ GPP="$(getbootparam 'gpp' 2>>$DEBUG)"
  eindent
   einfo "Pointing /usr/bin/g++ to /usr/bin/g++-${GPP}."
   if [ -x /usr/bin/g++-${GPP} ] ; then
@@ -2158,7 +2158,7 @@ fi
 # in /etc/runlevel.conf
 config_modules(){
 MODULES_FILE=/etc/grml/modules
-if checkbootparam nomodules ; then
+if checkbootparam 'nomodules' ; then
   ewarn "Skipping loading of modules defined in ${MODULES_FILE} as requested." ; eend 0
 elif [ -z "$INSTALLED" ]; then
  if [ -r $MODULES_FILE ] ; then
@@ -2180,8 +2180,8 @@ fi
 
 # {{{ 915resolution
 config_915resolution(){
-if checkbootparam "915resolution" ; then
- OPTIONS="$(getbootparam 915resolution 2>>$DEBUG)"
+if checkbootparam '915resolution' ; then
+ OPTIONS="$(getbootparam '915resolution' 2>>$DEBUG)"
   if [ -x /usr/sbin/915resolution ]; then
     CMD=915resolution
     MODE=""
@@ -2309,7 +2309,7 @@ config_lvm(){
 
 # {{{ debnet: setup network based on an existing one found on a partition
 config_debnet(){
-if checkbootparam "debnet" ; then
+if checkbootparam 'debnet' ; then
  iszsh && setopt shwordsplit
  DEVICES="$(< /proc/partitions tail -n +3 | awk '{print "/dev/"$4}' | tr "\n" " ")"
  DEVICES="$DEVICES $(ls /dev/mapper/*)"
@@ -2368,7 +2368,7 @@ config_ipw3945() {
 
 # {{{ disable console blanking
 config_blanking(){
-if checkbootparam "noblank" ; then
+if checkbootparam 'noblank' ; then
   einfo "Bootoption noblank found. Disabling monitor blanking."
   setterm -blank 0 ; eend $?
 fi
@@ -2378,7 +2378,7 @@ fi
 # {{{ tohd= bootoption
 config_tohd()
 {
-  if checkbootparam "tohd" ; then
+  if checkbootparam 'tohd' ; then
      local TARGET="$(getbootparam 'tohd' 2>>$DEBUG)"
      if [ -z "$TARGET" ] ; then
         eerror "Error: tohd specified without any partition, can not continue." ; eend 1
@@ -2421,19 +2421,19 @@ config_grml2hd(){
 
 if stringinstring "BOOT_IMAGE=grml2hd " "$CMDLINE" ; then
 
-if checkbootparam "user" ; then
+if checkbootparam 'user' ; then
    NEWUSER=''
    NEWUSER="$(getbootparam 'user' 2>>$DEBUG)"
    sed -i "s/^NEWUSER=.*/NEWUSER=$NEWUSER/" /etc/grml2hd/config || export GRML2HD_FAIL=1
 fi
 
-if checkbootparam "filesystem" ; then
+if checkbootparam 'filesystem' ; then
    FILESYSTEM=''
    FILESYSTEM="$(getbootparam 'filesystem' 2>>$DEBUG)"
    sed -i "s/^FILESYSTEM=.*/FILESYSTEM=$FILESYSTEM/" /etc/grml2hd/config || export GRML2HD_FAIL=1
 fi
 
-if checkbootparam "partition" ; then
+if checkbootparam 'partition' ; then
    PARTITION=''
    PARTITION="$(getbootparam 'partition' 2>>$DEBUG)"
    # notice: the following checks whether the given partition is available, if not the skip
@@ -2445,7 +2445,7 @@ if checkbootparam "partition" ; then
    fi
 fi
 
-if checkbootparam "mbr" ; then
+if checkbootparam 'mbr' ; then
    BOOT_PARTITION=''
    BOOT_PARTITION="$(getbootparam 'mbr' 2>>$DEBUG)"
    sed -i "s#^BOOT_PARTITION=.*#BOOT_PARTITION=$BOOT_PARTITION#" /etc/grml2hd/config || export GRML2HD_FAIL=1
@@ -2482,7 +2482,7 @@ if ! [ -x /usr/sbin/grml-debootstrap ] ; then
    exit 1
 fi
 
-if checkbootparam "target" ; then
+if checkbootparam 'target' ; then
   TARGET=''
   TARGET="$(getbootparam 'target' 2>>$DEBUG)"
   # notice: the following checks whether the given partition is available, if not the skip
@@ -2497,32 +2497,32 @@ else
   exit 1
 fi
 
-if checkbootparam "grub" ; then
+if checkbootparam 'grub' ; then
   GRUB=''
   GRUB="$(getbootparam 'grub' 2>>$DEBUG)"
 fi
 
-if checkbootparam "groot" ; then
+if checkbootparam 'groot' ; then
   GROOT=''
   GROOT="$(getbootparam 'groot' 2>>$DEBUG)"
 fi
 
-if checkbootparam "release" ; then
+if checkbootparam 'release' ; then
   RELEASE=''
   RELEASE="$(getbootparam 'release' 2>>$DEBUG)"
 fi
 
-if checkbootparam "mirror" ; then
+if checkbootparam 'mirror' ; then
   MIRROR=''
   MIRROR="$(getbootparam 'mirror' 2>>$DEBUG)"
 fi
 
-if checkbootparam "boot_append" ; then
+if checkbootparam 'boot_append' ; then
   BOOT_APPEND=''
   BOOT_APPEND="$(getbootparam 'boot_append' 2>>$DEBUG)"
 fi
 
-if checkbootparam "password" ; then
+if checkbootparam 'password' ; then
   PASSWORD=''
   PASSWORD="$(getbootparam 'password' 2>>$DEBUG)"
 fi
@@ -2562,7 +2562,7 @@ fi # stringinstring "BOOT_IMAGE=debian2hd
 
 # {{{ Support customization
 config_distri(){
-if checkbootparam "distri"; then
+if checkbootparam 'distri'; then
   DISTRI="$(getbootparam 'distri' 2>>$DEBUG)"
   if [ -r "${LIVECD_PATH}"/desktop/"$DISTRI".jpg ] ; then
      [ -n "$BOOTDEBUG" ] && einfo "Debug: bootoption distri found and file ${LIVECD_PATH}/desktop/${DISTRI} present" && eend 0
