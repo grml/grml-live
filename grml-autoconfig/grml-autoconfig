@@ -63,7 +63,7 @@ CMDLINE="$(cat /proc/cmdline)"
 checkvalue $CONFIG_DEBUG && config_debug
 
 SPLASH=''
-if checkbootparam "textsplash" || checkbootparam "tsplash"; then
+if checkbootparam 'textsplash' || checkbootparam 'tsplash'; then
    SPLASH=1
 fi
 
@@ -91,7 +91,7 @@ fi
 
 checkvalue $CONFIG_SYSLOG && config_syslog
 
-if checkbootparam "forensic" ; then
+if checkbootparam 'forensic' ; then
    ewarn "Bootopion forensic found. Important notice:" ; eend 0
    ewarn " Do *NOT* boot with something like 'grml forensic ...' but always use 'forensic ...' instead!" ; eend 0
 fi
