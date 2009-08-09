@@ -53,12 +53,6 @@ mount_pts
 mount_sys
 # }}}
 
-# {{{ Read in boot parameters
-CMDLINE="$(cat /proc/cmdline)"
-[ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/* | tr '\n' ' ')"
-[ -d /live/image/bootparams/ ] && CMDLINE="$CMDLINE $(cat /live/image/bootparams/* | tr '\n' ' ')"
-# }}}
-
 # {{{ main grml-autoconfig
 checkvalue $CONFIG_DEBUG && config_debug
 
