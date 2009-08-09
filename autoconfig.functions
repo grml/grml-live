@@ -1959,7 +1959,7 @@ fi
 
 if [ -n "$DCSDIR" ]; then
   einfo "Debs, config, scripts will be read from $DCSDIR." ; eend 0
-else
+elif checkbootparam 'debs' || checkbootparam 'config' || checkbootparam 'scripts'; then
   einfo "Debs, config, scripts will be read from the live image directly." ; eend 0
 fi
 }
