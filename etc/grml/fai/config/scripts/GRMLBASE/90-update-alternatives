@@ -51,7 +51,10 @@ if [ -r $target/usr/bin/w3m ] ; then
 fi
 
 if [ -r $target/usr/bin/wm-ng ] ; then
-   $ROOTCMD update-alternatives --set x-window-manager /usr/bin/wm-ng
+   # activate wm-ng only if it is registered as x-window-manager:
+   if update-alternatives --list x-window-manager | grep -q wm-ng ; then
+     $ROOTCMD update-alternatives --set x-window-manager /usr/bin/wm-ng
+   fi
 fi
 
 ## END OF FILE #################################################################
