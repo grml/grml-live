@@ -20,8 +20,9 @@ grml-live (0.9.21) UNRELEASED; urgency=low
     operating on it.
   * buildd: drop GRML_LIVE_ARCH but instead use default architecture
     if not specified.
+  * Add git-email to GRML_FULL (thanks to Joerg Woelke for mentioning).
 
- -- Michael Prokop <mika@grml.org>  Fri, 07 Aug 2009 16:08:31 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 10 Aug 2009 21:59:13 +0200
 
 grml-live (0.9.20) unstable; urgency=low
 
