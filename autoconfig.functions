@@ -1946,7 +1946,7 @@ else
       else
         [ -d /mnt/grml ] || mkdir /mnt/grml
         umount /mnt/grml 1>>$DEBUG 2>&1 # make sure it is not mounted
-        mount -o ro -t auto $MOUNTDEVICE /mnt/grml ; RC="$?"
+        mount -o ro -t auto $DCSDEVICE  /mnt/grml ; RC="$?"
         if [[ $RC == 0 ]]; then
           einfo "Successfully mounted $DCSDEVICE to /mnt/grml (readonly)." ; eend 0
           eindent
