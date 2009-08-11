@@ -35,7 +35,7 @@ iszsh && setopt no_nomatch # || echo "Warning: not running under zsh!"
 # {{{ Read in boot parameters
 if [ -z "$CMDLINE" ]; then
   # if CMDLINE was set from the outside, we're debugging.
-  # Otherwise, take CMDLINE from Kernel and config files.
+  # otherwise, take CMDLINE from Kernel and config files.
   CMDLINE="$(cat /proc/cmdline)"
   [ -d /cdrom/bootparams/ ]      && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/* | tr '\n' ' ')"
   [ -d /live/image/bootparams/ ] && CMDLINE="$CMDLINE $(cat /live/image/bootparams/* | tr '\n' ' ')"
@@ -44,47 +44,45 @@ fi
 
 ### {{{ Utility Functions
 
-# Simple shell grep
-stringinfile(){
-  case "$(cat $2)" in *$1*) return 0;; esac
-  return 1
-}
-
-# same for strings
-stringinstring(){
-  case "$2" in *$1*) return 0;; esac
-  return 1
-}
-
-# Reread boot command line; echo last parameter's argument or return false.
+# Get a bootoption's parameter: read boot command line and either
+# echo last parameter's argument or return false.
 getbootparam(){
-  stringinstring " $1=" "$CMDLINE" || return 1
-  result="${CMDLINE##* $1=}"
-  result="${result%%[ 	]*}"
-  echo "$result"
-  return 0
+  case "$CMDLINE" in
+    *$1=*)
+      result="${CMDLINE##* $1=}"
+      result="${result%%[ 	]*}"
+      echo "$result"
+      return 0 ;;
+    *) # no match?
+      return 1 ;;
+  esac
 }
 
 # Check boot commandline for specified option
 checkbootparam(){
-  stringinstring " $1" "$CMDLINE"
-  return "$?"
-}
-
-checkvalue(){
-  if [ "$1" = "yes" ] ; then
-    return 0
+  [ -n "$1" ] || { echo "Error: missing argument to checkbootparam()" ; return 1 }
+  # make sure we match beginning and end of line as well
+  # but don't match 'vg' if we want to check for 'vga'
+  if echo "$CMDLINE" | grep -qw "$1" ; then
+     return 0
   else
-    return 1
+     return 1
   fi
 }
 
-checkgrmlsmall(){
-  grep -q small /etc/grml_version 2>>$DEBUG && return 0 || return 1
+# Check wheter a configuration variable (like $CONFIG_TOHD) is
+# enabled or not
+checkvalue(){
+  case "$1" in
+    [yY][eE][sS])     return 0 ;; # it's set to 'yes'
+    [tT][rR][uU][eE]) return 0 ;; # it's set to 'true'
+                   *) return 1 ;; # default
+  esac
 }
 
-checkgrmlusb(){
-  grep -q usb /etc/grml_version 2>>$DEBUG && return 0 || return 1
+# Are we using grml-small?
+checkgrmlsmall(){
+  grep -q small /etc/grml_version 2>>$DEBUG && return 0 || return 1
 }
 
 # execute flite only if it's present
@@ -99,7 +97,7 @@ mount_proc(){
 }
 
 mount_pts(){
-  stringinfile "/dev/pts" /proc/mounts || mount -t devpts /dev/pts /dev/pts 2>/dev/null
+  grep -q "/dev/pts" /proc/mounts || mount -t devpts /dev/pts /dev/pts 2>/dev/null
 }
 
 mount_sys(){
@@ -129,8 +127,8 @@ fi
 
 # {{{ debug
 config_debug(){
- checkbootparam 'debug'                        && BOOTDEBUG="yes"
- stringinstring "BOOT_IMAGE=debug " "$CMDLINE" && BOOTDEBUG="yes"
+ checkbootparam 'debug'            && BOOTDEBUG="yes"
+ checkbootparam "BOOT_IMAGE=debug" && BOOTDEBUG="yes"
 
  rundebugshell(){
   if [ -n "$BOOTDEBUG" ]; then
@@ -424,7 +422,7 @@ if checkbootparam 'novmware' ; then
    ewarn "Skipping running vmware specific stuff as requested on boot commandline." ; eend 0
 else
    if [ -z "$INSTALLED" ] ; then
-      if vmware-detect || stringinstring "BOOT_IMAGE=vmware " "$CMDLINE" ; then
+      if vmware-detect || checkbootparam "BOOT_IMAGE=vmware" ; then
          if ! checkbootparam 'qemu' ; then
             if [ -r /etc/X11/xorg.conf.vmware ] ; then
                einfo "VMware: Copying /etc/X11/xorg.conf.vmware to /etc/X11/xorg.conf"
@@ -545,7 +543,7 @@ eoutdent
 
 # skip startup of w3m {{{
 config_fast(){
-if checkbootparam 'fast '; then
+if checkbootparam 'fast'; then
   ewarn "Bootoption fast detected. Skipping startup of grml-quickconfig."
     sed -i 's#^1:.*#1:12345:respawn:/usr/bin/openvt -f -c 1 -w -- /bin/zsh#' /etc/inittab
   /sbin/telinit q ; eend $?
@@ -995,7 +993,7 @@ config_interactive(){
 config_agp(){
 if checkbootparam 'forceagp' ; then
 # Probe for AGP. Hope this can fail safely
-  stringinfile "AGP" "/proc/pci" 2>>$DEBUG && { modprobe agpgart || modprobe agpgart agp_try_unsupported=1; } >>$DEBUG 2>&1 && einfo "AGP bridge detected." ; eend 0
+  grep -q "AGP" "/proc/pci" 2>>$DEBUG && { modprobe agpgart || modprobe agpgart agp_try_unsupported=1; } >>$DEBUG 2>&1 && einfo "AGP bridge detected." ; eend 0
 fi
 }
 # }}}
@@ -1015,14 +1013,14 @@ addautomount(){
     [ -d "/mnt/auto/$d" ] || mkdir -p "/mnt/auto/$d"
     [ -L "/mnt/$d" ]      || ln -s "/mnt/auto/$d" "/mnt/$d"
     anew="$d        -fstype=auto,$2 :$i"
-    stringinfile "$anew" "/etc/auto.mnt" || echo "$anew" >> /etc/auto.mnt
+    grep -q "$anew" "/etc/auto.mnt" || echo "$anew" >> /etc/auto.mnt
     AUTOMOUNTS="$AUTOMOUNTS $d"
     new="$1 /mnt/auto/$d  auto   users,noauto,exec,$2 0 0"
   else
     [ -d /mnt/$d ] && mkdir -p /mnt/$d
     new="$1 /mnt/$d  auto   users,noauto,exec,$2 0 0"
   fi
-  stringinfile "$new" "/etc/fstab" || echo "$new" >> /etc/fstab
+  grep -q "$new" "/etc/fstab" || echo "$new" >> /etc/fstab
 }
 
   AUTOMOUNTS="floppy cdrom"
@@ -1187,7 +1185,7 @@ if [ -z "$INSTALLED" ] ; then
                 einfo "Using GRML swapfile ${WHITE}${SWAPFILE}${NORMAL}."
               eoutdent
               fnew="$SWAPFILE swap swap defaults 0 0"
-              stringinfile "$fnew" "/etc/fstab" || echo "$fnew" >> /etc/fstab
+              grep -q "$fnew" "/etc/fstab" || echo "$fnew" >> /etc/fstab
               GRML_SWP="$GRML_SWP $SWAPFILE"
               eend 0
            fi
@@ -2419,7 +2417,7 @@ config_tohd()
 # {{{ grml2hd: automatic installation
 config_grml2hd(){
 
-if stringinstring "BOOT_IMAGE=grml2hd " "$CMDLINE" ; then
+if checkbootparam "BOOT_IMAGE=grml2hd" ; then
 
 if checkbootparam 'user' ; then
    NEWUSER=''
@@ -2464,14 +2462,14 @@ else
    ewarn "There was an error adjusting /etc/grml2hd/config. Skipping execution of grml2hd for security reasons." ; eend 1
 fi
 
-fi # if stringinstring "BOOT_IMAGE=grml2hd ...
+fi # if checkbootparam "BOOT_IMAGE=grml2hd ...
 }
 # }}}
 
 # {{{ debootstrap: automatic installation
 config_debootstrap(){
 
-if stringinstring "BOOT_IMAGE=debian2hd " "$CMDLINE" ; then
+if checkbootparam "BOOT_IMAGE=debian2hd" ; then
 
 einfo "Bootoption debian2hd found. Setting up environment for automatic installation via grml-debootstrap." ; eend 0
 
@@ -2556,7 +2554,7 @@ screen /usr/bin/grml-debootstrap_noninteractive
 einfo "Invoking a shell, just exit to continue booting..."
 /bin/zsh
 
-fi # stringinstring "BOOT_IMAGE=debian2hd
+fi # checkbootparam "BOOT_IMAGE=debian2hd
 }
 # }}}
 
