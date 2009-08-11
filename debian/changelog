@@ -21,8 +21,9 @@ grml-live (0.9.21) UNRELEASED; urgency=low
   * buildd: drop GRML_LIVE_ARCH but instead use default architecture
     if not specified.
   * Add git-email to GRML_FULL (thanks to Joerg Woelke for mentioning).
+  * Drop hydra from GRML_FULL (the license is not a clean GPL one).
 
- -- Michael Prokop <mika@grml.org>  Mon, 10 Aug 2009 21:59:13 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 11 Aug 2009 16:35:04 +0200
 
 grml-live (0.9.20) unstable; urgency=low
 

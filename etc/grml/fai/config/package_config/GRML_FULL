@@ -86,7 +86,6 @@ grml-vpn
 grml-x
 heirloom-sh
 histring
-hydra
 i855crt
 icmp-mtu
 icmp-quench
@@ -131,18 +130,6 @@ udev
 upgrade-oldest
 zfs-fuse
 zsh-lovers
-## }}}
-
-## Notice: this packages are known to be x86-only currently [2007-11-04] {{{
-# aesutil afflib asleap bar bfa btsco classpath classpath-qtpeer cmospwd
-# cpuburn-in-binary ctapi-cyberjack ctris ddrescue dd-rhelp ded deletemail
-# devscripts dired dupseek dynamic-disk ex ext3rminator firescope ftpbackup
-# fvwm-crystal-minimal gateguardian gatling gcjwebplugin gifshuffle
-# glipper-nognome grml-ddcxinfo grml-reportbug grml-robocup-files grml-samsung-x20
-# histring hydra i855crt icmp-mtu icmp-quench icmp-reset lame lame-extras libewf
-# magicrescue multiseat ncp prosilla pspax ptfinder quadkonsole rootsh
-# salvage-ntfs shadowfs shish shmux speechd-up squashfs
-# sudosh tal thc-pptp-bruter tlswrap tpm-tools trapdoor2 trousers yersinia
 ## }}}
 
 ## Official Debian packages {{{
