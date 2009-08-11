@@ -2,13 +2,16 @@ grml-autoconfig (0.8.25) UNRELEASED; urgency=low
 
   * config_finddcsdir(): Use the correct device for GRMLCFG.
     Bugreport and path by Julian Langschädel, thanks!
-  * Streamline calls of bootparams-functions, single quotes everywhere.
-    Patch by Marc Haber, thanks!
-  * Don't print the "Debs, config, scripts will be read from the live
-    image directly." message if no debs, config or scripts option
-    was given on the command line. Thanks for the patch, Marc Haber!
+  * Patches by Marc Haber (thanks!):
+    - Streamline calls of bootparams-functions, single quotes everywhere.
+    - Don't print the "Debs, config, scripts will be read from the live
+      image directly." message if no debs, config or scripts option
+      was given on the command line.
+    - Drop $CMDLINE from grml-autoconfig; it's initialized from within
+      autoconfig.functions.
+  * Set $CMDLINE in $BOOTDEBUG part only if it's not available yet.
 
- -- Michael Prokop <mika@grml.org>  Tue, 11 Aug 2009 11:27:30 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 11 Aug 2009 11:39:35 +0200
 
 grml-autoconfig (0.8.24) unstable; urgency=low
 

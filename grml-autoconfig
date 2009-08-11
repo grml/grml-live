@@ -283,9 +283,12 @@ if [ -z "$SPLASH" ] ; then
 fi
 
 if [ -n "$BOOTDEBUG" ] ; then
-   CMDLINE="$(cat /proc/cmdline)"
-   [ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/*)"
-   [ -d /live/image/bootparams/ ] && CMDLINE="$CMDLINE $(cat /live/image/bootparams/*)"
+   # set only if not already set
+   if [ -z "$CMDLINE" ] ; then
+     CMDLINE="$(cat /proc/cmdline)"
+     [ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/*)"
+     [ -d /live/image/bootparams/ ] && CMDLINE="$CMDLINE $(cat /live/image/bootparams/*)"
+   fi
    einfo "Bootoption debug detected. Printing kernel command line:"
    echo "$CMDLINE"
 fi
