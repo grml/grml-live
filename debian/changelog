@@ -10,8 +10,13 @@ grml-autoconfig (0.8.25) UNRELEASED; urgency=low
     - Drop $CMDLINE from grml-autoconfig; it's initialized from within
       autoconfig.functions.
   * Set $CMDLINE in $BOOTDEBUG part only if it's not available yet.
+  * Code cleanup:
+    - drop stringinstring(), stringinfile() and checkgrmlusb()
+    - rework getbootparam(), checkvalue() and checkbootparam() - now
+      we handle bootoptions in /proc/cmdline correctly as whole words
+      and support matching begin and end of line as well.
 
- -- Michael Prokop <mika@grml.org>  Tue, 11 Aug 2009 11:39:35 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 11 Aug 2009 13:03:38 +0200
 
 grml-autoconfig (0.8.24) unstable; urgency=low
 
