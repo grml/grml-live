@@ -13,6 +13,7 @@ build: build-stamp
 
 build-stamp: 
 	dh_testdir
+	cd doc && $(MAKE) && cd ..
 
 	touch build-stamp
 
@@ -28,6 +29,7 @@ install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k 
+	cd doc && $(MAKE) clean && cd ..
 	dh_installdirs etc/grml etc/init.d usr/sbin usr/bin
 
 	# Add here commands to install the package into debian/grml-autoconfig.
