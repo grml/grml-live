@@ -249,7 +249,7 @@ debs::
     shell wildcard. All Files matching the wildcard are installed in a
     single dpkg --install call. For backwards compatibility, if no
     slash is contained in the path, it is taken relative to DCSDIR/debs.
-    
+
     Usage examples:
 
   debs=*.deb        =>   install all debian packages (suffix .deb) from directory DCSDIR/debs/
