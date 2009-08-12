@@ -25,13 +25,15 @@ grml-live (0.9.21) UNRELEASED; urgency=low
   * Drop hydra from GRML_FULL (the license is not a clean GPL one).
   * Drop bar from GRML_FULL (no release since 2007, consider using
     cpipe instead).
+  * Set UTC=no by default. See http://bts.grml.org/grml/issue708 for
+    details. Credits to Ulrich Zehl for debugging.
 
   [ Thorsten Glaser ]
   * Update MirOS bsd4grml to 20090812 and sync menu.lst, grub.cfg,
     isolinux.cfg, syslinux.cfg with each other; provide a fallback
     way to boot MirOS bsd4grml from both GRUB versions using modules
 
- -- Michael Prokop <mika@grml.org>  Tue, 11 Aug 2009 16:57:41 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 12 Aug 2009 23:44:41 +0200
 
 grml-live (0.9.20) unstable; urgency=low
 

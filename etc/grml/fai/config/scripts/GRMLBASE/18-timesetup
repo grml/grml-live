@@ -10,6 +10,7 @@ set -u
 set -e
 
 # tell if hwclock is running in UTC or local time
+# by default it's set to UTC=yes, we usually want UTC=no
 if [ -n "$UTC" ] ; then
    echo "Setting hwclock parameter UTC to $UTC"
    sed -i "s|^UTC=.*$|UTC="$UTC"|" $target/etc/default/rcS
