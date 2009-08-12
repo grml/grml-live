@@ -1,5 +1,6 @@
 grml-live (0.9.21) UNRELEASED; urgency=low
 
+  [ Michael Prokop ]
   * Split the single /etc/apt/sources.list file into structured files
     in /etc/apt/sources.list.d/. We are using:
     - /etc/apt/sources.list.d/grml.list for all grml related repositories
@@ -24,6 +25,11 @@ grml-live (0.9.21) UNRELEASED; urgency=low
   * Drop hydra from GRML_FULL (the license is not a clean GPL one).
   * Drop bar from GRML_FULL (no release since 2007, consider using
     cpipe instead).
+
+  [ Thorsten Glaser ]
+  * Update MirOS bsd4grml to 20090812 and sync menu.lst, grub.cfg,
+    isolinux.cfg, syslinux.cfg with each other; provide a fallback
+    way to boot MirOS bsd4grml from both GRUB versions using modules
 
  -- Michael Prokop <mika@grml.org>  Tue, 11 Aug 2009 16:57:41 +0200
 

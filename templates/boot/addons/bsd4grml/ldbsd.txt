@@ -9,9 +9,9 @@ DESCRIPTION
      do some auxiliary functions, while dealing with the problems arising from
      the history of the i386 architecture since 1978, incompatibilities, ex-
      tensions, bugs, El Torito booting, Intel's Preboot Execution Environment
-     (PXE) for network boot, etc. MirOS floppies use a specially limited ver-
-     sion optimised for size, lacking support for any filesystem other than
-     4.2FFS and most commands.
+     (PXE) for network boot, the Multiboot Specification, etc. MirOS floppies
+     use a specially limited version optimised for size, lacking support for
+     any filesystem other than 4.2FFS and most commands.
 
      It can be loaded either directly from the BIOS (most commonly via PXE;
      earlier versions could also be loaded using El Torito), the bootxx first
@@ -23,10 +23,11 @@ DESCRIPTION
      implementing the COMBOOT API (specified by SYSLINUX, EXTLINUX, ISOLINUX,
      PXELINUX) or MS-DOS(R) (unless DOS occupies the HMA). Once loaded, it can
      be used, in a more or less limited fashion, to boot a MirOS kernel from a
-     supported filesystem (4.2FFS, ISO 9660, FAT12, FAT16, FAT28, TFTP, NFS),
-     inspect the filesystems, get or set machine information, or load other
-     bootloaders (see below for details). It can inflate gzip(1) compressed
-     files, set up serial console, and provides an interactive prompt.
+     supported filesystem (4.2FFS, ISO 9660, FAT12, FAT16, FAT28, TFTP, NFS,
+     and a pseudo filesystem called lmbmfs), inspect the filesystems, get or
+     set machine information, or load other bootloaders (see below for de-
+     tails). It can inflate gzip(1) compressed files (with LZMA compression
+     planned), set up serial console, and provides an interactive prompt.
 
      Basic operation procedure is as follows:
 
@@ -78,14 +79,22 @@ DESCRIPTION
           Multiboot  We request to be loaded to 0x00100000 (the HMA) due to
                      GNU GRUB's limitations, save the boot device off the MBI
                      structure, copy ourselves to the final location, and
-                     switch back to Real Mode.
+                     switch back to Real Mode. Modules passed to us by the
+                     Multiboot compliant boot loader will be moved off to just
+                     above 20 MiB in memory; their dirnames as well as any
+                     command lines (to the Multiboot OS kernel, i.e. this
+                     bootloader, as well as to the Multiboot modules) are dis-
+                     carded. The modules are made available as regular files
+                     using the virtual lmbm (Loadable Multiboot Modules) dev-
+                     ice and filesystem (in-RAM file store, really).
 
           During the initial operation, the stack is located about 80 KiB
           behind the start of our own memory area, and switched to the final
           location if the position in memory is known to be correct early.
 
      2.   System information (boot drive, potential partition table entry,
-          PXENV+ and !PXE structure pointers) are stored in safe locations.
+          PXENV+ and !PXE structure pointers, multiboot module information)
+          are stored in safe locations.
 
      3.   The code is relocated to the final address once or twice if needed.
           The final address is 4000:0000h with the stack beginning at
@@ -103,11 +112,9 @@ DESCRIPTION
           the numeric return value for later, to replace the cfg suffix of the
           configuration file with it.
 
-     5.   The IDT for the Protected Mode is set up.
+     5.   The system is switched to Protected Mode.
 
-     6.   The system is switched to Protected Mode.
-
-     7.   The hardware is probed:
+     6.   The hardware is probed:
 
         + o Console devices: the default BIOS console (INT 10h, which may be
               a MDA/MGA/Hercules, CGA/EGA or VGA CRT/LCD, plus DIN or PS/2 or
@@ -117,13 +124,17 @@ DESCRIPTION
               space, in case the BIOS reports wrong information.
         + o APM support
         + o PXE support
+        + o Loadable Multiboot Modules (if any, they are moved off to safe
+              locations and the virtual lmbm device and lmbmfs are set up)
+        + o Floppy disc drives
+        + o Hard disc drives, including El Torito CD-ROM drives
 
-     8.   Unless a control key is held, the files /x.x.x.x/boot.cfg (where
-          x.x.x.x is our own IPv4 address) and /boot.cfg (with cfg possibly
-          replaced from the menu) are read and executed as if the commands had
-          been entered on the loader prompt.
+     7.   Unless a control key is held, the files /x.x.x.x/boot.cfg if loaded
+          via PXE (where x.x.x.x is our own IPv4 address) and /boot.cfg, with
+          "cfg" possibly replaced from the Live CD menu, are read and executed
+          as if the commands had been entered on the loader prompt.
 
-     9.   The bootloader prompt
+     8.   The bootloader prompt
 
                 boot> _
 
@@ -177,7 +188,7 @@ COMMANDS
 
              The cd9660, tftp and nfs filesystems do not support this command.
              They will either always fail or always succeed with sane but
-             unusable results. The FAT12, FAt16 and FAT28 filesystems have
+             unusable results. The FAT12, FAT16 and FAT28 filesystems have
              hardcoded perms and uid/gid.
 
      machine [command]
@@ -297,7 +308,12 @@ IMAGE SPECIFICATIONS
    + o fd0a:/bsd
    + o hd0o:/bsd.rd
    + o / (for "ls")
+   + o hd0a:/ (for "ls")
+   + o lmbm:/ (for "ls")
    + o cd0a:/boot/grub/stage2
+   + o tftp:/bsd.rd.i386
+   + o lmbm:/bsd4grml
+   + o /bsd
 
      Disklabels are read from hard discs (BIOS drive >= 80h) by searching for
      a primary MirOS partition first. The default partition type, 0x27, can be
@@ -390,6 +406,8 @@ SEE ALSO
      Intel Corporation, Preboot Execution Environment (PXE) Specification,
      Version 2.1, September 20, 1999.
 
+     Free Software Foundation, Inc., Multiboot Specification, Version 0.6.93.
+
 HISTORY
      This bootloader is based on code written by Michael Shalayeff for
      OpenBSD 2.1. The separate pxeboot command first appeared in OpenBSD 3.5,
@@ -397,13 +415,36 @@ HISTORY
      boot.cfg file was called boot.conf, it has been renamed for ISO 9660 and
      FAT compatibility. A version called cdboot appeared in MirOS #8 and went
      away for MirOS #10. The separate versions got merged into one bootloader,
-     DOS, COMBOOT, Multiboot support, pagination, macros, the machine exec and
-     cat commands, working chainbooting of bootsectors and GNU GRUB, faked
-     disklabels (if none exist on disc), FAT filesystem support, and many more
-     things were added or rewritten for MirOS #11 and grml by Thorsten Glaser.
+     DOS, COMBOOT, Multiboot support (including modules), pagination, macros,
+     the machine exec and cat commands, working chainbooting of bootsectors
+     and GNU GRUB, faked disklabels (if none exist on disc), FAT filesystem
+     support, and many more things were added or rewritten for MirOS #11 and
+     MirOS bsd4grml by Thorsten Glaser.
 
 CAVEATS
      The default location of the kernels and the boot.cfg file can be changed
      at compile time.
 
-MirOS BSD #10-current          February 1, 2009                              6
+  FILESYSTEM SPECIFIC NOTES
+
+     ISO 9660   Filesystems above 4 GiB in size definitively do not work. We
+                do not know at this time if there is a 2 GiB or 4 GiB limit,
+                nor if this affects any other filesystems.
+
+                The ls command does not work.
+
+     lmbmfs     This filesystem and device will only appear if loaded via a
+                Multiboot compliant boot loader, masquerading as Multiboot
+                compliant OS kernel, and when modules are passed. ls is possi-
+                ble only on the root directory ("/", "/."). Files keep the
+                names passed by the Multiboot boot loader, but have the direc-
+                tory part stripped, and can be accessed with any directory
+                leading. If they have no names, they are given an enumerated
+                hex number as name.
+
+     tftp, nfs  These filesystems and devices will only appear of loaded via
+                PXE. They obviously do not support ls.
+
+     ustarfs    This filesystem will be implemented soon.
+
+MirOS BSD #10-current           August 9, 2009                               6
