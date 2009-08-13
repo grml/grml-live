@@ -744,16 +744,16 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       fi
 
       # jump back to grub from bsd4grml:
+      if [ -e "$BUILD_OUTPUT"/boot/grub/stage2 ]; then
+         GRUB_LEGACY=stage2
+      else
+         GRUB_LEGACY=stage2_eltorito
+      fi
       if [ -e "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6 ]; then
          if [ -e "$BUILD_OUTPUT"/boot/grub/core.img ]; then
             GRUB_VERSION=2
          else
             GRUB_VERSION=1
-         fi
-         if [ -e "$BUILD_OUTPUT"/boot/grub/stage2 ]; then
-            GRUB_LEGACY=stage2
-         else
-            GRUB_LEGACY=stage2_eltorito
          fi
 
          # why not ed(1)?
@@ -762,6 +762,15 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
              sed -i -e "s!%GRUB_VERSION%!$GRUB_VERSION!g" \
                     -e "s!%GRUB_LEGACY%!$GRUB_LEGACY!g" "$file"
          done
+
+         sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6
+      fi
+      if [ -e "$BUILD_OUTPUT"/boot/grub/$GRUB_LEGACY ]; then
+         sed -i "s/%GRUB_LEGACY%/$GRUB_LEGACY/g" "$BUILD_OUTPUT"/boot/grub/menu.lst
+         sed -i "s/%GRUB_LEGACY%/$GRUB_LEGACY/g" "$BUILD_OUTPUT"/boot/grub/grub.cfg
+      else
+         sed -i "/%GRUB_LEGACY%/d" "$BUILD_OUTPUT"/boot/grub/menu.lst
+         sed -i "/%GRUB_LEGACY%/d" "$BUILD_OUTPUT"/boot/grub/grub.cfg
       fi
 
       # autostart for Windows:

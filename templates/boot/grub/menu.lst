@@ -75,6 +75,8 @@ module /boot/addons/bsd4grml/boot.4
 module /boot/addons/bsd4grml/boot.5
 module /boot/addons/bsd4grml/boot.6
 module /boot/addons/bsd4grml/boot.cfg
+module /boot/grub/%GRUB_LEGACY%
+module /boot/grub/core.img
 
 # title %GRML_NAME% %VERSION% - old boot method
 # kernel /boot/%GRML_NAME%/linux26 ramdisk_size=100000 init=/etc/init apm=power-off lang=us vga=791 nomce quiet grml_dir="live" grml_name="grml.squashfs"

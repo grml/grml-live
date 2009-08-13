@@ -1,7 +1,8 @@
-# $MirOS: src/distrib/common/grml/boot.6,v 1.2 2009/06/29 18:19:00 tg Exp $
+# $MirOS: src/distrib/common/grml/boot.6,v 1.3 2009/08/13 14:34:01 tg Exp $
 #
 echo
-echo Switching to GNU GRUB %GRUB_VERSION%
+echo Switching to GNU GRUB %GRUB_VERSION% for booting
+echo into %RELEASE_INFO%
 echo
 macro grub1 machine exec grub /boot/grub/%GRUB_LEGACY%
 macro grub2 machine exec grub /boot/grub/core.img

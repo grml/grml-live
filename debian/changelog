@@ -56,9 +56,11 @@ grml-live (0.9.21) UNRELEASED; urgency=low
   [ Thorsten Glaser ]
   * Update MirOS bsd4grml to 20090812 and sync menu.lst, grub.cfg,
     isolinux.cfg, syslinux.cfg with each other; provide a fallback
-    way to boot MirOS bsd4grml from both GRUB versions using modules
+    way to boot MirOS bsd4grml from both GRUB versions using modules.
+  * Fix going back to GNU GRUB from ldbsd.com via alternative boot method;
+    while here, add the grml release info to the appropriate file.
 
- -- Michael Prokop <mika@grml.org>  Mon, 17 Aug 2009 01:10:02 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 17 Aug 2009 01:27:06 +0200
 
 grml-live (0.9.20) unstable; urgency=low
 
