@@ -26,7 +26,7 @@ grml-live (0.9.21) UNRELEASED; urgency=low
   * Drop bar from GRML_FULL (no release since 2007, consider using
     cpipe instead).
   * Set UTC=no by default. See http://bts.grml.org/grml/issue708 for
-    details. Credits to Ulrich Zehl for debugging.
+    details. Credits to Ulrich Zehl for debugging. [Closes: issue708]
 
   [ Thorsten Glaser ]
   * Update MirOS bsd4grml to 20090812 and sync menu.lst, grub.cfg,
