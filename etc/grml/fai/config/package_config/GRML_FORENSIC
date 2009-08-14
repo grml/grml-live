@@ -10,12 +10,17 @@ PACKAGES aptitude
 # http://alioth.debian.org/projects/forensics
 # http://wiki.debian.org/Teams/DebianForensics
 # http://wiki.debian.org/DebianForensics/TODO
+# http://qa.debian.org/developer.php?login=forensics-devel@lists.alioth.debian.org
 
 # forensic software:
 acl
+aesfix
+aeskeyfind
 afflib
 autopsy
+bios-memimage
 bkhive
+chaosreader
 chkrootkit
 chntpw
 clamav
@@ -29,6 +34,8 @@ ddrescue
 disktype
 dnsutils
 dsniff
+ext3grep
+fatback
 fdupes
 fdutils
 foremost
@@ -58,6 +65,7 @@ memdump
 mii-diag
 missidentify
 mscompress
+myrescue
 netdiscover
 nmap
 odt2txt
@@ -66,6 +74,7 @@ outguess
 p7zip-full
 parted
 pasco
+pipebench
 rdd
 readpst
 recoverdm
@@ -73,10 +82,12 @@ reglookup
 rifiuti
 rifiuti2
 rkhunter
+safecopy
 samdump2
 scalpel
 scrounge-ntfs
 sdd
+shed
 sleuthkit
 socat
 ssdeep
@@ -95,6 +106,7 @@ vinetto
 wipe
 wireshark
 wv
+xmount
 zfs-fuse
 
 # system tools
@@ -141,16 +153,13 @@ wvdial
 # * vncviewer? (tsclient)
 
 # Packages which aren't (official) available (yet):
-# afflib         => on the way
 # air            =>
 # bmap           =>
 # carvefs        =>
-# chaosreader    => on the way
 # dc3dd          => #468958
 # e2recover      =>
-# fatback        => #512483
 # ftimes         => #468940
-# guymager       =>
+# guymager       => #479014
 # libcarvpath    =>
 # libguytools    => #479016
 # photorec       =>
@@ -159,4 +168,3 @@ wvdial
 # regviewer      =>
 # revit          => #469067
 # sha15deep      =>
-# xmount         => on the way
