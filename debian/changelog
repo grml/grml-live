@@ -30,13 +30,14 @@ grml-live (0.9.21) UNRELEASED; urgency=low
   * Add aesfix, aeskeyfind, bios-memimage, chaosreader, ext3grep, fatback,
     myrescue, pipebench, safecopy, shed and xmount to GRML_FORENSIC. The
     packages are either already available or should be available soon.
+  * Add scsitools to GRML_MEDIUM.
 
   [ Thorsten Glaser ]
   * Update MirOS bsd4grml to 20090812 and sync menu.lst, grub.cfg,
     isolinux.cfg, syslinux.cfg with each other; provide a fallback
     way to boot MirOS bsd4grml from both GRUB versions using modules
 
- -- Michael Prokop <mika@grml.org>  Fri, 14 Aug 2009 09:19:06 +0200
+ -- Michael Prokop <mika@grml.org>  Fri, 14 Aug 2009 10:24:36 +0200
 
 grml-live (0.9.20) unstable; urgency=low
 
