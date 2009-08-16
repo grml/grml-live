@@ -416,6 +416,9 @@ if [ -n "$SUITE" ] ; then
    done
 fi
 
+# set $ARCH
+[ -n "$ARCH" ] || ARCH="$(dpkg --print-architecture)"
+
 # validate whether the specified architecture class matches the
 # architecture (option), otherwise installation of kernel will fail
 if echo $CLASSES | grep -qi i386 ; then
@@ -432,8 +435,6 @@ elif echo $CLASSES | grep -qi amd64 ; then
    fi
 fi
 
-# set $ARCH
-[ -n "$ARCH" ] || ARCH="$(dpkg --print-architecture)"
 if grep -q -- 'FAI_DEBOOTSTRAP_OPTS.*--arch' "$NFSROOT_CONF" ; then
    sed "s/--arch [a-z0-9]* /--arch $ARCH /" "$NFSROOT_CONF" | sponge "$NFSROOT_CONF"
 else
