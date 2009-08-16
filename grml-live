@@ -551,6 +551,8 @@ else
          einfo "Finished execution of stage 'fai dirinstall'"
       fi
 
+      einfo "Find FAI build logs at $(readlink -f /var/log/fai/$HOSTNAME/last)."
+      eend 0
    fi
 fi # BUILD_DIRTY?
 # }}}

@@ -41,6 +41,7 @@ grml-live (0.9.21) UNRELEASED; urgency=low
     the build host. [Closes: issue717]
   * Check whether rebuild of ISO is needed even though the ISO exists already.
     [Closes: issue719]
+  * Display path of FAI logs during execution of grml-live.
   * Software related changes:
     - Add git-email to GRML_FULL (thanks to Joerg Woelke for mentioning).
     - Add aesfix, aeskeyfind, bios-memimage, chaosreader, ext3grep, fatback,
@@ -57,7 +58,7 @@ grml-live (0.9.21) UNRELEASED; urgency=low
     isolinux.cfg, syslinux.cfg with each other; provide a fallback
     way to boot MirOS bsd4grml from both GRUB versions using modules
 
- -- Michael Prokop <mika@grml.org>  Mon, 17 Aug 2009 00:22:42 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 17 Aug 2009 01:10:02 +0200
 
 grml-live (0.9.20) unstable; urgency=low
 
