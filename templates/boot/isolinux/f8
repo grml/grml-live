@@ -1,6 +1,6 @@
-grml - Linux for sysadmins and users of texttools                            09F807
+Grml - Linux for sysadmins and users of texttools                            09F807
                                                                                
-70 grml configuration options                                                    
+70 Grml configuration options                                                    
  ==========================                                                    
                                                                                
   myconfig=/dev/ice    -> search for config.tbz and grml.sh on specifed device 
@@ -9,8 +9,8 @@
                                              extract it                        
   noautoconfig         -> do not automount device labeled with GRMLCFG         
   file=configname.tbz  -> use specified filename as configuration archive      
-  partconf=/dev/ice    -> copy files specified in  /etc/grml/partconf from     
-                          /dev/ice to the grml system                          
+  partconf=/dev/sdx#    -> copy files specified in /etc/grml/partconf from     
+                          /dev/sdx# to the Grml system                         
                                                                                
   Usage examples:                                                              
                                                                                

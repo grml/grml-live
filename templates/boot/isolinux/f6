@@ -1,6 +1,6 @@
-grml - Linux for sysadmins and users of texttools                            09F607
+Grml - Linux for sysadmins and users of texttools                            09F607
                                                                                
-70 Troubleshooting on grml (main page via key f1)                                
+70 Troubleshooting on Grml (main page via key f1)                                
                                                                                
   If you experience lockups or other hardware failures,                        
   disable buggy APIC interrupt routing:                                        

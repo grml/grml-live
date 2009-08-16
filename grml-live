@@ -236,6 +236,9 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 [ -n "$ARCH" ]            || ARCH="$(dpkg --print-architecture)"
 [ -n "$BOOT_METHOD" ]     || BOOT_METHOD='isolinux'
 [ -n "$CLASSES" ]         || CLASSES='GRML,I386'
+[ -n "$DISTRI_INFO" ]     || DISTRI_INFO='Grml - Live Linux for system administrators   '
+[ -n "$DISTRI_NAME" ]     || DISTRI_NAME="grml"
+[ -n "$DISTRI_SPLASH" ]   || DISTRI_SPLASH='grml.png'
 [ -n "$GRML_FAI_CONFIG" ] || GRML_FAI_CONFIG='/etc/grml/fai'
 [ -n "$GRML_NAME" ]       || GRML_NAME='grml'
 [ -n "$HOSTNAME" ]        || HOSTNAME='grml'
@@ -544,9 +547,9 @@ mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for s
 
 # i386:
 if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
-   if [ -d "$BUILD_OUTPUT"/boot -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
-      log "$BUILD_OUTPUT/boot exists already, skipping stage 'boot'"
-      ewarn "$BUILD_OUTPUT/boot exists already, skipping stage 'boot'" ; eend 0
+   if [ -d "$BUILD_OUTPUT"/boot/isolinux -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
+      log "$BUILD_OUTPUT/boot/isolinux exists already, skipping stage 'boot'"
+      ewarn "$BUILD_OUTPUT/boot/isolinux exists already, skipping stage 'boot'" ; eend 0
    else
       # booting stuff:
       [ -d "$BUILD_OUTPUT"/boot/isolinux ] || mkdir -p "$BUILD_OUTPUT"/boot/isolinux
@@ -641,6 +644,13 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       sed -i "s/%VERSION%/$VERSION/"           "$BUILD_OUTPUT"/boot/grub/grub.cfg
       sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/grub/grub.cfg
 
+      sed -i "s/%VERSION%/$VERSION/"           "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
+      sed -i "s/%GRML_NAME%/$GRML_NAME/"       "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
+      sed -i "s/%ARCH%/$ARCH/"                 "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
+
+      sed -i "s/%DISTRI_INFO%/$DISTRI_INFO/" "$BUILD_OUTPUT"/boot/isolinux/vesamenu.cfg
+      sed -i "s/%DISTRI_SPLASH%/$DISTRI_SPLASH/" "$BUILD_OUTPUT"/boot/isolinux/vesamenu.cfg
+
       # make sure the squashfs filename is set accordingly:
       GRML_NAME_SQUASHFS="$GRML_NAME.squashfs"
       sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/isolinux.cfg
@@ -651,6 +661,47 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       GRML_NAME_SQUASHFS="$(extend_string_end 20 "$GRML_NAME_SQUASHFS")"
       sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/f4
       sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/f5
+
+      if ! [ -r "${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg" ] ; then
+         log "including grml.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+         echo "include grml.cfg" > "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+         [ -n "$NO_ADDONS" ] || echo "include addons.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+      else # assume we are building a custom distribution:
+         log "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
+         einfo "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
+         if grep -q "^include ${DISTRI_NAME}.cfg" "${BUILD_OUTPUT}/boot/isolinux/distri.cfg" ; then
+           log "include for ${DISTRI_NAME}.cfg already present, nothing to do."
+           einfo "include for ${DISTRI_NAME}.cfg already present, nothing to do."
+           eend $?
+        else
+           log "including ${DISTRI_NAME}.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+           echo "include ${DISTRI_NAME}.cfg" > "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+           [ -n "$NO_ADDONS" ] || echo "include addons.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+         fi
+      fi
+
+      # use old style console based isolinux method only if requested:
+      if [[ "${ISOLINUX_METHOD}" == "console" ]] ; then
+         log 'Using console based isolinux method as requested via $ISOLINUX_METHOD.'
+         einfo 'Using console based isolinux method as requested via $ISOLINUX_METHOD.'
+         if grep -q '^include console.cfg' "${BUILD_OUTPUT}/boot/isolinux/distri.cfg" ; then
+           einfo "include for console.cfg already foud, nothing to do."
+           eend 0
+         else
+           log "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
+           einfo "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
+           echo "include console.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
+           eend $?
+         fi
+      else
+         log 'Using graphical boot menu.'
+         if grep -q '^include vesamenu.cfg' "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg" ; then
+           log "include for vesamenu.cfg already foud, nothing to do."
+         else
+           log "including vesamenu.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
+           echo "include vesamenu.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
+         fi
+      fi
 
       # jump back to grub from bsd4grml:
       if [ -e "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6 ]; then

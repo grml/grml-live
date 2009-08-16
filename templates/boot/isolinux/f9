@@ -1,6 +1,6 @@
-grml - Linux for sysadmins and users of texttools                            09F907
+Grml - Linux for sysadmins and users of texttools                            09F907
                                                                                
-70 grml2hd - automatic installation of grml                                      
+70 grml2hd - automatic installation of Grml                                      
  ========================================                                      
                                                                                
   Using grml2hd as bootoption runs grml2hd in non-interactive mode.            
@@ -11,7 +11,7 @@
    user=                user name for user which should be used at hd-install  
    filesystem={ext2|ext3|reiserfs|reiser4|jfs|xfs}      filesystem to be used  
    mbr=/dev/...  partition where MBR should be installed (default:=partition)  
-   partition=/dev/...                partition where grml should be installed  
+   partition=/dev/...                partition where Grml should be installed  
                                                                                
   Usage example for booting:                                                   
    grml2hd partition=/dev/hda4 mbr=/dev/hda filesystem=ext3 user=mika          

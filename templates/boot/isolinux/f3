@@ -1,8 +1,8 @@
-grml - Linux for sysadmins and users of texttools                            09F307
+Grml - Linux for sysadmins and users of texttools                            09F307
                                                                                
 70 The following options can be used at the boot:-prompt:                        
                                                                                
- grml   [options, list via F4-F10]                          boot grml default  
+ grml   [options, list via F4-F10]                          boot Grml default  
  memtest                                     memtest86+ (memory test program)  
  fb1280x1024, fb1024x768 or fb800x600   use framebuffer mode (e.g. notebooks)  
  nofb                                                disable framebuffer mode  

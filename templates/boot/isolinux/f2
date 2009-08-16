@@ -1,17 +1,17 @@
-grml - Linux for sysadmins and users of texttools                            09F207
+Grml - Linux for sysadmins and users of texttools                            09F207
                                                                                
-09  Overview of bootsplashes on grml (F1-F10)07                                    
+09  Overview of bootsplashes on Grml (F1-F10)07                                    
                                                                                
-  09F107   main bootsplash with keyboard-image and bootprompt                      
+  09F107   main bootsplash                                                         
   09F207   this overview page                                                      
-  09F307   main grml bootoptions                                                   
-  09F407   main cheatcodes for grml [1/2]                                          
-  09F507   main cheatcodes for grml [2/2]                                          
-  09F607   troubleshooting on grml                                                 
+  09F307   main Grml bootoptions                                                   
+  09F407   main cheatcodes for Grml [1/2]                                          
+  09F507   main cheatcodes for Grml [2/2]                                          
+  09F607   troubleshooting on Grml                                                 
   09F707   kernel cheatcodes                                                       
-  09F807   grml configuration options                                              
-  09F907   grml2hd - automatic installation of grml                                
-  09F1007  problems with grml?           _                                         
+  09F807   Grml configuration options                                              
+  09F907   grml2hd - automatic installation of Grml                                
+  09F1007  problems with Grml?           _                                         
                  __ _ _ __ _ __ ___ | |  ___  _ __ __ _                        
                 / _` | '__| '_ ` _ \| | / _ \| '__/ _` |                       
                | (_| | |  | | | | | | || (_) | | | (_| |                       

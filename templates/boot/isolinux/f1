@@ -1,0 +1,23 @@
+Grml - Linux for sysadmins and users of texttools                            09F107
+                                                                               
+  Further information regarding the Grml live system and available boot        
+  options can be found on pages 2 to 10, reachable via keys F2 - F10.          
+                                                                               
+  Note that the options on page 3 (F3) have to be used as *main* boot          
+  options at the bootprompt as they are aliases for further options.           
+  The options mentioned on pages 4-9 have to be used as options behind the     
+  main boot option. If you don't need a special main option just use the       
+  default one being 'grml' (which is used in several examples as well).        
+  Example:                                                                     
+                                                                               
+    grml     vga=normal -> disables framebuffer in the default boot mode       
+    forensic vga=normal -> disables framebuffer in the forensic boot mode      
+                                                                               
+  Booting with just "vga=normal" won't work as well as "grml forensic"         
+  won't do what you'd expect.                                                  
+                                                                               
+  Further information available via keys F1...F10.                             
+                                                                               
+  To return to the graphical boot menu just press ENTER.                       
+                                                                               
+1f
