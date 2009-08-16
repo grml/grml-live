@@ -8,26 +8,27 @@
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
-# read configuration files, set some misc variables {{{
-
+# some misc and global stuff {{{
 export LANG=C
 export LC_ALL=C
 
 # define function getfilesize before "set -e"
 if stat --help >/dev/null 2>&1; then
-	getfilesize='stat -c %s'	# GNU stat
+  getfilesize='stat -c %s'  # GNU stat
 else
-	getfilesize='stat -f %z'	# BSD stat
+  getfilesize='stat -f %z'  # BSD stat
 fi
 
 # exit on any error:
 set -e
 
-GRML_LIVE_VERSION='0.9.20'
+# global variables
+GRML_LIVE_VERSION='0.9.21'
 PN="$(basename $0)"
 CMDLINE="$0 $@"
 ISO_DATE="$(date +%Y-%m-%d)"
 SOURCES_LIST_FILE='/etc/grml/fai/apt/sources.list'
+# }}}
 
 # usage information {{{
 usage()
@@ -81,6 +82,7 @@ if [ "$1" = '-h' -o "$1" = '--help' ] ; then
 fi
 # }}}
 
+# some runtime checks {{{
 # we need root permissions for the build-process:
 if [ "$(id -u 2>/dev/null)" != 0 ] ; then
    echo "Error: please run this script with uid 0 (root)." >&2
@@ -99,7 +101,9 @@ if [ -r /var/run/fai/fai_softupdate_is_running ] ; then
    echo "You may remove /var/run/fai/fai_softupdate_is_running and try again.">&2
    exit 1
 fi
+# }}}
 
+# lsb-functions and configuration stuff {{{
 # make sure they are not set by default
 VERBOSE=''
 FORCE=''
@@ -120,7 +124,6 @@ fi
 # source main configuration file:
 LIVE_CONF=/etc/grml/grml-live.conf
 . $LIVE_CONF
-
 # }}}
 
 # clean exit {{{
@@ -136,28 +139,11 @@ bailout() {
 trap bailout 1 2 3 3 6 9 14 15
 # }}}
 
-# check for important variables {{{
-[ -n "$GRML_FAI_CONFIG" ] || GRML_FAI_CONFIG=/etc/grml/fai
-[ -n "$HOSTNAME" ] || HOSTNAME=grml
-[ -n "$USERNAME" ] || USERNAME=grml
-[ -n "$CLASSES" ]  || CLASSES="GRML,I386"
-[ -n "$BOOT_METHOD" ] || BOOT_METHOD='isolinux'
-[ -n "$OUTPUT" ] || bailout 1 "${PN}: \$OUTPUT not specified. Please adjust $LIVE_CONF. Exiting."
-
-[ -n "$VERSION" ]  || VERSION="0.0.1"
-[ -n "$RELEASENAME" ] || RELEASENAME="grml-live rocks"
-[ -n "$GRML_NAME" ] || GRML_NAME='grml'
-
-# logfile:
-if [ -z "$LOGFILE" ] ; then
-   LOGFILE=/var/log/grml-live.log
-fi
+# log file stuff {{{
+[ -n "$LOGFILE" ] || LOGFILE=/var/log/grml-live.log
 touch $LOGFILE
 chown root:adm $LOGFILE
 chmod 664 $LOGFILE
-
-NFSROOT_CONF=/etc/grml/fai/make-fai-nfsroot.conf
-
 # }}}
 
 # some important functions {{{
@@ -244,6 +230,20 @@ while getopts "a:C:c:g:i:o:r:s:t:v:bBFuqVz" opt; do
   esac
 done
 shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
+# }}}
+
+# assume sane defaults (if not set already) {{{
+[ -n "$ARCH" ]            || ARCH="$(dpkg --print-architecture)"
+[ -n "$BOOT_METHOD" ]     || BOOT_METHOD='isolinux'
+[ -n "$CLASSES" ]         || CLASSES='GRML,I386'
+[ -n "$GRML_FAI_CONFIG" ] || GRML_FAI_CONFIG='/etc/grml/fai'
+[ -n "$GRML_NAME" ]       || GRML_NAME='grml'
+[ -n "$HOSTNAME" ]        || HOSTNAME='grml'
+[ -n "$NFSROOT_CONF" ]    || NFSROOT_CONF='/etc/grml/fai/make-fai-nfsroot.conf'
+[ -n "$RELEASENAME" ]     || RELEASENAME='grml-live rocks'
+[ -n "$SUITE" ]           || SUITE='stable'
+[ -n "$USERNAME" ]        || USERNAME='grml'
+[ -n "$VERSION" ]         || VERSION='0.0.1'
 # }}}
 
 # some misc checks before executing FAI {{{
@@ -374,50 +374,44 @@ if [ -n "$FAI_DEBOOTSTRAP" ] ; then
 fi
 
 # does this suck? YES!
-if [ -n "$SUITE" ] ; then
+# /usr/share/debootstrap/scripts/unstable does not exist, instead use 'sid':
+case $SUITE in
+   unstable) SUITE='sid' ;;
+   # make sure that we *NEVER* write any broken suite name to sources.list,
+   # otherwise we won't be able to adjust it one next (correct) execution
+   stable)   ;;
+   testing)  ;;
+   etch)     ;;
+   lenny)    ;;
+   squeeze)  ;;
+   sid)      ;;
+   *) echo "Sorry, $SUITE is not a valid Debian suite, exiting.">&2; bailout 1 ;;
+esac
 
-   # /usr/share/debootstrap/scripts/unstable does not exist, instead use 'sid':
-   case $SUITE in
-      unstable) SUITE='sid' ;;
-      # make sure that we *NEVER* write any broken suite name to sources.list,
-      # otherwise we won't be able to adjust it one next (correct) execution
-      stable)   ;;
-      testing)  ;;
-      etch)     ;;
-      lenny)    ;;
-      squeeze)  ;;
-      sid)      ;;
-      *) echo "Sorry, $SUITE is not a valid Debian suite, exiting.">&2; bailout 1 ;;
-   esac
+DIST=" etch\| stable\| lenny\| squeeze\| testing\| sid\| unstable"
+sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE\4\5/" "$SOURCES_LIST_FILE" | sponge "$SOURCES_LIST_FILE"
+for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
+    if [ -n "$file" ] ; then
+       sed "s/^SUITE=.*/SUITE=\"$SUITE\"/" $file | sponge $file
+       sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE\4\5/" "$file" | sponge "$file"
+    fi
+done
 
-   DIST=" etch\| stable\| lenny\| squeeze\| testing\| sid\| unstable"
-   sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE\4\5/" "$SOURCES_LIST_FILE" | sponge "$SOURCES_LIST_FILE"
-   for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
-       if [ -n "$file" ] ; then
-          sed "s/^SUITE=.*/SUITE=\"$SUITE\"/" $file | sponge $file
-          sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE\4\5/" "$file" | sponge "$file"
-       fi
-   done
-
-   # notice: activate grml-live pool only if we are building against unstable:
-   if grep -qe unstable -qe sid "$SOURCES_LIST_FILE" ; then
-      grep -q 'grml-live.*main' "$SOURCES_LIST_FILE" || \
-      grep grml-stable "$SOURCES_LIST_FILE" | \
-           sed 's/grml-stable/grml-live/' >> "$SOURCES_LIST_FILE"
-   else
-      grep -q 'grml-live.*main' "$SOURCES_LIST_FILE" && \
-      sed 's/.*grml-live.*/# removed grml-live repository/' "$SOURCES_LIST_FILE" | sponge "$SOURCES_LIST_FILE"
-   fi
-
-   for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" "$NFSROOT_CONF" ; do
-       if [ -n "$file" ] ; then
-          sed "s|^FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" "$file" | sponge "$file"
-       fi
-   done
+# notice: activate grml-live pool only if we are building against unstable:
+if grep -qe unstable -qe sid "$SOURCES_LIST_FILE" ; then
+   grep -q 'grml-live.*main' "$SOURCES_LIST_FILE" || \
+   grep grml-stable "$SOURCES_LIST_FILE" | \
+        sed 's/grml-stable/grml-live/' >> "$SOURCES_LIST_FILE"
+else
+   grep -q 'grml-live.*main' "$SOURCES_LIST_FILE" && \
+   sed 's/.*grml-live.*/# removed grml-live repository/' "$SOURCES_LIST_FILE" | sponge "$SOURCES_LIST_FILE"
 fi
 
-# set $ARCH
-[ -n "$ARCH" ] || ARCH="$(dpkg --print-architecture)"
+for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" "$NFSROOT_CONF" ; do
+    if [ -n "$file" ] ; then
+       sed "s|^FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" "$file" | sponge "$file"
+    fi
+done
 
 # validate whether the specified architecture class matches the
 # architecture (option), otherwise installation of kernel will fail
@@ -814,8 +808,8 @@ else
 
       # pad the output ISO to multiples of 256 KiB for partition table support
       siz=$($getfilesize "${ISO_OUTPUT}/${ISO_NAME}")
-      cyls=$((siz / 512 / 32 / 16 + 1))		# C=$cyls H=16 S=32
-      siz=$((cyls * 16 * 32 * 512))		# size after padding
+      cyls=$((siz / 512 / 32 / 16 + 1))   # C=$cyls H=16 S=32
+      siz=$((cyls * 16 * 32 * 512))   # size after padding
       dd if=/dev/zero bs=1 count=1 seek=$((siz - 1)) \
          of="${ISO_OUTPUT}/${ISO_NAME}" 2>/dev/null
 
