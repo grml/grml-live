@@ -37,6 +37,8 @@ grml-live (0.9.21) UNRELEASED; urgency=low
     we can improve sanity checks and easify configuration.
   * Support installation of local files (not being part of any Debian package)
     through $CHROOT_INSTALL.
+  * Integrate memtest86+ binary so we don't ship old versions from
+    the build host. [Closes: issue717]
   * Check whether rebuild of ISO is needed even though the ISO exists already.
     [Closes: issue719]
   * Software related changes:

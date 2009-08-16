@@ -571,7 +571,17 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
       if [ -z "$NO_ADDONS" ] ; then
          [ -d "$BUILD_OUTPUT"/boot/addons   ] || mkdir -p "$BUILD_OUTPUT"/boot/addons
-         cp /boot/memtest86+.bin "$BUILD_OUTPUT"/boot/addons/memtest
+         if [ -r "$TEMPLATE_DIRECTORY"/boot/addons/memtest ] ; then
+            log "Installing $TEMPLATE_DIRECTORY/boot/addons/memtest"
+            cp "$TEMPLATE_DIRECTORY"/boot/addons/memtest "$BUILD_OUTPUT"/boot/addons/memtest
+         elif [ -r /boot/memtest86+.bin ] ; then
+            log "Installing /boot/memtest86+.bin"
+            cp /boot/memtest86+.bin "$BUILD_OUTPUT"/boot/addons/memtest
+         else
+            ewarn "No memtest binary found, skipping."
+            log "No memtest binary found, skipping."
+            eend 0
+         fi
       fi
 
       # if we don't have an initrd we a) can't boot and b) there was an error
