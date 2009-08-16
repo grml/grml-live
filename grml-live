@@ -244,10 +244,10 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 [ -n "$DISTRI_INFO" ]      || DISTRI_INFO='Grml - Live Linux for system administrators   '
 [ -n "$DISTRI_NAME" ]      || DISTRI_NAME="grml"
 [ -n "$DISTRI_SPLASH" ]    || DISTRI_SPLASH='grml.png'
+[ -n "$FORCE_ISO_REBUILD" ] || FORCE_ISO_REBUILD="false"
 [ -n "$GRML_FAI_CONFIG" ]  || GRML_FAI_CONFIG='/etc/grml/fai'
 [ -n "$GRML_NAME" ]        || GRML_NAME='grml'
 [ -n "$HOSTNAME" ]         || HOSTNAME='grml'
-[ -n "$ISOLINUX_METHOD" ]  || ISOLINUX_METHOD='console'
 [ -n "$ISO_OUTPUT" ]       || ISO_OUTPUT="$OUTPUT/grml_isos"
 [ -n "$NFSROOT_CONF" ]     || NFSROOT_CONF='/etc/grml/fai/make-fai-nfsroot.conf'
 [ -n "$OUTPUT" ]           || OUTPUT='/grml/grml-live'
@@ -495,6 +495,8 @@ else
       "$HOSTNAME" $FAI_ACTION "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
       RC="$PIPESTATUS" # notice: bash-only
 
+      FORCE_ISO_REBUILD=true
+
       if [ "$RC" != 0 ] ; then
          log "Error while executing fai [exit code ${RC}]. Exiting."
          eerror "Error while executing fai [exit code ${RC}]. Exiting." ; eend 1
@@ -678,7 +680,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/f4
       sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/f5
 
-      if ! [ -r "${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg" ] ; then
+      if ! [ -r "${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg" ] || [ "$DISTRI_NAME" = "grml" ] ; then
          log "including grml.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
          echo "include grml.cfg" > "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
          [ -n "$NO_ADDONS" ] || echo "include addons.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
@@ -687,7 +689,9 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          einfo "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
          if grep -q "^include ${DISTRI_NAME}.cfg" "${BUILD_OUTPUT}/boot/isolinux/distri.cfg" ; then
            log "include for ${DISTRI_NAME}.cfg already present, nothing to do."
+           eindent
            einfo "include for ${DISTRI_NAME}.cfg already present, nothing to do."
+           eoutdent
            eend $?
         else
            log "including ${DISTRI_NAME}.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
@@ -767,6 +771,8 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          log "Finished execution of stage 'WINDOWS_BINARIES' [$(date)]"
          einfo "Finished execution of stage 'WINDOWS_BINARIES'" ; eend 0
       fi
+
+   FORCE_ISO_REBUILD=true
    einfo "Finished execution of stage 'boot'" ; eend 0
    fi
 else
@@ -785,6 +791,7 @@ if [ -n "$CHROOT_INSTALL" ] ; then
      rsync -avz --inplace "$CHROOT_INSTALL"/ "$CHROOT_OUTPUT/"
      eend $?
      einfo "Make sure to run squashfs stage, otherwise your local files won't be part of the ISO."
+     FORCE_ISO_REBUILD=true
   fi
 fi
 
@@ -846,6 +853,8 @@ else
       rm -f "${SQUASHFS_OUTPUT}"
       bailout
    fi
+
+   FORCE_ISO_REBUILD=true
 fi
 
 # create md5sum file:
@@ -863,11 +872,16 @@ elif [ "$BOOT_METHOD" = "grub" ] ; then
    BOOT_FILE="boot/grub/stage2_eltorito"
 fi
 
-if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" ] ; then
-   log "$ISO_OUTPUT exists already, skipping stage 'iso build'"
-   ewarn "$ISO_OUTPUT exists already, skipping stage 'iso build'" ; eend 0
+if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" -a "$FORCE_ISO_REBUILD" = "false" ]  ; then
+   log "$ISO_OUTPUT/${ISO_NAME} exists already, skipping stage 'iso build'"
+   ewarn "$ISO_OUTPUT/${ISO_NAME} exists already, skipping stage 'iso build'" ; eend 0
 else
    mkdir -p "$ISO_OUTPUT" || bailout 6 "Problem with creating $ISO_OUTPUT for stage 'iso build'"
+
+   if $FORCE_ISO_REBUILD ; then
+      log "Forcing rebuild of ISO because files on ISO have been modified."
+      einfo "Forcing rebuild of ISO because files on ISO have been modified."
+   fi
 
    # support mkisofs as well as genisoimage
    if which mkisofs >/dev/null 2>&1; then
