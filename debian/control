@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends: debhelper (>= 5)
 Build-Depends-Indep: asciidoc, xsltproc, docbook-xsl
-Standards-Version: 3.8.2
+Standards-Version: 3.8.3
 Homepage: http://grml.org/grml-live/
 Vcs-git: git://git.grml.org/grml-live.git
 Vcs-Browser: http://git.grml.org/?p=grml-live.git
@@ -14,17 +14,16 @@ Architecture: all
 Depends: ${misc:Depends}, bc, fai-client (>= 3.2.4), fai-server (>= 3.2.4), memtest86+ [i386 amd64], mkisofs | genisoimage, mksh, moreutils, squashfs-lzma-tools | squashfs-tools, wget
 Recommends: grml-live-addons
 Suggests: fai-doc
-Description: build system for creating a grml (based) live-cd
- This package provides the build system for creating
- a Debian / grml based Linux live cd. It is based on
- FAI (Fully Automatic Installation).
+Description: build system for creating a Grml (based) Linux live system
+ This package provides the build system for creating a Debian /
+ Grml based Linux live system (also known as live cd). It is
+ based on the FAI (Fully Automatic Installation) framework.
 
 Package: grml-live-addons
 Architecture: all
 Depends: ${misc:Depends}, grml-live
 Conflicts: grml-live (<< 0.9.13)
 Description: templates/boot/addons for grml-live
- This package provides the boot addons known as the
- features providing bootoptions bsd, dos, grub and hdt.
- You can safely skip this package if you don't need
- the addons.
+ This package provides the boot addons known as the features
+ providing bootoptions bsd, dos, grub and hdt. You can safely
+ skip this package if you don't need the addons.
