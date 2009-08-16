@@ -672,8 +672,16 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       sed -i "s/%VERSION%/$VERSION/"           "$BUILD_OUTPUT"/boot/grub/grub.cfg
       sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/grub/grub.cfg
 
+      if [ -r "${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg" ] ; then
+         sed -i "s/%VERSION%/$VERSION/"            "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
+         sed -i "s/%GRML_LONG_NAME%/$DISTRI_NAME/" "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
+         sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/"  "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
+         sed -i "s/%ARCH%/$ARCH/"                  "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
+      fi
+
       sed -i "s/%VERSION%/$VERSION/"           "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
-      sed -i "s/%GRML_NAME%/$GRML_NAME/"       "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
+      sed -i "s/%GRML_LONG_NAME%/$GRML_NAME/"  "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
+      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
       sed -i "s/%ARCH%/$ARCH/"                 "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
 
       sed -i "s/%DISTRI_INFO%/$DISTRI_INFO/" "$BUILD_OUTPUT"/boot/isolinux/vesamenu.cfg
