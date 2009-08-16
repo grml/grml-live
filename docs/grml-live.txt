@@ -89,18 +89,18 @@ So instead of GRML_MEDIUM you can also use GRML_SMALL and GRML_FULL.
   -C **CONFIGURATION_FILE**::
 
 The specified file is used as configuration file for grml-live. By default
-/etc/grml/grml-live.conf is used for main configuration. If a file named
+/etc/grml/grml-live.conf is used as default configuration. If a file named
 /etc/grml/grml-live.local exists it is used as well (sourced after reading
-/etc/grml/grml-live.conf to allow overriding settings). As a last option the
-specified configuration file is sourced so it is possible to override settings
-of /etc/grml/grml-live.conf as well as of /etc/grml/grml-live.local. Please
-notice that all configuration files have to be adjusted during execution of
-grml-live, so please make sure you use /etc/grml/grml-live.conf as a base for
-your own configuration file. Please also notice that the configuration file
-specified via this option is **not** (yet) supported inside the
-scripts/hooks/classes at /etc/grml/fai/config. Instead use
-/etc/grml/grml-live.conf and/or /etc/grml/grml-live.local for configuration
-stuff used inside /etc/grml/fai/config.
+/etc/grml/grml-live.conf meant as main file for local configuration). As a last
+option the specified configuration file is sourced so it is possible to override
+settings of /etc/grml/grml-live.conf as well as of /etc/grml/grml-live.local.
+Please notice that all configuration files have to be adjusted during execution
+of grml-live, so please make sure you use /etc/grml/grml-live.conf as a base for
+your own configuration file (usually /etc/grml/grml-live.local). Please also
+notice that the configuration file specified via this option is **not** (yet)
+supported inside the scripts/hooks/classes at /etc/grml/fai/config. Instead use
+/etc/grml/grml-live.local for configuration stuff used inside
+/etc/grml/fai/config.
 
   -F::
 
@@ -143,7 +143,7 @@ Specify name of the release.
 Specify the Debian suite you want to use for your live-system.  Defaults to
 "lenny" (being current Debian/stable). Supported values are: etch, lenny, sid.
 Debian "squeeze" (current Debian/testing) requires base.tgz
-(/etc/grml/fai/config/basefiles/....tar.gz) until it's supported by debootstrap.
+(/etc/grml/fai/config/basefiles/....tar.gz) or a recent version of debootstrap.
 
   -t **TEMPLATE_DIRECTORY**::
 
@@ -245,9 +245,9 @@ files/directories.
 If you want to use your own configuration, extend an existing configuration
 and/or add additional packages to your ISO just invent a new class (or extend an
 existing one). For example if you want to use your own class named "FOOBAR" just
-extend CLASSES="GRMLBASE,GRML_SMALL,I386" inside /etc/grml/grml-live.conf to
-CLASSES="GRMLBASE,GRML_SMALL,I386,FOOBAR" or invoke grml-live using the classes
-option: "grml-live -c GRMLBASE,GRML_SMALL,I386,FOOBAR ...".
+set CLASSES="GRMLBASE,GRML_SMALL,I386" inside /etc/grml/grml-live.local or
+invoke grml-live using the classes option: "grml-live -c
+GRMLBASE,GRML_SMALL,I386,FOOBAR ...".
 
 More details regarding the class concept can be found in the documentation of
 FAI itself (being available at /usr/share/doc/fai-doc/).
@@ -322,8 +322,17 @@ Script for the main build process. Requires root permissions for execution.
 
   /etc/grml/grml-live.conf
 
-Main configuration file for grml-live. All the important steps can be configured
-at this stage.
+Main configuration file for grml-live which should be considered as a reference
+configuration file only. Please use /etc/grml/grml-live.local for local
+configuration instead.
+
+  /etc/grml/grml-live.local
+
+All the local configuration should go to this file. This file overrides any
+defaults of grml-live. Configurations via /etc/grml/grml-live.local are prefered
+over the ones from /etc/grml/grml-live.conf. If you want to override settings
+from /etc/grml/grml-live.local as well you have to specify them on the grml-live
+commandline.
 
   /etc/grml/fai/fai.conf
 
@@ -632,14 +641,18 @@ further details.
 I've problems with the build process. How to start debugging?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Check out the logs inside /var/log/fai/... If you don't have the time to debug
-the problem in further detail or don't know how to proceed just send a copy of
-your config, logs and the commandline with a short problem description to
-<mika@grml.org>:
+Check out the logs inside /var/log/fai/... If you think it's a bug in grml-live
+send a copy of your config, logs and the commandline with a short problem
+description to <mika@grml.org>:
 
   # history | grep grml-live > /etc/grml/grml_live.cmdline
   # tar zcf grml_live_problem.tar.gz /etc/grml/grml-live.conf \
             /etc/grml/grml-buildd.conf /var/log/fai /etc/grml/fai
+  -> finally mail grml_live_problem.tar.gz to <mika@grml.org>
+
+If you need help with grml-live or would like to see new features as part of
+grml-live you can get commercial support via
+link:http://grml-solutions.com/[Grml Solutions].
 
 [[local-debian-mirror]]
 Can I use my own (local) Debian mirror?

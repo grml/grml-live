@@ -33,6 +33,8 @@ grml-live (0.9.21) UNRELEASED; urgency=low
     easier rebranding of grml-live based distributions.
   * Detect existence of stage 'boot' using boot/isolinux so grml-live
     executed with options '-q -B' and empty boot/isolinux works as well.
+  * Introduce $NO_WINDOWS_BINARIES which replaces $WINDOWS_BINARIES so
+    we can improve sanity checks and easify configuration.
   * Software related changes:
     - Add git-email to GRML_FULL (thanks to Joerg Woelke for mentioning).
     - Add aesfix, aeskeyfind, bios-memimage, chaosreader, ext3grep, fatback,
@@ -49,7 +51,7 @@ grml-live (0.9.21) UNRELEASED; urgency=low
     isolinux.cfg, syslinux.cfg with each other; provide a fallback
     way to boot MirOS bsd4grml from both GRUB versions using modules
 
- -- Michael Prokop <mika@grml.org>  Sun, 16 Aug 2009 21:24:53 +0200
+ -- Michael Prokop <mika@grml.org>  Sun, 16 Aug 2009 22:57:46 +0200
 
 grml-live (0.9.20) unstable; urgency=low
 
