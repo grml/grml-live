@@ -121,6 +121,12 @@ Display short usage information and exit.
 Specify name of ISO which will be available inside $OUTPUT_DIRECTORY/grml_isos
 by default.
 
+  -I **CHROOT_INSTALL**::
+
+Specify name of source directory which provides files that should become part of
+the chroot/ISO. Not enabled by default. Note: the files are installed under '/'
+in the chroot so you have to create the rootfs structure on your own.
+
   -o **OUTPUT_DIRECTORY**::
 
 Main output directory of the build process of FAI.  Some directories are created
@@ -593,6 +599,8 @@ Instructions
   # consider using lzma only for space reasons (resulting in longer
   # build time but smaller ISO):
   SQUASHFS_OPTIONS="-nolzma"
+  # install local files into the chroot
+  CHROOT_INSTALL="/etc/grml/fai/chroot_install"
   ## adjust if necessary (defaults to /grml/grml-live):
   ## OUTPUT="/srv/grml-live"
   FAI_DEBOOTSTRAP="squeeze http://ftp.de.debian.org/debian/"
@@ -653,6 +661,21 @@ description to <mika@grml.org>:
 If you need help with grml-live or would like to see new features as part of
 grml-live you can get commercial support via
 link:http://grml-solutions.com/[Grml Solutions].
+
+[[install-local-files]]
+How to I install further files into the chroot/ISO?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Just point the configuration variable CHROOT_INSTALL to the directory which
+provides the files you would like to install. Note that the files are installed
+under '/' in the chroot - so you have to create the rootfs structure on your
+own. Usage example:
+
+  echo "CHROOT_INSTALL=\$GRML_FAI_CONFIG/chroot_install" >> /etc/grml/grml-live.local
+  mkdir -p /etc/grml/fai/chroot_install/usr/src/
+  wget example.org/foo.tar.gz
+  mv foo.tar.gz /etc/grml/fai/chroot_install/usr/src/
+  grml-live ...
 
 [[local-debian-mirror]]
 Can I use my own (local) Debian mirror?

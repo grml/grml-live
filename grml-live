@@ -47,6 +47,8 @@ Usage: $PN [options, see as follows]
    -g <grml_name>]         set the grml flavour name
    -h                      display short usage information and exit
    -i <iso_name>           name of ISO
+   -I <src_directory>      directory which provides files that should become
+                           part of the chroot/ISO
    -o <output_directory>   main output directory of the build process
    -q                      skip mksquashfs
    -r <release_name<       release name
@@ -207,7 +209,7 @@ fi
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:g:i:o:r:s:t:v:bBFuqVz" opt; do
+while getopts "a:C:c:g:i:I:o:r:s:t:v:bBFuqVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     b) BUILD_ONLY=1 ;;
@@ -216,6 +218,7 @@ while getopts "a:C:c:g:i:o:r:s:t:v:bBFuqVz" opt; do
     C) CONFIG="$OPTARG" ;;
     g) GRML_NAME="$OPTARG" ;;
     i) ISO_NAME="$OPTARG" ;;
+    I) CHROOT_INSTALL="$OPTARG" ;;
     o) OUTPUT="$OPTARG" ;;
     q) SKIP_MKSQUASHFS=1 ;;
     r) RELEASENAME="$OPTARG" ;;
@@ -315,6 +318,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$ARCH" ]               && echo "  Architecture:      $ARCH"
    [ -n "$BOOT_METHOD" ]        && echo "  Boot method:       $BOOT_METHOD"
    [ -n "$TEMPLATE_DIRECTORY" ] && echo "  Template files:    $TEMPLATE_DIRECTORY"
+   [ -n "$CHROOT_INSTALL" ]     && echo "  Install files from directory to chroot:  $CHROOT_INSTALL"
    [ -n "$FAI_ARGS" ]           && echo "  additional arguments for FAI: $FAI_ARGS"
    [ -n "$LOGFILE" ]            && echo "  Logging to file:   $LOGFILE"
    [ -n "$SQUASHFS_ZLIB" ]      && echo "  Using ZLIB (instead of LZMA) compression."
@@ -765,12 +769,23 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       fi
    einfo "Finished execution of stage 'boot'" ; eend 0
    fi
-# ppc:
-elif [ "$ARCH" = powerpc ] ; then
-    ewarn 'Warning: formorer, it is your turn. :)'>&2
-# unsuported:
 else
+   log 'Error: Unsupported ARCH, sorry. Want to support it? Contribute!'
    eerror 'Error: Unsupported ARCH, sorry. Want to support it? Contribute!' ; eend 1
+fi
+
+# support installation of local files into the chroot/ISO
+if [ -n "$CHROOT_INSTALL" ] ; then
+  if ! [ -d "$CHROOT_INSTALL" ] ; then
+     log "Configuration variable \$CHROOT_INSTALL is set but not a directory; ignoring"
+     ewarn "Configuration variable \$CHROOT_INSTALL is set but not a directory; ignoring"
+  else
+     log "Copying local files to chroot as requested via \$CHROOT_INSTALL"
+     einfo "Copying local files to chroot as requested via \$CHROOT_INSTALL"
+     rsync -avz --inplace "$CHROOT_INSTALL"/ "$CHROOT_OUTPUT/"
+     eend $?
+     einfo "Make sure to run squashfs stage, otherwise your local files won't be part of the ISO."
+  fi
 fi
 
 if [ -f "$BUILD_OUTPUT"/live/${GRML_NAME}.squashfs -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" ] ; then
