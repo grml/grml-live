@@ -854,8 +854,7 @@ link:http://git.grml.org/?p=grml-live.git[http://git.grml.org/?p=grml-live.git]
 TODO list
 ---------
 
-Check out link:http://wiki.grml.org/doku.php?id=grml-live[grml-live in the grml-wiki]
-for details.
+Check out the link:http://git.grml.org/?p=grml-live.git;a=blob;f=TODO;hb=HEAD[TODO file].
 
 [[bugs]]
 Bugs
