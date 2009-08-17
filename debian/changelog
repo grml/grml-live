@@ -52,6 +52,7 @@ grml-live (0.9.21) UNRELEASED; urgency=low
     see http://wiki.debian.org/DebianGeoMirror for details.
     Thanks for the idea, Marc Haber!
   * Register grml-live html docs using doc-base.
+  * Update copyright file (make lintian happy).
   * Software related changes:
     - Add git-email to GRML_FULL (thanks to Joerg Woelke for mentioning).
     - Add aesfix, aeskeyfind, bios-memimage, chaosreader, ext3grep, fatback,
@@ -70,7 +71,7 @@ grml-live (0.9.21) UNRELEASED; urgency=low
   * Fix going back to GNU GRUB from ldbsd.com via alternative boot method;
     while here, add the grml release info to the appropriate file.
 
- -- Michael Prokop <mika@grml.org>  Tue, 18 Aug 2009 00:30:26 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 18 Aug 2009 00:33:48 +0200
 
 grml-live (0.9.20) unstable; urgency=low
 
