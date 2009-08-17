@@ -1,4 +1,4 @@
-grml-autoconfig (0.8.25) UNRELEASED; urgency=low
+grml-autoconfig (0.8.25) unstable; urgency=low
 
   * config_finddcsdir(): Use the correct device for GRMLCFG.
     Bugreport and path by Julian Langschädel, thanks!
