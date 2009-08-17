@@ -1,0 +1,90 @@
+grml-autoconfig(8)
+==================
+
+Name
+----
+grml-autoconfig - script and configuration framework for the grml system
+
+Synopsis
+--------
+grml-autoconfig
+
+Options
+-------
+
+The program grml-autoconfig does not support any options but needs to be run
+with root permissions as it modifies a system wide configuration file
+(/etc/grml/autoconfig).
+
+About
+-----
+
+The program grml-autoconfig does not support any options but needs to be run
+with root permissions as it modifies a system wide configuration file
+(/etc/grml/autoconfig).  'grml-autoconfig' is an interface to the framework
+named grml-autoconfig.  /etc/init.d/grml-autoconfig is the main script of the
+grml-system where all the hardware recognition and activation of services take
+place.
+
+grml-autoconfig supports an adjustable configuration via the configuration file
+named /etc/grml/autoconfig. The script named Bgrml-autoconfig is a simple
+dialog-based interface to the configuration file. You can either use the script
+for configuring grml-autoconfig or modify the configuration file manually on
+your own (there is no interference).
+
+The grml-autoconfig package creates three initscripts on installation:
+/etc/init.d/bootlocal.first, /etc/init.d/bootlocal.middle and
+/etc/init.d/bootlocal.last.
+
+They are created in the maintainer scripts of the grml-autoconfig package.  This
+means they are not part of the package itself and therefore also not marked as
+configuration files of the package. As a result the files won't be touched
+anymore, neither when upgrading nor when removing the package! If you want to
+add your own bootup commands you can use these files.
+/etc/init.d/bootlocal.first is executed at the very beginning, in runlevel 'S'.
+/etc/init.d/bootlocal.middle is executed right before startup of grml-autoconfig
+itself in runlevel '2' only (where grml-autoconfig is located as well).  Finally
+/etc/init.d/bootlocal.last is executed as one of the last initscripts in
+runlevel '2' only.
+
+Files
+-----
+
+  */etc/init.d/grml-autoconfig*::
+
+Init-script which runs the commands defined in /etc/grml/autoconfig.functions
+after checking configuration file /etc/grml/autoconfig.
+
+  */usr/sbin/grml-autoconfig*::
+
+Dialog interface to the configuration file /etc/grml/autoconfig.
+
+  */etc/grml/autoconfig*::
+
+Configuration file for grml-autoconfig framework. You can either edit this
+configuration file manually of use the dialog interface
+/usr/sbin/grml-autoconfig.
+
+  */etc/grml/autoconfig.functions*::
+
+Main functions of the grml-autoconfig. You do not need to configure or execute
+the file.  For debugging purposes you can source this script also from within an
+interactive shell and run specific functions afterwards.
+
+  */etc/grml/lsb-functions*::
+
+Based on /lib/lsb/init-functions this file provides an adjusted version of an
+lsb-like booting sequence.
+
+Bugs
+----
+If you find a bug please report it. See link:http://grml.org/bugs/ for details
+about how to report bugs.
+
+See also
+--------
+grml-autoconfig(1), mkpersistenthome(1), restore-config(1), save-config(1)
+
+Author
+------
+grml-autoconfig was written by Michael Prokop <mika@grml.org>.

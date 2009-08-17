@@ -1,0 +1,44 @@
+grml-bootsplash(1)
+==================
+
+Name
+----
+grml-bootsplash - script and configuration framework for the grml system
+
+Synopsis
+--------
+
+grml-bootsplash "||..."
+
+About
+-----
+
+'grml-bootsplash' provides a text-based simple bootsplash. It is integrated
+within the grml-autoconfig(1) framework. You very probably won't need it
+otherwise, this manpage just documents what grml-bootsplash does.
+
+Options
+-------
+
+The program grml-bootsplash does not support any options besides the "||..."
+sequence.  If you want to specify first status of bootsplash use
+'grml-bootsplash "|"'.  To specify the last status of bootsplash use
+'grml-bootsplash "||||||||||||"' (that's 12 '|').  The maximum number of
+supported "|" signs is twelve and will be used automatically if more are
+specified.
+
+Bugs
+----
+If you find a bug please report it. See link:http://grml.org/bugs/ for details
+about how to report bugs.
+
+See also
+--------
+grml-autoconfig(1), grml-autoconfig(8), mkpersistenthome(1), restore-config(1)
+
+Authors
+-------
+
+grml-bootsplash was written by Michael Prokop <mika@grml.org> and Florian Keller
+<Florian.Keller@zuerich.ch>.  This manual page was written by Michael Prokop
+<mika@grml.org> for the grml project (but may be used by others).
