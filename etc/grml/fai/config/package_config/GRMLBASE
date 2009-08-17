@@ -19,7 +19,6 @@ grml-etc-core
 grml-network
 grml-policyrcd
 grml-rebuildfstab
-grml-saveconfig
 grml-scanpartitions
 grml-scripts
 grml-shlib

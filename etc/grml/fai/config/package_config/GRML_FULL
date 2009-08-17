@@ -71,7 +71,6 @@ grml-paste
 grml-policyrcd
 grml-pylib
 grml-rebuildfstab
-grml-saveconfig
 grml-scanpartitions
 grml-scripts
 grml-sectools

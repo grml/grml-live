@@ -78,7 +78,7 @@ grml scripts=path-name              execute script (defaulting to grml.sh) insid
 grml config=path-name               unpack archive that path-name points to
 grml noautoconfig                   Disable searching for device labeled GRMLCFG
 
-Notice: Take a look at http://grml.org/config/ and /usr/share/doc/grml-saveconfig/grml-config.html
+Notice: Take a look at http://grml.org/config/ and 'man 1 grml-autoconfig'
 for more information regarding the configuration framework of grml.
 
 Booting related options:
