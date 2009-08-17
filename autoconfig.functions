@@ -60,7 +60,7 @@ getbootparam(){
 
 # Check boot commandline for specified option
 checkbootparam(){
-  [ -n "$1" ] || { echo "Error: missing argument to checkbootparam()" ; return 1 }
+  [ -n "$1" ] || ( echo "Error: missing argument to checkbootparam()" ; return 1 )
   # make sure we match beginning and end of line as well
   # but don't match 'vg' if we want to check for 'vga'
   if echo "$CMDLINE" | grep -qw "$1" ; then
