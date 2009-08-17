@@ -1,0 +1,248 @@
+#!/bin/zsh
+# Filename:      save-config
+# Purpose:       generate grml configuration archive and store it anywhere
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Son Mai 13 11:46:44 CEST 2007 [mika]
+################################################################################
+
+# some zsh-stuff {{{
+  autoload colors ; colors
+  setopt nonomatch
+  . /etc/grml/sh-lib
+  . /etc/grml/script-functions
+# }}}
+
+# set variables  {{{
+
+  # old linuxrc version:
+  [ -d /cdrom ]      && OLDLAYOUT=1 || OLDLAYOUT=''
+  # new initramfs layout:
+  [ -d /live/image ] && NEWLAYOUT=1 || NEWLAYOUT=''
+
+  LANG=C
+  LC_ALL=C
+  [[ $UID != 0 ]] && runas='sudo' # important for /etc
+
+  check4progs mutt || echo "Warning, mutt not available for mail handling.">&2
+  check4progs findchanged tar || { echo "Sorry, can't continue. Exiting.">&2 ; exit 1 }
+
+  CONFIG=/etc/grml/saveconfig
+  [ -r "$CONFIG" ] && . $CONFIG
+
+  PROGRAMNAME=${0##*/}
+  HOSTNAME=$(hostname)
+  DATE=$(date)
+  GRML_VERSION=$(awk '{print $1}' /etc/grml_version 2>/dev/null || print "not a grml system")
+  KERNEL=$(uname -a)
+
+  TMPDIR=/tmp
+  MAILFILE="$TMPDIR/mail.txt"
+
+  [ -n "$FILELIST" ] || FILELIST=$(mktemp $TMPDIR/filelist.XXXXXX)
+
+# functions {{{
+debug(){
+  if [[ $DEBUG -gt 0 ]] ; then
+    echo "debug: $*"
+  fi
+# setopt xtrace
+# set -x
+}
+
+bailout(){
+  rm -f "$FILELIST"
+  rm -f "$MAILFILE"
+}
+
+trap bailout 1 2 3 15
+# }}}
+
+# usage information {{{
+usage()
+{
+  print 1>&2 "
+$bg[black]$fg[green]${boldcolor}${PROGRAMNAME} - save configuration of grml system${reset_color}
+
+$bg[black]$fg[blue]${boldcolor}Usage:${reset_color}
+  $PROGRAMNAME [-target_options] -{all,home,etc,configdir}
+
+$bg[black]$fg[blue]${boldcolor}Target options:${reset_color}
+  -ssh user@host:/path/to/file  copy configuration via ssh/scp to remote host
+  -mail <recipient>             send configuration via mail
+  -file foo_bar_config.tbz      save configuration in specified file
+
+  Notice: if no option is specified the default is assumed:
+          create file config.tbz in current directory
+
+$bg[black]$fg[blue]${boldcolor}Files-to-store options:${reset_color}
+  -home                         store hidden files from \$HOME (\$HOME/.*)
+  -grmlhome                     store hidden files from \$HOME (\$HOME/.*) of user grml [use as user root]
+  -etc                          store modified files from /etc
+  -configdir                    store \$HOME/config
+  -all                          store all configuration files (:= -home, -configdir and -etc)
+
+  Notice: it is also possible to use environment variables:
+          \$SAVE_HOME, \$SAVE_GRMLHOME, \$SAVE_ETC, \$SAVE_CONFIGDIR and \$SAVE_ALL
+
+$bg[black]$fg[blue]${boldcolor}Usage examples:${reset_color}
+  $PROGRAMNAME -all                                  => store all configuration files in config.tbz in current dir
+  $PROGRAMNAME -home -mail  devnull@grml.org         => store \$HOME/.* in config.tbz and send it via mail
+  $PROGRAMNAME -etc  -ssh   devnull@grml.org:/path/  => store /etc in config.tbz and scp it to specified host
+  $PROGRAMNAME -all  -file  foo.tbz                  => store all configuration files in foo.tbz
+  SAVE_ALL=yes $PROGRAMNAME -file /path/foo.tbz      => store all configuration files in /path/foo.tbz
+
+More information on save-config can be found in the manual page: man save-config
+
+See also: restore-config(1), bootoptions: myconfig=/dev/ice, extract=PATH,
+          netconfig=server.tld/path/to/config.tbz
+
+Report bugs, send wishes and feedback to the grml team:
+http://grml.org/bugs/ - contact (at) grml.org
+"
+}
+# }}}
+
+# what do we want to store? {{{
+save_home(){
+  debug "save home"
+  for i in $HOME/.* ; do findchanged "$i" /etc/skel/$(basename "$i"); done >> $FILELIST
+  debug "debug: $FILELIST"
+}
+
+save_grmlhome(){
+  debug "save grmlhome"
+  if [ -d /home/grml/ ] ; then
+     for i in /home/grml/.* ; do findchanged "$i" /etc/skel/$(basename "$i"); done >> $FILELIST
+  fi
+  debug "debug: $FILELIST"
+}
+
+save_etc(){
+  debug "save etc"
+  if [ -n "$NEWLAYOUT" ] ; then
+     $runas find /live/cow/etc | sed -e 's#/live/cow## ; /etc$/d' >> $FILELIST
+  else
+     $runas findchanged /etc /GRML/etc >> $FILELIST
+  fi
+}
+
+save_configdir(){
+  debug "save configdir"
+  if [ -d $HOME/config ] ; then
+     ls $HOME/config/*  >> $FILELIST  2>/dev/null
+     ls $HOME/config/.* >> $FILELIST 2>/dev/null
+  fi
+}
+
+# create configuration file {{{
+create_config(){
+  if ! [ -r "$FILELIST" ]; then
+     echo "Sorry, filelist $FILELIST could not be read." >&2
+     echo "Error when generating $FILENAME." >&2
+  else
+     # GNU tar sucks so much, really. Avoid the "file changed as we read it":
+     tar cf /dev/null /etc
+     # now really execute the according tar command:
+     BZIP2=-9 $runas tar -T - -cpPjf "$FILENAME" <"$FILELIST" && \
+     echo "Successfully stored configuration in file $FILENAME"   || \
+     echo "Error when generating $FILENAME." >&2
+  fi
+}
+# }}}
+
+# commandline parsing {{{
+parse_options()
+{
+   zparseopts -K -- help=o_help mail:=o_mail \
+                    file:=o_file home=o_home grmlhome=o_grmlhome etc=o_etc \
+                    configdir=o_configdir all=o_all ssh:=o_ssh
+
+   if [[ "$#" == 0 || "$o_help" != "" || "$1" == '-h' || "$1" == '--help' ]]; then
+      usage ; exit
+   fi
+
+   if [[ "$o_file" != "" ]]; then
+     FILENAME="$o_file[2]"
+   else
+     FILENAME="config.tbz"
+   fi
+
+   if [[ "$o_home" != "" ]]; then
+      debug "home is set"
+      SAVE_HOME="yes"
+   fi
+
+   if [[ "$o_grmlhome" != "" ]]; then
+      debug "grmlhome is set"
+      SAVE_GRMLHOME="yes"
+   fi
+
+   if [[ "$o_etc" != "" ]]; then
+      debug "etc is set"
+      SAVE_ETC="yes"
+   fi
+
+   if [[ "$o_configdir" != "" ]]; then
+      debug "configdir is set"
+      SAVE_CONFIGDIR="yes"
+   fi
+
+   if [[ "$o_all" != "" ]]; then
+      debug "home, grmlhome, etc and configdir are set"
+      SAVE_HOME="yes"
+      SAVE_GRMLHOME="yes"
+      SAVE_ETC="yes"
+      SAVE_CONFIGDIR="yes"
+   fi
+
+   if [[ "$o_ssh" != "" ]]; then
+      debug "scp $FILENAME $o_ssh[2]"
+      scp $FILENAME $o_ssh[2]
+   fi
+
+   if [[ "$o_mail" != "" ]]; then
+      check4progs mutt || { echo "Sorry, mutt not available for sending mail. Exiting.">&2 ; exit 1 }
+      recipient=$o_mail[2]
+      debug "send mail to $recipient"
+      echo "Created on $DATE on host $HOSTNAME running grml $GRML_VERSION" > $MAILFILE
+      mutt -s "configuration of $HOSTNAME ($DATE)" -a $FILENAME $recipient < $MAILFILE
+   fi
+}
+parse_options $*
+# }}}
+
+runit(){
+   if [[ $SAVE_HOME == "yes" ]]; then
+     debug "running save_home"
+     save_home
+     SETSAVE=1
+   fi
+   if [[ $SAVE_GRMLHOME == "yes" ]]; then
+     debug "running save_grmlhome"
+     save_grmlhome
+     SETSAVE=1
+   fi
+   if [[ $SAVE_ETC == "yes" ]] ; then
+     debug "running save_etc"
+     save_etc
+     SETSAVE=1
+   fi
+   if [[ $SAVE_CONFIGDIR == "yes" ]] ; then
+     debug "running save_configdir"
+     save_configdir
+     SETSAVE=1
+   fi
+   if [ -z $SETSAVE ] ; then
+     echo "Sorry, you did not select any configuration which should be saved. Exiting." ; exit 1
+   fi
+}
+
+# now run it
+  runit
+  create_config
+  bailout
+
+## END OF FILE #################################################################
+# vim:foldmethod=marker

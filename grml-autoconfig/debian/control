@@ -3,7 +3,7 @@ Section: grml
 Priority: optional
 Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends: debhelper (>= 5)
-Standards-Version: 3.8.2
+Standards-Version: 3.8.3
 Build-Depends-Indep: asciidoc, docbook-xsl, xsltproc
 Homepage: http://git.grml.org/?p=grml-autoconfig.git
 Vcs-git: git://git.grml.org/grml-autoconfig.git
@@ -11,13 +11,20 @@ Vcs-Browser: http://git.grml.org/?p=grml-autoconfig.git
 
 Package: grml-autoconfig
 Architecture: all
-Conflicts: grml-etc (<= 0.4-7)
+Conflicts: grml-etc (<= 0.4-7), grml-saveconfig
+Replaces: grml-saveconfig
 Depends: ${shlibs:Depends}, ${misc:Depends}, acpid | apmd, laptop-detect, hotplug | hotplug-light | udev (>= 0.080-1), zsh, gpm, syslog-ng | system-log-daemon, console-tools, console-terminus, pump, grml-rebuildfstab (>= 0.3-1), grml-etc-core (>= 0.1-3), grml-scripts (>= 0.8-14), gawk, rungetty, rsync
 Recommends: acpi-support, hwinfo, alsa-utils, mdadm, powernowd, aumix, locales, grml2hd, grml-debootstrap (>= 0.7)
 Description: main bootup process of a grml system
  grml-autoconfig is the main part of the bootup process of the
- grml system. This includes the hardware recognition system.
+ grml system. This includes the hardware recognition system and
+ several configuration options.
  .
  grml-autoconfig is also a script which is an interface to
  the configuration system (see /etc/grml/autoconfig) of
  the framework.
+ .
+ This package provides utilities and documentation for saving
+ and restoring configurations on grml system (like save-config,
+ restore-config and mkpersistenthome). Please check out the
+ provided documentation for further details.

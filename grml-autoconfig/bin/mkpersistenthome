@@ -1,0 +1,173 @@
+#!/bin/bash
+# Filename:      mkpersistenthome
+# Purpose:       mkpersistenthome - create grml home directory image
+# Authors:       grml-team (grml.org), (c) Klaus Knopper Feb 2003, (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Fre Mär 16 19:59:53 CET 2007 [mika]
+################################################################################
+
+export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+
+if [ "`id -u`" != "0" ] ; then
+   exec sudo "$0" "$@"
+else
+   export HOME='/home/grml'
+fi
+
+TMP=$(mktemp)
+DIRECTORY=$(mktemp -d /mnt/XXXXXX)
+DIALOG="dialog"
+
+bailout(){
+  [ -n "$DIRECTORY" ] && umount "$DIRECTORY" 2>/dev/null
+  [ -d "$DIRECTORY" ] && rmdir "$DIRECTORY"
+  rm -f "$TMP" "$TMP.done" "$TMP.err"
+  exit 0
+}
+
+trap bailout 1 2 3 15
+
+HOMEKB="$(du -sk $HOME 2>/dev/null | awk '{print $1}')"
+
+# Language-dependent messages
+case "$LANGUAGE" in
+de*|at*|ch*)
+TITLE1="Permanentes grml Heimverzeichnis anlegen"
+MESSAGE1="Dieses Skript richtet ein permanentes Heimverzeichnis für den User \"grml\" auf Ihrer Festplatte oder einem Wechselmedium wie Memorystick, Compactflash oder ZIP-Medium ein. Dadurch ist es möglich, Daten und persönliche Konfigurationen über einen Reboot hinaus zu speichern, sofern sie im persönlichen Heimverzeichnis des Benutzers abgelegt werden. Per Bootoption, z.B. \"home=/dev/sda1\" für die erste Partition einer SCSI-Festplatte oder eines USB-Memorystick, können Sie beim Systemstart das permanente Heimverzeichnis wieder aktivieren. Die Bootoption \"home=scan\" durchsucht automatisch alle Partitionen und erkannten Speichermedien nach einem persistenten grml-Heimverzeichnis.
+
+Möchten Sie das Heimverzeichnis des Benutzers \"grml\" permanent speichern?"
+MESSAGE2="Bitte wählen Sie die Partition, auf der Sie das Heimverzeichnis (oder ein Image davon) anlegen möchten."
+MESSAGE3="Möchten Sie die KOMPLETTE Partition verwenden und mit den Linux-Dateisystem formatieren?
+
+NEIN=Image-Datei auf bestehendem Dateisystem anlegen."
+SUCCESS="FERTIG!
+
+Die grml-Konfiguration wurde erfolgreich gespeichert. Ihre Konfigurationsdateien werden beim nächsten grml-Bootvorgang in die Ramdisk restauriert, wenn Sie im Bootscreen \"grml floppyconfig\" (Diskette) bzw. \"grml myconfig=/mnt/verzeichnisname\" angeben."
+ERROR="Leider konnte die grml-Konfiguration NICHT gespeichert werden:"
+MESSAGE_NO_PARTS="Keine passende Partition gefunden. Zur Erinnerung: NTFS-Partitonen können mit Linux nicht beschrieben werden."
+;;
+*)
+TITLE1="Create persistent grml home directory"
+MESSAGE1="This script creates a persistent home directory for the \"grml\" account on your harddisk or on a changeable medium like memory stick, compact flash or zip media. Using this features makes it possible to store personal data and config files permanently over a reboot, if they are stored inside the home directory of the \"grml\" user. The boot option \"home=/dev/sda1\", for the first partition of a SCSI harddisk or USB memory stick as example, activates the persistent home directory at system startup. You can also let grml scan all autodetected storage devices using the boot option \"home=scan\".
+
+Do you want to create a persistent home directory for the \"grml\" user?"
+
+MESSAGE2="Please select partition for creating persistent homedir (or image):"
+MESSAGE3="Do you want to use the ENTIRE Partition, and would like to format it with the Linux filesystem?
+
+NO=Just create an image in the existing filesystem."
+SUCCESS="SUCCESS!
+
+Creation of grml configuration floppy was successful. Your configuration files will be reinstalled to the ramdisk on next grml boot if you specify \"grml floppyconf\" (floppy disk), or \"grml myconfig=/mnt/directoryname\" at the boot prompt."
+ERROR="The grml configuration could NOT be saved:"
+MESSAGE_NO_PARTS="No suitable partitions could be found. Remember that NTFS-Partitions are not writable with linux."
+;;
+esac
+
+$DIALOG --cr-wrap --clear --title "$TITLE1" --yesno "$MESSAGE1" 18 75 || bailout
+
+# Partition selector
+PARTITIONS=""
+count=0
+for i in `fdisk -l | grep -v NTFS | awk '/^\/dev\// { print $1 }'` ; do
+  PARTITIONS="$PARTITIONS ${i} [Disk/Partition] off"
+  echo "PARTITIONS=$PARTITIONS ${i} [Disk/Partition] off" >> /tmp/part
+done
+[ -z "$PARTITIONS" ] && { $DIALOG --cr-wrap --clear --title "$TITLE1" --msgbox "$ERROR $MESSAGE_NO_PARTS" 10 75; bailout; }
+
+PARTITION=""
+while [ -z "$PARTITION" -o -z "$DIRECTORY" -o ! -e "$DIRECTORY" ]; do
+  rm -f "$TMP"
+  $DIALOG --cr-wrap --clear --title "$TITLE1" --radiolist "$MESSAGE2" 18 75 9 $PARTITIONS 2>"$TMP" || bailout
+  PARTITION="$(<$TMP)"
+done
+
+DEVICE=""
+if $DIALOG --cr-wrap --clear --title "$TITLE1" --defaultno --yesno "$MESSAGE3" 15 75; then
+  DEVICE="$PARTITION"
+  FILEINFO="$PARTITION"
+else
+  FILEINFO="grml.img on $PARTITION"
+  DEVICE="$DIRECTORY/grml.img"
+  mount | grep -q "$DIRECTORY" || mount -r $PARTITION "$DIRECTORY" 2>"$TMP.err"
+  [ "$?" != "0" ] && { $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
+  mount | grep -q "$DIRECTORY.*ntfs" && { $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR NTFS" 10 75; bailout; }
+  mount -o remount,rw $PARTITION "$DIRECTORY"
+fi
+
+# More language-dependent messages
+case "$LANGUAGE" in
+ de*|at*|ch*)
+  MESSAGE4="Sind Sie ABSOLUT SICHER, dass Sie die Partition $PARTITION formatieren möchten? ALLE DATEN WERDEN DADURCH GELÖSCHT!"
+  MESSAGE5="Möchten Sie Ihr Heimverzeichnis mit AES256 (=Advanced Encryption Standard 256bit, s.a. http://csrc.nist.gov/encryption/aes/) verschlüsselt speichern? Hierzu ist die Eingabe eines sehr langen Passwortes beim Einrichten sowie beim Einbinden des Verzeichnisses beim Systemstart erforderlich. NEIN=unverschlüsselt"
+  MESSAGE6="Bitte geben Sie die gewünschte Größe Ihres persistenten Heimverzeichnisses in MB an (aktuell belegt: $HOMEKB Kilobyte, verfügbar:"
+  MESSAGE7="Formatiere $FILEINFO mit dem ext2 Dateisystem und kopiere Daten..."
+  MESSAGE8="Lege Datenbereich für Linux an..."
+  SUCCESS="$FILEINFO wurde erfolgreich mit dem Linux ext2 Dateisystem formatiert, und Ihre Heimverzeichnis-Daten wurden darauf transferiert.
+
+Sie können jetzt Ihren Computer neu starten, und beim grml boot:-Prompt durch Eingabe von \"grml home=$PARTITION\" oder \"grml home=scan\" Ihr permanentes Heimverzeichnis aktivieren. Falls Sie außerdem (mit dem save-config Skript) die Systemeinstellungen gesichert haben, können Sie diese Option mit der Angabe von \"myconf=$PARTITION\" kombinieren."
+ ;;
+ *)
+  MESSAGE4="Are you positively SURE that you want to format partition $PARTITION? ALL DATA WILL BE LOST!"
+  MESSAGE5="Do you want to save your home directory encrypted with AES256 (Advanced Encryption Standard, see http://csrc.nist.gov/encryption/aes/)? If yes, you will have to specify a very long password at homedir creation and boot time."
+  MESSAGE6="Please enter the desired size of your persistent homedir in MB (currently used: $HOMEKB kB, available:"
+  MESSAGE7="Formatting $FILEINFO with ext2 filesystem and copying data..."
+  MESSAGE8="Preparing for Linux filesystem..."
+  SUCCESS="$FILEINFO has been succeessfully formatted with the Linux ext2 filesystem, and your home directory has been transferred to it.
+
+You may now reboot your computer and type \"grml home=$PARTITION\" or \"grml home=scan\" at the grml boot: prompt to take advantage of your new persistent home directory. If you have also saved the system configuration (using the save-config script), you can use this in combination with \"myconf=$PARTITION\"."
+ ;;
+esac
+
+gauge(){
+  rm -f "$TMP.done"
+  status=0
+  while [ ! -e "$TMP.done" ]; do
+    echo "$status" ; status="`expr \( 100 - $status \) / 4 + $status`"; sleep 2;
+  done | $DIALOG --title "$TITLE1" --gauge "$1" 8 75 0
+}
+
+# Stop status bar
+killgauge(){
+  touch "$TMP.done" ; wait ; rm -f "$TMP.done"
+}
+
+if [ "$DEVICE" = "$PARTITION" ]; then
+  $DIALOG --cr-wrap --clear --title "$TITLE1" --defaultno --yesno "$MESSAGE4" 6 75 || bailout
+else
+  AMOUNT=0
+  AVAIL="$(df -m $DIRECTORY/. | awk '/^\/dev\//{print $4}')"
+
+  until [ "$AMOUNT" -ge 1 -a "$AMOUNT" -le "$AVAIL" ] 2>/dev/null; do
+    $DIALOG --cr-wrap --clear --title "$TITLE1" --inputbox "$MESSAGE6 $AVAIL MB)" 10 62 "30" 2>"$TMP" || bailout
+    AMOUNT="$(<$TMP)"
+  done
+
+  gauge "$MESSAGE8" &
+  dd if=/dev/urandom of="$DEVICE" bs=1M count="$AMOUNT" 1>/dev/null || { killgauge; sleep 2; bailout; }
+  killgauge
+fi
+
+# Normal loopback file or partition
+gauge "$MESSAGE7" &
+umount "$DEVICE" 2>/dev/null
+
+# create filesystem
+mke2fs -F -m0 "$DEVICE" 1>/dev/null 2>"$TMP.err" || { killgauge; $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
+
+# mount for synch
+LOOPOPT=""
+[ -f "$DEVICE" ] && LOOPOPT="-o loop"
+mkdir -p /tmp/grmlhome
+mount -t ext2 $LOOPOPT "$DEVICE" /tmp/grmlhome 2>"$TMP.err" && rsync -Ha "$HOME/" /tmp/grmlhome 2>"$TMP.err" || { killgauge; umount /tmp/grmlhome 2>/dev/null; $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
+
+umount /tmp/grmlhome
+umount "$DIRECTORY" 2>/dev/null
+killgauge
+
+$DIALOG --cr-wrap --title "$TITLE1" --msgbox "$SUCCESS" 17 65
+
+bailout
+
+## END OF FILE #################################################################

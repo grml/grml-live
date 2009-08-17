@@ -11,7 +11,7 @@
 
 build: build-stamp
 
-build-stamp: 
+build-stamp:
 	dh_testdir
 	cd doc && $(MAKE) && cd ..
 
@@ -21,16 +21,15 @@ clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp
+	cd doc && $(MAKE) clean && cd ..
 
-
-	dh_clean 
+	dh_clean
 
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k 
-	cd doc && $(MAKE) clean && cd ..
-	dh_installdirs etc/grml etc/init.d usr/sbin usr/bin
+	dh_clean -k
+	dh_installdirs etc/grml etc/init.d usr/sbin usr/bin usr/share/doc/grml-saveconfig
 
 	# Add here commands to install the package into debian/grml-autoconfig.
 	install -m 755 grml-autoconfig      debian/grml-autoconfig/etc/init.d/grml-autoconfig
@@ -39,6 +38,11 @@ install: build
 	install -m 644 language-functions   debian/grml-autoconfig/etc/grml/language-functions
 	install -m 755 sbin/grml-autoconfig debian/grml-autoconfig/usr/sbin/grml-autoconfig
 	install -m 755 grml-bootsplash      debian/grml-autoconfig/usr/bin/grml-bootsplash
+
+	install -m 755 bin/mkpersistenthome debian/grml-autoconfig/usr/bin/mkpersistenthome
+	install -m 755 bin/restore-config debian/grml-autoconfig/usr/bin/restore-config
+	install -m 755 bin/save-config debian/grml-autoconfig/usr/bin/save-config
+
 	# just as a "backup" solution:
 	cp -a etc/* debian/grml-autoconfig/etc/
 
@@ -50,13 +54,18 @@ binary-arch: build install
 binary-indep: build install
 	dh_testdir
 	dh_testroot
-	dh_installchangelogs 
-	dh_installdocs
-	dh_installman man/grml-autoconfig.8 man/grml-bootsplash.1
-	dh_link
+	dh_installchangelogs
+	dh_installdocs doc/grml-autoconfig.1.html doc/grml-autoconfig.8.html \
+			doc/grml-bootsplash.1.html doc/mkpersistenthome.1.html \
+			doc/restore-config.1.html doc/save-config.1.html
+	dh_installman doc/grml-autoconfig.1.gz doc/grml-autoconfig.8.gz \
+			doc/grml-bootsplash.1.gz doc/mkpersistenthome.1.gz \
+			doc/restore-config.1.gz doc/save-config.1.gz
+	# backward compability:
+	dh_link /usr/share/doc/grml-autoconfig/grml-autoconfig.1.html /usr/share/doc/grml-saveconfig/grml-config.html
 	dh_strip
 	dh_compress
-	mkdir -p $(CURDIR)/debian/grml-autoconfig/usr/share/lintian/overrides/ 
+	mkdir -p $(CURDIR)/debian/grml-autoconfig/usr/share/lintian/overrides/
 	cp -av debian/overrides $(CURDIR)/debian/grml-autoconfig/usr/share/lintian/overrides/grml-autoconfig
 	dh_fixperms
 	dh_installdeb
