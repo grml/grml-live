@@ -1,67 +1,76 @@
-grml-live (0.9.21) UNRELEASED; urgency=low
+grml-live (0.9.21) unstable; urgency=low
 
   [ Michael Prokop ]
-  * Split the single /etc/apt/sources.list file into structured files
-    in /etc/apt/sources.list.d/. We are using:
-    - /etc/apt/sources.list.d/grml.list for all grml related repositories
-    - /etc/apt/sources.list.d/debian.list for official Debian repositories
-    [Testing: issue349]
-  * When adjusting postfix configuration: make sure to execute newaliases
-    command after adjusting configuration, otherwise the old hostname
-    will be left inside /etc/aliases.db.
-  * grml_cleanup_chroot: get rid of /etc/lvm/cache/.cache and
-    /etc/lvm/backup/main as well.
-  * grml_cleanup_chroot: drop the /usr/include/linux checks.
-  * 90-update-alternatives: use wm-ng as default x-window-manager.
-    [Closes: issue716]
-  * Provide information about grml-live version and Debian/suite
-    through /etc/grml_live_version in the generated ISO. [Closes: issue637]
-  * grml-cheatcodes: document bootoption 'nostartx'.
-  * Check for existence of $target/etc/apt/important_note.txt before
-    operating on it.
-  * buildd: drop GRML_LIVE_ARCH but instead use default architecture
-    if not specified.
-  * Set UTC=no by default. See http://bts.grml.org/grml/issue708 for
-    details. Credits to Ulrich Zehl for debugging. [Closes: issue708]
-  * Improve check for architecture which should be build: if not specified
-    assume a safe default and check this one.
-  * Unify variable default checks, always assume sane defaults.
-  * Always run $SUITE checks, so grml-live repository is used also
-    if suite isn't manually specified.
-  * New graphical boot menu. Can be disabled via ISOLINUX_METHOD=console.
-  * New configuration variables DISTRI_NAME and DISTRI_INFO which should allow
-    easier rebranding of grml-live based distributions.
-  * Detect existence of stage 'boot' using boot/isolinux so grml-live
-    executed with options '-q -B' and empty boot/isolinux works as well.
-  * Introduce $NO_WINDOWS_BINARIES which replaces $WINDOWS_BINARIES so
-    we can improve sanity checks and easify configuration.
-  * Support installation of local files (not being part of any Debian package)
-    through $CHROOT_INSTALL.
-  * Integrate memtest86+ binary so we don't ship old versions from
-    the build host. [Closes: issue717]
-  * Check whether rebuild of ISO is needed even though the ISO exists already.
-    [Closes: issue719]
-  * Display path of FAI logs during execution of grml-live.
-  * Bump to Standard-Version 3.8.3 (no further changes).
-  * Improve long description.
-  * Apply patch from Marc Haber (thanks!) for new grml cheatcodes
-    (new DCS directory feature).
-  * Drop package grml-saveconfig as it is replaced with recent versions
-    of grml-autoconfig.
-  * Replace all references to ftp.de.debian.org with cdn.debian.org,
-    see http://wiki.debian.org/DebianGeoMirror for details.
-    Thanks for the idea, Marc Haber!
-  * Register grml-live html docs using doc-base.
-  * Update copyright file (make lintian happy).
+
+  * New features:
+    - Split the single /etc/apt/sources.list file into structured files
+      in /etc/apt/sources.list.d/. We are using:
+      - /etc/apt/sources.list.d/grml.list for all grml related repositories
+      - /etc/apt/sources.list.d/debian.list for official Debian repositories
+      [Closes: issue349]
+    - Provide information about grml-live version and Debian/suite
+      through /etc/grml_live_version in the generated ISO. [Closes: issue637]
+    - New graphical boot menu. Can be disabled via ISOLINUX_METHOD=console.
+    - New configuration variables DISTRI_NAME and DISTRI_INFO which should allow
+      easier rebranding of grml-live based distributions.
+    - Support installation of local files (not being part of any Debian package)
+      through $CHROOT_INSTALL.
+    - Display path of FAI logs during execution of grml-live.
+    - Replace all references to ftp.de.debian.org with cdn.debian.org,
+      see http://wiki.debian.org/DebianGeoMirror for details.
+      Thanks for the idea, Marc Haber!
+
+  * Bug fixes and improvements:
+    - When adjusting postfix configuration: make sure to execute newaliases
+      command after adjusting configuration, otherwise the old hostname
+      will be left inside /etc/aliases.db.
+    - grml_cleanup_chroot: get rid of /etc/lvm/cache/.cache and
+      /etc/lvm/backup/main as well.
+    - grml_cleanup_chroot: drop the /usr/include/linux checks.
+    - 90-update-alternatives: use wm-ng as default x-window-manager.
+      [Closes: issue716]
+    - Check for existence of $target/etc/apt/important_note.txt before
+      operating on it.
+    - buildd: drop GRML_LIVE_ARCH but instead use default architecture
+      if not specified.
+    - Set UTC=no by default. See http://bts.grml.org/grml/issue708 for
+      details. Credits to Ulrich Zehl for debugging. [Closes: issue708]
+    - Improve check for architecture which should be build: if not specified
+      assume a safe default and check this one.
+    - Unify variable default checks, always assume sane defaults.
+    - Always run $SUITE checks, so grml-live repository is used also
+      if suite isn't manually specified.
+    - Detect existence of stage 'boot' using boot/isolinux so grml-live
+      executed with options '-q -B' and empty boot/isolinux works as well.
+    - Introduce $NO_WINDOWS_BINARIES which replaces $WINDOWS_BINARIES so
+      we can improve sanity checks and easify configuration.
+    - Integrate memtest86+ binary so we don't ship old versions from
+      the build host. [Closes: issue717]
+    - Check whether rebuild of ISO is needed even though the ISO exists already.
+      [Closes: issue719]
+
+  * Debian packaging related changes:
+    - Bump to Standard-Version 3.8.3 (no further changes).
+    - Improve long description.
+    - Update copyright file (make lintian happy).
+    - Register grml-live html docs using doc-base.
+
+  * Documentation:
+    - grml-cheatcodes: document bootoption 'nostartx'.
+    - Apply patch from Marc Haber (thanks!) for new grml cheatcodes
+      (new DCS directory feature).
+
   * Software related changes:
     - Add git-email to GRML_FULL (thanks to Joerg Woelke for mentioning).
     - Add aesfix, aeskeyfind, bios-memimage, chaosreader, ext3grep, fatback,
       myrescue, pipebench, safecopy, shed and xmount to GRML_FORENSIC. The
       packages are either already available or should be available soon.
     - Add scsitools to GRML_MEDIUM.
-    - Drop hydra from GRML_FULL (the license is not a clean GPL one).
     - Drop bar from GRML_FULL (no release since 2007, consider using
       for example cpipe instead).
+    - Drop grml-saveconfig as it is replaced with recent versions
+      of grml-autoconfig.
+    - Drop hydra from GRML_FULL (the license is not a clean GPL one).
     - Drop icedax from GRML_FULL (we have schilyutils available).
 
   [ Thorsten Glaser ]
