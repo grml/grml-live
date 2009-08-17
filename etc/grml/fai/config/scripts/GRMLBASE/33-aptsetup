@@ -43,8 +43,8 @@ fi
 # configure official Debian repositories:
 cat > "$DEBIAN_SOURCES_LIST" << EOF
 # official debian repository:
-  deb     http://ftp.de.debian.org/debian/ $SUITE main contrib non-free
-  deb-src http://ftp.de.debian.org/debian/ $SUITE main contrib non-free
+  deb     http://cdn.debian.net/debian/ $SUITE main contrib non-free
+  deb-src http://cdn.debian.net/debian/ $SUITE main contrib non-free
 EOF
 
 # configure grml-stable repository:

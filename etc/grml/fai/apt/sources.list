@@ -4,4 +4,4 @@
 # and using /etc/grml/fai/files/etc/apt instead!'
 deb http://deb.grml.org/            grml-stable  main
 deb http://deb.grml.org/            grml-testing main
-deb http://ftp.de.debian.org/debian lenny        main contrib non-free
+deb http://cdn.debian.net/debian lenny        main contrib non-free

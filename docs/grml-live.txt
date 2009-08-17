@@ -603,7 +603,7 @@ Instructions
   CHROOT_INSTALL="/etc/grml/fai/chroot_install"
   ## adjust if necessary (defaults to /grml/grml-live):
   ## OUTPUT="/srv/grml-live"
-  FAI_DEBOOTSTRAP="squeeze http://ftp.de.debian.org/debian/"
+  FAI_DEBOOTSTRAP="squeeze http://cdn.debian.net/debian/"
   ARCH="i386"
   CLASSES="GRMLBASE,GRML_MEDIUM,I386"
   ZERO_LOGFILE='1'
@@ -611,7 +611,7 @@ Instructions
   GRML_LIVE_SOURCES="
   deb http://deb.grml.org/            grml-stable  main
   deb http://deb.grml.org/            grml-testing main
-  deb http://ftp.de.debian.org/debian squeeze main contrib non-free
+  deb http://cdn.debian.net/debian squeeze main contrib non-free
   "
   EOF
 
@@ -742,7 +742,7 @@ How do I create a base.tgz for use as NFSROOT?
 First of all build the chroot system:
 
   mkdir /tmp/nfsroot && cd /tmp/nfsroot
-  debootstrap lenny /tmp/nfsroot/ http://ftp.de.debian.org/debian
+  debootstrap lenny /tmp/nfsroot/ http://cdn.debian.net/debian
   tar zcf base.tgz ./
 
 Then check out where your NFSROOT is located:
@@ -788,10 +788,10 @@ FAI_DEBOOTSTRAP:
   GRML_LIVE_SOURCES="
   deb http://localhost:3142/deb.grml.org grml-stable  main
   deb http://localhost:3142/deb.grml.org grml-testing main
-  deb http://localhost:3142/ftp.de.debian.org/debian lenny main contrib non-free
+  deb http://localhost:3142/cdn.debian.net/debian lenny main contrib non-free
   "
   [...]
-  FAI_DEBOOTSTRAP="lenny http://localhost:3142/ftp.de.debian.org/debian lenny main contrib non-free"
+  FAI_DEBOOTSTRAP="lenny http://localhost:3142/cdn.debian.net/debian lenny main contrib non-free"
 
 Make sure apt-cacher / apt-cacher-ng is running ('/etc/init.d/apt-cacher
 restart' or '/etc/init.d/apt-cacher-ng restart'). That's it.  All downloaded

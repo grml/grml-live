@@ -30,10 +30,10 @@ allopt="$debug --ignore-missing-release --ignore-release-gpg --passive --nosourc
 # first sync from a mirror near to you!
 # please ask the mirror admin(s) for permission before downloading
 # several GB of data!
-update_from ftp.de.debian.org
+update_from cdn.debian.net
 
 # since this mirror is not always up to date, sync the rest from an official mirror
-# update_from ftp.de.debian.org
+# update_from cdn.debian.net
 
 # even one should not mirror the security site, but I will do it.
 echo "------------------ create mirror for debian-security ------------------"
