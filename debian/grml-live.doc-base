@@ -1,0 +1,10 @@
+Document: grml-live
+Title: Documentation of the grml-live build framework
+Author: Michael Prokop
+Abstract: grml-live is a build framework based on FAI for generating a
+ Grml and Debian based Linux Live system
+Section: Debian
+
+Format: HTML
+Index: /usr/share/doc/grml-live/grml-live.html
+Files: /usr/share/doc/grml-live/grml-live*.html
