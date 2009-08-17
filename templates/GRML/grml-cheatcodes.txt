@@ -44,7 +44,9 @@ grml setkeycodes                    Set some special function keys for MS/HP key
 
 Configuration settings:
 -----------------------
-grml myconfig=/dev/fd0              Execute "grml.sh" and extract config.tbz from a partition:
+grml myconfig=/dev/fd0              Set the DCS dir (debs, config, scripts) to the root of this device
+                                    DCS dir defaults to the live image or a device labeled GRMLCFG
+                                    If a file /config.tbz exists, it is extracted from there.
                                     /dev/fd0  for floppy disk
                                     /dev/sda1 for USB-stick/first SCSI-device
 grml netconfig=server/config.tbz    Download file and extract configuration archive
@@ -62,12 +64,18 @@ grml home=scan                      Automatic search for grml homedir (using fil
 grml hostname=...                   Set hostname
 grml distri=...                     Set distribution name to given argument. If a jpg file named like the
                                     given distri name can be found in directory desktop on the ISO
-				    (/cdrom/desktop/"$DISTRI") it will be taken as wallpaper for grml
+                                    (/cdrom/desktop/"$DISTRI") it will be taken as wallpaper for grml
 grml debnet                         Search through local partitions for file /etc/network/interfaces,
                                     copy /etc/network to local system and restart networking then
 grml mypath=...                     Add specified option into $PATH of Zsh
                                     For example when using "grml mypath=/foobar" then /foobar
                                     will be added to the end of $PATH inside Zsh
+grml debs=path-name-wildcard        install Debian packages matching the path-name-wildcard in the
+                                    DCS dir
+grml scripts=path-name              execute script (defaulting to grml.sh) inside DCS dir. Path names
+                                    allowed. If path-name points to a directory, all scripts found in
+                                    the directory are executed.
+grml config=path-name               unpack archive that path-name points to
 grml noautoconfig                   Disable searching for device labeled GRMLCFG
 
 Notice: Take a look at http://grml.org/config/ and /usr/share/doc/grml-saveconfig/grml-config.html
@@ -187,7 +195,7 @@ grml pci=bios                       Workaround for bad PCI controllers
 grml ide2=0x180 nopcmcia            Boot from PCMCIA-CD-ROM (some notebooks)
 grml mem=128M                       Specify Memory size in MByte
 grml libata.force=[ID:]VAL          Force configurations for libata.
-                                    Usage example: grml libata.force=1:pio4 
+                                    Usage example: grml libata.force=1:pio4
                                     to force pio4 mode on device "ata1:00:"
 grml libata.dma=0                   Disable DMA on PATA and SATA devices
 grml libata.ignore_hpa=1            Disable host protected area (which should enable the whole disk)
