@@ -20,7 +20,7 @@ multitude of ways. It allows to:
 - install Debian packages from deb files on startup
 - unpack configuration on startup
 
-The combination of Debs, Configuration and Scripts is called DCS in Brml. DCS
+The combination of Debs, Configuration and Scripts is called DCS in Grml. DCS
 can be read from the Live Image itself, from an arbitrary file system on the
 local system which is marked with the volume label GRMLCFG, or from the file
 system pointed to by the myconfig boot parameter.
