@@ -552,6 +552,7 @@ else
       fi
 
       einfo "Find FAI build logs at $(readlink -f /var/log/fai/$HOSTNAME/last)."
+      log   "Find FAI build logs at $(readlink -f /var/log/fai/$HOSTNAME/last)."
       eend 0
    fi
 fi # BUILD_DIRTY?

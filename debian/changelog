@@ -1,8 +1,9 @@
 grml-live (0.9.22) UNRELEASED; urgency=low
 
   * Drop edac-utils from GRML_FULL (it's in a bad shape within Debian).
+  * Send 'Find FAI build logs at' message to grml-live.log as well.
 
- -- Michael Prokop <mika@grml.org>  Wed, 19 Aug 2009 00:37:15 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 19 Aug 2009 09:48:56 +0200
 
 grml-live (0.9.21) unstable; urgency=low
 
