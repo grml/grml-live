@@ -1,5 +1,34 @@
+grml-etc: file-in-etc-rc.d-marked-as-conffile /etc/rcS.d/important_notice
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/bootsplash_end.sh force-reload
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/bootsplash_end.sh restart
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/bootsplash_end.sh start
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/bootsplash_end.sh stop
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/bootsplash_start.sh force-reload
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/bootsplash_start.sh restart
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/bootsplash_start.sh start
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/bootsplash_start.sh stop
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/firewall force-reload
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-halt force-reload
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-halt restart
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-halt start
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-home force-reload
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-home restart
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-home start
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-home stop
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-misc force-reload
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-misc restart
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-misc stop
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-reboot force-reload
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-reboot restart
+grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-reboot start
+grml-etc: init.d-script-missing-lsb-section /etc/init.d/bootsplash_end.sh
+grml-etc: init.d-script-missing-lsb-section /etc/init.d/bootsplash_start.sh
+grml-etc: init.d-script-missing-lsb-section /etc/init.d/firewall
+grml-etc: init.d-script-missing-lsb-section /etc/init.d/grml-halt
+grml-etc: init.d-script-missing-lsb-section /etc/init.d/grml-home
+grml-etc: init.d-script-missing-lsb-section /etc/init.d/grml-misc
+grml-etc: init.d-script-missing-lsb-section /etc/init.d/grml-reboot
 grml-etc: non-standard-file-perm etc/mgetty/login.config 0600 != 0644
-grml-etc: package-installs-into-etc-rc.d etc/rcS.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc0.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc1.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc2.d/important_notice
@@ -7,14 +36,15 @@ grml-etc: package-installs-into-etc-rc.d etc/rc3.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc4.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc5.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc6.d/important_notice
-grml-etc: script-not-executable ./etc/resolv.conf.template
-grml-etc: file-in-etc-rc.d-marked-as-conffile /etc/rcS.d/important_notice
-grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/firewall
-grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/grml-home
-grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/grml-reboot
-grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/grml-misc
-grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/ssh
-grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/grml-halt
-grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/bootsplash_start.sh
+grml-etc: package-installs-into-etc-rc.d etc/rcS.d/important_notice
+grml-etc: script-calls-init-script-directly ./etc/init.d/grml-reboot:221
 grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/bootsplash_end.sh
+grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/bootsplash_start.sh
+grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/firewall
+grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/grml-halt
+grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/grml-home
+grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/grml-misc
+grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/grml-reboot
+grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/ssh
+grml-etc: script-not-executable ./etc/resolv.conf.template
 grml-etc: unknown-section grml
