@@ -1,3 +1,10 @@
+grml-etc (1.1.20) unstable; urgency=low
+
+  * /etc/init.d/grml-reboot: small message formating improvement
+    if displaying message for USB device.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 19 Aug 2009 09:52:40 +0200
+
 grml-etc (1.1.19) unstable; urgency=low
 
   * Use x-window-manager as default window manager in xinitrc.

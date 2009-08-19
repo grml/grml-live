@@ -55,7 +55,7 @@ if ! $INSTALLED ; then
        [ "$(cat /sys/block/${DEVICE}/removable 2>/dev/null)" = "1" ] && REMOVABLE=true
        # is it a usb device?
        readlink /sys/block/${DEVICE} 2>/dev/null | grep -q '/usb' && USB_DEVICE=true
-       $USB_DEVICE && USB_INFO="$(cat /sys/block/${DEVICE}/device/model 2>/dev/null)"
+       $USB_DEVICE && USB_INFO=" ($(cat /sys/block/${DEVICE}/device/model 2>/dev/null))"
      fi
    fi
 fi
