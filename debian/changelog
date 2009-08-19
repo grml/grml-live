@@ -2,8 +2,9 @@ grml-etc (1.1.20) unstable; urgency=low
 
   * /etc/init.d/grml-reboot: small message formating improvement
     if displaying message for USB device.
+  * Bump Standards-Version to 3.8.3 (no further changes).
 
- -- Michael Prokop <mika@grml.org>  Wed, 19 Aug 2009 09:52:40 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 19 Aug 2009 09:57:22 +0200
 
 grml-etc (1.1.19) unstable; urgency=low
 
