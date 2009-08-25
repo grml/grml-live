@@ -1,8 +1,9 @@
 grml-desktop (0.2.5) unstable; urgency=low
 
   * /etc/skel/.pekwm/menu: drop reference to grml-nessus.
+  * Bump Standards-Version to 3.8.3 (no further changes).
 
- -- Michael Prokop <mika@grml.org>  Wed, 26 Aug 2009 00:21:49 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 26 Aug 2009 00:23:33 +0200
 
 grml-desktop (0.2.4) unstable; urgency=low
 
