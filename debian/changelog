@@ -1,3 +1,11 @@
+grml-etc (1.1.21) unstable; urgency=low
+
+  [ Andreas Gredler ]
+  * Added comments to .xinitrc for disabling screenblanking features.
+    Very useful when presenting grml at the booth.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 25 Aug 2009 22:22:04 +0200
+
 grml-etc (1.1.20) unstable; urgency=low
 
   * /etc/init.d/grml-reboot: small message formating improvement
@@ -673,7 +681,7 @@ grml-etc (0.8-21) unstable; urgency=low
 grml-etc (0.8-20) unstable; urgency=low
 
   * /etc/skel/.Xresources: applied nedit-stuff from
-    http://www.nedit.org/technotes/looks-1.php - thanks, Mark! 
+    http://www.nedit.org/technotes/looks-1.php - thanks, Mark!
 
  -- Michael Prokop <mika@grml.org>  Thu, 28 Sep 2006 23:10:48 +0200
 
@@ -829,7 +837,7 @@ grml-etc (0.7-69) unstable; urgency=low
 grml-etc (0.7-68) unstable; urgency=low
 
   * /etc/skel/.zshrc: let's drop the
-    -o "PreferredAuthentications=keyboard-interactive" 
+    -o "PreferredAuthentications=keyboard-interactive"
     in insecssh causing problems in some situations like:
     | Permission denied (publickey,password).
 
