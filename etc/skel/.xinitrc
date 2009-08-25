@@ -39,6 +39,10 @@
 # other settings:
 # xset m 20/10 4
 
+# disable screensaver and dpms
+# xset s off
+# xset -dpms
+
 # xresources
   [ -r $HOME/.Xresources ] && xrdb -merge $HOME/.Xresources
 
