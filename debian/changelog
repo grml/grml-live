@@ -4,8 +4,9 @@ grml-live (0.9.22) UNRELEASED; urgency=low
   * Software related changes:
     - Drop edac-utils from GRML_FULL (it's in a bad shape within Debian).
     - Add qla-tools to GRML_FULL.
+    - Add libsmbios-bin to GRML_FULL (thanks to Christian Bricart).
 
- -- Michael Prokop <mika@grml.org>  Tue, 25 Aug 2009 12:38:14 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 25 Aug 2009 18:41:04 +0200
 
 grml-live (0.9.21) unstable; urgency=low
 

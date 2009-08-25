@@ -942,6 +942,7 @@ libpam-mount
 libpam-smbpass
 libpam-ssh
 libpam-tmpdir
+libsmbios-bin
 libtool
 lighttpd
 lilo
