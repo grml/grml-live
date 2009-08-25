@@ -23,7 +23,6 @@ RootMenu = "Pekwm @ grml" {
 	}
 	Submenu = "Configuration" {
 		Entry = "grml-mutt" { Actions = "Exec $TERM -title grml-mutt -e grml-mutt &" }
-		Entry = "grml-nessus" { Actions = "Exec $TERM -title grml-nessus -e grml-nessus &" }
 		Entry = "grml-postfix" { Actions = "Exec $TERM -title grml-postfix -e grml-postfix &" }
 		Entry = "grml-slrn" { Actions = "Exec $TERM -title grml-slrn -e grml-slrn &" }
 	}
