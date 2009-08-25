@@ -122,7 +122,6 @@
 20	0,1,6	-		/etc/init.d/xfs
 20	0,1,6	-		/etc/init.d/xinetd
 20	0,6	-		/etc/init.d/honeyd
-20	0,6	-		/etc/init.d/nessusd
 20	0,1,6	-		/etc/init.d/acct
 20	0,1,6	-		/etc/init.d/apmd
 20	0,6	-		/etc/init.d/bittorrent
