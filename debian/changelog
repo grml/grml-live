@@ -5,8 +5,10 @@ grml-live (0.9.22) UNRELEASED; urgency=low
     - Drop edac-utils from GRML_FULL (it's in a bad shape within Debian).
     - Add qla-tools to GRML_FULL.
     - Add libsmbios-bin to GRML_FULL (thanks to Christian Bricart).
+    - Replace nessusclient, nessusd and nessus-plugins with
+      openvas-client and openvas-server in GRML_FULL.
 
- -- Michael Prokop <mika@grml.org>  Tue, 25 Aug 2009 18:41:04 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 26 Aug 2009 00:16:38 +0200
 
 grml-live (0.9.21) unstable; urgency=low
 

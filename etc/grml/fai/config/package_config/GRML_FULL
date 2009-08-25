@@ -1113,9 +1113,6 @@ ndisc6
 ndiswrapper-utils-1.9
 ne
 nedit
-nessusclient
-nessusd
-nessus-plugins
 netbase
 netcat
 netcat6
@@ -1185,6 +1182,8 @@ opensc
 openssh-client
 openssh-server
 openssl
+openvas-client
+openvas-server
 open-vm-tools
 openvpn
 ophcrack
