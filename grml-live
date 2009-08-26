@@ -470,7 +470,7 @@ else
    fi
 
    if [ -n "$UPDATE" -o -n "$BUILD_ONLY" ] ; then
-      if ! [ -r "$CHROOT_OUTPUT/etc/grml_version" ] ; then
+      if ! [ -r "$CHROOT_OUTPUT/etc/debian_version" ] ; then
          log "Error: does not look like you have a working chroot. Updating/building not possible."
          eerror "Error: does not look like you have a working chroot. Updating/building not possible. (Drop -u/-b option?)"
          eend 1

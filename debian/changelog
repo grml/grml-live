@@ -7,8 +7,12 @@ grml-live (0.9.22) UNRELEASED; urgency=low
     - Add libsmbios-bin to GRML_FULL (thanks to Christian Bricart).
     - Replace nessusclient, nessusd and nessus-plugins with
       openvas-client and openvas-server in GRML_FULL.
+  * Do not use /etc/grml_version but instead use /etc/debian_version
+    as check whether the chroot exists. If grml-live execution
+    itself succeded but was interrupted during task_configure it should
+    be fine to re-run grml-live with -u/-b options.
 
- -- Michael Prokop <mika@grml.org>  Wed, 26 Aug 2009 00:16:38 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 26 Aug 2009 23:06:53 +0200
 
 grml-live (0.9.21) unstable; urgency=low
 
