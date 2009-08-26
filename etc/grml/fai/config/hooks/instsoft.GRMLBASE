@@ -58,6 +58,9 @@ EOF
          rm $target/etc/apt/sources.list
       fi
       cp /etc/grml/fai/apt/sources.list $target/etc/apt/sources.list.d/grml-live.list
+      if [ -r  $target/etc/apt/sources.list.d/grml.list ] ; then
+         mv $target/etc/apt/sources.list.d/grml.list $target/etc/apt/sources.list.d/grml.unused
+      fi
    fi
 
    # run it on our own, as updatebase is used at the wrong stage for our needs,
