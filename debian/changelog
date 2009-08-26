@@ -13,8 +13,9 @@ grml-live (0.9.22) UNRELEASED; urgency=low
     be fine to re-run grml-live with -u/-b options.
   * Fix usage of exclude option in $SQUASHFS_OPTIONS.
   * Always remove temporary squashfs stderr file.
+  * Fix usage of /etc/runlevel.conf in 15-initsetup.
 
- -- Michael Prokop <mika@grml.org>  Wed, 26 Aug 2009 23:27:01 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 26 Aug 2009 23:39:42 +0200
 
 grml-live (0.9.21) unstable; urgency=low
 

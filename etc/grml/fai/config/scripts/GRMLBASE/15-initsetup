@@ -9,7 +9,7 @@
 set -u
 set -e
 
-if ! [ -r /etc/runlevel.conf ] ; then
+if ! [ -r $target/etc/runlevel.conf ] ; then
    echo 'Warning: /etc/runlevel.conf does not exist...'
    echo '... assuming we do not have file-rc, skipping 15-initsetup'
    exit 0
@@ -17,10 +17,10 @@ fi
 
 # keep a backup of the original runlevel.conf file for reference
 # but only save it as /etc/runlevel.conf.original if it's not the
-# according livecd version, this should prevent from overriding
-# /etc/runlevel.conf.original if re-running grml-live -b ...
-if ! cmp /etc/runlevel.conf /etc/runlevel.conf.livecd 1>/dev/null || \
-   ! cmp /etc/runlevel.conf /etc/runlevel.conf.livecd.small 1>/dev/null ; then
+# according live system version, this should prevent from overriding
+# /etc/runlevel.conf.original if re-running grml-live with -b option.
+if ! cmp $target/etc/runlevel.conf $target/etc/runlevel.conf.livecd 1>/dev/null || \
+   ! cmp $target/etc/runlevel.conf $target/etc/runlevel.conf.livecd.small 1>/dev/null ; then
 
    # make sure to store old backup files if they differ as well
    if [ -r $target/etc/runlevel.conf.original ] ; then
