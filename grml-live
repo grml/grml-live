@@ -132,6 +132,7 @@ LIVE_CONF=/etc/grml/grml-live.conf
 bailout() {
   rm -f /var/run/fai/fai_softupdate_is_running \
         /var/run/fai/FAI_INSTALLATION_IN_PROGRESS
+  [ -n "$SQUASHFS_STDERR" ]  && rm -rf "$SQUASHFS_STDERR"
   [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
   [ -n "$1" ] && EXIT="$1" || EXIT="1"
   [ -n "$2" ] && eerror "$2">&2
@@ -867,20 +868,19 @@ else
       SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -e initrd.img* vmlinuz*"
    fi
 
-   SQUASHFS_OUTPUT="$(mktemp -t grml-live.XXXXXX)"
+   SQUASHFS_STDERR="$(mktemp -t grml-live.XXXXXX)"
+
    log "mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/${GRML_NAME}.squashfs -noappend $SQUASHFS_OPTIONS $SQUASHFS_ZLIB"
    if mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/"${GRML_NAME}".squashfs \
-      -noappend $SQUASHFS_OPTIONS $SQUASHFS_ZLIB 2>"${SQUASHFS_OUTPUT}" ; then
+      -noappend $SQUASHFS_OPTIONS $SQUASHFS_ZLIB 2>"${SQUASHFS_STDERR}" ; then
       echo "${GRML_NAME}.squashfs" > $BUILD_OUTPUT/live/filesystem.module
       log "Finished execution of stage 'squashfs' [$(date)]"
       einfo "Finished execution of stage 'squashfs'" ; eend 0
-      rm -f "${SQUASHFS_OUTPUT}"
    else
       log "There was an error executing stage 'squashfs' [$(date)]:"
-      log "$(cat $SQUASHFS_OUTPUT)"
+      log "$(cat $SQUASHFS_STDERR)"
       eerror "There was an error executing stage 'squashfs':" ; eend 1
-      cat "${SQUASHFS_OUTPUT}"
-      rm -f "${SQUASHFS_OUTPUT}"
+      cat "${SQUASHFS_STDERR}"
       bailout
    fi
 
