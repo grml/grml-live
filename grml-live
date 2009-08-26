@@ -864,7 +864,7 @@ else
 
    # get rid of unnecessary files when building grml-small for final release:
    if echo "$CLASSES" | grep -q GRML_SMALL ; then
-      SQUASHFS_OPTIONS="$SQUASHFS_OUTPUT -e initrd.img* vmlinuz*"
+      SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -e initrd.img* vmlinuz*"
    fi
 
    SQUASHFS_OUTPUT="$(mktemp -t grml-live.XXXXXX)"
