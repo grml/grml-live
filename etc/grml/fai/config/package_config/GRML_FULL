@@ -617,6 +617,7 @@ fakechroot
 fakeroot
 faketime
 farpd
+fatattr
 fatresize
 fatsort
 fbgrab
