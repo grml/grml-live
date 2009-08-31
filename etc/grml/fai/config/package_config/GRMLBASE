@@ -5,6 +5,7 @@ bzip2
 console-common
 cron
 deborphan
+dmidecode
 eject
 file
 grml2hd

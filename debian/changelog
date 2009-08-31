@@ -7,6 +7,7 @@ grml-live (0.9.22) UNRELEASED; urgency=low
     - Add qla-tools to GRML_FULL.
     - Drop edac-utils from GRML_FULL (it's in a bad shape within Debian).
     - Drop lanmap (abandonned upstream, see #542376).
+    - Move dmidecode from GRML_SMALL, GRML_MEDIUM and GRML_FULL to GRMLBASE.
     - Replace nessusclient, nessusd and nessus-plugins with
       openvas-client and openvas-server in GRML_FULL.
   * Do not use /etc/grml_version but instead use /etc/debian_version
@@ -22,7 +23,7 @@ grml-live (0.9.22) UNRELEASED; urgency=low
     again then. This should should prevent us from duplicated sources
     list entries.
 
- -- Michael Prokop <mika@grml.org>  Sat, 29 Aug 2009 09:45:51 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 31 Aug 2009 20:21:08 +0200
 
 grml-live (0.9.21) unstable; urgency=low
 

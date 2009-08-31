@@ -34,7 +34,6 @@ deborphan
 dhcp3-client
 dialog
 diff
-dmidecode
 dmraid
 dmsetup
 dosfstools
