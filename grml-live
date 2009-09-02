@@ -49,6 +49,7 @@ Usage: $PN [options, see as follows]
    -i <iso_name>           name of ISO
    -I <src_directory>      directory which provides files that should become
                            part of the chroot/ISO
+   -n                      skip generation of ISO
    -o <output_directory>   main output directory of the build process
    -q                      skip mksquashfs
    -r <release_name<       release name
@@ -210,7 +211,7 @@ fi
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:g:i:I:o:r:s:t:v:bBFuqVz" opt; do
+while getopts "a:C:c:g:i:I:o:r:s:t:v:bBFnquVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     b) BUILD_ONLY=1 ;;
@@ -220,6 +221,7 @@ while getopts "a:C:c:g:i:I:o:r:s:t:v:bBFuqVz" opt; do
     g) GRML_NAME="$OPTARG" ;;
     i) ISO_NAME="$OPTARG" ;;
     I) CHROOT_INSTALL="$OPTARG" ;;
+    n) SKIP_MKISOFS=1 ;;
     o) OUTPUT="$OPTARG" ;;
     q) SKIP_MKSQUASHFS=1 ;;
     r) RELEASENAME="$OPTARG" ;;
@@ -327,6 +329,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$VERBOSE" ]            && echo "  Using VERBOSE mode."
    [ -n "$UPDATE" ]             && echo "  Executing UPDATE instead of fresh installation."
    [ -n "$SKIP_MKSQUASHFS" ]    && echo "  Skipping creation of SQUASHFS file."
+   [ -n "$SKIP_MKISOFS" ]       && echo "  Skipping creation of ISO file."
    [ -n "$BUILD_ONLY" ]         && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
    [ -n "$BUILD_DIRTY" ]        && echo "  Executing BUILD_DIRTY to leave chroot untouched."
    echo
@@ -905,6 +908,9 @@ fi
 if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" -a "$FORCE_ISO_REBUILD" = "false" ]  ; then
    log "$ISO_OUTPUT/${ISO_NAME} exists already, skipping stage 'iso build'"
    ewarn "$ISO_OUTPUT/${ISO_NAME} exists already, skipping stage 'iso build'" ; eend 0
+elif [ -n "$SKIP_MKISOFS" ] ; then
+   log "Skipping stage 'iso build' as requested via option -n"
+   ewarn "Skipping stage 'iso build' as requested via option -n" ; eend 0
 else
    mkdir -p "$ISO_OUTPUT" || bailout 6 "Problem with creating $ISO_OUTPUT for stage 'iso build'"
 

@@ -127,6 +127,11 @@ Specify name of source directory which provides files that should become part of
 the chroot/ISO. Not enabled by default. Note: the files are installed under '/'
 in the chroot so you have to create the rootfs structure on your own.
 
+  -n::
+
+Skip creation of the ISO file. This option is useful if you want to build/update
+the chroot and/or recreate the squashfs file without building an ISO file.
+
   -o **OUTPUT_DIRECTORY**::
 
 Main output directory of the build process of FAI.  Some directories are created
