@@ -2,6 +2,7 @@ grml-live (0.9.22) UNRELEASED; urgency=low
 
   * Send 'Find FAI build logs at' message to grml-live.log as well.
   * Software related changes:
+    - Add comgt to GRML_FULL.
     - Add fatattr to GRML_FULL.
     - Add libsmbios-bin to GRML_FULL (thanks to Christian Bricart).
     - Add qla-tools to GRML_FULL.
@@ -23,7 +24,7 @@ grml-live (0.9.22) UNRELEASED; urgency=low
     again then. This should should prevent us from duplicated sources
     list entries.
 
- -- Michael Prokop <mika@grml.org>  Mon, 31 Aug 2009 20:21:08 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 02 Sep 2009 11:06:56 +0200
 
 grml-live (0.9.21) unstable; urgency=low
 
