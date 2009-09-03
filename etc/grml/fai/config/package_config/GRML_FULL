@@ -1945,12 +1945,10 @@ bluez-firmware
 chntpw
 dvdrtools
 figlet
-firmware-ipw3945
 firmware-iwlwifi
 firmware-qlogic
 firmware-ralink
 iozone3
-ipw3945d
 irpas
 lha
 # lmbench

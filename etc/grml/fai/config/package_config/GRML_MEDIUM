@@ -59,7 +59,6 @@ ethtool
 file
 file-rc
 findutils
-firmware-ipw3945
 firmware-iwlwifi
 fluxbox
 fnord
@@ -112,7 +111,6 @@ initscripts
 iproute
 iptstate
 iputils-ping
-ipw3945d
 ipw-firmware
 irqbalance
 jed

@@ -47,7 +47,6 @@ ethtool
 file
 file-rc
 findutils
-firmware-ipw3945
 fnord
 # fuse-utils
 gawk
@@ -85,7 +84,6 @@ initramfs-tools
 initscripts
 iproute
 iputils-ping
-ipw3945d
 ipw-firmware
 jed
 jed-common

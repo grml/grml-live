@@ -7,6 +7,8 @@ grml-live (0.9.22) UNRELEASED; urgency=low
     - Add libsmbios-bin to GRML_FULL (thanks to Christian Bricart).
     - Add qla-tools to GRML_FULL.
     - Drop edac-utils from GRML_FULL (it's in a bad shape within Debian).
+    - Drop deprecated firmware-ipw3945 + ipw3945d from GRML_SMALL,
+      GRML_MEDIUM and GRML_FULL.
     - Drop lanmap (abandonned upstream, see #542376).
     - Move dmidecode from GRML_SMALL, GRML_MEDIUM and GRML_FULL to GRMLBASE.
     - Replace nessusclient, nessusd and nessus-plugins with
@@ -25,7 +27,7 @@ grml-live (0.9.22) UNRELEASED; urgency=low
     list entries.
   * New cmdline option: "-n" skips generation of the ISO file.
 
- -- Michael Prokop <mika@grml.org>  Wed, 02 Sep 2009 23:18:42 +0200
+ -- Michael Prokop <mika@grml.org>  Thu, 03 Sep 2009 13:14:31 +0200
 
 grml-live (0.9.21) unstable; urgency=low
 
