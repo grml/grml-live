@@ -27,8 +27,10 @@ grml-live (0.9.22) UNRELEASED; urgency=low
     again then. This should should prevent us from duplicated sources
     list entries.
   * New cmdline option: "-n" skips generation of the ISO file.
+  * Introduce support for squashfs-lzma-tools 4.0-1 and support
+    configuration variable SQUASHFS_BINARY.
 
- -- Michael Prokop <mika@grml.org>  Fri, 04 Sep 2009 01:56:19 +0200
+ -- Michael Prokop <mika@grml.org>  Fri, 04 Sep 2009 01:57:39 +0200
 
 grml-live (0.9.21) unstable; urgency=low
 
