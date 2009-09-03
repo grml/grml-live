@@ -343,8 +343,8 @@ fi
 
 if [ -n "$CONFIG" ] ; then
    if ! [ -f "$CONFIG" ] ; then
-      log "Sorry, $CONFIG could not be read. Exiting. [$(date)]"
-      eerror "Sorry, $CONFIG could not be read. Exiting."
+      log    "Error: $CONFIG could not be read. Exiting. [$(date)]"
+      eerror "Error: $CONFIG could not be read. Exiting." ; eend 1
       bailout 1
    else
       log "Sourcing $CONFIG"
@@ -364,8 +364,8 @@ einfo "Logging actions to logfile $LOGFILE"
 # on-the-fly configuration {{{
 if [ -n "$MIRROR_DIRECTORY" ] ; then
    if ! [ -d "$MIRROR_DIRECTORY/debian" ] ; then
-      log "Sorry, $MIRROR_DIRECTORY/debian does not seem to exist. Exiting. [$(date)]"
-      eerror "Sorry, $MIRROR_DIRECTORY/debian does not seem to exist. Exiting."
+      log    "Error: $MIRROR_DIRECTORY/debian does not seem to exist. Exiting. [$(date)]"
+      eerror "Error: $MIRROR_DIRECTORY/debian does not seem to exist. Exiting." ; eend 1
       bailout 1
    fi
    cat > "$SOURCES_LIST_FILE" << EOF
@@ -436,14 +436,18 @@ done
 # architecture (option), otherwise installation of kernel will fail
 if echo $CLASSES | grep -qi i386 ; then
    if ! [[ "$ARCH" == "i386" ]] ; then
-      eerror "You specified the I386 class but are trying to build something else (AMD64?)."
-      eerror "-> Either invoke grml-live with '-i i386' or adjust the architecture class. Exiting."
+      log    "Error: You specified the I386 class but are trying to build something else (AMD64?)."
+      eerror "Error: You specified the I386 class but are trying to build something else (AMD64?)."
+      eerror "Tip:   Either invoke grml-live with '-i i386' or adjust the architecture class. Exiting."
+      eend 1
       bailout
    fi
 elif echo $CLASSES | grep -qi amd64 ; then
    if ! [[ "$ARCH" == "amd64" ]] ; then
-      eerror "You specified the AMD64 class but are trying to build something else (I386?)."
-      eerror "-> Either invoke grml-live with '-i amd64' or adjust the architecture class. Exiting."
+      log    "Error: You specified the AMD64 class but are trying to build something else (I386?)."
+      eerror "Error: You specified the AMD64 class but are trying to build something else (I386?)."
+      eerror "Tip:   Either invoke grml-live with '-i amd64' or adjust the architecture class. Exiting."
+      eend 1
       bailout
    fi
 fi
@@ -457,7 +461,8 @@ fi
 
 # CHROOT_OUTPUT - execute FAI {{{
 if [ -n "$BUILD_DIRTY" ]; then
-  einfo "Skipping FAI" ; eend 0
+   log   "Skipping stage 'fai' as requested via option -B"
+   ewarn "Skipping stage 'fai' as requested via option -B" ; eend 0
 else
    [ -n "$CHROOT_OUTPUT" ] || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
 
@@ -475,7 +480,7 @@ else
 
    if [ -n "$UPDATE" -o -n "$BUILD_ONLY" ] ; then
       if ! [ -r "$CHROOT_OUTPUT/etc/debian_version" ] ; then
-         log "Error: does not look like you have a working chroot. Updating/building not possible."
+         log    "Error: does not look like you have a working chroot. Updating/building not possible."
          eerror "Error: does not look like you have a working chroot. Updating/building not possible. (Drop -u/-b option?)"
          eend 1
          bailout 20
@@ -483,8 +488,8 @@ else
    fi
 
    if [ -d "$CHROOT_OUTPUT/bin" -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
-      log "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'"
-      ewarn "$CHROOT_OUTPUT exists already, skipping stage 'fai dirinstall'" ; eend 0
+      log   "Skiping stage 'fai dirinstall' as $CHROOT_OUTPUT exists already."
+      ewarn "Skiping stage 'fai dirinstall' as $CHROOT_OUTPUT exists already." ; eend 0
    else
       mkdir -p "$CHROOT_OUTPUT" || bailout 5 "Problem with creating $CHROOT_OUTPUT for FAI"
 
@@ -502,8 +507,8 @@ else
       FORCE_ISO_REBUILD=true
 
       if [ "$RC" != 0 ] ; then
-         log "Error while executing fai [exit code ${RC}]. Exiting."
-         eerror "Error while executing fai [exit code ${RC}]. Exiting." ; eend 1
+         log    "Error: critical error while executing fai [exit code ${RC}]. Exiting."
+         eerror "Error: critical error while executing fai [exit code ${RC}]. Exiting." ; eend 1
          bailout 1
       else
          log "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]"
@@ -545,9 +550,9 @@ else
       fi
 
       if [ -n "$ERROR" ] ; then
-         log "There was an error [${ERROR}] during execution of stage 'fai dirinstall' [$(date)]"
-         eerror "There was an error during execution of stage 'fai dirinstall'"
-         echo "   Check out ${CHECKLOG}/ for details. [exit ${ERROR}]"
+         log    "Error: there was a critical error [${ERROR}] during execution of stage 'fai dirinstall' [$(date)]"
+         eerror "Error: there was a critical error during execution of stage 'fai dirinstall'"
+         eerror "Note:  check out ${CHECKLOG}/ for details. [exit ${ERROR}]"
          eend 1
          bailout 1
       else
@@ -569,8 +574,8 @@ mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for s
 # i386:
 if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
    if [ -d "$BUILD_OUTPUT"/boot/isolinux -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
-      log "$BUILD_OUTPUT/boot/isolinux exists already, skipping stage 'boot'"
-      ewarn "$BUILD_OUTPUT/boot/isolinux exists already, skipping stage 'boot'" ; eend 0
+      log   "Skipping stage 'boot' as $BUILD_OUTPUT/boot/isolinux exists already."
+      ewarn "Skipping stage 'boot' as $BUILD_OUTPUT/boot/isolinux exists already." ; eend 0
    else
       # booting stuff:
       [ -d "$BUILD_OUTPUT"/boot/isolinux ] || mkdir -p "$BUILD_OUTPUT"/boot/isolinux
@@ -598,8 +603,8 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          cp $INITRD "$BUILD_OUTPUT"/boot/"${SHORT_GRML_NAME}"/initrd.gz
          find $CHROOT_OUTPUT/boot/ -name initrd\*.bak -exec rm {} \;
       else
-         log "No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting"
-         eerror "No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
+         log    "Error: No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting"
+         eerror "Error: No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
          bailout 10
       fi
 
@@ -607,15 +612,15 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       if [ -n "$KERNEL_IMAGE" ] ; then
          cp "$KERNEL_IMAGE" "$BUILD_OUTPUT"/boot/"${SHORT_GRML_NAME}"/linux26
       else
-         log "No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting"
-         eerror "No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
+         log    "Error: No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting"
+         eerror "Error: No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
          bailout 11
       fi
 
       [ -n "$TEMPLATE_DIRECTORY" ] || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
       if ! [ -d "${TEMPLATE_DIRECTORY}"/boot ] ; then
-         log "${TEMPLATE_DIRECTORY}/boot does not exist. Exiting."
-         eerror "${TEMPLATE_DIRECTORY}/boot does not exist. Exiting." ; eend 1
+         log    "Error: ${TEMPLATE_DIRECTORY}/boot does not exist. Exiting."
+         eerror "Error: ${TEMPLATE_DIRECTORY}/boot does not exist. Exiting." ; eend 1
          bailout 8
       fi
 
@@ -648,8 +653,8 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       cp ${TEMPLATE_DIRECTORY}/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
 
       if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
-         log "${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
-         eerror "${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting." ; eend 1
+         log    "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
+         eerror "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting." ; eend 1
          bailout 9
       fi
 
@@ -785,13 +790,13 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
       # windows-binaries:
       if [ -n "$NO_WINDOWS_BINARIES" ] ; then
-         log "Skipping download of windows binaries as requested via \$NO_WINDOWS_BINARIES."
+         log   "Skipping download of windows binaries as requested via \$NO_WINDOWS_BINARIES."
          einfo "Skipping download of windows binaries as requested via \$NO_WINDOWS_BINARIES."
          eend 0
       else
          if [ -f "$BUILD_OUTPUT"/windows/putty.exe ] ; then
-            log "$BUILD_OUTPUT/windows exists already, skipping stage 'WINDOWS_BINARIES'"
-            ewarn "$BUILD_OUTPUT/windows exists already, skipping stage 'WINDOWS_BINARIES'" ; eend 0
+            log   "Skipping stage 'WINDOWS_BINARIES' as $BUILD_OUTPUT/windows exists already."
+            ewarn "Skipping stage 'WINDOWS_BINARIES' as $BUILD_OUTPUT/windows exists already." ; eend 0
          else
             if ! [ -d "$BUILD_OUTPUT"/windows ] ; then
                mkdir "$BUILD_OUTPUT"/windows
@@ -810,8 +815,9 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
    einfo "Finished execution of stage 'boot'" ; eend 0
    fi
 else
-   log 'Error: Unsupported ARCH, sorry. Want to support it? Contribute!'
+   log    'Error: Unsupported ARCH, sorry. Want to support it? Contribute!'
    eerror 'Error: Unsupported ARCH, sorry. Want to support it? Contribute!' ; eend 1
+   bailout
 fi
 
 # support installation of local files into the chroot/ISO
@@ -830,32 +836,82 @@ if [ -n "$CHROOT_INSTALL" ] ; then
 fi
 
 if [ -f "$BUILD_OUTPUT"/live/${GRML_NAME}.squashfs -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" ] ; then
-   log "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'"
-   ewarn "$BUILD_OUTPUT/live exists already, skipping stage 'squashfs'" ; eend 0
+   log   "Skipping stage 'squashfs' as $BUILD_OUTPUT/live exists already."
+   ewarn "Skipping stage 'squashfs' as $BUILD_OUTPUT/live exists already." ; eend 0
 elif [ -n "$SKIP_MKSQUASHFS" ] ; then
-   log "Skipping stage 'squashfs' as requested via option -q"
+   log   "Skipping stage 'squashfs' as requested via option -q"
    ewarn "Skipping stage 'squashfs' as requested via option -q" ; eend 0
 else
    [ -d "$BUILD_OUTPUT"/live ] || mkdir "$BUILD_OUTPUT"/live
    # make sure we don't leave (even an empty) base.tgz:
    [ -f "$CHROOT_OUTPUT/base.tgz" ] && rm -f "$CHROOT_OUTPUT/base.tgz"
 
-   # make sure mksquashfs can handle the according option:
-   if [ -n "$SQUASHFS_ZLIB" ] ; then
-      mksquashfs --help 2>&1 | grep -q -- "$SQUASHFS_ZLIB" || SQUASHFS_ZLIB=''
+   # $SQUASHFS_BINARY is specified in the configuration:
+   if [ -n "$SQUASHFS_BINARY" ] ; then
+      if ! which "$SQUASHFS_BINARY" >/dev/null 2>&1 ; then
+         log    "Error: specified mksquashfs binary ($SQUASHFS_BINARY) not found. Exiting."
+         eerror "Error: specified mksquashfs binary ($SQUASHFS_BINARY) not found. Exiting." ; eend 1
+         bailout
+      fi
+   else # no $SQUASHFS_BINARY configured, let's find the according binary:
+      # Note: this is ALL for backward compability and yes: it's serious PITA.
+      # We'll definitely drop this once people build >2.6.28-grml* only and
+      # the squashfs-tools vs. squashfs-lzma-tools + zlib vs. lzma situation
+      # is settling...
+
+      # assume the safe default if mksquashfs-lzma isn't present:
+      if ! which mksquashfs-lzma >/dev/null 2>&1 ; then
+         SQUASHFS_BINARY='mksquashfs'
+      else # mksquashfs-lzma is available since squashfs-lzma-tools 4.0:
+         # if the user wants to use zlib then don't use mksquashfs-lzma:
+         if echo "$SQUASHFS_OPTIONS" | grep -q -- "-nolzma" || [ -n "$SQUASHFS_ZLIB" ] ; then
+            SQUASHFS_BINARY='mksquashfs'
+         else # neither -nolzma nor -z and mksquashfs-lzma is available:
+            SQUASHFS_BINARY='mksquashfs-lzma'
+
+            # backwards compability: someone has squashfs-lzma-tools >=4 installed but
+            # 1) doesn't use -nolzma in $SQUASHFS_OPTIONS or the grml-live's -z option *and*
+            # 2) builds against kernel version <=2.6.28-grml[64]
+            if ls $CHROOT_OUTPUT/boot/vmlinuz* >/dev/null 2>&1 ; then
+               KERNEL_IMAGE="$(ls $CHROOT_OUTPUT/boot/vmlinuz* 2>/dev/null | sort -r | head -1)"
+
+               case $KERNEL_IMAGE in
+                  *vmlinuz-2.6.28-grml*|*vmlinuz-2.6.26-grml*|*vmlinuz-2.6.23-grml*)
+                  log   "You seem to be building a system with squashfs file format 3 using squashfs-lzma-tools >=4."
+                  ewarn "You seem to be building a system with squashfs file format 3 using squashfs-lzma-tools >=4."
+                  ewarn "|-> Consider installing squashfs-lzma-tools 3.3-1 for support of file format version 3."
+                  ewarn "|-> Trying the mksquashfs binary instead of mksquashfs-lzma (though this might fail)."
+                  ewarn "\`-> Visit http://grml.org/grml-live/#current_state for further details if building fails."
+                  eend 0
+                  SQUASHFS_BINARY='mksquashfs'
+                  ;;
+               esac
+            fi
+         fi
+
+      fi
    fi
 
+   # make sure mksquashfs can handle the according option:
+   if [ -n "$SQUASHFS_ZLIB" ] ; then
+      $SQUASHFS_BINARY --help 2>&1 | grep -q -- "$SQUASHFS_ZLIB" || SQUASHFS_ZLIB=''
+   fi
+
+   # make sure to drop the -nolzma option if it's not available:
    if echo "$SQUASHFS_OPTIONS" | grep -q -- "-nolzma" ; then
-      if ! mksquashfs --help 2>&1 | grep -q -- '-nolzma' ; then
-         ewarn "mksquashfs does NOT support the nolzma option, just using default zlib mode."
+      if ! $SQUASHFS_BINARY --help 2>&1 | grep -q -- '-nolzma' ; then
+         log   "$SQUASHFS_BINARY does NOT support the nolzma option, dropping it and using default mode."
+         ewarn "$SQUASHFS_BINARY does NOT support the nolzma option, dropping it and using default mode."
          SQUASHFS_OPTIONS="$(echo $SQUASHFS_OPTIONS | sed 's/-nolzma//g')"
          eend 0
       fi
    fi
 
+   # make sure to drop the -lzma option if it's not available:
    if echo "$SQUASHFS_OPTIONS" | grep -q -- "-lzma" ; then
-      if ! mksquashfs --help 2>&1 | grep -q -- '-lzma' ; then
-         ewarn "mksquashfs does NOT support the lzma option, falling back to zlib mode."
+      if ! $SQUASHFS_BINARY --help 2>&1 | grep -q -- '-lzma' ; then
+         log   "$SQUASHFS_BINARY does NOT support the lzma option, dropping it and using default mode."
+         ewarn "$SQUASHFS_BINARY does NOT support the lzma option, dropping it and using default mode."
          SQUASHFS_OPTIONS="$(echo $SQUASHFS_OPTIONS | sed 's/-lzma//g')"
          eend 0
       fi
@@ -871,19 +927,36 @@ else
       SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -e initrd.img* vmlinuz*"
    fi
 
+   # check whether we have the according binary available:
+   if ! which $SQUASHFS_BINARY >/dev/null 2>&1 ; then
+      log    "Error: mksquashfs binary (${SQUASHFS_BINARY}) could not be found. Exiting."
+      eerror "Error: mksquashfs binary (${SQUASHFS_BINARY}) could not be found. Exiting."
+      eerror "|-> Make sure to install either squashfs-tools and/or squashfs-lzma-tools."
+      eerror "\`-> Visit http://grml.org/grml-live/#current_state for further details."
+      eend 1
+      package
+      bailout
+   fi
+
    SQUASHFS_STDERR="$(mktemp -t grml-live.XXXXXX)"
 
-   log "mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/${GRML_NAME}.squashfs -noappend $SQUASHFS_OPTIONS $SQUASHFS_ZLIB"
-   if mksquashfs $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/"${GRML_NAME}".squashfs \
+   [ -n "$SQUASHFS_OPTIONS" ]  && SQUASHFS_INFO_MSG="$SQUASHFS_OPTIONS"
+   [ -n "$SQUASHFS_ZLIB" ]     && SQUASHFS_INFO_MSG="$SQUASHFS_INFO_MSG $SQUASHFS_ZLIB"
+   [ -n "$SQUASHFS_INFO_MSG" ] && SQUASHFS_INFO_MSG="using options: $SQUASHFS_INFO_MSG"
+   einfo "Squashfs build information: running binary $SQUASHFS_BINARY $SQUASHFS_INFO_MSG"
+
+   log "$SQUASHFS_BINARY $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/${GRML_NAME}.squashfs -noappend $SQUASHFS_OPTIONS $SQUASHFS_ZLIB"
+
+   if $SQUASHFS_BINARY $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/"${GRML_NAME}".squashfs \
       -noappend $SQUASHFS_OPTIONS $SQUASHFS_ZLIB 2>"${SQUASHFS_STDERR}" ; then
       echo "${GRML_NAME}.squashfs" > $BUILD_OUTPUT/live/filesystem.module
       log "Finished execution of stage 'squashfs' [$(date)]"
       einfo "Finished execution of stage 'squashfs'" ; eend 0
    else
-      log "There was an error executing stage 'squashfs' [$(date)]:"
-      log "$(cat $SQUASHFS_STDERR)"
-      eerror "There was an error executing stage 'squashfs':" ; eend 1
-      cat "${SQUASHFS_STDERR}"
+      log    "Error: there was a critical error executing stage 'squashfs' [$(date)]:"
+      log    "$(cat $SQUASHFS_STDERR)"
+      eerror "Error: there was a critical error executing stage 'squashfs':" ; eend 1
+      cat    "${SQUASHFS_STDERR}"
       bailout
    fi
 
@@ -906,16 +979,16 @@ elif [ "$BOOT_METHOD" = "grub" ] ; then
 fi
 
 if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" -a "$FORCE_ISO_REBUILD" = "false" ]  ; then
-   log "$ISO_OUTPUT/${ISO_NAME} exists already, skipping stage 'iso build'"
-   ewarn "$ISO_OUTPUT/${ISO_NAME} exists already, skipping stage 'iso build'" ; eend 0
+   log   "Skipping stage 'iso build' as $ISO_OUTPUT/${ISO_NAME} exists already."
+   ewarn "Skipping stage 'iso build' as $ISO_OUTPUT/${ISO_NAME} exists already." ; eend 0
 elif [ -n "$SKIP_MKISOFS" ] ; then
-   log "Skipping stage 'iso build' as requested via option -n"
+   log   "Skipping stage 'iso build' as requested via option -n"
    ewarn "Skipping stage 'iso build' as requested via option -n" ; eend 0
 else
    mkdir -p "$ISO_OUTPUT" || bailout 6 "Problem with creating $ISO_OUTPUT for stage 'iso build'"
 
    if $FORCE_ISO_REBUILD ; then
-      log "Forcing rebuild of ISO because files on ISO have been modified."
+      log   "Forcing rebuild of ISO because files on ISO have been modified."
       einfo "Forcing rebuild of ISO because files on ISO have been modified."
    fi
 
@@ -925,8 +998,8 @@ else
    elif which genisoimage >/dev/null 2>&1; then
       MKISOFS='genisoimage'
    else
-      log "Sorry, neither mkisofs nor genisoimage available - can not create ISO."
-      eerror "Sorry, neither mkisofs nor genisoimage available - can not create ISO." ; eend 1
+      log    "Error: neither mkisofs nor genisoimage available - can not create ISO."
+      eerror "Error: neither mkisofs nor genisoimage available - can not create ISO." ; eend 1
       bailout
    fi
 
@@ -947,7 +1020,7 @@ else
 
       # support disabling hybrid ISO image
       if [ "$HYBRID_METHOD" = "disable" ] ; then\
-         log "Skipping creation of hybrid ISO file as requested via HYBRID_METHOD=disable"
+         log   "Skipping creation of hybrid ISO file as requested via HYBRID_METHOD=disable"
          einfo "Skipping creation of hybrid ISO file as requested via HYBRID_METHOD=disable"
          eend 0
       # use isohybrid only on request
@@ -993,11 +1066,11 @@ else
    fi
 
    if [ "$RC" = 0 ] ; then
-      log "Finished execution of stage 'iso build' [$(date)]"
+      log   "Finished execution of stage 'iso build' [$(date)]"
       einfo "Finished execution of stage 'iso build'" ; eend 0
    else
-      log "There was an error ($RC) executing stage 'iso build' [$(date)]"
-      eerror "There was an error executing stage 'iso build'" ; eend 1
+      log    "Error: there was a critical error ($RC) executing stage 'iso build' [$(date)]"
+      eerror "Error: there was a critical error executing stage 'iso build'" ; eend 1
       bailout $RC
    fi
 fi
