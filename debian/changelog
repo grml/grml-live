@@ -29,8 +29,11 @@ grml-live (0.9.22) UNRELEASED; urgency=low
   * New cmdline option: "-n" skips generation of the ISO file.
   * Introduce support for squashfs-lzma-tools 4.0-1 and support
     configuration variable SQUASHFS_BINARY.
+  * Modify update-initramfs call in grml-live script as the
+    'update-initramfs -u -t' might fail with linux images which have been
+    build using kernel-package.
 
- -- Michael Prokop <mika@grml.org>  Fri, 04 Sep 2009 01:57:39 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 07 Sep 2009 14:26:14 +0200
 
 grml-live (0.9.21) unstable; urgency=low
 

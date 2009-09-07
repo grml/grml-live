@@ -516,7 +516,8 @@ else
          chmod 644 $CHROOT_OUTPUT/etc/grml_version
          einfo "Rebuilding initramfs"
          # make sure new /etc/grml_version reaches the initramfs:
-         chroot $CHROOT_OUTPUT update-initramfs -u -t
+         # chroot $CHROOT_OUTPUT update-initramfs -u -t => might break when using kernel-package :(
+         chroot $CHROOT_OUTPUT update-initramfs -u -k all
          eend $?
       fi
 
