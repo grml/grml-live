@@ -465,7 +465,7 @@ Current state of grml-live with squashfs-tools and kernel
 To make it easier to track problems this section documents current state of
 grml-live playing together with squashfs-tools / squashfs-lzma-tools (for
 building the compressed file) and the kernel version. Documentation of this
-section is up2date by 03nd of september 2009, please report any bugs you
+section is up2date by 7rd of september 2009, please report any bugs you
 encounter.
 
 Difference between squashfs-lzma-tools and squashfs-tools
@@ -477,12 +477,12 @@ Grml builds use the LZMA compression.
 
 Squashfs-tools was introduced in Debian and once provided support for LZMA
 compression. Sadly LZMA compression within squashfs-tools became unsupported and
-therefore squashfs-lzma-tools had to be introduced. Different kernel versions
-provide different squashfs file formats (version 3.x for kernel versions until
-2.6.28-grml[64], newer kernel versions use the 4.x format).
+therefore squashfs-lzma-tools had to be introduced by the Grml team. Different
+kernel versions provide different squashfs file formats (version 3.x for kernel
+versions until 2.6.28-grml[64], since kernel 2.6.31-grml[64] it's the 4.x
+format).
 
-If you're wondering which package supports which option, here's a short
-overview:
+If you're wondering which package supports what, here's a short overview:
 
 * squashfs-tools 1:4.0-1: ZLIB as default, no LZMA support/options, file format
 version 4
@@ -493,40 +493,17 @@ version 3
 * squashfs-tools 1:3.2r2-9exp1: LZMA as default, ZLIB support via -nolzma
 option, file format version 3
 
+* squashfs-lzma-tools 4.0-1: LZMA as default, no ZLIB support/options, file format 4
+
 * squashfs-lzma-tools 3.3-1: LZMA as default, ZLIB support via -nolzma option,
 file format version 3
-
-* squashfs-lzma-tools 4.0-1: LZMA as default, no ZLIB support/options, file format 4
 
 Depending on the kernel version you want to use you need different versions
 squashfs-tools/squashfs-lzma-tools. Yes, that's pretty a mess (don't ask how
 much this sucks for us developers) - though this is supposed to calm down with
 the recent integration of squashfs file format 4 in the mainline kernel. Support
 for LZMA is pending and should dramatically simplify the situation for
-developers as well as users.
-
-Using squashfs-tools 1:4.0-1 on the build system
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-squashfs-tools 1:4.0-1 is available in Debian/unstable and Debian/testing. It
-provides the  mksquashfs and unsquashfs binaries and the package does NOT
-conflict with the squashfs-lzma-tools 4.0-1 package (you can install both of
-them at the same time).
-
-It provides support for the new squashfs file format version 4 and therefore
-requires kernel versions newer than 2.6.28-grml[64].
-
-It does NOT support LZMA compression. If you need LZMA support please use
-squashfs-lzma-tools instead.
-
-* Kernel 2.6.23-grml[64]: does not work
-* Kernel 2.6.26-grml[64]: does not work
-* Kernel 2.6.28-grml[64]: does not work
-* Kernel 2.6.31-grml[64]: work in progress
-
-[NOTE]
-Please use squashfs-tools 1:4.0-1 if you want to remaster grml releases
-MORE RECENT than 2009.05 using the ZLIB compression.
+developers as well as users as soon as it's available mainline.
 
 Using squashfs-lzma-tools 4.0-1 on the build system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -535,6 +512,9 @@ squashfs-lzma-tools 4.0-1 is available via the grml repositories. It provides
 the mksquashfs-lzma and unsquashfs-lzma binaries and the package does NOT
 conflict with the squashfs-tools package (you can install both of them at the
 same time).
+
+The packages can be downloaded from
+link:http://deb.grml.org/pool/main/s/squashfs-lzma-tools/[http://deb.grml.org/pool/main/s/squashfs-lzma-tools/]
 
 It provides support for the new squashfs file format version 4 and therefore
 requires kernel versions newer than 2.6.28-grml[64].
@@ -546,11 +526,37 @@ or set "SQUASHFS_OPTIONS='-nolzma'" in the grml-live configuration file.
 * Kernel 2.6.23-grml[64]: does not work
 * Kernel 2.6.26-grml[64]: does not work
 * Kernel 2.6.28-grml[64]: does not work
-* Kernel 2.6.31-grml[64]: work in progress
+* Kernel 2.6.31-grml[64]: works
 
 [NOTE]
 Please use squashfs-lzma-tools 4.0-1 if you want to remaster grml releases
 MORE RECENT than 2009.05 using the LZMA compression.
+
+Using squashfs-tools 1:4.0-1 on the build system
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+squashfs-tools 1:4.0-1 is available in Debian/unstable and Debian/testing. It
+provides the mksquashfs and unsquashfs binaries and the package does NOT
+conflict with the squashfs-lzma-tools 4.0-1 package (you can install both of
+them at the same time).
+
+The packages can be downloaded from
+link:ftp://ftp.de.debian.org/debian/pool/main/s/squashfs/[ftp://ftp.de.debian.org/debian/pool/main/s/squashfs/]
+
+It provides support for the new squashfs file format version 4 and therefore
+requires kernel versions newer than 2.6.28-grml[64].
+
+It does NOT support LZMA compression. If you need LZMA support please use
+squashfs-lzma-tools instead.
+
+* Kernel 2.6.23-grml[64]: does not work
+* Kernel 2.6.26-grml[64]: does not work
+* Kernel 2.6.28-grml[64]: does not work
+* Kernel 2.6.31-grml[64]: supposed to work (verification in progress)
+
+[NOTE]
+Please use squashfs-tools 1:4.0-1 if you want to remaster grml releases
+MORE RECENT than 2009.05 using the ZLIB compression.
 
 Using squashfs-lzma-tools 3.3-1 on the build system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -676,7 +682,8 @@ Instructions
   mkdir -p /etc/grml/fai/config/basefiles/
   mv base.tgz /etc/grml/fai/config/basefiles/I386.tar.gz
 
-  # install relevant tools:
+  # install relevant tools
+  # please check out http://grml.org/grml-live/#current_state when encountering problems!
   apt-get -o APT::Install-Recommends=false install grml-live squashfs-lzma-tools
 
   # adjust grml-live configuration for our needs:
