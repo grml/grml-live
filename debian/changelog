@@ -39,8 +39,10 @@ grml-live (0.9.22) UNRELEASED; urgency=low
   * Fix grml2usb bootoption in templates/boot/isolinux/grml.cfg.
   * Display "Finished execution of stage 'WINDOWS_BINARIES'" only if the
     according code has been executed (and do not display if skipping).
+  * Completely remove /lib/modules/${KERNEL}/kernel/drivers/isdn/hisax on
+    grml-small as there will be unresolved symbols without hisax.ko.
 
- -- Michael Prokop <mika@grml.org>  Mon, 07 Sep 2009 14:43:28 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 07 Sep 2009 15:59:47 +0200
 
 grml-live (0.9.21) unstable; urgency=low
 

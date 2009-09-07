@@ -147,14 +147,15 @@ fi
 
 # get rid of large kernel modules:
 if ifclass GRML_SMALL ; then
+  einfo "Identified grml-small, removing some very large kernel drivers:"
   if [ -r "/lib/modules/${KERNEL}/kernel/fs/ocfs2/ocfs2.ko" ] ; then
     einfo "Removing /lib/modules/${KERNEL}/kernel/fs/ocfs2/ocfs2.ko"
     rm -f "/lib/modules/${KERNEL}/kernel/fs/ocfs2/ocfs2.ko"
     eend $?
   fi
-  if [ -r "/lib/modules/${KERNEL}/kernel/drivers/isdn/hisax/hisax.ko" ] ; then
-    einfo "Removing /lib/modules/${KERNEL}/kernel/drivers/isdn/hisax/hisax.ko"
-    rm -f "/lib/modules/${KERNEL}/kernel/drivers/isdn/hisax/hisax.ko"
+  if [ -d "/lib/modules/${KERNEL}/kernel/drivers/isdn/hisax/" ] ; then
+    einfo "Removing /lib/modules/${KERNEL}/kernel/drivers/isdn/hisax"
+    rm -rf "/lib/modules/${KERNEL}/kernel/drivers/isdn/hisax"
     eend $?
   fi
 fi
