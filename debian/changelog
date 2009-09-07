@@ -1,4 +1,4 @@
-grml-live (0.9.22) UNRELEASED; urgency=low
+grml-live (0.9.22) unstable; urgency=low
 
   * Send 'Find FAI build logs at' message to grml-live.log as well.
   * Software related changes:
