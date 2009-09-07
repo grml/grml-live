@@ -32,8 +32,12 @@ grml-live (0.9.22) UNRELEASED; urgency=low
   * Modify update-initramfs call in grml-live script as the
     'update-initramfs -u -t' might fail with linux images which have been
     build using kernel-package.
+  * templates/boot/isolinux/grml.cfg: add space char at end of lines in entries
+    that are meant for manual editing (so user just has to press <tab>
+    and edit).
+  * Add 'pci=nomsi' to failsafe bootoption (thanks to Marc 'HE' Brockschmidt).
 
- -- Michael Prokop <mika@grml.org>  Mon, 07 Sep 2009 14:26:14 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 07 Sep 2009 14:40:41 +0200
 
 grml-live (0.9.21) unstable; urgency=low
 
