@@ -1,3 +1,11 @@
+grml-live (0.9.23) UNRELEASED; urgency=low
+
+  * Add backwards compability check for old sources.list layout
+    (we're using /etc/apt/sources.list.d now) to script
+    /etc/grml/fai/config/scripts/GRMLBASE/33-aptsetup
+
+ -- Michael Prokop <mika@grml.org>  Mon, 07 Sep 2009 20:24:12 +0200
+
 grml-live (0.9.22) unstable; urgency=low
 
   * Send 'Find FAI build logs at' message to grml-live.log as well.

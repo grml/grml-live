@@ -8,6 +8,13 @@
 
 set -e
 
+if [ -L "$target"/etc/apt/sources.list ] ; then
+   echo "Note: $target/etc/apt/sources.list seems to be the old sources.list setup."
+   echo "|->   Not modifying anything. If you want to switch to the new setup just"
+   echo "\`->   remove symlink $target/etc/apt/sources.list"
+   exit 0
+fi
+
 # remove leftover from /etc/grml/fai/config/hooks/instsoft.GRMLBASE:
 rm -f $target/etc/apt/sources.list.d/grml-live.list
 
