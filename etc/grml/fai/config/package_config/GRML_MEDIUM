@@ -285,18 +285,17 @@ PACKAGES aptitude I386
 # we want to use linux-kernel-headers-grml instead of linux-libc-dev:
 linux-kernel-headers-grml
 
-at76-usb-modules-2.6.28-grml
-aufs-modules-2.6.28-grml aufs-tools
-#grml-kerneladdons-2.6.28
-linux-image-2.6.28-grml
-#madwifi-modules-2.6.28-grml madwifi-tools
+at76-usb-modules-2.6.31-grml
+aufs-modules-2.6.31-grml aufs-tools
+linux-image-2.6.31-grml
+#madwifi-modules-2.6.31-grml madwifi-tools
 powernowd
-rt2400-modules-2.6.28-grml rt2500-modules-2.6.28-grml rt73-modules-2.6.28-grml firmware-ralink
-#truecrypt-2.6.28-grml
-virtualbox-ose-guest-modules-2.6.28-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
+rt2400-modules-2.6.31-grml rt2500-modules-2.6.31-grml rt73-modules-2.6.31-grml firmware-ralink
+#truecrypt-2.6.31-grml
+virtualbox-ose-guest-modules-2.6.31-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
 
 PACKAGES aptitude AMD64
-aufs-modules-2.6.28-grml64 aufs-tools
-linux-image-2.6.28-grml64
-#madwifi-modules-2.6.28-grml64 madwifi-tools
-#truecrypt-2.6.28-grml64
+aufs-modules-2.6.31-grml64 aufs-tools
+linux-image-2.6.31-grml64
+#madwifi-modules-2.6.31-grml64 madwifi-tools
+#truecrypt-2.6.31-grml64
