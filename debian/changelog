@@ -36,8 +36,11 @@ grml-live (0.9.22) UNRELEASED; urgency=low
     that are meant for manual editing (so user just has to press <tab>
     and edit).
   * Add 'pci=nomsi' to failsafe bootoption (thanks to Marc 'HE' Brockschmidt).
+  * Fix grml2usb bootoption in templates/boot/isolinux/grml.cfg.
+  * Display "Finished execution of stage 'WINDOWS_BINARIES'" only if the
+    according code has been executed (and do not display if skipping).
 
- -- Michael Prokop <mika@grml.org>  Mon, 07 Sep 2009 14:40:41 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 07 Sep 2009 14:43:28 +0200
 
 grml-live (0.9.21) unstable; urgency=low
 

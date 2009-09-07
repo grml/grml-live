@@ -807,9 +807,10 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
                     md5sum ${file}.exe > ${file}.exe.md5
                  done )
             fi
+
+            log "Finished execution of stage 'WINDOWS_BINARIES' [$(date)]"
+            einfo "Finished execution of stage 'WINDOWS_BINARIES'" ; eend 0
          fi
-         log "Finished execution of stage 'WINDOWS_BINARIES' [$(date)]"
-         einfo "Finished execution of stage 'WINDOWS_BINARIES'" ; eend 0
       fi
 
    FORCE_ISO_REBUILD=true
