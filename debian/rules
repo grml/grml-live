@@ -13,7 +13,8 @@ build: build-stamp
 
 build-stamp:
 	dh_testdir
-	cd doc && $(MAKE) && cd ..
+	(cd tests && ./test_parameters.sh)
+	(cd doc && $(MAKE))
 
 	touch build-stamp
 
