@@ -5,8 +5,11 @@ grml-live (0.9.23) UNRELEASED; urgency=low
     /etc/grml/fai/config/scripts/GRMLBASE/33-aptsetup
   * GRML_SMALL, GRML_MEDIUM and GRML_FULL: switch from kernel
     2.6.28-grml[64] to 2.6.31-grml[64].
+  * Assume 'lenny' as default SUITE instead of 'stable' as
+    debootstrap doesn't know how to handle 'stable'.
+    Thanks to Ulrich Dangel.
 
- -- Michael Prokop <mika@grml.org>  Tue, 08 Sep 2009 01:50:59 +0200
+ -- Michael Prokop <mika@grml.org>  Thu, 10 Sep 2009 00:54:46 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 
