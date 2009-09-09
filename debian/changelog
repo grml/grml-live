@@ -1,3 +1,22 @@
+grml-autoconfig (0.8.28) unstable; urgency=low
+
+  [ Michael Prokop ]
+  * DCSDIR default value is /live/image. If no GRMLCONFIG device
+    is found and no myconfig option is given, DCSDIR is empty. It should
+    be /live/image. Thanks to Ulrich Dangel for the bugreport, thanks
+    to Marc Haber for the fix. [Closes: issue730]
+
+  [ Ulrich Dangel]
+  * Add unit tests for {get,check}bootparam.
+  * Fix a bug in getbootparam() (requesting unavailable argument
+    returned wrong bootoption instead of empty value).
+
+  [ Frank Terbeck ]
+  * doc/Makefile: fix non posix shell syntax.
+  * Integrate Ulrich's unit tests into the Debian package.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 10 Sep 2009 01:01:04 +0200
+
 grml-autoconfig (0.8.27) unstable; urgency=low
 
   * Fix typo in grml-autoconfig(1).
