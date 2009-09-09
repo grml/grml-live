@@ -1,3 +1,11 @@
+grml-etc (1.1.23) unstable; urgency=low
+
+  * .Xresources: drop the 'URxvt*borderLess: True' line which
+    breaks focus of the urxvt terminal. Thanks to Markus Schimpf
+    and Moritz Wilhelmy for the bugreports.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 09 Sep 2009 22:29:56 +0200
+
 grml-etc (1.1.22) unstable; urgency=low
 
   * Drop /etc/skel/.nessusrc and remove nessusd from

@@ -184,7 +184,6 @@ URxvt.fading: 30
 
 URxvt.scrollBar: off
 URxvt*scrollstyle: xterm
-URxvt*borderLess: True
 
 ! extensions:
 URxvt.perl-ext: default,matcher,tabbed
