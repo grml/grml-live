@@ -47,10 +47,14 @@ fi
 # Get a bootoption's parameter: read boot command line and either
 # echo last parameter's argument or return false.
 getbootparam(){
-  case "$CMDLINE" in
-    *$1=*)
-      result="${CMDLINE##* $1=}"
-      result="${result%%[ 	]*}"
+  local line
+  local ws
+  ws='	 '
+  line=" $CMDLINE "
+  case "$line" in
+    *[${ws}]"$1="*)
+      result="${line##*[$ws]$1=}"
+      result="${result%%[$ws]*}"
       echo "$result"
       return 0 ;;
     *) # no match?
