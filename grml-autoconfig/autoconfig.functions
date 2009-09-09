@@ -65,13 +65,16 @@ getbootparam(){
 # Check boot commandline for specified option
 checkbootparam(){
   [ -n "$1" ] || ( echo "Error: missing argument to checkbootparam()" ; return 1 )
-  # make sure we match beginning and end of line as well
-  # but don't match 'vg' if we want to check for 'vga'
-  if echo "$CMDLINE" | grep -qw "$1" ; then
-     return 0
-  else
-     return 1
-  fi
+  local line
+  local ws
+  ws='	 '
+  line=" $CMDLINE "
+  case "$line" in
+    *[${ws}]"$1"=*|*[${ws}]"$1"[${ws}]*)
+      return 0 ;;
+    *)
+      return 1 ;;
+  esac
 }
 
 # Check wheter a configuration variable (like $CONFIG_TOHD) is
