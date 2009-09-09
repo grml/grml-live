@@ -1958,6 +1958,8 @@ else
         fi
         DCSDIR="/mnt/grml"
       fi
+    else
+      DCSDIR="/live/image"
     fi
   fi
 fi
