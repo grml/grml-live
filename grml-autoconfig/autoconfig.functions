@@ -1799,7 +1799,7 @@ config_netconfig(){
   CONFIGFILE='/tmp/netconfig.grml'
 
   getconfig() {
-  wget --timeout=10 --dns-timeout=10  --connect-timeout=10 \
+  wget --timeout=10 --dns-timeout=10  --connect-timeout=10 --tries=1 \
        --read-timeout=10 $CONFIG -O $CONFIGFILE && return 0 || return 1
   }
   einfo "Trying to get ${WHITE}${CONFIG}${NORMAL}"
