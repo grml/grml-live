@@ -510,22 +510,33 @@ Using squashfs-lzma-tools 4.0-2 on the build system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 squashfs-lzma-tools 4.0-2 is available via the grml repositories. It provides
-the mksquashfs-lzma and unsquashfs-lzma binaries and the package does NOT
-conflict with the squashfs-tools package (you can install both of them at the
-same time).
+the mksquashfs-lzma and unsquashfs-lzma binaries. The package does NOT conflict
+with Debian's squashfs-tools package (you can install both of them at the same
+time).
 
 The packages can be downloaded from
 link:http://deb.grml.org/pool/main/s/squashfs-lzma-tools/[http://deb.grml.org/pool/main/s/squashfs-lzma-tools/]
 
 It provides support for the new squashfs file format version 4 and therefore
-requires kernel versions newer than 2.6.28-grml[64].
+requires kernel versions newer than 2.6.28-grml[64]. It supports LZMA as well as
+ZLIB compression. Just use the defaults for enabling LZMA or use grml-live's
+'-z' option if you want to use ZLIB instead.
 
 * Kernel 2.6.23-grml[64]: does not work
 * Kernel 2.6.26-grml[64]: does not work
 * Kernel 2.6.28-grml[64]: does not work
 * Kernel 2.6.31-grml[64]: works
 
+////////////////////////////////////////////////////////////////////////////////
+[IMPORTANT]
+
+Do NOT use a blocksize different than the default (131072 / 128kb).  The kernel
+will very probably oops then - so please do not touch the '-b' option of
+mksquashfs.
+////////////////////////////////////////////////////////////////////////////////
+
 [NOTE]
+
 Please use squashfs-lzma-tools >=4.0-2 from Grml if you want to remaster any
 grml release being MORE RECENT than 2009.05.
 
@@ -533,8 +544,8 @@ Using squashfs-tools 1:4.0-1 on the build system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 squashfs-tools 1:4.0-1 is available in Debian/unstable and Debian/testing. It
-provides the mksquashfs and unsquashfs binaries and the package does NOT
-conflict with the squashfs-lzma-tools 4.0-1 package (you can install both of
+provides the mksquashfs and unsquashfs binaries. The package does NOT
+conflict with the squashfs-lzma-tools 4.0-2 package (you can install both of
 them at the same time).
 
 The packages can be downloaded from
@@ -544,7 +555,7 @@ It provides support for the new squashfs file format version 4 and therefore
 requires kernel versions newer than 2.6.28-grml[64].
 
 It does NOT support LZMA compression. If you need LZMA support please use
-squashfs-lzma-tools (see section above) instead.
+Grml's squashfs-lzma-tools (see section above) instead.
 
 * Kernel 2.6.23-grml[64]: does not work
 * Kernel 2.6.26-grml[64]: does not work
@@ -755,30 +766,38 @@ link:http://grml-solutions.com/[Grml Solutions].
 How much is the difference between LZMA and ZLIB compression?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Note: LZMA sizes is work in progress.
+ISO size (bs = blocksize):
 
-[width="40%",cols="3,^2,^2",options="header"]
-|==================================
-|ISO                   |LZMA |ZLIB
-|grml64_lenny          |X    |745M
-|grml64-medium_lenny   |X    |231M
-|grml64-medium_sid     |X    |245M
-|grml64-medium_squeeze |X    |244M
-|grml64_sid            |X    |791M
-|grml64-small_lenny    |X    |116M
-|grml64-small_sid      |X    |120M
-|grml64-small_squeeze  |X    |120M
-|grml64_squeeze        |X    |785M
-|grml_lenny            |X    |723M
-|grml-medium_lenny     |X    |220M
-|grml-medium_sid       |X    |236M
-|grml-medium_squeeze   |X    |234M
-|grml_sid              |X    |771M
-|grml-small_lenny      |X    |112M
-|grml-small_sid        |X    |118M
-|grml-small_squeeze    |X    |117M
-|grml_squeeze          |X    |761M
-|==================================
+[width="45%",cols="3,^2,^2,^2",options="header"]
+|============================================================
+|ISO                   |LZMA (256kB bs) |LZMA (128kB bs)|ZLIB
+|grml_sid              |666M | WIP | 771M
+|grml_squeeze          |659M | WIP | 761M
+|grml_lenny            |624M | WIP | 723M
+|grml64_sid            |677M | WIP | 791M
+|grml64_squeeze        |671M | WIP | 785M
+|grml64_lenny          |639M | WIP | 745M
+|grml-medium_sid       |208M | WIP | 236M
+|grml-medium_squeeze   |206M | WIP | 234M
+|grml-medium_lenny     |193M | WIP | 220M
+|grml64-medium_sid     |213M | WIP | 245M
+|grml64-medium_squeeze |213M | WIP | 244M
+|grml64-medium_lenny   |201M | WIP | 231M
+|grml-small_sid        |102M | WIP | 118M
+|grml-small_squeeze    |101M | WIP | 117M
+|grml-small_lenny      |97M  | WIP | 112M
+|grml64-small_sid      |103M | WIP | 120M
+|grml64-small_squeeze  |103M | WIP | 120M
+|grml64-small_lenny    |99M  | WIP | 116M
+|============================================================
+
+Build time of grml-medium's squashfs file (depends on your system, though just
+to get the ratio between the different options):
+
+* 10 minutes and 4 seconds with LZMA default blocksize (128k)
+* 7 minutes 27 seconds with LZMA and blocksize 256k
+* 6 minutes and 8 seconds with LZMA blocksize 512k
+* 1 minute and 40 seconds with ZLIB
 
 [[install-local-files]]
 How to I install further files into the chroot/ISO?
