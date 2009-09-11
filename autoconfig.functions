@@ -1792,31 +1792,44 @@ config_services(){
 }
 # }}}
 
+# {{{ remote files
+get_remote_file() {
+  [ "$#" -eq 2 ] || ( echo "Error: wrong parameter for get_remote_file()" ; return 1 )
+  SOURCE="$1"
+  TARGET="$2"
+  getconfig() {
+  wget --timeout=10 --dns-timeout=10  --connect-timeout=10 --tries=1 \
+       --read-timeout=10 ${SOURCE} -O ${TARGET} && return 0 || return 1
+  }
+  einfo "Trying to get ${WHITE}${TARGET}${NORMAL}"
+  counter=10
+  while ! getconfig && [[ "$counter" != 0 ]] ; do
+    echo -n "Sleeping for 1 second and trying to get config again... "
+    counter=$(( counter-1 ))
+    echo "$counter tries left" ; sleep 1
+  done
+  if [ -s "$TARGET" ] ; then
+    einfo "Downloading was successfull." ; eend 0
+    einfo "md5sum of ${WHITE}${TARGET}${NORMAL}: "
+    md5sum ${TARGET} ; eend 0
+    return 0;
+  else
+    einfo "Sorry, could not fetch ${SOURCE}" ; eend 1
+    return 1;
+ fi
+}
+# }}}
+
 # {{{ config files
 config_netconfig(){
  if checkbootparam 'netconfig' ; then
   CONFIG="$(getbootparam 'netconfig' 2>>$DEBUG)"
   CONFIGFILE='/tmp/netconfig.grml'
 
-  getconfig() {
-  wget --timeout=10 --dns-timeout=10  --connect-timeout=10 --tries=1 \
-       --read-timeout=10 $CONFIG -O $CONFIGFILE && return 0 || return 1
-  }
-  einfo "Trying to get ${WHITE}${CONFIG}${NORMAL}"
-  counter=10
-  while ! getconfig && [[ "$counter" != 0 ]] ; do
-    echo -n "Sleeping for 5 seconds and trying to get config again... "
-    counter=$(( counter-1 ))
-    echo "$counter tries left" ; sleep 1
-  done
-  if [ -r "$CONFIGFILE" ] ; then
-    einfo "Downloading was successfull." ; eend 0
-    einfo "md5sum of ${WHITE}${CONFIG}${NORMAL}: "
-    md5sum $CONFIGFILE ; eend 0
+  if get_remote_file ${CONFIG} ${CONFIGFILE} ; then
     cd / && einfo "Unpacking ${WHITE}${CONFIGFILE}${NORMAL}:" && /usr/bin/unp $CONFIGFILE $EXTRACTOPTIONS ; eend $?
-  else
-    einfo "Sorry, could not fetch $CONFIG" ; eend 1
   fi
+
  fi
 }
 # }}}
