@@ -1,4 +1,4 @@
-grml-live (0.9.23) UNRELEASED; urgency=low
+grml-live (0.9.23) unstable; urgency=low
 
   * Add backwards compatibility check for old sources.list layout
     (we're using /etc/apt/sources.list.d now) to script
@@ -9,8 +9,9 @@ grml-live (0.9.23) UNRELEASED; urgency=low
     debootstrap doesn't know how to handle 'stable'.
     Thanks to Ulrich Dangel.
   * Use blocksize of 256 when running mksquashfs-lzma binary.
+  * Update documentation regarding recent lzma development.
 
- -- Michael Prokop <mika@grml.org>  Fri, 11 Sep 2009 02:53:25 +0200
+ -- Michael Prokop <mika@grml.org>  Fri, 11 Sep 2009 03:29:38 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 

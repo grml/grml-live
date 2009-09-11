@@ -23,7 +23,7 @@ fi
 set -e
 
 # global variables
-GRML_LIVE_VERSION='0.9.23-prerelease'
+GRML_LIVE_VERSION='0.9.23'
 PN="$(basename $0)"
 CMDLINE="$0 $@"
 ISO_DATE="$(date +%Y-%m-%d)"
