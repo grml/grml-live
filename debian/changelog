@@ -5,13 +5,17 @@ grml-live (0.9.23) unstable; urgency=low
     /etc/grml/fai/config/scripts/GRMLBASE/33-aptsetup
   * GRML_SMALL, GRML_MEDIUM and GRML_FULL: switch from kernel
     2.6.28-grml[64] to 2.6.31-grml[64].
+  * Drop rt2400-modules-2.6.31-grml, rt2500-modules-2.6.31-grml and
+    rt73-modules-2.6.31-grml from GRML_MEDIUM.
+  * Drop rt2400-modules-2.6.31-grml, rt73-modules-2.6.31-grml and
+    rt2400-modules-2.6.31-grml64 from GRML_FULL.
   * Assume 'lenny' as default SUITE instead of 'stable' as
     debootstrap doesn't know how to handle 'stable'.
     Thanks to Ulrich Dangel.
   * Use blocksize of 256 when running mksquashfs-lzma binary.
   * Update documentation regarding recent lzma development.
 
- -- Michael Prokop <mika@grml.org>  Fri, 11 Sep 2009 03:29:38 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 12 Sep 2009 01:11:29 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 

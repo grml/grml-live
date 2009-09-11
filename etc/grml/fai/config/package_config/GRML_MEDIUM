@@ -60,6 +60,7 @@ file
 file-rc
 findutils
 firmware-iwlwifi
+firmware-ralink
 fluxbox
 fnord
 fuse-utils
@@ -290,7 +291,6 @@ aufs-modules-2.6.31-grml aufs-tools
 linux-image-2.6.31-grml
 #madwifi-modules-2.6.31-grml madwifi-tools
 powernowd
-rt2400-modules-2.6.31-grml rt2500-modules-2.6.31-grml rt73-modules-2.6.31-grml firmware-ralink
 #truecrypt-2.6.31-grml
 virtualbox-ose-guest-modules-2.6.31-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
 

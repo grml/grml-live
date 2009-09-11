@@ -1985,8 +1985,6 @@ loop-aes-modules-2.6.31-grml
 ndiswrapper-modules-2.6.31-grml
 #nvidia-kernel-2.6.31-grml
 openafs-modules-2.6.31-grml
-rt2400-modules-2.6.31-grml
-rt73-modules-2.6.31-grml
 sl-modem-modules-2.6.31-grml
 speakup-modules-2.6.31-grml
 sysprof-module-2.6.31-grml
@@ -2014,7 +2012,6 @@ loop-aes-modules-2.6.31-grml64
 ndiswrapper-modules-2.6.31-grml64
 #nvidia-kernel-2.6.31-grml64
 openafs-modules-2.6.31-grml64
-rt2400-modules-2.6.31-grml64
 speakup-modules-2.6.31-grml64
 sysprof-module-2.6.31-grml64
 xtables-addons-modules-2.6.31-grml64
