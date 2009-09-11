@@ -44,7 +44,7 @@ Usage: $PN [options, see as follows]
    -c <classe[s]>          classes to be used for building the ISO via FAI
    -C <configfile>         configuration file for grml-live
    -F                      force execution without prompting
-   -g <grml_name>]         set the grml flavour name
+   -g <grml_name>          set the grml flavour name
    -h                      display short usage information and exit
    -i <iso_name>           name of ISO
    -I <src_directory>      directory which provides files that should become
@@ -52,7 +52,7 @@ Usage: $PN [options, see as follows]
    -n                      skip generation of ISO
    -o <output_directory>   main output directory of the build process
    -q                      skip mksquashfs
-   -r <release_name<       release name
+   -r <release_name>       release name
    -s <suite>              Debian suite; values: etch, lenny, squeeze, sid
    -t <template_directory> place of the templates
    -u                      update existing chroot instead of rebuilding it from scratch
