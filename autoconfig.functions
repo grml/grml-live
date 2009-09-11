@@ -1834,6 +1834,21 @@ config_netconfig(){
 }
 # }}}
 
+# {{{ remote scripts
+config_netscript() {
+ if checkbootparam 'netscript' ; then
+  CONFIG="$(getbootparam 'netscript' 2>>$DEBUG)"
+  SCRIPTFILE='/tmp/netscript.grml'
+
+  if get_remote_file ${CONFIG} ${SCRIPTFILE} ; then
+    chmod +x ${SCRIPTFILE}
+    einfo "Running ${WHITE}${SCRIPTFILE}${NORMAL}:" && ${SCRIPTFILE} ; eend $?
+  fi
+
+ fi
+}
+# }}}
+
 # {{{ blindsound
 config_blindsound(){
  if checkbootparam 'blind' ; then

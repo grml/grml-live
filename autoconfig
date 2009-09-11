@@ -95,6 +95,7 @@ CONFIG_MOUSE='yes'            # show mouse information (expert-mode)
 CONFIG_MYCONFIG='yes'         # check if we want the config floppy
 CONFIG_MYPATH='yes'           # provide setting additional paths via bootoption mypath
 CONFIG_NETCONFIG='yes'        # download configuration archive provided by bootoption netconfig=...
+CONFIG_NETSCRIPT='yes'        # download and run script/executable provided by bootoption netscript=...
 CONFIG_NETIPV6='yes'          # check for bootparam ipv6
 CONFIG_PARTCONF='yes'	      # do we want partconf to work?
 CONFIG_PASSWD='yes'           # set password via bootparam passwd
