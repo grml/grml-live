@@ -892,7 +892,7 @@ else
 
             # if we still want to use mksquashfs-lzma then let's choose
             # blocksize 256k as this gives best result with regards to time + comopression
-            [[ "$SQUASHFS_BINARY" == "mksquashfs-lzma" ]] && SQUASHFS_OPTIONS="-b 256k"
+            [[ "$SQUASHFS_BINARY" == "mksquashfs-lzma" ]] && SQUASHFS_OPTIONS="-b 256k -lzma"
          fi
 
       fi

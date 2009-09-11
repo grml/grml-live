@@ -493,7 +493,8 @@ version 3
 * squashfs-tools 1:3.2r2-9exp1: LZMA as default, ZLIB support via -nolzma
 option, file format version 3
 
-* squashfs-lzma-tools 4.0-1: LZMA as default, no ZLIB support/options, file format 4
+* squashfs-lzma-tools 4.0-2: ZLIB as default, LZMA support via -lzma option,
+file format version 4
 
 * squashfs-lzma-tools 3.3-1: LZMA as default, ZLIB support via -nolzma option,
 file format version 3
@@ -505,10 +506,10 @@ the recent integration of squashfs file format 4 in the mainline kernel. Support
 for LZMA is pending and should dramatically simplify the situation for
 developers as well as users as soon as it's available mainline.
 
-Using squashfs-lzma-tools 4.0-1 on the build system
+Using squashfs-lzma-tools 4.0-2 on the build system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-squashfs-lzma-tools 4.0-1 is available via the grml repositories. It provides
+squashfs-lzma-tools 4.0-2 is available via the grml repositories. It provides
 the mksquashfs-lzma and unsquashfs-lzma binaries and the package does NOT
 conflict with the squashfs-tools package (you can install both of them at the
 same time).
@@ -519,18 +520,14 @@ link:http://deb.grml.org/pool/main/s/squashfs-lzma-tools/[http://deb.grml.org/po
 It provides support for the new squashfs file format version 4 and therefore
 requires kernel versions newer than 2.6.28-grml[64].
 
-It does NOT provide support for ZLIB compression. If you need ZLIB support
-please use squashfs-tools 1:4.0-1 instead and use the '-z' option of grml-live
-or set "SQUASHFS_OPTIONS='-nolzma'" in the grml-live configuration file.
-
 * Kernel 2.6.23-grml[64]: does not work
 * Kernel 2.6.26-grml[64]: does not work
 * Kernel 2.6.28-grml[64]: does not work
 * Kernel 2.6.31-grml[64]: works
 
 [NOTE]
-Please use squashfs-lzma-tools 4.0-1 if you want to remaster grml releases
-MORE RECENT than 2009.05 using the LZMA compression.
+Please use squashfs-lzma-tools >=4.0-2 from Grml if you want to remaster any
+grml release being MORE RECENT than 2009.05.
 
 Using squashfs-tools 1:4.0-1 on the build system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -547,15 +544,15 @@ It provides support for the new squashfs file format version 4 and therefore
 requires kernel versions newer than 2.6.28-grml[64].
 
 It does NOT support LZMA compression. If you need LZMA support please use
-squashfs-lzma-tools instead.
+squashfs-lzma-tools (see section above) instead.
 
 * Kernel 2.6.23-grml[64]: does not work
 * Kernel 2.6.26-grml[64]: does not work
 * Kernel 2.6.28-grml[64]: does not work
-* Kernel 2.6.31-grml[64]: supposed to work (verification in progress)
+* Kernel 2.6.31-grml[64]: works
 
 [NOTE]
-Please use squashfs-tools 1:4.0-1 if you want to remaster grml releases
+Please use squashfs-tools 1:4.0-1 only if you want to remaster grml releases
 MORE RECENT than 2009.05 using the ZLIB compression.
 
 Using squashfs-lzma-tools 3.3-1 on the build system
@@ -753,6 +750,35 @@ description to <mika@grml.org>:
 If you need help with grml-live or would like to see new features as part of
 grml-live you can get commercial support via
 link:http://grml-solutions.com/[Grml Solutions].
+
+[[lzma-vs-zlib]]
+How much is the difference between LZMA and ZLIB compression?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Note: LZMA sizes is work in progress.
+
+[width="40%",cols="3,^2,^2",options="header"]
+|==================================
+|ISO                   |LZMA |ZLIB
+|grml64_lenny          |X    |745M
+|grml64-medium_lenny   |X    |231M
+|grml64-medium_sid     |X    |245M
+|grml64-medium_squeeze |X    |244M
+|grml64_sid            |X    |791M
+|grml64-small_lenny    |X    |116M
+|grml64-small_sid      |X    |120M
+|grml64-small_squeeze  |X    |120M
+|grml64_squeeze        |X    |785M
+|grml_lenny            |X    |723M
+|grml-medium_lenny     |X    |220M
+|grml-medium_sid       |X    |236M
+|grml-medium_squeeze   |X    |234M
+|grml_sid              |X    |771M
+|grml-small_lenny      |X    |112M
+|grml-small_sid        |X    |118M
+|grml-small_squeeze    |X    |117M
+|grml_squeeze          |X    |761M
+|==================================
 
 [[install-local-files]]
 How to I install further files into the chroot/ISO?
