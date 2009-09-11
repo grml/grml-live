@@ -120,6 +120,12 @@ netconfig::
 
   netconfig=server.tld/path/to/config.tbz  =>   restore configuration using wget to download file config.tbz
 
+netscript::
+    Use this parameter to download and run a script from specified
+    destination: Usage example:
+
+  netcript=server.tld/path/to/script       =>   download and run script/executable from server
+
 extract::
 
     Extract specific directories from configuration archive. Notice: This

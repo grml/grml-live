@@ -232,6 +232,8 @@ checkvalue $CONFIG_SERVICES && config_services
 
 checkvalue $CONFIG_NETCONFIG && config_netconfig
 
+checkvalue $CONFIG_NETSCRIPT && config_netscript
+
 checkvalue $CONFIG_NETIPV6 && config_ipv6
 
 checkvalue $CONFIG_DEBNET && config_debnet
