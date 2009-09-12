@@ -18,15 +18,19 @@ TMPFILE="$(mktemp)"
 AUTOCONFIG=/etc/grml/autoconfig
 [ -r $AUTOCONFIG ] || exit 1
 
+. $AUTOCONFIG
+
 # helper functions
 activate_value()
 {
-  sed -i "s/$1.*/$1'yes'/" $AUTOCONFIG
+  check_entry $1
+  sed -i "s/$1.*/$1'yes'/" ${CONFIG_AUTOCONFIG_LOCAL}
 }
 
 deactivate_value()
 {
-  sed -i "s/$1.*/$1'no'/" $AUTOCONFIG
+  check_entry $1
+  sed -i "s/$1.*/$1'no'/" ${CONFIG_AUTOCONFIG_LOCAL}
 }
 
 check_setting()
@@ -34,17 +38,28 @@ check_setting()
   grep -q $* $TMPFILE && return 0 || return 1
 }
 
+check_entry()
+{
+  if ! grep -q ${1} ${CONFIG_AUTOCONFIG_LOCAL} 2>/dev/null ; then
+    grep $1 ${AUTOCONFIG} >> ${CONFIG_AUTOCONFIG_LOCAL}
+  fi
+}
+
+is_set()
+{
+    [ $1 = 'yes' ] && return 0 || return 1
+}
 check_current_state()
 {
-  grep -q '^CONFIG_DHCP=.*yes'     $AUTOCONFIG && DHCPSTATUS=ON     || DHCPSTATUS=OFF
+  is_set $CONFIG_DHCP       && DHCPSTATUS=ON     || DHCPSTATUS=OFF
   if [ "$(grep '^auto' /etc/network/interfaces | sed 's/ lo// ; s/auto// ; s/ //g')" != "" ] ; then
      DHCPSTATUS=OFF
   fi
-  grep -q '^CONFIG_FSTAB=.*yes'    $AUTOCONFIG && FSTABSTATUS=ON    || FSTABSTATUS=OFF
-  grep -q '^CONFIG_CPU=.*yes'      $AUTOCONFIG && CPUSTATUS=ON      || CPUSTATUS=OFF
-  grep -q '^CONFIG_ACPI_APM=.*yes' $AUTOCONFIG && ACPI_APMSTATUS=ON || ACPI_APMSTATUS=OFF
-  grep -q '^CONFIG_SYSLOG=.*yes'   $AUTOCONFIG && SYSLOGSTATUS=ON   || SYSLOGSTATUS=OFF
-  grep -q '^CONFIG_GPM=.*yes'      $AUTOCONFIG && GPMSTATUS=ON      || GPMSTATUS=OFF
+  is_set $CONFIG_FSTAB      && FSTABSTATUS=ON    || FSTABSTATUS=OFF
+  is_set $CONFIG_CPU        && CPUSTATUS=ON      || CPUSTATUS=OFF
+  is_set $CONFIG_ACPI_APM   && ACPI_APMSTATUS=ON || ACPI_APMSTATUS=OFF
+  is_set $CONFIG_SYSLOG     && SYSLOGSTATUS=ON   || SYSLOGSTATUS=OFF
+  is_set $CONFIG_GPM        && GPMSTATUS=ON      || GPMSTATUS=OFF
 }
 
 # main program
@@ -57,7 +72,7 @@ interface to activate or deactivate some features.
 If you do not know what to do at this stage just leave it untouched,
 the defaults are the recommended values.
 
-All the configuration happens in the file /etc/grml/autoconfig - you can
+All the configuration happens in the file /etc/grml/autoconfig.local - you can
 edit it manually as well.
 " 0 0 0 \
 dhcp "check for network devices and run pump (get ip-address via DHCP)" $DHCPSTATUS \
