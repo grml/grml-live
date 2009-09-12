@@ -120,12 +120,6 @@ netconfig::
 
   netconfig=server.tld/path/to/config.tbz  =>   restore configuration using wget to download file config.tbz
 
-netscript::
-    Use this parameter to download and run a script from specified
-    destination: Usage example:
-
-  netcript=server.tld/path/to/script       =>   download and run script/executable from server
-
 extract::
 
     Extract specific directories from configuration archive. Notice: This
@@ -234,9 +228,21 @@ partconf::
 netconfig::
 
     Use this parameter to restore configuration using wget to download a GCA
-    from the specified destination. Usage example:
+    from the specified destination. You can also add variables to change the
+    file name depending on the host configuration. Predefined and useful
+    variables are $ARCH, $HOSTNAME and $KERNEL. Usage example:
 
   netconfig=server.tld/path/to/config.tbz  =>   restore configuration using wget to download file config.tbz
+  netconfig=server.tld/config-$ARCH.tbz    =>   download config for specified architecture
+
+netscript::
+    Use this parameter to download and run a script from specified destination:
+    You can also add variables to change the file name depending on the host
+    configuration. Predefined and useful variables are $ARCH, $HOSTNAME and
+    $KERNEL. Usage example:
+
+  netcript=server.tld/path/to/script       =>   download and run script/executable from server
+  netscript=server.tld/script-$HOSTNAME    =>   download and run script/executable for specific host
 
 extract::
 
