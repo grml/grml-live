@@ -561,8 +561,8 @@ else
          einfo "Finished execution of stage 'fai dirinstall'"
       fi
 
-      einfo "Find FAI build logs at $(readlink -f /var/log/fai/$HOSTNAME/last)."
-      log   "Find FAI build logs at $(readlink -f /var/log/fai/$HOSTNAME/last)."
+      einfo "Find FAI build logs at $(readlink -f /var/log/fai/$HOSTNAME/last)"
+      log   "Find FAI build logs at $(readlink -f /var/log/fai/$HOSTNAME/last)"
       eend 0
    fi
 fi # BUILD_DIRTY?
@@ -906,8 +906,8 @@ else
    # make sure to drop the -nolzma option if it's not available:
    if echo "$SQUASHFS_OPTIONS" | grep -q -- "-nolzma" ; then
       if ! $SQUASHFS_BINARY --help 2>&1 | grep -q -- '-nolzma' ; then
-         log   "$SQUASHFS_BINARY does NOT support the nolzma option, dropping it and using default mode."
-         ewarn "$SQUASHFS_BINARY does NOT support the nolzma option, dropping it and using default mode."
+         log   "The $SQUASHFS_BINARY binary does NOT support the nolzma option, dropping it and using default mode."
+         ewarn "The $SQUASHFS_BINARY binary does NOT support the nolzma option, dropping it and using default mode."
          SQUASHFS_OPTIONS="$(echo $SQUASHFS_OPTIONS | sed 's/-nolzma//g')"
          eend 0
       fi
@@ -916,8 +916,8 @@ else
    # make sure to drop the -lzma option if it's not available:
    if echo "$SQUASHFS_OPTIONS" | grep -q -- "-lzma" ; then
       if ! $SQUASHFS_BINARY --help 2>&1 | grep -q -- '-lzma' ; then
-         log   "$SQUASHFS_BINARY does NOT support the lzma option, dropping it and using default mode."
-         ewarn "$SQUASHFS_BINARY does NOT support the lzma option, dropping it and using default mode."
+         log   "The $SQUASHFS_BINARY binary does NOT support the lzma option, dropping it and using default mode."
+         ewarn "The $SQUASHFS_BINARY binary does NOT support the lzma option, dropping it and using default mode."
          SQUASHFS_OPTIONS="$(echo $SQUASHFS_OPTIONS | sed 's/-lzma//g')"
          eend 0
       fi

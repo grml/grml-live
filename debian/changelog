@@ -14,8 +14,9 @@ grml-live (0.9.23) unstable; urgency=low
     Thanks to Ulrich Dangel.
   * Use blocksize of 256 when running mksquashfs-lzma binary.
   * Update documentation regarding recent lzma development.
+  * Some minor cosmetic corrections in grml-live's output.
 
- -- Michael Prokop <mika@grml.org>  Sat, 12 Sep 2009 01:11:29 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 12 Sep 2009 02:09:55 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 
