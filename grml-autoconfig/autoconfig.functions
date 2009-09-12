@@ -10,6 +10,7 @@
 export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin"
 DEBUG="/dev/null"
 KERNEL="$(uname -r)"
+ARCH="$(uname -m)"
 umask 022
 
 # old linuxrc version:
