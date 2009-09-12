@@ -50,7 +50,7 @@ grml myconfig=/dev/fd0              Set the DCS dir (debs, config, scripts) to t
                                     /dev/fd0  for floppy disk
                                     /dev/sda1 for USB-stick/first SCSI-device
 grml netconfig=server/config.tbz    Download file and extract configuration archive
-grml netscript=server/file          Download and execute file
+grml netscript=server/file          Download and execute file [Note: only available in releases >2009.05]
 grml partconf=/dev/hda2             Copy files specified in /etc/grml/partconf from /dev/hda2
                                     to booting grml system
 grml file=foobar.tbz                Use specified file as name for configuration archive
