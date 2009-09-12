@@ -13,7 +13,7 @@ build: build-stamp
 
 build-stamp:
 	dh_testdir
-	(cd tests && ./test_parameters.sh)
+	(cd tests && ./run_tests.sh)
 	(cd doc && $(MAKE))
 
 	touch build-stamp
