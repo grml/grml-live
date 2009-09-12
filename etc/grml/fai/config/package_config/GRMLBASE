@@ -27,6 +27,7 @@ grml-usleep
 grml-vpn
 hdparm
 hwinfo
+iw
 less
 live-initramfs
 lvm2
