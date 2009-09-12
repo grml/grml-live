@@ -768,7 +768,7 @@ How much is the difference between LZMA and ZLIB compression?
 
 ISO size (bs = blocksize):
 
-[width="45%",cols="3,^2,^2,^2",options="header"]
+[width="45%",cols="3,^2,^2,^2"]
 |============================================================
 |ISO                   |LZMA (256kB bs) |LZMA (128kB bs)|ZLIB
 |grml_sid              |666M | WIP | 771M

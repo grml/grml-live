@@ -7,7 +7,9 @@ grml-live (0.9.23) unstable; urgency=low
       rt73-modules-2.6.31-grml from GRML_MEDIUM.
     - Drop rt2400-modules-2.6.31-grml, rt73-modules-2.6.31-grml and
       rt2400-modules-2.6.31-grml64 from GRML_FULL.
+    - Drop version specific dependency on -mysql-client-5.0.
     - Add iw to GRMLBASE. Thanks to Christian Hofstaedtler for the hint.
+    - Add guymager to GRML_FORENSIC.
   * Add backwards compatibility check for old sources.list layout
     (we're using /etc/apt/sources.list.d now) to script
     /etc/grml/fai/config/scripts/GRMLBASE/33-aptsetup
@@ -18,7 +20,7 @@ grml-live (0.9.23) unstable; urgency=low
   * Update documentation regarding recent lzma development.
   * Some minor cosmetic corrections in grml-live's output.
 
- -- Michael Prokop <mika@grml.org>  Sat, 12 Sep 2009 10:12:03 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 12 Sep 2009 13:18:05 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 
