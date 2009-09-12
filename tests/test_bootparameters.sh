@@ -1,6 +1,5 @@
 #!/bin/zsh
 
-setopt shwordsplit
 
 test_checkbootparam() {
     CMDLINE='foo=dingens bar foobar=blub'
@@ -51,14 +50,4 @@ test_getbootparam() {
 }
 
 
-oneTimeSetUp() {
-    OLDPATH=$PATH
-
-    . ../autoconfig.functions
-
-    export PATH=$OLDPATH
-}
-
-SHUNIT_PARENT=$0
-
-. ./shunit2
+. ./common_tests $0
