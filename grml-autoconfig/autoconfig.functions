@@ -1887,7 +1887,7 @@ config_x_startup(){
 # make sure we start X only if startx is used *before* a nostartx option
 # so it's possible to disable automatic X startup using nostart
 if checkbootparam 'startx' && ! echo "$CMDLINE" | grep -q 'startx.*nostartx' ; then
- if [ -x /usr/X11R6/bin/X ] ; then
+ if [ -x $(which X) ] ; then
   if [ -z "$INSTALLED" ] ; then
    WINDOWMANAGER="$(getbootparam 'startx' 2>>$DEBUG)"
    if [ -z "$WINDOWMANAGER" ] ; then
