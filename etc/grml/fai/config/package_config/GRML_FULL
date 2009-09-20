@@ -936,7 +936,6 @@ libewf1
 libpam-chroot
 libpam-devperm
 libpam-dotfile
-libpam-krb5
 libpam-modules
 libpam-mount
 libpam-smbpass
