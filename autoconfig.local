@@ -1,0 +1,6 @@
+# Filename:      /etc/grml/autoconfig.local
+# Purpose:       local configuration for grml-autoconfig
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################

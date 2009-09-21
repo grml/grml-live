@@ -61,9 +61,14 @@ Dialog interface to the configuration file /etc/grml/autoconfig.
 
   */etc/grml/autoconfig*::
 
-Configuration file for grml-autoconfig framework. You can either edit this
-configuration file manually of use the dialog interface
+Default configuration file for grml-autoconfig framework.  You can override
+settings via /etc/grml/autoconfig.local or use the dialog interface
 /usr/sbin/grml-autoconfig.
+
+  */etc/grml/autoconfig.local*::
+User specific configuration file for grml-autoconfig. You can edit it directly
+or use the dialog interface /usr/sbin/grml-autoconfig.
+
 
   */etc/grml/autoconfig.functions*::
 
