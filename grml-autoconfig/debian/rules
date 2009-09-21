@@ -13,7 +13,7 @@ build: build-stamp
 
 build-stamp:
 	dh_testdir
-	(cd tests && ./test_parameters.sh)
+	(cd tests && ./run_tests.sh)
 	(cd doc && $(MAKE))
 
 	touch build-stamp
@@ -35,6 +35,7 @@ install: build
 	# Add here commands to install the package into debian/grml-autoconfig.
 	install -m 755 grml-autoconfig      debian/grml-autoconfig/etc/init.d/grml-autoconfig
 	install -m 644 autoconfig           debian/grml-autoconfig/etc/grml/autoconfig
+	install -m 644 autoconfig.local     debian/grml-autoconfig/etc/grml/autoconfig.local
 	install -m 755 autoconfig.functions debian/grml-autoconfig/etc/grml/autoconfig.functions
 	install -m 644 language-functions   debian/grml-autoconfig/etc/grml/language-functions
 	install -m 755 sbin/grml-autoconfig debian/grml-autoconfig/usr/sbin/grml-autoconfig

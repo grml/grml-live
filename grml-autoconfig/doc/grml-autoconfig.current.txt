@@ -1,0 +1,159 @@
+Behavior in current Grml versions
+---------------------------------
+
+This section applies to all Grml versions newer than release 2009.05.
+
+The central concept of grml-autoconfig is the DCS directory which holds debs,
+configuration and scripts which are used during system startup.
+
+Determination of DCS directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The DCS directory defaults to the root directory of the GRML live image. If a
+file system labeled GRMLCFG is found, the DCS directory is the root directory of
+that file system. Alternatively, the myconfig boot parameter can be used to
+directly specify a device which is then taken as DCS directory
+(myconfig=/dev/sda1, for example).
+
+Without any additional boot parameters, the GCA at DCSDIR/config.tbz is
+automatically unpacked and DCSDIR/scrips/grml.sh is automaitcally executed on
+system startup. The 'noautoconfig' boot parameter disables this automatic
+behavior.
+
+Boot Parameters
+~~~~~~~~~~~~~~~
+
+The following boot parameters are supported. Use them at the (isolinux)
+bootprompt as documented here.
+
+myconfig::
+
+   This parameter directly sets DCSDIR to the root directory of the specified
+   device. Usage examples:
+
+  myconfig=/dev/sda1                        => read DCS from usb-device
+  myconfig=/dev/fd0                         => read DCS from floppy-disk
+
+home::
+
+    This parameter is for setting a specific partition as home directory.  Usage
+    examples:
+
+  home=/dev/sda3    =>  use /dev/sda3 as the homepartition
+  home=scan         =>  scan through the available partitions and search
+                        for file grml.img
+
+partconf::
+
+    This parameter mounts the specified device in read-only mode and tries to
+    copy all files specified in /etc/grml/partconf to the Grml system. This
+    provides the possibility to use the configuration of a harddisk
+    installation. For example using the network configuration (which is
+    specified in /etc/network) is possible using this boot parameter. Usage
+    example:
+
+  partconf=/dev/sda2 => try to mount /dev/sda2 and copy files specified
+                        in /etc/grml/partconf to the booted Grml system
+
+netconfig::
+
+    Use this parameter to restore configuration using wget to download a GCA
+    from the specified destination. You can also add variables to change the
+    file name depending on the host configuration. Predefined and useful
+    variables are $ARCH, $HOSTNAME and $KERNEL. Usage example:
+
+  netconfig=server.tld/path/to/config.tbz  =>   restore configuration using wget to download file config.tbz
+  netconfig=server.tld/config-$ARCH.tbz    =>   download config for specified architecture
+
+netscript::
+    Use this parameter to download and run a script from specified destination:
+    You can also add variables to change the file name depending on the host
+    configuration. Predefined and useful variables are $ARCH, $HOSTNAME and
+    $KERNEL. Usage example:
+
+  netcript=server.tld/path/to/script       =>   download and run script/executable from server
+  netscript=server.tld/script-$HOSTNAME    =>   download and run script/executable for specific host
+
+extract::
+
+    Extract specific directories from the GCA which needs to be specified by
+    other means.
+
+  extract=/home/grml         => extract only /home/grml from archive
+  extract=/etc               => extract only /etc from archive
+  extract=/home/grml/config  => extract only $HOME/config from archive
+
+scripts::
+
+    This parameter executes scripts. If an optional path is given, it is
+    relative to DCSDIR. If it points to a directory, all scripts inside this
+    directory are executed. If the path points to a file, this single file is
+    executed. If no path is given, it defaults to scripts/grml.sh. Usage
+    examples:
+
+  scripts               =>   run script DCSDIR/scripts/grml.sh
+  scripts=foobar.sh     =>   run script foobar.sh in DCSDIR
+  scripts=foobar        =>   run all scripts inside DCSDIR/foobar directory
+
+config::
+
+    This parameter restores a configuration using a GCA. If an optional path is
+    given, it is relative to DCSDIR. If no path is given, it defaults to
+    DCSDIR/config.tbz. Usage examples:
+
+  config                    =>   restore configuration using file DCSDIR/config.tbz
+  config=config_foobar.tbz  =>   restore configuration using file DCSDIR/config_foobar.tbz
+
+debs::
+
+    This parameter allows automatic installation of deb packages while booting.
+    The path is relative to DCSDIR, not optional and is a shell wildcard. All
+    Files matching the wildcard are installed in a single dpkg --install call.
+    For backwards compatibility, if no slash is contained in the path, it is
+    taken relative to DCSDIR/debs.
+
+    Usage examples:
+
+  debs=*.deb        =>   install all debian packages (suffix .deb) from directory DCSDIR/debs/
+  debs=foo/01*.deb  =>   install all debian packages (suffix .deb) starting with 01 in the filename from directory DCSDIR/foo
+
+
+noautoconfig::
+
+    Deactivate automounting. By default the scripts try to mount a device with
+    label 'GRMLCFG'. If you specify the noautoconfig bootparam this automounting
+    will be deactivated.
+
+  noautoconfig            => disables auto mounting of label 'GRMLCFG'
+
+
+Permanently adjust boot parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As you probably know you can adjust boot parameters on the bootprompt.  You want
+to set some boot parameters permanently? That's possible via adding a directory
+named 'bootparams' to the Grml ISO which has to be located at the root-directory
+/bootparams/ (note: the directory is known as /live/image/bootparams/ on a
+_running_ Grml system then). Place a textfile inside the directory containing
+the boot parameters which should be appended to default ones (this corresponds
+to booting without any special parameters).
+
+  mkdir bootparams
+  echo lang=de > bootparams/my_bootparams
+
+Then burn a multisession CD where directory bootparams is located in the root
+directory of the CD.
+
+[NOTE]
+Not all boot parameters can be used via /bootparams/. This is a limitation of
+the way the kernel and userspace retrieve boot parameters. Boot parameter
+regarding the kernel definitely do *NOT* work. Boot parameter related to
+grml-autoconfig (the main part of the boot process in Grml running in userspace,
+being all the stuff after startup of udev) are expected to work. Boot parameter
+related to initrd/initramfs (the part between 'Searching for GRML file' and
+startup of udev) are *NOT* covered by /bootparams/ as well yet.
+
+TIP: the application k3b (not available on the live-CD but available through the
+Debian repositories) provides an easy to use interface for doing the
+multisession task.
+

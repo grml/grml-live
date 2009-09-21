@@ -1,0 +1,116 @@
+Behavior up to grml 2009.05
+---------------------------
+
+This section applies to all Grml versions older than and including release 2009.05.
+
+Autoconfiguration
+~~~~~~~~~~~~~~~~~
+
+By default the booting process tries to mount a device labeled 'GRMLCFG'. This
+provides the possibility to restore a configuration (named config.tbz) and
+execute a script (named grml.sh) without the need to specify any bootparams. If
+you want to disable this feature please take a look at the 'noautoconfig'
+bootparam.
+
+Boot parameters
+~~~~~~~~~~~~~~~
+
+As you probably know you can adjust boot parameters on the bootprompt.  You want
+to set some boot parameters permanently? That's possible via adding a directory
+named 'bootparams' to the Grml-ISO which has to be located at the root-directory
+/bootparams/ (note: the directory is known as /live/image/bootparams/ on a
+_running_ grml system then). Place a textfile inside the directory containing
+the boot parameters which should be appended to default ones (this corresponds
+to booting without any special parameters). If you want to be able to boot from
+your Grml-CD you have to create a multisession CD. See the <<X7,usage
+scenarios>> for more details how to use it or consider booting from a USB device
+(checkout grml2usb).
+
+The following boot parameters are supported. Use them at the (isolinux)
+bootprompt as documented here.
+
+myconfig::
+
+   This parameter is for restoring configuration using the file config.tbz
+    on the specified device. Usage examples:
+
+  myconfig=/dev/sda1                        => use file config.tbz from usb-device
+  myconfig=/dev/fd0                         => use file config.tbz from floppy-disk
+  myconfig=/dev/sda1 file=config_foobar.tbz => use file config_foobar.tbz from usb-device
+
+home::
+
+    This parameter is for setting a specific partition as home directory.
+    Usage examples:
+
+  home=/dev/sda3    =>  use /dev/sda3 as the homepartition
+  home=scan         =>  scan through the available partitions and search
+                        for file grml.img
+
+partconf::
+
+    This parameter mounts the specified device in read-only mode and tries to
+    copy all files specified in /etc/grml/partconf to the Grml system. This
+    provides the possibility to use the configuration of a harddisk
+    installation. For example using the network configuration (which is
+    specified in /etc/network) is possible using this boot parameter. Usage
+    example:
+
+  partconf=/dev/sda2 => try to mount /dev/sda2 and copy files specified
+                        in /etc/grml/partconf to the booted Grml system
+
+netconfig::
+
+    Use this parameter to restore configuration using wget to download a
+    configuration file from specified destination. Usage example:
+
+  netconfig=server.tld/path/to/config.tbz  =>   restore configuration using wget to download file config.tbz
+
+extract::
+
+    Extract specific directories from configuration archive. Notice: This
+    bootparam is useful only with bootparams which are able to extract
+    configuration archives.
+
+  extract=/home/grml         => extract only /home/grml from archive
+  extract=/etc               => extract only /etc from archive
+  extract=/home/grml/config  => extract only $HOME/config from archive
+
+scripts::
+
+    This parameter executes a script located in the root-directory /scripts/ on
+    the Grml media/ISO (note: the directory is known as /live/image/scripts/ on
+    a _running_ Grml system then). Usage examples:
+
+  scripts               =>   run script [/live/image]/scripts/grml.sh
+  scripts=foobar.sh     =>   run script foobar.sh in [/live/image]/scripts/
+
+config::
+
+    This parameter restores a configuration using root-directory /config/ on the
+    Grml media/ISO (note: the directory is known as /live/image/config on a
+    _running_ Grml system then). Usage examples:
+
+  config                    =>   restore configuration using file config.tbz from directory [/live/image]/config/
+  config=config_foobar.tbz  =>   restore configuration using file config_foobar.tbz from directory [/live/image]/config/
+
+debs::
+
+    This parameter allows automatic installation of deb packages while booting.
+    The debian packages have to be located in the root-directory /debs/ on the
+    Grml media/ISO (note: the directory is known as /live/image/debs/ on a
+    _running_ Grml system then). Usage examples:
+
+  debs              =>   install all debian packages (suffix .deb) from directory [/live/image]/debs/
+  debs=01           =>   install all debian packages (suffix .deb) starting with 01 in the filename from directory [/live/image]/debs/
+
+
+noautoconfig::
+
+    Deactivate automounting. By default the command 'mount' tries to mount a
+    device with label 'GRMLCFG'. If you specify the noautoconfig bootparam the
+    automounting will be deactivated.
+
+  noautoconfig            => disables auto mounting of label 'GRMLCFG'
+
+
