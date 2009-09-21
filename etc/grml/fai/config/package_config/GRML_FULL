@@ -94,6 +94,7 @@ lcdtest
 libacme-bleach-perl
 libacme-eyedrops-perl
 libacme-smirch-perl
+libnss-mdns
 libpam-thinkfinger
 libstdc++2.10-glibc2.2
 md5deep
