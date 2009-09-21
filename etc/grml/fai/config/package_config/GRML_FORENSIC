@@ -35,6 +35,7 @@ disktype
 dnsutils
 dsniff
 ext3grep
+extract
 fatback
 fdupes
 fdutils
@@ -56,6 +57,7 @@ iputils-tracepath
 jfsutils
 kpartx
 libewf1
+libextractor-plugins
 lshw
 lsscsi
 ltrace

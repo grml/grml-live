@@ -12,6 +12,8 @@ grml-live (0.9.23) unstable; urgency=low
     - Drop version specific dependency on -mysql-client-5.0.
     - Add febootstrap to GRML_FULL.
     - Add guymager to GRML_FORENSIC.
+    - Add extract and libextractor-plugins to GRML_FORENSIC (thanks to
+      Dennis Schreiber for the hint).
     - Add iw to GRMLBASE. Thanks to Christian Hofstaedtler for the hint.
     - Add libnss-mdns to GRML_FULL (thanks to mrud).
   * Add backwards compatibility check for old sources.list layout
@@ -24,7 +26,7 @@ grml-live (0.9.23) unstable; urgency=low
   * Update documentation regarding recent lzma development.
   * Some minor cosmetic corrections in grml-live's output.
 
- -- Michael Prokop <mika@grml.org>  Mon, 21 Sep 2009 02:13:16 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 21 Sep 2009 18:13:05 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 
