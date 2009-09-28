@@ -993,7 +993,7 @@ elif [ -n "$SKIP_MKISOFS" ] ; then
 else
    mkdir -p "$ISO_OUTPUT" || bailout 6 "Problem with creating $ISO_OUTPUT for stage 'iso build'"
 
-   if $FORCE_ISO_REBUILD && ! -f "${ISO_OUTPUT}/${ISO_NAME}"; then
+   if $FORCE_ISO_REBUILD && ! [ -f "${ISO_OUTPUT}/${ISO_NAME}" ] ; then
       log   "Forcing rebuild of ISO because files on ISO have been modified."
       einfo "Forcing rebuild of ISO because files on ISO have been modified."
    fi
