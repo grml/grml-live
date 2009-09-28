@@ -1958,7 +1958,7 @@ else
     if checkbootparam 'myconfig' ; then
       DCSDEVICE="$(getbootparam 'myconfig' 2>>$DEBUG)"
       if [ -z "$DCSDEVICE" ]; then
-        einfo "No device for bootoption myconfig provided." ; eend 1
+        eerror "Error: No device for bootoption myconfig provided." ; eend 1
       fi # [ -z "$DCSDEVICE" ]
     elif checkvalue $CONFIG_MYCONFIG; then # checkbootparam myconfig
       einfo "Searching for device(s) labeled with GRMLCFG. (Disable this via boot option: noautoconfig)" ; eend 0
@@ -1971,30 +1971,36 @@ else
         fi
       fi
       DCSDEVICE=$(blkid -t LABEL=GRMLCFG | head -1 | awk -F: '{print $1}')
+      eoutdent
     fi
-    if [ -n "$DCSDEVICE" ]; then
+
+    # if not specified/present then assume default:
+    if [ -z "$DCSDEVICE" ]; then
+      DCSDIR="/live/image"
+    else
+      eindent
       einfo "debs, config, scripts are read from $DCSDEVICE." ; eend 0
       DCSDIR="$(< /proc/mounts awk -v DCSDEV=$DCSDEVICE '{if ($1 == DCSDEV) { print $2 }}')"
       if [ -n "$DCSDIR" ]; then
-        einfo "$DCSDEVICE already mounted on $DCSDIR"; eend 0
+        ewarn "$DCSDEVICE already mounted on $DCSDIR"; eend 0
       else
         [ -d /mnt/grml ] || mkdir /mnt/grml
         umount /mnt/grml 1>>$DEBUG 2>&1 # make sure it is not mounted
         mount -o ro -t auto $DCSDEVICE  /mnt/grml ; RC="$?"
         if [[ $RC == 0 ]]; then
           einfo "Successfully mounted $DCSDEVICE to /mnt/grml (readonly)." ; eend 0
-          eindent
+        else
+          eerror "Error: mounting $DCSDEVICE to /mnt/grml (readonly) failed." ; eend 1
         fi
         DCSDIR="/mnt/grml"
       fi
-    else
-      DCSDIR="/live/image"
+      eoutdent
     fi
   fi
 fi
 
-if [ -n "$DCSDIR" ]; then
-  einfo "Debs, config, scripts will be read from $DCSDIR." ; eend 0
+if [ -n "$DCSDIR" -a "$DCSDIR" != "/live/image" ] ; then
+  einfo "Debs, config, scripts (if present) will be read from $DCSDIR." ; eend 0
 elif checkbootparam 'debs' || checkbootparam 'config' || checkbootparam 'scripts'; then
   einfo "Debs, config, scripts will be read from the live image directly." ; eend 0
 fi
