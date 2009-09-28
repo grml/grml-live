@@ -9,6 +9,8 @@
 set -u
 set -e
 
+[ -z "$GRML_NAME" ] && GRML_NAME=grml
+
 if ! [ -r $target/etc/runlevel.conf ] ; then
    echo 'Warning: /etc/runlevel.conf does not exist...'
    echo '... assuming we do not have file-rc, skipping 15-initsetup'

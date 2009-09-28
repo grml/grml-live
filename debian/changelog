@@ -26,8 +26,9 @@ grml-live (0.9.23) unstable; urgency=low
   * Update documentation regarding recent lzma development.
   * Some minor cosmetic corrections in grml-live's output.
   * Add missing test call in $FORCE_ISO_REBUILD code.
+  * scripts/GRMLBASE/15-initsetup: assume safe GRML_NAME default.
 
- -- Michael Prokop <mika@grml.org>  Mon, 28 Sep 2009 14:13:02 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 28 Sep 2009 14:14:38 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 
