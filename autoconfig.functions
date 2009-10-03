@@ -1597,9 +1597,10 @@ fi # checkbootparam home
 # }}}
 
 # {{{ Sound
+
 config_mixer(){
-if ! [ -x /usr/bin/aumix ] ; then
-  eerror "aumix binary not available. Can not set sound volumes therefore." ; eend 1
+if ! [ -x /usr/bin/amixer ] ; then
+  eerror "amixer binary not available. Can not set sound volumes therefore." ; eend 1
 else
 
   if ! [ -r /proc/asound/cards ] ; then
@@ -1619,14 +1620,12 @@ else
 
   if checkbootparam 'nosound' ; then
     einfo "Muting sound devices on request."
-    # some IBM notebooks require the following stuff:
-    if [ -x /usr/bin/amixer ] ; then
-       if amixer get Front 1>/dev/null 2>>$DEBUG ; then
-          amixer set Front unmute 1>/dev/null
-          amixer set Front 0% 1>/dev/null
-       fi
-    fi
-    ERROR=$(aumix -w 0 -v 0 -p 0 -m 0 2>&1) ; RC=$?
+
+    fix_ibm_sound 0
+    # mute the master, this should be sufficient
+    ERROR=$(amixer -q set Master mute)
+    RC=$?
+
     if [ -n "$ERROR" ] ; then
        eindent
        eerror "Problem muting sound devices: $ERROR"
@@ -1635,13 +1634,9 @@ else
     eend $RC
   elif [ -z "$INSTALLED" ]; then
       einfo "Setting mixer volumes to level ${WHITE}${VOL}${NORMAL}."
-      # some IBM notebooks require the following stuff:
-      if [ -x /usr/bin/amixer ] ; then
-         if amixer get Front 1>/dev/null 2>>$DEBUG ; then
-            amixer set Front unmute 1>/dev/null
-            amixer set Front ${VOL}% 1>/dev/null
-         fi
-      fi
+
+      fix_ibm_sound ${VOL}
+
       # by default assume '0' as volume for microphone:
       if checkbootparam 'micvol' ; then
          MICVOL="$(getbootparam 'micvol' 2>>$DEBUG)"
@@ -1650,16 +1645,38 @@ else
       fi
 
       # finally set the volumes:
-      ERROR=$(aumix -w $VOL -v $VOL -p $VOL -m $MICVOL 2>&1) ; RC=$?
-      if [ -n "$ERROR" ] ; then
-         eindent
-         eerror "Problem setting mixer volumes: $ERROR (no soundcard?)"
-         eoutdent
+      RC=0
+      for CONTROL in Master PCM ; do
+         amixer -q set ${CONTROL} ${VOL}%
+         if [ $? -ne 0 ] ; then RC=$? ; fi
+      done
+      # dont know how to set microphone volume for all soundcards with amixer,
+      # so use aumix instead :/
+      if [ ${MICVOL} -ne 0 -a -x /usr/bin/aumix ] ; then
+         aumix -m $MICVOL &>/dev/null
+         if [ $? -ne 0 ] ; then RC=$? ; fi
       fi
+
       eend $RC
   fi
 
 fi
+}
+
+# on some IBM notebooks the front control has to be toggled
+fix_ibm_sound() {
+ if [ -z $1 ] ; then
+    return
+ fi
+
+ VOL=${1}
+
+ if [ -x /usr/bin/amixer ] ; then
+    if amixer -q get Front 1>/dev/null 2>>$DEBUG ; then
+       amixer -q set Front unmute &>/dev/null
+       amixer -q set Front ${VOL}% &>/dev/null
+    fi
+ fi
 }
 # }}}
 
