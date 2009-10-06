@@ -440,7 +440,6 @@ dconf
 dcraw
 dctrl-tools
 ddccontrol
-ddccontrol-db
 ddclient
 ddrescue
 dds2tar
@@ -469,7 +468,6 @@ devio
 devscripts
 devtodo
 dhcp3-client
-dhcp3-common
 dhcp3-server
 dhcpdump
 dhcping
@@ -484,7 +482,6 @@ diction
 dictionaries-common
 dietlibc
 dietlibc-dev
-diff
 diffstat
 ding
 dir2ogg

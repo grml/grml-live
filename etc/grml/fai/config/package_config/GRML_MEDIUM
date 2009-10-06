@@ -42,7 +42,6 @@ debootstrap
 deborphan
 dhcp3-client
 dialog
-diff
 dmraid
 dmsetup
 dns2tcp

@@ -5,6 +5,8 @@ grml-live (0.9.23) unstable; urgency=low
       2.6.28-grml[64] to 2.6.31-grml[64].
     - Drop ash from GRML_FULL (unrelevant for Grml).
     - Drop crack-common from GRML_FULL (it's a dependency of crack*).
+    - Drop ddccontrol-db from GRML_FULL (it's a dependency of ddccontrol).
+    - Drop dhcp3-common from GRML_FULL (it's a dependency of dhcp3*).
     - Drop libpam-krb5 from GRML_FULL (related to #545824).
     - Drop replicator from GRML_FULL (orphaned, see #474131).
     - Drop rt2400-modules-2.6.31-grml, rt2500-modules-2.6.31-grml and
@@ -12,6 +14,7 @@ grml-live (0.9.23) unstable; urgency=low
     - Drop rt2400-modules-2.6.31-grml, rt73-modules-2.6.31-grml and
       rt2400-modules-2.6.31-grml64 from GRML_FULL.
     - Drop version specific dependency on -mysql-client-5.0.
+    - Replace diff with diffutils and move it to GRMLBASE.
     - Add febootstrap to GRML_FULL.
     - Add guymager to GRML_FORENSIC.
     - Add extract and libextractor-plugins to GRML_FORENSIC (thanks to
@@ -30,7 +33,7 @@ grml-live (0.9.23) unstable; urgency=low
   * Add missing test call in $FORCE_ISO_REBUILD code.
   * scripts/GRMLBASE/15-initsetup: assume safe GRML_NAME default.
 
- -- Michael Prokop <mika@grml.org>  Tue, 06 Oct 2009 10:26:58 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 06 Oct 2009 10:45:05 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 
