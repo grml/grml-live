@@ -94,7 +94,6 @@ lcdtest
 libacme-bleach-perl
 libacme-eyedrops-perl
 libacme-smirch-perl
-libnss-mdns
 libpam-thinkfinger
 libstdc++2.10-glibc2.2
 md5deep
@@ -211,7 +210,6 @@ arrayprobe
 ascii
 ascii2binary
 asciidoc
-ash
 asn1c
 asql
 asr-manpages
@@ -397,7 +395,6 @@ cpufrequtils
 cpuid
 cpulimit
 crack
-crack-common
 cracklib2
 cracklib-runtime
 cramfsprogs
@@ -935,6 +932,7 @@ lftp
 libaa-bin
 libcap2-bin
 libewf1
+libnss-mdns
 libpam-chroot
 libpam-devperm
 libpam-dotfile

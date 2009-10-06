@@ -3,6 +3,8 @@ grml-live (0.9.23) unstable; urgency=low
   * Software related changes:
     - GRML_SMALL, GRML_MEDIUM and GRML_FULL: switch from kernel
       2.6.28-grml[64] to 2.6.31-grml[64].
+    - Drop ash from GRML_FULL (unrelevant for Grml).
+    - Drop crack-common from GRML_FULL (it's a dependency of crack*).
     - Drop libpam-krb5 from GRML_FULL (related to #545824).
     - Drop replicator from GRML_FULL (orphaned, see #474131).
     - Drop rt2400-modules-2.6.31-grml, rt2500-modules-2.6.31-grml and
@@ -28,7 +30,7 @@ grml-live (0.9.23) unstable; urgency=low
   * Add missing test call in $FORCE_ISO_REBUILD code.
   * scripts/GRMLBASE/15-initsetup: assume safe GRML_NAME default.
 
- -- Michael Prokop <mika@grml.org>  Mon, 28 Sep 2009 14:14:38 +0200
+ -- Michael Prokop <mika@grml.org>  Tue, 06 Oct 2009 10:26:58 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 
