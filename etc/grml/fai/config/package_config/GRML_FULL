@@ -543,7 +543,6 @@ dwdiff
 dwm
 dwm-tools
 dzen2
-e2fslibs
 e2fsprogs
 e2tools
 e2undel
@@ -572,9 +571,7 @@ epdfview
 equivs
 erc
 es
-esound-common
 espeak
-espeak-data
 espeakup
 etckeeper
 eterm
@@ -582,7 +579,6 @@ etherwake
 ethstatus
 ethtool
 etpan-ng
-ettercap-common
 ettercap-gtk
 euro-support
 evilwm
@@ -623,9 +619,7 @@ fetchmail
 fgetty
 file
 filepp
-file-rc
 filetraq
-fileutils
 findutils
 finger
 firehol
@@ -672,11 +666,9 @@ fxload
 g++
 gaffitter
 gamin
-gawk
 gcal
 gcc
 gcolor2
-gcom
 gdb
 gddrescue
 geeqie
@@ -740,7 +732,6 @@ gsm-utils
 gtkam
 guessnet
 gv
-gzip
 gzrt
 habak
 hal

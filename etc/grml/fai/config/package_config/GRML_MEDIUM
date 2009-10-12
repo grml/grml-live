@@ -55,17 +55,13 @@ ed
 eterm
 ethtool
 file
-file-rc
 findutils
 firmware-iwlwifi
 firmware-ralink
 fluxbox
 fnord
 fuse-utils
-gawk
 genext2fs
-gpm
-grep
 grml2hd
 grml2hd-utils
 grml2usb
@@ -98,7 +94,6 @@ grml-usleep
 grml-x
 grub
 guessnet
-gzip
 hostname
 htop
 hwinfo

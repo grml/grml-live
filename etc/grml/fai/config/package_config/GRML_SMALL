@@ -43,13 +43,9 @@ e3
 ed
 ethtool
 file
-file-rc
 findutils
 fnord
 # fuse-utils
-gawk
-gpm
-grep
 grml2hd
 grml2hd-utils
 grml2usb
@@ -71,7 +67,6 @@ grml-tips
 grml-usleep
 grub
 guessnet
-gzip
 hostname
 htop
 hwinfo

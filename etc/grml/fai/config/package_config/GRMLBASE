@@ -9,6 +9,10 @@ diffutils
 dmidecode
 eject
 file
+file-rc
+gawk
+grep
+gpm
 grml2hd
 grml2hd-utils
 grml2usb
@@ -26,6 +30,7 @@ grml-scripts
 grml-shlib
 grml-usleep
 grml-vpn
+gzip
 hdparm
 hwinfo
 iw
