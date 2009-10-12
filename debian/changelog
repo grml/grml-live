@@ -7,6 +7,7 @@ grml-live (0.9.23) unstable; urgency=low
     - Drop crack-common from GRML_FULL (it's a dependency of crack*).
     - Drop ddccontrol-db from GRML_FULL (it's a dependency of ddccontrol).
     - Drop dhcp3-common from GRML_FULL (it's a dependency of dhcp3*).
+    - Drop emacs22/-common specific packages from GRML_FULL (dependencies).
     - Drop libpam-krb5 from GRML_FULL (related to #545824).
     - Drop replicator from GRML_FULL (orphaned, see #474131).
     - Drop rt2400-modules-2.6.31-grml, rt2500-modules-2.6.31-grml and
@@ -14,7 +15,11 @@ grml-live (0.9.23) unstable; urgency=low
     - Drop rt2400-modules-2.6.31-grml, rt73-modules-2.6.31-grml and
       rt2400-modules-2.6.31-grml64 from GRML_FULL.
     - Drop version specific dependency on -mysql-client-5.0.
+    - Drop e2fslibs, esound-common, espeak-data, ettercap-common (all being
+      dependencies), fileutils and gcom (both transitional package) from
+      GRML_FULL.
     - Replace diff with diffutils and move it to GRMLBASE.
+    - Move eject, file-rc, gawk, grep, gpm + gzip to GRMLBASE.
     - Add febootstrap to GRML_FULL.
     - Add guymager to GRML_FORENSIC.
     - Add extract and libextractor-plugins to GRML_FORENSIC (thanks to
