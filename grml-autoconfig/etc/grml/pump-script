@@ -1,0 +1,22 @@
+#!/bin/sh
+# PUMP Script
+# $1 Calling circumstance (up, renewal, down)
+# $2 interface
+# $3 ip
+
+# Exit early, if we're not being called for the initial lease
+[ "$1" != "up" ] && exit 0
+
+# See if we're needed at all, only run when booted with dhcphostname
+for i in $(cat /proc/cmdline)
+do
+	if [ "$i" = "dhcphostname" ]
+	then
+		# dhcphostname is set, get the PTR for the ip
+		hostname=$(host $3 | awk '{ print substr($5, 0, length($5)-1) }')
+		if [ -n "$hostname" ]
+		then
+			echo $hostname > /etc/hostname
+		fi
+	fi
+done
