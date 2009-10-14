@@ -1,9 +1,10 @@
-grml-autoconfig (0.8.33) UNRELEASED; urgency=low
+grml-autoconfig (0.8.33) unstable; urgency=low
 
-  * Use amixer instead of aumix for setting the output volume
-     [Closes: Issue625]
+  [ Ulrich Dangel ]
+  * Use amixer instead of aumix for setting the output volume.
+    [Closes: Issue625]
 
- -- Ulrich Dangel <uli@spamt.net>  Sat, 03 Oct 2009 12:17:51 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 14 Oct 2009 09:03:59 +0200
 
 grml-autoconfig (0.8.32) unstable; urgency=low
 
