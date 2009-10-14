@@ -19,7 +19,8 @@ grml-live (0.9.23) unstable; urgency=low
       dependencies), fileutils and gcom (both transitional package) from
       GRML_FULL.
     - Replace diff with diffutils and move it to GRMLBASE.
-    - Move eject, file-rc, gawk, grep, gpm + gzip to GRMLBASE.
+    - Move eject, file-rc, gawk, gpm, grep, grml-hwinfo, gzip, hostname,
+      initramfs-tools, initscripts, klibc-utils + laptop-detect to GRMLBASE.
     - Add febootstrap to GRML_FULL.
     - Add guymager to GRML_FORENSIC.
     - Add extract and libextractor-plugins to GRML_FORENSIC (thanks to

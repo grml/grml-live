@@ -22,6 +22,7 @@ grml-debootstrap
 grml-docs
 grml-etc
 grml-etc-core
+grml-hwinfo
 grml-network
 grml-policyrcd
 grml-rebuildfstab
@@ -32,8 +33,13 @@ grml-usleep
 grml-vpn
 gzip
 hdparm
+hostname
 hwinfo
+initramfs-tools
+initscripts
 iw
+klibc-utils
+laptop-detect
 less
 live-initramfs
 lvm2

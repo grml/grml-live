@@ -74,7 +74,6 @@ grml-docs
 grml-etc
 grml-etc-core
 grml-files
-grml-hwinfo
 grml-laptop
 grml-live
 grml-mercurial-utils
@@ -94,14 +93,10 @@ grml-usleep
 grml-x
 grub
 guessnet
-hostname
 htop
-hwinfo
 ifplugd
 ifupdown
 inetutils-inetd
-initramfs-tools
-initscripts
 iproute
 iptstate
 iputils-ping
@@ -110,9 +105,7 @@ irqbalance
 jed
 jed-common
 keychain
-klibc-utils
 knockd
-laptop-detect
 latencytop
 less
 lilo

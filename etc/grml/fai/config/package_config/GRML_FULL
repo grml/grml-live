@@ -62,7 +62,6 @@ grml-etc
 grml-etc-core
 grml-files
 grml-firefox
-grml-hwinfo
 grml-laptop
 grml-live
 grml-mercurial-utils
@@ -753,7 +752,6 @@ hnb
 honeyd
 hostapd
 hostap-utils
-hostname
 hotkeys
 hotkey-setup
 hotswap-text
@@ -768,7 +766,6 @@ httping
 httptunnel
 hunt
 hwdata
-hwinfo
 i2c-tools
 i810switch
 i8kutils
@@ -776,7 +773,6 @@ ibod
 ibritish
 icecast2
 iceweasel
-iceweasel-webdeveloper
 icheck
 icmpush
 id3
@@ -808,8 +804,6 @@ indent
 info
 info2www
 ingerman
-initramfs-tools
-initscripts
 ink
 inotail
 inoticoming
@@ -838,7 +832,6 @@ ipvsadm
 ipx
 ipython
 irb
-irb1.8
 ircii
 irda-utils
 irqbalance
@@ -885,11 +878,9 @@ keychain
 keynav
 keyutils
 kismet
-klibc-utils
 knockd
 knocker
 konwert
-konwert-filters
 kpartx
 kqemu-common
 krb5-config
@@ -897,7 +888,6 @@ krb5-user
 ksh
 kvm
 labrea
-laptop-detect
 laptop-mode-tools
 latencytop
 lbdb
@@ -1887,6 +1877,7 @@ xtrace
 xtrlock
 x-ttcidfont-conf
 xtv
+xul-ext-webdeveloper
 xutils
 xutils-dev
 xvfb
