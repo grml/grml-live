@@ -1274,7 +1274,7 @@ else
     einfo "Network device ${WHITE}${DEVICE}${NORMAL} detected, DHCP broadcasting for IP. (Backgrounding)"
     trap 2 3 11
     ifconfig $DEVICE up >>$DEBUG 2>&1
-    ( pump -i $DEVICE >>$DEBUG 2>&1 && echo finished_running_pump > /etc/network/status/$DEVICE ) &
+    ( pump -i $DEVICE --script=/etc/grml/pump-script >>$DEBUG 2>&1 && echo finished_running_pump > /etc/network/status/$DEVICE ) &
     trap "" 2 3 11
     sleep 1
     eend 0
