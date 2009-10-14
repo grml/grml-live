@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+arguments=""
+
+for ARG in $* ; do
+    arguments="${arguments} -a ${ARG} "
+done
+
+run-parts $arguments /etc/grml/pump-scripts.d/

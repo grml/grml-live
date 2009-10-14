@@ -1,0 +1,24 @@
+#!/bin/zsh -e
+# PUMP Script
+# $1 Calling circumstance (up, renewal, down)
+# $2 interface
+# $3 ip
+
+# Exit early, if we're not being called for the initial lease
+[ "$1" != "up" ] && exit 0
+
+. /etc/grml/autoconfig.functions
+
+
+# only run if no nodhcphostname parameter is given
+if ! checkbootparam 'nodhcphostname' ; then
+
+    hostname=$(host $3) || exit 1
+    # dhcphostname is set, get the PTR for the ip
+    hostname=$(echo ${hostname} | awk '{ print substr($5, 0, length($5)-1) }')
+
+    if [ -n "$hostname" ] ; then
+        echo $hostname > /etc/hostname
+        hostname -F /etc/hostname
+    fi
+fi
