@@ -1250,8 +1250,7 @@ poster
 postfix
 postfix-ldap
 postfix-pcre
-postgresql-client-8.2
-postgresql-client-common
+postgresql-client
 postmark
 powermgmt-base
 powernowd

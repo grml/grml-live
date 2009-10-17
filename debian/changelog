@@ -22,6 +22,8 @@ grml-live (0.9.23) unstable; urgency=low
       dependencies), fileutils and gcom (both transitional package) from
       GRML_FULL.
     - Replace diff with diffutils and move it to GRMLBASE.
+    - Replace postgresql-client-8.2 + postgresql-client-common with
+      postgresql-client in GRML_FULL.
     - Move eject, file-rc, gawk, gpm, grep, grml-hwinfo, gzip, hostname,
       initramfs-tools, initscripts, klibc-utils + laptop-detect to GRMLBASE.
     - Add febootstrap to GRML_FULL.
@@ -43,7 +45,7 @@ grml-live (0.9.23) unstable; urgency=low
   * scripts/GRMLBASE/15-initsetup: assume safe GRML_NAME default.
   * Use menu hide in templates/boot/isolinux/prompt.cfg
 
- -- Michael Prokop <mika@grml.org>  Sat, 17 Oct 2009 15:53:21 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 17 Oct 2009 15:55:30 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 
