@@ -9,6 +9,7 @@ grml-live (0.9.23) unstable; urgency=low
     - Drop dhcp3-common from GRML_FULL (it's a dependency of dhcp3*).
     - Drop emacs22/-common specific packages from GRML_FULL (dependencies).
     - Drop libpam-krb5 from GRML_FULL (related to #545824).
+    - Drop mktemp from GRML_* (transitional package).
     - Drop replicator from GRML_FULL (orphaned, see #474131).
     - Drop rt2400-modules-2.6.31-grml, rt2500-modules-2.6.31-grml and
       rt73-modules-2.6.31-grml from GRML_MEDIUM.
@@ -41,7 +42,7 @@ grml-live (0.9.23) unstable; urgency=low
   * scripts/GRMLBASE/15-initsetup: assume safe GRML_NAME default.
   * Use menu hide in templates/boot/isolinux/prompt.cfg
 
- -- Michael Prokop <mika@grml.org>  Sat, 17 Oct 2009 15:40:14 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 17 Oct 2009 15:48:40 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 

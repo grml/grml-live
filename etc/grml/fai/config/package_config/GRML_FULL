@@ -1017,7 +1017,6 @@ mkisofs
 mklibs-copy
 mknbi
 mksh
-mktemp
 mlocate
 mmv
 moc
