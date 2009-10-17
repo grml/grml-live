@@ -1679,8 +1679,6 @@ vim-addon-manager
 vim-common
 vim-gtk
 vim-gui-common
-vim-python
-vim-ruby
 vim-runtime
 vim-scripts
 vim-vimoutliner

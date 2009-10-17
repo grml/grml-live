@@ -17,6 +17,7 @@ grml-live (0.9.23) unstable; urgency=low
     - Drop rt2400-modules-2.6.31-grml, rt73-modules-2.6.31-grml and
       rt2400-modules-2.6.31-grml64 from GRML_FULL.
     - Drop timeout from GRML_* (it is part of coreutils nowadays).
+    - Drop vim-python + vim-ruby from GRML_FULL (not available anymore).
     - Drop version specific dependency on -mysql-client-5.0.
     - Drop e2fslibs, esound-common, espeak-data, ettercap-common (all being
       dependencies), fileutils and gcom (both transitional package) from
@@ -45,7 +46,7 @@ grml-live (0.9.23) unstable; urgency=low
   * scripts/GRMLBASE/15-initsetup: assume safe GRML_NAME default.
   * Use menu hide in templates/boot/isolinux/prompt.cfg
 
- -- Michael Prokop <mika@grml.org>  Sat, 17 Oct 2009 15:55:30 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 17 Oct 2009 15:59:00 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 
