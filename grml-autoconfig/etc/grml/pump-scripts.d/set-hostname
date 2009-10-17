@@ -9,16 +9,16 @@
 
 . /etc/grml/autoconfig.functions
 
-
 # only run if no nodhcphostname parameter is given
-if ! checkbootparam 'nodhcphostname' ; then
+# and if running in live mode
+if ! checkbootparam 'nodhcphostname' && [ -f /etc/grml_cd ] ; then
 
     hostname=$(host $3) || exit 1
     # dhcphostname is set, get the PTR for the ip
     hostname=$(echo ${hostname} | awk '{ print substr($5, 0, length($5)-1) }')
 
     if [ -n "$hostname" ] ; then
-        echo $hostname > /etc/hostname
+        grml-hostname $hostname
         hostname -F /etc/hostname
     fi
 fi
