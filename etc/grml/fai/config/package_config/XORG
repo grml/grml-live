@@ -31,12 +31,10 @@ xserver-xorg-video-fbdev
 xserver-xorg-video-glint
 xserver-xorg-video-i128
 xserver-xorg-video-i740
-xserver-xorg-video-i810
 xserver-xorg-video-intel
 xserver-xorg-video-ivtv
 xserver-xorg-video-mga
 xserver-xorg-video-neomagic
-xserver-xorg-video-nsc
 xserver-xorg-video-nv
 xserver-xorg-video-rendition
 xserver-xorg-video-s3

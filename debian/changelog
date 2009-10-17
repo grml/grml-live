@@ -23,7 +23,15 @@ grml-live (0.9.23) unstable; urgency=low
     - Drop e2fslibs, esound-common, espeak-data, ettercap-common (all being
       dependencies), fileutils and gcom (both transitional package) from
       GRML_FULL.
+    - Drop 915resolution, bazaar, cracklib2, dbishell, gmailfs,
+      igal, nmapfe, python-pyogg, weechat-common, xdialog,
+      xserver-xorg-video-i810, xserver-xorg-video-nsc and zeroconf from
+      GRML_FULL (all being deprecated packages).
+    - Drop cracklib2 from GRML_FORENSIC (deprecated).
+    - Drop xserver-xorg-video-i810 + xserver-xorg-video-nsc from GRML_MEDIUM
+      and XORG (deprecated packages).
     - Replace diff with diffutils and move it to GRMLBASE.
+    - Replace dvb-utils with dvb-apps in GRML_FULL.
     - Replace postgresql-client-8.2 + postgresql-client-common with
       postgresql-client in GRML_FULL.
     - Move eject, file-rc, gawk, gpm, grep, grml-hwinfo, gzip, hostname,
@@ -47,7 +55,7 @@ grml-live (0.9.23) unstable; urgency=low
   * scripts/GRMLBASE/15-initsetup: assume safe GRML_NAME default.
   * Use menu hide in templates/boot/isolinux/prompt.cfg
 
- -- Michael Prokop <mika@grml.org>  Sat, 17 Oct 2009 16:02:26 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 17 Oct 2009 16:14:51 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 

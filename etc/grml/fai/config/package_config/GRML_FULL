@@ -133,7 +133,6 @@ zsh-lovers
 2vcard
 3270-common
 4g8
-915resolution
 9base
 9menu
 abcde
@@ -257,7 +256,6 @@ bash-doc
 bash-minimal
 bash-static
 bastille
-bazaar
 bb
 bbe
 bc
@@ -394,7 +392,6 @@ cpufrequtils
 cpuid
 cpulimit
 crack
-cracklib2
 cracklib-runtime
 cramfsprogs
 cron
@@ -429,7 +426,6 @@ dares
 dares-qt
 dash
 davfs2
-dbishell
 dbs
 dbus
 dbus-x11
@@ -531,7 +527,7 @@ dumputils
 duplicity
 dupload
 durep
-dvb-utils
+dvb-apps
 dvdbackup
 dvdisaster
 dvd+rw-tools
@@ -701,7 +697,6 @@ gkrellm-x86info
 gkrellshoot
 gkrellweather
 glark
-gmailfs
 gmrun
 gnuit
 gnupg
@@ -786,7 +781,6 @@ ifstat
 iftop
 ifupdown
 ifupdown-extra
-igal
 ihu
 ii
 iisemulator
@@ -1113,7 +1107,6 @@ nikto
 nilfs2-tools
 nload
 nmap
-nmapfe
 normalize-audio
 noshell
 nsd
@@ -1317,7 +1310,6 @@ python-pexpect
 python-pyao
 python-pycallgraph
 python-pymad
-python-pyogg
 python-pysqlite2
 python-pyvorbis
 python-scapy
@@ -1715,7 +1707,6 @@ webcheck
 webcpp
 weblint-perl
 weechat
-weechat-common
 weechat-curses
 weechat-plugins
 weechat-scripts
@@ -1762,7 +1753,6 @@ xcursor-themes
 xdelta
 xdelta3
 xdesktopwaves
-xdialog
 xfaces
 xfig
 xfonts-100dpi
@@ -1837,12 +1827,10 @@ xserver-xorg-video-fbdev
 xserver-xorg-video-glint
 xserver-xorg-video-i128
 xserver-xorg-video-i740
-xserver-xorg-video-i810
 xserver-xorg-video-intel
 xserver-xorg-video-ivtv
 xserver-xorg-video-mga
 xserver-xorg-video-neomagic
-xserver-xorg-video-nsc
 xserver-xorg-video-nv
 xserver-xorg-video-radeonhd
 xserver-xorg-video-rendition
@@ -1887,7 +1875,6 @@ yersinia
 youtube-dl
 ysm
 zec
-zeroconf
 zgv
 zile
 zip
