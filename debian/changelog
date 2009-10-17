@@ -7,6 +7,7 @@ grml-live (0.9.23) unstable; urgency=low
     - Drop crack-common from GRML_FULL (it's a dependency of crack*).
     - Drop ddccontrol-db from GRML_FULL (it's a dependency of ddccontrol).
     - Drop dhcp3-common from GRML_FULL (it's a dependency of dhcp3*).
+    - Drop defrag from GRML_FULL + GRML_FORENSIC (see #446691).
     - Drop emacs22/-common specific packages from GRML_FULL (dependencies).
     - Drop libpam-krb5 from GRML_FULL (related to #545824).
     - Drop mktemp from GRML_* (transitional package).
@@ -42,7 +43,7 @@ grml-live (0.9.23) unstable; urgency=low
   * scripts/GRMLBASE/15-initsetup: assume safe GRML_NAME default.
   * Use menu hide in templates/boot/isolinux/prompt.cfg
 
- -- Michael Prokop <mika@grml.org>  Sat, 17 Oct 2009 15:48:40 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 17 Oct 2009 15:53:21 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 
