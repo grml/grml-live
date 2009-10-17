@@ -63,6 +63,7 @@ grml home=/dev/hda2                 Mount specified partition as grml homedir
 grml home=/dev/sda1/grml.img        Mount loopback file as /home/grml
 grml home=scan                      Automatic search for grml homedir (using file grml.img)
 grml hostname=...                   Set hostname
+grml nodhcphostname                 Do not to set the hostname according to the dns information
 grml distri=...                     Set distribution name to given argument. If a jpg file named like the
                                     given distri name can be found in directory desktop on the ISO
                                     (/cdrom/desktop/"$DISTRI") it will be taken as wallpaper for grml
