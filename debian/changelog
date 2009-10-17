@@ -14,6 +14,7 @@ grml-live (0.9.23) unstable; urgency=low
       rt73-modules-2.6.31-grml from GRML_MEDIUM.
     - Drop rt2400-modules-2.6.31-grml, rt73-modules-2.6.31-grml and
       rt2400-modules-2.6.31-grml64 from GRML_FULL.
+    - Drop timeout from GRML_* (it is part of coreutils nowadays).
     - Drop version specific dependency on -mysql-client-5.0.
     - Drop e2fslibs, esound-common, espeak-data, ettercap-common (all being
       dependencies), fileutils and gcom (both transitional package) from
@@ -38,8 +39,9 @@ grml-live (0.9.23) unstable; urgency=low
   * Some minor cosmetic corrections in grml-live's output.
   * Add missing test call in $FORCE_ISO_REBUILD code.
   * scripts/GRMLBASE/15-initsetup: assume safe GRML_NAME default.
+  * Use menu hide in templates/boot/isolinux/prompt.cfg
 
- -- Michael Prokop <mika@grml.org>  Tue, 06 Oct 2009 10:45:05 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 17 Oct 2009 15:40:14 +0200
 
 grml-live (0.9.22) unstable; urgency=low
 
