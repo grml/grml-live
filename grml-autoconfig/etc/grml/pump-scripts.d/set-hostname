@@ -13,9 +13,8 @@
 # and if running in live mode
 if ! checkbootparam 'nodhcphostname' && [ -f /etc/grml_cd ] ; then
 
-    hostname=$(host $3) || exit 1
-    # dhcphostname is set, get the PTR for the ip
-    hostname=$(echo ${hostname} | awk '{ print substr($5, 0, length($5)-1) }')
+    hostname=$(busybox nslookup $3 | awk '/Address 1: '$3'/ {print $4}')
+    [ -n $hostname ] || exit 1
 
     if [ -n "$hostname" ] ; then
         grml-hostname $hostname
