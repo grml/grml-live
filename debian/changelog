@@ -7,8 +7,10 @@ grml-live (0.9.24) UNRELEASED; urgency=low
   * Software related changes:
     - Drop lcap (package is gone) from GRML_FORENSIC.
     - Drop isic + lcap (packages gone) from GRML_FULL.
+    - Drop ipset from GRML_FULL + GRML_FORENSIC (it's part of
+      xtables-addons-common).
 
- -- Michael Prokop <mika@grml.org>  Sun, 18 Oct 2009 11:43:38 +0200
+ -- Michael Prokop <mika@grml.org>  Sun, 18 Oct 2009 14:05:41 +0200
 
 grml-live (0.9.23) unstable; urgency=low
 
