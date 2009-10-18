@@ -51,7 +51,7 @@
      [ -r $HOME/.Xmodmap ] && xmodmap $HOME/.Xmodmap || setxkbmap us
   else
      . /etc/sysconfig/keyboard
-     if [ $XKEYBOARD == "us" ] ; then
+     if [ "$XKEYBOARD" = "us" ] ; then
         [ -r $HOME/.Xmodmap ] && xmodmap $HOME/.Xmodmap
      else
         if [ -n "$XKEYMODEL" ] ; then

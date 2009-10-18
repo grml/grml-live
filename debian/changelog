@@ -1,3 +1,9 @@
+grml-etc (1.1.24) unstable; urgency=low
+
+  * .xinitrc: fix syntax of test for $XKEYBOARD.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 18 Oct 2009 14:31:38 +0200
+
 grml-etc (1.1.23) unstable; urgency=low
 
   * .Xresources: drop the 'URxvt*borderLess: True' line which
