@@ -692,10 +692,12 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          sed -i "s/%ARCH%/$ARCH/"                  "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
       fi
 
-      sed -i "s/%VERSION%/$VERSION/"           "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
-      sed -i "s/%GRML_LONG_NAME%/$GRML_NAME/"  "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
-      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
-      sed -i "s/%ARCH%/$ARCH/"                 "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
+      for FILE in grml default ; do
+         sed -i "s/%VERSION%/$VERSION/"           "$BUILD_OUTPUT"/boot/isolinux/${FILE}.cfg
+         sed -i "s/%GRML_LONG_NAME%/$GRML_NAME/"  "$BUILD_OUTPUT"/boot/isolinux/${FILE}.cfg
+         sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/isolinux/${FILE}.cfg
+         sed -i "s/%ARCH%/$ARCH/"                 "$BUILD_OUTPUT"/boot/isolinux/${FILE}.cfg
+      done
 
       sed -i "s/%DISTRI_INFO%/$DISTRI_INFO/" "$BUILD_OUTPUT"/boot/isolinux/vesamenu.cfg
       sed -i "s/%DISTRI_SPLASH%/$DISTRI_SPLASH/" "$BUILD_OUTPUT"/boot/isolinux/vesamenu.cfg
@@ -712,9 +714,16 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/f5
 
       if ! [ -r "${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg" ] || [ "$DISTRI_NAME" = "grml" ] ; then
-         log "including grml.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-         echo "include grml.cfg" > "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-         [ -n "$NO_ADDONS" ] || echo "include addons.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+         log "including grmlmain.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+         echo "include grmlmain.cfg" > "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+         echo "include grml.cfg" > "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+         echo "include options.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+         if [ ! -n "$NO_ADDONS" ] ; then
+            echo "include addons.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+         fi
+         echo "include hd.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+         echo "include isoprompt.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+         echo "include hidden.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
       else # assume we are building a custom distribution:
          log "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
          einfo "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
