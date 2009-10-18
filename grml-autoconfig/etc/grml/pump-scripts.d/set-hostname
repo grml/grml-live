@@ -13,9 +13,9 @@
 # and if running in live mode
 if ! checkbootparam 'nodhcphostname' && [ -f /etc/grml_cd ] ; then
 
-    hostname=$(busybox nslookup $3 | awk '/Address 1: '$3'/ {print $4}')
-    [ -n $hostname ] || exit 1
+    hostname=$(busybox nslookup "$3" | awk '/Address 1: '$3'/ {print $4}')
+    [ -n "$hostname" ] || exit 1
 
-    grml-hostname $hostname
+    grml-hostname "$hostname"
     hostname -F /etc/hostname
 fi
