@@ -3,7 +3,12 @@ grml-live (0.9.24) UNRELEASED; urgency=low
   [ Ulrich Dangel ]
   * Update templates/GRML/grml-cheatcodes.txt: mention nodhcphostname.
 
- -- Michael Prokop <mika@grml.org>  Sat, 17 Oct 2009 22:07:37 +0200
+  [ Michael Prokop ]
+  * Software related changes:
+    - Drop lcap (package is gone) from GRML_FORENSIC.
+    - Drop isic + lcap (packages gone) from GRML_FULL.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 18 Oct 2009 11:43:38 +0200
 
 grml-live (0.9.23) unstable; urgency=low
 

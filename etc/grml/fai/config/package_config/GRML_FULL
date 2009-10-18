@@ -836,7 +836,6 @@ iscsitarget
 isdnactivecards
 isdnutils-base
 isdnvboxclient
-isic
 ispell
 isync
 itop
@@ -884,7 +883,6 @@ labrea
 laptop-mode-tools
 latencytop
 lbdb
-lcap
 ldapscripts
 ldap-utils
 ldapvi
