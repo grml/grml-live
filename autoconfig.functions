@@ -297,7 +297,7 @@ config_language(){
  if [ -r /etc/default/locale ] ; then
     if grep -q "LANG=.*UTF" /etc/default/locale ; then
        einfo "Setting up unicode environment."
-       unicode_start ; eend $?
+       unicode_start 2>>$DEBUG ; eend $?
     fi
  fi
 
