@@ -1,7 +1,7 @@
 table Icon
   Caption: run irssi and connect to channel #grml
   ToolTip.Caption: get support by developers and users of grml in the IRC channel #grml
-  Command: LANG=en_US.iso885915 grml-exec-wrapper x-terminal-emulator -T "irssi" -e irssi
+  Command: grml-exec-wrapper irssi
   Icon: /home/grml/.idesktop/icons/l33t_IMS_irssi.png
   X: 288
   Y: 131

@@ -1,3 +1,10 @@
+grml-desktop (0.2.6) unstable; urgency=low
+
+  * /etc/skel/.idesktop/irssi.lnk: change commandline and therefore
+    fix usage of grml-exec-wrapper.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 18 Oct 2009 15:32:48 +0200
+
 grml-desktop (0.2.5) unstable; urgency=low
 
   * /etc/skel/.pekwm/menu: drop reference to grml-nessus.
