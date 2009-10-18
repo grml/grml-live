@@ -10,8 +10,15 @@ grml-live (0.9.24) UNRELEASED; urgency=low
     - Drop isic + lcap (packages gone) from GRML_FULL.
     - Drop ipset from GRML_FULL + GRML_FORENSIC (it's part of
       xtables-addons-common).
+  * Rework variable replacements in templates. Now the %VAR% strings
+    in the templates match with the ones used inside grml-live ($VAR),
+    currently ARCH, DATE, DISTRI_INFO, DISTRI_NAME, DISTRI_SPLASH,
+    GRML_NAME, SQUASHFS_NAME, RELEASE_INFO, SHORT_NAME and VERSION
+    are supported. If you use your own templates from older grml-live
+    versions please make sure to adjust them.
+    Thanks to Ulrich for helping with integration within grml2usb.
 
- -- Michael Prokop <mika@grml.org>  Sun, 18 Oct 2009 16:51:22 +0200
+ -- Michael Prokop <mika@grml.org>  Sun, 18 Oct 2009 17:44:42 +0200
 
 grml-live (0.9.23) unstable; urgency=low
 

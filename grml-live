@@ -276,7 +276,7 @@ ISO_OUTPUT="$OUTPUT/grml_isos"
 
 # trim characters that are known to cause problems inside $GRML_NAME;
 # for example isolinux does not like '-' inside the directory name
-[ -n "$GRML_NAME" ] && export SHORT_GRML_NAME="$(echo $GRML_NAME | tr -d ',./;\- ')"
+[ -n "$GRML_NAME" ] && export SHORT_NAME="$(echo $GRML_NAME | tr -d ',./;\- ')"
 
 # export variables to have them available in fai scripts:
 [ -n "$GRML_NAME" ]   && export GRML_NAME="$GRML_NAME"
@@ -580,7 +580,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
    else
       # booting stuff:
       [ -d "$BUILD_OUTPUT"/boot/isolinux ] || mkdir -p "$BUILD_OUTPUT"/boot/isolinux
-      [ -d "$BUILD_OUTPUT"/boot/"${SHORT_GRML_NAME}" ] || mkdir -p "$BUILD_OUTPUT"/boot/"${SHORT_GRML_NAME}"
+      [ -d "$BUILD_OUTPUT"/boot/"${SHORT_NAME}" ] || mkdir -p "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"
 
       if [ -z "$NO_ADDONS" ] ; then
          [ -d "$BUILD_OUTPUT"/boot/addons   ] || mkdir -p "$BUILD_OUTPUT"/boot/addons
@@ -601,7 +601,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       # during build, so check for the file:
       INITRD="$(ls $CHROOT_OUTPUT/boot/initrd* 2>/dev/null| grep -v '.bak$' | sort -r | head -1)"
       if [ -n "$INITRD" ] ; then
-         cp $INITRD "$BUILD_OUTPUT"/boot/"${SHORT_GRML_NAME}"/initrd.gz
+         cp $INITRD "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/initrd.gz
          find $CHROOT_OUTPUT/boot/ -name initrd\*.bak -exec rm {} \;
       else
          log    "Error: No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting"
@@ -611,7 +611,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
       KERNEL_IMAGE="$(ls $CHROOT_OUTPUT/boot/vmlinuz* 2>/dev/null | sort -r | head -1)"
       if [ -n "$KERNEL_IMAGE" ] ; then
-         cp "$KERNEL_IMAGE" "$BUILD_OUTPUT"/boot/"${SHORT_GRML_NAME}"/linux26
+         cp "$KERNEL_IMAGE" "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/linux26
       else
          log    "Error: No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting"
          eerror "Error: No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
@@ -625,6 +625,8 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          bailout 8
       fi
 
+      # *always* copy files to output directory so the variables
+      # get adjusted according to the build
       cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
 
       if [ -n "$NO_ADDONS" ] ; then
@@ -668,62 +670,45 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       RELEASE_INFO="$(extend_string_end 68 "$RELEASE_INFO")"
 
       sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/GRML/grml-version
-      sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_OUTPUT"/GRML/grml-version
-
-      sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_OUTPUT"/boot/isolinux/boot.msg
-      sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_OUTPUT"/boot/isolinux/boot.msg
-
-      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/isolinux/isolinux.cfg
-      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/isolinux/syslinux.cfg
-
-      sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_OUTPUT"/boot/isolinux/boot-beep.msg
-      sed -i "s/%DATE%/$ISO_DATE/"             "$BUILD_OUTPUT"/boot/isolinux/boot-beep.msg
-
-      sed -i "s/%VERSION%/$VERSION/"           "$BUILD_OUTPUT"/boot/grub/menu.lst
-      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/grub/menu.lst
-
-      sed -i "s/%VERSION%/$VERSION/"           "$BUILD_OUTPUT"/boot/grub/grub.cfg
-      sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/grub/grub.cfg
-
-      if [ -r "${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg" ] ; then
-         sed -i "s/%VERSION%/$VERSION/"            "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
-         sed -i "s/%GRML_LONG_NAME%/$DISTRI_NAME/" "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
-         sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/"  "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
-         sed -i "s/%ARCH%/$ARCH/"                  "$BUILD_OUTPUT"/boot/isolinux/grml.cfg
-      fi
-
-      for FILE in grml default ; do
-         sed -i "s/%VERSION%/$VERSION/"           "$BUILD_OUTPUT"/boot/isolinux/${FILE}.cfg
-         sed -i "s/%GRML_LONG_NAME%/$GRML_NAME/"  "$BUILD_OUTPUT"/boot/isolinux/${FILE}.cfg
-         sed -i "s/%GRML_NAME%/$SHORT_GRML_NAME/" "$BUILD_OUTPUT"/boot/isolinux/${FILE}.cfg
-         sed -i "s/%ARCH%/$ARCH/"                 "$BUILD_OUTPUT"/boot/isolinux/${FILE}.cfg
-      done
-
-      sed -i "s/%DISTRI_INFO%/$DISTRI_INFO/" "$BUILD_OUTPUT"/boot/isolinux/vesamenu.cfg
-      sed -i "s/%DISTRI_SPLASH%/$DISTRI_SPLASH/" "$BUILD_OUTPUT"/boot/isolinux/vesamenu.cfg
+      sed -i "s/%DATE%/$ISO_DATE/"                                  "$BUILD_OUTPUT"/GRML/grml-version
 
       # make sure the squashfs filename is set accordingly:
-      GRML_NAME_SQUASHFS="$GRML_NAME.squashfs"
-      sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/isolinux.cfg
-      sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/syslinux.cfg
-      sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/grub/menu.lst
+      SQUASHFS_NAME="$GRML_NAME.squashfs"
 
-      GRML_NAME_SQUASHFS="$(cut_string 20 "$GRML_NAME_SQUASHFS")"
-      GRML_NAME_SQUASHFS="$(extend_string_end 20 "$GRML_NAME_SQUASHFS")"
-      sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/f4
-      sed -i "s/%GRML_NAME_SQUASHFS%/$GRML_NAME_SQUASHFS/" "$BUILD_OUTPUT"/boot/isolinux/f5
+      # adjust all variables in the templates with the according distribution information
+      for file in "${BUILD_OUTPUT}"/boot/isolinux/*.cfg "${BUILD_OUTPUT}"/boot/isolinux/*.msg \
+                  "${BUILD_OUTPUT}"/boot/grub/* ; do
+        sed -i "s/%ARCH%/$ARCH/g"                    "${file}"
+        sed -i "s/%DATE%/$ISO_DATE/g"                "${file}"
+        sed -i "s/%DISTRI_INFO%/$DISTRI_INFO/g"      "${file}"
+        sed -i "s/%DISTRI_NAME%/$DISTRI_NAME/g"      "${file}"
+        sed -i "s/%DISTRI_SPLASH%/$DISTRI_SPLASH/g"  "${file}"
+        sed -i "s/%GRML_NAME%/$GRML_NAME/g"          "${file}"
+        sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/g"  "${file}"
+        sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/g"    "${file}"
+        sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
+        sed -i "s/%VERSION%/$VERSION/g"              "${file}"
+      done
+
+      # adjust bootsplash accordingly but make sure the string has the according lenght
+      SQUASHFS_NAME="$(cut_string 20 "$SQUASHFS_NAME")"
+      SQUASHFS_NAME="$(extend_string_end 20 "$SQUASHFS_NAME")"
+      sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/" "$BUILD_OUTPUT"/boot/isolinux/f4
+      sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/" "$BUILD_OUTPUT"/boot/isolinux/f5
 
       if ! [ -r "${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg" ] || [ "$DISTRI_NAME" = "grml" ] ; then
          log "including grmlmain.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-         echo "include grmlmain.cfg" > "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-         echo "include grml.cfg" > "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-         echo "include options.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+         echo "include grmlmain.cfg"    >  "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+         echo "include default.cfg"     >  "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+         echo "include menuoptions.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+         echo "include grml.cfg"        >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+         echo "include options.cfg"     >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
          if [ ! -n "$NO_ADDONS" ] ; then
-            echo "include addons.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+           echo "include addons.cfg"    >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
          fi
-         echo "include hd.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-         echo "include isoprompt.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-         echo "include hidden.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+         echo "include hd.cfg"          >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+         echo "include isoprompt.cfg"   >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+         echo "include hidden.cfg"      >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
       else # assume we are building a custom distribution:
          log "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
          einfo "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
