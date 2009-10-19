@@ -456,6 +456,11 @@ ldapscripts
 ldap-utils
 ldapvi
 
+openvas-client
+openvas-plugins-base
+openvas-plugins-dfsg
+openvas-server
+
 # TODO
 # * pdftk
 # * vncviewer? (tsclient)
