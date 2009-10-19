@@ -17,8 +17,10 @@ grml-live (0.9.24) UNRELEASED; urgency=low
     are supported. If you use your own templates from older grml-live
     versions please make sure to adjust them.
     Thanks to Ulrich for helping with integration within grml2usb.
+  * /etc/grml/fai/config/debconf/GRMLBASE: add configuration for
+    portmap to not listen on the loopback interface only by default.
 
- -- Michael Prokop <mika@grml.org>  Sun, 18 Oct 2009 17:44:42 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 19 Oct 2009 16:34:20 +0200
 
 grml-live (0.9.23) unstable; urgency=low
 
