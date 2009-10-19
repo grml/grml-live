@@ -1,3 +1,11 @@
+grml-etc (1.1.25) unstable; urgency=low
+
+  * /etc/init.d/grml-reboot: use bash as interpreter so the
+    syntax of the read command is supported. Thanks to Christian
+    Hofstaedtler for the bugreport.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 19 Oct 2009 09:38:22 +0200
+
 grml-etc (1.1.24) unstable; urgency=low
 
   * .xinitrc: fix syntax of test for $XKEYBOARD.
