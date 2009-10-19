@@ -730,7 +730,6 @@ habak
 hal
 hal-info
 haproxy
-harden-remoteaudit
 harden-tools
 hasciicam
 hdapsd
@@ -1141,7 +1140,6 @@ openssh-client
 openssh-server
 openssl
 openvas-client
-openvas-server
 open-vm-tools
 openvpn
 ophcrack

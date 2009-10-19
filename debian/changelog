@@ -10,6 +10,8 @@ grml-live (0.9.24) UNRELEASED; urgency=low
     - Drop isic + lcap (packages gone) from GRML_FULL.
     - Drop ipset from GRML_FULL + GRML_FORENSIC (it's part of
       xtables-addons-common).
+    - Drop harden-remoteaudit + openvas-server from GRML_FULL (they
+      are pretty useless without plugins which need just too much space).
   * Rework variable replacements in templates. Now the %VAR% strings
     in the templates match with the ones used inside grml-live ($VAR),
     currently ARCH, DATE, DISTRI_INFO, DISTRI_NAME, DISTRI_SPLASH,
@@ -20,7 +22,7 @@ grml-live (0.9.24) UNRELEASED; urgency=low
   * /etc/grml/fai/config/debconf/GRMLBASE: add configuration for
     portmap to not listen on the loopback interface only by default.
 
- -- Michael Prokop <mika@grml.org>  Mon, 19 Oct 2009 16:34:20 +0200
+ -- Michael Prokop <mika@grml.org>  Mon, 19 Oct 2009 17:47:20 +0200
 
 grml-live (0.9.23) unstable; urgency=low
 
