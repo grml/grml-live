@@ -23,6 +23,7 @@ grml-live (0.9.24) UNRELEASED; urgency=low
     Thanks to Ulrich for helping with integration within grml2usb.
   * /etc/grml/fai/config/debconf/GRMLBASE: add configuration for
     portmap to not listen on the loopback interface only by default.
+    [Closes: issue737]
 
  -- Michael Prokop <mika@grml.org>  Mon, 19 Oct 2009 17:50:26 +0200
 

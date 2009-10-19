@@ -175,6 +175,7 @@ grml swraid                         Enable automatic assembling of software raid
 grml nolvm                          Disable scanning for Logical Volumes (LVM)
 grml lvm                            Automatically activate Logival Volumes (LVM) during boot
 grml readonly                       Make sure all harddisk devices (/dev/hd* /dev/sd*) are forced to read-only mode
+grml ethdevice=...                  Use specified network device for network boot instead of default (eth0)
 grml xmodule=ati|fbdev|i810|mga     Use specified X.org-Module (1)
 grml xmodule=nv|radeon|savage|s3    Use specified X.org-Module (2)
 grml xmodule=radeon|svga|i810       Use specified X.org-Module (3)
