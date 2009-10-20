@@ -1,8 +1,11 @@
-grml-live (0.9.24) UNRELEASED; urgency=low
+grml-live (0.9.24) unstable; urgency=low
 
   [ Ulrich Dangel ]
   * Update templates/GRML/grml-cheatcodes.txt: mention nodhcphostname.
   * Changed isolinux vesamenu layout to support better multiiso layout.
+
+  [ Thorsten Glaser ]
+  * Update MirOS bsd4grml to 20091019.
 
   [ Michael Prokop ]
   * Software related changes:
@@ -25,8 +28,9 @@ grml-live (0.9.24) UNRELEASED; urgency=low
   * /etc/grml/fai/config/debconf/GRMLBASE: add configuration for
     portmap to not listen on the loopback interface only by default.
     [Closes: issue737]
+  * Update templates/GRML/grml-cheatcodes.txt: mention ethdevice.
 
- -- Michael Prokop <mika@grml.org>  Wed, 21 Oct 2009 00:09:09 +0200
+ -- Michael Prokop <mika@grml.org>  Wed, 21 Oct 2009 00:12:27 +0200
 
 grml-live (0.9.23) unstable; urgency=low
 
