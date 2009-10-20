@@ -461,6 +461,8 @@ openvas-plugins-base
 openvas-plugins-dfsg
 openvas-server
 
+stressapptest
+
 # TODO
 # * pdftk
 # * vncviewer? (tsclient)
