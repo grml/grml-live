@@ -1,3 +1,11 @@
+grml-live (0.9.25) UNRELEASED; urgency=low
+
+  [ Ulrich Dangel ]
+  * Switched order between isoprompt and hd menu entry to generate more
+    easily the same bootmenu for generated cd images.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 22 Oct 2009 01:35:12 +0200
+
 grml-live (0.9.24) unstable; urgency=low
 
   [ Ulrich Dangel ]
