@@ -1968,6 +1968,7 @@ config_finddcsdir() {
 #  - If myconfig=foo is set on the command line, $dcs-dir is set to
 #    foo, even if a GRMLCFG partition is present.
 DCSDIR=""
+DCSMP="/mnt/grml"
 if checkbootparam 'noautoconfig' || checkbootparam 'forensic' ; then
   ewarn "Skipping running automount of device(s) labeled GRMLCFG as requested." ; eend 0
 else
@@ -1988,6 +1989,7 @@ else
         fi
       fi
       DCSDEVICE=$(blkid -t LABEL=GRMLCFG | head -1 | awk -F: '{print $1}')
+      DCSMP="/mnt/grmlcfg"
       eoutdent
     fi
 
@@ -2001,15 +2003,15 @@ else
       if [ -n "$DCSDIR" ]; then
         ewarn "$DCSDEVICE already mounted on $DCSDIR"; eend 0
       else
-        [ -d /mnt/grml ] || mkdir /mnt/grml
-        umount /mnt/grml 1>>$DEBUG 2>&1 # make sure it is not mounted
-        mount -o ro -t auto $DCSDEVICE  /mnt/grml ; RC="$?"
+        [ -d $DCSMP ] || mkdir $DCSMP
+        umount $DCSMP 1>>$DEBUG 2>&1 # make sure it is not mounted
+        mount -o ro -t auto $DCSDEVICE  $DCSMP ; RC="$?"
         if [[ $RC == 0 ]]; then
-          einfo "Successfully mounted $DCSDEVICE to /mnt/grml (readonly)." ; eend 0
+          einfo "Successfully mounted $DCSDEVICE to $DCSMP (readonly)." ; eend 0
         else
-          eerror "Error: mounting $DCSDEVICE to /mnt/grml (readonly) failed." ; eend 1
+          eerror "Error: mounting $DCSDEVICE to $DCSMP (readonly) failed." ; eend 1
         fi
-        DCSDIR="/mnt/grml"
+        DCSDIR="$DCSMP"
       fi
       eoutdent
     fi
@@ -2063,7 +2065,7 @@ fi
 }
 
 config_scripts(){
-if checkbootparam 'scripts' ; then
+if checkbootparam 'scripts' || [ "$DCSMP" = "/mnt/grmlcfg" ]; then
    SCRIPTS="$(getbootparam 'scripts' 2>>$DEBUG)"
    if [ -z "$SCRIPTS" ]; then
      SCRIPTS="$(cd ${DCSDIR}/scripts; /bin/ls -1d [Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
@@ -2072,8 +2074,16 @@ if checkbootparam 'scripts' ; then
      # backwards compatibility: if no path is given get scripts from scripts/
      SCRIPTS="scripts/$SCRIPTS"
    fi
+   if [ "$DCSMP" = "/mnt/grmlcfg" ]; then
+     # we are executing from a GRMLCFG labeled fs
+     # kick everything we have done before and start over
+     SCRIPTS="$(cd ${DCSDIR}; /bin/ls -1d [Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
+   fi
    SCRIPTS="${DCSDIR}/$SCRIPTS"
-   if [ -d "$SCRIPTS" ]; then
+   if [ "$DCSMP" = "/mnt/grmlcfg" ]; then
+     einfo "Trying to execute ${SCRIPTS}"
+     sh -c $SCRIPTS
+   elif [ -d "$SCRIPTS" ]; then
      einfo "Bootparameter scripts found. Trying to execute from directory ${SCRIPTS}:"
      run-parts $SCRIPTS
    else
@@ -2084,7 +2094,7 @@ fi
 }
 
 config_config(){
-if checkbootparam 'config' ; then
+if checkbootparam 'config' || [ "$DCSMP" = "/mnt/grmlcfg" ]; then
   CONFIG="$(getbootparam 'config' 2>>$DEBUG)"
   if [ -z "$CONFIG" ]; then
     CONFIG="$(cd ${DCSDIR}; ls -1d [Cc][Oo][Nn][Ff][Ii][Gg].[Tt][Bb][Zz] 2>>$DEBUG)"
@@ -2104,9 +2114,9 @@ if checkbootparam 'config' ; then
     fi
   fi
 fi
-# umount /mnt/grml if it was mounted by finddcsdir
+# umount $DCSMP if it was mounted by finddcsdir
 # this doesn't really belong here
-grep -q '/mnt/grml' /proc/mounts && umount /mnt/grml
+grep -q '$DCSMP' /proc/mounts && umount $DCSMP
 }
 # }}}
 
