@@ -706,8 +706,8 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          if [ ! -n "$NO_ADDONS" ] ; then
            echo "include addons.cfg"    >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
          fi
-         echo "include hd.cfg"          >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
          echo "include isoprompt.cfg"   >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+         echo "include hd.cfg"          >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
          echo "include hidden.cfg"      >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
       else # assume we are building a custom distribution:
          log "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
