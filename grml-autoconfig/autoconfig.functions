@@ -2067,7 +2067,7 @@ fi
 config_scripts(){
 if checkbootparam 'scripts' || [ "$DCSMP" = "/mnt/grmlcfg" ]; then
    SCRIPTS="$(getbootparam 'scripts' 2>>$DEBUG)"
-   if [ -z "$SCRIPTS" ]; then
+   if [ -d ${DCSDIR}/scripts ] && [ -z "$SCRIPTS" ]; then
      SCRIPTS="$(cd ${DCSDIR}/scripts; /bin/ls -1d [Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
    fi
    if ! echo $SCRIPTS | grep -q '/'; then
@@ -2079,16 +2079,18 @@ if checkbootparam 'scripts' || [ "$DCSMP" = "/mnt/grmlcfg" ]; then
      # kick everything we have done before and start over
      SCRIPTS="$(cd ${DCSDIR}; /bin/ls -1d [Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
    fi
-   SCRIPTS="${DCSDIR}/$SCRIPTS"
-   if [ "$DCSMP" = "/mnt/grmlcfg" ]; then
-     einfo "Trying to execute ${SCRIPTS}"
-     sh -c $SCRIPTS
-   elif [ -d "$SCRIPTS" ]; then
-     einfo "Bootparameter scripts found. Trying to execute from directory ${SCRIPTS}:"
-     run-parts $SCRIPTS
-   else
-     einfo "Bootparameter scripts found. Trying to execute ${SCRIPTS}:"
-     sh -c $SCRIPTS
+   if [ -n "$SCRIPTS" ]; then
+     SCRIPTS="${DCSDIR}/$SCRIPTS"
+     if [ "$DCSMP" = "/mnt/grmlcfg" ]; then
+       einfo "Trying to execute ${SCRIPTS}"
+       sh -c $SCRIPTS
+     elif [ -d "$SCRIPTS" ]; then
+       einfo "Bootparameter scripts found. Trying to execute from directory ${SCRIPTS}:"
+       run-parts $SCRIPTS
+     else
+       einfo "Bootparameter scripts found. Trying to execute ${SCRIPTS}:"
+       sh -c $SCRIPTS
+     fi
    fi
 fi
 }
