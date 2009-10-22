@@ -1,3 +1,10 @@
+grml-etc (1.1.26) unstable; urgency=low
+
+  * /etc/skel/.xinitrc: adjust font in osd_cat command. Thanks to
+    Axel Beckert for the suggestion.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 22 Oct 2009 14:35:43 +0200
+
 grml-etc (1.1.25) unstable; urgency=low
 
   * /etc/init.d/grml-reboot: use bash as interpreter so the

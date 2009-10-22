@@ -19,7 +19,7 @@
 # print info text
   if [ -x /usr/bin/osd_cat ] ; then
      echo "Starting X window system and loading window manager..." | \
-     osd_cat -c white -A center -p middle -f "-misc-fixed-medium-r-normal-*-*-150-*-*-c-*-iso8859-15" &
+     osd_cat -c white -A center -p middle -f "-misc-fixed-medium-r-normal-*-15-150-*-*-c-*-iso8859-15" &
   fi
 
 # add at least one entry to xauth
