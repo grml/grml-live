@@ -1,3 +1,10 @@
+grml-autoconfig (0.8.39) unstable; urgency=low
+
+  * Apply another patch contributed by Marc Haber (thanks!):
+    Set DCSMP to /mnt/grmlcfg only if a GRMLCFG fs was found.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 23 Oct 2009 21:41:00 +0200
+
 grml-autoconfig (0.8.38) unstable; urgency=low
 
   * Apply patch contributed by Marc Haber (thanks!) which fixes
