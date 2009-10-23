@@ -5,6 +5,8 @@ grml-live (0.9.25) UNRELEASED; urgency=low
     easily the same bootmenu for generated cd images.
   * Changed grub.cfg and menu.lst to use new template names.
     Thanks to Michael Schierl for his bug report.
+  * Clear at first the screen if bootparam quiet is set.
+    Thanks again to Michael Schierl for his bug report.
 
  -- Ulrich Dangel <mru@grml.org>  Fri, 23 Oct 2009 19:07:23 +0200
 
