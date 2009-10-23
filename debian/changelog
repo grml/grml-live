@@ -3,8 +3,10 @@ grml-live (0.9.25) UNRELEASED; urgency=low
   [ Ulrich Dangel ]
   * Switched order between isoprompt and hd menu entry to generate more
     easily the same bootmenu for generated cd images.
+  * Changed grub.cfg and menu.lst to use new template names.
+    Thanks to Michael Schierl for his bug report.
 
- -- Michael Prokop <mika@grml.org>  Thu, 22 Oct 2009 01:35:12 +0200
+ -- Ulrich Dangel <mru@grml.org>  Fri, 23 Oct 2009 19:07:23 +0200
 
 grml-live (0.9.24) unstable; urgency=low
 
