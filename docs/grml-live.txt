@@ -527,14 +527,6 @@ ZLIB compression. Just use the defaults for enabling LZMA or use grml-live's
 * Kernel 2.6.28-grml[64]: does not work
 * Kernel 2.6.31-grml[64]: works
 
-////////////////////////////////////////////////////////////////////////////////
-[IMPORTANT]
-
-Do NOT use a blocksize different than the default (131072 / 128kb).  The kernel
-will very probably oops then - so please do not touch the '-b' option of
-mksquashfs.
-////////////////////////////////////////////////////////////////////////////////
-
 [NOTE]
 
 Please use squashfs-lzma-tools >=4.0-2 from Grml if you want to remaster any
@@ -964,8 +956,7 @@ All downloaded files will be cached in /var/cache/approx now.
 I've a question which isn't answered by this document
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Don't hesitate to ask on IRC (channel #grml on irc.freenode.org) or just drop me
-a mail: <mika@grml.org>
+Don't hesitate to contact the author: <mika@grml.org>
 
 [[download]]
 Download / install grml-live as a Debian package
