@@ -1989,7 +1989,9 @@ else
         fi
       fi
       DCSDEVICE=$(blkid -t LABEL=GRMLCFG | head -1 | awk -F: '{print $1}')
-      DCSMP="/mnt/grmlcfg"
+      if [ -n "$DCSDEVICE" ]; then
+        DCSMP="/mnt/grmlcfg"
+      fi
       eoutdent
     fi
 
