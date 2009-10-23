@@ -115,6 +115,10 @@ if [ -r /etc/grml_version ] ; then
    GRML_VERSION="$(cat /etc/grml_version)"
 fi
 
+if checkbootparam "quiet" ; then
+    echo -e "${CLEAR}"
+fi
+
 if [ -n "$DISTRI" ] ; then
 SPLASH="
 ${RED} $DISTRI
