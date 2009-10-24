@@ -10,8 +10,9 @@ grml-live (0.9.25) UNRELEASED; urgency=low
 
   [ Michael Prokop ]
   * Support mksquashfs-lzma and $MKSQUASHFS in remaster/grml-live-remaster.
+  * Add parted to GRML_SMALL (thanks for the suggestion, Marc Haber).
 
- -- Michael Prokop <mika@grml.org>  Sat, 24 Oct 2009 03:00:12 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 24 Oct 2009 10:34:44 +0200
 
 grml-live (0.9.24) unstable; urgency=low
 

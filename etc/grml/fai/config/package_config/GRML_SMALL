@@ -109,6 +109,7 @@ ntpdate
 # nvi -> see #490361
 openssh-client
 openssh-server
+parted
 passwd
 patch
 pciutils
