@@ -1,9 +1,17 @@
 grml-live (0.9.26) UNRELEASED; urgency=low
 
+  [ Michael Prokop ]
   * Update templates/boot/grub to grub2 version 1.97~beta4-1.
   * Add templates/boot/isolinux/ifcpu64.c32.
+  * templates/boot/isolinux/{addons,syslinux}.cfg: Use new ldbsd.com
+    feature (command line) to chain into GRUB2 directly from isolinux
+    or syslinux without an intermediate interactive/menu prompt.
+    Thanks to Thorsten for implementing and help.
 
- -- Michael Prokop <mika@grml.org>  Sat, 24 Oct 2009 18:33:51 +0200
+  [ Thorsten Glaser ]
+  * Update MirOS bsd4grml to 20091024 (ldbsd.com and ldbsd.txt only).
+
+ -- Michael Prokop <mika@grml.org>  Sat, 24 Oct 2009 19:01:04 +0200
 
 grml-live (0.9.25) unstable; urgency=low
 
