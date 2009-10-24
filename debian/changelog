@@ -8,7 +8,10 @@ grml-live (0.9.25) UNRELEASED; urgency=low
   * Clear at first the screen if bootparam quiet is set.
     Thanks again to Michael Schierl for his bug report.
 
- -- Ulrich Dangel <mru@grml.org>  Fri, 23 Oct 2009 19:07:23 +0200
+  [ Michael Prokop ]
+  * Support mksquashfs-lzma and $MKSQUASHFS in remaster/grml-live-remaster.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 24 Oct 2009 03:00:12 +0200
 
 grml-live (0.9.24) unstable; urgency=low
 
