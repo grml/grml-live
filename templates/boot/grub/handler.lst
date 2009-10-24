@@ -1,4 +1,3 @@
-parser.lua: lua
 parser.sh: sh
 reader.normal: normal
 terminal_input.at_keyboard: at_keyboard

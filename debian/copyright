@@ -30,6 +30,13 @@ License:
     along with this package; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
+License information for the grub files shipped as
+/usr/share/grml-live/templates/boot/grub/:
+
+   Extracted from the Debian packages grub2, grub-pc and grub-common.
+   Copyright: 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc
+   License: GPL-3+
+
 License information for the syslinux files shipped as
 /usr/share/grml-live/templates/boot/isolinux/:
 

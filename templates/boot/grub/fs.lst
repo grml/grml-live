@@ -1,5 +1,8 @@
 affs
 afs
+afs_be
+befs
+befs_be
 cpio
 ext2
 fat
@@ -14,5 +17,7 @@ reiserfs
 sfs
 tar
 udf
-ufs
+ufs1
+ufs2
 xfs
+zfs
