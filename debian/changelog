@@ -1,4 +1,4 @@
-grml-live (0.9.25) UNRELEASED; urgency=low
+grml-live (0.9.25) unstable; urgency=low
 
   [ Ulrich Dangel ]
   * Switched order between isoprompt and hd menu entry to generate more
