@@ -1,8 +1,9 @@
 grml-live (0.9.26) UNRELEASED; urgency=low
 
   * Update templates/boot/grub to grub2 version 1.97~beta4-1.
+  * Add templates/boot/isolinux/ifcpu64.c32.
 
- -- Michael Prokop <mika@grml.org>  Sat, 24 Oct 2009 15:49:13 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 24 Oct 2009 18:33:51 +0200
 
 grml-live (0.9.25) unstable; urgency=low
 
