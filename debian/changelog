@@ -1,4 +1,4 @@
-grml-live (0.9.26) UNRELEASED; urgency=low
+grml-live (0.9.26) unstable; urgency=low
 
   [ Michael Prokop ]
   * Update templates/boot/grub to grub2 version 1.97~beta4-1.
@@ -13,9 +13,7 @@ grml-live (0.9.26) UNRELEASED; urgency=low
   [ Thorsten Glaser ]
   * Update MirOS bsd4grml to 20091024 (ldbsd.com and ldbsd.txt only).
 
-  [ Michael Prokop ]
-
- -- Michael Prokop <mika@grml.org>  Sat, 24 Oct 2009 20:31:10 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 24 Oct 2009 21:10:17 +0200
 
 grml-live (0.9.25) unstable; urgency=low
 
