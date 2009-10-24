@@ -67,14 +67,18 @@ DESCRIPTION
                      more, we require the machine to be in Real Mode, not in
                      VM86 mode, so EMM386.SYS, Win32 or similar must not be
                      active. We ask DOS for the current drive to use this in-
-                     formation later.
+                     formation later. DOS has set up a PSP (Program Segment
+                     Prefix) for us, which may contain a command line which we
+                     store away for later perusal if it is not empty.
 
           COMBOOT    We are loaded in a similar way as from DOS, except the
                      machine state is not changed as much from the initial
                      state. After determining that we are in fact loaded via
                      COMBOOT and not DOS, we ask SYSLINUX to terminate after
                      gathering information about the boot drive, partition, or
-                     PXE; the UNDI and PXE stacks are kept active if any.
+                     PXE; the UNDI and PXE stacks are kept active if any. The
+                     COMBOOT API has set up a PSP like DOS as well, which we
+                     handle the same.
 
           Multiboot  We request to be loaded to 0x00100000 (the HMA) due to
                      GNU GRUB's limitations, save the boot device off the MBI
@@ -82,11 +86,14 @@ DESCRIPTION
                      switch back to Real Mode. Modules passed to us by the
                      Multiboot compliant boot loader will be moved off to just
                      above 20 MiB in memory; their dirnames as well as any
-                     command lines (to the Multiboot OS kernel, i.e. this
-                     bootloader, as well as to the Multiboot modules) are dis-
-                     carded. The modules are made available as regular files
-                     using the virtual lmbm (Loadable Multiboot Modules) dev-
-                     ice and filesystem (in-RAM file store, really).
+                     command lines to the Multiboot modules are discarded. If
+                     a command line is passed to the Multiboot OS kernel, i.e.
+                     this bootloader, the pathname of the loader is skipped;
+                     it is then cut off after a certain size limit (currently,
+                     256 bytes) and stored away for later use. The modules are
+                     made available as regular files using the virtual lmbm
+                     (Loadable Multiboot Modules) device and filesystem (in-
+                     RAM file store, really).
 
           During the initial operation, the stack is located about 80 KiB
           behind the start of our own memory area, and switched to the final
@@ -98,23 +105,31 @@ DESCRIPTION
 
      3.   The code is relocated to the final address once or twice if needed.
           The final address is 4000:0000h with the stack beginning at
-          3000:FFFCh. The stack is shared between Real Mode and 32-bit Virtual
-          Protected Address Mode. The code is mostly organised using the small
-          memory model, with everything within 64 KiB (although the real limit
-          is more than 256 bytes less than that due to initial loading is-
-          sues), except some rather large uninitialised areas and the disc I/O
-          bounce buffer, which begin at 3000:0000 and grow upwards. The heap
-          begins after the bss section and grows up to just short of
-          9000:0000h.
+          3000:FF7Ch. The 128 bytes in between, from 3000:FF80h onwards, con-
+          tains a potentially stored away PSP command line, before it is moved
+          to the buffer after the bss and ssbss sections have been initialised
+          (zeroed out). The stack is shared between Real Mode and 32-bit Vir-
+          tual Protected Address Mode. The code is mostly organised using the
+          small memory model, with everything within 64 KiB (although the real
+          limit is more than 256 bytes less than that due to initial loading
+          issues), except some rather large uninitialised areas and the disc
+          I/O bounce buffer, which begin at 3000:0000 and grow upwards, nick-
+          named the ssbss section. The heap begins after the bss section and
+          grows up to just short of 9000:0000h.
 
      4.   If the bootloader is compiled to do so, for example on a Live CD, it
           displays a boot menu unless the shift key is pressed, and retains
           the numeric return value for later, to replace the cfg suffix of the
-          configuration file with it.
+          configuration file with it, unless a (non-empty) command line is
+          passed.
 
      5.   The system is switched to Protected Mode.
 
-     6.   The hardware is probed:
+     6.   If a command line was passed, it is moved from its original (Multi-
+          boot, above 1 MiB or way below in the real mode area) or temporary
+          (0x3FF80) location to cmd_buf.
+
+     7.   The hardware is probed:
 
         + o Console devices: the default BIOS console (INT 10h, which may be
               a MDA/MGA/Hercules, CGA/EGA or VGA CRT/LCD, plus DIN or PS/2 or
@@ -129,12 +144,18 @@ DESCRIPTION
         + o Floppy disc drives
         + o Hard disc drives, including El Torito CD-ROM drives
 
-     7.   Unless a control key is held, the files /x.x.x.x/boot.cfg if loaded
-          via PXE (where x.x.x.x is our own IPv4 address) and /boot.cfg, with
-          "cfg" possibly replaced from the Live CD menu, are read and executed
-          as if the commands had been entered on the loader prompt.
+     8.   If a command line was passed, it is executed. If it contained a boot
+          command, the kernel is attempted to be loaded; otherwise, or if it
+          fails, execution flow continues at the command prompt (see below)
+          with no timeout or auto-boot enabled.
 
-     8.   The bootloader prompt
+     9.   Unless a control key is held or a command line was passed, the files
+          /x.x.x.x/boot.cfg if loaded via PXE (where x.x.x.x is our own IPv4
+          address) and /boot.cfg, with "cfg" possibly replaced from the Live
+          CD menu, are read and executed as if the commands had been entered
+          on the loader prompt.
+
+     10. The bootloader prompt
 
                 boot> _
 
@@ -201,6 +222,10 @@ COMMANDS
 
              diskinfo  Display a list of probed floppy and hard disc drives
                        including BIOS and geometry information.
+
+             exec dos  Execute INT 21h, AH=4Ch, to return to DOS or SYSLINUX,
+                       if possible. This will not always work and may hang
+                       your system.
 
              exec type image
                        Load a bootsector or other bootloader from an image
@@ -445,6 +470,10 @@ CAVEATS
      tftp, nfs  These filesystems and devices will only appear of loaded via
                 PXE. They obviously do not support ls.
 
+     http       There are plans to support this if pxebsd.0 is loaded from
+                gPXE, but no code yet. For now, gPXE can load boot using Mul-
+                tiboot, and any passed modules are handled via lmbmfs.
+
      ustarfs    This filesystem will be implemented soon.
 
-MirOS BSD #10-current           August 9, 2009                               6
+MirOS BSD #10-current          October 24, 2009                              7
