@@ -52,7 +52,6 @@ grml2hd-utils
 grml2usb
 grml-autoconfig
 grml-crypt
-grml-ddcxinfo
 grml-debian-keyring
 grml-debootstrap
 grml-debugtools
