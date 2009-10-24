@@ -3,6 +3,8 @@ grml-live (0.9.26) UNRELEASED; urgency=low
   [ Michael Prokop ]
   * Update templates/boot/grub to grub2 version 1.97~beta4-1.
   * Add templates/boot/isolinux/ifcpu64.c32.
+  * Add templates/boot/addons/gpxe.lkrn.
+  * Document 'Shortcut keys of vesamenu bootsplash' in isolinux.cfg.
   * templates/boot/isolinux/{addons,syslinux}.cfg: Use new ldbsd.com
     feature (command line) to chain into GRUB2 directly from isolinux
     or syslinux without an intermediate interactive/menu prompt.
@@ -11,7 +13,9 @@ grml-live (0.9.26) UNRELEASED; urgency=low
   [ Thorsten Glaser ]
   * Update MirOS bsd4grml to 20091024 (ldbsd.com and ldbsd.txt only).
 
- -- Michael Prokop <mika@grml.org>  Sat, 24 Oct 2009 19:01:04 +0200
+  [ Michael Prokop ]
+
+ -- Michael Prokop <mika@grml.org>  Sat, 24 Oct 2009 20:31:10 +0200
 
 grml-live (0.9.25) unstable; urgency=low
 
