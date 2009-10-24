@@ -763,14 +763,19 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
          for file in "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6 \
                      "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.cfg \
+                     "$BUILD_OUTPUT"/boot/isolinux/addons.cfg \
                      "$BUILD_OUTPUT"/boot/isolinux/syslinux.cfg \
+                     "$BUILD_OUTPUT"/boot/grub/grub.cfg \
                      "$BUILD_OUTPUT"/boot/grub/menu.lst ; do
-             sed -i -e "s!%GRUB_VERSION%!$GRUB_VERSION!g" \
-                    -e "s!%GRUB_LEGACY%!$GRUB_LEGACY!g" "$file"
+             if [ -e "$file" ] ; then
+               sed -i -e "s!%GRUB_VERSION%!$GRUB_VERSION!g" \
+                      -e "s!%GRUB_LEGACY%!$GRUB_LEGACY!g" "$file"
+             fi
          done
 
          sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6
       fi
+
       if [ -e "$BUILD_OUTPUT"/boot/grub/$GRUB_LEGACY ]; then
          sed -i "s/%GRUB_LEGACY%/$GRUB_LEGACY/g" "$BUILD_OUTPUT"/boot/grub/menu.lst
          sed -i "s/%GRUB_LEGACY%/$GRUB_LEGACY/g" "$BUILD_OUTPUT"/boot/grub/grub.cfg
