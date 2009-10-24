@@ -10,11 +10,12 @@ grml-live (0.9.25) UNRELEASED; urgency=low
 
   [ Michael Prokop ]
   * Support mksquashfs-lzma and $MKSQUASHFS in remaster/grml-live-remaster.
-  * Add parted to GRML_SMALL (thanks for the suggestion, Marc Haber).
-  * Drop grml-ddcxinfo from GRML_FULL. [Closes: issue62]
   * Add fbterm to GRML_FULL. [Closes: issue563]
+  * Add parted to GRML_SMALL (thanks for the suggestion, Marc Haber).
+  * Add pyneighborhood to GRML_FULL. [Closes: issue580]
+  * Drop grml-ddcxinfo from GRML_FULL. [Closes: issue62]
 
- -- Michael Prokop <mika@grml.org>  Sat, 24 Oct 2009 14:01:47 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 24 Oct 2009 14:12:33 +0200
 
 grml-live (0.9.24) unstable; urgency=low
 

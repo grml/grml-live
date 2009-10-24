@@ -1282,6 +1282,7 @@ pxe
 pxfw
 pydb
 pymacs
+pyneighborhood
 python
 python2.4
 python2.4-minimal
