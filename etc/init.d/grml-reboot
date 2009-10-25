@@ -49,7 +49,7 @@ if ! $INSTALLED ; then
    DEVICE=""
    if [ -n "$CDROM" ] ; then
      DEVICE="${CDROM##/dev/}"
-     DEVICE="${DEVICE%%[0-9]*}"
+     [ -d /sys/block/${DEVICE} ] || DEVICE="${DEVICE%%[0-9]*}"
 
      if [ -n "$DEVICE" ] ; then
        # is it a removable device?
