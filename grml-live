@@ -28,6 +28,7 @@ PN="$(basename $0)"
 CMDLINE="$0 $@"
 ISO_DATE="$(date +%Y-%m-%d)"
 SOURCES_LIST_FILE='/etc/grml/fai/apt/sources.list'
+ADDONS_LIST_FILE='/boot/isolinux/addons_list.cfg'
 # }}}
 
 # usage information {{{
@@ -695,6 +696,13 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       SQUASHFS_NAME="$(extend_string_end 20 "$SQUASHFS_NAME")"
       sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/" "$BUILD_OUTPUT"/boot/isolinux/f4
       sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/" "$BUILD_OUTPUT"/boot/isolinux/f5
+
+      # generate addon list
+      rm "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
+      for name in $(ls "${BUILD_OUTPUT}"/boot/isolinux/addon_*.cfg) ; do
+        include_name=$(basename "$name")
+        echo "include $include_name"  >> "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
+      done
 
       if ! [ -r "${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg" ] || [ "$DISTRI_NAME" = "grml" ] ; then
          log "including grmlmain.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
