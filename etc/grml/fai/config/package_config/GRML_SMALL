@@ -64,7 +64,6 @@ grml-shlib
 # grml-small
 grml-tips
 grml-usleep
-grub
 guessnet
 htop
 ifplugd

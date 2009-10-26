@@ -1,3 +1,9 @@
+grml-live (0.9.28) UNRELEASED; urgency=low
+
+  * Drop grub from all classes and add grub-pc to GRMLBASE.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 26 Oct 2009 21:15:09 +0100
+
 grml-live (0.9.27) unstable; urgency=low
 
   [ Michael Prokop ]
