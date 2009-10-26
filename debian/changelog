@@ -1,3 +1,14 @@
+grml-etc (1.1.27) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * Only remove digits from DEVICE in grml-reboot if DEVICE is not
+    already a valid block device name.
+
+  [ Michael Prokop ]
+  * /etc/mgetty/login.config: use zsh instead of bash.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 26 Oct 2009 15:12:30 +0100
+
 grml-etc (1.1.26) unstable; urgency=low
 
   * /etc/skel/.xinitrc: adjust font in osd_cat command. Thanks to
