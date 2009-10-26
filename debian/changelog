@@ -1,6 +1,8 @@
 grml-live (0.9.28) UNRELEASED; urgency=low
 
   * Drop grub from all classes and add grub-pc to GRMLBASE.
+  * Add guymager to GRML_FULL.
+  * Add gcc to GRML_MEDIUM.
 
  -- Michael Prokop <mika@grml.org>  Mon, 26 Oct 2009 21:15:09 +0100
 
