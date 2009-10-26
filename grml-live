@@ -771,8 +771,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
          for file in "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6 \
                      "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.cfg \
-                     "$BUILD_OUTPUT"/boot/isolinux/addons.cfg \
-                     "$BUILD_OUTPUT"/boot/isolinux/syslinux.cfg \
+                     "$BUILD_OUTPUT"/boot/isolinux/*.cfg \
                      "$BUILD_OUTPUT"/boot/grub/grub.cfg \
                      "$BUILD_OUTPUT"/boot/grub/menu.lst ; do
              if [ -e "$file" ] ; then
