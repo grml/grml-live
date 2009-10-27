@@ -5,8 +5,18 @@ grml-live (0.9.28) UNRELEASED; urgency=low
   * Add gcc to GRML_MEDIUM.
   * Adjust grub variable in *all* /boot/isolinux/*.cfg files.
   * Update memtest86+ binary to 4.00-2.
+  * Update isolinux/syslinux files to version 2:3.83+dfsg-1:
+    - templates/boot/addons/chain.c32
+    - templates/boot/addons/hdt.c32
+    - templates/boot/addons/memdisk
+    - templates/boot/addons/menu.c32
+    - templates/boot/addons/pci.ids
+    - templates/boot/isolinux/ifcpu64.c32
+    - templates/boot/isolinux/isolinux.bin
+    - templates/boot/isolinux/vesamenu.c32
+  * Add templates/boot/isolinux/mboot.c32 from suslinux.
 
- -- Michael Prokop <mika@grml.org>  Tue, 27 Oct 2009 20:32:41 +0100
+ -- Michael Prokop <mika@grml.org>  Tue, 27 Oct 2009 20:39:08 +0100
 
 grml-live (0.9.27) unstable; urgency=low
 
