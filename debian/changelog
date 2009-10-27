@@ -4,8 +4,9 @@ grml-live (0.9.28) UNRELEASED; urgency=low
   * Add guymager to GRML_FULL.
   * Add gcc to GRML_MEDIUM.
   * Adjust grub variable in *all* /boot/isolinux/*.cfg files.
+  * Update memtest86+ binary to 4.00-2.
 
- -- Michael Prokop <mika@grml.org>  Mon, 26 Oct 2009 23:50:09 +0100
+ -- Michael Prokop <mika@grml.org>  Tue, 27 Oct 2009 20:32:41 +0100
 
 grml-live (0.9.27) unstable; urgency=low
 
