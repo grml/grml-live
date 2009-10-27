@@ -7,11 +7,14 @@
 
 # Usage examples:
 # ================
-# gcom -d /dev/ttyUSB0
+# comgt -d /dev/ttyUSB0
 # wvdial --config /etc/wvdial.conf.umts a1usb
 #
-# gcom -d /dev/noz0
+# comgt -d /dev/noz0
 # wvdial --config /etc/wvdial.conf.umts tmnozomi
+#
+# comgt -d /dev/ttyACM0
+# wvdial --config /etc/wvdial.conf.umts yesss
 
 # Default settings - do not modify but create own profile if needed:
 [Dialer Defaults]
@@ -134,5 +137,17 @@ Init3 = ATE0V1&D2&C1S0=0+IFC=2,2
 ISDN = 0
 Modem Type = Analog Modem
 Init5 =AT+CGDCONT=1,"IP","web.vodafone.de";
+
+# fonic:
+[Dialer fonic]
+Baud = 921600
+Init3 = AT+CGDCONT=1, "IP","pinternet.interkomm.de","",0,0
+Username=fonic
+Password=fonic
+Dial Command = ATDT
+Modem = /dev/ttyUSB0
+Carrier Check = No
+Phone = *99#
+Stupid Mode = 1
 
 ## END OF FILE ##################################################################
