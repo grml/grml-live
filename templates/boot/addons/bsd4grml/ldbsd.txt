@@ -31,7 +31,11 @@ DESCRIPTION
 
      Basic operation procedure is as follows:
 
-     1.   Be loaded.
+     1.   Be loaded. However this is done, as the first thing we write a RETF
+          instruction to 0000:0000 and CALL FAR it (from 16-bit code), or
+          write a RET instruction to 0x00000000 and CALL it (from 32-bit
+          code), backing up the previous content of course, so that qemu+gdb
+          users can intercept via "b *0".
 
           BIOS       We are loaded to 0x07C00. The drive used to load us from
                      is passed in the DL register. The ES:BX and DS:SI regis-
@@ -267,11 +271,13 @@ COMMANDS
 
                              boot> machine mem -0x100000@0x00F00000
 
-             regs      Debugging command displaying register dumps.
-
              oldbios   Enable or disable the so-called "Old BIOS / Soekris
                        helper", which restricts boot from loading more than
                        one sector at a time from disc.
+
+             pxe       Forcibly scan for a PXE boot ROM.
+
+             regs      Debugging command displaying register dumps.
 
      macro   Displays the names of all currently defined macros. Up to four
              can be defined, holding up to 256 characters.
@@ -476,4 +482,4 @@ CAVEATS
 
      ustarfs    This filesystem will be implemented soon.
 
-MirOS BSD #10-current          October 24, 2009                              7
+MirOS BSD #10-current          October 27, 2009                              7

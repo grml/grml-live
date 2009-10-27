@@ -422,4 +422,4 @@ BUGS
      MirOS project at <miros-discuss@mirbsd.org> if you think you have
      discovered a bug.
 
-MirOS                           June 29, 2009                                6
+MirOS                          August 30, 2009                               6

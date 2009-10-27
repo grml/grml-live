@@ -15,8 +15,9 @@ grml-live (0.9.28) UNRELEASED; urgency=low
     - templates/boot/isolinux/isolinux.bin
     - templates/boot/isolinux/vesamenu.c32
   * Adjust label text for grub1 boot entry.
+  * Update bsd4grml to version 20091027.
 
- -- Michael Prokop <mika@grml.org>  Tue, 27 Oct 2009 20:44:02 +0100
+ -- Michael Prokop <mika@grml.org>  Tue, 27 Oct 2009 20:54:33 +0100
 
 grml-live (0.9.27) unstable; urgency=low
 
