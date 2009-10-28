@@ -988,7 +988,7 @@ find .. -type f -not -name md5sums -not -name isolinux.bin -exec md5sum {} \; > 
 if [ "$BOOT_METHOD" = "isolinux" ] ; then
    BOOT_FILE="boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat"
 elif [ "$BOOT_METHOD" = "grub" ] ; then
-   BOOT_FILE="boot/grub/stage2_eltorito"
+   BOOT_FILE="boot/grub/stage2"
 fi
 
 if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" -a "$FORCE_ISO_REBUILD" = "false" ]  ; then
