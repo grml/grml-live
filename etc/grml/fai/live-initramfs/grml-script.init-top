@@ -161,7 +161,7 @@ fi
 
 # Make sure we support squashfs:
 if ! grep -q squashfs /proc/filesystems ; then
-   modprobe -q squashfs || log_grml_failure_msg "Warning: look like you do not have support for squashfs"
+   modprobe -q squashfs || log_grml_failure_msg "Warning: looks like you do not have support for squashfs"
 fi
 
 if grep -q 'boot=live' /proc/cmdline 2>/dev/null ; then
