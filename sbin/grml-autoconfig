@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Filename:      grml-autoconfig
 # Purpose:       configuration interface for grml-autoconfig
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika(at)grml.org>
@@ -6,7 +6,7 @@
 # License:       This file is licensed under the GPL v2.
 ################################################################################
 
-if [ "$UID" != 0 ];  then
+if [ $(id -u) != 0 ] ; then
   echo "Error: please run this script with uid 0 (root)." ; exit 1
 fi
 

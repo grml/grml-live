@@ -23,7 +23,7 @@
 
   LANG=C
   LC_ALL=C
-  [[ $UID != 0 ]] && runas='sudo' # important for /etc
+  [[ $(id -u) != 0 ]] && runas='sudo' # important for /etc
 
   check4progs mutt || echo "Warning, mutt not available for mail handling.">&2
   check4progs findchanged tar || { echo "Sorry, can't continue. Exiting.">&2 ; exit 1 }
