@@ -55,7 +55,7 @@ if [ x"$1" == x ]; then
    echo "  first, because grml-live-remaster will need a lot ot RAM."
    echo ""
    echo "Please report bugs and feature requests: http://grml.org/bugs/"
-   exit -1
+   exit 1
 fi
 
 if [ ! -d /remaster ]; then
