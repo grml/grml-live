@@ -1,3 +1,9 @@
+grml-autoconfig (0.8.41) unstable; urgency=low
+
+  * Drop usage of $UID in scripts.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 29 Oct 2009 13:13:05 +0100
+
 grml-autoconfig (0.8.40) unstable; urgency=low
 
   [ Ulrich Dangel ]
