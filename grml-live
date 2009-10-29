@@ -23,10 +23,9 @@ fi
 set -e
 
 # global variables
-GRML_LIVE_VERSION='0.9.29'
+GRML_LIVE_VERSION='0.9.30-pre1'
 PN="$(basename $0)"
 CMDLINE="$0 $@"
-ISO_DATE="$(date +%Y-%m-%d)"
 SOURCES_LIST_FILE='/etc/grml/fai/apt/sources.list'
 ADDONS_LIST_FILE='/boot/isolinux/addons_list.cfg'
 # }}}
@@ -44,6 +43,7 @@ Usage: $PN [options, see as follows]
    -B                      build the ISO without touching the chroot (skips cleanup)
    -c <classe[s]>          classes to be used for building the ISO via FAI
    -C <configfile>         configuration file for grml-live
+   -d <date>               use specified date instead of build time as date of release
    -F                      force execution without prompting
    -g <grml_name>          set the grml flavour name
    -h                      display short usage information and exit
@@ -212,13 +212,14 @@ fi
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:g:i:I:o:r:s:t:v:bBFnquVz" opt; do
+while getopts "a:C:c:d:g:i:I:o:r:s:t:v:bBFnquVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     b) BUILD_ONLY=1 ;;
     B) BUILD_DIRTY=1 ;;
     c) CLASSES="$OPTARG" ;;
     C) CONFIG="$OPTARG" ;;
+    d) DATE="$OPTARG" ;;
     g) GRML_NAME="$OPTARG" ;;
     i) ISO_NAME="$OPTARG" ;;
     I) CHROOT_INSTALL="$OPTARG" ;;
@@ -245,6 +246,7 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 [ -n "$BUILD_OUTPUT" ]     || BUILD_OUTPUT="$OUTPUT/grml_cd"
 [ -n "$CHROOT_OUTPUT" ]    || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
 [ -n "$CLASSES" ]          || CLASSES="GRMLBASE,GRML_MEDIUM,I386"
+[ -n "$DATE" ]             || DATE="$(date +%Y-%m-%d)"
 [ -n "$DISTRI_INFO" ]      || DISTRI_INFO='Grml - Live Linux for system administrators   '
 [ -n "$DISTRI_NAME" ]      || DISTRI_NAME="grml"
 [ -n "$DISTRI_SPLASH" ]    || DISTRI_SPLASH='grml.png'
@@ -317,6 +319,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$ISO_OUTPUT" ]         && echo "  ISO target:        $ISO_OUTPUT"
    [ -n "$GRML_NAME" ]          && echo "  grml name:         $GRML_NAME"
    [ -n "$RELEASENAME" ]        && echo "  release name:      $RELEASENAME"
+   [ -n "$DATE" ]               && echo "  build date:        $DATE"
    [ -n "$VERSION" ]            && echo "  grml version:      $VERSION"
    [ -n "$SUITE" ]              && echo "  Debian suite:      $SUITE"
    [ -n "$ARCH" ]               && echo "  Architecture:      $ARCH"
@@ -512,8 +515,8 @@ else
          eerror "Error: critical error while executing fai [exit code ${RC}]. Exiting." ; eend 1
          bailout 1
       else
-         log "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]"
-         echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$ISO_DATE]" > $CHROOT_OUTPUT/etc/grml_version
+         log "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$DATE]"
+         echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$DATE]" > $CHROOT_OUTPUT/etc/grml_version
          chmod 644 $CHROOT_OUTPUT/etc/grml_version
          einfo "Rebuilding initramfs"
          # make sure new /etc/grml_version reaches the initramfs:
@@ -671,7 +674,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       RELEASE_INFO="$(extend_string_end 68 "$RELEASE_INFO")"
 
       sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/GRML/grml-version
-      sed -i "s/%DATE%/$ISO_DATE/"                                  "$BUILD_OUTPUT"/GRML/grml-version
+      sed -i "s/%DATE%/$DATE/"                                      "$BUILD_OUTPUT"/GRML/grml-version
 
       # make sure the squashfs filename is set accordingly:
       SQUASHFS_NAME="$GRML_NAME.squashfs"
@@ -680,7 +683,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       for file in "${BUILD_OUTPUT}"/boot/isolinux/*.cfg "${BUILD_OUTPUT}"/boot/isolinux/*.msg \
                   "${BUILD_OUTPUT}"/boot/grub/* ; do
         sed -i "s/%ARCH%/$ARCH/g"                    "${file}"
-        sed -i "s/%DATE%/$ISO_DATE/g"                "${file}"
+        sed -i "s/%DATE%/$DATE/g"                    "${file}"
         sed -i "s/%DISTRI_INFO%/$DISTRI_INFO/g"      "${file}"
         sed -i "s/%DISTRI_NAME%/$DISTRI_NAME/g"      "${file}"
         sed -i "s/%DISTRI_SPLASH%/$DISTRI_SPLASH/g"  "${file}"

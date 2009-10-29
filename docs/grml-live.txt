@@ -102,6 +102,16 @@ supported inside the scripts/hooks/classes at /etc/grml/fai/config. Instead use
 /etc/grml/grml-live.local for configuration stuff used inside
 /etc/grml/fai/config.
 
+  -d **DATE**::
+
+Use specified date as build date information on the ISO instead of the default.
+The default is the date when grml-live is being executed (retrieved via
+executing 'date +%Y-%m-%d'). The information is stored inside the file
+/GRML/grml-version on the ISO, /etc/grml_version in the squashfs file and in all
+the bootsplash related files. This option is useful if you want to provide an
+ISO with release information for a specific date but have to build it in
+advance. Usage example: '-d 2009-10-30'
+
   -F::
 
 Force execution and do not prompt for acknowledgment of configuration.

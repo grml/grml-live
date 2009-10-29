@@ -1,3 +1,10 @@
+grml-live (0.9.30) UNRELEASED; urgency=low
+
+  * Support new option '-d <date>' to use specified date as build date
+    information on the ISO instead of the default.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 29 Oct 2009 11:02:18 +0100
+
 grml-live (0.9.29) unstable; urgency=low
 
   [ Ulrich Dangel ]
