@@ -23,7 +23,7 @@ fi
 set -e
 
 # global variables
-GRML_LIVE_VERSION='0.9.28'
+GRML_LIVE_VERSION='0.9.29'
 PN="$(basename $0)"
 CMDLINE="$0 $@"
 ISO_DATE="$(date +%Y-%m-%d)"
@@ -756,12 +756,9 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          fi
       fi
 
-      # jump back to grub from bsd4grml:
-      if [ -e "$BUILD_OUTPUT"/boot/grub/stage2 ]; then
-         GRUB_LEGACY=stage2
-      else
-         GRUB_LEGACY=stage2_eltorito
-      fi
+      # jump back to grub from bsd4grml (/boot/grub/stage2):
+      GRUB_LEGACY=stage2
+
       if [ -e "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6 ]; then
          if [ -e "$BUILD_OUTPUT"/boot/grub/core.img ]; then
             GRUB_VERSION=2

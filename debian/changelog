@@ -1,3 +1,14 @@
+grml-live (0.9.29) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * Renamed stage2_eltorito to stage2 to get rid of name mangling
+    problems with fat.
+
+  [ Michael Prokop ]
+  * Adjust stage2{,_eltorito} code in grml-live.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 29 Oct 2009 01:17:59 +0100
+
 grml-live (0.9.28) unstable; urgency=low
 
   * Drop grub from all classes and add grub-pc to GRMLBASE.
