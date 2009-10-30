@@ -1,0 +1,27 @@
+#!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/02-mtab
+# Purpose:       create mtab if it does not yet exist
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
+[ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
+
+# newer debootstrap does not create an mtab.
+# create it and fill it with what is probably already mounted.
+if [ ! -e $target/etc/mtab ] ; then
+  cat > $target/etc/mtab << EOF
+proc /proc proc rw 0 0
+sysfs /sys sysfs rw 0 0
+/dev /dev tmpfs rw 0 0
+devpts /dev/pts devpts rw 0 0
+EOF
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
