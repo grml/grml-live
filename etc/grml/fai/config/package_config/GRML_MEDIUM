@@ -104,6 +104,7 @@ ipw-firmware
 irqbalance
 jed
 jed-common
+jfsutils
 keychain
 knockd
 latencytop

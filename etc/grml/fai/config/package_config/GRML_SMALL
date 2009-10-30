@@ -74,6 +74,7 @@ iputils-ping
 ipw-firmware
 jed
 jed-common
+jfsutils
 keychain
 knockd
 less
