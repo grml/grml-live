@@ -4,8 +4,11 @@ grml-live (0.9.30) UNRELEASED; urgency=low
     information on the ISO instead of the default.
   * Fix posix violation in grml-live-remaster.
   * Add jfsutils to GRML_MEDIUM and GRML_SMALL.
+  * Apply patch by Christian Hofstaedtler <ch+git@zeha.at> (thanks!):
+    Ensure /etc/mtab is always present. Newer debootstrap versions
+    no longer create /etc/mtab, so we need to provide our own.
 
- -- Michael Prokop <mika@grml.org>  Fri, 30 Oct 2009 19:46:36 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 30 Oct 2009 19:48:50 +0100
 
 grml-live (0.9.29) unstable; urgency=low
 
