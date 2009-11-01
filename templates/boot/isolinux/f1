@@ -5,7 +5,7 @@
                                                                                
   Note that the options on page 3 (F3) have to be used as *main* boot          
   options at the bootprompt as they are aliases for further options.           
-  The options mentioned on pages 4-9 have to be used as options behind the     
+  The options mentioned on pages 4-9 have to be used as options after the      
   main boot option. If you don't need a special main option just use the       
   default one being 'grml' (which is used in several examples as well).        
   Example:                                                                     
