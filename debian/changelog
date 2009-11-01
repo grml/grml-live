@@ -7,8 +7,10 @@ grml-live (0.9.30) UNRELEASED; urgency=low
   * Apply patch by Christian Hofstaedtler <ch+git@zeha.at> (thanks!):
     Ensure /etc/mtab is always present. Newer debootstrap versions
     no longer create /etc/mtab, so we need to provide our own.
+  * config/hooks/instsoft.GRMLBASE: force installation of file-rc using
+    aptitude's Aptitude::ProblemResolver::Keep-All-Tier option.
 
- -- Michael Prokop <mika@grml.org>  Fri, 30 Oct 2009 19:48:50 +0100
+ -- Michael Prokop <mika@grml.org>  Sun, 01 Nov 2009 11:31:44 +0100
 
 grml-live (0.9.29) unstable; urgency=low
 

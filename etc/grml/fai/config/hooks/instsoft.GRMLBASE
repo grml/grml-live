@@ -127,7 +127,9 @@ fi
 # make sure we have file-rc available before
 # package_config/GRML is being executed:
 $ROOTCMD apt-get update
-$ROOTCMD aptitude -f -y install file-rc
+# newer aptitude versions won't remove essential packages using
+# 'aptitude -f -y install file-rc' anymore, therefore force it:
+$ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc
 
 # we definitely don't want to fail running fai dirinstall just
 # because of some well known bugs:
