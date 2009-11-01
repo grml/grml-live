@@ -1,4 +1,4 @@
-grml-live (0.9.30) UNRELEASED; urgency=low
+grml-live (0.9.30) unstable; urgency=low
 
   [ Michael Prokop ]
   * Support new option '-d <date>' to use specified date as build date
@@ -20,7 +20,7 @@ grml-live (0.9.30) UNRELEASED; urgency=low
   * Remove denglish phrase from help file. Thanks to Andreas Gredler.
     [Closes: issue758]
 
- -- Michael Prokop <mika@grml.org>  Sun, 01 Nov 2009 13:08:40 +0100
+ -- Michael Prokop <mika@grml.org>  Sun, 01 Nov 2009 17:48:21 +0100
 
 grml-live (0.9.29) unstable; urgency=low
 
