@@ -1,3 +1,9 @@
+grml-live (0.9.31) UNRELEASED; urgency=low
+
+  * Fix the 'Memtest86+ bootentry doesn't work within GRUB2' issue.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 02 Nov 2009 00:05:22 +0100
+
 grml-live (0.9.30) unstable; urgency=low
 
   [ Michael Prokop ]
