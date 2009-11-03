@@ -770,27 +770,27 @@ How much is the difference between LZMA and ZLIB compression?
 
 ISO size (bs = blocksize):
 
-[width="45%",cols="3,^2,^2,^2"]
+[width="45%",cols="3,^2,^2"]
 |============================================================
-|ISO                   |LZMA (256kB bs) |LZMA (128kB bs)|ZLIB
-|grml_sid              |666M | WIP | 771M
-|grml_squeeze          |659M | WIP | 761M
-|grml_lenny            |624M | WIP | 723M
-|grml64_sid            |677M | WIP | 791M
-|grml64_squeeze        |671M | WIP | 785M
-|grml64_lenny          |639M | WIP | 745M
-|grml-medium_sid       |208M | WIP | 236M
-|grml-medium_squeeze   |206M | WIP | 234M
-|grml-medium_lenny     |193M | WIP | 220M
-|grml64-medium_sid     |213M | WIP | 245M
-|grml64-medium_squeeze |213M | WIP | 244M
-|grml64-medium_lenny   |201M | WIP | 231M
-|grml-small_sid        |102M | WIP | 118M
-|grml-small_squeeze    |101M | WIP | 117M
-|grml-small_lenny      |97M  | WIP | 112M
-|grml64-small_sid      |103M | WIP | 120M
-|grml64-small_squeeze  |103M | WIP | 120M
-|grml64-small_lenny    |99M  | WIP | 116M
+|ISO                   |LZMA (256kB bs) |ZLIB
+|grml_sid              |666M | 771M
+|grml_squeeze          |659M | 761M
+|grml_lenny            |624M | 723M
+|grml64_sid            |677M | 791M
+|grml64_squeeze        |671M | 785M
+|grml64_lenny          |639M | 745M
+|grml-medium_sid       |208M | 236M
+|grml-medium_squeeze   |206M | 234M
+|grml-medium_lenny     |193M | 220M
+|grml64-medium_sid     |213M | 245M
+|grml64-medium_squeeze |213M | 244M
+|grml64-medium_lenny   |201M | 231M
+|grml-small_sid        |102M | 118M
+|grml-small_squeeze    |101M | 117M
+|grml-small_lenny      |97M  | 112M
+|grml64-small_sid      |103M | 120M
+|grml64-small_squeeze  |103M | 120M
+|grml64-small_lenny    |99M  | 116M
 |============================================================
 
 Build time of grml-medium's squashfs file (depends on your system, though just
