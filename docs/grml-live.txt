@@ -359,8 +359,9 @@ commandline.
 
 Main configuration file for FAI which specifies where all the configuration
 files and scripts for FAI/grml-live can be found. By default it is set to
-FAI_CONFIGDIR=/etc/grml/fai/config, a directory shipped by grml-live
-out-of-the-box so you shouldn't have to configure anything in this file.
+FAI_CONFIG_SRC=file:///etc/grml/fai/config being a directory shipped by
+grml-live out-of-the-box so you shouldn't have to configure anything in this
+file.
 
   /etc/grml/fai/make-fai-nfsroot.conf
 
