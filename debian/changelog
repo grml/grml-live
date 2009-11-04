@@ -1,8 +1,14 @@
 grml-live (0.9.31) UNRELEASED; urgency=low
 
+  [ Michael Prokop ]
   * Fix the 'Memtest86+ bootentry doesn't work within GRUB2' issue.
 
- -- Michael Prokop <mika@grml.org>  Mon, 02 Nov 2009 00:05:22 +0100
+  [ Thorsten Glaser ]
+  * Update bootgrub.mksh to 20091104
+  * Change manifold-boot ISO patch logic slightly to work better on
+    certain HP machines
+
+ -- Thorsten Glaser <tg@mirbsd.de>  Wed, 04 Nov 2009 13:58:13 +0100
 
 grml-live (0.9.30) unstable; urgency=low
 
