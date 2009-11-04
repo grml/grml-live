@@ -1,14 +1,22 @@
-grml-live (0.9.31) UNRELEASED; urgency=low
+grml-live (0.9.31) unstable; urgency=low
 
   [ Michael Prokop ]
   * Fix the 'Memtest86+ bootentry doesn't work within GRUB2' issue.
+  * Update main fai config (update to what's shipped by FAI 3.3):
+    * Move 'FAI_CONFIGDIR=/etc/grml/fai/config' from fai.conf
+      to make-fai-nfsroot.conf and disable it by default as
+      only FAI_CONFIG_SRC is relevant nowadays.
+    * Disable irrelevant 'FAI=/etc/grml/fai/config' in fai.conf by
+      default.
+    * Drop dhcp-client from exclude option in $FAI_DEBOOTSTRAP_OPTS
+      in file make-fai-nfsroot.conf (sync with FAI upstram).
 
   [ Thorsten Glaser ]
-  * Update bootgrub.mksh to 20091104
+  * Update bootgrub.mksh to 20091104.
   * Change manifold-boot ISO patch logic slightly to work better on
-    certain HP machines
+    certain HP machines. [Closes: issue757]
 
- -- Thorsten Glaser <tg@mirbsd.de>  Wed, 04 Nov 2009 13:58:13 +0100
+ -- Michael Prokop <mika@grml.org>  Wed, 04 Nov 2009 20:30:30 +0100
 
 grml-live (0.9.30) unstable; urgency=low
 
@@ -128,7 +136,7 @@ grml-live (0.9.24) unstable; urgency=low
 
   [ Michael Prokop ]
   * Software related changes:
-    - Add openvas-client, openvas-plugins-base, openvas-plugins-dfsg + 
+    - Add openvas-client, openvas-plugins-base, openvas-plugins-dfsg +
       openvas-server to GRML_FORENSIC.
     - Add stressapptest to GRML_FULL + GRML_FORENSIC.
     - Drop lcap (package is gone) from GRML_FORENSIC.
