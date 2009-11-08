@@ -358,8 +358,9 @@ commandline.
   /etc/grml/fai/fai.conf
 
 Main configuration file for FAI which specifies where all the configuration
-files and scripts for FAI/grml-live can be found. By default it is set to
-FAI_CONFIG_SRC=file:///etc/grml/fai/config being a directory shipped by
+files and scripts for FAI/grml-live can be found. By default the configuration
+variables are FAI_CONFIG_SRC=file:///etc/grml/fai/config and
+FAI_CONFIGDIR=/etc/grml/fai/config - both pointing to a directory shipped by
 grml-live out-of-the-box so you shouldn't have to configure anything in this
 file.
 

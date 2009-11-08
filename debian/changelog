@@ -1,8 +1,11 @@
-grml-live (0.9.32) UNRELEASED; urgency=low
+grml-live (0.9.32) unstable; urgency=low
 
-  * Update docs to reflect current FAI_CONFIG_SRC setup.
+  * Update docs to reflect current FAI_CONFIG_* setup.
+  * Set FAI_CONFIGDIR=/etc/grml/fai/config in /etc/grml/fai/fai.conf
+    so FAI versions older than 3.3 still work. Thanks for the bugreport,
+    Christian Hofstaedtler.
 
- -- Michael Prokop <mika@grml.org>  Wed, 04 Nov 2009 23:39:26 +0100
+ -- Michael Prokop <mika@grml.org>  Sun, 08 Nov 2009 11:50:46 +0100
 
 grml-live (0.9.31) unstable; urgency=low
 
