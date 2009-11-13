@@ -2,8 +2,10 @@ grml-live (0.9.33) UNRELEASED; urgency=low
 
   * Switch order of mirror configuration in example config.
     Thanks for the hint, formorer.
+  * Write current date to last output line of grml-live so the user
+    knows how "old" his build is while sitting at the shell prompt.
 
- -- Michael Prokop <mika@grml.org>  Fri, 13 Nov 2009 11:06:38 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Nov 2009 21:48:22 +0100
 
 grml-live (0.9.32) unstable; urgency=low
 
