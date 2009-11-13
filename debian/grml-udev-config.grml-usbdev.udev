@@ -1,2 +1,2 @@
 # Create device link for /mnt/usb-sd* stuff
-ACTION=="add", KERNEL=="sd[a-z]*", SUBSYSTEM=="block", SUBSYSTEMS=="usb", SYMLINK+="usb-%k", GROUP="users", NAME="%k"
+ACTION=="add", KERNEL=="sd[a-z]*", SUBSYSTEM=="block", SUBSYSTEMS=="usb", SYMLINK+="usb-%k", GROUP="users"
