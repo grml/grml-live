@@ -1,6 +1,6 @@
 #!/bin/sh
 ### BEGIN INIT INFO
-# Provides:          grml-udev-config
+# Provides:          grml-udev
 # Required-Start:    mountkernfs
 # Required-Stop:
 # Should-Start:
@@ -11,6 +11,13 @@
 ### END INIT INFO
 
 . /lib/lsb/init-functions
+
+# shell version of /usr/bin/tty
+my_tty() {
+  [ -x /bin/readlink ] || return 0
+  [ -e /proc/self/fd/0 ] || return 0
+  readlink --silent /proc/self/fd/0 || true
+}
 
 # are we running within init (non_interactive) or within shell (interactive)?
 check_for_non_interactive() {
@@ -26,24 +33,35 @@ check_for_non_interactive() {
   return 1
 }
 
-exec_wrapper() {
-  if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
-    invoke-rc.d $1 $2
-  else
-    /etc/init.d/$1 $2
-  fi
+# start init script through official Debian way
+udev_exec() {
+  # avoid syntax error if called without valid parameter:
+  [ -z "$1" ] && exec /etc/init.d/udev "$1"
+
+  exec /etc/init.d/udev "$1"
 }
 
+# test whether udev is enabled in init's configuration
+udev_active() {
+  # file-rc:
+  if [ -r /etc/runlevel.conf ] && egrep -q '^[0-9]+.*-.*-.*\/etc\/init.d\/ydev$' /etc/runlevel.conf ; then
+    return 0
+  fi
+
+  # sysv-rc:
+  if ls /etc/rcS.d/*udev >/dev/null 2>&1 ; then
+    return 0
+  fi
+
+  return 1
+}
+
+# if original udev init script is enabled to not execute our script
 udev_init_check() {
-  # test whether udev is enabled in init's configuration
-  # if so do not execute our script but instead use original
-  # udev init script only
-  if update-rc.d -n udev start 3 S >/dev/null ; then
+  if udev_active ; then
     log_warning_msg "Original udev init script is configured for startup, ignoring request to start $0"
     return 1
   fi
-
-  return 0
 }
 
 case "$1" in
@@ -83,13 +101,13 @@ case "$1" in
            fi
         fi
 
-	udev_init_check && exec_wrapper udev start
+        udev_init_check && udev_exec start
 
         ;;
 
   # in any other situation just directly invoke udev:
   *)
-	udev_init_check && exec_wrapper udev $1
+        udev_init_check && udev_exec "$1"
         ;;
 esac
 

@@ -44,7 +44,7 @@ binary-indep: install
 	dh_installudev --name=grml-external     --priority 60
 	dh_installudev --name=grml-usbdev       --priority 60
 	dh_installudev --name=grml-blockdevices --priority 60
-	dh_installinit --no-start
+	dh_installinit --no-start --name=grml-udev
 	# --update-rcd-params='start 2 S .'
 	dh_installman
 	dh_link
