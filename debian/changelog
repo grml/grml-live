@@ -1,3 +1,9 @@
+grml-etc (1.1.29) unstable; urgency=low
+
+  * Update /etc/runlevel.conf.livecd* to support grml-udev-config.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Nov 2009 21:59:42 +0100
+
 grml-etc (1.1.28) unstable; urgency=low
 
   * Update /etc/wvdial.conf.umts (gcom->comgt + add fonic).
