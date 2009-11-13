@@ -1,3 +1,10 @@
+grml-live (0.9.33) UNRELEASED; urgency=low
+
+  * Switch order of mirror configuration in example config.
+    Thanks for the hint, formorer.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Nov 2009 11:06:38 +0100
+
 grml-live (0.9.32) unstable; urgency=low
 
   * Update docs to reflect current FAI_CONFIG_* setup.
