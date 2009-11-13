@@ -1,0 +1,98 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          grml-udev-config
+# Required-Start:    mountkernfs
+# Required-Stop:
+# Should-Start:
+# Should-Stop:
+# Default-Start:     S
+# Default-Stop:
+# Short-Description: wrapper around udev to support bootoptions noudev and blacklist
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+# are we running within init (non_interactive) or within shell (interactive)?
+check_for_non_interactive() {
+  if [ "$RUNLEVEL" = "S" -a "$PREVLEVEL" = "N" ]; then
+    return
+  fi
+
+  TTY=$(my_tty)
+  if [ -z "$TTY" -o "$TTY" = "/dev/console" -o "$TTY" = "/dev/null" ]; then
+    return
+  fi
+
+  return 1
+}
+
+exec_wrapper() {
+  if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
+    invoke-rc.d $1 $2
+  else
+    /etc/init.d/$1 $2
+  fi
+}
+
+udev_init_check() {
+  # test whether udev is enabled in init's configuration
+  # if so do not execute our script but instead use original
+  # udev init script only
+  if update-rc.d -n udev start 3 S >/dev/null ; then
+    log_warning_msg "Original udev init script is configured for startup, ignoring request to start $0"
+    return 1
+  fi
+
+  return 0
+}
+
+case "$1" in
+  start)
+        # do not flood console with kernel driver messages
+        # grep -q debug /proc/cmdline || echo 0 > /proc/sys/kernel/printk
+
+        # do not display anything when bootoption *splash is present:
+        # if grep -qe ' splash' -qe ' tsplash' -qe ' textsplash' /proc/cmdline ; then
+        #   exec >/dev/null </dev/null
+        # fi
+
+        # support bootoption blacklist, must be executed *before* udev is present
+        if [ -r /etc/grml/autoconfig.functions ] ; then
+          ( zsh -c '. /etc/grml/autoconfig.functions && config_blacklist || printf "Error when trying to run config_blacklist.\n">&2' )
+        else
+          printf 'Warning: /etc/grml/autoconfig.functions could not be read.\n'>&2
+        fi
+
+        # support bootoption noudev and inform user how to skip
+        # execution of udev (being bootoption noudev)
+        if ! grep -q noudev /proc/cmdline ; then
+           check_for_non_interactive && \
+              log_warning_msg "If your system hangs now skip execution of udev via bootoption noudev"
+        else
+           # - allow execution of initscript through FORCE=1 when booting with noudev
+           if [ -z "$FORCE" ] ; then
+              log_failure_msg "Bootoption noudev found. Skipping execution of udev init script."
+              if ! check_for_non_interactive ; then
+                 printf "\nIt has been detected that the udev init script\n"
+                 printf "has been run from an interactive shell.\n"
+                 printf "You booted your system using bootoption noudev.\n"
+                 printf "To force startup of udev please run:\n\n"
+                 printf "\tFORCE=1 Start udev\n\n"
+              fi
+              exit 1
+           fi
+        fi
+
+	udev_init_check && exec_wrapper udev start
+
+        ;;
+
+  # in any other situation just directly invoke udev:
+  *)
+	udev_init_check && exec_wrapper udev $1
+        ;;
+esac
+
+exit 0
+
+##############################################################################

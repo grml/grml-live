@@ -1,0 +1,62 @@
+grml-udev-config for Debian
+---------------------------
+
+grml.rules
+==========
+A custom rule file /etc/udev/z30_grml.rules is installed by the grml udev
+package.  This file contains a udev rule to map USB-Pendrives (or USB-Sticks) to
+the /dev/external* device nodes (or symlinks respectively). This allows us to
+easily mount USB-Sticks on a grml System and you don't risk to accidentialy
+overwrite your SCSI/S-ATA disk.
+Note: These rules are deprecated in favour of the grml_usbdev rules mentioned
+below. Nevertheless this way of accessing USB-Pendrives is retained for
+backwards compatibility reasons.
+
+grml_usbdev.rules
+=================
+The rule file /etc/udev/z31_grml_usbdev.rules is installed. The rules contained
+in there allow simple access to USB devices like pendrives upon plugging them
+in.  You'll get according symlinks in /dev (prefixed with 'usb-'), entries in
+/etc/fstab (via rebuildfstab) and directories in /mnt according to available
+labeled filesystems for free. On removal of the usb device the symlinks and
+usb*-directories in /mnt will automatically vanish.
+
+To prevent udev from automatically creating the directories and fstab entries
+please rename the rules file by executing:
+
+	mv z31_grml_usbdev.rules \#z31_grml_usbdev.rules
+
+inside the directory /etc/udev/rules.d
+
+Persistent network interfaces
+=============================
+Don't run write_net_rules on any occasion, it's evil on a Live-CD. The script is
+still shipped and can be enabled manually to get persistent network interfaces
+across reboots (e.g. after a hd-install). Just execute
+
+	mv \#75_persistent-net-generator.rules 75_persistent-net-generator.rules
+
+in /etc/udev/rules.d and reload the udev rules with 'udevcontrol reload_rules'
+(as root)
+
+Or better just see 'grml-tips udev' for other ways to get persistent network
+interfaces.
+
+SELinux support
+===============
+The udev version on grml is built without support for SELinux.
+
+Various
+=======
+The generation of the udeb package has been disabled in debian/rules (by
+removing BUILD_UDEB := 1) as this is not needed on grml. Some grml specific
+functions have been added to the init script and to the maintainer scripts.
+
+hg repository
+==============
+Since version 0.103-0grml1 this package is maintained in the grml hg repository
+at http://hg.grml.org/udev. The version in the git repository at
+http://git.distanz.ch is not maintained anymore.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Nov 2009 12:02:41 +0100
+

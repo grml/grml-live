@@ -1,0 +1,5 @@
+grml-udev-config (0.0.1) unstable; urgency=low
+
+  * Initial release. [Closes: issue772]
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Nov 2009 12:02:41 +0100

@@ -1,0 +1,16 @@
+Source: grml-udev-config
+Section: admin
+Priority: extra
+Maintainer: Michael Prokop <mika@grml.org>
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.8.3
+Homepage: http://git.grml.org/?p=grml-udev-config.git
+Vcs-git: git://git.grml.org/grml-udev-config.git
+Vcs-Browser: http://git.grml.org/?p=grml-udev-config.git
+
+Package: grml-udev-config
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, udev, zsh
+Conflicts: ydev (<= 0.141-1grml.04)
+Description: custom udev configurations for Grml live system
+ Udev specific configurations for the Grml live system.

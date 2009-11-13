@@ -1,0 +1,3 @@
+# regenerate /etc/fstab for new/removed devices:
+ACTION=="add",    SUBSYSTEM=="block", RUN+="/usr/sbin/rebuildfstab -r -config"
+ACTION=="remove", SUBSYSTEM=="block", RUN+="/usr/sbin/rebuildfstab -r -config"
