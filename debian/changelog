@@ -10,8 +10,10 @@ grml-live (0.9.33) UNRELEASED; urgency=low
     - move all grml-* packages that used to be part of all Grml
       flavours to GRMLBASE and drop them from the flavour specific
       configuration instead
+  * Integrate /etc/grml/fai/config/scripts/GRMLBASE/01-packages
+    which is meant to be used as package installation validator.
 
- -- Michael Prokop <mika@grml.org>  Sat, 14 Nov 2009 12:20:17 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Nov 2009 12:38:04 +0100
 
 grml-live (0.9.32) unstable; urgency=low
 

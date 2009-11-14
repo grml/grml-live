@@ -1,0 +1,28 @@
+#!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/01-packages
+# Purpose:       check for packages that have been requested but could not be installed
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
+[ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
+
+
+if ! [ -r "$target/tmp/packages.list" ] ; then
+   echo "No $target/tmp/packages.list found, will not run package validation check."
+else
+   printf "Validating package list: "
+   if $ROOTCMD dpkg --list $(grep -v '^#' $target/tmp/packages.list) >/dev/null 2>$LOGDIR/package_errors.log ; then
+      printf "done - no errors found\n"
+   else
+      printf "failed (there have been errors, find them at $LOGDIR/package_errors.txt)\n"
+   fi
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
