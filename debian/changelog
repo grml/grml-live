@@ -23,8 +23,9 @@ grml-live (0.9.33) UNRELEASED; urgency=low
     for bringing this issue up, Richard Hartmann.
   * templates/boot/grub/menu.lst: drop bootoption lang=us, we
     specify the default within grml-autoconfig.
+  * Drop (unavailable) at76-usb-modules-2.6.31-grml from GRML_MEDIUM.
 
- -- Michael Prokop <mika@grml.org>  Sat, 14 Nov 2009 13:22:35 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Nov 2009 14:01:09 +0100
 
 grml-live (0.9.32) unstable; urgency=low
 

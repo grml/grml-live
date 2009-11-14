@@ -252,7 +252,6 @@ PACKAGES aptitude I386
 # we want to use linux-kernel-headers-grml instead of linux-libc-dev:
 linux-kernel-headers-grml
 
-at76-usb-modules-2.6.31-grml
 aufs-modules-2.6.31-grml aufs-tools
 linux-image-2.6.31-grml
 #madwifi-modules-2.6.31-grml madwifi-tools
