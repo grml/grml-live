@@ -19,8 +19,10 @@ grml-live (0.9.33) UNRELEASED; urgency=low
     - Note usage of GeoIP-selected mirrors.
     - Add commented examples for DE/AT mirrors.
     Thanks for the suggestions to Sedat Dilek. [Closes: issue756]
+  * Use /sbin/mount.ntfs-3g as default handler for ntfs. Thanks
+    for bringing this issue up, Richard Hartmann.
 
- -- Michael Prokop <mika@grml.org>  Sat, 14 Nov 2009 12:46:22 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Nov 2009 13:18:10 +0100
 
 grml-live (0.9.32) unstable; urgency=low
 

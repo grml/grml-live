@@ -57,5 +57,11 @@ if [ -r $target/usr/bin/wm-ng ] ; then
    fi
 fi
 
+# sadly isn't available via update-alternates, anyway - use
+# ntfs-3g (if available) as default for ntfs
+if [ -r $target/sbin/mount.ntfs-3g ] ; then
+   $ROOTCMD ln -s /sbin/mount.ntfs-3g /sbin/mount.ntfs
+fi
+
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
