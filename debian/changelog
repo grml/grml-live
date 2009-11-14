@@ -1,3 +1,11 @@
+grml-udev-config (0.0.2) unstable; urgency=low
+
+  * Do not depend on udev >= 146-5 but instead be happy with
+    any version. Conflict only with latest udev version of grml,
+    otherwise we can't support old udev in Lenny.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Nov 2009 16:23:13 +0100
+
 grml-udev-config (0.0.1) unstable; urgency=low
 
   * Initial release. [Closes: issue772]
