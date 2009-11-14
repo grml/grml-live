@@ -21,8 +21,10 @@ grml-live (0.9.33) UNRELEASED; urgency=low
     Thanks for the suggestions to Sedat Dilek. [Closes: issue756]
   * Use /sbin/mount.ntfs-3g as default handler for ntfs. Thanks
     for bringing this issue up, Richard Hartmann.
+  * templates/boot/grub/menu.lst: drop bootoption lang=us, we
+    specify the default within grml-autoconfig.
 
- -- Michael Prokop <mika@grml.org>  Sat, 14 Nov 2009 13:18:10 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Nov 2009 13:22:35 +0100
 
 grml-live (0.9.32) unstable; urgency=low
 
