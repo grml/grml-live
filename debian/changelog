@@ -12,8 +12,15 @@ grml-live (0.9.33) UNRELEASED; urgency=low
       configuration instead
   * Integrate /etc/grml/fai/config/scripts/GRMLBASE/01-packages
     which is meant to be used as package installation validator.
+  * Update sources.list handling:
+    - Disable deb-src by default in sources.list. People usually
+      won't need this and the ones that want it know how to enable
+      it. Therefore let's save traffic on the mirrors.
+    - Note usage of GeoIP-selected mirrors.
+    - Add commented examples for DE/AT mirrors.
+    Thanks for the suggestions to Sedat Dilek. [Closes: issue756]
 
- -- Michael Prokop <mika@grml.org>  Sat, 14 Nov 2009 12:38:04 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Nov 2009 12:46:22 +0100
 
 grml-live (0.9.32) unstable; urgency=low
 
