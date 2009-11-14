@@ -1,3 +1,0 @@
-* update grml's udev package:
-  - depend on Debian's udev + grml's grml-udev-config
-  - get rid of previous conffiles + scripts
