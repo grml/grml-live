@@ -554,13 +554,6 @@ else
          grep 'FAILED with exit code' $CHECKLOG/shell.log >> $LOGFILE && ERROR=2
       fi
 
-      # package validator
-      if [ -r "$CHECKLOG/package_errors.log" ] && grep -q '[a-z]' "$CHECKLOG/package_errors.log" ; then
-         ewarn "The following packages were requested for installation but could not be processed:"
-         cat $CHECKLOG/package_errors.log
-         eend 0
-      fi
-
       if [ -n "$ERROR" ] ; then
          log    "Error: there was a critical error [${ERROR}] during execution of stage 'fai dirinstall' [$(date)]"
          eerror "Error: there was a critical error during execution of stage 'fai dirinstall'"
@@ -1101,6 +1094,14 @@ fi
 # }}}
 
 # finalize {{{
+CHECKLOG=/var/log/fai/$HOSTNAME/last
+# package validator
+if [ -r "$CHECKLOG/package_errors.log" ] && grep -q '[a-z]' "$CHECKLOG/package_errors.log" ; then
+   ewarn "The following packages were requested for installation but could not be processed:"
+   cat $CHECKLOG/package_errors.log
+   eend 0
+fi
+
 [ -n "$start_seconds" ] && SECONDS="$[$(cut -d . -f 1 /proc/uptime)-$start_seconds]" || SECONDS="unknown"
 einfo "Successfully finished execution of $PN [$(date) - running ${SECONDS} seconds]" ; eend 0
 log "Successfully finished execution of $PN [$(date) - running ${SECONDS} seconds]"
