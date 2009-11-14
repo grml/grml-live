@@ -1,8 +1,11 @@
 grml-autoconfig (0.9.1) unstable; urgency=low
 
   * Use lang=en as default (instead of lang=us). [Closes: issue760]
+  * Enable cpu frequency scaling on all hardware by default (and
+    don't limit it to laptops only). Thanks for bringing this
+    up, Andras Korn! [Closes: issue754]
 
- -- Michael Prokop <mika@grml.org>  Sat, 14 Nov 2009 13:24:19 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 14 Nov 2009 13:27:52 +0100
 
 grml-autoconfig (0.9.0) unstable; urgency=low
 
