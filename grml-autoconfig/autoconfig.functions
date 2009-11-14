@@ -219,7 +219,7 @@ config_language(){
 
  # set default to 'en' in live-cd mode if $LANGUAGE is not yet set:
  if [ -z "$INSTALLED" ] ; then
-    [ -n "$LANGUAGE" ] || LANGUAGE='us'
+    [ -n "$LANGUAGE" ] || LANGUAGE='en'
  fi
 
  # if bootoption lang is used update /etc/default/locale, otherwise *not*!
