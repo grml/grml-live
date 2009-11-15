@@ -1,5 +1,6 @@
 grml-live (0.9.33) UNRELEASED; urgency=low
 
+  [ Michael Prokop ]
   * Switch order of mirror configuration in example config.
     Thanks for the hint, formorer.
   * Write current date to last output line of grml-live so the user
@@ -25,7 +26,10 @@ grml-live (0.9.33) UNRELEASED; urgency=low
     specify the default within grml-autoconfig.
   * Drop (unavailable) at76-usb-modules-2.6.31-grml from GRML_MEDIUM.
 
- -- Michael Prokop <mika@grml.org>  Sat, 14 Nov 2009 14:01:09 +0100
+  [ Thorsten Glaser ]
+  * Update MirOS bsd4grml to 20091115.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 15 Nov 2009 15:01:31 +0100
 
 grml-live (0.9.32) unstable; urgency=low
 
