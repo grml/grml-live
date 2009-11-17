@@ -1933,6 +1933,7 @@ grml64
 aufs-modules-2.6.31-grml64
 drbd8-2.6.31-grml64
 #fglrx-kernel-2.6.31-grml64
+iscsitarget-module-2.6.31-grml64
 kqemu-modules-2.6.31-grml64
 linux-doc-2.6.31-grml64
 linux-headers-2.6.31-grml64

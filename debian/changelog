@@ -25,11 +25,12 @@ grml-live (0.9.33) UNRELEASED; urgency=low
   * templates/boot/grub/menu.lst: drop bootoption lang=us, we
     specify the default within grml-autoconfig.
   * Drop (unavailable) at76-usb-modules-2.6.31-grml from GRML_MEDIUM.
+  * Add iscsitarget-module-2.6.31-grml64 to GRML_FULL.
 
   [ Thorsten Glaser ]
   * Update MirOS bsd4grml to 20091115.
 
- -- Michael Prokop <mika@grml.org>  Sun, 15 Nov 2009 15:01:31 +0100
+ -- Michael Prokop <mika@grml.org>  Tue, 17 Nov 2009 17:03:16 +0100
 
 grml-live (0.9.32) unstable; urgency=low
 
