@@ -204,9 +204,9 @@ checkvalue $CONFIG_FINDDCSDIR && config_finddcsdir
 
 checkvalue $CONFIG_DEBS && config_debs
 
-checkvalue $CONFIG_SCRIPTS && config_scripts
-
 checkvalue $CONFIG_CONFIG && config_config
+
+checkvalue $CONFIG_SCRIPTS && config_scripts
 
 checkvalue $CONFIG_PARTCONF && config_partconf
 
