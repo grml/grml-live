@@ -1041,6 +1041,8 @@ naim
 nano
 nasm
 nast
+nbd-client
+nbd-server
 nbtscan
 ncc
 ncdu
