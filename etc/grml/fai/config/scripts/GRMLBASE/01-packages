@@ -20,7 +20,7 @@ else
    if $ROOTCMD dpkg --list $(grep -v '^#' $target/tmp/packages.list) >/dev/null 2>$LOGDIR/package_errors.log ; then
       printf "done - no errors found\n"
    else
-      printf "failed (there have been errors, find them at $LOGDIR/package_errors.txt)\n"
+      printf "failed (there have been errors, find them at $LOGDIR/package_errors.log)\n"
    fi
 fi
 
