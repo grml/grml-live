@@ -194,6 +194,8 @@ checkvalue $CONFIG_CPU && config_cpu
 
 checkvalue $CONFIG_SSH && config_ssh
 
+checkvalue $CONFIG_VNC && config_vnc
+
 checkvalue $CONFIG_PASSWD && config_passwd
 
 checkvalue $CONFIG_EXTRACT  && config_extract
