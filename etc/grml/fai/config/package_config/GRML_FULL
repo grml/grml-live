@@ -510,7 +510,6 @@ dvb-apps
 dvdbackup
 dvdisaster
 dvd+rw-tools
-dvi2tty
 dvtm
 dwdiff
 dwm
@@ -573,7 +572,6 @@ fai-doc
 fail2ban
 fai-server
 fake
-fakechroot
 fakeroot
 faketime
 farpd

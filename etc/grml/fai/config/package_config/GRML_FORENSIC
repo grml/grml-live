@@ -342,7 +342,6 @@ ext3grep
 fai-client
 fai-server
 fake
-fakechroot
 fakeroot
 faketime
 farpd
