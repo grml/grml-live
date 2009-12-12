@@ -18,6 +18,9 @@ grml-live (0.9.33) UNRELEASED; urgency=low
     for bringing this issue up, Richard Hartmann.
   * templates/boot/grub/menu.lst: drop bootoption lang=us, we
     specify the default within grml-autoconfig.
+  * Support configuration variable EXIT_ON_MISSING_PACKAGES to exit
+    with returncode != 0 if a requested package isn't available on the
+    resulting ISO.
   * Software related changes:
     - Add iscsitarget-module-2.6.31-grml64 to GRML_FULL.
     - Add nbd-server + nbd-client to GRML_FULL (thanks to Xuân Baldauf).
@@ -33,7 +36,7 @@ grml-live (0.9.33) UNRELEASED; urgency=low
   [ Thorsten Glaser ]
   * Update MirOS bsd4grml to 20091115.
 
- -- Michael Prokop <mika@grml.org>  Wed, 25 Nov 2009 03:21:07 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 12 Dec 2009 14:44:14 +0100
 
 grml-live (0.9.32) unstable; urgency=low
 

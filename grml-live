@@ -1104,9 +1104,18 @@ fi
 CHECKLOG=/var/log/fai/$HOSTNAME/last
 # package validator
 if [ -r "$CHECKLOG/package_errors.log" ] && grep -q '[a-z]' "$CHECKLOG/package_errors.log" ; then
-   ewarn "The following packages were requested for installation but could not be processed:"
-   cat $CHECKLOG/package_errors.log
-   eend 0
+
+   if [ -n "$EXIT_ON_MISSING_PACKAGES" ] ; then
+      eerror "The following packages were requested for installation but could not be processed:"
+      cat $CHECKLOG/package_errors.log
+      eerror "... exiting as requested via \$EXIT_ON_MISSING_PACKAGES."
+      eend 1
+      bailout 13
+   else
+      ewarn "The following packages were requested for installation but could not be processed:"
+      cat $CHECKLOG/package_errors.log
+      eend 0
+   fi
 fi
 
 [ -n "$start_seconds" ] && SECONDS="$[$(cut -d . -f 1 /proc/uptime)-$start_seconds]" || SECONDS="unknown"
