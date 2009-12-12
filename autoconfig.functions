@@ -1501,6 +1501,56 @@ fi
 }
 # }}}
 
+# {{{ autostart of x11vnc
+config_vnc(){
+
+USER=grml # TODO: make it dynamically configurable
+if checkbootparam 'vnc' ; then
+   VNC_PASSWD=''
+   VNC_PASSWD="$(getbootparam 'vnc' 2>>$DEBUG)"
+   einfo "Bootoption vnc found, trying to set password for user $USER."
+   eindent
+   if [ -z "$VNC_PASSWD" ] ; then
+      if [ -x /usr/bin/apg ] ; then
+         VNC_PASSWD="$(apg -M NL -a 0 -m 8 -x 12 -n 1)"
+      elif [ -x /usr/bin/gpw ] ; then
+         VNC_PASSWD="$(gpw 1)"
+      elif [ -x /usr/bin/pwgen ] ; then
+         VNC_PASSWD="$(pwgen -1 8)"
+      elif [ -x /usr/bin/hexdump ] ; then
+         VNC_PASSWD="$(dd if=/dev/urandom bs=14 count=1 2>/dev/null | hexdump | awk '{print $3 $4}')"
+      elif [ -n "$RANDOM" ] ; then
+         VNC_PASSWD="${USER}${RANDOM}"
+      else
+         VNC_PASSWD=''
+         eerror "Empty passphrase and neither pwgen nor hexdump nor \$RANDOM found. Skipping."
+         eend 1
+      fi
+
+      if [ -n "$VNC_PASSWD" ] ; then
+         ewarn "No given password for vnc found. Using random password: $VNC_PASSWD" ; eend 0
+      fi
+   fi
+   eoutdent
+
+   # finally check if we have a password we can use:
+   if [ -n "$VNC_PASSWD" ] ; then
+
+      VNCDIR="/home/${USER}/.vnc"
+      [ -d "$VNCDIR" ] || mkdir "$VNCDIR"
+
+      if [ ! -x /usr/bin/x11vnc ] ; then
+         eerror "Error: x11vnc not found - can not set up vnc. Please make sure to install the x11vnc package."
+         eend 1
+      else
+         /usr/bin/x11vnc -storepasswd "$VNC_PASSWD" "$VNCDIR"/passwd ; eend $?
+         /bin/chown -R "$USER": "$VNCDIR"
+      fi
+   fi
+fi
+}
+# }}}
+
 # {{{ set password for user grml
 config_passwd(){
 if checkbootparam 'passwd' >>$DEBUG 2>&1; then
