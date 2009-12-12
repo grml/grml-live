@@ -22,6 +22,7 @@ grml-live (0.9.33) UNRELEASED; urgency=low
     - Add iscsitarget-module-2.6.31-grml64 to GRML_FULL.
     - Add nbd-server + nbd-client to GRML_FULL (thanks to Xuân Baldauf).
     - Drop (unavailable) at76-usb-modules-2.6.31-grml from GRML_MEDIUM.
+    - Drop lomoco from GRML_FULL (bad state, unnecessary).
     * GRML* classes:
       - drop grml-scanpartitions
       - add grml-udev-config
