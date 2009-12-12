@@ -1,3 +1,10 @@
+grml-etc (1.1.30) unstable; urgency=low
+
+  * /etc/skel/.xinitrc: Add support for VNC. Thanks to formorer
+    for the patch. [Closes: issue781]
+
+ -- Michael Prokop <mika@grml.org>  Sat, 12 Dec 2009 13:18:51 +0100
+
 grml-etc (1.1.29) unstable; urgency=low
 
   * Update /etc/runlevel.conf.livecd* to support grml-udev-config.

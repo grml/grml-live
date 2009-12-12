@@ -70,6 +70,12 @@
 # start browser with startpage.html, but only in live-cd mode
   [ -r /etc/grml_cd ] && grml-info &
 
+# if the vnc bootoption sets up the password let's start the vnc server
+  if [ -e $HOME/.vnc/passwd ]; then
+     /usr/bin/x11vnc -bg -forever -noxdamage -o $HOME/.vnc/x11vnc.log -rfbauth \
+                     $HOME/.vnc/passwd -auth $HOME/.Xauthority -display $DISPLAY
+  fi
+
 # default entry, use e.g. 'grml-x windowmanager' for changing or just adjust manually
   exec /usr/bin/x-window-manager
 
