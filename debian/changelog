@@ -1,3 +1,13 @@
+grml-autoconfig (0.9.2) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * Run config_config before config_scripts. [Closes: issue776]
+
+  [ Michael Prokop ]
+  * Add VNC support. Based on code by formorer, thanks! [Testing: issue781]
+
+ -- Michael Prokop <mika@grml.org>  Sat, 12 Dec 2009 11:37:03 +0100
+
 grml-autoconfig (0.9.1) unstable; urgency=low
 
   * Use lang=en as default (instead of lang=us). [Closes: issue760]
