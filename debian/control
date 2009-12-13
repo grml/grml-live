@@ -27,3 +27,13 @@ Description: templates/boot/addons for grml-live
  This package provides the boot addons known as the features
  providing bootoptions bsd, dos, grub and hdt. You can safely
  skip this package if you don't need the addons.
+
+Package: grml-live-db
+Architecture: all
+Depends: ${misc:Depends}, grml-live, libdbd-sqlite3-perl, libdbi-perl, libtimedate-perl, sqlite3
+Recommends: perl-doc
+Description: log package build information of grml-live to database
+ This package provides a database layer for storing build
+ information about grml-live builds in a sqlite3 database.
+ More details are available in the provided grml-live-db manpage
+ and /usr/share/doc/grml-live-db/grml-live-db.html
