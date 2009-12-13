@@ -21,6 +21,10 @@ grml-live (0.9.33) UNRELEASED; urgency=low
   * Support configuration variable EXIT_ON_MISSING_PACKAGES to exit
     with returncode != 0 if a requested package isn't available on the
     resulting ISO.
+  * Drop memtest86+ from Depends as it's shipped by grml-live-addons
+    nowadays (see issue717). Instead be more verbose in the warning
+    message if neither the one from grml-live-addons nor memtest86+
+    can be found.
   * Software related changes:
     - Add iscsitarget-module-2.6.31-grml64 to GRML_FULL.
     - Add nbd-server + nbd-client to GRML_FULL (thanks to Xuân Baldauf).
@@ -42,7 +46,7 @@ grml-live (0.9.33) UNRELEASED; urgency=low
   [ Thorsten Glaser ]
   * Update MirOS bsd4grml to 20091115.
 
- -- Michael Prokop <mika@grml.org>  Sun, 13 Dec 2009 14:25:05 +0100
+ -- Michael Prokop <mika@grml.org>  Sun, 13 Dec 2009 23:15:30 +0100
 
 grml-live (0.9.32) unstable; urgency=low
 
