@@ -68,7 +68,6 @@ grml-desktop
 grml-files
 grml-laptop
 grml-live
-grml-mercurial-utils
 grml-pylib
 grml-sectools
 grml-small
