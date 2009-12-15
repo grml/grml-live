@@ -72,6 +72,7 @@ CONFIG_DISCOVER='no'          # use discover for hardware detection
 CONFIG_DISTCC='yes'           # activate and setup distcc through bootparam distcc=$NETWORK,$INTERFACE
 CONFIG_DISTRI='yes'           # support some customization via bootoption distri
 CONFIG_DMA='yes'              # Enable DMA for all IDE drives
+CONFIG_DMRAID='yes'           # support for dmraid
 CONFIG_EXTRACT='yes'          # specify which (only in combination with bootparam myconfig/netconfig useful)
 CONFIG_FAST='yes'             # skip startup of w3m on tty1
 CONFIG_FINDDCSDIR='yes'       # search for a debs, config, scripts directory
