@@ -1,3 +1,9 @@
+grml-autoconfig (0.9.3) unstable; urgency=low
+
+  * Add support for dmraid.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 15 Dec 2009 17:02:29 +0100
+
 grml-autoconfig (0.9.2) unstable; urgency=low
 
   [ Ulrich Dangel ]
