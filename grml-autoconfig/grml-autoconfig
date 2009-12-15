@@ -135,6 +135,8 @@ checkvalue $CONFIG_ENVIRONMENT && config_environment
 
 checkvalue $CONFIG_SWRAID && config_swraid
 
+checkvalue $CONFIG_DMRAID && config_dmraid
+
 checkvalue $CONFIG_LVM && config_lvm
 
 # No kernel messages while probing modules

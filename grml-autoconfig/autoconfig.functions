@@ -2341,9 +2341,10 @@ fi
 
 # {{{ SW-RAID
 config_swraid(){
-  if [ -z "$INSTALLED" ] ; then
+  [ -n "$INSTALLED" ] && return 0
+
   # notice: checkbootparam "forensic" is just for users who don't know how to really use the bootoption
-  if checkbootparam 'noraid'   || checkbootparam 'noswraid' -o \
+  if checkbootparam 'noraid'   || checkbootparam 'noswraid' || \
      checkbootparam 'forensic' || checkbootparam 'raid=noautodetect' ; then
      ewarn "Skipping SW-RAID code as requested on boot commandline." ; eend 0
   else
@@ -2404,14 +2405,79 @@ config_swraid(){
 
      fi # is /sbin/mdadm executable?
   fi # check for bootoptions
-  fi # run only in live-cd mode
+}
+# }}}
+
+# {{{ dmraid
+config_dmraid(){
+  [ -n "$INSTALLED" ] && return 0
+
+  if checkbootparam 'nodmraid' ; then
+    ewarn "Skipping dmraid code as requested on boot commandline." ; eend 0
+    return 0
+  fi
+
+  if ! [ -x /sbin/dmraid ] ; then
+    eerror "dmraid not available, can not execute it." ; eend 1
+    return
+  fi
+
+  dmraid_wrapper() {
+    # usage: dmraid_wrapper <dmraid_option>
+    [ -n "$1" ] || return 1
+
+    IFSOLD=${IFS:-}
+    IFS='
+'
+    eindent
+
+    for line in $(dmraid $1 ; echo errcode:$?); do
+      case $line in
+        *'no raid disks'*)
+          einfo "No active dmraid devices found" ; eend 0
+          break
+          ;;
+        errcode:0)
+          eend 0;
+          ;;
+        errcode:1)
+          eend 1
+          ;;
+        *)
+          einfo "$line"
+          ;;
+      esac
+    done
+
+    eoutdent
+    IFS=$IFSOLD
+  }
+
+  if checkbootparam 'dmraid' ; then
+    local ACTION="$(getbootparam 'dmraid' 2>>$DEBUG)"
+    if [ "$ACTION" = "off" ] ; then
+      # Deactivates all active software RAID sets:
+      einfo "Deactivating present dmraid sets (as requested via dmraid=off):"
+      dmraid_wrapper -an
+    else
+      # Activate all software RAID sets discovered:
+      einfo "Activating present dmraid sets (as requested via dmraid):"
+      dmraid_wrapper -ay
+    fi
+
+    return
+  fi
+
+  # by default (no special bootoptions) discover all software RAID devices:
+  einfo "Searching for any present dmraid sets:"
+  dmraid_wrapper -r
 }
 # }}}
 
 # {{{ LVM (Logical Volumes)
 config_lvm(){
-  if [ -z "$INSTALLED" ] ; then
-  # notice: checkbootparam "forensic" is just for users who don't know how to really use the bootoption
+  [ -n "$INSTALLED" ] && return 0
+
   if checkbootparam 'nolvm' ; then
      ewarn "Skipping LVM code as requested on boot commandline." ; eend 0
   else
@@ -2432,7 +2498,6 @@ config_lvm(){
        fi
     fi # check for lvm binary
   fi # check for bootoption nolvm
-  fi # run only in live-cd mode
 }
 # }}}
 
