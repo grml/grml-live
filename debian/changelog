@@ -26,6 +26,7 @@ grml-live (0.9.33) UNRELEASED; urgency=low
     message if neither the one from grml-live-addons nor memtest86+
     can be found.
   * Software related changes:
+    - Add iptraf to GRML_MEDIUM (thanks, thermoman).
     - Add iscsitarget-module-2.6.31-grml64 to GRML_FULL.
     - Add kexec-tools to GRML_SMALL and GRML_MEDIUM (thanks,
       Christoph Biedl).
@@ -48,7 +49,7 @@ grml-live (0.9.33) UNRELEASED; urgency=low
   [ Thorsten Glaser ]
   * Update MirOS bsd4grml to 20091115.
 
- -- Michael Prokop <mika@grml.org>  Wed, 23 Dec 2009 23:34:12 +0100
+ -- Michael Prokop <mika@grml.org>  Wed, 23 Dec 2009 23:37:01 +0100
 
 grml-live (0.9.32) unstable; urgency=low
 

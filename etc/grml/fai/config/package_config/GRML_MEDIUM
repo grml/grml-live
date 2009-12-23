@@ -80,6 +80,7 @@ ifplugd
 ifupdown
 inetutils-inetd
 iproute
+iptraf
 iptstate
 iputils-ping
 ipw-firmware
