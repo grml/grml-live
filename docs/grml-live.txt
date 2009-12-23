@@ -759,7 +759,8 @@ description to <mika@grml.org>:
 
   # history | grep grml-live > /etc/grml/grml_live.cmdline
   # tar zcf grml_live_problem.tar.gz /etc/grml/grml-live.conf \
-            /etc/grml/grml-buildd.conf /var/log/fai /etc/grml/fai
+            /etc/grml/grml_live.cmdline /etc/grml/grml-buildd.conf \
+            /var/log/fai /etc/grml/fai
   -> finally mail grml_live_problem.tar.gz to <mika@grml.org>
 
 If you need help with grml-live or would like to see new features as part of
