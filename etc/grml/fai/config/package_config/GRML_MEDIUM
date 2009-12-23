@@ -87,6 +87,7 @@ irqbalance
 jed
 jed-common
 jfsutils
+kexec-tools
 keychain
 knockd
 latencytop

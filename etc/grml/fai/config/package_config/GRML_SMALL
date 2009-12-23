@@ -58,6 +58,7 @@ ipw-firmware
 jed
 jed-common
 jfsutils
+kexec-tools
 keychain
 knockd
 less
