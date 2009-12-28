@@ -1,0 +1,46 @@
+#!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/37-portmap
+# Purpose:       configure portmap of live-system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
+[ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
+
+# Work around a bug in the portmap package, see
+# http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=317358
+
+CONFFILE="$target/etc/default/portmap"
+
+if [ -r "$CONFFILE" ] ; then
+ # modify it iff we have portmap's default configuration
+ if grep -q '^OPTIONS="-i 127.0.0.1"' "$CONFFILE" ; then
+   # disable the "-i 127.0.0.1" configuration so it works e.g. with
+   # grml-terminalserver OOTB:
+   printf "Removing loopback-interface-only option (workaround #317358) in /etc/default/portmap: "
+   sed -i 's/^OPTIONS.*/# OPTIONS="-i 127.0.0.1"/' "$CONFFILE" && echo OK || echo ERROR
+ fi
+else # no /etc/default/portmap available yet:
+ printf "Building fresh /etc/default/portmap configuration file."
+ cat > "$CONFFILE" << EOF
+# Portmap configuration file
+#
+# Note: if you manually edit this configuration file,
+# portmap configuration scripts will avoid modifying it
+# (for example, by running 'dpkg-reconfigure portmap').
+
+# If you want portmap to listen only to the loopback
+# interface, uncomment the following line (it will be
+# uncommented automatically if you configure this
+# through debconf).
+# OPTIONS="-i 127.0.0.1"
+EOF
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
