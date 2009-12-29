@@ -12,4 +12,4 @@ oneTimeSetUp() {
 
 
 SHUNIT_PARENT=$1
-. ./shunit2
+. /usr/share/shunit2//shunit2
