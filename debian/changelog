@@ -1,4 +1,4 @@
-grml-live (0.9.33) UNRELEASED; urgency=low
+grml-live (0.9.33) unstable; urgency=low
 
   [ Michael Prokop ]
   * Switch order of mirror configuration in example config.
@@ -6,7 +6,7 @@ grml-live (0.9.33) UNRELEASED; urgency=low
   * Write current date to last output line of grml-live so the user
     knows how "old" his build is while sitting at the shell prompt.
   * Integrate /etc/grml/fai/config/scripts/GRMLBASE/01-packages
-    which is meant to be used as package installation validator.
+    as package installation validator.
   * Update sources.list handling:
     - Disable deb-src by default in sources.list. People usually
       won't need this and the ones that want it know how to enable
@@ -17,7 +17,7 @@ grml-live (0.9.33) UNRELEASED; urgency=low
   * Use /sbin/mount.ntfs-3g as default handler for ntfs. Thanks
     for bringing this issue up, Richard Hartmann.
   * templates/boot/grub/menu.lst: drop bootoption lang=us, we
-    specify the default within grml-autoconfig.
+    specify the default within grml-autoconfig nowadays.
   * Support configuration variable EXIT_ON_MISSING_PACKAGES to exit
     with returncode != 0 if a requested package isn't available on the
     resulting ISO.
@@ -26,36 +26,40 @@ grml-live (0.9.33) UNRELEASED; urgency=low
     message if neither the one from grml-live-addons nor memtest86+
     can be found.
   * Software related changes:
-    - Add fsarchiver to GRML_FULL.
-    - Add gdisk to GRML_FULL.
-    - Add infiniband-diags to GRML_FULL.
-    - Add iptraf to GRML_MEDIUM (thanks, thermoman).
-    - Add iscsitarget-module-2.6.31-grml64 to GRML_FULL.
-    - Add kexec-tools to GRML_SMALL and GRML_MEDIUM (thanks,
-      Christoph Biedl).
-    - Add mbuffer to GRML_FULL.
-    - Add modem-cmd to GRML_FULL.
-    - Add nbd-server + nbd-client to GRML_FULL (thanks to Xuân Baldauf).
-    - Drop (unavailable) at76-usb-modules-2.6.31-grml from GRML_MEDIUM.
-    - Drop dvi2tty from GRML_FULL (so we don't pull tex-common and
-      texlive-binaries into the system).
-    - Drop fakechroot from GRML_FULL and GRML_FORENSIC (the package
-      is in a bad shape since several month).
-    - Drop grml-mercurial-utils from GRML_FULL and GRML_MEDIUM as we
-      use git nowadays.
-    - Drop lomoco from GRML_FULL (bad state, unnecessary).
-    - Add lcrack to GRML_FORENSIC.
-    * GRML* classes:
-      - drop grml-scanpartitions
-      - add grml-udev-config
-      - move all grml-* packages that used to be part of all Grml
-        flavours to GRMLBASE and drop them from the flavour specific
-        configuration instead
+    - Main GRML* classes:
+      + add grml-udev-config (we use Debian's udev from now on and
+        provide our own udev stuff through grml-udev-config)
+      + drop grml-scanpartitions
+      + move all grml-* packages that used to be part of all Grml
+        flavours to GRMLBASE and drop them from the flavour
+        specific configuration instead
+    - GRML_FULL:
+      + Add fsarchiver
+      + Add gdisk
+      + Add infiniband-diags
+      + Add iscsitarget-module-2.6.31-grml64
+      + Add mbuffer
+      + Add modem-cmd
+      + Add nbd-server + nbd-client (thanks to Xuân Baldauf).
+      + Drop dvi2tty (so we don't pull tex-common and texlive-binaries
+        into the system).
+      + Drop lomoco (bad state, unnecessary)
+    - GRML_MEDIUM:
+      + Add iptraf (thanks, thermoman)
+      + Drop (unavailable) at76-usb-modules-2.6.31-grml
+    - Mixed:
+      + Add kexec-tools to GRML_SMALL + GRML_MEDIUM (thanks,
+        Christoph Biedl)
+      + Add lcrack to GRML_FORENSIC
+      + Drop fakechroot from GRML_FULL + GRML_FORENSIC (the package is
+        in a bad shape since several months)
+      + Drop grml-mercurial-utils from GRML_FULL and GRML_MEDIUM as
+        we use git nowadays
 
   [ Thorsten Glaser ]
   * Update MirOS bsd4grml to 20091226.
 
- -- Michael Prokop <mika@grml.org>  Wed, 30 Dec 2009 02:20:10 +0100
+ -- Michael Prokop <mika@grml.org>  Wed, 30 Dec 2009 02:34:38 +0100
 
 grml-live (0.9.32) unstable; urgency=low
 
