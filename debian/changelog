@@ -43,6 +43,7 @@ grml-live (0.9.33) UNRELEASED; urgency=low
     - Drop grml-mercurial-utils from GRML_FULL and GRML_MEDIUM as we
       use git nowadays.
     - Drop lomoco from GRML_FULL (bad state, unnecessary).
+    - Add lcrack to GRML_FORENSIC.
     * GRML* classes:
       - drop grml-scanpartitions
       - add grml-udev-config
@@ -53,7 +54,7 @@ grml-live (0.9.33) UNRELEASED; urgency=low
   [ Thorsten Glaser ]
   * Update MirOS bsd4grml to 20091226.
 
- -- Michael Prokop <mika@grml.org>  Wed, 30 Dec 2009 02:11:41 +0100
+ -- Michael Prokop <mika@grml.org>  Wed, 30 Dec 2009 02:18:18 +0100
 
 grml-live (0.9.32) unstable; urgency=low
 
