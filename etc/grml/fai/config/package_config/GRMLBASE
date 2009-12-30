@@ -54,6 +54,7 @@ pciutils
 resolvconf
 rsync
 rsyslog
+scsiadd
 strace
 usbutils
 wireless-tools

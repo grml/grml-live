@@ -150,7 +150,6 @@ resolvconf
 rsync
 rungetty
 screen
-scsiadd
 scsitools
 sed
 ser2net

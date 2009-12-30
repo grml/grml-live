@@ -111,7 +111,6 @@ resolvconf
 rsync
 rungetty
 screen
-scsiadd
 sed
 ser2net
 setserial
