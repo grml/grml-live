@@ -989,6 +989,7 @@ mlocate
 mmv
 moc
 modconf
+modem-cmd
 module-assistant
 module-init-tools
 molly-guard
