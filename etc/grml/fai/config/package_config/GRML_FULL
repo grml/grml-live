@@ -955,6 +955,7 @@ mbmon
 mboxcheck
 mboxgrep
 mbr
+mbuffer
 mc
 mcabber
 mcelog
