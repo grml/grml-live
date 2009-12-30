@@ -1,3 +1,9 @@
+grml-live (0.9.34) UNRELEASED; urgency=low
+
+  * No changelog entries yet, will be inserted by git-dch.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 30 Dec 2009 02:57:38 +0100
+
 grml-live (0.9.33) unstable; urgency=low
 
   [ Michael Prokop ]
