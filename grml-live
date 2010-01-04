@@ -442,7 +442,7 @@ if echo $CLASSES | grep -qi i386 ; then
    if ! [[ "$ARCH" == "i386" ]] ; then
       log    "Error: You specified the I386 class but are trying to build something else (AMD64?)."
       eerror "Error: You specified the I386 class but are trying to build something else (AMD64?)."
-      eerror "Tip:   Either invoke grml-live with '-i i386' or adjust the architecture class. Exiting."
+      eerror "Tip:   Either invoke grml-live with '-a i386' or adjust the architecture class. Exiting."
       eend 1
       bailout
    fi
@@ -450,7 +450,7 @@ elif echo $CLASSES | grep -qi amd64 ; then
    if ! [[ "$ARCH" == "amd64" ]] ; then
       log    "Error: You specified the AMD64 class but are trying to build something else (I386?)."
       eerror "Error: You specified the AMD64 class but are trying to build something else (I386?)."
-      eerror "Tip:   Either invoke grml-live with '-i amd64' or adjust the architecture class. Exiting."
+      eerror "Tip:   Either invoke grml-live with '-a amd64' or adjust the architecture class. Exiting."
       eend 1
       bailout
    fi
