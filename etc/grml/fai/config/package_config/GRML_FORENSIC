@@ -18,7 +18,6 @@ aesfix
 aeskeyfind
 afflib
 autopsy
-bios-memimage
 bkhive
 chaosreader
 chkrootkit
@@ -460,6 +459,7 @@ stressapptest
 
 # Packages which aren't (official) available (yet):
 # air            =>
+# bios-memimage  => #495422 (WIP, was rejected once)
 # bmap           =>
 # carvefs        =>
 # dc3dd          => #468958
