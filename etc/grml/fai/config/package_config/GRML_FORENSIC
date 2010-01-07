@@ -205,7 +205,6 @@ ascii2binary
 asciidoc
 at
 attr
-aufs-tools
 autoconf
 automake
 autopsy
@@ -468,7 +467,6 @@ stressapptest
 # ftimes         => #468940
 # libcarvpath    =>
 # libguytools    => #479016
-# photorec       =>
 # pyflag         =>
 # recoverphotos  =>
 # regviewer      =>
