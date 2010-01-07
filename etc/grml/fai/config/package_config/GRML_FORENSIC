@@ -117,7 +117,6 @@ cpufrequtils
 dc
 dvd+rw-tools
 os-prober
-readahead
 rpm
 sdparm
 sg3-utils
