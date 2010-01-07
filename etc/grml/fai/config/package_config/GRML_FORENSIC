@@ -36,7 +36,6 @@ dsniff
 ewf-tools
 ext3grep
 extract
-fatback
 fdupes
 fdutils
 foremost
@@ -464,6 +463,7 @@ stressapptest
 # carvefs        =>
 # dc3dd          => #468958
 # e2recover      =>
+# fatback        => #512483 (WIP, was rejected once)
 # ftimes         => #468940
 # libcarvpath    =>
 # libguytools    => #479016
