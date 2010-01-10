@@ -12,7 +12,7 @@ PACKAGES aptitude
 # http://wiki.debian.org/DebianForensics/TODO
 # http://qa.debian.org/developer.php?login=forensics-devel@lists.alioth.debian.org
 
-# forensic software:
+# forensic [related] software:
 acl
 aesfix
 aeskeyfind
@@ -144,6 +144,7 @@ wvdial
 
 # desktop
 # lxde wicd
+grml-x
 
 # packages from grml:
 3ware-cli-binary
@@ -154,7 +155,6 @@ cmospwd
 dd-rhelp
 dupmerge
 dupseek
-dynamic-disk
 ext3rminator
 gatling
 gifshuffle
@@ -166,7 +166,6 @@ pspax
 ptfinder
 rainbowcrack
 rootsh
-salvage-ntfs
 smap
 sudosh
 zfs-fuse
@@ -443,6 +442,9 @@ lcrack
 ldapscripts
 ldap-utils
 ldapvi
+locales
+
+notification-daemon
 
 openvas-client
 openvas-plugins-base
@@ -450,6 +452,8 @@ openvas-plugins-dfsg
 openvas-server
 
 stressapptest
+
+vim
 
 # TODO
 # * pdftk
