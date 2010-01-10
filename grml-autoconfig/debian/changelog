@@ -1,3 +1,10 @@
+grml-autoconfig (0.9.4) unstable; urgency=low
+
+  * If there's no lang=... bootoption present default to lang=en (except
+    for grml-small).
+
+ -- Michael Prokop <mika@grml.org>  Sun, 10 Jan 2010 21:41:24 +0100
+
 grml-autoconfig (0.9.3) unstable; urgency=low
 
   * Add support for dmraid.

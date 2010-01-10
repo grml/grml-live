@@ -222,13 +222,14 @@ config_language(){
     [ -n "$LANGUAGE" ] || LANGUAGE='en'
  fi
 
- # if bootoption lang is used update /etc/default/locale, otherwise *not*!
- if [ -n "$BOOT_LANGUAGE" -a -x /usr/sbin/grml-setlang ] ; then
-    if checkgrmlsmall ; then
-       /usr/sbin/grml-setlang "POSIX"
-    else
-       /usr/sbin/grml-setlang "$LANGUAGE"
-    fi
+ if [ -x /usr/sbin/grml-setlang ] ; then
+   # if bootoption lang is used update /etc/default/locale accordingly
+   if [ -n "$BOOT_LANGUAGE" ] ; then
+     checkgrmlsmall && /usr/sbin/grml-setlang "POSIX" || /usr/sbin/grml-setlang "$LANGUAGE"
+   # otherwise default to lang=en
+   else
+     checkgrmlsmall && /usr/sbin/grml-setlang "POSIX" || /usr/sbin/grml-setlang "en"
+   fi
  fi
 
  # set console font
