@@ -65,7 +65,6 @@ icmp-mtu
 icmp-quench
 icmp-reset
 ipw-firmware
-lame
 lcdtest
 libacme-bleach-perl
 libacme-eyedrops-perl
