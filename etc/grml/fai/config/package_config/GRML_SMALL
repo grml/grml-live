@@ -1,5 +1,6 @@
 PACKAGES aptitude
 
+acpi-support-base
 adduser
 agrep
 apt
