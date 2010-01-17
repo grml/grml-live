@@ -966,7 +966,6 @@ else
       eerror "|-> Make sure to install either squashfs-tools and/or squashfs-lzma-tools."
       eerror "\`-> Visit http://grml.org/grml-live/#current_state for further details."
       eend 1
-      package
       bailout
    fi
 
