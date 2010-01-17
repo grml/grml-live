@@ -544,16 +544,16 @@ ZLIB compression. Just use the defaults for enabling LZMA or use grml-live's
 Please use squashfs-lzma-tools >=4.0-2 from Grml if you want to remaster any
 grml release being MORE RECENT than 2009.05.
 
-Using squashfs-tools 1:4.0-1 on the build system
+Using squashfs-tools 1:4.0-X on the build system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-squashfs-tools 1:4.0-1 is available in Debian/unstable and Debian/testing. It
+squashfs-tools >=1:4.0-1 is available in Debian/unstable and Debian/testing. It
 provides the mksquashfs and unsquashfs binaries. The package does NOT
 conflict with the squashfs-lzma-tools 4.0-2 package (you can install both of
 them at the same time).
 
 The packages can be downloaded from
-link:ftp://ftp.de.debian.org/debian/pool/main/s/squashfs/[ftp://ftp.de.debian.org/debian/pool/main/s/squashfs/]
+link:ftp://ftp.de.debian.org/debian/pool/main/s/squashfs-tools/[ftp://ftp.de.debian.org/debian/pool/main/s/squashfs-tools/]
 
 It provides support for the new squashfs file format version 4 and therefore
 requires kernel versions newer than 2.6.28-grml[64].
@@ -567,7 +567,7 @@ Grml's squashfs-lzma-tools (see section above) instead.
 * Kernel 2.6.31-grml[64]: works
 
 [NOTE]
-Please use squashfs-tools 1:4.0-1 only if you want to remaster grml releases
+Please use squashfs-tools >=1:4.0-1 only if you want to remaster grml releases
 MORE RECENT than 2009.05 using the ZLIB compression.
 
 Using squashfs-lzma-tools 3.3-1 on the build system
