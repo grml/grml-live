@@ -452,6 +452,7 @@ openvas-server
 
 stressapptest
 
+ufsutils
 vim
 
 # TODO
