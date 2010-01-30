@@ -23,7 +23,7 @@ fi
 set -e
 
 # global variables
-GRML_LIVE_VERSION='0.9.34-pre1'
+GRML_LIVE_VERSION='0.9.34'
 PN="$(basename $0)"
 CMDLINE="$0 $@"
 SOURCES_LIST_FILE='/etc/grml/fai/apt/sources.list'
@@ -288,34 +288,13 @@ ISO_OUTPUT="$OUTPUT/grml_isos"
 [ -n "$RELEASENAME" ] && export RELEASENAME="$RELEASENAME"
 # }}}
 
-# clean/zero grml-live logfile {{{
-
-# keep for backwards compability reasons (default behaviour until grml-live 0.9.34)
-if [ -n "$ZERO_LOGFILE" -a -z "$PRESERVE_LOGFILE" ] ; then
-  echo -n > $LOGFILE
-  einfo "Zeroing logfile $LOGFILE as requested via \$ZERO_LOGFILE."
-  ewarn "Please consider disabling the \$ZERO_LOGFILE option as grml-live clears..."
-  ewarn "... the logfile $LOGFILE by default (unless \$PRESERVE_LOGFILE is set) nowadays."
-  eend 0
-fi
-
-if [ -n "$PRESERVE_LOGFILE" ] ; then
-  echo "Preserving logfile $LOGFILE as requested via \$PRESERVE_LOGFILE"
-else
-  echo -n > $LOGFILE
-fi
-# }}}
-
-# clean/zero/remove old FAI directory {{{
-if [ -n "$ZERO_FAI_LOGFILE" ] ; then
-   if [ -d /var/log/fai/"$HOSTNAME" ] ; then
-      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last)"
-      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last-dirinstall)"
-      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last-softupdate)"
-      rm -f /var/log/fai/"$HOSTNAME"/last \
-            /var/log/fai/"$HOSTNAME"/last-dirinstall \
-            /var/log/fai/"$HOSTNAME"/last-softupdate
-   fi
+# ZERO_LOGFILE - check for backwards compability reasons {{{
+# this was default behaviour until grml-live 0.9.34:
+if [ -n "$ZERO_LOGFILE" ] ; then
+   PRESERVE_LOGFILE='' # make sure it's cleaned then
+   ewarn "Please consider disabling the \$ZERO_LOGFILE option as grml-live clears..."
+   ewarn "... the logfile $LOGFILE by default (unless \$PRESERVE_LOGFILE is set) nowadays."
+   eend 0
 fi
 # }}}
 
@@ -358,7 +337,30 @@ if [ -z "$FORCE" ] ; then
    fi
    echo
 fi
+# }}}
 
+# clean/zero/remove logfiles {{{
+
+if [ -n "$PRESERVE_LOGFILE" ] ; then
+   echo "Preserving logfile $LOGFILE as requested via \$PRESERVE_LOGFILE"
+else
+   # make sure it is empty (as it is e.g. appended to grml-live-db)
+   echo -n > $LOGFILE
+fi
+
+if [ -n "$ZERO_FAI_LOGFILE" ] ; then
+   if [ -d /var/log/fai/"$HOSTNAME" ] ; then
+      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last)"
+      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last-dirinstall)"
+      rm -rf /var/log/fai/"$HOSTNAME"/"$(readlink /var/log/fai/"$HOSTNAME"/last-softupdate)"
+      rm -f /var/log/fai/"$HOSTNAME"/last \
+            /var/log/fai/"$HOSTNAME"/last-dirinstall \
+            /var/log/fai/"$HOSTNAME"/last-softupdate
+   fi
+fi
+# }}}
+
+# source config and startup {{{
 if [ -n "$CONFIG" ] ; then
    if ! [ -f "$CONFIG" ] ; then
       log    "Error: $CONFIG could not be read. Exiting. [$(date)]"
