@@ -288,7 +288,7 @@ ISO_OUTPUT="$OUTPUT/grml_isos"
 [ -n "$RELEASENAME" ] && export RELEASENAME="$RELEASENAME"
 # }}}
 
-# ZERO_LOGFILE - check for backwards compability reasons {{{
+# ZERO_LOGFILE - check for backwards compatibility reasons {{{
 # this was default behaviour until grml-live 0.9.34:
 if [ -n "$ZERO_LOGFILE" ] ; then
    PRESERVE_LOGFILE='' # make sure it's cleaned then
@@ -898,7 +898,7 @@ else
          bailout
       fi
    else # no $SQUASHFS_BINARY configured, let's find the according binary:
-      # Note: this is ALL for backward compability and yes: it's serious PITA.
+      # Note: this is ALL for backward compatibility and yes: it's serious PITA.
       # We'll definitely drop this once people build >2.6.28-grml* only and
       # the squashfs-tools vs. squashfs-lzma-tools + zlib vs. lzma situation
       # is settling...
@@ -913,7 +913,7 @@ else
          else # neither -nolzma nor -z and mksquashfs-lzma is available:
             SQUASHFS_BINARY='mksquashfs-lzma'
 
-            # backwards compability: someone has squashfs-lzma-tools >=4 installed but
+            # backwards compatibility: someone has squashfs-lzma-tools >=4 installed but
             # 1) doesn't use -nolzma in $SQUASHFS_OPTIONS or the grml-live's -z option *and*
             # 2) builds against kernel version <=2.6.28-grml[64]
             if ls $CHROOT_OUTPUT/boot/vmlinuz* >/dev/null 2>&1 ; then

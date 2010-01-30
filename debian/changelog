@@ -1,8 +1,33 @@
-grml-live (0.9.34) UNRELEASED; urgency=low
+grml-live (0.9.34) unstable; urgency=low
 
-  * No changelog entries yet, will be inserted by git-dch.
+  * Add scripts/GRMLBASE/38-udev to get rid of automatically generated
+    udev rules file.
+  * Fix architecture option in error message (-a instead of -i).
+  * Add ia32-libs [amd64] to Depends to make sure building i386 on amd64
+    works OOTB.
+  * Use $TEMPLATE_DIRECTORY for checking for precense of bsd4grml.
+  * Drop keyword package from squashfs binary exit code.
+  * Update docs regarding squashfs-tools 1:4.0-1.
+  * Support for logging to database via grml-live-db.
+    Thanks to formorer for his work on dpkg-to-db.
+  * Changed logic of ZERO_LOGFILE to PRESERVE_LOGFILE (though integrated
+    a backwared compatibility layer so existing installations still continue
+    to work) and clear logs after prompting for execution.
 
- -- Michael Prokop <mika@grml.org>  Wed, 30 Dec 2009 02:57:38 +0100
+  * Software related changes:
+    - Add acpi-support-base to GRML_SMALL [Closes: issue791]
+    - Add netsniff-ng to GRML_FULL (thanks Daniel Borkmann).
+    - Add ufsutils to GRML{SMALL,MEDIUM,FULL} [thanks, chaitat].
+    - Drop aufs-tools from GRML_FULL (deprecated, see #555638).
+    - Drop firescope from GRML_FULL - it is unmaintained upstream.
+    - Drop package config file GRML_FORENSIC as it is developed and
+      maintained as part of Grml-Forensic nowadays.
+    - Move scsiadd from GRML_* to GRMLBASE.
+    - Remove dynamic-disk from GRML_FULL (unmaintained upstream).
+    - Remove lame from GRML_FULL (not available from official Debian pool).
+    - Remove salvage-ntfs from GRML_FULL (unmaintained upstream).
+
+ -- Michael Prokop <mika@grml.org>  Sat, 30 Jan 2010 19:56:32 +0100
 
 grml-live (0.9.33) unstable; urgency=low
 

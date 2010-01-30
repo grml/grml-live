@@ -13,7 +13,7 @@ grml-live (0.9.34) unstable; urgency=low
     grml-live-db can work straight out-of-the-box. If you still want to
     preserve your logfiles (e.g. when you don't want to use
     grml-live-db) just enable the PRESERVE_LOGFILE option in your
-    grml-live configuration file.  For backwards compability reasons the
+    grml-live configuration file.  For backwards compatibility reasons the
     ZERO_LOGFILE variable is still supported within grml-live but it's
     strongly recommended to adjust configuration.
 
