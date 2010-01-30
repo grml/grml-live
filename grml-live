@@ -289,10 +289,20 @@ ISO_OUTPUT="$OUTPUT/grml_isos"
 # }}}
 
 # clean/zero grml-live logfile {{{
+
+# keep for backwards compability reasons (default behaviour until grml-live 0.9.34)
+if [ -n "$ZERO_LOGFILE" -a -z "$PRESERVE_LOGFILE" ] ; then
+  echo -n > $LOGFILE
+  einfo "Zeroing logfile $LOGFILE as requested via \$ZERO_LOGFILE."
+  ewarn "Please consider disabling the \$ZERO_LOGFILE option as grml-live clears..."
+  ewarn "... the logfile $LOGFILE by default (unless \$PRESERVE_LOGFILE is set) nowadays."
+  eend 0
+fi
+
 if [ -n "$PRESERVE_LOGFILE" ] ; then
   echo "Preserving logfile $LOGFILE as requested via \$PRESERVE_LOGFILE"
 else
-   echo -n > $LOGFILE
+  echo -n > $LOGFILE
 fi
 # }}}
 

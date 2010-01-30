@@ -432,16 +432,19 @@ live-initramfs(8).
 Available log files
 -------------------
 
-grml-live itself logs to /var/log/grml-live.log. Unless you set ZERO_LOGFILE in
-/etc/grml/grml-live.conf the output is appended to the file. If you set the
-ZERO_LOGFILE configuration option the logfile will be truncated on each new
-invocation of grml-live.
+grml-live itself logs to /var/log/grml-live.log. Unless you set PRESERVE_LOGFILE
+in your grml-live configuration the file is cleared on each new invocation of
+grml-live.
 
 The FAI part of grml-live logs to /var/log/fai/$HOSTNAME/ - so the
 default being /var/log/fai/grml/.
 
 If you are using the grml-live buildd you will find the logs of the grml-live
 run at /var/log/grml-buildd.stdout and /var/log/grml-buildd.stderr.
+
+If you want to store build information in a database just install the
+grml-live-db Debian package. Further details available in the grml-live-db
+manpage.
 
 [[requirements]]
 Requirements for the build system
@@ -707,7 +710,7 @@ Instructions
   FAI_DEBOOTSTRAP="squeeze http://cdn.debian.net/debian/"
   ARCH="i386"
   CLASSES="GRMLBASE,GRML_MEDIUM,I386"
-  ZERO_LOGFILE='1'
+  # PRESERVE_LOGFILE='1'
   # ZERO_FAI_LOGFILE='1'
   GRML_LIVE_SOURCES="
   deb http://deb.grml.org/            grml-stable  main

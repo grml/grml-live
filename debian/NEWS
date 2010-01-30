@@ -1,3 +1,24 @@
+grml-live (0.9.34) unstable; urgency=low
+
+  * This version introduces an additional package named grml-live-db.
+    The grml-live-db Debian package provides a simple way to put build
+    information of grml-live into a database. By default you have to do
+    nothing but install grml-live-db and during each invocation of
+    grml-live you'll get an additional entry in the sqlite3 database
+    /var/log/grml-live.db. If you want to customize the database logging
+    check out the grml-live-db manpage.
+
+  * Instead of ZERO_LOGFILE a new variable titled PRESERVE_LOGFILE has
+    been introduced. By default grml-live cleans the build logfile so
+    grml-live-db can work straight out-of-the-box. If you still want to
+    preserve your logfiles (e.g. when you don't want to use
+    grml-live-db) just enable the PRESERVE_LOGFILE option in your
+    grml-live configuration file.  For backwards compability reasons the
+    ZERO_LOGFILE variable is still supported within grml-live but it's
+    strongly recommended to adjust configuration.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 30 Jan 2010 14:36:15 +0100
+
 grml-live (0.9.4) unstable; urgency=low
 
   * grml provides its own squashfs-tools again which support LZMA
