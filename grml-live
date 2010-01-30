@@ -1142,9 +1142,10 @@ if [ -d /usr/share/grml-live-db ] ; then
   DPKG_LIST="/var/log/fai/$HOSTNAME/last/dpkg.list" # the dpkg --list output of the chroot:
   [ -n "$DPKG_DATABASE" ]  || DPKG_DATABASE=/var/log/grml-live.db
   [ -n "$DPKG_DBSCRIPT" ]  || DPKG_DBSCRIPT=/usr/share/grml-live-db/scripts/dpkg-to-db
-  [ -n "$DPKG_DBOPTIONS" ] || DPKG_DBOPTIONS="-d $DPKG_DATABASE --logfile $LOGFILE --flavour $GRML_NAME < $DPKG_LIST"
+  [ -n "$DPKG_DBOPTIONS" ] || DPKG_DBOPTIONS="--database $DPKG_DATABASE --logfile $LOGFILE --flavour $GRML_NAME --dpkg $DPKG_LIST"
 
   if ! [ -x "$DPKG_DBSCRIPT" ] ; then
+    log "Error: $DPKG_DBSCRIPT is not executable, can not log dpkg information."
     eerror "Error: $DPKG_DBSCRIPT is not executable, can not log dpkg information." ; eend 1
     bailout 14
   fi
@@ -1156,10 +1157,13 @@ if [ -d /usr/share/grml-live-db ] ; then
   #fi
 
   if ! [ -r "$DPKG_LIST" ] ; then
+     log "Error reading $DPKG_LIST - can not provide information to $DPKG_DBSCRIPT"
      eerror "Error reading $DPKG_LIST - can not provide information to $DPKG_DBSCRIPT" ; eend 1
      bailout 14
   else
      einfo "Logging $DPKG_LIST to database $DPKG_DATABASE"
+     log "Logging $DPKG_LIST to database $DPKG_DATABASE"
+     log "Executing $DPKG_DBSCRIPT $DPKG_DBOPTIONS"
      eindent
 
      if DB_INFO=$("$DPKG_DBSCRIPT" $DPKG_DBOPTIONS 2>&1) ; then

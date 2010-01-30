@@ -7,7 +7,7 @@ grml-live-db - log package build information of grml-live to database
 
 Synopsis
 --------
-dpkg-to-db  [ options ] || db-to-fai /path/to/grml-live.db <build-id> |
+dpkg-to-db  [ options ] || db-to-fai /path/to/grml-live.db <build-id>
 
 Introduction
 ------------
@@ -22,9 +22,9 @@ Provided scripts
 ----------------
 
 /usr/share/grml-live-db/scripts/dpkg-to-db adds grml-live build information
-(output of 'dpkg --list') and (optionally) a logfile into a sqlite3 database.
-This script is used by default if grml-live-db is installed (no configuration
-needed by default).
+(output of 'dpkg --list') and a logfile into a sqlite3 database.  This script is
+used by default if grml-live-db is installed (no configuration needed by
+default).
 
 /usr/share/grml-live-db/scripts/db-to-fai converts output of grml-live's sqlite
 database for use within FAI. This script is useful if you want to reproduce a
@@ -34,15 +34,20 @@ according Debian mirrors providing all the specific package versions of course.
 Options
 -------
 
-dpkg-to-db supports the following options:
+dpkg-to-db supports the following options (and all except for --help
+are mandatory!):
 
   --help
 
-Brief help message.
+Print help message and exit.
 
-  --db <database>
+  --database <database>
 
 Use specified database file.
+
+  --dpkg <dpkgfile>
+
+Use specified dpkgfile as `dpkg --list` output file of grml-live build.
 
   --logfile <logfile>
 
@@ -52,8 +57,8 @@ Logfile thath should be added to the database entry.
 
 Name of the grml-live flavour that was being built.
 
-db-to-fai does not support any options but needs to be invoked
-with path to the grml-live database and the build id.
+The db-to-fai script does not support any options but needs to be invoked with
+path to the grml-live database and the build id.
 
 Configuration and using custom database wrapper scripts
 -------------------------------------------------------
@@ -63,7 +68,7 @@ The following configuration variables are available and can be adjusted:
   DPKG_DATABASE=/var/log/grml-live.db
 
 Path to the database file that should be used for storing the build information.
-This database is ysed within dpkg-to-db by default.
+This database is used within dpkg-to-db by default.
 
   DPKG_DBSCRIPT=/usr/share/grml-live-db/scripts/dpkg-to-db
 
@@ -71,23 +76,21 @@ The database wrapper script that's used for storing the build information.
 If you do not want to log to the sqlite3 database but instead use your own
 abstraction layer just point this variable to your favourite script.
 
-  DPKG_DBOPTIONS="-d $DPKG_DATABASE --logfile $LOGFILE --flavour $GRML_NAME < $DPKG_LIST"
+  DPKG_DBOPTIONS="--database $DPKG_DATABASE --logfile $LOGFILE --flavour $GRML_NAME --dpkg $DPKG_LIST"
 
 If the database script ($DPKG_DBSCRIPT) requires any command line options
-specifiy it through this variable.
+specify it through this variable.
 
 Usage Examples
 --------------
 
 How dpkg-to-db is being used inside grml-live:
 
-  /usr/share/grml-live-db/scripts/dpkg-to-db -d /var/log/grml-live.db --logfile /var/log/grml-live.log --flavour $GRML_NAME < /var/log/fai/$HOSTNAME/last/dpkg.list
+  /usr/share/grml-live-db/scripts/dpkg-to-db --database /var/log/grml-live.db --logfile /var/log/grml-live.log --flavour $GRML_NAME --dpkg /var/log/fai/$HOSTNAME/last/dpkg.list
 
 Manually insert data to database:
 
-  # /usr/share/grml-live-db/scripts/dpkg-to-db -d ./grml-live.db --logfile /tmp/logfile --flavour grml-full < ./dpkg.list
-
-  # dpkg -l | ./dpkg-to-db --db ./grml-live.db --logfile /tmp/logfile --flavour grml-full
+  # /usr/share/grml-live-db/scripts/dpkg-to-db --database ./grml-live.db --logfile /tmp/logfile --flavour grml-full --dpkg ./dpkg.list
 
 Retrieve build information of a specific build for use within FAI:
 
@@ -97,7 +100,7 @@ Describe schema of database:
 
   # echo '.schema' | sqlite3 /var/log/grml-live.db
 
-Query database:
+Database queries:
 
   # echo 'SELECT package,version,status,build.flavour,build.identifier FROM packages, build WHERE build.identifier = "grml-full-20091213012517" AND packages.build = build.id ; ' | sqlite3 /var/log/grml-live.db
 

@@ -18,26 +18,29 @@ use DBI;
 use Date::Format;
 
 
-my ($db, $logfile, $flavour, $help);
+my ($db, $logfile, $flavour, $help, $dpkgfile);
 my $rc = GetOptions (
-		'db|d=s' => \$db,
-		'logfile|l=s' => \$logfile,
-		'flavour|f=s' => \$flavour,
-		'help|h' => \$help,
+		'database|db=s' => \$db,
+		'dpkg|d=s'      => \$dpkgfile,
+		'logfile|l=s'   => \$logfile,
+		'flavour|f=s'   => \$flavour,
+		'help|h'        => \$help,
 	);
 
 pod2usage(1) if $help;
 
-pod2usage(-message => "$0: Need a sqlite database.\n") unless $db;
-pod2usage(-message => "$0: Need a logfile to insert.\n") unless $logfile;
-pod2usage(-message => "$0: Need the flavour information\n") unless $flavour;
+pod2usage(-message => "$0: Need a sqlite database through --database ....\n") unless $db;
+pod2usage(-message => "$0: Need a logfile to insert through --database ...\n") unless $logfile;
+pod2usage(-message => "$0: Need the flavour information through --flavour ...\n") unless $flavour;
+pod2usage(-message => "$0: Need the dpkg file through --dpkg ...\n") unless $dpkgfile;
+
+open (my $fh, '<', $logfile) or die "Could not open $logfile: $!";
+open (my $dpkg_handle, '<', $dpkgfile) or die "Could not open $dpkgfile: $!";
 
 my $dbh = DBI->connect("dbi:SQLite:dbname=$db","","") or die "Could not connect to database: " . $DBI::err;
 
 # We use foreign key - beware this needs sqlite > 3.6.19
 $dbh->do("PRAGMA foreign_keys = ON");
-
-open (my $fh, '<', $logfile) or die "Could not open $logfile: $!";
 
 # read content of log file - please do not try this at home :)
 my $log = do { local $/; <$fh> };
@@ -90,7 +93,7 @@ die "No id?" unless $id;
 $sth = $dbh->prepare("INSERT into packages (package, status, version, build) VALUES (?,?,?,?)")
 	or die "Could not prepare db statement: " . $dbh->errstr;
 
-while (my $line = <>) {
+while (my $line = <$dpkg_handle>) {
 	next unless $line =~ /^[a-z]{2} /;
 	# remove new lines
 	my ($status, $package, $version, $desc) = split (/\s+/, $line, 4);
@@ -112,28 +115,38 @@ dpkg-to-db - add grml build information into a sqlite database
 
 =head1 SYNOPSIS
 
-dpkg-to-db [options]
-
-  Options:
-   --help            	brief help message
-   --db <database>	database file
-   --logfile <logfile>  logfile which should be added
-   --flavour <flavour>  which flavour the build is
+dpkg-to-db <options>
 
 =head1 OPTIONS
 
 =over 8
 
-=item B<-help>
+=item B<--help>
 
 Print a brief help message and exits.
+
+=item B<--database <database>>
+
+Database file.
+
+=item B<--dpkg <dpkglist>>
+
+`dpkg --list` output file of grml-live build.
+
+=item B<--logfile <logfile>>
+
+Logfile which should be added.
+
+=item B<--flavour <flavour>>
+
+Name of the grml-flavour the build is.
 
 =back
 
 =head1 DESCRIPTION
 
-B<dpkg-to-db> will read the given input file(s) which holds output of
-`dpkg --list' and writes the information to the specified database.
+B<dpkg-to-db> will read the given input file(s) and stores the
+information to the specified database.
 
 =head1 USAGE EXAMPLES
 
