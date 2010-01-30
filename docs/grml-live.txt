@@ -290,9 +290,6 @@ defining a grml system. Important parts of the buildprocess are specified in
 this class as well, so unless you have a really good reason you should always
 use this class.
 
-* GRML_FORENSIC: tools for forensic investigations which has been created
-by people from link:http://www.forensic-geeks.org/[forensic-geeks.org].
-
 * GRML_FULL: full featured grml, also known as the "normal", full grml.
 
 * GRML_MEDIUM: medium sized grml version, known as grml-medium
