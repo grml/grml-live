@@ -14,11 +14,9 @@ USERNAME=''
 [ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
 [ -n "$USERNAME" ] || USERNAME=grml
 
-if [ -r /etc/grml/fai/files/etc/sudoers ] ; then
-   cp /etc/grml/fai/files/etc/sudoers $target/etc/sudoers
-   sed -i "s/\$USERNAME/$USERNAME/" $target/etc/sudoers
-   chmod 440 $target/etc/sudoers
-fi
+fcopy /etc/sudoers
+sed -i "s/\$USERNAME/$USERNAME/" $target/etc/sudoers
+chmod 440 $target/etc/sudoers
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

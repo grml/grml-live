@@ -83,28 +83,20 @@ EOF
 else # no softupdate but fresh installation
 
 # install all apt related files
-if [ -r /etc/grml/fai/files/etc/apt ] ; then
-   cp -a /etc/grml/fai/files/etc/apt/* $target/etc/apt/
-   # remove grml-live's sources.list file from chroot:
-   if [ -r $target/etc/apt/important_note.txt ] ; then
-      grep -q GRML_LIVE_SOURCES $target/etc/apt/important_note.txt && rm $target/etc/apt/important_note.txt
-   fi
+fcopy -r /etc/apt
+
+# remove grml-live's sources.list file from chroot:
+if [ -r $target/etc/apt/important_note.txt ] ; then
+   grep -q GRML_LIVE_SOURCES $target/etc/apt/important_note.txt && rm $target/etc/apt/important_note.txt
 fi
 
-# install all present (but at least the grml) gpg keys:
-if [ -r /etc/grml/fai/files/etc/apt/grml.key ] ; then
-   for file in /etc/grml/fai/files/etc/apt/*.key ; do
-      FILE="$(basename $file)"
-      # installed via 'cp -a /etc/grml/fai/files/etc/apt/* $target/etc/apt/' above already
-      # cp $file $target/etc/apt/"$FILE"
-      $ROOTCMD apt-key add /etc/apt/"$FILE"
-   done
-else
-   gpg --keyserver subkeys.pgp.net      --recv-keys F61E2E7CECDEA787 || \
-   gpg --keyserver blackhole.pca.dfn.de --recv-keys F61E2E7CECDEA787
-   gpg --export F61E2E7CECDEA787 > $target/etc/apt/grml.key
-   $ROOTCMD apt-key add /etc/apt/grml.key
-fi
+# install grml gpg key:
+fcopy /etc/apt/grml.key
+$ROOTCMD apt-key add /etc/apt/grml.key
+#   gpg --keyserver subkeys.pgp.net      --recv-keys F61E2E7CECDEA787 || \
+#   gpg --keyserver blackhole.pca.dfn.de --recv-keys F61E2E7CECDEA787
+#   gpg --export F61E2E7CECDEA787 > $target/etc/apt/grml.key
+#   $ROOTCMD apt-key add /etc/apt/grml.key
 
 # make sure the file exists
 [ -e $target/etc/apt/apt.conf ] || touch $target/etc/apt/apt.conf

@@ -9,9 +9,7 @@
 set -u
 set -e
 
-if [ -r /etc/grml/fai/files/etc/network/interfaces ] ; then
-   cp /etc/grml/fai/files/etc/network/interfaces $target/etc/network/interfaces
-fi
+fcopy /etc/network/interfaces
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

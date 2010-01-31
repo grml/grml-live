@@ -379,7 +379,7 @@ like to see included). Important: this file should *not* be adjusted manually!
 Instead use the GRML_LIVE_SOURCES variable inside /etc/grml/grml-live.conf or
 /etc/grml/grml-live.local which modifies /etc/grml/fai/apt/sources.list
 on-the-fly via grml-live then. If you want to generally adjust apt configuration
-check out /etc/grml/fai/files/etc/apt instead.
+use FAI's fcopy command with /etc/grml/fai/config/files instead.
 
   /etc/grml/fai/config/
 
@@ -416,12 +416,6 @@ reasonable package configuration.
   /etc/grml/fai/config/scripts/
 
 Scripts for customising the ISO within the build process.
-
-  /etc/grml/fai/files/
-
-This directory provides files used inside the scripts of
-/etc/grml/fai/config/scripts/*. For a full documentation what happens with the
-files please refer to the source of the scripts.
 
   /etc/grml/fai/live-initramfs/
 

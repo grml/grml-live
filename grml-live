@@ -392,7 +392,7 @@ if [ -n "$MIRROR_DIRECTORY" ] ; then
 # NOTE: This file is *NOT* meant for manual customisation! This file is
 # modified by grml-live and any changes might be overriden.
 # You might consider using GRML_LIVE_SOURCES in /etc/grml/grml-live.conf*
-# and using /etc/grml/fai/files/etc/apt instead!'
+# or FAI's fcopy command with /etc/grml/fai/config/files instead!
 EOF
    echo "$MIRROR_SOURCES" >> "$SOURCES_LIST_FILE"
    if [ -n "$GRML_LIVE_SOURCES" ] ; then
@@ -403,7 +403,7 @@ elif [ -n "$GRML_LIVE_SOURCES" ] ; then
 # NOTE: This file is *NOT* meant for manual customisation! This file is
 # modified by grml-live and any changes might be overriden.
 # You might consider using GRML_LIVE_SOURCES in /etc/grml/grml-live.conf*
-# and using /etc/grml/fai/files/etc/apt instead!'
+# or FAI's fcopy command with /etc/grml/fai/config/files instead!
 EOF
    echo "$GRML_LIVE_SOURCES" >> "$SOURCES_LIST_FILE"
 fi

@@ -14,9 +14,7 @@ HOSTNAME=''
 [ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 
-if [ -r /etc/grml/fai/files/etc/hosts ] ; then
-   cp /etc/grml/fai/files/etc/hosts $target/etc/hosts
-fi
+fcopy /etc/hosts
 
 # replace $HOSTNAME with the real hostname:
 sed -i "s/\$HOSTNAME/$HOSTNAME/" $target/etc/hosts
