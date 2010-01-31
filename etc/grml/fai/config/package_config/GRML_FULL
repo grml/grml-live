@@ -450,6 +450,7 @@ dictionaries-common
 dietlibc
 dietlibc-dev
 diffstat
+diffutils
 ding
 dir2ogg
 dirdiff
@@ -815,6 +816,7 @@ ispell
 isync
 itop
 ivtv-utils
+iw
 iwatch
 jack
 jackd

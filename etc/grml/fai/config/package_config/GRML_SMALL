@@ -34,6 +34,7 @@ debianutils
 deborphan
 dhcp3-client
 dialog
+diffutils
 dmraid
 dmsetup
 dosfstools
@@ -56,6 +57,7 @@ inetutils-inetd
 iproute
 iputils-ping
 ipw-firmware
+iw
 jed
 jed-common
 jfsutils

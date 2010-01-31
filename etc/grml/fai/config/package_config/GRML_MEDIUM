@@ -42,6 +42,7 @@ debootstrap
 deborphan
 dhcp3-client
 dialog
+diffutils
 dmraid
 dmsetup
 dns2tcp
@@ -85,6 +86,7 @@ iptstate
 iputils-ping
 ipw-firmware
 irqbalance
+iw
 jed
 jed-common
 jfsutils

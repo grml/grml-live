@@ -5,7 +5,6 @@ bzip2
 console-common
 cron
 deborphan
-diffutils
 dmidecode
 eject
 file
@@ -40,7 +39,6 @@ hostname
 hwinfo
 initramfs-tools
 initscripts
-iw
 klibc-utils
 laptop-detect
 less
