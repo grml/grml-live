@@ -13,7 +13,7 @@ die() {
 
 . /etc/grml/grml-buildd.conf || die "Could not source /etc/grml/grml-buildd.conf. Exiting."
 
-which mutt >/dev/null 2>&1 || die "mutt binary not found. Exiting."
+which nail >/dev/null 2>&1 || die "nail binary not found. Exiting."
 
 # exit if important variables aren't set:
 [ -n "$STORAGE" ]  || die "\$STORAGE is not set. Exiting."
@@ -26,9 +26,7 @@ which mutt >/dev/null 2>&1 || die "mutt binary not found. Exiting."
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11
 DATE=$(date +'%Y%m%d_%H%M%S')
 TMP_DIR="$(mktemp -d)"
-MUTT_HEADERS="$(mktemp)"
 [ -n "$TMP_DIR" ]      || die "Could not create \$TMP_DIR. Exiting."
-[ -n "$MUTT_HEADERS" ] || die "Could not create $\MUTT_HEADERS. Exiting."
 
 # make sure we have same safe defaults:
 [ -n "$OUTPUT_DIR" ]    || OUTPUT_DIR="${STORAGE}/grml-live_${DATE}.$$"
@@ -45,8 +43,6 @@ else
 fi
 
 [ -n "$FAI_LOGFILES" ]  || FAI_LOGFILES=/var/log/fai/grml/last
-
-echo "my_hdr From: grml-live autobuild daemon <$FROM>" > $MUTT_HEADERS
 
 # execute grml-live:
 grml_live_run() {
@@ -107,8 +103,6 @@ iso_details() {
 send_mail() {
   # create logs if using 'send_mail -e'
   [ "$1" = "-e" ] && create_logs
-  # attach logs only if we have some:
-  [ -r "$ATTACHMENT" ] && MUTT_ATTACH="-a $ATTACHMENT" || MUTT_ATTACH=''
 
   echo -en "Automatically generated mail by $SCRIPTNAME
 
@@ -139,8 +133,8 @@ $(grep -i "Couldn't find.*package" $FAI_LOGFILES/software.log | sed 's/\(.*\)"\(
 See attached files:
 /var/log/grml-buildd.stderr /var/log/grml-buildd.stdout $ATTACHMENT
 
-EOF " | \
-  mutt -s "$SCRIPTNAME [${DATE}] - $RC_INFO" -a /var/log/grml-buildd.stderr $MUTT_ATTACH "$RECIPIENT"
+EOF" | \
+  nail -r "grml-live autobuild daemon <$FROM>" -s "$SCRIPTNAME [${DATE}] - $RC_INFO" -a /var/log/grml-buildd.stderr $ATTACHMENT "$RECIPIENT"
 }
 
 # make sure we store the final iso:
@@ -160,9 +154,8 @@ store_iso() {
 # allow clean exit:
 bailout() {
   if [ "$RC" = "0" ] ; then
-     rm -rf "$TMP_DIR" "$MUTT_HEADERS" "$OUTPUT_DIR"
+     rm -rf "$TMP_DIR" "$OUTPUT_DIR"
   else
-     rm -f "$MUTT_HEADERS"
      echo "building ISO failed, keeping build files [${OUTPUT_DIR} / ${TMP_DIR}]">&2
   fi
 

@@ -1,5 +1,3 @@
-buildd/grml-buildd.conf     etc/grml/
-buildd/*.sh                 usr/share/grml-live/buildd/
 docs/grml-live.8            usr/share/man/man8/
 docs/grml-live-remaster.8   usr/share/man/man8/
 etc/grml                    etc

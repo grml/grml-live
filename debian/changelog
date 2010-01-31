@@ -1,3 +1,9 @@
+grml-live (0.9.35) UNRELEASED; urgency=low
+
+  * No entries yet, will be added when releasing via git-dch.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 31 Jan 2010 11:23:03 +0100
+
 grml-live (0.9.34) unstable; urgency=low
 
   * Add scripts/GRMLBASE/38-udev to get rid of automatically generated

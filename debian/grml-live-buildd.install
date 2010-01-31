@@ -1,0 +1,2 @@
+buildd/grml-buildd.conf     etc/grml/
+buildd/*.sh                 usr/share/grml-live/buildd/

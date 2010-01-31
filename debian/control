@@ -37,3 +37,12 @@ Description: log package build information of grml-live to database
  information about grml-live builds in a sqlite3 database.
  More details are available in the provided grml-live-db manpage
  and /usr/share/doc/grml-live-db/grml-live-db.html
+
+Package: grml-live-buildd
+Architecture: all
+Depends: ${misc:Depends}, grml-live, nail
+Description: autobuild daemon for grml-live
+ This package provides example scripts for a simple autobuild
+ daemon for the grml-live framework. Those scripts are used
+ for creating the official daily grml ISOs provided through
+ http://daily.grml.org/
