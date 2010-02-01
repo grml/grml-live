@@ -826,6 +826,15 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          sed -i "/%GRUB_LEGACY%/d" "$BUILD_OUTPUT"/boot/grub/grub.cfg
       fi
 
+      DPKG_LIST="/var/log/fai/$HOSTNAME/last/dpkg.list" # the dpkg --list output of the chroot
+      if ! [ -r "$DPKG_LIST" ] ; then
+         ewarn "$DPKG_LIST could not be read, ignoring to store package information on ISO therefore."
+      else
+         einfo "Storing package list information as /GRML/${GRML_NAME}-packages.txt on ISO."
+         cp "$DPKG_LIST" "${BUILD_OUTPUT}/GRML/${GRML_NAME}-packages.txt"
+         eend $?
+      fi
+
       # autostart for Windows:
       if [ -d "${TEMPLATE_DIRECTORY}/windows/autostart/" ] ; then
          cp ${TEMPLATE_DIRECTORY}/windows/autostart/* "$BUILD_OUTPUT"/
