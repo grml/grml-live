@@ -716,7 +716,9 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
       [ -n "$BOOTID" ] || BOOTID="$(echo ${GRML_NAME}${VERSION} | tr -d ',./;\- ')"
       [ -d "$BUILD_OUTPUT"/conf ] || mkdir "$BUILD_OUTPUT"/conf
+      einfo "Generating /conf/bootid.txt with entry ${BOOTID}."
       echo "$BOOTID" > "$BUILD_OUTPUT"/conf/bootid.txt
+      eend $?
 
       # adjust all variables in the templates with the according distribution information
       for file in "${BUILD_OUTPUT}"/boot/isolinux/*.cfg "${BUILD_OUTPUT}"/boot/isolinux/*.msg \

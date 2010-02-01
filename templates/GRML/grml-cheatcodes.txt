@@ -105,9 +105,9 @@ grml isofrom=/dev/sda1/grml.iso     Use specified ISO image for booting
                                     "boot=live isofrom=/dev/sda1/grml.iso"
                                     Notice: "fromiso" does the same as "isofrom", it's just there
                                     to prevent any typing errors
-grml findiso=/grml_2009.05.iso      Look for the specified ISO file on all disks where it usually
+grml findiso=/grml_2009.10.iso      Look for the specified ISO file on all disks where it usually
                                     looks for the .squashfs file (so you don't have to know the device name
-                                    as in isofrom=....). [Available since grml 2009.05]
+                                    as in isofrom=....). [Available since Grml 2009.05]
 grml live-media-path=live           Sets the path to the live filesystem on the medium
                                     By default, it is set to /live
 grml module=grml                    Instead of using the default "$name.module" another file can
@@ -115,11 +115,18 @@ grml module=grml                    Instead of using the default "$name.module" 
                                     on "/live" directory of the live medium
                                     Useful for Multiboot USB pen, see
                                     http://wiki.grml.org/doku.php?id=tips#multiboot_usb_pen
+grml bootid=mybootid                Use specified argument as identifier for the ISO.
+                                    [Note: only available in releases >2009.10]
+grml ignore_bootid                  Disable bootid verification.
+                                    [Note: only available in releases >2009.10]
+
 
 Debugging related settings:
 ---------------------------
-debug                               Get shells during process of booting, using GNU screen, most verbose
-grml debug                          Get shells during process of booting, using GNU screen, verbose
+debug                               Get shells during process of booting, using GNU screen, be very verbose
+grml debug                          Get shells during process of booting, using GNU screen, be verbose
+grml debug=1                        Get shells during process of booting, using GNU screen, be verbose and
+                                    display shell code being executed in initramfs.
 grml debug=noscreen                 Get shells during process of booting, verbose, but without using GNU screen
 grml nocolor                        Disable colorized output while booting
 grml log                            Log error messages while booting to /tmp/grml.log.`date +%Y%m%d`"
