@@ -593,7 +593,7 @@ CHECKLOG=/var/log/fai/$HOSTNAME/last
 # package validator
 if [ -r "$CHECKLOG/package_errors.log" ] && grep -q '[a-z]' "$CHECKLOG/package_errors.log" ; then
 
-   if [ -n "$EXIT_ON_MISSING_PACKAGES" ] ; then
+   if [ -n "$EXIT_ON_MISSING_PACKAGES" -a -z "$BUILD_DIRTY" ] ; then
       eerror "The following packages were requested for installation but could not be processed:"
       cat $CHECKLOG/package_errors.log
       eerror "... exiting as requested via \$EXIT_ON_MISSING_PACKAGES."
