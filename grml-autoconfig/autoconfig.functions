@@ -354,8 +354,9 @@ config_hostname(){
  if checkbootparam 'hostname' ; then
   HOSTNAME="$(getbootparam 'hostname' 2>>$DEBUG)"
   einfo "Setting hostname to $HOSTNAME as requested."
-  sed -i "s/^127.0.0.1.*localhost/127.0.0.1 $HOSTNAME localhost/" /etc/hosts
-  hostname $HOSTNAME ; eend $?
+  grml-hostname $HOSTNAME >>$DEBUG ; RC=$?
+  [ "$RC" = "0" ] && hostname $HOSTNAME
+  eend $RC
  else
   hostname --file /etc/hostname
  fi

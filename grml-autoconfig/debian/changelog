@@ -1,3 +1,10 @@
+grml-autoconfig (0.9.5) unstable; urgency=low
+
+  * Bootoption hostname: use grml-hostname to adjust configuration
+    files on the fly. [Closes: gf-issue33]
+
+ -- Michael Prokop <mika@grml.org>  Tue, 02 Feb 2010 14:33:09 +0100
+
 grml-autoconfig (0.9.4) unstable; urgency=low
 
   * If there's no lang=... bootoption present default to lang=en (except
