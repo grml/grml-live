@@ -714,11 +714,17 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       # make sure the squashfs filename is set accordingly:
       SQUASHFS_NAME="$GRML_NAME.squashfs"
 
-      [ -n "$BOOTID" ] || BOOTID="$(echo ${GRML_NAME}${VERSION} | tr -d ',./;\- ')"
-      [ -d "$BUILD_OUTPUT"/conf ] || mkdir "$BUILD_OUTPUT"/conf
-      einfo "Generating /conf/bootid.txt with entry ${BOOTID}."
-      echo "$BOOTID" > "$BUILD_OUTPUT"/conf/bootid.txt
-      eend $?
+      if [ -n "$NO_BOOTID" ] ; then
+         log   'Skipping bootid feature as requested via $NO_BOOTID.'
+         einfo 'Skipping bootid feature as requested via $NO_BOOTID.'
+      else
+         [ -n "$BOOTID" ] || BOOTID="$(echo ${GRML_NAME}${VERSION} | tr -d ',./;\- ')"
+         [ -d "$BUILD_OUTPUT"/conf ] || mkdir "$BUILD_OUTPUT"/conf
+         einfo "Generating /conf/bootid.txt with entry ${BOOTID}."
+         log   "Generating /conf/bootid.txt with entry ${BOOTID}."
+         echo "$BOOTID" > "$BUILD_OUTPUT"/conf/bootid.txt
+         eend $?
+      fi
 
       # adjust all variables in the templates with the according distribution information
       for file in "${BUILD_OUTPUT}"/boot/isolinux/*.cfg "${BUILD_OUTPUT}"/boot/isolinux/*.msg \
@@ -733,7 +739,11 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
         sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/g"    "${file}"
         sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
         sed -i "s/%VERSION%/$VERSION/g"              "${file}"
-        sed -i "s/%BOOTID%/$BOOTID/g"                "${file}"
+        if [ -n "$NO_BOOTID" ] ; then
+           sed -i "s/ bootid=%BOOTID%//g" "${file}" # drop bootid bootoption
+        else
+           sed -i "s/%BOOTID%/$BOOTID/g" "${file}" # adjust bootid=... bootoption
+        fi
       done
 
       # adjust bootsplash accordingly but make sure the string has the according lenght
