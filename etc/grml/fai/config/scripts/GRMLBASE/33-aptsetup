@@ -18,9 +18,13 @@ fi
 # remove leftover from /etc/grml/fai/config/hooks/instsoft.GRMLBASE:
 rm -f $target/etc/apt/sources.list.d/grml-live.list
 
-# restore original grml sources.list file:
+# restore original grml sources.list file (temporarly moved via
+# /etc/grml/fai/config/hooks/instsoft.GRMLBASE):
 if [ -r $target/etc/apt/sources.list.d/grml.unused ] ; then
    mv $target/etc/apt/sources.list.d/grml.unused $target/etc/apt/sources.list.d/grml.list
+fi
+if [ -r $target/etc/apt/sources.list.d/debian.unused ] ; then
+   mv $target/etc/apt/sources.list.d/debian.unused $target/etc/apt/sources.list.d/debian.list
 fi
 
 GRML_SOURCES_LIST="$target/etc/apt/sources.list.d/grml.list"

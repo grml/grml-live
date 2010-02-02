@@ -52,14 +52,24 @@ EOF
    fi
 
    # FAI softupdate executes upgrade only with the sources.list being
-   # present in the chroot :-/ - so let's do it on our own:
+   # present in the chroot - so let's do it on our own:
    if [ -r /etc/grml/fai/apt/sources.list ] ; then
       if [ -L $target/etc/apt/sources.list ] ; then
          rm $target/etc/apt/sources.list
       fi
+
+      # install grml-live's (on the fly adjusted) sources.list config
       cp /etc/grml/fai/apt/sources.list $target/etc/apt/sources.list.d/grml-live.list
+
+      # when re-running grml-live with the -u option we do not want to use the
+      # sources.list config of the live system but grml-live's config instead,
+      # therefore temporarly move known files and restore them again later on
+      # through /etc/grml/fai/config/scripts/GRMLBASE/33-aptsetup:
       if [ -r  $target/etc/apt/sources.list.d/grml.list ] ; then
          mv $target/etc/apt/sources.list.d/grml.list $target/etc/apt/sources.list.d/grml.unused
+      fi
+      if [ -r  $target/etc/apt/sources.list.d/debian.list ] ; then
+         mv $target/etc/apt/sources.list.d/debian.list $target/etc/apt/sources.list.d/debian.unused
       fi
    fi
 
