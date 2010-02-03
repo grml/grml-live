@@ -145,7 +145,7 @@ else
   done
 
   gauge "$MESSAGE8" &
-  dd if=/dev/urandom of="$DEVICE" bs=1M count="$AMOUNT" 1>/dev/null || { killgauge; sleep 2; bailout; }
+  dd if=/dev/urandom of="$DEVICE" bs=1M count="$AMOUNT" >/dev/null || { killgauge; sleep 2; bailout; }
   killgauge
 fi
 
@@ -154,7 +154,7 @@ gauge "$MESSAGE7" &
 umount "$DEVICE" 2>/dev/null
 
 # create filesystem
-mke2fs -F -m0 "$DEVICE" 1>/dev/null 2>"$TMP.err" || { killgauge; $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
+mke2fs -F -m0 "$DEVICE" >/dev/null 2>"$TMP.err" || { killgauge; $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
 
 # mount for synch
 LOOPOPT=""
