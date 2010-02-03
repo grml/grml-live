@@ -176,7 +176,7 @@ if checkbootparam 'log' || checkbootparam 'debug' ; then
    einfo "Bootparameter log found. Log files: ${DEBUG} and /var/log/boot"
    eindent
      einfo "Starting bootlogd." # known to be *very* unreliable :(
-     bootlogd -r -c 1>>$DEBUG 2>&1 ; eend $?
+     bootlogd -r -c >>$DEBUG 2>&1 ; eend $?
    eoutdent
 else
    DEBUG="/dev/null"
@@ -189,7 +189,7 @@ config_fwtimeout(){
  if checkbootparam 'fwtimeout' ; then
    TIMEOUT="$(getbootparam 'fwtimeout' 2>>$DEBUG)"
    einfo "Bootoption fwtimeout found. (Re)Loading firmware_class module."
-   rmmod firmware_class 1>>$DEBUG 2>&1
+   rmmod firmware_class >>$DEBUG 2>&1
    modprobe firmware_class ; eend $?
  fi
  if [ -z "$TIMEOUT" ] ; then
@@ -683,7 +683,7 @@ else
    eindent
    einfo "$(discover --data-path=linux/module/name --data-path=linux/modules/options --format="%s %s" --data-version=`uname -r` --enable-bus all | sort -u | xargs echo)"
    eoutdent
-  /sbin/discover-modprobe -v 1>>$DEBUG 2>&1 &
+  /sbin/discover-modprobe -v >>$DEBUG 2>&1 &
   eend 0
  else
   eerror "Application discover not available. Information: udev should handle hardware recognition." ; eend 0
@@ -740,11 +740,11 @@ if checkbootparam 'nohotplug' ; then
 else
   if [ -r /etc/init.d/hotplug ] ; then
     einfo "Starting hotplug system in background."
-    /etc/init.d/hotplug start 1>>$DEBUG 2>>$DEBUG &
+    /etc/init.d/hotplug start >>$DEBUG 2>>$DEBUG &
     eend 0
   elif [ -r /etc/init.d/hotplug-light ] ; then
     einfo "Starting hotplug-light system in background."
-    /etc/init.d/hotplug-light start 1>>$DEBUG 2>>$DEBUG &
+    /etc/init.d/hotplug-light start >>$DEBUG 2>>$DEBUG &
     eend 0
   else
     ewarn "No hotplug system found. Should be handled by udev. Skipping execution." ; eend 0
@@ -809,7 +809,7 @@ if [ -d /proc/acpi ]; then
     if ! ps x | grep -q /usr/sbin/acpid ; then
       if ! [ -r /var/run/dbus/pid ] ; then
         einfo "Starting acpi daemon."
-        /etc/init.d/acpid start 1>>$DEBUG 2>&1 ; eend $?
+        /etc/init.d/acpid start >>$DEBUG 2>&1 ; eend $?
       else
         eerror "acpid error: it seems you are running d-bus/hal, but acpid needs to be started before d-bus."
         eerror "Solution: please activate acpid via /etc/runlevel.conf"
@@ -1086,7 +1086,7 @@ done <<EOT
 $(awk 'BEGIN{old="__start"}{if($0==old){exit}else{old=$0;if($4&&$4!="name"){print $0}}}' /proc/partitions)
 EOT
 }
-check_partitions 1>/dev/null 2>&1 # avoid output "check_partitions:3: read-only file system"
+check_partitions >/dev/null 2>&1 # avoid output "check_partitions:3: read-only file system"
 # }}}
 
 # {{{ Enable DMA for all IDE drives now if not disabled
@@ -1421,7 +1421,7 @@ else
         . /usr/bin/cpufreq-detect.sh
         if [ -n "$MODULE" -a "$MODULE" != none ]; then
            einfo "Loading modules ${MODULE}"
-           modprobe "$MODULE" 1>>$DEBUG || modprobe "$MODULE_FALLBACK" 1>>$DEBUG
+           modprobe "$MODULE" >>$DEBUG || modprobe "$MODULE_FALLBACK" >>$DEBUG
            RC=$?
            if [[ $RC == 0 ]]; then
               eend 0
@@ -1493,8 +1493,8 @@ if checkbootparam 'ssh' ; then
    fi
 
    einfo 'Starting secure shell server in background.'
-   /etc/init.d/rmnologin start 1>>$DEBUG 2>>$DEBUG
-   /etc/init.d/ssh start 1>>$DEBUG 2>>$DEBUG &
+   /etc/init.d/rmnologin start >>$DEBUG 2>>$DEBUG
+   /etc/init.d/ssh start >>$DEBUG 2>>$DEBUG &
    eend $?
 
    eindent
@@ -1731,7 +1731,7 @@ fix_ibm_sound() {
  VOL=${1}
 
  if [ -x /usr/bin/amixer ] ; then
-    if amixer -q get Front 1>/dev/null 2>>$DEBUG ; then
+    if amixer -q get Front >/dev/null 2>>$DEBUG ; then
        amixer -q set Front unmute &>/dev/null
        amixer -q set Front ${VOL}% &>/dev/null
     fi
@@ -1830,7 +1830,7 @@ config_syslog(){
        eerror "No syslog daemon found." ; eend 1
     else
        einfo "Starting $SYSLOGD in background."
-       /etc/init.d/$SYSLOGD start 1>>$DEBUG &
+       /etc/init.d/$SYSLOGD start >>$DEBUG &
        eend 0
     fi
  fi
@@ -1846,8 +1846,8 @@ config_gpm(){
       eerror "No mouse found - not starting GPM." ; eend 1
    else
       einfo "Starting gpm in background."
-      /etc/init.d/gpm start 1>>$DEBUG &
-      # ( while [ ! -e /dev/psaux ]; do sleep 5; done; /etc/init.d/gpm start 1>>$DEBUG ) &
+      /etc/init.d/gpm start >>$DEBUG &
+      # ( while [ ! -e /dev/psaux ]; do sleep 5; done; /etc/init.d/gpm start >>$DEBUG ) &
       eend 0
    fi
  fi
@@ -1862,7 +1862,7 @@ config_services(){
     SERVICENL=$(echo "$SERVICE" | sed 's/,/ /g')
     einfo "Starting service(s) ${SERVICENL} in background."
     for service in $(echo -e $SERVICELIST) ; do
-       /etc/init.d/${service} start 1>>$DEBUG &
+       /etc/init.d/${service} start >>$DEBUG &
     done
     [ "$?" == "0" ] ; eend $?
  fi
@@ -1977,7 +1977,7 @@ if checkbootparam 'startx' && ! echo "$CMDLINE" | grep -q 'startx.*nostartx' ; t
  cat>|/etc/init.d/xstartup<<EOF
 #!/bin/sh
 # su - $fstabuser -c 'grml-x "$WINDOWMANAGER"'
-sudo -u $fstabuser -i /usr/bin/grml-x $WINDOWMANAGER 1>>$DEBUG
+sudo -u $fstabuser -i /usr/bin/grml-x $WINDOWMANAGER >>$DEBUG
 EOF
    chmod 755 /etc/init.d/xstartup
 
@@ -2043,8 +2043,8 @@ else
       # We do need the following fix so floppy disk is available to blkid in any case :-/
       if [ -r /dev/fd0 ] ; then
         einfo "Floppy device detected. Trying to access floppy disk."
-        if timeout 4 dd if=/dev/fd0 of=/dev/null bs=512 count=1 1>>$DEBUG 2>&1 ; then
-           blkid /dev/fd0 1>>$DEBUG 2>&1
+        if timeout 4 dd if=/dev/fd0 of=/dev/null bs=512 count=1 >>$DEBUG 2>&1 ; then
+           blkid /dev/fd0 >>$DEBUG 2>&1
         fi
       fi
       DCSDEVICE=$(blkid -t LABEL=GRMLCFG | head -1 | awk -F: '{print $1}')
@@ -2065,7 +2065,7 @@ else
         ewarn "$DCSDEVICE already mounted on $DCSDIR"; eend 0
       else
         [ -d $DCSMP ] || mkdir $DCSMP
-        umount $DCSMP 1>>$DEBUG 2>&1 # make sure it is not mounted
+        umount $DCSMP >>$DEBUG 2>&1 # make sure it is not mounted
         mount -o ro -t auto $DCSDEVICE  $DCSMP ; RC="$?"
         if [[ $RC == 0 ]]; then
           einfo "Successfully mounted $DCSDEVICE to $DCSMP (readonly)." ; eend 0
@@ -2249,7 +2249,7 @@ if checkbootparam 'distcc' ; then
     )
 
     einfo "Starting distcc for network ${NET}, listening on ${IP}."
-   /etc/init.d/distcc start 1>/dev/null ; eend $?
+   /etc/init.d/distcc start >/dev/null ; eend $?
    eoutdent
  else
    eerror "No ip address for $INTERFACE found. distcc can not be used without it." ; eend 1
@@ -2488,7 +2488,7 @@ config_lvm(){
     if ! [ -x /sbin/lvm -a -x /sbin/lvdisplay ] || ! [ -x /etc/init.d/lvm2 -o -x /etc/init.d/lvm ] ; then
        eerror "LVM not available, can not execute it." ; eend 1
     else
-       if lvdisplay 2>&1 | grep -v 'No volume groups found' 1>/dev/null 2>&1 ; then
+       if lvdisplay 2>&1 | grep -v 'No volume groups found' >/dev/null 2>&1 ; then
           einfo "You seem to have logical volumes (LVM) on your system."
           eindent
           einfo "Just run 'Start lvm2' to activate them or boot using 'lvm' as bootoption for autostart."
@@ -2514,7 +2514,7 @@ if checkbootparam 'debnet' ; then
 
  einfo "Bootoption 'debnet' found. Searching for Debian network configuration: "
  eindent
- if ! mount | grep '/mnt ' 1>/dev/null 2>&1 ; then
+ if ! mount | grep '/mnt ' >/dev/null 2>&1 ; then
     for i in $DEVICES; do
      if mount -o ro -t auto "$i" /mnt >/dev/null 2>&1; then
          einfo "Scanning on $i"
@@ -2529,8 +2529,8 @@ if checkbootparam 'debnet' ; then
 
    if [ -n "$FOUND_DEBNET" ]; then
      einfo "Stopping network."
-       pump -k 1>/dev/null 2>&1
-       /etc/init.d/networking stop 1>/dev/null 2>&1 ; eend $?
+       pump -k >/dev/null 2>&1
+       /etc/init.d/networking stop >/dev/null 2>&1 ; eend $?
      einfo "Copying Debian network configuration from $FOUND_DEBNET to running system."
        rm -rf /etc/network/run
        cp -a /mnt/etc/network /etc
