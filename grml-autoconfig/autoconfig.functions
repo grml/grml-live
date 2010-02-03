@@ -2436,6 +2436,10 @@ config_dmraid(){
 
     for line in $(dmraid $1 ; echo errcode:$?); do
       case $line in
+        *'no block devices found'*)
+          einfo "No block devices found" ; eend 0
+          break
+          ;;
         *'no raid disks'*)
           einfo "No active dmraid devices found" ; eend 0
           break
