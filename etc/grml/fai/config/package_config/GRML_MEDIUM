@@ -105,7 +105,6 @@ login
 logrotate
 lrzsz
 lsof
-lvm2
 makedev
 mawk
 mbr
