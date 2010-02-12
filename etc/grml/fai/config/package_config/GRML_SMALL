@@ -76,7 +76,6 @@ lsof
 makedev
 mawk
 mbr
-mdadm
 memtester
 mgetty
 module-init-tools
