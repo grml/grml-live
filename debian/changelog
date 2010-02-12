@@ -2,8 +2,9 @@ grml-etc (1.1.31) unstable; urgency=low
 
   * /etc/skel/.Xmodmap: disable Terminate_Server function [thanks
     for hint, gebi]
+  * Bump Standards-Version to 3.8.4 (no further changes).
 
- -- Michael Prokop <mika@grml.org>  Fri, 12 Feb 2010 01:10:37 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 12 Feb 2010 01:11:20 +0100
 
 grml-etc (1.1.30) unstable; urgency=low
 
