@@ -45,6 +45,7 @@ less
 live-initramfs
 lvm2
 mdadm
+module-init-tools
 nfs-common
 openssh-client
 openssh-server
