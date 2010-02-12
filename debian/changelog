@@ -2,9 +2,11 @@ grml-etc (1.1.31) unstable; urgency=low
 
   * /etc/skel/.Xmodmap: disable Terminate_Server function [thanks
     for hint, gebi]
+  * /etc/init.d/ssh: synchronise with Debian's version and use
+    log_action_msg for status info when generating ssh keys.
   * Bump Standards-Version to 3.8.4 (no further changes).
 
- -- Michael Prokop <mika@grml.org>  Fri, 12 Feb 2010 01:11:20 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 12 Feb 2010 01:26:57 +0100
 
 grml-etc (1.1.30) unstable; urgency=low
 
