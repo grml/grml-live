@@ -21,6 +21,7 @@ grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-misc
 grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-reboot force-reload
 grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-reboot restart
 grml-etc: init.d-script-does-not-implement-required-option /etc/init.d/grml-reboot start
+grml-etc: init.d-script-does-not-provide-itself /etc/init.d/ssh
 grml-etc: init.d-script-missing-lsb-section /etc/init.d/bootsplash_end.sh
 grml-etc: init.d-script-missing-lsb-section /etc/init.d/bootsplash_start.sh
 grml-etc: init.d-script-missing-lsb-section /etc/init.d/firewall
@@ -28,6 +29,7 @@ grml-etc: init.d-script-missing-lsb-section /etc/init.d/grml-halt
 grml-etc: init.d-script-missing-lsb-section /etc/init.d/grml-home
 grml-etc: init.d-script-missing-lsb-section /etc/init.d/grml-misc
 grml-etc: init.d-script-missing-lsb-section /etc/init.d/grml-reboot
+grml-etc: init.d-script-possible-missing-stop /etc/init.d/ssh 0 6
 grml-etc: non-standard-file-perm etc/mgetty/login.config 0600 != 0644
 grml-etc: package-installs-into-etc-rc.d etc/rc0.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc1.d/important_notice
@@ -37,7 +39,7 @@ grml-etc: package-installs-into-etc-rc.d etc/rc4.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc5.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc6.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rcS.d/important_notice
-grml-etc: script-calls-init-script-directly ./etc/init.d/grml-reboot:221
+grml-etc: script-calls-init-script-directly ./etc/init.d/grml-reboot:222
 grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/bootsplash_end.sh
 grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/bootsplash_start.sh
 grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d /etc/init.d/firewall
