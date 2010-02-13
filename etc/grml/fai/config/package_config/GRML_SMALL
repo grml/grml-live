@@ -14,15 +14,11 @@ bridge-utils
 bsdmainutils
 bsdutils
 buffer
-busybox
-bzip2
 chntpw
-console-common
 console-terminus
 console-tools
 coreutils
 cpio
-cron
 cryptsetup
 dante-client
 dash
@@ -31,7 +27,6 @@ ddrescue
 debconf
 debconf-i18n
 debianutils
-deborphan
 dhcp3-client
 dialog
 diffutils
@@ -44,7 +39,6 @@ e2fsprogs
 e3
 ed
 ethtool
-file
 findutils
 fnord
 # fuse-utils
@@ -64,10 +58,8 @@ jfsutils
 kexec-tools
 keychain
 knockd
-less
 lilo
 links
-live-initramfs
 lockfile-progs
 login
 logrotate
@@ -86,16 +78,12 @@ ncftp
 netbase
 netcat
 net-tools
-nfs-common
 ntfsprogs
 ntpdate
 # nvi -> see #490361
-openssh-client
-openssh-server
 parted
 passwd
 patch
-pciutils
 portmap
 ppp
 # pppoeconf
@@ -106,8 +94,6 @@ psmisc
 pump
 readline-common
 reiserfsprogs
-resolvconf
-rsync
 rungetty
 screen
 sed
@@ -117,7 +103,6 @@ sharutils
 smartmontools
 socket
 statserial
-strace
 sudo
 symlinks
 syslinux
@@ -134,7 +119,6 @@ udev
 ufsutils
 unp
 unzip
-usbutils
 update-inetd
 util-linux
 vlan
@@ -142,8 +126,6 @@ vlock
 wget
 whiptail
 wipe
-wireless-tools
-wpasupplicant
 xfsprogs
 zip
 zoo

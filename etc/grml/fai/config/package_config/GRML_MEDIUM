@@ -20,15 +20,11 @@ bridge-utils
 bsdmainutils
 bsdutils
 buffer
-busybox
-bzip2
 chntpw
-console-common
 console-terminus
 console-tools
 coreutils
 cpio
-cron
 cryptsetup
 dante-client
 dash
@@ -39,7 +35,6 @@ debconf-i18n
 debconf-utils
 debianutils
 debootstrap
-deborphan
 dhcp3-client
 dialog
 diffutils
@@ -55,7 +50,6 @@ e3
 ed
 eterm
 ethtool
-file
 findutils
 firmware-iwlwifi
 firmware-ralink
@@ -94,10 +88,8 @@ kexec-tools
 keychain
 knockd
 latencytop
-less
 lilo
 links2
-live-initramfs
 localepurge
 locales
 lockfile-progs
@@ -120,17 +112,13 @@ ncftp
 netbase
 netcat
 net-tools
-nfs-common
 nfs-kernel-server
 ntfs-3g
 ntfsprogs
 ntpdate
 nvi
-openssh-client
-openssh-server
 passwd
 patch
-pciutils
 pcmciautils
 portmap
 postfix
@@ -144,8 +132,6 @@ psmisc
 pump
 readline-common
 reiserfsprogs
-resolvconf
-rsync
 rungetty
 screen
 scsitools
@@ -157,7 +143,6 @@ smartmontools
 socket
 sshfs
 statserial
-strace
 sudo
 symlinks
 syslinux
@@ -175,7 +160,6 @@ ufsutils
 unp
 unzip
 update-inetd
-usbutils
 util-linux
 vim
 vlan
@@ -183,8 +167,6 @@ vlock
 wget
 whiptail
 wipe
-wireless-tools
-wpasupplicant
 xcursor-themes
 xfonts-100dpi
 xfonts-75dpi
