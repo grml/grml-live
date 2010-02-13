@@ -1,3 +1,21 @@
+grml-live (0.9.35) unstable; urgency=low
+
+  * The files from /etc/grml/fai/files have been moved to
+    /etc/grml/fai/config/files (and as a consequence
+    /etc/grml/fai/live-initramfs has been moved to
+    /etc/grml/fai/config/ as well). This is an important step
+    to use the config space and class concept of FAI in a more
+    decent and clean way. It allows much better customization. 
+    
+    Please notice: If you didn't modify anything inside
+    /etc/grml/fai/files you can safely remove the directory.
+    Otherwise please check out the structure of the new
+    /etc/grml/fai/config/files layout and the fcopy command
+    used in /etc/grml/fai/config/scripts/GRMLBASE/* scripts to
+    incoorporate your changes.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 13 Feb 2010 01:35:43 +0100
+
 grml-live (0.9.34) unstable; urgency=low
 
   * This version introduces an additional package named grml-live-db.

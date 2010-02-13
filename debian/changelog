@@ -1,8 +1,37 @@
-grml-live (0.9.35) UNRELEASED; urgency=low
+grml-live (0.9.35) unstable; urgency=low
 
-  * No entries yet, will be added when releasing via git-dch.
+  * New features / major changes:
+    - Moved /etc/grml/fai/files to /etc/grml/fai/config/files (and 
+      /etc/grml/fai/live-initramfs to /etc/grml/fai/config/). This is
+      an important step to use the config space and class concept of
+      FAI in a more decent and cleaner way. Further details in NEWS
+      file. Thanks to Henning Sprang for the initial hint.
+    - Provide buildd as separate Debian package grml-live-buildd.
+    - Store package list on ISO. [Closes: issue779] [Closes: issue749]
+    - Support conf/bootid.txt and use bootoption bootfrom=removable by
+      default.
+    - Support NO_BOOTID to disable the new bootid feature.
+    - Support DEFAULT_BOOTOPTIONS via configuration file.
+  * Bugfixes / minor changes:
+    - buildd: use nail instead of mutt for sending mails as recent
+      versions of mutt introduced a major breakage (see #539276).
+    - scripts/GRMLBASE/38-udev: check for presence of config file.
+    - Ignore $EXIT_ON_MISSING_PACKAGES if running a dirty build
+      through -B.
+    - Make sure to use sources.list of grml-live, even on updates
+      through -u option. [Closes: issue803]
+  * Software related changes:
+    - Drop all packages from GRML_* classes that are defined in
+      GRMLBASE already.
+    - Drop aufs-tools from GRML_MEDIUM.
+    - Drop lvm2 from GRML_* classes at it is in GRMLBASE.
+    - Drop mdadm from GRML_* classes as it is in GRMLBASE.
+    - Move diffutils + iw from GRMLBASE to GRML_* classes.
+    - Move mgetty from GRML_* classes to GRMLBASE.
+    - Move module-init-tools from GRML_* classes to GRMLBASE.
+  * Debian packaging: Bump Standards-Version to 3.8.4.
 
- -- Michael Prokop <mika@grml.org>  Sun, 31 Jan 2010 11:23:03 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 13 Feb 2010 01:08:57 +0100
 
 grml-live (0.9.34) unstable; urgency=low
 
