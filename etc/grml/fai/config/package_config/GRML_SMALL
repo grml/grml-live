@@ -43,6 +43,7 @@ findutils
 fnord
 # fuse-utils
 # grml-small
+grml-quickconfig-standard
 guessnet
 htop
 ifplugd

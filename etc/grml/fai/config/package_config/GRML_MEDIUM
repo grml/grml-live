@@ -64,6 +64,7 @@ grml-files
 grml-laptop
 grml-live
 grml-pylib
+grml-quickconfig-standard
 grml-sectools
 grml-small
 grml-templates

@@ -53,6 +53,7 @@ grml-laptop
 grml-live
 grml-paste
 grml-pylib
+grml-quickconfig-standard
 grml-sectools
 grml-templates
 grml-terminalserver
