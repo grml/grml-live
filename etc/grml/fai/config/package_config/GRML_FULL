@@ -321,6 +321,7 @@ cfv
 cgdb
 check
 chkrootkit
+chntpw
 chrootuid
 clamav
 clamav-base
@@ -1852,7 +1853,6 @@ abs-guide
 agrep
 atmel-firmware
 bluez-firmware
-chntpw
 dvdrtools
 figlet
 firmware-iwlwifi
@@ -1861,12 +1861,9 @@ firmware-ralink
 iozone3
 irpas
 lha
-# lmbench
 manpages-posix
 netperf
-# nttcp
 python-profiler
-rar
 sl-modem-daemon
 unrar
 zd1211-firmware
