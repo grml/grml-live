@@ -1,0 +1,21 @@
+#!/bin/sh
+# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/39-modprobe
+# Purpose:       adjust modprobe configuration
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
+[ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
+
+# Make sure all modprobe configuration files use .conf as filename suffix.
+# See http://bugs.debian.org/cgi-bin/pkgreport.cgi?pkg=module-init-tools;dist=unstable
+# and http://blog.bofh.it/debian/id_236
+find $target/etc/modprobe.d -maxdepth 1 -type f ! -name \*\.conf -exec mv {} {}.conf \;
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
