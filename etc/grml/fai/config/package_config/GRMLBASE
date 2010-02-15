@@ -25,6 +25,7 @@ grml-etc-core
 grml-hwinfo
 grml-network
 grml-policyrcd
+grml-quickconfig
 grml-rebuildfstab
 grml-scripts
 grml-shlib
