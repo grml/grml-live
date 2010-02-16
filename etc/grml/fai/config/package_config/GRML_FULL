@@ -16,7 +16,6 @@ PACKAGES aptitude
 ## }}}
 
 ## grml specific packages {{{
-3ware-cli-binary
 aamath
 advchk
 aesutil
