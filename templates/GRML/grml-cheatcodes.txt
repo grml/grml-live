@@ -300,7 +300,7 @@ as option to mkisofs. Otherwise your CD won't be bootable. The
 directory live, containing the squashfs compressed filesystem file,
 must be located in the top level directory of the CD.
 
-*) Caution: screensavers: Don't start xlock/vlock or any other screensaver
+*) Caution: screensavers: Don't start vlock or any screensaver
 that requires a password. There are no default passwords on grml,
 i.e. all accounts are LOCKED unless you explicitly set a password.
 See also README.txt about this issue.
