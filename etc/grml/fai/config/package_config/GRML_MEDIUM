@@ -60,6 +60,7 @@ gcc
 genext2fs
 grml-debugtools
 grml-desktop
+grml-docs
 grml-files
 grml-laptop
 grml-live

@@ -41,8 +41,7 @@ ed
 ethtool
 findutils
 fnord
-# fuse-utils
-# grml-small
+grml-docs
 grml-quickconfig-standard
 guessnet
 htop
