@@ -42,7 +42,7 @@ if [ -r $target/etc/X11/cursors/whiteglass.theme ] ; then
    $ROOTCMD update-alternatives --set x-cursor-theme /etc/X11/cursors/whiteglass.theme
 fi
 
-if [ -r $target/usr/bin/iceweasel ] ; then
+if [ -r $target/usr/bin/iceweasel ] || [ -L $target/usr/bin/iceweasel ] ; then
    $ROOTCMD update-alternatives --set x-www-browser /usr/bin/iceweasel
 fi
 
@@ -59,7 +59,7 @@ fi
 
 # sadly isn't available via update-alternates, anyway - use
 # ntfs-3g (if available) as default for ntfs
-if [ -r $target/sbin/mount.ntfs-3g ] ; then
+if [ -r $target/sbin/mount.ntfs-3g ] || [ -L $target/sbin/mount.ntfs-3g ] ; then
    $ROOTCMD ln -s /sbin/mount.ntfs-3g /sbin/mount.ntfs
 fi
 
