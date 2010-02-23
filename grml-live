@@ -672,23 +672,32 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
 
       if [ -n "$NO_ADDONS" ] ; then
-         log "Skipping installation boot addons requested via \$NO_ADDONS."
-         einfo "Skipping installation boot addons requested via \$NO_ADDONS."
-         eend 0
+         log   "Skipping installation of boot addons as requested via \$NO_ADDONS."
+         einfo "Skipping installation of boot addons as requested via \$NO_ADDONS."; eend 0
       else
-         if ! [ -d "$TEMPLATE_DIRECTORY"/boot/addons/bsd4grml ] ; then
+         if ! [ -d "$TEMPLATE_DIRECTORY"/boot/addons ] ; then
+           log   "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)"
            ewarn "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)" ; eend 0
          else
            # copy only files so we can handle bsd4grml on its own
            for file in ${TEMPLATE_DIRECTORY}/boot/addons/* ; do
-               test -f $file && cp $file "$BUILD_OUTPUT"/boot/addons/
+             test -f $file && cp $file "$BUILD_OUTPUT"/boot/addons/
            done
 
-           if [ -z "$NO_ADDONS_BSD4GRML" ] ; then
-              cp -a ${TEMPLATE_DIRECTORY}/boot/addons/bsd4grml "$BUILD_OUTPUT"/boot/addons/
+           if [ -n "$NO_ADDONS_BSD4GRML" ] ; then
+              log   "Skipping installation of bsd4grml as requested via \$NO_ADDONS_BSD4GRML."
+              einfo "Skipping installation of bsd4grml as requested via \$NO_ADDONS_BSD4GRML."; eend 0
+           else
+              if [ -d "$TEMPLATE_DIRECTORY"/boot/addons/bsd4grml ] ; then
+                cp -a ${TEMPLATE_DIRECTORY}/boot/addons/bsd4grml "$BUILD_OUTPUT"/boot/addons/
+              else
+                log   "bsd4grml addon not found, skipping therefore."
+                ewarn "bsd4grml addon not found, skipping therefore." ; eend 0
+              fi
            fi
-         fi
-      fi
+
+         fi # no "$TEMPLATE_DIRECTORY"/boot/addons
+      fi # NO_ADDONS
 
       if ! [ -d "${BUILD_OUTPUT}/boot/grub" ] ; then
          cp -a ${TEMPLATE_DIRECTORY}/boot/grub  "$BUILD_OUTPUT"/boot/
