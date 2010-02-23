@@ -23,7 +23,7 @@ fi
 set -e
 
 # global variables
-GRML_LIVE_VERSION='0.9.36-pre1'
+GRML_LIVE_VERSION='0.9.36'
 PN="$(basename $0)"
 CMDLINE="$0 $@"
 SOURCES_LIST_FILE='/etc/grml/fai/apt/sources.list'
@@ -699,12 +699,18 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          fi # no "$TEMPLATE_DIRECTORY"/boot/addons
       fi # NO_ADDONS
 
-      if ! [ -d "${BUILD_OUTPUT}/boot/grub" ] ; then
-         cp -a ${TEMPLATE_DIRECTORY}/boot/grub  "$BUILD_OUTPUT"/boot/
+      if ! [ -d ${TEMPLATE_DIRECTORY}/boot/grub ] ; then
+         log   "grub templates do not exist, skipping therefore."
+         ewarn "grub templates do not exist, skipping therefore." ; eend 0
+      else
+         if ! [ -d "${BUILD_OUTPUT}/boot/grub" ] ; then
+            cp -a ${TEMPLATE_DIRECTORY}/boot/grub  "$BUILD_OUTPUT"/boot/
+         fi
+
+         # make sure we have recent template files available, otherwise updating
+         # the strings like $GRML_NAME and $VERSION might be out of date
+         cp ${TEMPLATE_DIRECTORY}/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
       fi
-      # make sure we have recent template files available, otherwise updating
-      # the strings like $GRML_NAME and $VERSION might be out of date
-      cp ${TEMPLATE_DIRECTORY}/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
 
       if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
          log    "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
@@ -720,8 +726,10 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       RELEASE_INFO="$(cut_string 68 "$RELEASE_INFO")"
       RELEASE_INFO="$(extend_string_end 68 "$RELEASE_INFO")"
 
-      sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/GRML/grml-version
-      sed -i "s/%DATE%/$DATE/"                                      "$BUILD_OUTPUT"/GRML/grml-version
+      if [ -r "$BUILD_OUTPUT"/GRML/grml-version ] ; then
+         sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/GRML/grml-version
+         sed -i "s/%DATE%/$DATE/"                                      "$BUILD_OUTPUT"/GRML/grml-version
+      fi
 
       # make sure the squashfs filename is set accordingly:
       SQUASHFS_NAME="$GRML_NAME.squashfs"
@@ -741,31 +749,37 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       # adjust all variables in the templates with the according distribution information
       for file in "${BUILD_OUTPUT}"/boot/isolinux/*.cfg "${BUILD_OUTPUT}"/boot/isolinux/*.msg \
                   "${BUILD_OUTPUT}"/boot/grub/* ; do
-        sed -i "s/%ARCH%/$ARCH/g"                    "${file}"
-        sed -i "s/%DATE%/$DATE/g"                    "${file}"
-        sed -i "s/%DISTRI_INFO%/$DISTRI_INFO/g"      "${file}"
-        sed -i "s/%DISTRI_NAME%/$DISTRI_NAME/g"      "${file}"
-        sed -i "s/%DISTRI_SPLASH%/$DISTRI_SPLASH/g"  "${file}"
-        sed -i "s/%GRML_NAME%/$GRML_NAME/g"          "${file}"
-        sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/g"  "${file}"
-        sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/g"    "${file}"
-        sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
-        sed -i "s/%VERSION%/$VERSION/g"              "${file}"
+        if [ -r "${file}" ] ; then
+          sed -i "s/%ARCH%/$ARCH/g"                    "${file}"
+          sed -i "s/%DATE%/$DATE/g"                    "${file}"
+          sed -i "s/%DISTRI_INFO%/$DISTRI_INFO/g"      "${file}"
+          sed -i "s/%DISTRI_NAME%/$DISTRI_NAME/g"      "${file}"
+          sed -i "s/%DISTRI_SPLASH%/$DISTRI_SPLASH/g"  "${file}"
+          sed -i "s/%GRML_NAME%/$GRML_NAME/g"          "${file}"
+          sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/g"  "${file}"
+          sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/g"    "${file}"
+          sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
+          sed -i "s/%VERSION%/$VERSION/g"              "${file}"
 
-        [ -n "$DEFAULT_BOOTOPTIONS" ] && sed -i "s/ boot=live/ boot=live $DEFAULT_BOOTOPTIONS/"  "${file}"
+          [ -n "$DEFAULT_BOOTOPTIONS" ] && sed -i "s/ boot=live/ boot=live $DEFAULT_BOOTOPTIONS/"  "${file}"
 
-        if [ -n "$NO_BOOTID" ] ; then
-           sed -i "s/ bootid=%BOOTID%//g" "${file}" # drop bootid bootoption
-        else
-           sed -i "s/%BOOTID%/$BOOTID/g" "${file}" # adjust bootid=... argument
+          if [ -n "$NO_BOOTID" ] ; then
+             sed -i "s/ bootid=%BOOTID%//g" "${file}" # drop bootid bootoption
+          else
+             sed -i "s/%BOOTID%/$BOOTID/g" "${file}" # adjust bootid=... argument
+          fi
         fi
       done
 
       # adjust bootsplash accordingly but make sure the string has the according lenght
       SQUASHFS_NAME="$(cut_string 20 "$SQUASHFS_NAME")"
       SQUASHFS_NAME="$(extend_string_end 20 "$SQUASHFS_NAME")"
-      sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/" "$BUILD_OUTPUT"/boot/isolinux/f4
-      sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/" "$BUILD_OUTPUT"/boot/isolinux/f5
+      for file in f4 f5 ; do
+         if [ -r "${BUILD_OUTPUT}/boot/isolinux/${file}" ] ; then
+            sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
+            sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
+         fi
+      done
 
       # generate addon list
       rm "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
@@ -853,7 +867,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       if [ -e "$BUILD_OUTPUT"/boot/grub/$GRUB_LEGACY ]; then
          sed -i "s/%GRUB_LEGACY%/$GRUB_LEGACY/g" "$BUILD_OUTPUT"/boot/grub/menu.lst
          sed -i "s/%GRUB_LEGACY%/$GRUB_LEGACY/g" "$BUILD_OUTPUT"/boot/grub/grub.cfg
-      else
+      elif [ -e "$BUILD_OUTPUT"/boot/grub/menu.lst -a -e "$BUILD_OUTPUT"/boot/grub/grub.cfg ] ; then
          sed -i "/%GRUB_LEGACY%/d" "$BUILD_OUTPUT"/boot/grub/menu.lst
          sed -i "/%GRUB_LEGACY%/d" "$BUILD_OUTPUT"/boot/grub/grub.cfg
       fi

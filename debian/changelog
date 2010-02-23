@@ -1,8 +1,30 @@
-grml-live (0.9.36~0.pre1) UNRELEASED; urgency=low
+grml-live (0.9.36) unstable; urgency=low
 
-  * No entries yet, will be adjusted via git-dch for stable release.
+  * scripts/GRMLBASE/39-modprobe: Make sure all modprobe configuration
+    files use .conf as filename suffix. [Closes: issue647]
+  * Disable PDiffs by default via /etc/apt/apt.conf.d/20pdiffs.
+  * 90-update-alternatives: check for symlinks of iceweasel and
+    mount.ntfs-3g and force creation of /sbin/mount.ntfs symlink.
+  * Rework addons handling (make sure to install boot addons independent
+    from bsd4grml which might be disabled).
+  * Updated boot manager teamplates (simplify syslinux.cfg,
+    update failsafe bootoption, add GPXE to grub.cf, drop duplicate
+    boot=live from grub.cfg)
+  * Do not bailout if reading dpkg.list fails, instead assume user
+    is running a dirty build and display a warning message.
+  * Check for precense of grub directory and files in templates
+    that we are adjusting on-the-fly and skip non-existing ones
+    so customisation of templates is easier.
+  * Software related changes:
+    - Add grml-quickconfig to GRMLBASE.
+    - Add grml-quickconfig-standard to GRML_* classes.
+    - Drop 3ware-cli-binary (license unclear).
+    - Drop rar from GRML_FULL (license).
+    - Drop xlockmore from GRML_FULL (using vlock instead in grml-lock).
+    - Move grml-docs from GRMLBASE to GRML_{SMALL,MEDIUM,FULL} to be
+      able to customize it easier.
 
- -- Michael Prokop <mika@grml.org>  Mon, 15 Feb 2010 11:36:42 +0100
+ -- Michael Prokop <mika@grml.org>  Tue, 23 Feb 2010 15:49:20 +0100
 
 grml-live (0.9.35) unstable; urgency=low
 
