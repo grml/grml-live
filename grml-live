@@ -1198,9 +1198,8 @@ if [ -d /usr/share/grml-live-db ] ; then
   #fi
 
   if ! [ -r "$DPKG_LIST" ] ; then
-     log "Error reading $DPKG_LIST - can not provide information to $DPKG_DBSCRIPT"
-     eerror "Error reading $DPKG_LIST - can not provide information to $DPKG_DBSCRIPT" ; eend 1
-     bailout 14
+     log   "Warning: can not read $DPKG_LIST - can not provide information to $DPKG_DBSCRIPT (dirty build?)"
+     ewarn "Warning: can not read $DPKG_LIST - can not provide information to $DPKG_DBSCRIPT (dirty build?)" ; eend 0
   else
      einfo "Logging $DPKG_LIST to database $DPKG_DATABASE"
      log "Logging $DPKG_LIST to database $DPKG_DATABASE"
