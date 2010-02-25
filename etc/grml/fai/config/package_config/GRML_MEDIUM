@@ -226,6 +226,7 @@ xserver-xorg-video-via
 xserver-xorg-video-vmware
 xserver-xorg-video-voodoo
 xterm
+zerofree
 zip
 zoo
 zsh
