@@ -21,6 +21,8 @@ grml-live (0.9.36) unstable; urgency=low
     when debugging a system.
   * Fix label name for ssh bootoption.
   * Add persistency feature to boot menu. [Closes: issue773]
+  * buildd/link_latest.sh: make sure to use according filename in
+    md5sum file of *_latest* ISOs. [Closes: issue814]
   * Software related changes:
     - Add grml-quickconfig to GRMLBASE.
     - Add grml-quickconfig-standard to GRML_* classes.
@@ -32,7 +34,7 @@ grml-live (0.9.36) unstable; urgency=low
     - Move grml-docs from GRMLBASE to GRML_{SMALL,MEDIUM,FULL} to be
       able to customize it easier.
 
- -- Michael Prokop <mika@grml.org>  Fri, 26 Feb 2010 14:52:03 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 26 Feb 2010 21:32:25 +0100
 
 grml-live (0.9.35) unstable; urgency=low
 
