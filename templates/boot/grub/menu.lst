@@ -32,7 +32,7 @@ kernel /boot/%SHORT_NAME%/linux26 vga=normal boot=live bootid=%BOOTID% bootfrom=
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - debug mode
-kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=791 verbose debug=vc debug initrd=initrd.gz boot=live bootid=%BOOTID% bootfrom=removable initcall_debug nomce 
+kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=791 verbose debug=vc initrd=initrd.gz boot=live bootid=%BOOTID% bootfrom=removable initcall_debug nomce 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - copy grml squashfs file to RAM
