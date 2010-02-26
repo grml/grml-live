@@ -220,7 +220,7 @@ case "$LANGUAGE" in
                 LANG="fr_FR.ISO-8859-1"
                 KEYTABLE="cf"
                 CHARSET="iso8859-1"
-                CONSOLEFONT="lat1-16"
+                CONSOLEFONT="Lat15-Terminus16"
                 XKEYBOARD="ca_enhanced"
                 KDEKEYBOARD="ca_enhanced"
                 KDEKEYBOARDS="us"
@@ -440,7 +440,7 @@ case "$LANGUAGE" in
                 # Additional KDE Keyboards
                 KDEKEYBOARDS="de,us,fr"
                 TZ="Europe/Madrid"
-                CONSOLEFONT="lat10-16"
+                CONSOLEFONT="Lat15-Terminus16"
                 ;;
         fi-iso)
                 # Finnish version
@@ -704,7 +704,7 @@ case "$LANGUAGE" in
                 # Additional KDE Keyboards
                 KDEKEYBOARDS="de,us,fr"
                 TZ="Europe/Lisbon"
-                CONSOLEFONT="lat10-16"
+                CONSOLEFONT="Lat15-Terminus16"
                 ;;
         pt|pt-utf8)
                 # Portuguese version (UTF8)
@@ -718,7 +718,7 @@ case "$LANGUAGE" in
                 # Additional KDE Keyboards
                 KDEKEYBOARDS="de,us,fr"
                 TZ="Europe/Lisbon"
-                CONSOLEFONT="lat10-16"
+                CONSOLEFONT="Lat15-Terminus16"
                 ;;
         ru-iso)
                 # Russian version

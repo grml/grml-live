@@ -208,16 +208,14 @@ config_language(){
  einfo "Activating language settings:"
  eindent
 
- # people can specify $LANGUAGE and $CONSOLEFONT in a config file:
+ # people can specify $LANGUAGE and $CONSOLEFONT in a config file
  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig
 
- grep -q ' lang=.*-utf8' /proc/cmdline && UTF8='yes' || UTF8=''
-
- # check for bootoption which overrides config from /etc/grml/autoconfig:
+ # check for bootoption which overrides config from /etc/grml/autoconfig
  BOOT_LANGUAGE="$(getbootparam 'lang' 2>>$DEBUG)"
  [ -n "$BOOT_LANGUAGE" ] && LANGUAGE="$BOOT_LANGUAGE"
 
- # set default to 'en' in live-cd mode if $LANGUAGE is not yet set:
+ # set default to 'en' in live-cd mode iff $LANGUAGE is not set yet
  if [ -z "$INSTALLED" ] ; then
     [ -n "$LANGUAGE" ] || LANGUAGE='en'
  fi
@@ -235,8 +233,6 @@ config_language(){
  # set console font
  if [ -z "$CONSOLEFONT" ] ; then
     if ! checkbootparam 'nodefaultfont' >>$DEBUG 2>&1 ; then
-       # [ -n "$UTF8" ] && CONSOLEFONT='LatArCyrHeb-16' || CONSOLEFONT='Lat15-Terminus16'
-       # if [ -r /usr/share/consolefonts/Lat15-Terminus16.psf.gz ] ; then
        if [ -r /usr/share/consolefonts/Uni3-Terminus16.psf.gz ] ; then
           CONSOLEFONT='Uni3-Terminus16'
        else
