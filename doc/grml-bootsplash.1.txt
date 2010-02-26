@@ -34,7 +34,7 @@ about how to report bugs.
 
 See also
 --------
-grml-autoconfig(1), grml-autoconfig(8), mkpersistenthome(1), restore-config(1)
+grml-autoconfig(1), grml-autoconfig(8), restore-config(1)
 
 Authors
 -------

@@ -1293,59 +1293,6 @@ fi
 }
 # }}}
 
-# {{{ helper functions
-findfile(){
-FOUND=""
-# search all partitions for a file in the root directory
-for i in /mnt/[sh]d[a-z] /mnt/[sh]d[a-z][1-9] /mnt/[sh]d[a-z][1-9]?*; do
-# See if it's already mounted
-  [ -f "$i/$1" ] &&  { echo "$i/$1"; return 0; }
-  if [ -d "$i" ] && mount -r "$i" 2>>$DEBUG; then
-    [ -f "$i/$1" ] && FOUND="$i/$1"
-    umount -l "$i" 2>>$DEBUG
-    [ -n "$FOUND" ] && { echo "$FOUND"; return 0; }
-  fi
-done
-return 2
-}
-
-fstype(){
-case "$(file -s $1)" in
-  *[Ff][Aa][Tt]*|*[Xx]86*) echo "vfat"; return 0;;
-  *[Rr][Ee][Ii][Ss][Ee][Rr]*)  echo "reiserfs"; return 0;;
-  *[Xx][Ff][Ss]*)  echo "xfs"; return 0;;
-  *[Ee][Xx][Tt]3*) echo "ext3"; return 0;;
-  *[Ee][Xx][Tt]2*) echo "ext2"; return 0;;
-  *data*)          echo "invalid"; return 0;;
-  *) echo "auto"; return 0;;
-esac
-}
-
-# Try to mount this filesystem read-only, without or with encryption
-trymount(){
-# Check if already mounted
-case "$(cat /proc/mounts)" in *\ $2\ *) return 0;; esac
-# Apparently, mount-aes DOES autodetect AES loopback files.
-[ -b "$1" ] && { mount -t auto -o ro "$1" "$2" 2>>$DEBUG; RC="$?"; }
-# We need to mount crypto-loop files with initial rw support
-[ -f "$1" ] && { mount -t auto -o loop,rw "$1" "$2" 2>>$DEBUG; RC="$?"; }
-# Mount succeeded?
-[ "$RC" = "0" ] && return 0
-echo ""
-einfo "Filesystem not autodetected, trying to mount $1 with AES256 encryption."
-a="y"
-while [ "$a" != "n" -a "$a" != "N" ]; do
-# We need to mount crypto-loop files with initial rw support
- mount -t auto -o loop,rw,encryption=AES256 "$1" "$2" && return 0
- echo -n "${RED}Mount failed, retry? [Y/n] ${NORMAL}"
- # Problem with ioctl() from getpasswd()?
- # read a
- read a
-done
-return 1
-}
-# }}}
-
 # {{{ CPU-detection
 config_cpu(){
 if checkbootparam 'nocpu'; then
@@ -1570,84 +1517,8 @@ fi
 # {{{ Check for persistent homedir option and eventually mount /home from there, or use a loopback file.
 config_homedir(){
 if checkbootparam 'home' ; then
-   HOMEDIR="$(getbootparam 'home')"
-   MYHOMEDEVICE=""
-   MYHOMEMOUNTPOINT=""
-   MYHOMEDIR=""
-   if [ -n "$HOMEDIR" ]; then
-      einfo "Bootoption home detected." && eend 0
-      case "$HOMEDIR" in
-        /dev/*)
-        MYHOMEDEVICE="${HOMEDIR##/dev/}"
-        MYHOMEDEVICE="/dev/${MYHOMEDEVICE%%/*}"
-        MYHOMEMOUNTPOINT="/mnt/${MYHOMEDEVICE##/dev/}"
-        MYHOMEDIR="/mnt/${HOMEDIR##/dev/}"
-      ;;
-        /mnt/*)
-        MYHOMEDEVICE="${HOMEDIR##/mnt/}"
-        MYHOMEDEVICE="/dev/${MYHOMEDEVICE%%/*}"
-        MYHOMEMOUNTPOINT="/mnt/${MYHOMEDEVICE##/dev/}"
-        MYHOMEDIR="$HOMEDIR"
-      ;;
-        [Aa][Uu][Tt][Oo]|[Ss][Cc][Aa][Nn]|[Ff][Ii][Nn][Dd])
-        MYHOMEDIR="$(findfile grml.img)"
-        MYHOMEDEVICE="${MYHOMEDIR##/mnt/}"
-        MYHOMEDEVICE="/dev/${MYHOMEDEVICE%%/*}"
-        MYHOMEMOUNTPOINT="/mnt/${MYHOMEDEVICE##/dev/}"
-      ;;
-      *)
-        eerror "Invalid home= option '$HOMEDIR' specified (must start with /dev/ or /mnt/ or 'scan')." ; eend 1
-        eerror "Option ignored." ; eend 1
-      ;;
-      esac
-   fi # -n $HOMEDIR
-
-   if [ -n "$MYHOMEDIR" ]; then
-      if trymount "$MYHOMEDEVICE" "$MYHOMEMOUNTPOINT"; then
-         [ -f "$MYHOMEMOUNTPOINT/grml.img" ] && MYHOMEDIR="$MYHOMEMOUNTPOINT/grml.img"
-         while read device mountpoint fs relax; do
-           case "$mountpoint" in *$MYHOMEMOUNTPOINT*)
-             case "$fs" in
-               *[Nn][Tt][Ff][Ss]*)
-                 umount "$MYHOMEMOUNTPOINT"; eerror "Error: will not mount NTFS filesystem on $MYHOMEDEVICE read/write!" ; eend 1
-                 break
-                 ;;
-               *[Ff][Aa][Tt]*)
-                 # Note: This currently won't work with encrypted partitions
-                 umount "$MYHOMEMOUNTPOINT"; mount -t vfat -o rw,uid=grml,gid=grml,umask=002 "$MYHOMEDEVICE" "$MYHOMEMOUNTPOINT"
-                 if [ ! -f "$MYHOMEDIR" ]; then
-                    ewarn "WARNING: FAT32 is not a good filesystem option for /home/grml (missing socket/symlink support)."
-                    ewarn "WARNING: Better use an ext2 loopback file on this device, and boot with home=$MYHOMEDEVICE/grml.img."
-                 fi
-                 ;;
-             esac
-
-             if mount -o remount,rw "$MYHOMEMOUNTPOINT"; then
-                einfo "Mounting ${WHITE}$MYHOMEDIR${NORMAL} as ${WHITE}/home/grml${NORMAL}."
-                if [ -f "$MYHOMEDIR" ]; then
-                   # It's a loopback file, mount it over the /home/grml directory
-                   trymount "$MYHOMEDIR" /home/grml
-                   RC="$?"
-                   [ "$RC" = "0" ] && ERROR="$(mount -o remount,rw /home/grml 2>&1)"
-                   RC="$?"
-                else
-                   # Do a --bind mount
-                   ERROR="$(mount --bind "$MYHOMEDIR" /home/grml 2>&1)"
-                   RC="$?"
-                fi # -f $MYHOMEDIR
-
-                [ "$RC" = "0" ] && eend 0 || ( eerror "${ERROR}" ; eend 1 )
-
-             fi #  mount -o remount,rw,...
-           break
-           ;;
-           esac # case "$mountpoint" in *$MYHOMEMOUNTPOINT*)
-         done <<EOT
-         $(cat /proc/mounts)
-EOT
-     fi # if trymount ...
-   fi # -n $MYHOMEDIR
-fi # checkbootparam home
+   ewarn "The \"home\" bootoption is deprecated, please use the persistency feature instead."; eend 1
+fi
 }
 # }}}
 

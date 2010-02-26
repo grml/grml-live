@@ -2,8 +2,13 @@ grml-autoconfig (0.9.6) unstable; urgency=low
 
   * Use Lat15-Terminus16 instead of lat1-16/lat10-16 to address
     broken lang=pt feature. [Closes: issue691]
+  * Deprecate home=... bootoption and drop the mkpersistenthome
+    script. The home feature has too many flaws and nowadays
+    the persistency feature should be used instead.
+    [Closes: issue449]
+  * Bump to Standards-Version 3.8.4.
 
- -- Michael Prokop <mika@grml.org>  Fri, 26 Feb 2010 21:36:39 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 26 Feb 2010 21:49:00 +0100
 
 grml-autoconfig (0.9.5) unstable; urgency=low
 
