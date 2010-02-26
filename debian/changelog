@@ -19,6 +19,8 @@ grml-live (0.9.36) unstable; urgency=low
     arguments avoids displaying the executed code in the initramfs
     which is something you usually want to have enabled by default
     when debugging a system.
+  * Fix label name for ssh bootoption.
+  * Add persistency feature to boot menu. [Closes: issue773]
   * Software related changes:
     - Add grml-quickconfig to GRMLBASE.
     - Add grml-quickconfig-standard to GRML_* classes.
@@ -30,7 +32,7 @@ grml-live (0.9.36) unstable; urgency=low
     - Move grml-docs from GRMLBASE to GRML_{SMALL,MEDIUM,FULL} to be
       able to customize it easier.
 
- -- Michael Prokop <mika@grml.org>  Fri, 26 Feb 2010 12:22:08 +0100
+ -- Michael Prokop <mika@grml.org>  Fri, 26 Feb 2010 14:52:03 +0100
 
 grml-live (0.9.35) unstable; urgency=low
 
