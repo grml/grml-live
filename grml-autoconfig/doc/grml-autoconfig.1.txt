@@ -232,35 +232,6 @@ Or you put a grml.iso file on your hard disk (maybe in /boot/grml) or on an USB
 stick, use grub to boot from there and place debs, configuration scripts or Grml
 configuraton archives alongside the .iso.
 
-Use persistent home directory
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You want to use a persistent home directory which includes all the files located
-in $HOME. Use the script mkpersistenthome to create such a persistent home
-directory. You have the options to either use a specific partition as your home
-directory or add a loopback file named grml.img on the specified partition (the
-default).
-
-TIP: /dev/external in the partition selection of mkpersistenthome is an usb
-device without partitions. /dev/external1 corresponds to the first partition on
-an usb device (usually an usb stick).
-
-After running the script mkpersistenthome you can use the boot parameter home to
-activate the home directory. If you are using the option with the loopback file
-(grml.img) you can boot via:
-
-  grml home=scan
-
-which will scan through the partitions and if a file grml.img is found it will
-be mounted as your $HOME-directory. If you want to use a partition as your home
-directory specify the device as an option. If you want to use /dev/sda2 as your
-$HOME boot via:
-
-  grml home=/dev/sda2
-
-Notice: the files located in /etc/skel will be copied to the partition (but will
-not overwrite any files).
-
 Bugs
 ----
 If you find a bug please report it. See link:http://grml.org/bugs/ for details
@@ -268,7 +239,7 @@ about how to report bugs.
 
 See also
 --------
-grml-autoconfig(8), mkpersistenthome(1), restore-config(1), save-config(1)
+grml-autoconfig(8), restore-config(1), save-config(1)
 
 Author
 ------

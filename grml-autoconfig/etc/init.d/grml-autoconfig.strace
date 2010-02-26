@@ -9,8 +9,8 @@
 # http://wiki.debian.org/LSBInitScripts =>
 ### BEGIN INIT INFO
 # Provides:          grml-autoconfig
-# Required-Start:
-# Required-Stop:
+# Required-Start:    $remote_fs
+# Required-Stop:     $remote_fs
 # Should-Start:      udev
 # Default-Start:     S 2 3 4 5
 # Default-Stop:
