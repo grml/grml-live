@@ -1,3 +1,12 @@
+grml-autoconfig (0.9.8) unstable; urgency=low
+
+  * save-config: search for modified files and symlinks in /etc
+    only so not the full directories are stored in the resulting
+    tarball. Thanks to Alexander Menk for the bugreport.
+    [Closes: issue765]
+
+ -- Michael Prokop <mika@grml.org>  Sat, 27 Feb 2010 15:07:56 +0100
+
 grml-autoconfig (0.9.7) unstable; urgency=low
 
   * Improve chvt code for serial console.
