@@ -52,7 +52,7 @@ kernel /boot/%SHORT_NAME%/linux26 vga=791 nofstab noraid nolvm noautoconfig nosw
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - serial console mode
-kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=normal video=vesafb:off quiet initrd=initrd.gz boot=live bootid=%BOOTID% bootfrom=removable nomce noquick console=tty1 console=ttyS0,9600n8 
+kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=normal video=vesafb:off quiet initrd=initrd.gz boot=live bootid=%BOOTID% bootfrom=removable nomce console=tty1 console=ttyS0,9600n8 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title Run memtest86+
