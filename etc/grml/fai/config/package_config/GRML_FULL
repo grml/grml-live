@@ -96,8 +96,6 @@ thc-ipv6
 thinkfinger-tools
 tlswrap
 tpm-tools
-trousers
-udev
 upgrade-oldest
 zfs-fuse
 zsh-lovers
@@ -1568,6 +1566,7 @@ trayer
 tree
 treil
 trickle
+trousers
 tshark
 tsocks
 tss
