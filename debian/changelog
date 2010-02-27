@@ -1,3 +1,15 @@
+grml-etc (1.1.33) unstable; urgency=low
+
+  * /etc/inittab*: Use normal getty instead of mgetty and several
+    baud rate settings to let getty figure out which mode should be
+    used. Use '#grmlserial#' to mark the beginng of the lines that
+    should be activated through grml-autoconfig when booting with
+    serial/console bootoption (providing more flexibility for the
+    user). Thanks to Zoran Dzelajlija for the detailled bugreport
+    and suggestions. [Closes: issue485]
+
+ -- Michael Prokop <mika@grml.org>  Sat, 27 Feb 2010 02:28:29 +0100
+
 grml-etc (1.1.32) unstable; urgency=low
 
   * Rework xinitrc handling: modularize the code into ~/.xinitrc.d/
