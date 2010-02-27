@@ -94,8 +94,6 @@ tal
 texttools-doc
 thc-ipv6
 thinkfinger-tools
-tlswrap
-tpm-tools
 upgrade-oldest
 zfs-fuse
 zsh-lovers
@@ -1557,6 +1555,7 @@ tor
 toshset
 toshutils
 tpconfig
+tpm-tools
 tpp
 t-prot
 tra
