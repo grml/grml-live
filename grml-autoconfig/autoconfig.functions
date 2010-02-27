@@ -315,16 +315,18 @@ config_language(){
 
  # we have to set up all consoles, therefore loop it over all ttys:
  NUM_CONSOLES=$(fgconsole --next-available)
- NUM_CONSOLES=$(expr ${NUM_CONSOLES} - 1)
+ [ -n "$NUM_CONSOLES" ] && NUM_CONSOLES=$(expr ${NUM_CONSOLES} - 1)
  [ ${NUM_CONSOLES} -eq 1 ] && NUM_CONSOLES=6
  CUR_CONSOLE=$(fgconsole)
 
  if [ -n "$CHARMAP" ] ; then
     einfo "Running consolechars for ${CHARMAP}"
-    for vc in `seq 0 ${NUM_CONSOLES}`  ; do
+    for vc in $(seq 0 ${NUM_CONSOLES}) ; do
         consolechars --tty=/dev/tty${vc} -m ${CHARMAP} ; RC=$?
     done
-    [ -n "$CUR_CONSOLE" ] && chvt $CUR_CONSOLE
+    if [ -n "$CUR_CONSOLE" ] ; then
+       [ "$CUR_CONSOLE" != "serial" ] && chvt $CUR_CONSOLE
+    fi
     eend $RC
  fi
 
@@ -333,11 +335,13 @@ config_language(){
  else
     if [ -n "$CONSOLEFONT" ] ; then
        einfo "Running consolechars using ${CONSOLEFONT}"
-       for vc in `seq 0 ${NUM_CONSOLES}`  ; do
+       for vc in $(seq 0 ${NUM_CONSOLES}) ; do
            consolechars --tty=/dev/tty${vc} -f $CONSOLEFONT ; RC=$?
        done
-       [ -n "$CUR_CONSOLE" ] && chvt $CUR_CONSOLE
-       eend $?
+       if [ -n "$CUR_CONSOLE" ] ; then
+          [ "$CUR_CONSOLE" != "serial" ] && chvt $CUR_CONSOLE
+       fi
+       eend $RC
     fi
  fi
 
@@ -568,21 +572,10 @@ fi
 # activate serial console {{{
 config_console(){
 if checkbootparam 'console'; then
-  einfo "Bootoption (for serial) console detected."
-  eindent
-    if [ -r /etc/mgetty/mgetty.config ] ; then
-       MODE=$(getbootparam 'console' | awk -F, '{print $2}')
-       MODE=${MODE%%n*}
-       [ -n "$MODE" ] || MODE=9600 # default mode
-       einfo "Setting speed in /etc/mgetty/mgetty.config to $MODE bps"
-       sed -i "s/speed [0-9]*/speed $MODE/" /etc/mgetty/mgetty.config ; eend $?
-    fi
-
-    einfo "Activating mgetty."
-    sed -i 's/^#T0/T0/' /etc/inittab
-    sed -i 's/^#T1/T1/' /etc/inittab
-    /sbin/telinit q ; eend $?
-  eoutdent
+  einfo "Bootoption for serial console detected, activating console login."
+  sed -i 's/^#grmlserial#//' /etc/inittab
+  /sbin/telinit q
+  eend $?
 fi
 }
 # }}}
