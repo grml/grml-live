@@ -302,7 +302,7 @@ config_language(){
  if [ -r /etc/default/locale ] ; then
     if grep -q "LANG=.*UTF" /etc/default/locale ; then
        einfo "Setting up unicode environment."
-       unicode_start 2>>$DEBUG ; eend $?
+       unicode_start >>$DEBUG 2>&1 ; eend $?
     fi
  fi
 
@@ -314,13 +314,15 @@ config_language(){
  fi
 
  # we have to set up all consoles, therefore loop it over all ttys:
- NUM_CONSOLES=$(fgconsole --next-available)
- [ -n "$NUM_CONSOLES" ] && NUM_CONSOLES=$(expr ${NUM_CONSOLES} - 1)
- [ ${NUM_CONSOLES} -eq 1 ] && NUM_CONSOLES=6
- CUR_CONSOLE=$(fgconsole)
-
+ NUM_CONSOLES=$(fgconsole --next-available 2>/dev/null)
+ if [ -n "$NUM_CONSOLES" ] ; then
+    NUM_CONSOLES=$(expr ${NUM_CONSOLES} - 1)
+    [ ${NUM_CONSOLES} -eq 1 ] && NUM_CONSOLES=6
+ fi
+ CUR_CONSOLE=$(fgconsole 2>/dev/null)
  if [ -n "$CHARMAP" ] ; then
     einfo "Running consolechars for ${CHARMAP}"
+    RC=0
     for vc in $(seq 0 ${NUM_CONSOLES}) ; do
         consolechars --tty=/dev/tty${vc} -m ${CHARMAP} ; RC=$?
     done
@@ -335,6 +337,7 @@ config_language(){
  else
     if [ -n "$CONSOLEFONT" ] ; then
        einfo "Running consolechars using ${CONSOLEFONT}"
+       RC=0
        for vc in $(seq 0 ${NUM_CONSOLES}) ; do
            consolechars --tty=/dev/tty${vc} -f $CONSOLEFONT ; RC=$?
        done
@@ -1359,7 +1362,7 @@ else
            einfo "Loading modules ${MODULE}"
            modprobe "$MODULE" >>$DEBUG || modprobe "$MODULE_FALLBACK" >>$DEBUG
            RC=$?
-           if [[ $RC == 0 ]]; then
+           if [[ "$RC" == 0 ]]; then
               eend 0
            else
               SKIP_CPU_GOVERNOR=1
@@ -1373,6 +1376,7 @@ else
 
      if [ -z "$SKIP_CPU_GOVERNOR" ] ; then
         einfo "Loading cpufreq_ondemand, setting ondemand governor"
+        RC=0
         if modprobe cpufreq_ondemand ; RC=$? ; then
            for file in $(find /sys/devices/system/cpu/ -name scaling_governor 2>/dev/null) ; do
                echo ondemand > $file

@@ -4,8 +4,9 @@ grml-autoconfig (0.9.8) unstable; urgency=low
     only so not the full directories are stored in the resulting
     tarball. Thanks to Alexander Menk for the bugreport.
     [Closes: issue765]
+  * Further cosmetic tuning for serial console mode.
 
- -- Michael Prokop <mika@grml.org>  Sat, 27 Feb 2010 15:07:56 +0100
+ -- Michael Prokop <mika@grml.org>  Sat, 27 Feb 2010 15:28:52 +0100
 
 grml-autoconfig (0.9.7) unstable; urgency=low
 
