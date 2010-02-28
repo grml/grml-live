@@ -1,3 +1,17 @@
+grml-live (0.9.37) unstable; urgency=low
+
+  * Drop noquick bootoption from serial console boot entry.
+  * Add grml as default to default.cfg. [Closes: issue761]
+  * Software related changes:
+    - Add nginx. Thanks al4711. [Closes: issue704]
+    - Add usb-modeswitch to GRML_FULL. [Closes: issue424]
+    - Drop asleap from GRML_FULL.
+    - Drop ded from GRLM_FULL.
+    - Drop tlswrap package from GRML_FULL.
+    - Move udev from GRML_* to GRMLBASE.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 28 Feb 2010 00:03:31 +0100
+
 grml-live (0.9.36) unstable; urgency=low
 
   * scripts/GRMLBASE/39-modprobe: Make sure all modprobe configuration
