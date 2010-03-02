@@ -1080,6 +1080,7 @@ ntlmaps
 ntp
 ntpdate
 nullidentd
+numactl
 num-utils
 nutcpc
 nvi
