@@ -794,6 +794,11 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          echo "include default.cfg"     >  "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
          echo "include menuoptions.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
          echo "include grml.cfg"        >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+
+         for f in "${BUILD_OUTPUT}"/boot/isolinux/submenu*.cfg ; do
+           echo "include $(basename $f)"     >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+         done
+
          echo "include options.cfg"     >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
          if [ ! -n "$NO_ADDONS" ] ; then
            echo "include addons.cfg"    >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
