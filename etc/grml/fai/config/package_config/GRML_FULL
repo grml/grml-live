@@ -1877,26 +1877,23 @@ grml
 # use linux-kernel-headers-grml instead of linux-libc-dev?
 # linux-kernel-headers-grml
 
-## current kernel version 2.6.31-grml:
-aufs-modules-2.6.31-grml
-drbd8-2.6.31-grml
-#fglrx-kernel-2.6.31-grml
-iscsitarget-module-2.6.31-grml
-kqemu-modules-2.6.31-grml
-linux-doc-2.6.31-grml
-linux-headers-2.6.31-grml
-linux-image-2.6.31-grml
-#linux-source-2.6.31-grml
-loop-aes-modules-2.6.31-grml
-ndiswrapper-modules-2.6.31-grml
-#nvidia-kernel-2.6.31-grml
-openafs-modules-2.6.31-grml
-sl-modem-modules-2.6.31-grml
-speakup-modules-2.6.31-grml
-sysprof-module-2.6.31-grml
-tp-smapi-modules-2.6.31-grml
-virtualbox-ose-guest-modules-2.6.31-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
-xtables-addons-modules-2.6.31-grml
+## current kernel version 2.6.33-grml:
+drbd8-2.6.33-grml
+#fglrx-kernel-2.6.33-grml
+iscsitarget-module-2.6.33-grml
+linux-doc-2.6.33-grml
+linux-headers-2.6.33-grml
+linux-image-2.6.33-grml
+#linux-source-2.6.33-grml
+loop-aes-modules-2.6.33-grml
+ndiswrapper-modules-2.6.33-grml
+#nvidia-kernel-2.6.33-grml
+openafs-modules-2.6.33-grml
+speakup-modules-2.6.33-grml
+sysprof-module-2.6.33-grml
+tp-smapi-modules-2.6.33-grml
+virtualbox-ose-guest-modules-2.6.33-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
+xtables-addons-modules-2.6.33-grml
 ## }}}
 
 ## amd64 specific packages {{{
@@ -1905,24 +1902,22 @@ PACKAGES aptitude AMD64
 ## general:
 grml64
 
-## current kernel version 2.6.31-grml64:
-aufs-modules-2.6.31-grml64
-drbd8-2.6.31-grml64
-#fglrx-kernel-2.6.31-grml64
-iscsitarget-module-2.6.31-grml64
-kqemu-modules-2.6.31-grml64
-linux-doc-2.6.31-grml64
-linux-headers-2.6.31-grml64
-linux-image-2.6.31-grml64
-#linux-source-2.6.31-grml
-loop-aes-modules-2.6.31-grml64
-ndiswrapper-modules-2.6.31-grml64
-#nvidia-kernel-2.6.31-grml64
-openafs-modules-2.6.31-grml64
-speakup-modules-2.6.31-grml64
-sysprof-module-2.6.31-grml64
-xtables-addons-modules-2.6.31-grml64
-#virtualbox-ose-guest-modules-2.6.31-grml64 virtualbox-ose-guest-utils virtualbox-ose-guest-x11
+## current kernel version 2.6.33-grml64:
+drbd8-2.6.33-grml64
+#fglrx-kernel-2.6.33-grml64
+iscsitarget-module-2.6.33-grml64
+linux-doc-2.6.33-grml64
+linux-headers-2.6.33-grml64
+linux-image-2.6.33-grml64
+#linux-source-2.6.33-grml
+loop-aes-modules-2.6.33-grml64
+ndiswrapper-modules-2.6.33-grml64
+#nvidia-kernel-2.6.33-grml64
+openafs-modules-2.6.33-grml64
+speakup-modules-2.6.33-grml64
+sysprof-module-2.6.33-grml64
+xtables-addons-modules-2.6.33-grml64
+#virtualbox-ose-guest-modules-2.6.33-grml64 virtualbox-ose-guest-utils virtualbox-ose-guest-x11
 ## }}}
 
 # vim: foldmethod=marker

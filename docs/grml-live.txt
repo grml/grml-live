@@ -532,6 +532,7 @@ ZLIB compression. Just use the defaults for enabling LZMA or use grml-live's
 * Kernel 2.6.26-grml[64]: does not work
 * Kernel 2.6.28-grml[64]: does not work
 * Kernel 2.6.31-grml[64]: works
+* Kernel 2.6.33-grml[64]: works
 
 [NOTE]
 
@@ -559,6 +560,7 @@ Grml's squashfs-lzma-tools (see section above) instead.
 * Kernel 2.6.26-grml[64]: does not work
 * Kernel 2.6.28-grml[64]: does not work
 * Kernel 2.6.31-grml[64]: works
+* Kernel 2.6.33-grml[64]: works
 
 [NOTE]
 Please use squashfs-tools >=1:4.0-1 only if you want to remaster grml releases
