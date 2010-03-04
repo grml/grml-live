@@ -1836,20 +1836,19 @@ if checkbootparam 'startx' && ! echo "$CMDLINE" | grep -q 'startx.*nostartx' ; t
    else
      einfo "Window manager ${WHITE}${WINDOWMANAGER}${NORMAL} found as bootoption." && eend 0
    fi
-   einfo "Changing to runlevel 5 for starting grml-x ${WINDOWMANAGER}. Just exit X windows system to get full featured consoles."
+   einfo "Setting up and invoking grml-x ${WINDOWMANAGER}. Just exit X windows system to get full featured consoles."
    config_userfstab || fstabuser='grml'
  cat>|/etc/init.d/xstartup<<EOF
 #!/bin/sh
-# su - $fstabuser -c 'grml-x "$WINDOWMANAGER"'
-sudo -u $fstabuser -i /usr/bin/grml-x $WINDOWMANAGER >>$DEBUG
+su $fstabuser -c "/usr/bin/grml-x $WINDOWMANAGER"
 EOF
    chmod 755 /etc/init.d/xstartup
 
    # adjust inittab for xstartup
    if grep -q '^6:' /etc/inittab ; then
-      sed -i 's|^6:.*|6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /bin/zsh"|' /etc/inittab
+      sed -i 's|^6:.*|6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /usr/bin/zsh-login" >/dev/tty6 2>\&1 </dev/tty6|' /etc/inittab
    else # just append tty6 to inittab if no definition is present:
-      echo '6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /bin/zsh"' >> /etc/inittab
+      echo '6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /usr/bin/zsh-login" >/dev/tty6 2>&1 < /dev/tty6' >> /etc/inittab
    fi
 
    /sbin/telinit q ; eend $?
