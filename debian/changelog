@@ -1,3 +1,29 @@
+grml-live (0.9.39) unstable; urgency=low
+
+  * Add support for /boot/isolinux/submenu*.cfg files.
+  * Drop bootfrom=removable from default bootoptions (we've bootid
+    and scan removable devices first nowadays).
+  * Grub2 related changes:
+    - Add scripts/create-grub-dir.sh to build templates/boot/grub/
+    - Add font file templates/boot/grub/ascii.pf2
+    - Update templates/boot/grub/ based on grub-pc_1.98-1_i386.deb
+    - grub.cfg:
+      ~ add additional menu_color_* entries if loading background image
+      ~ loadfont /boot/grub/ascii.pf2
+      ~ increase timeout to 20 seconds
+      ~ replace terminal command with terminal_output
+      ~ use gfxpayload=1024x768 instead of vga=...
+  * Some minor lintian cleanups. 
+  * Software related changes:
+    - Add mksh to GRML_SMALL and GRML_MEDIUM to allow switching to mksh for
+      `minimal-shell'.
+    - Add numactl to GRML_FULL (thanks, gebi).
+    - Drop ctapi-cyberjack.
+    - Drop sl-modem-daemon.
+    - Update to grml kernel 2.6.33.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 11 Mar 2010 15:12:21 +0100
+
 grml-live (0.9.38) unstable; urgency=low
 
   * Move ia32-libs from Depends to Recommends so installation

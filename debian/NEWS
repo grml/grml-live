@@ -1,86 +1,86 @@
 grml-live (0.9.35) unstable; urgency=low
 
-  * The files from /etc/grml/fai/files have been moved to
-    /etc/grml/fai/config/files (and as a consequence
-    /etc/grml/fai/live-initramfs has been moved to
-    /etc/grml/fai/config/ as well). This is an important step
-    to use the config space and class concept of FAI in a more
-    decent and clean way. It allows much better customization. 
-    
-    Please notice: If you didn't modify anything inside
-    /etc/grml/fai/files you can safely remove the directory.
-    Otherwise please check out the structure of the new
-    /etc/grml/fai/config/files layout and the fcopy command
-    used in /etc/grml/fai/config/scripts/GRMLBASE/* scripts to
-    incoorporate your changes.
+  The files from /etc/grml/fai/files have been moved to
+  /etc/grml/fai/config/files (and as a consequence
+  /etc/grml/fai/live-initramfs has been moved to
+  /etc/grml/fai/config/ as well). This is an important step
+  to use the config space and class concept of FAI in a more
+  decent and clean way. It allows much better customization. 
+  
+  Please notice: If you didn't modify anything inside
+  /etc/grml/fai/files you can safely remove the directory.
+  Otherwise please check out the structure of the new
+  /etc/grml/fai/config/files layout and the fcopy command
+  used in /etc/grml/fai/config/scripts/GRMLBASE/* scripts to
+  incoorporate your changes.
 
  -- Michael Prokop <mika@grml.org>  Sat, 13 Feb 2010 01:35:43 +0100
 
 grml-live (0.9.34) unstable; urgency=low
 
-  * This version introduces an additional package named grml-live-db.
-    The grml-live-db Debian package provides a simple way to put build
-    information of grml-live into a database. By default you have to do
-    nothing but install grml-live-db and during each invocation of
-    grml-live you'll get an additional entry in the sqlite3 database
-    /var/log/grml-live.db. If you want to customize the database logging
-    check out the grml-live-db manpage.
+  This version introduces an additional package named grml-live-db.
+  The grml-live-db Debian package provides a simple way to put build
+  information of grml-live into a database. By default you have to do
+  nothing but install grml-live-db and during each invocation of
+  grml-live you'll get an additional entry in the sqlite3 database
+  /var/log/grml-live.db. If you want to customize the database logging
+  check out the grml-live-db manpage.
 
-  * Instead of ZERO_LOGFILE a new variable titled PRESERVE_LOGFILE has
-    been introduced. By default grml-live cleans the build logfile so
-    grml-live-db can work straight out-of-the-box. If you still want to
-    preserve your logfiles (e.g. when you don't want to use
-    grml-live-db) just enable the PRESERVE_LOGFILE option in your
-    grml-live configuration file.  For backwards compatibility reasons the
-    ZERO_LOGFILE variable is still supported within grml-live but it's
-    strongly recommended to adjust configuration.
+  Instead of ZERO_LOGFILE a new variable titled PRESERVE_LOGFILE has
+  been introduced. By default grml-live cleans the build logfile so
+  grml-live-db can work straight out-of-the-box. If you still want to
+  preserve your logfiles (e.g. when you don't want to use
+  grml-live-db) just enable the PRESERVE_LOGFILE option in your
+  grml-live configuration file.  For backwards compatibility reasons the
+  ZERO_LOGFILE variable is still supported within grml-live but it's
+  strongly recommended to adjust configuration.
 
  -- Michael Prokop <mika@grml.org>  Sat, 30 Jan 2010 14:36:15 +0100
 
 grml-live (0.9.4) unstable; urgency=low
 
-  * grml provides its own squashfs-tools again which support LZMA
-    compression with kernel 2.6.26-grml[64], please install the
-    Debian package squashfs-lzma-tools of the grml repository.
-    More details can be found in the grml-live docs. Please
-    check out the section "Current state of grml-live with
-    squashfs-tools and kernel" in the grml-live docs, being
-    shipped with this package as manpage grml-live(8) and
-    /usr/share/doc/grml-live/grml-live.html and being available
-    online at http://grml.org/grml-live/#current_state as well.
+  grml provides its own squashfs-tools again which support LZMA
+  compression with kernel 2.6.26-grml[64], please install the
+  Debian package squashfs-lzma-tools of the grml repository.
+  More details can be found in the grml-live docs. Please
+  check out the section "Current state of grml-live with
+  squashfs-tools and kernel" in the grml-live docs, being
+  shipped with this package as manpage grml-live(8) and
+  /usr/share/doc/grml-live/grml-live.html and being available
+  online at http://grml.org/grml-live/#current_state as well.
 
-  * grml migrated from Mercurial (hg) to Git as version control
-    system. If you are interested in using very recent grml-live
-    versions from our VCS please make sure to check out the docs.
-    http://git.grml.org/?p=grml-live.git
+  grml migrated from Mercurial (hg) to Git as version control
+  system. If you are interested in using very recent grml-live
+  versions from our VCS please make sure to check out the docs.
+  http://git.grml.org/?p=grml-live.git
 
  -- Michael Prokop <mika@grml.org>  Tue, 30 Sep 2008 13:12:07 +0200
 
 grml-live (0.9) unstable; urgency=low
 
-  * grml-live 0.9 features kernel 2.6.26-grml[64]. Using
-    squashfs-tools 1:3.2r2-9exp1 does not work with kernel
-    2.6.26-grml when using LZMA compression though it works
-    fine when using ZLIB compression.
+  grml-live 0.9 features kernel 2.6.26-grml[64]. Using
+  squashfs-tools 1:3.2r2-9exp1 does not work with kernel
+  2.6.26-grml when using LZMA compression though it works
+  fine when using ZLIB compression.
 
-    Debian provides updated squashfs-tools 1:3.3-7. You can
-    safely upgrade as long as you don't need kernel
-    2.6.23-grml[64] and/or LZMA compression.
+  Debian provides updated squashfs-tools 1:3.3-7. You can
+  safely upgrade as long as you don't need kernel
+  2.6.23-grml[64] and/or LZMA compression.
 
-    All these details can be found in the grml-live docs. Please
-    check out the section "Current state of grml-live with
-    squashfs-tools and kernel" in the grml-live docs, being
-    shipped with this package as manpage grml-live(8) and
-    /usr/share/doc/grml-live/grml-live.html and being available
-    online at http://grml.org/grml-live/#current_state as well.
+  All these details can be found in the grml-live docs. Please
+  check out the section "Current state of grml-live with
+  squashfs-tools and kernel" in the grml-live docs, being
+  shipped with this package as manpage grml-live(8) and
+  /usr/share/doc/grml-live/grml-live.html and being available
+  online at http://grml.org/grml-live/#current_state as well.
 
  -- Michael Prokop <mika@grml.org>  Fri, 22 Aug 2008 08:32:44 +0200
 
 grml-live (0.0.4) unstable; urgency=low
 
-  * The -t option for specifying the output directory has been
-    renamed into -o. The option -t now specifies the place where
-    templates for building the ISO can be found.
-    Do not forget to adjust present scripts you use with grml-live.
+  The -t option for specifying the output directory has been
+  renamed into -o. The option -t now specifies the place where
+  templates for building the ISO can be found.
+  Do not forget to adjust present scripts you use with grml-live.
 
  -- Michael Prokop <mika@grml.org>  Sat, 06 Oct 2007 16:50:16 +0200

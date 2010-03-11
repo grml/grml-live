@@ -347,7 +347,7 @@ configuration instead.
   /etc/grml/grml-live.local
 
 All the local configuration should go to this file. This file overrides any
-defaults of grml-live. Configurations via /etc/grml/grml-live.local are prefered
+defaults of grml-live. Configurations via /etc/grml/grml-live.local are preferred
 over the ones from /etc/grml/grml-live.conf. If you want to override settings
 from /etc/grml/grml-live.local as well you have to specify them on the grml-live
 commandline.
@@ -834,7 +834,7 @@ taken. If you customise the variables in /etc/grml/grml-live.conf then the two
 files will be adjusted during runtime automatically.
 
 If MIRROR_DIRECTORY and MIRROR_SOURCES are specified the local mirror will be
-taken as first entry in the generated sources.list so it's prefered over
+taken as first entry in the generated sources.list so it's preferred over
 non-local mirrors. Using a fallback mirror (via providing several mirrors in
 GRML_LIVE_SOURCES as used by default) is a recommended setting.
 
