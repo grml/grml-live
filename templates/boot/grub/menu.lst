@@ -12,47 +12,47 @@ background  = FFCC33
 
 # define entries:
 title %GRML_NAME% %VERSION% - Default boot (using 1024x768 framebuffer)
-kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=791 quiet boot=live bootid=%BOOTID% bootfrom=removable nomce 
+kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=791 quiet boot=live bootid=%BOOTID% nomce 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - without framebuffer
-kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=normal video=ofonly quiet initrd=initrd.gz boot=live bootid=%BOOTID% bootfrom=removable nomce 
+kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=normal video=ofonly quiet initrd=initrd.gz boot=live bootid=%BOOTID% nomce 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - with 1280x1024 framebuffer
-kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=794 quiet initrd=initrd.gz boot=live bootid=%BOOTID% bootfrom=removable nomce 
+kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=794 quiet initrd=initrd.gz boot=live bootid=%BOOTID% nomce 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - with 800x600 framebuffer
-kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=788 quiet initrd=initrd.gz boot=live bootid=%BOOTID% bootfrom=removable nomce 
+kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=788 quiet initrd=initrd.gz boot=live bootid=%BOOTID% nomce 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - failsafe boot
-kernel /boot/%SHORT_NAME%/linux26 vga=normal boot=live bootid=%BOOTID% bootfrom=removable noautoconfig atapicd noapic noacpi acpi=off nomodules nofirewire noudev nousb nohotplug noapm nopcmcia nosmp maxcpus=0 noscsi noagp nodma ide=nodma noswap nofstab nosound nogpm nosyslog nodhcp nocpu nodisc nomodem xmodule=vesa noraid nolvm noresume selinux=0 edd=off 
+kernel /boot/%SHORT_NAME%/linux26 vga=normal boot=live bootid=%BOOTID% noautoconfig atapicd noapic noacpi acpi=off nomodules nofirewire noudev nousb nohotplug noapm nopcmcia nosmp maxcpus=0 noscsi noagp nodma ide=nodma noswap nofstab nosound nogpm nosyslog nodhcp nocpu nodisc nomodem xmodule=vesa noraid nolvm noresume selinux=0 edd=off 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - debug mode
-kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=791 verbose debug=vc initrd=initrd.gz boot=live bootid=%BOOTID% bootfrom=removable initcall_debug nomce 
+kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=791 verbose debug=vc initrd=initrd.gz boot=live bootid=%BOOTID% initcall_debug nomce 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - copy grml squashfs file to RAM
-kernel /boot/%SHORT_NAME%/linux26 toram=%GRML_NAME_SQUASHFS% apm=power-off vga=791 quiet boot=live bootid=%BOOTID% bootfrom=removable nomce 
+kernel /boot/%SHORT_NAME%/linux26 toram=%GRML_NAME_SQUASHFS% apm=power-off vga=791 quiet boot=live bootid=%BOOTID% nomce 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - copy medium to RAM
-kernel /boot/%SHORT_NAME%/linux26 toram apm=power-off vga=791 quiet boot=live bootid=%BOOTID% bootfrom=removable nomce 
+kernel /boot/%SHORT_NAME%/linux26 toram apm=power-off vga=791 quiet boot=live bootid=%BOOTID% nomce 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - grml2hd - install grml to local harddisk [adjust it!]
-kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=791 quiet boot=live bootid=%BOOTID% bootfrom=removable nomce partition=/dev/ice1 mbr=/dev/ice
+kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=791 quiet boot=live bootid=%BOOTID% nomce partition=/dev/ice1 mbr=/dev/ice
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - forensic mode
-kernel /boot/%SHORT_NAME%/linux26 vga=791 nofstab noraid nolvm noautoconfig noswap raid=noautodetect quiet initrd=initrd.gz boot=live bootid=%BOOTID% bootfrom=removable 
+kernel /boot/%SHORT_NAME%/linux26 vga=791 nofstab noraid nolvm noautoconfig noswap raid=noautodetect quiet initrd=initrd.gz boot=live bootid=%BOOTID% 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - serial console mode
-kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=normal video=vesafb:off quiet initrd=initrd.gz boot=live bootid=%BOOTID% bootfrom=removable nomce console=tty1 console=ttyS0,9600n8 
+kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=normal video=vesafb:off quiet initrd=initrd.gz boot=live bootid=%BOOTID% nomce console=tty1 console=ttyS0,9600n8 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title Run memtest86+
