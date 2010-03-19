@@ -6,53 +6,56 @@
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
-function get_blockdev_dir() {
+get_blockdev_dir() {
     for dir in /sys/subsystem/block/ /sys/class/block/ /sys/block/ ; do
-        [ -d $dir ] && echo $dir && return
+        [ -d "$dir" ] && echo "$dir" && return
     done
 }
 
-function base() {
+base() {
     echo ${1##*/}
 }
-function dir() {
+
+dir() {
     echo ${1%/*}
 }
 
-function is_ro() {
+is_ro() {
     [ "$(blockdev --getro $1)" = "1" ] && return 0 || return 1
-
-
 }
+
 # check for forensic/readonly bootoption
-if : ; then
+if grep -qe forensic -qe readonly /proc/cmdline ; then
  # we get $DEVNAME via udev's environment
  if [ -n "$DEVNAME" ] ; then
     NAME=$(base $DEVNAME)
     SYS_DIR=$(get_blockdev_dir)
 
-    if [ -n $SYS_DIR ] && [ -n $NAME ] ; then
+    if [ -n "$SYS_DIR" ] && [ -n "$NAME" ] ; then
         DEVICE=$SYS_DIR/*/$NAME
         if [ -d $DEVICE ] ; then
             PARENT=$(dir $DEVICE)
             PARENT=$(base $PARENT)
-            PARENT=/dev/$PARENT
+            PARENT="/dev/$PARENT"
         fi
     fi
 
    if is_ro "$DEVNAME" ; then
-     logger "forensic mode: device $DEVNAME already set to readonly mode, nothing to do"
+     logger "forensic mode: device $DEVNAME already set to read-only mode, nothing to do"
    elif [ -n "$PARENT" ] && ! is_ro "$PARENT" ; then
-     logger "forensic mode: parent device $PARENT is set readwrite, not modifying"
+     logger "forensic mode: parent device $PARENT is set read-write, not modifying"
      logger "forensic mode: use blockdev --setro $DEVNAME to set it manually"
    else
-     logger "forensic mode: setting $DEVNAME [$ID_SERIAL] to readonly"
+     logger "forensic mode: setting $DEVNAME [$ID_SERIAL] to read-only"
+
      if blockdev --setro "$DEVNAME" ; then
        logger "|-> done; execute 'blockdev --setrw $DEVNAME' to unlock"
      else
        logger "|-> error while executing blockdev: $(blockdev --setro $DEVNAME 2>&1)"
      fi
+
    fi
+
  fi
 fi
 
