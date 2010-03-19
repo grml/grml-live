@@ -1,3 +1,11 @@
+grml-udev-config (0.0.3) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * forensic-mark-readonly: Only set device to read-only if parent
+    is also read-only. [Closes: gf-issue47]
+
+ -- Michael Prokop <mika@grml.org>  Fri, 19 Mar 2010 01:47:03 +0100
+
 grml-udev-config (0.0.2) unstable; urgency=low
 
   * Do not depend on udev >= 146-5 but instead be happy with
