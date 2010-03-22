@@ -1,3 +1,9 @@
+grml-live (0.9.40) UNRELEASED; urgency=low
+
+  * Nothing yet, will be updated using git-dch on release.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 23 Mar 2010 00:51:20 +0100
+
 grml-live (0.9.39) unstable; urgency=low
 
   * Add support for /boot/isolinux/submenu*.cfg files.
