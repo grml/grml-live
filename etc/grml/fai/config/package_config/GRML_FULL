@@ -1873,6 +1873,7 @@ PACKAGES aptitude I386
 
 ## general:
 grml
+perf
 # use linux-kernel-headers-grml instead of linux-libc-dev?
 # linux-kernel-headers-grml
 
@@ -1900,6 +1901,7 @@ PACKAGES aptitude AMD64
 
 ## general:
 grml64
+perf
 
 ## current kernel version 2.6.33-grml64:
 drbd8-2.6.33-grml64
