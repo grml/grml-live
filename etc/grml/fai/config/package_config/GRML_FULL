@@ -725,6 +725,7 @@ httping
 httptunnel
 hunt
 hwdata
+hwloc
 i2c-tools
 i810switch
 i8kutils
