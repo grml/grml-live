@@ -896,8 +896,8 @@ login
 logrotate
 logtools
 logwatch
-loop-aes-utils
 loop-aes-testsuite
+loop-aes-utils
 lrzsz
 lsb-base
 lsb-release
@@ -911,6 +911,7 @@ lua50
 luasocket
 luvcview
 lwatch
+lxc
 lynx
 lzma
 lzop
