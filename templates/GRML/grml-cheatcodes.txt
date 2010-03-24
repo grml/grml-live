@@ -50,7 +50,7 @@ grml myconfig=/dev/fd0              Set the DCS dir (debs, config, scripts) to t
                                     /dev/fd0  for floppy disk
                                     /dev/sda1 for USB-stick/first SCSI-device
 grml netconfig=server/config.tbz    Download file and extract configuration archive
-grml netscript=server/file          Download and execute file [Note: only available in releases >2009.05]
+grml netscript=server/file          Download and execute file
 grml partconf=/dev/hda2             Copy files specified in /etc/grml/partconf from /dev/hda2
                                     to booting grml system
 grml file=foobar.tbz                Use specified file as name for configuration archive
@@ -105,9 +105,9 @@ grml isofrom=/dev/sda1/grml.iso     Use specified ISO image for booting
                                     "boot=live isofrom=/dev/sda1/grml.iso"
                                     Notice: "fromiso" does the same as "isofrom", it's just there
                                     to prevent any typing errors
-grml findiso=/grml_2009.10.iso      Look for the specified ISO file on all disks where it usually
+grml findiso=/grml_2010.04.iso      Look for the specified ISO file on all disks where it usually
                                     looks for the .squashfs file (so you don't have to know the device name
-                                    as in isofrom=....). [Available since Grml 2009.05]
+                                    as in isofrom=....).
 grml live-media-path=live           Sets the path to the live filesystem on the medium
                                     By default, it is set to /live
 grml module=grml                    Instead of using the default "$name.module" another file can
@@ -116,9 +116,9 @@ grml module=grml                    Instead of using the default "$name.module" 
                                     Useful for Multiboot USB pen, see
                                     http://wiki.grml.org/doku.php?id=tips#multiboot_usb_pen
 grml bootid=mybootid                Use specified argument as identifier for the ISO.
-                                    [Note: only available in releases >2009.10]
+                                    [Note: only available since release 2010.04]
 grml ignore_bootid                  Disable bootid verification.
-                                    [Note: only available in releases >2009.10]
+                                    [Note: only available since release 2010.04]
 
 
 Debugging related settings:
@@ -179,6 +179,9 @@ Hardware related settings:
 grml swap                           Activate present/detected swap partitions
 grml noswraid                       Disable scanning for software raid arrays (creates /etc/mdadm/mdadm.conf)
 grml swraid                         Enable automatic assembling of software raid arrays
+grml nodmraid                       Do not enable present dmraid devices.
+grml dmraid=on                      Automatically enable any present dmraid devices.
+grml dmraid=off                     Actively try to stop any present dmraid devices.
 grml nolvm                          Disable scanning for Logical Volumes (LVM)
 grml lvm                            Automatically activate Logival Volumes (LVM) during boot
 grml readonly                       Make sure all harddisk devices (/dev/hd* /dev/sd*) are forced to read-only mode
@@ -255,14 +258,7 @@ grml2hd <options>                   ... whereas valid options for grml2hd are:
 Additional notes:
 -----------------
 
-*) Try "grml pci=irqmask=0x0e98" if (you have a notebook and) your
-PS/2 mouse doesn't work. (Possibly caused by a BIOS-flaw on your board,
-BIOS updates can help.) Sometimes, switching to the text console with
-Control-Alt-F1 and back to the X-screen with Control-Alt-F7 solves the
-problem without rebooting, since the X server reinitializes the mouse
-driver during that procedure.
-
-*) If your grml-CD makes strange noises during boot, or you see frequent
+*) If your Grml-CD makes strange noises during boot, or you see frequent
 errors like "squashfs: read error", or programs are crashing randomly,
 then your CD image is probably defective or incomplete, your CD-burner
 created a defective CD due to wrong writing speed or bad media or your
@@ -300,12 +296,10 @@ as option to mkisofs. Otherwise your CD won't be bootable. The
 directory live, containing the squashfs compressed filesystem file,
 must be located in the top level directory of the CD.
 
-*) Caution: screensavers: Don't start vlock or any screensaver
-that requires a password. There are no default passwords on grml,
-i.e. all accounts are LOCKED unless you explicitly set a password.
-See also README.txt about this issue.
-Hint: If you accidentially started a screensaver switch to one of the
-textconsoles by Control-Alt-F1 and kill the screensaver (or just set a
-password for the grml user). Take a look at the script grml-lock.
+*) Caution: screensavers: Don't start vlock or any other screensaver
+that requires a password manually. There are no default passwords on
+the live system - all accounts are LOCKED by default for security reasons.
+Instead just invoke the script grml-lock which prompts for setting a
+password.
 
 # EOF
