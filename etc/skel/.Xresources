@@ -31,6 +31,9 @@ UXTerm*font6:           -misc-fixed-medium-r-normal--20-200-75-75-c-100-iso10646
 UXTerm*utf8Fonts.font:          -misc-fixed-medium-r-normal--18-120-100-100-c-90-iso10646-1
 UXTerm*utf8Fonts.wideFont:      -misc-fixed-medium-r-normal-ko-18-120-100-100-c-180-iso10646-1
 
+UXTerm*.background: black
+UXTerm*.foreground: lightgrey
+
 ! enable UTF8
 ! XTerm*utf8: 0
 ! start via xterm -class UXTerm or 'uxterm'

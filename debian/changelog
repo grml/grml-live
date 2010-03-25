@@ -1,3 +1,10 @@
+grml-etc (1.1.35) unstable; urgency=low
+
+  * .Xresources: set background and foreground color for UXTerm
+    explicitly.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 25 Mar 2010 16:17:51 +0100
+
 grml-etc (1.1.34) unstable; urgency=low
 
   * Remove /etc/policy-rc.d.conf and /etc/zg-policy-rc.d.conf
