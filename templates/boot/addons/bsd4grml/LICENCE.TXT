@@ -9,7 +9,7 @@ DESCRIPTION
      covering the operating system.
 
 MIROS PROJECT
-     MirOS is Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009
+     MirOS is Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
            The MirOS Project <miros-dev@mirbsd.org>
      and its contributors.
 
@@ -422,4 +422,4 @@ BUGS
      MirOS project at <miros-discuss@mirbsd.org> if you think you have
      discovered a bug.
 
-MirOS                          August 30, 2009                               6
+MirOS                          January 6, 2010                               6
