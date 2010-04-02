@@ -59,9 +59,6 @@ grml extract=/etc                   Extract only /etc from configuration archive
                                     use it in combination with myconfig or netconfig
 grml persistent                     Enable persistency feature, more details available at
                                     http://wiki.grml.org/doku.php?id=persistency
-grml home=/dev/hda2                 Mount specified partition as grml homedir
-grml home=/dev/sda1/grml.img        Mount loopback file as /home/grml
-grml home=scan                      Automatic search for grml homedir (using file grml.img)
 grml hostname=...                   Set hostname
 grml nodhcphostname                 Do not to set the hostname according to the dns information
 grml distri=...                     Set distribution name to given argument. If a jpg file named like the
