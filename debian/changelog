@@ -1,3 +1,12 @@
+grml-udev-config (0.0.4) unstable; urgency=low
+
+  * grml-blockdevices rule: do not react on changes in block devices
+    but instead on any add|change|remove action on filesystem layer.
+    Move script from priority 60 to 90 to be able to access
+    ID_FS_USAGE. Thanks for help to Ulrich.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 03 Apr 2010 02:49:38 +0200
+
 grml-udev-config (0.0.3) unstable; urgency=low
 
   [ Ulrich Dangel ]

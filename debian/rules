@@ -37,7 +37,7 @@ binary-indep: install
 	dh_installudev --name=grml-forensic     --priority 01
 	dh_installudev --name=grml-external     --priority 60
 	dh_installudev --name=grml-usbdev       --priority 60
-	dh_installudev --name=grml-blockdevices --priority 60
+	dh_installudev --name=grml-blockdevices --priority 90
 	dh_installinit --no-start --name=grml-udev
 	# do *NOT* automatically install it, see README.Debian
 	# --update-rcd-params='start 03 S .'
