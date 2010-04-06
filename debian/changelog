@@ -1,8 +1,25 @@
-grml-live (0.9.40) UNRELEASED; urgency=low
+grml-live (0.9.40) unstable; urgency=low
 
-  * Nothing yet, will be updated using git-dch on release.
+  [ Michael Prokop ]
+  * Software related changes:
+    - Add perf to GRML_FULL.
+    - Add lxc to GRML_FULL.
+    - Add hwloc to GRML_FULL.
+    - Drop aria2 from GRML_FULL (lack of space).
+    - Drop bluez-audio (lack of space, requires ~17MB incl.
+      dependencies)
+  * Drop wrongly merged failsafe bootoptions.
+  * Update grml-cheatcodes.txt (e.g. drop home= bootoption
+    as it has been deprecated recently).
+  * Update bsd4grml to version 20100328 (thanks, Thorsten).
 
- -- Michael Prokop <mika@grml.org>  Tue, 23 Mar 2010 00:51:20 +0100
+  [ Ulrich Dangel ]
+  * Fix Boot OS of first partition entry for grub. Thanks to Jordan
+    Uggla for
+  * Support automatic findiso command and fixed gfxpayload handling.
+    Thanks to Jordan Uggla.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 06 Apr 2010 10:45:26 +0200
 
 grml-live (0.9.39) unstable; urgency=low
 
