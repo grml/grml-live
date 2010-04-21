@@ -1,3 +1,10 @@
+grml-live (0.9.41) UNRELEASED; urgency=low
+
+  * Placeholder changelog entry, will be adjusted with release
+    using git-dch.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 22 Apr 2010 01:08:45 +0200
+
 grml-live (0.9.40) unstable; urgency=low
 
   [ Michael Prokop ]
