@@ -120,6 +120,7 @@ grml module=grml                    Instead of using the default "$name.module" 
                                     Useful for Multiboot USB pen, see
                                     http://wiki.grml.org/doku.php?id=tips#multiboot_usb_pen
 grml bootid=mybootid                Use specified argument as identifier for the ISO.
+                                    mybootid is specified in /conf/bootid.txt on the ISO.
                                     [Note: only available since release 2010.04]
 grml ignore_bootid                  Disable bootid verification.
                                     [Note: only available since release 2010.04]
