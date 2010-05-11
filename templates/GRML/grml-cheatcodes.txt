@@ -1,17 +1,17 @@
       CHEATCODES AND HINTS FOR GRML
 ==============================================================================
 
-These options work from the (isolinux/grub) bootprompt of grml based (live) systems.
+These options work from the (isolinux/grub) bootprompt of Grml based (live) systems.
 
 The following kernel options are available (do NOT use them as 'grml $OPTION',
 use them as '$OPTION'!):
 
 grml                                Use default settings (same as just pressing return)
-grml2ram                            Copy grml's squashfs file to RAM and
+grml2ram                            Copy Grml's squashfs file to RAM and
                                     run from there (compare with 'grml toram')
 memtest                             Run Memtest86+ instead of Linux
 fb1280x1024                         Use fixed framebuffer graphics (1)
-fb1024x768                          Use fixed framebuffer graphics (2) [notice: grml's default]
+fb1024x768                          Use fixed framebuffer graphics (2) [notice: Grml's default]
 fb800x600                           Use fixed framebuffer graphics (3)
 nofb                                Disable framebuffer
 floppy                              Boot from floppydisk
@@ -28,8 +28,12 @@ hdt                                 Boot Hardware Detection Tool (from syslinux 
 qemu                                Boot with special options for use in Qemu
 vmware                              Boot with special options for use in VMware
 
+Further documentation regarding the init process can be found at:
+* http://git.grml.org/?p=live-initramfs-grml.git;a=blob_plain;f=manpages/live-initramfs.en.7.txt;hb=HEAD
+* http://git.debian.org/?p=kernel/initramfs-tools.git;a=blob_plain;f=initramfs-tools.8;hb=HEAD
+
 The following boot options can be combined.
-Notice: not all of the them are available on all the grml flavours.
+Notice: not all of the them are available on all the Grml flavours.
 For example the X window system is not part of grml-small.
 
 Regional settings:
@@ -82,14 +86,14 @@ for more information regarding the configuration framework of grml.
 
 Booting related options:
 ------------------------
-grml2ram                            Copy grml's squashfs file to RAM and run from there
+grml2ram                            Copy Grml's squashfs file to RAM and run from there
 grml toram                          Copy the whole CD/medium to RAM and run from there
 grml toram=filename.squashfs        Copy the specified file to RAM and run from there
                                     Usage example: grml toram=grml-medium.squashfs
                                     Notice: grml2ram is an alias for this option which
                                     corresponds with the grml flavour settings by default
 
-grml tohd=/dev/sda1                 Copy grml's squashfs file to harddisk partition for later
+grml tohd=/dev/sda1                 Copy Grml's squashfs file to harddisk partition for later
                                     use via "grml bootfrom=/dev/sda1"
 grml bootfrom=/dev/sda1             Use the squashfs file from directory 'live' of the specified device
                                     Setup can be done booting 'grml tohd=/dev/sda1' or
@@ -105,6 +109,9 @@ grml isofrom=/dev/sda1/grml.iso     Use specified ISO image for booting
 grml findiso=/grml_2010.04.iso      Look for the specified ISO file on all disks where it usually
                                     looks for the .squashfs file (so you don't have to know the device name
                                     as in isofrom=....).
+grml fetch=$IP/filename.squashfs    Download a squashfs image from a given url, copying to ram and booting it.
+                                    Due to current limitations in busyboxs wget and DNS resolution, an URL
+                                    can not contain a hostname but an IP only.
 grml live-media-path=live           Sets the path to the live filesystem on the medium
                                     By default, it is set to /live
 grml module=grml                    Instead of using the default "$name.module" another file can
