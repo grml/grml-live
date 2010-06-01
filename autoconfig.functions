@@ -577,22 +577,27 @@ config_console(){
 if checkbootparam 'console'; then
   einfo "Bootoption for serial console detected:"
 
-  local serial="$(getbootparam console=ttyS)"
-  option="${serial##*,}"
-
-  # default to:
-  local speed="115200,57600,38400,19200,9600,4800,2400,1200";
-  # ... unless overriden by command line:
-  case "$option" in
-    115200*) speed=115200 ;;
-     57600*) speed=57600 ;;
-     38400*) speed=38400 ;;
-     19200*) speed=19200 ;;
-      9600*) speed=9600 ;;
-      4800*) speed=4800 ;;
-      2400*) speed=2400 ;;
-      1200*) speed=1200 ;;
-  esac
+  local serial="$(getbootparam console)"
+  if ! echo $serial | grep -q ttyS ; then
+    ewarn "Warning: console=ttyS... not specified as last console= option. Falling back to defaults."
+    eend 0
+    local speed="9600"
+  else
+    local option="${serial##*,}"
+    # default (works for kvm & CO):
+    local speed="115200,57600,38400,19200,9600,4800,2400,1200";
+    # ... unless overriden by command line:
+    case "$option" in
+      115200*) speed=115200 ;;
+       57600*) speed=57600 ;;
+       38400*) speed=38400 ;;
+       19200*) speed=19200 ;;
+        9600*) speed=9600 ;;
+        4800*) speed=4800 ;;
+        2400*) speed=2400 ;;
+        1200*) speed=1200 ;;
+    esac
+  fi
 
   eindent
     einfo "Setting baud rate to ${speed}."
