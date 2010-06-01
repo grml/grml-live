@@ -1,3 +1,10 @@
+grml-autoconfig (0.9.11) unstable; urgency=low
+
+  * Do not check for bootoption console=ttyS as this might fail,
+    instead assume safe defaults.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 01 Jun 2010 12:58:01 +0200
+
 grml-autoconfig (0.9.10) unstable; urgency=low
 
   * console/serial bootoption: allow manually specifying
