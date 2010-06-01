@@ -40,7 +40,7 @@ Description: log package build information of grml-live to database
 
 Package: grml-live-buildd
 Architecture: all
-Depends: ${misc:Depends}, grml-live, nail
+Depends: ${misc:Depends}, grml-live, heirloom-mailx
 Description: autobuild daemon for grml-live
  This package provides example scripts for a simple autobuild
  daemon for the grml-live framework. Those scripts are used
