@@ -117,6 +117,10 @@ debs::
   debs=*.deb        =>   install all debian packages (suffix .deb) from directory DCSDIR/debs/
   debs=foo/01*.deb  =>   install all debian packages (suffix .deb) starting with 01 in the filename from directory DCSDIR/foo
 
+debnet::
+
+    Search all local partitions and dm devices for file /etc/network/interfaces and
+    copy the directory /etc/network to the grml system and restart networking.
 
 noautoconfig::
 
