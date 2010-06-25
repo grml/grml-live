@@ -13,6 +13,9 @@
 *hello: hello
 *help: help
 *hexdump: hexdump
+*inb: iorw
+*inl: iorw
+*inw: iorw
 *keystatus: keystatus
 *kfreebsd: bsd
 *knetbsd: bsd
@@ -43,6 +46,7 @@ boot: boot
 cat: minicmd
 chainloader: chain
 clear: minicmd
+cmostest: cmostest
 cmp: cmp
 configfile: configfile
 crc: crc
@@ -55,7 +59,6 @@ exit: minicmd
 export: normal
 false: true
 gptsync: gptsync
-handler: handler
 help: minicmd
 initrd16: linux16
 initrd: linux
@@ -68,12 +71,15 @@ loadfont: font
 lsfonts: font
 lsmmap: lsmmap
 lsmod: minicmd
+module2: multiboot2
 module: multiboot
-module: multiboot2
 multiboot2: multiboot2
 multiboot: multiboot
 normal: normal
 normal_exit: normal
+outb: iorw
+outl: iorw
+outw: iorw
 parttool: parttool
 password: password
 password_pbkdf2: password_pbkdf2
@@ -81,6 +87,7 @@ play: play
 pxe_unload: pxecmd
 read: read
 reboot: reboot
+regexp: regexp
 rmmod: minicmd
 root: minicmd
 search.file: search_fs_file

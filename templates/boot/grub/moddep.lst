@@ -1,158 +1,164 @@
-gcry_des: crypto
-videotest: font video
-loopback: extcmd
-memrw: extcmd
-terminfo:
-part_gpt:
-gcry_arcfour: crypto
-read:
-aout:
-elf: gzio
-vga_text:
-gcry_seed: crypto
-password_pbkdf2: crypto gcry_sha512 pbkdf2 normal
-bsd: elf extcmd aout boot video cpuid gzio mmap
-reiserfs: fshelp
-sfs: fshelp
-915resolution: extcmd
-gfxmenu: trig bitmap_scale gfxterm font normal bitmap video
-configfile: normal
-help: charset extcmd normal
-jfs:
-afs: fshelp
-ohci: usb pci
-search_fs_file:
-usb_keyboard: usb
-vga: font
-usbms: scsi usb
-true:
-affs: fshelp
-iso9660: fshelp
-gfxterm: bitmap_scale font extcmd bitmap video
-functional_test: extcmd
-xfs: fshelp
-sleep: extcmd normal
-vbetest: vbe video
-pxecmd: pxe
-memdisk:
-gcry_rijndael: crypto
-gcry_sha1: crypto
-gettext: normal gzio
-cmp: gzio
-befs_be: fshelp
-hashsum: crypto extcmd normal
-halt: extcmd
-usb:
-search_fs_uuid:
-keystatus: extcmd
-linux: normal boot video mmap
-part_sun:
-mdraid: raid
-bufio:
-handler:
-cpuid: extcmd
-gcry_blowfish: crypto
-hdparm: extcmd
-test:
-minicmd:
-ata: scsi pci
-gzio:
-udf: fshelp
-terminal:
-xnu_uuid: gcry_md5
-uhci: usb pci
-crypto:
-raid:
-gcry_sha512: crypto
-biosdisk:
-password: crypto normal
-fshelp:
-efiemu: charset crc acpi
-mmap: boot
-xnu: bitmap_scale charset extcmd boot bitmap video relocator efiemu gzio
-zfsinfo: zfs
-blocklist:
-ext2: fshelp
-drivemap: extcmd boot mmap
-part_acorn:
-sh: normal
-lsmmap:
-bitmap:
-ntfs: fshelp
-multiboot: boot video relocator gzio mmap
-vbe: video video_fb
-gcry_crc: crypto
-png: bufio bitmap
-jpeg: bufio bitmap
-parttool: normal
-cpio:
-gcry_rmd160: crypto
-fat:
-charset:
-zfs:
-raid6rec: raid
-bitmap_scale: bitmap
-loadenv: extcmd
-datehook: datetime normal
-probe: extcmd
-tar:
-hfs:
-boot:
-vbeinfo: vbe
-relocator:
-acpi: extcmd gzio mmap
-usbtest: usb
-tga: bufio bitmap
-reboot:
-befs: fshelp
-serial: extcmd terminfo
-dm_nv: raid
-font: bufio video
-raid5rec: raid
-example_functional_test: functional_test
-video:
-crc:
-gcry_cast5: crypto
-hfsplus: fshelp
-extcmd:
-gcry_whirlpool: crypto
-gcry_tiger: crypto
-pxe: bufio
-video_fb: video
-search: search_fs_uuid search_fs_file extcmd search_label
-lspci: extcmd pci
-afs_be: fshelp
-gcry_twofish: crypto
-msdospart: parttool
-hexdump: extcmd gzio
-part_apple:
-ata_pthru: ata
-gcry_sha256: crypto
-pbkdf2: crypto
 date: datetime normal
-ls: extcmd normal
-ntfscomp: ntfs
-hello: extcmd
-scsi:
-normal: terminal crypto charset boot
-cat: gzio
-linux16: video boot mmap
-lvm:
-ufs1:
-chain: video boot
-search_label:
-gptsync:
-ufs2:
-setpci: extcmd pci
-gcry_rfc2268: crypto
-multiboot2: boot video relocator gzio mmap
-part_amiga:
-play:
+search_fs_uuid:
+gcry_twofish: crypto
+multiboot2: boot gzio video relocator mmap
+uhci: pci usb
+cmostest:
+gcry_rijndael: crypto
 echo: extcmd
-minix:
+cpio:
+gcry_cast5: crypto
+gcry_sha512: crypto
+boot:
+part_sun:
+gzio:
+ls: extcmd normal
+gfxterm: video extcmd bitmap_scale bitmap font
+video:
 gcry_serpent: crypto
-gcry_md4: crypto
-gcry_md5: crypto
-gcry_camellia: crypto
-part_msdos:
+gcry_tiger: crypto
+aout:
+gcry_blowfish: crypto
+extcmd:
 at_keyboard:
+minix:
+pxe: bufio
+reboot:
+xnu_uuid: gcry_md5
+help: extcmd charset normal
+usbms: usb scsi
+usbtest: usb
+blocklist:
+part_msdos:
+gcry_rfc2268: crypto
+pbkdf2: crypto
+probe: extcmd
+gcry_camellia: crypto
+fat:
+gcry_md4: crypto
+parttool: normal
+pci:
+linux: boot video mmap normal
+zfsinfo: zfs
+gcry_md5: crypto
+fshelp:
+usb_keyboard: usb
+bitmap_scale: bitmap
+ata: pci scsi
+gcry_des: crypto
+datehook: datetime normal
+dm_nv: raid
+reiserfs: fshelp
+afs_be: fshelp
+efiemu: acpi crc charset
+gcry_seed: crypto
+crypto:
+terminal:
+jpeg: bufio bitmap
+test:
+bsd: boot gzio video aout extcmd elf cpuid mmap
+memdisk:
+cmp: gzio
+gfxmenu: gfxterm video trig bitmap_scale bitmap normal font
+acpi: gzio extcmd mmap
+elf: gzio
+affs: fshelp
+xfs: fshelp
+cpuid: extcmd
+crc:
+usb: pci
+videotest: video font
+play:
+relocator:
+password: crypto normal
+mdraid: raid
+part_sunpc:
+pxecmd: pxe
+video_fb: video
+sleep: extcmd normal
+serial: extcmd terminfo
+gcry_rmd160: crypto
+gcry_sha256: crypto
+search_fs_file:
+search: search_fs_uuid extcmd search_fs_file search_label
+chain: boot video
+memrw: extcmd
+cs5536: pci
+ata_pthru: ata
+gcry_crc: crypto
+password_pbkdf2: gcry_sha512 pbkdf2 crypto normal
+configfile: normal
+befs: fshelp
+linux16: boot video mmap
+gcry_arcfour: crypto
+charset:
+raid5rec: raid
+gettext: gzio normal
+hello: extcmd
+hashsum: extcmd crypto normal
+vga_text:
+vbeinfo: vbe
+regexp:
+gptsync:
+part_gpt:
+ohci: boot pci usb cs5536
+zfs:
+bufio:
+part_apple:
+hdparm: extcmd
+bitmap:
+true:
+terminfo:
+hfs:
+ntfscomp: ntfs
+biosdisk:
+ufs1:
+915resolution: extcmd
+gcry_sha1: crypto
+lsmmap:
+nilfs2: fshelp
+ufs2:
+befs_be: fshelp
+mmap: boot
+png: bufio bitmap
+tar:
+hfsplus: fshelp
+lspci: extcmd pci
+tga: bufio bitmap
+functional_test: extcmd
+scsi:
+lvm:
+raid:
+setpci: extcmd pci
+iso9660: fshelp
+search_label:
+msdospart: parttool
+raid6rec: raid
+udf: fshelp
+vbe: video video_fb
+halt: extcmd
+keystatus: extcmd
+read:
+multiboot: boot gzio video relocator mmap
+xnu: boot gzio video extcmd bitmap_scale efiemu relocator charset bitmap
+normal: boot crypto terminal charset
+loopback: extcmd
+part_amiga:
+sfs: fshelp
+jfs:
+vbetest: video vbe
+cat: gzio
+part_acorn:
+afs: fshelp
+iorw: extcmd
+hexdump: gzio extcmd
+gcry_whirlpool: crypto
+loadenv: extcmd
+minicmd:
+drivemap: boot extcmd mmap
+example_functional_test: functional_test
+font: video bufio
+part_bsd:
+ext2: fshelp
+vga: video video_fb
+ntfs: fshelp
