@@ -726,6 +726,7 @@ hunt
 hwdata
 hwloc
 i2c-tools
+i3-wm
 i810switch
 i8kutils
 ibod
