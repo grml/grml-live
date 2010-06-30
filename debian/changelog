@@ -1,9 +1,33 @@
-grml-live (0.9.41) UNRELEASED; urgency=low
+grml-live (0.9.41) unstable; urgency=low
 
-  * Placeholder changelog entry, will be adjusted with release
-    using git-dch.
+  [ Ulrich Dangel ]
+  * [f485d22] Add loopback.cfg.
+  * [a72dab8] Improved documentation for bootid bootoption.
 
- -- Michael Prokop <mika@grml.org>  Thu, 22 Apr 2010 01:08:45 +0200
+  [ Michael Stapelberg ]
+  * [71f9c13] SW: Add i3-wm to GRML_FULL. [Closes: issue876]
+
+  [ Michael Prokop ]
+  * [8568d83] grml-cheatcodes.txt: document fetch= bootoption + add
+    pointers to initramfs related documentation.
+  * [07ca6d5] update templates/boot/grub/ to grub version 1.98+20100617-
+    1, extend grub.cfg, update scripts/create-grub-dir.sh
+  * Debian packaging:
+    - [8a0e08a] Set Debian source format to 3.0 (native).
+    - [e84d056] Bump Standards-Version to 3.9.0.
+    - [3ae2043] Replace Depends of grml-live-buildd on nail with
+      heirloom-mailx.
+  * SW-related changes:
+    - [dfecfb0] Add uuid-runtime to GRMLBASE,
+                thanks Adriana Teixera.
+    - [1898358] Add gddrescue to GRML_MEDIUM,
+                thanks Antonio Diaz Diaz.
+    - [4df9949] Add socat to GRML_MEDIUM.
+    - [da02706] Add grml-paste to GRML_MEDIUM + GRML_SMALL.
+    - [8ad9d2a] Add ekeyd to GRML_FULL,
+                thanks Peter Palfrader. [Closes: issue873]
+
+ -- Michael Prokop <mika@grml.org>  Wed, 30 Jun 2010 12:15:00 +0200
 
 grml-live (0.9.40) unstable; urgency=low
 
