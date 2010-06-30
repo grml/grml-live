@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends: debhelper (>= 5)
 Build-Depends-Indep: asciidoc, xsltproc, docbook-xsl
-Standards-Version: 3.8.4
+Standards-Version: 3.9.0
 Homepage: http://grml.org/grml-live/
 Vcs-git: git://git.grml.org/grml-live.git
 Vcs-Browser: http://git.grml.org/?p=grml-live.git
