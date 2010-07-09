@@ -112,13 +112,6 @@ einfo "Removing pid-files"
   find /var/run -name \*.pid -exec rm {} \;
 eend $?
 
-einfo "Unmounting proc, /dev/pts, /dev/capi"
-  umount /proc     2>/dev/null
-  umount /dev/pts  2>/dev/null
-  umount /dev/capi 2>/dev/null
-  umount -a 2>/dev/null
-eend $?
-
 einfo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
   rm -f /var/lib/apt/lists/*Packages
   rm -f /var/lib/apt/lists/*Release
@@ -336,17 +329,11 @@ fi
 
 if [ -x /usr/bin/updatedb ] ; then
   einfo "Updating locate-database"
-  mount -t proc none /proc
   updatedb --prunepaths='/tmp /usr/tmp /var/tmp /grml /root /proc /sys'
-  umount /proc
   eend $?
 else
   ewarn "updatedb not installed" ; eend 0
 fi
-
-einfo "Unmounting all filesystems"
-  umount -a
-eend $?
 
 ################################################################################
 # MISC STUFF
