@@ -75,7 +75,17 @@ EOF
 
    # run it on our own, as updatebase is used at the wrong stage for our needs,
    # see /etc/grml/fai/config/hooks/updatebase.GRMLBASE
-   $ROOTCMD apt-get update
+   # the apt-get update might return an error if there's for example
+   # a hashsum mismatch on Debian mirror sources, we might want to continue
+   # but should warn the user
+   if ! $ROOTCMD apt-get update ; then
+      echo "Warning: there was an error executing apt-get update, continuing anyway."
+   fi
+
+  # newer aptitude versions won't remove essential packages using
+  # 'aptitude -f -y install file-rc' anymore, therefore force it:
+  $ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc
+
    if ! [ -x $target/usr/bin/aptitude ] ; then
       $ROOTCMD apt-get -y install aptitude
    fi
@@ -126,12 +136,18 @@ if ! grep -q 'Aptitude::Recommends-Important.*false' $target/etc/apt/apt.conf ; 
    echo "Aptitude::Recommends-Important false; // added by grml-live" >> $target/etc/apt/apt.conf
 fi
 
-# make sure we have file-rc available before
-# package_config/GRML is being executed:
-$ROOTCMD apt-get update
-# newer aptitude versions won't remove essential packages using
-# 'aptitude -f -y install file-rc' anymore, therefore force it:
-$ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc
+# make sure we have file-rc available before package_config/GRML is
+# being executed {{{
+  # the apt-get update might return an error if there's for example
+  # a hashsum mismatch on Debian mirror sources, we might want to continue
+  # but should warn the user
+  if ! $ROOTCMD apt-get update ; then
+     echo "Warning: there was an error executing apt-get update, continuing anyway."
+  fi
+  # newer aptitude versions won't remove essential packages using
+  # 'aptitude -f -y install file-rc' anymore, therefore force it:
+  $ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc
+# }}}
 
 # get rid of insserv:
 if $ROOTCMD dpkg --list insserv 2>/dev/null | grep -q '^ii' ; then
