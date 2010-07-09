@@ -9,7 +9,7 @@
 set -u
 set -e
 
-[ -z "$GRML_NAME" ] && GRML_NAME=grml
+GRML_NAME="${GRML_NAME:-grml}"
 
 if ! [ -r $target/etc/runlevel.conf ] ; then
    echo 'Warning: /etc/runlevel.conf does not exist...'
