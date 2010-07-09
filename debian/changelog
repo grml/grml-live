@@ -1,3 +1,16 @@
+grml-live (0.9.42) unstable; urgency=low
+
+  * [8e0d3bd] Update isolinux.bin to "ISOLINUX 4.00 debian-20100628".
+  * [8ef26a3] Bump grml-live version string.
+  * [ca2c8a5] Update hdt.c32 from version 0.3.4 to 0.3.6.
+  * [79e718c] grml_cleanup_chroot: drop all [u]mount commands.
+  * [caa84f1] 15-initsetup: improve check for empty GRML_NAME variable
+    to make it compatible with set -u.
+  * [125b443] instsoft.GRMLBASE: warn if apt-get update fails but try to
+    continue.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 09 Jul 2010 14:41:03 +0200
+
 grml-live (0.9.41) unstable; urgency=low
 
   [ Ulrich Dangel ]
