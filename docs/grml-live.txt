@@ -81,10 +81,16 @@ really know that you do not want to update the chroot.
 Specify the CLASSES to be used for building the ISO via FAI.  By default only
 the classes GRMLBASE, GRML_MEDIUM and I386 are assumed, resulting in a small base
 system (being about ~180MB total ISO size). If using a non-I386 system (like
-amd64) you should specify the appropriate architecture as well. Additionally you
+AMD64) you should specify the appropriate architecture as well. Additionally you
 can specify a class providing a grml-kernel (see
 <<classes,the 'CLASSES' section in this document>> for details about available classes).
 So instead of GRML_MEDIUM you can also use GRML_SMALL and GRML_FULL.
+
+[IMPORTANT]
+All class names should be written in uppercase letters. Do not use a dash, use
+an underscore. So do not use "amd64" but "AMD64", do not use "FOO BAR" but
+"FOO_BAR".
+
 
   -C **CONFIGURATION_FILE**::
 
