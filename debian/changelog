@@ -1,3 +1,15 @@
+grml-etc (1.2.2) unstable; urgency=low
+
+  [ Marc Haber ]
+  * [d2e4ad2] modify inittab for new serial handling.
+
+  [ Michael Prokop ]
+  * [3719a48] ttyS*: provide commented default, reword information about
+    grmlserial marker.
+  * [03f0dc2] Bump Standards-Version to 3.9.0.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 21 Jul 2010 23:44:00 +0200
+
 grml-etc (1.2.1) unstable; urgency=low
 
   * channels.conf-AT-graz: use audio ID 5013 instead of 5011 -
