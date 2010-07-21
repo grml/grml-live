@@ -1,3 +1,19 @@
+grml-autoconfig (0.9.12) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [563484d] Documented debnet parameter.
+
+  [ Marc Haber ]
+  * [f193f81] make config_console handle multiple console=-settings
+    allow devices > ttyS1.
+
+  [ Michael Prokop ]
+  * [3a046cd] console setup: provide fallback if no tty was specified,
+    fix minor whitespace/tab/typo issues.
+  * [78c2815] Bump Standards-Version to 3.9.0.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 21 Jul 2010 23:45:13 +0200
+
 grml-autoconfig (0.9.11) unstable; urgency=low
 
   * Do not check for bootoption console=ttyS as this might fail,
