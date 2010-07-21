@@ -1,3 +1,11 @@
+grml-live (0.9.43) unstable; urgency=low
+
+  * [6136081] docs/grml-live.txt: clarify policy for class names.
+  * [7c56f73] SW: (Re)add aufs-tools to GRMLBASE.
+  * [a8257bc] Update isolinux files to ISOLINUX 4.01 debian-20100712.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 21 Jul 2010 12:38:17 +0200
+
 grml-live (0.9.42) unstable; urgency=low
 
   * [8e0d3bd] Update isolinux.bin to "ISOLINUX 4.00 debian-20100628".
