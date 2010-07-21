@@ -698,7 +698,7 @@ Instructions
 
   # install relevant tools
   # please check out http://grml.org/grml-live/#current_state when encountering problems!
-  apt-get -o APT::Install-Recommends=false install grml-live squashfs-lzma-tools
+  apt-get -o APT::Install-Recommends=false install grml-live squashfs-tools squashfs-lzma-tools
 
   # adjust grml-live configuration for our needs:
   cat > /etc/grml/grml-live.local << EOF
