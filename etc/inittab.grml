@@ -64,12 +64,8 @@ po::powerokwait:/etc/init.d/powerfail stop
 12:2345:respawn:/bin/zsh --login -c "/usr/bin/grml-init-multitail ; /usr/bin/grml-init-screen" >/dev/tty12 2>&1 </dev/tty12
 
 ################################################################################
-# Please do NOT remove the following lines as they are important for the
-# bootoption serial/console. All lines starting with "#grmlserial#" will be
-# activated and %serialspeed% will be replaced with the according baude rate
-# settings specified on kernel command line then.
-#grmlserial#T0:23:respawn:/bin/bash -c "/sbin/getty -L ttyS0 -l /usr/bin/zsh-login %serialspeed% vt100 || sleep 30"
-#grmlserial#T1:23:respawn:/bin/bash -c "/sbin/getty -L ttyS1 -l /usr/bin/zsh-login %serialspeed% vt100 || sleep 30"
+#grmlserial# is a marker, important for the bootoption serial/console
+# inittab lines will be inserted here according to the kernel command line
 ################################################################################
 
 # Example how to put a getty on a serial line (for a terminal)
