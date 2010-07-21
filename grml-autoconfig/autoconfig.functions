@@ -574,11 +574,11 @@ fi
 
 # activate serial console {{{
 config_console(){
-local line
-local ws
-ws='	 '
-
 if checkbootparam 'console'; then
+  local line
+  local ws
+  ws='	 '
+
   einfo "Bootoption for serial console detected:"
 
   line="$CMDLINE x "
@@ -589,12 +589,12 @@ if checkbootparam 'console'; then
     case "$this" in
       console=*)
         local serial="$this"
-	local device="${this%%,*}"
-	local device="${device##*=}"
+        local device="${this%%,*}"
+        local device="${device##*=}"
         if ! echo $serial | grep -q ttyS ; then
-          ewarn "Warning: console=ttyS... not specified as last console= option. Falling back to defaults."
+          ewarn "Warning: console=ttyS... not specified as last console= option. Falling back to set up ttyS0/9600."
+          sed -i "/^#grmlserial#/iT0:23:respawn:/bin/bash -c \"/sbin/getty -L /dev/ttyS0 -l /usr/bin/zsh-login 9600 vt100 || sleep 30\"" /etc/inittab
           eend 0
-          local speed="9600"
         else
           local option="${serial##*,}"
           # default (works for kvm & CO):
@@ -612,18 +612,18 @@ if checkbootparam 'console'; then
           esac
         fi
         eindent
-          einfo "Activting console login on device ${device} with speed ${speed}."
-	  local number="${device#ttyS}"
-	  local inittab=../inittab
-          sed -i "/#grmlserial#/iT$number:23:respawn:/bin/bash -c \"/sbin/getty -L $device -l /usr/bin/zsh-login $speed vt100 || sleep 30\"" $inittab ;  eend $?
-	  telinitq="1"
+          einfo "Activating console login on device ${device} with speed ${speed}."
+          local number="${device#ttyS}"
+          sed -i "/^#grmlserial#/iT$number:23:respawn:/bin/bash -c \"/sbin/getty -L $device -l /usr/bin/zsh-login $speed vt100 || sleep 30\"" /etc/inittab
+          eend $?
+          telinitq="1"
         eoutdent
         ;;
     esac
     this="${line%%[$ws]*}"
     line="${line#*[$ws]}"
-  done 
-  
+  done
+
   if [ -n "$telinitq" ]; then
     /sbin/telinit q
   fi
