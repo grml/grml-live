@@ -574,40 +574,59 @@ fi
 
 # activate serial console {{{
 config_console(){
+local line
+local ws
+ws='	 '
+
 if checkbootparam 'console'; then
   einfo "Bootoption for serial console detected:"
 
-  local serial="$(getbootparam console)"
-  if ! echo $serial | grep -q ttyS ; then
-    ewarn "Warning: console=ttyS... not specified as last console= option. Falling back to defaults."
-    eend 0
-    local speed="9600"
-  else
-    local option="${serial##*,}"
-    # default (works for kvm & CO):
-    local speed="115200,57600,38400,19200,9600,4800,2400,1200";
-    # ... unless overriden by command line:
-    case "$option" in
-      115200*) speed=115200 ;;
-       57600*) speed=57600 ;;
-       38400*) speed=38400 ;;
-       19200*) speed=19200 ;;
-        9600*) speed=9600 ;;
-        4800*) speed=4800 ;;
-        2400*) speed=2400 ;;
-        1200*) speed=1200 ;;
+  line="$CMDLINE x "
+  this=""
+  line="${line#*[$ws]}"
+  local telinitq=""
+  while [ -n "$line" ]; do
+    case "$this" in
+      console=*)
+        local serial="$this"
+	local device="${this%%,*}"
+	local device="${device##*=}"
+        if ! echo $serial | grep -q ttyS ; then
+          ewarn "Warning: console=ttyS... not specified as last console= option. Falling back to defaults."
+          eend 0
+          local speed="9600"
+        else
+          local option="${serial##*,}"
+          # default (works for kvm & CO):
+          local speed="115200,57600,38400,19200,9600,4800,2400,1200";
+          # ... unless overriden by command line:
+          case "$option" in
+            115200*) speed=115200 ;;
+             57600*) speed=57600 ;;
+             38400*) speed=38400 ;;
+             19200*) speed=19200 ;;
+              9600*) speed=9600 ;;
+              4800*) speed=4800 ;;
+              2400*) speed=2400 ;;
+              1200*) speed=1200 ;;
+          esac
+        fi
+        eindent
+          einfo "Activting console login on device ${device} with speed ${speed}."
+	  local number="${device#ttyS}"
+	  local inittab=../inittab
+          sed -i "/#grmlserial#/iT$number:23:respawn:/bin/bash -c \"/sbin/getty -L $device -l /usr/bin/zsh-login $speed vt100 || sleep 30\"" $inittab ;  eend $?
+	  telinitq="1"
+        eoutdent
+        ;;
     esac
+    this="${line%%[$ws]*}"
+    line="${line#*[$ws]}"
+  done 
+  
+  if [ -n "$telinitq" ]; then
+    /sbin/telinit q
   fi
-
-  eindent
-    einfo "Setting baud rate to ${speed}."
-    sed -i "s/%serialspeed%/$speed/" /etc/inittab ;  eend $?
-
-    einfo "Activating console login."
-    sed -i 's/^#grmlserial#//' /etc/inittab ; eend $?
-  eoutdent
-
-  /sbin/telinit q
   eend $?
 fi
 }
