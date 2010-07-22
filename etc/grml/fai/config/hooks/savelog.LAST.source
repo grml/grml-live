@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # parse all log files for error messages
 # print errors and warnings found to error.log

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Filename:      /etc/grml/fai/config/scripts/GRMLBASE/10-build-initramfs
 # Purpose:       configure live-initramfs and build initramfs for booting
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>

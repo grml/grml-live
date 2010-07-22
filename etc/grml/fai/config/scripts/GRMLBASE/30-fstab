@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Filename:      /etc/grml/fai/config/scripts/GRMLBASE/30-fstab
 # Purpose:       create initial /etc/fstab for use on live-system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>

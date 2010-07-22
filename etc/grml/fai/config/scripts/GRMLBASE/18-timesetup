@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Filename:      /etc/grml/fai/config/scripts/GRMLBASE/18-timesetup
 # Purpose:       apply default time and timezone settings
 # Authors:       (c) Thomas Lehmann <thomas.lehmann@kvt.de>

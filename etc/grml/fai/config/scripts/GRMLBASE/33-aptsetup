@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Filename:      /etc/grml/fai/config/scripts/GRMLBASE/33-aptsetup
 # Purpose:       configure Debian package management of live-system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
