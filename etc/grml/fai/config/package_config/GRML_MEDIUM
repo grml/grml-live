@@ -196,7 +196,6 @@ xserver-xorg-input-vmmouse
 xserver-xorg-input-void
 xserver-xorg-input-wacom
 xserver-xorg-video-all
-xserver-xorg-video-amd
 xserver-xorg-video-apm
 xserver-xorg-video-ark
 xserver-xorg-video-ati
