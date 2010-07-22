@@ -170,7 +170,8 @@ Specify name of the release.
 Specify the Debian suite you want to use for your live-system.  Defaults to
 "lenny" (being current Debian/stable). Supported values are: etch, lenny, sid.
 Debian "squeeze" (current Debian/testing) requires base.tgz
-(/etc/grml/fai/config/basefiles/....tar.gz) or a recent version of debootstrap.
+(/etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz) or a recent version of
+debootstrap.
 
   -t **TEMPLATE_DIRECTORY**::
 
@@ -692,9 +693,11 @@ Instructions
   apt-get update
   apt-get --allow-unauthenticated install grml-debian-keyring
 
-  # install basefile so we don't have to build basic chroot from scratch:
-  mkdir -p /etc/grml/fai/config/basefiles/
-  mv base.tgz /etc/grml/fai/config/basefiles/I386.tar.gz
+  # optionally(!) install basefile so we don't have to build basic
+  # chroot from scratch, grab from http://daily.grml.org/
+  # mkdir -p /etc/grml/fai/config/basefiles/
+  # mv base.tgz /etc/grml/fai/config/basefiles/I386.tar.gz
+  # mv base64.tgz /etc/grml/fai/config/basefiles/AMD64.tar.gz
 
   # install relevant tools
   # please check out http://grml.org/grml-live/#current_state when encountering problems!
@@ -919,6 +922,9 @@ or if using /etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz for:
   ftar: extracting /etc/grml/fai/config/basefiles///AMD64.tar.gz to
   /grml-live/grml-live_20071029.22138/grml_chroot//
   [...]
+
+[TIP]
+Existing base.tgz can be found at http://daily.grml.org/
 
 [[apt-cacher]]
 Set up apt-cacher / apt-cacher-ng for use with grml-live
