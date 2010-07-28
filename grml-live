@@ -245,8 +245,6 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 # assume sane defaults (if not set already) {{{
 [ -n "$ARCH" ]             || ARCH="$(dpkg --print-architecture)"
 [ -n "$BOOT_METHOD" ]      || BOOT_METHOD='isolinux'
-[ -n "$BUILD_OUTPUT" ]     || BUILD_OUTPUT="$OUTPUT/grml_cd"
-[ -n "$CHROOT_OUTPUT" ]    || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
 [ -n "$CLASSES" ]          || CLASSES="GRMLBASE,GRML_MEDIUM,I386"
 [ -n "$DATE" ]             || DATE="$(date +%Y-%m-%d)"
 [ -n "$DISTRI_INFO" ]      || DISTRI_INFO='Grml - Live Linux for system administrators   '
@@ -256,9 +254,7 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 [ -n "$GRML_FAI_CONFIG" ]  || GRML_FAI_CONFIG='/etc/grml/fai'
 [ -n "$GRML_NAME" ]        || GRML_NAME='grml'
 [ -n "$HOSTNAME" ]         || HOSTNAME='grml'
-[ -n "$ISO_OUTPUT" ]       || ISO_OUTPUT="$OUTPUT/grml_isos"
 [ -n "$NFSROOT_CONF" ]     || NFSROOT_CONF='/etc/grml/fai/make-fai-nfsroot.conf'
-[ -n "$OUTPUT" ]           || OUTPUT='/grml/grml-live'
 [ -n "$RELEASENAME" ]      || RELEASENAME='grml-live rocks'
 [ -n "$SQUASHFS_EXCLUDES_FILE " ] || SQUASHFS_EXCLUDES_FILE='/etc/grml/fai/squashfs-excludes'
 [ -n "$SUITE" ]            || SUITE='lenny'
@@ -266,6 +262,12 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 [ -n "$USERNAME" ]         || USERNAME='grml'
 [ -n "$VERSION" ]          || VERSION='0.0.1'
 [ -n "$WINDOWS_BINARIES" ] || WINDOWS_BINARIES='http://the.earth.li/~sgtatham/putty/latest/x86/'
+
+# output specific stuff, depends on $OUTPUT (iff not set):
+[ -n "$OUTPUT" ]           || OUTPUT='/grml/grml-live'
+[ -n "$BUILD_OUTPUT" ]     || BUILD_OUTPUT="$OUTPUT/grml_cd"
+[ -n "$CHROOT_OUTPUT" ]    || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
+[ -n "$ISO_OUTPUT" ]       || ISO_OUTPUT="$OUTPUT/grml_isos"
 # }}}
 
 # some misc checks before executing FAI {{{
@@ -273,11 +275,6 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 specify it on the command line using the -c option."
 [ -n "$OUTPUT" ] || bailout 1 "Error: \$OUTPUT unset, please set it in $LIVE_CONF or
 specify it on the command line using the -o option."
-
-# set subdirectories according to $OUTPUT:
-CHROOT_OUTPUT="$OUTPUT/grml_chroot"
-BUILD_OUTPUT="$OUTPUT/grml_cd"
-ISO_OUTPUT="$OUTPUT/grml_isos"
 
 # trim characters that are known to cause problems inside $GRML_NAME;
 # for example isolinux does not like '-' inside the directory name
