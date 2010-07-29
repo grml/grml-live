@@ -41,8 +41,10 @@ Regional settings:
 grml lang=at|de|cn|da|es|fr|it      Specify language ($LANG, $LC_ALL, $LANGUAGE - utf8) + keyboard
 grml lang=nl|pl|ru|sk|tr|tw|us      Specify language ($LANG, $LC_ALL, $LANGUAGE - utf8) + keyboard
 grml lang=$LANG-iso                 Activate $LANG (use like in lines above) with iso-mode instead of utf8
-grml gmt                            Use GMT-based time
-grml tz=Europe/Vienna               Use this timezone for TZ
+grml gmt                            Use GMT-based time (UTC=yes)
+grml utc                            Use Coordinated Universal Time (UTC=yes)
+grml localtime                      Use local time (UTC=no)
+grml tz=Europe/Vienna               Use specified timezone for TZ
 grml keyboard=us xkeyboard=us       Use different keyboard layout (text-console/X)
 grml setkeycodes                    Set some special function keys for MS/HP keyboards
 
