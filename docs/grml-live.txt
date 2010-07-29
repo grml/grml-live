@@ -273,8 +273,8 @@ files/directories.
 If you want to use your own configuration, extend an existing configuration
 and/or add additional packages to your ISO just invent a new class (or extend an
 existing one). For example if you want to use your own class named "FOOBAR" just
-set CLASSES="GRMLBASE,GRML_SMALL,I386" inside /etc/grml/grml-live.local or
-invoke grml-live using the classes option: "grml-live -c
+set CLASSES="GRMLBASE,GRML_SMALL,I386,FOOBAR" inside /etc/grml/grml-live.local
+or invoke grml-live using the classes option: "grml-live -c
 GRMLBASE,GRML_SMALL,I386,FOOBAR ...".
 
 More details regarding the class concept can be found in the documentation of
