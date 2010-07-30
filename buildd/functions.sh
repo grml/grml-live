@@ -154,8 +154,9 @@ store_iso() {
 # allow clean exit:
 bailout() {
   if [ "$RC" = "0" ] ; then
-     rm -rf "$TMP_DIR" "$OUTPUT_DIR"
+     rm -rf "$ATTACHMENT" "$TMP_DIR" "$OUTPUT_DIR"
   else
+     rm -f "$ATTACHMENT"
      echo "building ISO failed, keeping build files [${OUTPUT_DIR} / ${TMP_DIR}]">&2
   fi
 
