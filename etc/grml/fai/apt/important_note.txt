@@ -1,4 +1,4 @@
 # NOTE: This directory is *NOT* meant for manual customisation! Files in this
-# directory are written by grml-live only and any changes might be overriden.
+# directory are written by grml-live only and any changes might be overridden.
 # You might consider using GRML_LIVE_SOURCES in /etc/grml/grml-live.conf*
 # or FAI's fcopy command with /etc/grml/fai/config/files instead!
