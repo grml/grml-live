@@ -1,3 +1,14 @@
+grml-autoconfig (0.9.13) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [0e4cbb6] Added random hostname support. Thanks to
+    Gregor Perner for the idea.
+
+  [ Michael Prokop ]
+  * [e1fb5ea] Add eend call to random hostname info message.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 02 Aug 2010 16:05:31 -0400
+
 grml-autoconfig (0.9.12) unstable; urgency=low
 
   [ Ulrich Dangel ]
