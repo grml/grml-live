@@ -1,3 +1,37 @@
+grml-live (0.10.0) unstable; urgency=low
+
+  The "DebConf10 in New York" Release.
+  * Software related changes:
+    - [6783097] SW: Drop xserver-xorg-video-amd from GRML_MEDIUM +
+      GRML_FULL (transitional package).
+    - [2f36927] SW: Use xserver-xorg-video-all + xserver-xorg-input-all
+      in GRML_FULL, GRML_MEDIUM + XORG. - thanks to Tong Sun
+      <suntong@cpan.org> [Closes: issue879]
+    - [212a7a8] Add tasksel and taskel-data to exclude option in
+      FAI_DEBOOTSTRAP_OPTS. - thanks to Tong Sun <suntong@cpan.org>
+      [Closes: issue886]
+
+  * Documentation related changes:
+    - [ab3c3be] docs: add squashfs-tools to default apt-get list for
+      deployments on Debian.
+    - [7fd12d9] docs: clarify usage of base.tgz
+    - [f8d3ccd] docs: mention FOOBAR class in usage example via
+      /etc/grml/grml-live.local - thanks to Tong Sun <suntong@cpan.org>
+    - [9de56d9] grml-cheatcodes.txt: document utc + localtime bootoptions.
+
+  * Bugfixes, Features,...:
+    - [4b2e863] Make all shell scripts using /bin/bash instead
+      /bin/sh to be able to FAI's environment - thanks to thermoman
+    - [6eebff8] Make sure that output directory variables aren't
+      overridden by $OUTPUT. [Closes: issue885]
+    - [807994a] buildd/functions.sh: remove attachment in bailout
+      function.
+    - [00825cf] Bump Standards-Version to 3.9.1.
+    - [ace32ae] Fix typo in several files, it's "overridden"
+      (thanks, lintian).
+
+ -- Michael Prokop <mika@grml.org>  Mon, 02 Aug 2010 00:21:34 -0400
+
 grml-live (0.9.43) unstable; urgency=low
 
   * [6136081] docs/grml-live.txt: clarify policy for class names.
@@ -88,7 +122,7 @@ grml-live (0.9.39) unstable; urgency=low
       ~ increase timeout to 20 seconds
       ~ replace terminal command with terminal_output
       ~ use gfxpayload=1024x768 instead of vga=...
-  * Some minor lintian cleanups. 
+  * Some minor lintian cleanups.
   * Software related changes:
     - Add mksh to GRML_SMALL and GRML_MEDIUM to allow switching to mksh for
       `minimal-shell'.
@@ -161,7 +195,7 @@ grml-live (0.9.36) unstable; urgency=low
 grml-live (0.9.35) unstable; urgency=low
 
   * New features / major changes:
-    - Moved /etc/grml/fai/files to /etc/grml/fai/config/files (and 
+    - Moved /etc/grml/fai/files to /etc/grml/fai/config/files (and
       /etc/grml/fai/live-initramfs to /etc/grml/fai/config/). This is
       an important step to use the config space and class concept of
       FAI in a more decent and cleaner way. Further details in NEWS
