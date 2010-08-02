@@ -357,8 +357,9 @@ config_hostname(){
  if checkbootparam 'hostname' ; then
   HOSTNAME="$(getbootparam 'hostname' 2>>$DEBUG)"
   if [ -z "$HOSTNAME" ] && [ -x /usr/bin/random-hostname ] ; then
-     einfo "Generating random hostname as no hostname was specified"
+     einfo "Generating random hostname as no hostname was specified."
      HOSTNAME="$(/usr/bin/random-hostname)"
+     eend $?
   fi
   einfo "Setting hostname to $HOSTNAME as requested."
   grml-hostname $HOSTNAME >>$DEBUG ; RC=$?
