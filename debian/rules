@@ -10,11 +10,14 @@
 #export DH_VERBOSE=1
 
 b=$(CURDIR)/debian/build
+VERSION:=$(shell dpkg-parsechangelog | awk '/Version: / { print $$2 }')
 
 build: build-stamp
 
 build-stamp:
 	dh_testdir
+	grep -q "GRML_LIVE_VERSION=.${VERSION}" grml-live || \
+			(echo "Wrong version in grml-live" && exit 2)
 	cd docs && $(MAKE) && cd ../
 	touch $@
 
