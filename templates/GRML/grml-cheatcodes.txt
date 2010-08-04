@@ -66,6 +66,7 @@ grml extract=/etc                   Extract only /etc from configuration archive
 grml persistent                     Enable persistency feature, more details available at
                                     http://wiki.grml.org/doku.php?id=persistency
 grml hostname=...                   Set hostname
+grml hostname                       Set a random hostname
 grml nodhcphostname                 Do not to set the hostname according to the dns information
 grml distri=...                     Set distribution name to given argument. If a jpg file named like the
                                     given distri name can be found in directory desktop on the ISO
