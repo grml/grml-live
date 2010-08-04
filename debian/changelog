@@ -1,3 +1,16 @@
+grml-live (0.10.1) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [916808e] Mention random hostname support in documentation.
+
+  [ Michael Prokop ]
+  * [9f059fa] Bump version number in grml-live script.
+    Thanks for reporting, Tong Sun. [Closes: issue888]
+  * [4b61133] docs: mention that random hostname is supported only in
+    recent versions.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 03 Aug 2010 23:32:14 -0400
+
 grml-live (0.10.0) unstable; urgency=low
 
   The "DebConf10 in New York" Release.
