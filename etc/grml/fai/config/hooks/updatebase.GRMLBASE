@@ -11,6 +11,15 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    ## we want to use our own sources.list:
    skiptask updatebase
 
+   ## taken from FAI's lib/updatebase:
+   # some packages must access /proc even in chroot environment
+   mount -t proc proc $FAI_ROOT/proc
+   # some packages must access /sys even in chroot environment
+   mount -t sysfs sysfs $FAI_ROOT/sys
+   # if we are using udev, also mount it into $FAI_ROOT
+   [ -f /etc/init.d/udev ] && mount --bind /dev $FAI_ROOT/dev
+   mount -t devpts devpts $FAI_ROOT/dev/pts
+
    ## make sure we don't start any daemons - removed
    ## later on via /etc/grml/fai/config/scripts/GRMLBASE/98-clean-chroot
    if ! [ -r $target/usr/sbin/policy-rc.d ] ; then
