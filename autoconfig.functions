@@ -2031,6 +2031,7 @@ fi
 # {{{ /cdrom/.*-options
 config_debs(){
 if checkbootparam 'debs' ; then
+   iszsh && setopt localoptions shwordsplit
    DEBS="$(getbootparam 'debs' 2>>$DEBUG)"
    if ! echo $DEBS | grep -q '/'; then
      # backwards compatibility: if no path is given get debs from debs/
@@ -2428,7 +2429,7 @@ config_lvm(){
 # {{{ debnet: setup network based on an existing one found on a partition
 config_debnet(){
 if checkbootparam 'debnet' ; then
- iszsh && setopt shwordsplit
+ iszsh && setopt localoptions shwordsplit
  DEVICES="$(< /proc/partitions tail -n +3 | awk '{print "/dev/"$4}' | tr "\n" " ")"
  DEVICES="$DEVICES $(ls /dev/mapper/*)"
  FOUND_DEBNET=""
