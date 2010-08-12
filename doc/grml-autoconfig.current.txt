@@ -16,7 +16,7 @@ directly specify a device which is then taken as DCS directory
 (myconfig=/dev/sda1, for example).
 
 Without any additional boot parameters, the GCA at DCSDIR/config.tbz is
-automatically unpacked and DCSDIR/scrips/grml.sh is automaitcally executed on
+automatically unpacked and DCSDIR/scrips/grml.sh is automatically executed on
 system startup. The 'noautoconfig' boot parameter disables this automatic
 behavior.
 
