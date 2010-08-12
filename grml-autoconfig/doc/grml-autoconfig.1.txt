@@ -51,11 +51,11 @@ This means you can store your settings and reuse them on reboot, without having
 to deal with this config framework. Visit
 link:http://wiki.grml.org/doku.php?id=persistency for further information.
 
-[[up-to-200905]]
-include::grml-autoconfig.200905.txt[]
-
 [[current-versions]]
 include::grml-autoconfig.current.txt[]
+
+[[up-to-200905]]
+include::grml-autoconfig.200905.txt[]
 
 Permanently adjust boot parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
