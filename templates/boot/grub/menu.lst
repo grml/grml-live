@@ -67,14 +67,14 @@ kernel /boot/addons/bsd4grml/ldbsd.com
 
 title MirOS bsd4grml (fallback method)
 kernel /boot/addons/bsd4grml/ldbsd.com
-modulenounzip /boot/addons/bsd4grml/bsd.rd
-module /boot/addons/bsd4grml/boot.1
-module /boot/addons/bsd4grml/boot.2
-module /boot/addons/bsd4grml/boot.3
-module /boot/addons/bsd4grml/boot.4
-module /boot/addons/bsd4grml/boot.5
-module /boot/addons/bsd4grml/boot.6
-module /boot/addons/bsd4grml/boot.cfg
-module /boot/grub/%GRUB_LEGACY%
-module /boot/grub/core.img
+modulenounzip /boot/addons/bsd4grml/bsd.rd bsd.rd
+module /boot/addons/bsd4grml/boot.1 boot.1
+module /boot/addons/bsd4grml/boot.2 boot.2
+module /boot/addons/bsd4grml/boot.3 boot.3
+module /boot/addons/bsd4grml/boot.4 boot.4
+module /boot/addons/bsd4grml/boot.5 boot.5
+module /boot/addons/bsd4grml/boot.6 boot.6
+module /boot/addons/bsd4grml/boot.cfg boot.cfg
+modulenounzip /boot/grub/%GRUB_LEGACY% %GRUB_LEGACY%
+modulenounzip /boot/grub/core.img core.img
 

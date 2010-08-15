@@ -1,0 +1,13 @@
+# $MirOS: src/distrib/common/grml/loopback.3,v 1.1 2010/08/06 15:40:03 tg Exp $
+#
+echo
+echo Booting the MirOS BSD rescue system (serial console)
+echo COM1 (tty00) at 9600 bps, 8N1
+echo
+stty com0 9600
+set tty com0
+echo
+echo Booting the MirOS BSD rescue system (serial console)
+echo COM1 (tty00) at 9600 bps, 8N1
+echo
+boot /bsd

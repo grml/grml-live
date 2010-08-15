@@ -480,6 +480,8 @@ CAVEATS
                 gPXE, but no code yet. For now, gPXE can load boot using Mul-
                 tiboot, and any passed modules are handled via lmbmfs.
 
-     ustarfs    This filesystem will be implemented soon.
+     ustarfs    This filesystem is currently only usable with the boot floppy
+                and assumes that the entire floppy disc (except, on sparc, the
+                MD disklabel) is a valid ustar archive.
 
-MirOS BSD #10-current          October 27, 2009                              7
+MirOS BSD #10-current           August 6, 2010                               7

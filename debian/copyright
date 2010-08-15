@@ -47,7 +47,7 @@ License information for the syslinux files shipped as
 License information for the bsd4grml files shipped as
 /usr/share/grml-live/templates/boot/addons/bsd4grml:
 
-   Downloaded from <https://eurynome.mirbsd.org/~tg/pub/bsd4grml.tgz>.
+   Downloaded from <https://dl.mirbsd.org/MirOS/current/bsd4grml-20100815.tgz>.
    Thorsten "mirabilos" Glaser <tg@mirbsd.de>
    See /usr/share/grml-live/templates/boot/addons/bsd4grml/LICENCE.TXT
    for details.
