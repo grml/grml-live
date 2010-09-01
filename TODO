@@ -13,27 +13,18 @@ Patches, ideas and feedback welcome.
 * support something like a directory /etc/grml/fai/chroot_packages to install
   additional Debian packages without the need for a Debian repository
 
-* add support for ppc (formorer?)
-
-* identify all packages that are arch specific so we have a clean package list
-  in all classes
-
-* support signed apt repositories (currently it’s deactivated via FAI’s
-  FAI_ALLOW_UNSIGNED=1 for some repositories/packages in the toolchain)
+* add support for ppc?
 
 * the /etc/runlevel.conf stuff isn’t flexible enough: adjust the file on-the-fly
   according to what software is used/installed on the system
 
-* amd64: if /emul/ia32-linux/lib does not exist mksquashfs fails with ‘no such
-  file or directory’ because of the dangling symlink /lib32 inside grml_chroot;
-  current fix: install ia32-libs on the system where you are running grml-live
-  (recheck: problem still present?)
-
 * check out how FAI_DEBMIRROR of /etc/grml/fai/fai.conf could be merged with our
   MIRROR_DIRECTORY and MIRROR_SOURCES feature of /etc/grml/grml-live.conf
 
-* support multiple kernel versions (currently the build-process might fail if
-  more than 1 kernel and 1 initrd is present)
+* support multiple kernel versions installed in one single live-system
+
+* support configuration of grml-live through specific directory instead
+  of /etc/grml/*
 
 * Provide different interfaces for easy and common use of grml-live:
   - a console interface (using dialog/stfl/...)
