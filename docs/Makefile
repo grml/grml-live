@@ -1,6 +1,6 @@
 all: doc
 
-doc: doc_man doc_html doc_epub doc_pdf
+doc: doc_man doc_html
 
 doc_html: html-stamp
 
