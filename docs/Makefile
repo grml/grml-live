@@ -1,6 +1,6 @@
 all: doc
 
-doc: doc_man doc_html
+doc: doc_man doc_html doc_epub doc_pdf
 
 doc_html: html-stamp
 
@@ -21,10 +21,25 @@ man-stamp: grml-live.txt grml-live-remaster.txt
 	xsltproc /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl grml-live-db.xml
 	touch man-stamp
 
-online: doc_html
+doc_epub: epub-stamp
+
+epub-stamp:
+	a2x --icons -a toc -a toclevels=3 -a docinfo -f epub grml-live.txt
+	touch epub-stamp
+
+doc_pdf: pdf-stamp
+
+pdf-stamp:
+	a2x --icons -a toc -a toclevels=3 -a docinfo -f pdf grml-live.txt
+	touch pdf-stamp
+
+online: doc_html doc_epub doc_pdf
 	scp grml-live.html grml:/var/www/grml/grml-live/index.html
+	scp grml-live.pdf  grml:/var/www/grml/grml-live/
+	scp grml-live.epub grml:/var/www/grml/grml-live/
 
 clean:
-	rm -rf grml-live-remaster.html grml-live-remaster.xml grml-live-remaster.8
-	rm -rf grml-live.html grml-live.xml grml-live.8 html-stamp man-stamp
-	rm -rf grml-live-db.html grml-live-db.xml grml-live-db.8 html-stamp man-stamp
+	rm -f grml-live-remaster.html grml-live-remaster.xml grml-live-remaster.8
+	rm -f grml-live.html grml-live.xml grml-live.8 grml-live.epub grml-live.pdf
+	rm -f grml-live-db.html grml-live-db.xml grml-live-db.8
+	rm -f html-stamp man-stamp epub-stamp pdf-stamp

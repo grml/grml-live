@@ -1,0 +1,24 @@
+<!--
+Revision file for grml-live
+-->
+
+<authorgroup>
+  <author>
+    <firstname>Michael</firstname>
+    <surname>Prokop</surname>
+    <affiliation>
+      <orgname>Grml Solutions</orgname>
+    </affiliation>
+  </author>
+</authorgroup>
+
+<revhistory>
+
+  <revision>
+    <revnumber>0.1</revnumber>
+    <date>2010-09-01</date>
+    <authorinitials>MP</authorinitials>
+    <revremark>Initial document version with included revision information.</revremark>
+  </revision>
+
+</revhistory>
