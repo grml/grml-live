@@ -55,7 +55,7 @@ License information for the bsd4grml files shipped as
 License information for the file gpxe.lkrn shipped as
 /usr/share/grml-live/templates/boot/addons/gpxe.lkrn:
 
-   Downloaded from <http://rom-o-matic.net/gpxe/gpxe-0.9.9/contrib/rom-o-matic/>
+   Downloaded from <http://rom-o-matic.net/gpxe/gpxe-1.0.1/contrib/rom-o-matic/>
    Etherboot is Open Source under the GNU General Public License Version 2 (GPL2).
    Visit http://etherboot.org/wiki/usermanual?s[]=gpl#license for details.
 
