@@ -7,16 +7,16 @@ cmostest:
 gcry_rijndael: crypto
 echo: extcmd
 cpio:
-gcry_cast5: crypto
 gcry_sha512: crypto
+gcry_cast5: crypto
 boot:
 part_sun:
 gzio:
 ls: extcmd normal
 gfxterm: video extcmd bitmap_scale bitmap font
 video:
-gcry_serpent: crypto
 gcry_tiger: crypto
+gcry_serpent: crypto
 aout:
 gcry_blowfish: crypto
 extcmd:
@@ -25,7 +25,7 @@ minix:
 pxe: bufio
 reboot:
 xnu_uuid: gcry_md5
-help: extcmd charset normal
+help: extcmd normal
 usbms: usb scsi
 usbtest: usb
 blocklist:
@@ -50,8 +50,9 @@ datehook: datetime normal
 dm_nv: raid
 reiserfs: fshelp
 afs_be: fshelp
-efiemu: acpi crc charset
+efiemu: acpi crc normal
 gcry_seed: crypto
+video_cirrus: video pci video_fb
 crypto:
 terminal:
 jpeg: bufio bitmap
@@ -67,7 +68,7 @@ xfs: fshelp
 cpuid: extcmd
 crc:
 usb: pci
-videotest: video font
+videotest: video gfxmenu font
 play:
 relocator:
 password: crypto normal
@@ -91,7 +92,6 @@ configfile: normal
 befs: fshelp
 linux16: boot video mmap
 gcry_arcfour: crypto
-charset:
 raid5rec: raid
 gettext: gzio normal
 hello: extcmd
@@ -140,14 +140,15 @@ halt: extcmd
 keystatus: extcmd
 read:
 multiboot: boot gzio video relocator mmap
-xnu: boot gzio video extcmd bitmap_scale efiemu relocator charset bitmap
-normal: boot crypto terminal charset
+xnu: boot gzio video extcmd bitmap_scale efiemu relocator bitmap normal
+normal: boot crypto terminal
 loopback: extcmd
 part_amiga:
 sfs: fshelp
+video_bochs: video pci video_fb
 jfs:
 vbetest: video vbe
-cat: gzio
+cat: gzio extcmd
 part_acorn:
 afs: fshelp
 iorw: extcmd

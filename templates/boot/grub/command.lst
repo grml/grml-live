@@ -45,7 +45,7 @@ blocklist: blocklist
 boot: boot
 cat: minicmd
 chainloader: chain
-clear: minicmd
+clear: normal
 cmostest: cmostest
 cmp: cmp
 configfile: configfile
