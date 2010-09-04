@@ -18,7 +18,6 @@ grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/bufio.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/cat.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/chain.mod
-grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/charset.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/cmostest.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/cmp.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/configfile.mod
@@ -42,9 +41,7 @@ grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/extcmd.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/fat.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/font.mod
-grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/fs_file.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/fshelp.mod
-grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/fs_uuid.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/functional_test.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/gcry_arcfour.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/gcry_blowfish.mod
@@ -71,7 +68,6 @@ grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/gptsync.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/gzio.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/halt.mod
-grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/handler.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/hashsum.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/hdparm.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/hello.mod
@@ -141,7 +137,6 @@ grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/setjmp.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/setpci.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/sfs.mod
-grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/sh.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/sleep.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/tar.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/terminal.mod
@@ -163,6 +158,8 @@ grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/vbetest.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/vga.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/vga_text.mod
+grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/video_bochs.mod
+grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/video_cirrus.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/video_fb.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/video.mod
 grml-live: arch-dependent-file-in-usr-share ./usr/share/grml-live/templates/boot/grub/videotest.mod
@@ -191,7 +188,6 @@ grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-l
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/bufio.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/cat.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/chain.mod
-grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/charset.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/cmostest.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/cmp.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/configfile.mod
@@ -215,9 +211,7 @@ grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-l
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/extcmd.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/fat.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/font.mod
-grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/fs_file.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/fshelp.mod
-grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/fs_uuid.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/functional_test.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/gcry_arcfour.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/gcry_blowfish.mod
@@ -244,7 +238,6 @@ grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-l
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/gptsync.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/gzio.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/halt.mod
-grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/handler.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/hashsum.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/hdparm.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/hello.mod
@@ -314,7 +307,6 @@ grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-l
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/setjmp.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/setpci.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/sfs.mod
-grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/sh.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/sleep.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/tar.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/terminal.mod
@@ -336,6 +328,8 @@ grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-l
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/vbetest.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/vga.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/vga_text.mod
+grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/video_bochs.mod
+grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/video_cirrus.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/video_fb.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/video.mod
 grml-live: arch-independent-package-contains-binary-or-object ./usr/share/grml-live/templates/boot/grub/videotest.mod
@@ -371,7 +365,6 @@ grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/bufio.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/cat.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/chain.mod
-grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/charset.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/cmostest.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/cmp.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/configfile.mod
@@ -393,9 +386,7 @@ grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/extcmd.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/fat.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/font.mod
-grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/fs_file.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/fshelp.mod
-grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/fs_uuid.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/functional_test.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/gcry_arcfour.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/gcry_blowfish.mod
@@ -422,7 +413,6 @@ grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/gptsync.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/gzio.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/halt.mod
-grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/handler.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/hashsum.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/hdparm.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/hello.mod
@@ -492,7 +482,6 @@ grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/setjmp.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/setpci.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/sfs.mod
-grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/sh.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/sleep.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/tar.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/terminal.mod
@@ -514,6 +503,8 @@ grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/vbetest.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/vga.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/vga_text.mod
+grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/video_bochs.mod
+grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/video_cirrus.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/video_fb.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/video.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/videotest.mod
