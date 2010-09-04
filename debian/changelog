@@ -1,3 +1,35 @@
+grml-live (0.11.0) unstable; urgency=low
+
+  The "kernel 2.6.35-grml[64] party" Release.
+
+  * This release provides support for kernel 2.6.35-grml[64] through
+    updated squashfs binary and options handling. To build live
+    systems featuring 2.6.35-grml[64] the squashfs-lzma-tools4
+    package is required. Further details are available in the
+    updated docs. [8be200e] [29cf238] [8cf1f25] [76e8d3a]
+  * [a99823d] Add SQUASHFS_OPTIONS to /etc/grml/grml-live.conf and
+    update SQUASHFS_BINARY comment.
+  * [47b72a3] hooks/updatebase.GRMLBASE: make sure /proc, /sys and /dev
+    are available on update
+  * [fc88014] Update TODO file, reflecting recent development.
+  * [d38f878] Add scripts/release_helper.sh.
+  * Updates in templates/boot/:
+    - [050f4d2] Update pci.ids to version 2010.08.27.
+    - [24960b7] Update gpxe.lkrn to version 1.0.1.
+    - [d980fe7] Update hdt.c32 to version 0.3.6.1.
+    - [d635175] Update memtest to memtest86+ version 4.10.
+    - [ab2ca8f] Update memdisk from 3.83 to 4.02 debian-20100803.
+    - [21b19cb] Update chain.c32 and menu.c32 to Debian's syslinux
+                version 2:4.02+dfsg-3.
+    - [f6065cb] Update isolinux.bin and vesamenu.c32 to 4.02
+                debian-20100803.
+    - [929662f] Update templates/boot/grub to grub version
+                1.98+20100804-4.
+    - [89c9f37] Update lintian overrides file to reflect current
+                updates in templates/boot/grub.
+
+ -- Michael Prokop <mika@grml.org>  Sat, 04 Sep 2010 15:47:32 +0200
+
 grml-live (0.10.1) unstable; urgency=low
 
   [ Ulrich Dangel ]
