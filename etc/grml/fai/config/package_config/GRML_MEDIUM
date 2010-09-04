@@ -194,11 +194,9 @@ PACKAGES aptitude I386
 # we want to use linux-kernel-headers-grml instead of linux-libc-dev:
 linux-kernel-headers-grml
 
-linux-image-2.6.33-grml
-#madwifi-modules-2.6.33-grml madwifi-tools
+linux-image-2.6.35-grml
 powernowd
-virtualbox-ose-guest-modules-2.6.33-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
+virtualbox-ose-guest-modules-2.6.35-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
 
 PACKAGES aptitude AMD64
-linux-image-2.6.33-grml64
-#madwifi-modules-2.6.33-grml64 madwifi-tools
+linux-image-2.6.35-grml64
