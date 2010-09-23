@@ -33,7 +33,7 @@ Further documentation regarding the init process can be found at:
 * http://git.debian.org/?p=kernel/initramfs-tools.git;a=blob_plain;f=initramfs-tools.8;hb=HEAD
 
 The following boot options can be combined.
-Notice: not all of the them are available on all the Grml flavours.
+Notice: not all of them are available on all the Grml flavours.
 For example the X window system is not part of grml-small.
 
 Regional settings:
