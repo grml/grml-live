@@ -23,7 +23,7 @@ Description
 
 grml-live provides the build system for creating a grml and Debian based Linux
 Live-CD. The build system is based on
-link:http://www.informatik.uni-koeln.de/fai/[FAI] (Fully Automatic
+link:http://fai-project.org/[FAI] (Fully Automatic
 Installation). grml-live uses the "fai dirinstall" feature to generate a chroot
 system based on the class concept of FAI (see later sections for further
 details) and provides the framework to be able to generate a full-featured ISO.
@@ -793,7 +793,7 @@ Instructions
   # just optional(!) - upgrade FAI to latest available version:
   cat >> /etc/apt/sources.list << EOF
   # fai:
-    deb http://www.informatik.uni-koeln.de/fai/download lenny koeln
+    deb http://fai-project.org/download lenny koeln
   EOF
 
   # get gpg key of FAI repos and install current FAI version:
@@ -812,12 +812,12 @@ and the ISO can be found inside /grml-live/grml-live/grml_isos/ then.
 Help, I'm using Debian etch and I don't have FAI version >3.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  wget http://www.informatik.uni-koeln.de/fai/download/etch/fai-client_3.2.8_all.deb \
-       http://www.informatik.uni-koeln.de/fai/download/etch/fai-server_3.2.8_all.deb \
-       http://www.informatik.uni-koeln.de/fai/download/etch/fai-doc_3.2.8_all.deb
+  wget http://fai-project.org/download/etch/fai-client_3.2.8_all.deb \
+       http://fai-project.org/download/etch/fai-server_3.2.8_all.deb \
+       http://fai-project.org/download/etch/fai-doc_3.2.8_all.deb
   dpkg -i fai-client_3.2.8_all.deb fai-server_3.2.8_all.deb fai-doc_3.2.8_all.deb
 
-or check out the link:http://www.informatik.uni-koeln.de/fai/[FAI-homepage] for
+or check out the link:http://fai-project.org/[FAI-homepage] for
 further details.
 
 [[how-to-debug]]

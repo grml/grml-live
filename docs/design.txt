@@ -16,7 +16,7 @@ Description
 
 grml-live mainly executes the following main stages:
 
-* fai dirinstall: link:http://www.informatik.uni-koeln.de/fai/[FAI] (Fully
+* fai dirinstall: link:http://fai-project.org/[FAI] (Fully
 Automatic Installation) does the chroot related work
 
 * mksquashfs: generate the compressed squashfs file which provides the chroot in
