@@ -23,7 +23,10 @@ git-dch --debian-branch="$(git branch | awk -F\*\  '/^* / { print $2}' )" \
         --id-length=7 --meta --multimaint-merge -S
 printf "OK\n"
 
-$EDITOR debian/changelog
+if ! $EDITOR debian/changelog ; then
+  printf "Exiting as editing debian/changelog returned an error." >&2
+  exit 1
+fi
 
 debian_version="$(dpkg-parsechangelog | awk '/^Version:/ {print $2}')"
 
@@ -55,7 +58,7 @@ if $dorelease ; then
 fi
 
 printf "Building debian packages:\n"
-git-buildpackage --git-debian-branch="$(git branch | awk -F\*\  '/^* / { print $2}' )" --git-ignore-new
+git-buildpackage --git-debian-branch="$(git branch | awk -F\*\  '/^* / { print $2}' )" --git-ignore-new $*
 printf "Finished execution of $(basename $0). Do not forget to tag release ${debian_version}\n"
 
 ## END OF FILE #################################################################
