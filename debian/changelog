@@ -1,9 +1,13 @@
-grml-autoconfig (0.9.14) unstable; urgency=low
+grml-autoconfig (0.9.14) UNRELEASED; urgency=low
 
+  [ Frank Terbeck ]
   * Fix config_debs() and make sure config_debnet() doesn't globally
     set options.
 
- -- Frank Terbeck <ft@grml.org>  Sun, 08 Aug 2010 21:42:21 +0200
+  [ Christian Hofstaedtler ]
+  * Document run-parts restrictions for script= option. [Closes: issue906]
+
+ -- Ulrich Dangel <mru@grml.org>  Tue, 12 Oct 2010 00:10:22 +0200
 
 grml-autoconfig (0.9.13) unstable; urgency=low
 
