@@ -86,10 +86,12 @@ extract::
 scripts::
 
     This parameter executes scripts. If an optional path is given, it is
-    relative to DCSDIR. If it points to a directory, all scripts inside this
-    directory are executed. If the path points to a file, this single file is
-    executed. If no path is given, it defaults to scripts/grml.sh. Usage
-    examples:
+    relative to DCSDIR. If the path points to a file, this single file is
+    executed. If no path is given, it defaults to scripts/grml.sh.
+    If the given name points to a directory, all scripts inside it are
+    executed, but the run-parts name restrictions apply: script names must
+    consist entirely of upper and lower case letters, digits, underscores,
+    and hyphens. Usage examples:
 
   scripts               =>   run script DCSDIR/scripts/grml.sh
   scripts=foobar.sh     =>   run script foobar.sh in DCSDIR
