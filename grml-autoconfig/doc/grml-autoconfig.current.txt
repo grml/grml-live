@@ -69,7 +69,9 @@ netscript::
     Use this parameter to download and run a script from specified destination:
     You can also add variables to change the file name depending on the host
     configuration. Predefined and useful variables are $ARCH, $HOSTNAME and
-    $KERNEL. Usage example:
+    $KERNEL. The environment variable NETSCRIPT is set to the specified URI.
+    This can be used to detect if the script is executed via the netscript bootoption.
+    Usage example:
 
   netcript=server.tld/path/to/script       =>   download and run script/executable from server
   netscript=server.tld/script-$HOSTNAME    =>   download and run script/executable for specific host
