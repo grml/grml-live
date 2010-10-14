@@ -7,7 +7,10 @@ grml-autoconfig (0.9.14) UNRELEASED; urgency=low
   [ Christian Hofstaedtler ]
   * Document run-parts restrictions for script= option. [Closes: issue906]
 
- -- Ulrich Dangel <mru@grml.org>  Tue, 12 Oct 2010 00:10:22 +0200
+  [ Ulrich Dangel ]
+  * set environment variable NETSCRIPT before executing a command. [Closes: issue913]
+
+ -- Ulrich Dangel <mru@grml.org>  Fri, 15 Oct 2010 01:05:53 +0200
 
 grml-autoconfig (0.9.13) unstable; urgency=low
 
