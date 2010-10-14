@@ -38,24 +38,14 @@ starting from the root-directory '/' so it is easy to handle. You can generate
 configuration archives manually as well. save-config is just a frontend which
 should make it easier to use.
 
-The grml-autoconfig code has been re-worked in August 2009. This document
-handles both the behavior of Grml releases up to 2009.05  (see
-<<up-to-200905,section 'Behavior up to grml 2009.05'>>) and the current behavior
-(see <<current-versions,section 'Behavior in current Grml versions'>>). Great
-care has been taken to provide maximum backwards compatibility during the
-rewrite.
-
 [IMPORTANT]
-Starting with grml release 2009.05 its possible to use root persistency on grml.
+Starting with Grml release 2009.05 its possible to use root persistency on grml.
 This means you can store your settings and reuse them on reboot, without having
 to deal with this config framework. Visit
 link:http://wiki.grml.org/doku.php?id=persistency for further information.
 
 [[current-versions]]
 include::grml-autoconfig.current.txt[]
-
-[[up-to-200905]]
-include::grml-autoconfig.200905.txt[]
 
 Permanently adjust boot parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
