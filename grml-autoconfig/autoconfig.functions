@@ -1837,7 +1837,7 @@ config_netscript() {
 
   if get_remote_file ${CONFIG} ${SCRIPTFILE} ; then
     chmod +x ${SCRIPTFILE}
-    einfo "Running ${WHITE}${SCRIPTFILE}${NORMAL}:" && ${SCRIPTFILE} ; eend $?
+    einfo "Running ${WHITE}${SCRIPTFILE}${NORMAL}:" && NETSCRIPT=${CONFIG} ${SCRIPTFILE} ; eend $?
   fi
 
  fi
