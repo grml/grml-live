@@ -9,8 +9,8 @@ grml-autoconfig (0.9.14) unstable; urgency=low
   * [86a6099] Swap position of pre-2009.05 and post-2009.05.
   * [6e63506] [e200e8e] [e200e8e] Provide variable NETSCRIPT for
     downloaded and executed script. [Closes: issue913]
-  * Set environment variable NETSCRIPT before executing a command.
-    [Closes: issue913]
+  * [d019c32] Added test for the config_debs function to test the
+    parameter count for the dpkg command.
 
   [ Christian Hofstaedtler ]
   * [7920da3] Document run-parts restrictions for script= option.
@@ -19,8 +19,13 @@ grml-autoconfig (0.9.14) unstable; urgency=low
   [ Michael Prokop ]
   * [5365fba] doc/grml-autoconfig.1.txt: no longer include
     grml-autoconfig.200905.txt. [Closes: issue891]
+  * [3c76bd3] Bump Standards-Version to 3.9.1.
+  * [95cf665] Add zsh to Build-Depends-Indep for tests.
+  * [82bbb6e] tests/test_debs.sh: provide einfo/eend wrapper for
+    non-existing grml-etc-core files /etc/grml/lsb-functions and
+    /etc/grml_colors.
 
- -- Michael Prokop <mika@grml.org>  Fri, 15 Oct 2010 01:41:04 +0200
+ -- Michael Prokop <mika@grml.org>  Sat, 16 Oct 2010 18:57:15 +0200
 
 grml-autoconfig (0.9.13) unstable; urgency=low
 
