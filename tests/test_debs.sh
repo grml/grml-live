@@ -25,6 +25,8 @@ test_debs() {
     mkdir -p "$DEB_DIR"
     touch "$DEB_DIR"/{1..$EXPECTED_COUNT}.deb
 
+    einfo() { echo "$*"; }
+    eend() { echo ; }
     config_debs
 
     rm -rf "$TMPDIR"
