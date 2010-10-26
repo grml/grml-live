@@ -1,3 +1,11 @@
+grml-autoconfig (0.9.15) unstable; urgency=low
+
+  [ Christian Hofstaedtler ]
+  * [a9ef28a] fix handling of multiple console= options.
+    [Closes: issue916]
+
+ -- Michael Prokop <mika@grml.org>  Tue, 26 Oct 2010 22:55:49 +0200
+
 grml-autoconfig (0.9.14) unstable; urgency=low
 
   [ Frank Terbeck ]
