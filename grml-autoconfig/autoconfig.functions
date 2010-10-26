@@ -596,11 +596,7 @@ if checkbootparam 'console'; then
         local serial="$this"
         local device="${this%%,*}"
         local device="${device##*=}"
-        if ! echo $serial | grep -q ttyS ; then
-          ewarn "Warning: console=ttyS... not specified as last console= option. Falling back to set up ttyS0/9600."
-          sed -i "/^#grmlserial#/iT0:23:respawn:/bin/bash -c \"/sbin/getty -L /dev/ttyS0 -l /usr/bin/zsh-login 9600 vt100 || sleep 30\"" /etc/inittab
-          eend 0
-        else
+        if echo $serial | grep -q ttyS ; then
           local option="${serial##*,}"
           # default (works for kvm & CO):
           local speed="115200,57600,38400,19200,9600,4800,2400,1200";
@@ -615,14 +611,14 @@ if checkbootparam 'console'; then
               2400*) speed=2400 ;;
               1200*) speed=1200 ;;
           esac
+          eindent
+            einfo "Activating console login on device ${device} with speed ${speed}."
+            local number="${device#ttyS}"
+            sed -i "/^T$number:/d;/^#grmlserial#/iT$number:23:respawn:/bin/bash -c \"/sbin/getty -L $device -l /usr/bin/zsh-login $speed vt100 || sleep 30\"" /etc/inittab
+            eend $?
+            telinitq="1"
+          eoutdent
         fi
-        eindent
-          einfo "Activating console login on device ${device} with speed ${speed}."
-          local number="${device#ttyS}"
-          sed -i "/^#grmlserial#/iT$number:23:respawn:/bin/bash -c \"/sbin/getty -L $device -l /usr/bin/zsh-login $speed vt100 || sleep 30\"" /etc/inittab
-          eend $?
-          telinitq="1"
-        eoutdent
         ;;
     esac
     this="${line%%[$ws]*}"
