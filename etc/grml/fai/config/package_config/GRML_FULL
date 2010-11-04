@@ -66,7 +66,6 @@ lcdtest
 libacme-bleach-perl
 libacme-eyedrops-perl
 libacme-smirch-perl
-libpam-thinkfinger
 libstdc++2.10-glibc2.2
 md5deep
 minised
@@ -862,14 +861,6 @@ libaa-bin
 libcap2-bin
 libewf1
 libnss-mdns
-libpam-chroot
-libpam-devperm
-libpam-dotfile
-libpam-modules
-libpam-mount
-libpam-smbpass
-libpam-ssh
-libpam-tmpdir
 libsmbios-bin
 libtool
 lighttpd
@@ -1124,7 +1115,6 @@ packeth
 packit
 pads
 pal
-pamusb-tools
 paperkey
 par
 par2
