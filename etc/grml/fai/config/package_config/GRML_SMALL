@@ -45,7 +45,6 @@ grml-paste
 grml-quickconfig-standard
 guessnet
 htop
-ifplugd
 ifupdown
 inetutils-inetd
 iproute

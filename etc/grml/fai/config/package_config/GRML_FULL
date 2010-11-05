@@ -97,15 +97,12 @@ zsh-lovers
 ## }}}
 
 ## Official Debian packages {{{
-2vcard
-3270-common
 4g8
 9base
 9menu
 abcde
 abook
 acct
-ace-of-penguins
 ack-grep
 acl
 acpi
@@ -162,7 +159,6 @@ apt-utils
 apt-zip
 apwal
 ara
-archivemail
 argus-client
 arj
 arping
@@ -176,11 +172,8 @@ ascii2binary
 asciidoc
 asn1c
 asql
-asr-manpages
-astyle
 asused
 at
-aterm
 atftpd
 athcool
 athena-jot
@@ -188,9 +181,7 @@ atitvout
 atop
 atsar
 attr
-aub
 aumix
-auto-apt
 autoconf
 automake
 automake1.4
@@ -205,7 +196,6 @@ away
 awesfx
 awesome
 axel
-axp
 backup2l
 backup-manager
 backuppc
@@ -276,8 +266,6 @@ cabextract
 caca-utils
 ca-certificates
 cadaver
-calcurse
-calife
 camserv
 capiutils
 catdoc
@@ -293,24 +281,20 @@ cdbackup
 cdbs
 cdck
 cdda2wav
-cddb
 cd-discid
 cdebootstrap
-cdecl
 cdparanoia
 cdpr
 cdrbq
 cdrdao
 cdrecord
 cdrskin
-cdtool
 cedet-common
 centerim-utf8
 cereal
 cfengine2
 cfv
 cgdb
-check
 chkrootkit
 chntpw
 chrootuid
@@ -320,9 +304,7 @@ clamav-daemon
 clamav-freshclam
 clamav-testfiles
 clex
-clive
 cloop-utils
-cmatrix
 cmus
 codeville
 colorgcc
@@ -331,7 +313,6 @@ compartment
 concalc
 configure-debian
 conkeror
-conky
 connect-proxy
 conntrack
 console-data
@@ -374,11 +355,8 @@ curl
 curlftpfs
 cvs
 cvs2cl
-cvs-buildpackage
 cvsconnect
 cvsdelta
-cw
-cwcp
 daemon
 dante-client
 dar
@@ -395,7 +373,6 @@ dcfldd
 dconf
 dcraw
 dctrl-tools
-ddccontrol
 ddclient
 ddrescue
 dds2tar
@@ -415,7 +392,6 @@ debootstrap
 debsecan
 debsigs
 debsums
-defoma
 detachtty
 detox
 devio
@@ -525,7 +501,6 @@ ent
 epdfview
 equivs
 erc
-es
 espeak
 espeakup
 etckeeper
@@ -535,7 +510,6 @@ ethstatus
 ethtool
 etpan-ng
 ettercap-gtk
-euro-support
 evilwm
 evms
 evms-bootdebug
@@ -548,7 +522,6 @@ exiv2
 expect
 ext3grep
 exuberant-ctags
-faad
 facter
 fai-client
 fai-doc
@@ -568,13 +541,9 @@ fbterm
 fcrackzip
 fdflush
 fdupes
-fdutils
 febootstrap
 feh
 fetchmail
-fgetty
-filepp
-filetraq
 findutils
 finger
 fio
@@ -593,7 +562,6 @@ fnfxd
 fondu
 fontconfig
 fontconfig-config
-fonty
 foremost
 fortune-mod
 fortunes-debian-hints
@@ -642,8 +610,6 @@ gftp-common
 gftp-text
 ghostscript
 giblib1
-gif2png
-giftcurs
 git-core
 git-email
 gitpkg
@@ -665,7 +631,6 @@ gnuit
 gnupg
 gnupg2
 gnupg-agent
-gnupg-pkcs11-scd
 gnutls-bin
 gocr
 gpart
@@ -689,7 +654,6 @@ guessnet
 guymager
 gv
 gzrt
-habak
 hal
 hal-info
 haproxy
@@ -704,11 +668,9 @@ hfsutils
 hgsvn
 hibernate
 hicolor-icon-theme
-hnb
 honeyd
 hostapd
 hostap-utils
-hotkeys
 hotkey-setup
 hotswap-text
 hoz
@@ -726,7 +688,6 @@ hwloc
 i2c-tools
 i3-wm
 i810switch
-i8kutils
 ibod
 ibritish
 icecast2
@@ -739,7 +700,6 @@ idesk
 idswakeup
 ifenslave-2.6
 ifmetric
-ifplugd
 ifrename
 ifstat
 iftop
@@ -786,7 +746,6 @@ iputils-ping
 iputils-tracepath
 ipv6calc
 ipvsadm
-ipx
 ipython
 irb
 ircii
@@ -797,7 +756,6 @@ irssi-plugin-xmpp
 irssi-scripts
 isakmpd
 iscsitarget
-isdnactivecards
 isdnutils-base
 isdnvboxclient
 ispell
@@ -810,7 +768,6 @@ jack
 jackd
 jail
 jailer
-jailtool
 jed
 jed-common
 jed-extra
@@ -894,7 +851,6 @@ lsb-base
 lsb-release
 lsdvd
 lshw
-lslk
 lsof
 lsscsi
 ltrace
@@ -947,7 +903,6 @@ mercurial
 mesa-utils
 metamail
 mg
-mgp
 migrationtools
 mii-diag
 mikmod
@@ -964,7 +919,6 @@ mksh
 mlocate
 mmv
 moc
-modconf
 modem-cmd
 module-assistant
 molly-guard
@@ -980,9 +934,7 @@ mp3gain
 mp3info
 mp3splt
 mp3val
-mp3wrap
 mpack
-mpage
 mpc
 mpg123-alsa
 mpg321
@@ -1021,7 +973,6 @@ ncc
 ncdu
 ncftp
 ncmpc
-ncpfs
 ncurses-base
 ncurses-bin
 ncurses-term
@@ -1045,7 +996,6 @@ netris
 netrw
 netsed
 netsniff-ng
-netstat-nat
 netsurf
 net-tools
 netwag
@@ -1081,7 +1031,6 @@ obconf
 obexftp
 obexpushd
 odt2txt
-offlineimap
 oinkmaster
 olsrd
 olsrd-plugins
@@ -1090,7 +1039,6 @@ opalmod
 openafs-client
 openafs-krb5
 openbox
-opencryptoki
 openipmi
 open-iscsi
 openjade
@@ -1172,7 +1120,6 @@ playmidi
 playmp3list
 plptools
 pmailq
-pmidi
 pmount
 pngtools
 pnm2ppa
@@ -1220,7 +1167,6 @@ proxychains
 proxycheck
 psad
 pscan
-psfontmgr
 psh
 psmisc
 pssh
@@ -1258,7 +1204,6 @@ python-id3
 python-libgmail
 python-minimal
 python-pexpect
-python-pyao
 python-pycallgraph
 python-pymad
 python-pysqlite2
@@ -1295,8 +1240,6 @@ rcov
 rcs
 rdate
 rdesktop
-rdiff
-rdiff-backup
 rdoc
 rdoc1.8
 read-edid
@@ -1321,7 +1264,6 @@ rinetd
 rinse
 rkhunter
 rlwrap
-rman
 rng-tools
 rofs
 root-tail
@@ -1427,7 +1369,6 @@ snarf
 sniffit
 snmp
 snoopy
-snowdrop
 socat
 sox
 sp
@@ -1440,7 +1381,6 @@ spell
 spellutils
 spicctrl
 splint
-splitvt
 sqlite
 sqlite3
 squashfs-lzma-tools
@@ -1527,24 +1467,19 @@ texinfo
 textdraw
 tf
 tgt
-thttpd
 tidy
 tig
 timelimit
 tin
 tinyhoneypot
 tk8.4
-tla
 tmpreaper
 tn5250
 tnef
 tofrodos
 toilet
 tor
-toshset
-toshutils
 tpconfig
-tpm-tools
 tpp
 t-prot
 tra
@@ -1554,7 +1489,6 @@ trayer
 tree
 treil
 trickle
-trousers
 tshark
 tsocks
 tss
@@ -1586,7 +1520,6 @@ unifont
 unison
 units
 uniutils
-unixcw
 unp
 unrar-free
 unrtf
@@ -1683,7 +1616,6 @@ wwwconfig-common
 wyrd
 x11-common
 x11vnc
-x2x
 x86info
 xar
 xautolock
@@ -1712,11 +1644,9 @@ xfonts-biznet-base
 xfonts-bolkhov-cp1251-75dpi
 xfonts-bolkhov-cp1251-misc
 xfonts-encodings
-xfonts-intl-european
 xfonts-scalable
 xfonts-terminus
 xfonts-utils
-xfs
 xfsdump
 xfsprogs
 xinetd
@@ -1797,7 +1727,6 @@ abs-guide
 agrep
 atmel-firmware
 bluez-firmware
-dvdrtools
 firmware-iwlwifi
 firmware-qlogic
 firmware-ralink
