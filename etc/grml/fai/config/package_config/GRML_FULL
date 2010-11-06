@@ -314,9 +314,6 @@ configure-debian
 conkeror
 connect-proxy
 conntrack
-console-data
-console-terminus
-console-tools
 conspy
 convmv
 coreutils
@@ -782,7 +779,6 @@ jp2a
 juke
 jwm
 kanif
-kbd-compat
 keepalived
 kernel-package
 ketchup

@@ -6,7 +6,7 @@ bootpc rsync lftp rsh-client less dump reiserfsprogs usbutils
 hwinfo psmisc pciutils hdparm smartmontools parted mdadm lvm2
 dnsutils ntpdate dosfstools cvs jove xfsprogs xfsdump
 procinfo dialog discover mdetect
-console-tools console-common
+kbd
 expect iproute udev subversion
 live-initramfs
 

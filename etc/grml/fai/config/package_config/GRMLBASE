@@ -3,7 +3,6 @@ PACKAGES aptitude
 aufs-tools
 busybox
 bzip2
-console-common
 deborphan
 dmidecode
 eject

@@ -21,8 +21,6 @@ bsdmainutils
 bsdutils
 buffer
 chntpw
-console-terminus
-console-tools
 coreutils
 cpio
 cryptsetup
