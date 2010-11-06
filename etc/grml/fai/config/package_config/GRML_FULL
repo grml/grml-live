@@ -206,7 +206,6 @@ base-passwd
 bash
 bash-builtins
 bash-doc
-bash-minimal
 bash-static
 bastille
 bb
@@ -263,7 +262,6 @@ cabextract
 caca-utils
 ca-certificates
 cadaver
-camserv
 capiutils
 catdoc
 cbm
@@ -481,7 +479,6 @@ ekeyd
 electric-fence
 elfsh
 elinks
-elmo
 elscreen
 elvis
 elvis-common
@@ -550,7 +547,6 @@ flex
 flexbackup
 flite
 fluxbox
-fluxconf
 fondu
 fontconfig
 fontconfig-config
@@ -691,7 +687,6 @@ icmpush
 id3
 id3v2
 idesk
-idswakeup
 ifenslave-2.6
 ifmetric
 ifrename
@@ -801,7 +796,6 @@ ldap-utils
 ldapvi
 lde
 ldnsutils
-ld.so.preload-manager
 leave
 lft
 lftp
@@ -813,7 +807,6 @@ libsmbios-bin
 libtool
 lighttpd
 lilo
-linda
 links
 links2
 lintian
@@ -828,7 +821,6 @@ loadlin
 localepurge
 locales
 lockfile-progs
-loco
 log2mail
 logapp
 login
@@ -944,7 +936,6 @@ mtpaint
 mtp-tools
 mtr-tiny
 mt-st
-multi-aterm
 multipath-tools
 multitail
 multitee
@@ -953,7 +944,6 @@ mutt
 muttprofile
 mysql-client
 mysql-common
-naim
 nano
 nasm
 nast
@@ -1088,7 +1078,6 @@ pdns-backend-sqlite
 pdns-recursor
 pdns-server
 pdsh
-pdumpfs
 pekwm
 perforate
 perl
@@ -1108,7 +1097,6 @@ piuparts
 pkg-config
 pktstat
 playmidi
-playmp3list
 plptools
 pmailq
 pmount
@@ -1192,7 +1180,6 @@ python-fuse
 python-gnupginterface
 python-gobject
 python-id3
-python-libgmail
 python-minimal
 python-pexpect
 python-pycallgraph
@@ -1258,7 +1245,6 @@ rlwrap
 rng-tools
 rofs
 root-tail
-router-audit-tool
 rox-filer
 rpl
 rpm
@@ -1314,7 +1300,6 @@ sensord
 ser2net
 setcd
 setserial
-sfind
 sformat
 sg3-utils
 sgml-base
@@ -1346,7 +1331,6 @@ slrnpull
 slsh
 slurm
 sm
-smake
 smartmontools
 smbc
 smbclient
@@ -1482,7 +1466,6 @@ tshark
 tsocks
 tss
 ttf-dejavu
-ttmkfdir
 ttysnoop
 tweak
 twm
@@ -1531,7 +1514,6 @@ v4l-conf
 vbetool
 vbindiff
 vblade
-vcdtools
 vde2
 vera
 vfu
@@ -1568,13 +1550,11 @@ wajig
 wakeonlan
 wamerican-small
 wapiti
-waproamd
 wavemon
 wcalc
 wdiff
 webcam
 webcamd
-webcam-server
 webcheck
 webcpp
 weblint-perl
@@ -1596,9 +1576,7 @@ wireshark-common
 wmaloader
 wmctrl
 wmii
-wmmisc
 wondershaper
-wprint
 wput
 wvdial
 wwwconfig-common

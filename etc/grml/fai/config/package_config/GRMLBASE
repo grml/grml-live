@@ -42,7 +42,6 @@ pciutils
 resolvconf
 rsync
 rsyslog
-scsiadd
 strace
 udev
 usbutils
