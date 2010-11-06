@@ -1,6 +1,7 @@
 PACKAGES aptitude
 
 auctex
+bibcursed
 catdvi
 ctioga
 dvipng
