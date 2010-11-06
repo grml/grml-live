@@ -24,10 +24,8 @@ grml-policyrcd
 grml-quickconfig
 grml-rebuildfstab
 grml-scripts
-grml-shlib
 grml-tips
 grml-udev-config
-grml-usleep
 grml-vpn
 grub-pc
 hdparm
