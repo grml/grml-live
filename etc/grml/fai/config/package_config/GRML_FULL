@@ -681,6 +681,9 @@ htop
 httperf
 httping
 httptunnel
+hunspell
+hunspell-en-us
+hunspell-de-de
 hunt
 hwdata
 hwloc
@@ -688,7 +691,6 @@ i2c-tools
 i3-wm
 i810switch
 ibod
-ibritish
 icecast2
 iceweasel
 icheck
@@ -720,7 +722,6 @@ indent
 infiniband-diags
 info
 info2www
-ingerman
 ink
 inotail
 inoticoming
@@ -757,7 +758,6 @@ isakmpd
 iscsitarget
 isdnutils-base
 isdnvboxclient
-ispell
 isync
 itop
 ivtv-utils
