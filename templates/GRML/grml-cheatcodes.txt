@@ -20,7 +20,7 @@ failsafe                            Boot with (almost) no HW-detection
 debug                               Get shells during process of booting for debugging
 bootchart                           Create chart of booting sequence in /var/log/bootchart.tgz
 forensic                            Do not touch any harddisks during hardware recognition
-serial                              Activate ttyS0 and start mgetty
+serial                              Activate ttyS0 and start a getty
 grub                                Boot Grub bootloader (special all-in-one-image)
 dos                                 Boot FreeDOS
 bsd                                 Boot MirOS BSD
