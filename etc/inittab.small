@@ -75,11 +75,6 @@ po::powerokwait:/etc/init.d/powerfail stop
 # T1:23:respawn:/bin/bash -c "/sbin/getty -L ttyS1 -l /usr/bin/zsh-login 9600 vt100 || sleep 30"
 # T0:23:respawn:/sbin/getty -L ttyS0 9600 vt100
 # T1:23:respawn:/sbin/getty -L ttyS1 9600 vt100
-# T0:2345:respawn:/bin/bash -c "/sbin/mgetty ttyS0 || sleep 30"
-# T1:2345:respawn:/bin/bash -c "/sbin/mgetty ttyS1 || sleep 30"
-
-# Example how to put a getty on a modem line.
-#T3:23:respawn:/sbin/mgetty -x0 -s 57600 ttyS3
 
 #-- isdnutils begin
 # Change the lines below for your local setup and uncomment them.

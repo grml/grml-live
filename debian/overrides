@@ -30,7 +30,6 @@ grml-etc: init.d-script-missing-lsb-section /etc/init.d/grml-home
 grml-etc: init.d-script-missing-lsb-section /etc/init.d/grml-misc
 grml-etc: init.d-script-missing-lsb-section /etc/init.d/grml-reboot
 grml-etc: init.d-script-possible-missing-stop /etc/init.d/ssh 0 6
-grml-etc: non-standard-file-perm etc/mgetty/login.config 0600 != 0644
 grml-etc: package-installs-into-etc-rc.d etc/rc0.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc1.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc2.d/important_notice

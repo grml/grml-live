@@ -8,11 +8,10 @@
 
 set -e
 
-TO_UNDIVERT1="login.config mgetty.config"
-TO_UNDIVERT2="ssh"
-TO_UNDIVERT3="kismet.conf"
-TO_UNDIVERT4="wlan-ng.conf"
-TO_UNDIVERT5="smb.conf"
+TO_UNDIVERT1="ssh"
+TO_UNDIVERT2="kismet.conf"
+TO_UNDIVERT3="wlan-ng.conf"
+TO_UNDIVERT4="smb.conf"
 
 undivert_gen() {
     DEXT=${3:-original}
@@ -33,18 +32,15 @@ replace_grml_with_orig_inittab() {
 case "$1" in
     purge)
         for cmd in $TO_UNDIVERT1; do
-                undivert_gen $cmd /etc/mgetty
-        done
-        for cmd in $TO_UNDIVERT2; do
                 undivert_gen $cmd /etc/init.d
         done
-        for cmd in $TO_UNDIVERT3; do
+        for cmd in $TO_UNDIVERT2; do
                 undivert_gen $cmd /etc/kismet
         done
-        for cmd in $TO_UNDIVERT4; do
+        for cmd in $TO_UNDIVERT3; do
                 undivert_gen $cmd /etc/pcmcia
         done
-        for cmd in $TO_UNDIVERT5; do
+        for cmd in $TO_UNDIVERT4; do
                 undivert_gen $cmd /etc/samba
         done
 

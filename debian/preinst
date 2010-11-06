@@ -9,10 +9,9 @@
 
 set -e
 
-TO_DIVERT1="login.config mgetty.config"
-TO_DIVERT2="ssh"
-TO_DIVERT3="kismet.conf"
-TO_DIVERT4="wlan-ng.conf"
+TO_DIVERT1="ssh"
+TO_DIVERT2="kismet.conf"
+TO_DIVERT3="wlan-ng.conf"
 
 divert_gen() {
     DEXT=${3:-original}
@@ -39,18 +38,14 @@ rm_conffile() {
 case "$1" in
    install|upgrade)
         for cmd in $TO_DIVERT1; do
-            divert_gen $cmd /etc/mgetty
-        done
-
-        for cmd in $TO_DIVERT2; do
             divert_gen $cmd /etc/init.d
         done
 
-        for cmd in $TO_DIVERT3; do
+        for cmd in $TO_DIVERT2; do
             divert_gen $cmd /etc/kismet
         done
 
-        for cmd in $TO_DIVERT4; do
+        for cmd in $TO_DIVERT3; do
             divert_gen $cmd /etc/pcmcia
         done
 
