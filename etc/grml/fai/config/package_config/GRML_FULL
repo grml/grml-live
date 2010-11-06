@@ -175,9 +175,7 @@ asql
 asused
 at
 atftpd
-athcool
 athena-jot
-atitvout
 atop
 atsar
 attr
@@ -553,8 +551,6 @@ flexbackup
 flite
 fluxbox
 fluxconf
-fnfx-client
-fnfxd
 fondu
 fontconfig
 fontconfig-config
@@ -1281,7 +1277,6 @@ rutilt
 rxvt-beta
 rxvt-unicode
 s3cmd
-s3switch
 safecopy
 saidar
 sam
@@ -1374,7 +1369,6 @@ speedometer
 speex
 spell
 spellutils
-spicctrl
 splint
 sqlite
 sqlite3
@@ -1741,6 +1735,15 @@ PACKAGES aptitude I386
 ## general:
 grml
 perf
+
+# i386-only software
+athcool
+atitvout
+fnfx-client
+fnfxd
+s3switch
+spicctrl
+
 # use linux-kernel-headers-grml instead of linux-libc-dev?
 # linux-kernel-headers-grml
 
