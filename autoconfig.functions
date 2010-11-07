@@ -1540,6 +1540,15 @@ if checkbootparam 'vnc' ; then
          /bin/chown -R "$USER": "$VNCDIR"
       fi
    fi
+   if checkbootparam 'vnc_connect' ; then
+      VNC_CONNECT=''
+      VNC_CONNECT="$(getbootparam 'vnc_connect' 2>>$DEBUG)"
+      einfo "Bootoption vnc_connect found, will start vnc with connect to $VNC_CONNECT."
+      #store the options in a file
+      VNCDIR="/home/${USER}/.vnc"
+      [ -d "$VNCDIR" ] || mkdir "$VNCDIR"
+      echo " --connect $VNC_CONNECT " >> $VNCDIR/options 
+   fi
 fi
 }
 # }}}
