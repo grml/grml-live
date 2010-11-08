@@ -23,9 +23,7 @@ afflib
 amap
 bfa
 bkp
-btsco
 cmospwd
-cpuburn-in-binary
 ctris
 dd-rhelp
 deletemail
@@ -65,7 +63,6 @@ lcdtest
 libacme-bleach-perl
 libacme-eyedrops-perl
 libacme-smirch-perl
-libstdc++2.10-glibc2.2
 md5deep
 minised
 msgid-chooser
@@ -74,7 +71,6 @@ ncp
 pip
 prism54-firmware
 prosilla
-pspax
 ptfinder
 rainbowcrack
 rootsh
@@ -529,7 +525,6 @@ fbi
 fbset
 fbterm
 fcrackzip
-fdflush
 fdupes
 febootstrap
 feh
@@ -1123,7 +1118,6 @@ powermgmt-base
 powernowd
 powertop
 pperl
-ppmd
 ppp
 pppconfig
 pppoe
@@ -1164,7 +1158,6 @@ pymacs
 pyneighborhood
 python
 python2.4
-python2.4-minimal
 python2.5
 python2.5-minimal
 python-apt
@@ -1697,7 +1690,6 @@ firmware-iwlwifi
 firmware-qlogic
 firmware-ralink
 iozone3
-irpas
 lha
 manpages-posix
 netperf
