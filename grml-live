@@ -567,7 +567,7 @@ else
       fi
 
       if [ -r "$CHECKLOG/shell.log" ] ; then
-         grep 'FAILED with exit code' $CHECKLOG/shell.log >> $LOGFILE && ERROR=2
+         grep 'FAILED with exit code' $CHECKLOG/shell.log >> $LOGFILE && ERROR=6
       fi
 
       if [ -n "$ERROR" ] ; then
