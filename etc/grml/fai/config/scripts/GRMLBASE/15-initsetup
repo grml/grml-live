@@ -16,20 +16,14 @@ if ! [ -r $target/etc/runlevel.conf ] ; then
 fi
 
 # keep a backup of the original runlevel.conf file for reference
-# but only save it as /etc/runlevel.conf.original if it's not the
-# according live system version, this should prevent from overriding
-# /etc/runlevel.conf.original if re-running grml-live with -b option.
-if ! cmp $target/etc/runlevel.conf $target/etc/runlevel.conf.livecd >/dev/null ; then
-
-   # make sure to store old backup files if they differ as well
-   if [ -r $target/etc/runlevel.conf.original ] ; then
-      if ! cmp $target/etc/runlevel.conf $target/etc/runlevel.conf.original >/dev/null ; then
-         cp $target/etc/runlevel.conf.original $target/etc/runlevel.conf.original."$(date +%Y%m%d_%k:%M:%S)"
-      fi
-   fi
-
-   cp $target/etc/runlevel.conf $target/etc/runlevel.conf.original
+if [ -r $target/etc/runlevel.conf.original ] ; then
+  # make sure to store old backup files if they differ as well
+  if ! cmp $target/etc/runlevel.conf $target/etc/runlevel.conf.original >/dev/null ; then
+    cp $target/etc/runlevel.conf.original $target/etc/runlevel.conf.original."$(date +%Y%m%d_%k:%M:%S)"
+  fi
 fi
+
+cp $target/etc/runlevel.conf $target/etc/runlevel.conf.original
 
 # provide Grml's default file-rc configuration
 fcopy /etc/runlevel.conf

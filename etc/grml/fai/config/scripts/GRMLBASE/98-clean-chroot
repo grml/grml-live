@@ -65,7 +65,6 @@ fi
 # make sure GRML_SMALL uses the appropriate configuration:
 if ifclass GRML_SMALL ; then
    cp $target/etc/inittab.small $target/etc/inittab
-   cp $target/etc/runlevel.conf.livecd.small $target/etc/runlevel.conf
 fi
 
 if ifclass RELEASE ; then

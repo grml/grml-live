@@ -15,9 +15,6 @@ Patches, ideas and feedback welcome.
 
 * add support for ppc?
 
-* the /etc/runlevel.conf stuff isn’t flexible enough: adjust the file on-the-fly
-  according to what software is used/installed on the system
-
 * check out how FAI_DEBMIRROR of /etc/grml/fai/fai.conf could be merged with our
   MIRROR_DIRECTORY and MIRROR_SOURCES feature of /etc/grml/grml-live.conf
 

@@ -162,10 +162,6 @@ else
    ewarn "Warning: /usr/bin/grep-dctrl not available."
 fi
 
-einfo "Copying original runlevel.conf to /etc/runlevel.conf"
-cp /etc/runlevel.conf.livecd /etc/runlevel.conf
-eend $?
-
 einfo "Removing x-server-conffiles"
   rm -f /etc/X11/xorg.conf /etc/X11/XF86Config-4 \
         /etc/X11/XF86Config /etc/XF86Config /etc/XF86Config-4
@@ -355,10 +351,7 @@ fi
 # file /usr/sbin/* | grep -v ', stripped' | grep -v 'perl' | grep -v 'Bourne' | grep -v 'python' | grep -v 'symbolic link'
 #
 # Is software by grml-repos up2date?
-# grep-dctrl --field Maintainer 'Michael Prokop' /var/lib/apt/lists/grml.org_repos_._* | grep Package | awk '{print $2}' | xargs echo
-#
-# runlevel.conf:
-# for file in /etc/init.d/* ; do grep $file -q /etc/runlevel.conf.hdinstall || echo $file not found ; done
+# grep-dctrl --field Maintainer 'Michael Prokop' /var/lib/apt/lists/* | grep Package | awk '{print $2}' | xargs echo
 ################################################################################
 
 ## END OF FILE #################################################################
