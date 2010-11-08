@@ -2496,19 +2496,6 @@ fi
 }
 # }}}
 
-# {{{ check for broken ipw3945 driver which causes problems (especially on hd install)
-config_ipw3945() {
-  if grep -q ipw3945 /proc/modules ; then
-     if ! iwconfig 2>/dev/null| grep -qe 'IEEE 802' -qe 'unassociated' ; then
-        ewarn "Broken ipw3945 network interface found, reloading module."
-        rmmod ipw3945
-        modprobe ipw3945
-        eend $?
-     fi
-  fi
-}
-# }}}
-
 # {{{ disable console blanking
 config_blanking(){
 if checkbootparam 'noblank' ; then

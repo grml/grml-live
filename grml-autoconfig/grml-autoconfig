@@ -258,8 +258,6 @@ checkvalue $CONFIG_CREATE_MNT_DIRS && create_mnt_dirs
 
 checkvalue $CONFIG_915RESOLUTION && config_915resolution
 
-checkvalue $CONFIG_IPW3945 && config_ipw3945
-
 checkvalue $CONFIG_MYPATH && config_mypath
 
 checkvalue $CONFIG_DISTCC && config_distcc
