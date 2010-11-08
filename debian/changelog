@@ -1,3 +1,16 @@
+grml-etc (1.2.3) unstable; urgency=low
+
+  [ Michael Prokop ]
+  * [cde374c] Add grml-usleep to Depends.
+  * [e6a1bf3] Bump Standards-Version to 3.9.1.
+  * [d3ecd0c] [27ac5ff] Drop all /etc/runlevel.conf.* files,
+    deployed via grml-live.
+
+  [ Christian Hofstaedtler ]
+  * [b2fecd0] Remove mgetty support.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 08 Nov 2010 11:26:19 +0100
+
 grml-etc (1.2.2) unstable; urgency=low
 
   [ Marc Haber ]
