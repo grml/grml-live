@@ -82,7 +82,7 @@ related settings instead.
 " 0 0 0 \
 dhcp "check for network devices and run pump (get ip-address via DHCP)" $DHCPSTATUS \
 fstab "update /etc/fstab entries (check for devices)" $FSTABSTATUS \
-cpufreq "activate cpydyn/powernowd for frequency-scalable CPUs" $CPUSTATUS \
+cpufreq "activate cpu frequency scaling" $CPUSTATUS \
 acpi_apm "load ACPI/APM modules" $ACPI_APMSTATUS \
 syslog "start syslog-ng" $SYSLOGSTATUS \
 gpm "start GPM (mouse on console)" $GPMSTATUS \

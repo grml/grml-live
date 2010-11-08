@@ -1547,7 +1547,7 @@ if checkbootparam 'vnc' ; then
       #store the options in a file
       VNCDIR="/home/${USER}/.vnc"
       [ -d "$VNCDIR" ] || mkdir "$VNCDIR"
-      echo " --connect $VNC_CONNECT " >> $VNCDIR/options 
+      echo " --connect $VNC_CONNECT " >> $VNCDIR/options
    fi
 fi
 }
