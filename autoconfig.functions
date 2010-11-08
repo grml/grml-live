@@ -320,11 +320,26 @@ config_language(){
     [ ${NUM_CONSOLES} -eq 1 ] && NUM_CONSOLES=6
  fi
  CUR_CONSOLE=$(fgconsole 2>/dev/null)
+
+ if [ -x "$(which setfont)" ] ; then
+    use_setfont=true
+ elif [ -x "$(which consolechars)" ] ; then
+    use_consolechars=true
+ else
+    eerror "Neither setfont nor consolechars tool present, can not set font."
+    eend 1
+    return 1
+ fi
+
  if [ -n "$CHARMAP" ] ; then
-    einfo "Running consolechars for ${CHARMAP}"
+    einfo "Setting font to ${CHARMAP}"
     RC=0
     for vc in $(seq 0 ${NUM_CONSOLES}) ; do
-        consolechars --tty=/dev/tty${vc} -m ${CHARMAP} ; RC=$?
+        if $use_setfont ; then
+          setfont -C /dev/tty${vc} $CHARMAP ; RC=$?
+        elif $use_consolechars ; then
+          consolechars --tty=/dev/tty${vc} -m ${CHARMAP} ; RC=$?
+        fi
     done
     if [ -n "$CUR_CONSOLE" ] ; then
        [ "$CUR_CONSOLE" != "serial" ] && chvt $CUR_CONSOLE
@@ -336,10 +351,14 @@ config_language(){
     ewarn "Skipping setting console font as requested on boot commandline." ; eend 0
  else
     if [ -n "$CONSOLEFONT" ] ; then
-       einfo "Running consolechars using ${CONSOLEFONT}"
+       einfo "Setting font to ${CONSOLEFONT}"
        RC=0
        for vc in $(seq 0 ${NUM_CONSOLES}) ; do
-           consolechars --tty=/dev/tty${vc} -f $CONSOLEFONT ; RC=$?
+           if $use_setfont ; then
+             setfont -C /dev/tty${vc} ${CONSOLEFONT} ; RC=$?
+           elif $use_consolechars ; then
+             consolechars --tty=/dev/tty${vc} -f ${CONSOLEFONT} ; RC=$?
+           fi
        done
        if [ -n "$CUR_CONSOLE" ] ; then
           [ "$CUR_CONSOLE" != "serial" ] && chvt $CUR_CONSOLE
@@ -1886,7 +1905,7 @@ config_x_startup(){
 # make sure we start X only if startx is used *before* a nostartx option
 # so it's possible to disable automatic X startup using nostart
 if checkbootparam 'startx' && ! echo "$CMDLINE" | grep -q 'startx.*nostartx' ; then
- if [ -x $(which X) ] ; then
+ if [ -x "$(which X)" ] ; then
   if [ -z "$INSTALLED" ] ; then
    WINDOWMANAGER="$(getbootparam 'startx' 2>>$DEBUG)"
    if [ -z "$WINDOWMANAGER" ] ; then
