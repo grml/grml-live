@@ -1,3 +1,16 @@
+grml-autoconfig (0.9.16) unstable; urgency=low
+
+  [ Michael Prokop ]
+  * [2e857cb] Replace depends on console-tools to 'kbd | console-
+    utilities'. [Closes: issue818]
+  * [b64ae9e] Drop powernowd from Recommends and adjust naming of cpu
+    frequency.
+
+  [ Alexander Wirt ]
+  * [863744b] Add support for vnc_connect feature. [Closes: issue877]
+
+ -- Michael Prokop <mika@grml.org>  Mon, 08 Nov 2010 11:17:51 +0100
+
 grml-autoconfig (0.9.15) unstable; urgency=low
 
   [ Christian Hofstaedtler ]
