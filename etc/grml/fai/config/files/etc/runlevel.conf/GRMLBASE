@@ -1,0 +1,41 @@
+############################################################################
+# You can use your favourite editor or update-rc.d(8) to modify it.
+# Read runlevel.conf(5) man page for more information about this file.
+############################################################################
+# This file was deployed via grml-live's
+# /etc/grml/fai/config/scripts/GRMLBASE/15-initsetup script, using
+# /etc/grml/fai/config/files/etc/runlevel.conf/GRMLBASE
+############################################################################
+# *IMPORTANT* This is the file used by the Grml live system.
+# Please notice that customization of this file will not work with the
+# save-config mechanism, as init takes place (and reads the file
+# /etc/runlevel.conf) before restore-config can be executed at all.
+# If you want to customize the Grml boot sequence please either
+# remaster the Grml ISO or (much simplier) just add your personal
+# stuff to the /etc/init.d/bootlocal.* scripts!
+############################################################################
+# Format:
+# <sort> <off-> <on-levels>     <command>
+01	-	2		/etc/init.d/bootsplash_start.sh
+01	-	S		/etc/init.d/bootlocal.first
+01	0,1,6	-		/etc/init.d/haltlocal.first
+02	-	S		/etc/init.d/mountkernfs.sh
+02	-	S		/etc/init.d/hostname.sh
+03	-	S		/etc/init.d/grml-udev
+04	-	S		/etc/init.d/mountdevsubfs.sh
+18	-	S		/etc/init.d/ifupdown-clean
+29	-	2		/etc/init.d/bootlocal.middle
+30	-	2,3,4,5		/etc/init.d/grml-autoconfig
+36	-	S		/etc/init.d/ifupdown
+36	-	S		/etc/init.d/udev-mtab
+38	-	S		/etc/init.d/resolvconf
+55	-	S		/etc/init.d/bootmisc.sh
+90	-	0		/etc/init.d/halt
+90	-	6		/etc/init.d/reboot
+90	-	S		/etc/init.d/rmnologin
+90	-	1		/etc/init.d/single
+98	-	2		/etc/init.d/grml-home
+99	-	2		/etc/init.d/grml-misc
+99	-	2		/etc/init.d/bootsplash_end.sh
+99	-	2		/etc/init.d/bootlocal.last
+# THE LAST LINE IS NEVER READ

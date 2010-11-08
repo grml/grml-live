@@ -9,8 +9,6 @@
 set -u
 set -e
 
-GRML_NAME="${GRML_NAME:-grml}"
-
 if ! [ -r $target/etc/runlevel.conf ] ; then
    echo 'Warning: /etc/runlevel.conf does not exist...'
    echo '... assuming we do not have file-rc, skipping 15-initsetup'
@@ -21,12 +19,11 @@ fi
 # but only save it as /etc/runlevel.conf.original if it's not the
 # according live system version, this should prevent from overriding
 # /etc/runlevel.conf.original if re-running grml-live with -b option.
-if ! cmp $target/etc/runlevel.conf $target/etc/runlevel.conf.livecd 1>/dev/null || \
-   ! cmp $target/etc/runlevel.conf $target/etc/runlevel.conf.livecd.small 1>/dev/null ; then
+if ! cmp $target/etc/runlevel.conf $target/etc/runlevel.conf.livecd >/dev/null ; then
 
    # make sure to store old backup files if they differ as well
    if [ -r $target/etc/runlevel.conf.original ] ; then
-      if ! cmp $target/etc/runlevel.conf $target/etc/runlevel.conf.original 1>/dev/null ; then
+      if ! cmp $target/etc/runlevel.conf $target/etc/runlevel.conf.original >/dev/null ; then
          cp $target/etc/runlevel.conf.original $target/etc/runlevel.conf.original."$(date +%Y%m%d_%k:%M:%S)"
       fi
    fi
@@ -34,14 +31,8 @@ if ! cmp $target/etc/runlevel.conf $target/etc/runlevel.conf.livecd 1>/dev/null 
    cp $target/etc/runlevel.conf $target/etc/runlevel.conf.original
 fi
 
-# if we have a small ISO let's adjust runlevel.conf:
-if [ -n "$GRML_NAME" ] ; then
-   if echo "$GRML_NAME" | grep -q small ; then
-      cp $target/etc/runlevel.conf.livecd.small $target/etc/runlevel.conf
-   else
-      cp $target/etc/runlevel.conf.livecd $target/etc/runlevel.conf
-   fi
-fi
+# provide Grml's default file-rc configuration
+fcopy /etc/runlevel.conf
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
