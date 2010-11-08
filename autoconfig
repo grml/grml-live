@@ -88,7 +88,6 @@ CONFIG_HOTPLUG_BLACKLIST='no' # check for blacklist bootparam
 CONFIG_HOTPLUG_MAIN='no'      # start hotplug system [should be handled by udev now]
 CONFIG_HWINFO='no'            # run hwinfo for module-detection (requires bootparam 'hwinfo'!)
 CONFIG_HWSPEAK='yes'          # support for hardware synthesizer via speakup
-CONFIG_IPW3945='yes'          # check for broken ipw3945 module
 CONFIG_KERNEL='yes'           # display information on running kernel
 CONFIG_LANGUAGE='yes'         # allow language specification via commandline
 CONFIG_LD_MOD='yes'           # run ldconfig and depmod on systems running from harddisk; remove /etc/grml.first.boot for forcing
