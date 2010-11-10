@@ -1227,7 +1227,7 @@ else
          ;;
       esac
 
-      cd $CURRENT_DIR
+      cd "$CURRENT_DIR"
    fi
 
    if [ "$RC" = 0 ] ; then
