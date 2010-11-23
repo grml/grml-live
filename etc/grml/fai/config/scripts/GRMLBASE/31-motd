@@ -1,6 +1,6 @@
 #!/bin/bash
 # Filename:      /etc/grml/fai/config/scripts/GRMLBASE/31-motd
-# Purpose:       make sure the motd setup is correct
+# Purpose:       replace motd
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
@@ -9,9 +9,7 @@
 set -u
 set -e
 
-if [ -f $target/etc/motd.dpkg-new ] ; then
-   $ROOTCMD mv /etc/motd.dpkg-new /var/run/motd
-fi
+fcopy /etc/motd
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
