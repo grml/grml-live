@@ -11,9 +11,9 @@ Vcs-Browser: http://git.grml.org/?p=grml-etc.git
 Package: grml-etc
 Architecture: all
 Replaces: automount-knoppix
-Suggests: grml-desktop, grml-shlib, grml-files, grml-docs, grml-sectools, grml-templates, grml-x, policyrcd-script-zg2, grml-usleep
+Suggests: grml-desktop, grml-shlib, grml-files, grml-docs, grml-sectools, grml-templates, grml-x, policyrcd-script-zg2
 Recommends: dillo, eterm, python, vim (>= 7.0)
-Depends: ${misc:Depends}, grml-scripts (>= 0.9), grml-etc-core (>= 0.3)
+Depends: ${misc:Depends}, grml-scripts (>= 0.9), grml-etc-core (>= 0.3), grml-usleep
 Conflicts: smbconf-pfeifle, grml-etc-core (<= 0.2.25), grml-sysvinit
 Description: ecetera files for the grml system
  This package includes /etc files for the Grml system.
