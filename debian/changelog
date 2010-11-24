@@ -1,3 +1,12 @@
+grml-desktop (0.3.0) unstable; urgency=low
+
+  * [ea506ea] /etc/skel/.fluxbox/keys: provide resize configuration so
+    left mouse button works again.
+  * [55f2484] Bump Standards-Version to 3.9.1.
+  * [f14d6f7] Fix typo in long description.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 24 Nov 2010 01:42:32 +0100
+
 grml-desktop (0.2.6) unstable; urgency=low
 
   * /etc/skel/.idesktop/irssi.lnk: change commandline and therefore
