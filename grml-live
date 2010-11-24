@@ -59,8 +59,7 @@ Usage: $PN [options, see as follows]
    -u                      update existing chroot instead of rebuilding it from scratch
    -v <version_number>     specify version number of the release
    -V                      increase verbosity in the build process
-   -z                      use ZLIB instead of LZMA compression (depends on
-                           squashfs-tools version)
+   -z                      use ZLIB instead of LZMA compression
 
 Usage examples:
 
@@ -947,118 +946,29 @@ else
    # make sure we don't leave (even an empty) base.tgz:
    [ -f "$CHROOT_OUTPUT/base.tgz" ] && rm -f "$CHROOT_OUTPUT/base.tgz"
 
-   # $SQUASHFS_BINARY is specified in the configuration:
-   if [ -n "$SQUASHFS_BINARY" ] ; then
-      if which "$SQUASHFS_BINARY" >/dev/null 2>&1 ; then
-         log    "Using specified mksquashfs binary ${SQUASHFS_BINARY}"
-         einfo  "Using specified mksquashfs binary ${SQUASHFS_BINARY}" ; eend 0
-      else
-         log    "Error: specified mksquashfs binary ($SQUASHFS_BINARY) not found. Exiting."
-         eerror "Error: specified mksquashfs binary ($SQUASHFS_BINARY) not found. Exiting." ; eend 1
-         bailout
-      fi
-   # no $SQUASHFS_BINARY configured, let's find the according binary:
+   # if unconfigured default to squashfs-tools' mksquashfs binary
+   if [ -z "$SQUASHFS_BINARY" ] ; then
+      SQUASHFS_BINARY='mksquashfs'
+   fi
+
+   if which "$SQUASHFS_BINARY" >/dev/null 2>&1 ; then
+      log    "Using mksquashfs binary ${SQUASHFS_BINARY}"
+      einfo  "Using mksquashfs binary ${SQUASHFS_BINARY}" ; eend 0
    else
-      # Note: this is ALL for backward compatibility and yes: it's serious PITA.
-      # We'll definitely drop this once people build >=2.6.35-grml* only and
-      # the squashfs-tools vs. squashfs-lzma-tools vs. squashfs-lzma-tools4 and
-      # zlib/gzip vs. lzma situation is settling with new squashfs file format (v4)
-
-      if ls $CHROOT_OUTPUT/boot/vmlinuz* >/dev/null 2>&1 ; then
-        KERNEL_IMAGE="$(ls $CHROOT_OUTPUT/boot/vmlinuz* 2>/dev/null | sort -r | head -1)"
-      else
-        KERNEL_IMAGE="unset"
-      fi
-
-      case $KERNEL_IMAGE in
-         *vmlinuz-2.6.31-grml*|*vmlinuz-2.6.33-grml*)
-           SQUASHFS_BINARY='mksquashfs-lzma'
-
-           # if using zlib compression kernel 2.6.3{1,3}-grml can be used with
-           # mksquashfs as well, therefore try to fall back if mksquashfs-lzma
-           # is NOT available
-           if ! which $SQUASHFS_BINARY >/dev/null 2>&1 && [ -n "$SQUASHFS_ZLIB" ] ; then
-             log "Squashfs binary $SQUASHFS_BINARY not available but building with zlib..."
-             log "\`-> trying to fall back to mksquashfs."
-             ewarn "Squashfs binary $SQUASHFS_BINARY not available but building with zlib..."
-             ewarn "\`-> trying to fall back to mksquashfs."
-             SQUASHFS_BINARY='mksquashfs'
-             eend 0
-           fi
-           ;;
-
-         *vmlinuz-2.6.35-grml*)
-           SQUASHFS_BINARY='mksquashfs-lzma4'
-
-           # if using zlib compression kernel 2.6.35-grml can be used with
-           # mksquashfs-lzma as well, therefore try to fall back if
-           # mksquashfs-lzma4 is NOT available
-           if ! which $SQUASHFS_BINARY >/dev/null 2>&1 && [ -n "$SQUASHFS_ZLIB" ] ; then
-             log "Squashfs binary $SQUASHFS_BINARY not available but building with zlib..."
-             log "\`-> trying to fall back to mksquashfs-lzma."
-             ewarn "Squashfs binary $SQUASHFS_BINARY not available but building with zlib..."
-             ewarn "\`-> trying to fall back to mksquashfs-lzma."
-             SQUASHFS_BINARY='mksquashfs-lzma'
-             eend 0
-           fi
-
-           # squashfs-tools 1:4.0-x work with 2.6.35-grml as well with default
-           # options, they just lack proper LZMA compression, so fall back as
-           # last option and inform user
-           if ! which $SQUASHFS_BINARY >/dev/null 2>&1 ; then
-             log   "Squashfs binary $SQUASHFS_BINARY not available either..."
-             log   "\`-> trying to fall back to mksquashfs, WARNING: very probably lacks LZMA compression."
-             ewarn "Squashfs binary $SQUASHFS_BINARY not available either..."
-             ewarn "\`-> trying to fall back to mksquashfs, WARNING: very probably lacks LZMA compression."
-             SQUASHFS_BINARY='mksquashfs'
-             eend 0
-           fi
-           ;;
-
-         *vmlinuz-2.6.23-grml*|*vmlinuz-2.6.26-grml*|*vmlinuz-2.6.28-grml*)
-            log    "Strongly outdated kernel version detected: $KERNEL_IMAGE"
-            eerror "Strongly outdated kernel version detected: $KERNEL_IMAGE"
-            eerror "|-> please update kernel version of live system to at *least* 2.6.31-grml[64]..."
-            eerror "\`-> or otherwise (not recommended though) set SQUASHFS_BINARY accordingly."
-            eend 1
-            bailout
-            ;;
-
-         *)
-           SQUASHFS_BINARY='mksquashfs'
-           log   "Could not detect grml kernel version and SQUASHFS_BINARY is unset."
-           ewarn "Could not detect grml kernel version and SQUASHFS_BINARY is unset."
-           ewarn "\`-> Assuming you want to use mksquashfs binary, if it fails please override with \$SQUASHFS_BINARY."
-           eend 0
-           ;;
-      esac
-
-      # check whether we have the according binary available:
-      if ! which $SQUASHFS_BINARY >/dev/null 2>&1 ; then
-         log    "Error: required mksquashfs binary (${SQUASHFS_BINARY}) could not be found. Exiting."
-         eerror "Error: required mksquashfs binary (${SQUASHFS_BINARY}) could not be found. Exiting."
-         eerror "|-> Make sure to install squashfs-tool, squashfs-lzma-tools and/or squashfs-lzma-tools4..."
-         eerror "|-> ... and set \$SQUASHFS_BINARY accordingly to the kernel version."
-         eerror "\`-> Visit http://grml.org/grml-live/#current_state for further details."
-         eend 1
-         bailout
-      fi
-
-   fi # end of SQUASHFS_BINARY handling
+      log    "Error: mksquashfs binary ($SQUASHFS_BINARY) not found. Exiting."
+      eerror "Error: mksquashfs binary ($SQUASHFS_BINARY) not found. Exiting." ; eend 1
+      bailout
+   fi
 
    # use sane defaults if $SQUASHFS_OPTIONS isn't set
    if [ -z "$SQUASHFS_OPTIONS" ] ; then
      # use blocksize 256k as this gives best result with regards to time + compression
-     [[ "$SQUASHFS_BINARY" == mksquashfs-lzma* ]] && SQUASHFS_OPTIONS="-b 256k"
+     SQUASHFS_OPTIONS="-b 256k"
 
      # set lzma compression by default, unless -z option has been specified on command line
      if [ -z "$SQUASHFS_ZLIB" ] ; then
-       case "$SQUASHFS_BINARY" in
-         mksquashfs-lzma)  SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -lzma";;
-         mksquashfs-lzma4) SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -comp lzma";;
-       esac
+        SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -comp lzma"
      fi
-
    fi
 
    # support exclusion of files via exclude-file:
@@ -1069,24 +979,6 @@ else
    # get rid of unnecessary files when building grml-small for final release:
    if echo "$CLASSES" | grep -q GRML_SMALL ; then
       SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -e initrd.img* vmlinuz*"
-   fi
-
-   # be backwards compatible, for squashfs-tools 1:3.2r2-9exp1 and squashfs-lzma-tools 3.3-1,
-   # make sure to drop the -nolzma option if it's not available:
-   if echo "$SQUASHFS_OPTIONS" | grep -q -- "-nolzma" ; then
-     if ! $SQUASHFS_BINARY --help 2>&1 | grep -q -- '-nolzma' ; then
-       log   "The $SQUASHFS_BINARY binary does NOT support the nolzma option, dropping it and using default mode."
-       ewarn "The $SQUASHFS_BINARY binary does NOT support the nolzma option, dropping it and using default mode."
-       SQUASHFS_OPTIONS="$(echo $SQUASHFS_OPTIONS | sed 's/-nolzma//g')"
-       eend 0
-     fi
-   fi
-
-   # if user doesn't want to use LZMA (e.g. running grml-live -z ...):
-   if [ -n "$SQUASHFS_ZLIB" ] ; then
-     if $SQUASHFS_BINARY --help 2>&1 | grep -q -- "-nolzma" ; then
-        SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -nolzma"
-     fi
    fi
 
    # log stuff

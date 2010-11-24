@@ -1716,22 +1716,22 @@ spicctrl
 # use linux-kernel-headers-grml instead of linux-libc-dev?
 # linux-kernel-headers-grml
 
-## current kernel version 2.6.35-grml:
-#fglrx-kernel-2.6.35-grml
-iscsitarget-module-2.6.35-grml
-linux-doc-2.6.35-grml
-linux-headers-2.6.35-grml
-linux-image-2.6.35-grml
-#linux-source-2.6.35-grml
-loop-aes-modules-2.6.35-grml
-ndiswrapper-modules-2.6.35-grml
-#nvidia-kernel-2.6.35-grml
-openafs-modules-2.6.35-grml
-speakup-modules-2.6.35-grml
-sysprof-module-2.6.35-grml
-tp-smapi-modules-2.6.35-grml
-virtualbox-ose-guest-modules-2.6.35-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
-xtables-addons-modules-2.6.35-grml
+## current kernel version 2.6.36-grml:
+#fglrx-kernel-2.6.36-grml
+iscsitarget-module-2.6.36-grml
+linux-doc-2.6.36-grml
+linux-headers-2.6.36-grml
+linux-image-2.6.36-grml
+#linux-source-2.6.36-grml
+loop-aes-modules-2.6.36-grml
+ndiswrapper-modules-2.6.36-grml
+#nvidia-kernel-2.6.36-grml
+openafs-modules-2.6.36-grml
+speakup-modules-2.6.36-grml
+sysprof-module-2.6.36-grml
+tp-smapi-modules-2.6.36-grml
+virtualbox-ose-guest-modules-2.6.36-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
+xtables-addons-modules-2.6.36-grml
 ## }}}
 
 ## amd64 specific packages {{{
@@ -1741,22 +1741,22 @@ PACKAGES aptitude AMD64
 grml64
 perf
 
-## current kernel version 2.6.35-grml64:
-#fglrx-kernel-2.6.35-grml64
-iscsitarget-module-2.6.35-grml64
-linux-doc-2.6.35-grml64
-linux-headers-2.6.35-grml64
-linux-image-2.6.35-grml64
-#linux-source-2.6.35-grml
-loop-aes-modules-2.6.35-grml64
-ndiswrapper-modules-2.6.35-grml64
-#nvidia-kernel-2.6.35-grml64
-openafs-modules-2.6.35-grml64
-speakup-modules-2.6.35-grml64
-sysprof-module-2.6.35-grml64
-tp-smapi-modules-2.6.35-grml64
-xtables-addons-modules-2.6.35-grml64
-virtualbox-ose-guest-modules-2.6.35-grml64 virtualbox-ose-guest-utils virtualbox-ose-guest-x11
+## current kernel version 2.6.36-grml64:
+#fglrx-kernel-2.6.36-grml64
+iscsitarget-module-2.6.36-grml64
+linux-doc-2.6.36-grml64
+linux-headers-2.6.36-grml64
+linux-image-2.6.36-grml64
+#linux-source-2.6.36-grml
+loop-aes-modules-2.6.36-grml64
+ndiswrapper-modules-2.6.36-grml64
+#nvidia-kernel-2.6.36-grml64
+openafs-modules-2.6.36-grml64
+speakup-modules-2.6.36-grml64
+sysprof-module-2.6.36-grml64
+tp-smapi-modules-2.6.36-grml64
+xtables-addons-modules-2.6.36-grml64
+virtualbox-ose-guest-modules-2.6.36-grml64 virtualbox-ose-guest-utils virtualbox-ose-guest-x11
 ## }}}
 
 # vim: foldmethod=marker
