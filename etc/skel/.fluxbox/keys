@@ -3,8 +3,15 @@
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Son Okt 14 00:07:56 CEST 2007 [mika]
 ################################################################################
+
+# Enable resizing - taken from Debian's fluxbox
+# package (patch titled restore-old-keybindings.patch),
+# without this config the left mouse button does not work
+# as expected, see #592904 in Debian's BTS for details
+OnLeftGrip Move1 :StartResizing bottomleft
+OnRightGrip Move1 :StartResizing bottomright
+OnTitlebar Move1 :StartMoving
 
 # Mod1 = Alt key
 # Control = Ctrl Key
