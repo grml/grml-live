@@ -1,3 +1,10 @@
+grml-etc (1.2.4) unstable; urgency=low
+
+  [ Christian Hofstaedtler ]
+  * [2d31fa5] Fix grml-usleep dependency.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 25 Nov 2010 02:04:18 +0100
+
 grml-etc (1.2.3) unstable; urgency=low
 
   [ Michael Prokop ]
