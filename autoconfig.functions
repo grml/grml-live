@@ -1598,86 +1598,67 @@ fi
 # }}}
 
 # {{{ Sound
-
-config_mixer(){
-if ! [ -x /usr/bin/amixer ] ; then
-  eerror "amixer binary not available. Can not set sound volumes therefore." ; eend 1
-else
-
-  if ! [ -r /proc/asound/cards ] ; then
-     ewarn "No soundcard present, skipping mixer settings therefore." ; eend 0
-     return
-  fi
-
-  if checkbootparam 'vol' ; then
-    VOL="$(getbootparam 'vol' 2>>$DEBUG)"
-    if [ -z "$VOL" ] ; then
-      eerror "Bootoption vol found but no volume level/parameter given. Using defaults." ; eend 1
-      VOL='75' # default
-    fi
-  else
-    VOL='75' # default
-  fi
-
-  if checkbootparam 'nosound' ; then
-    einfo "Muting sound devices on request."
-
-    fix_ibm_sound 0
-    # mute the master, this should be sufficient
-    ERROR=$(amixer -q set Master mute)
-    RC=$?
-
-    if [ -n "$ERROR" ] ; then
-       eindent
-       eerror "Problem muting sound devices: $ERROR"
-       eoutdent
-    fi
-    eend $RC
-  elif [ -z "$INSTALLED" ]; then
-      einfo "Setting mixer volumes to level ${WHITE}${VOL}${NORMAL}."
-
-      fix_ibm_sound ${VOL}
-
-      # by default assume '0' as volume for microphone:
-      if checkbootparam 'micvol' ; then
-         MICVOL="$(getbootparam 'micvol' 2>>$DEBUG)"
-      else
-         MICVOL=0
+config_mixer () {
+   if ! [ -x /usr/bin/amixer ] ; then
+      eerror "amixer binary not available. Can not set sound volumes therefore."
+      eend 1
+   else
+      if ! [ -r /proc/asound/cards ] ; then
+         ewarn "No soundcard present, skipping mixer settings therefore."
+         eend 0
+         return
       fi
 
-      # finally set the volumes:
-      RC=0
-      for CONTROL in Master PCM ; do
-         amixer -q set ${CONTROL} ${VOL}%
-         if [ $? -ne 0 ] ; then RC=$? ; fi
+      for card in $(cat /proc/asound/cards| grep -e '^\s*[0-9]' | awk '{print $1}') ; do
+         einfo "Configuring soundcard $(cat /proc/asound/cards| grep -e "$card" | awk -F\[ '{print $2}' | awk '{print $1}')"
+         eindent
+
+         if checkbootparam 'vol' ; then
+            VOL="$(getbootparam 'vol' 2>>$DEBUG)"
+            if [ -z "$VOL" ] ; then
+               eerror "Bootoption vol found but no volume level/parameter given. Using defaults (75%)."
+               VOL='75'
+               eend 1
+            fi
+         else
+            VOL='75'
+         fi
+
+         if checkbootparam 'nosound' ; then
+            einfo "Muting sound devices on request."
+            ERROR=$(amixer -q set Master mute)
+            RC=$?
+            if [ -n "$ERROR" ] ; then
+               eindent
+               eerror "Problem muting sound devices: $ERROR"
+               eoutdent
+            fi
+            eend $RC
+         elif [ -z "$INSTALLED" ] ; then
+            einfo "Setting mixer volumes to level ${WHITE}${VOL}${NORMAL}."
+
+            if checkbootparam 'micvol' ; then
+               MICVOL="$(getbootparam 'micvol' 2>>$DEBUG)"
+            else
+               MICVOL=0
+            fi
+
+            for CONTROL in Master PCM ; do
+               if amixer -q | grep -q "Simple mixer control.*$CONTROL" ; then
+                  amixer -q set "${CONTROL}" "${VOL}"%
+                  eend $?
+               fi
+            done
+
+            if [ ${MICVOL} -ne 0 ] ; then
+               einfo "Setting microphone to ${WHITE}${MICVOL}${NORMAL}."
+               amixer -q set "Mic" $MICVOL &> /dev/null
+               eend $?
+            fi
+         fi # checkbootparam 'nosound'
+         eoutdent
       done
-      # dont know how to set microphone volume for all soundcards with amixer,
-      # so use aumix instead :/
-      if [ ${MICVOL} -ne 0 -a -x /usr/bin/aumix ] ; then
-         aumix -m $MICVOL &>/dev/null
-         if [ $? -ne 0 ] ; then RC=$? ; fi
-      fi
-
-      eend $RC
-  fi
-
-fi
-}
-
-# on some IBM notebooks the front control has to be toggled
-fix_ibm_sound() {
- if [ -z $1 ] ; then
-    return
- fi
-
- VOL=${1}
-
- if [ -x /usr/bin/amixer ] ; then
-    if amixer -q get Front >/dev/null 2>>$DEBUG ; then
-       amixer -q set Front unmute &>/dev/null
-       amixer -q set Front ${VOL}% &>/dev/null
-    fi
- fi
+   fi
 }
 # }}}
 
