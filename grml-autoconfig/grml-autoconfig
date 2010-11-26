@@ -127,8 +127,6 @@ checkvalue $CONFIG_FAST && config_fast
 
 [ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||">/dev/tty14
 
-checkvalue $CONFIG_ENVIRONMENT && config_environment
-
 checkvalue $CONFIG_SWRAID && config_swraid
 
 checkvalue $CONFIG_DMRAID && config_dmraid
@@ -166,13 +164,9 @@ checkvalue $CONFIG_ACPI_APM && config_acpi_apm
 
 checkvalue $CONFIG_PCMCIA && config_pcmcia
 
-checkvalue $CONFIG_KEYBOARD && config_keyboard
-
 [ -n "$SPLASH" ] &&  /usr/bin/grml-bootsplash "||||||">/dev/tty14
 
 checkvalue $CONFIG_BLIND && config_blind
-
-checkvalue $CONFIG_INTERACTIVE && config_interactive
 
 checkvalue $CONFIG_AGP && config_agp
 
@@ -197,8 +191,6 @@ checkvalue $CONFIG_VNC && config_vnc
 checkvalue $CONFIG_PASSWD && config_passwd
 
 checkvalue $CONFIG_EXTRACT  && config_extract
-
-checkvalue $CONFIG_HOMEDIR && config_homedir
 
 checkvalue $CONFIG_FINDDCSDIR && config_finddcsdir
 
@@ -249,8 +241,6 @@ checkvalue $CONFIG_BLINDSOUND && config_blindsound
 checkvalue $CONFIG_WELCOME && config_welcome
 
 checkvalue $CONFIG_FIX_UNIONFS && fix_unionfs
-
-checkvalue $CONFIG_CREATE_MNT_DIRS && create_mnt_dirs
 
 checkvalue $CONFIG_915RESOLUTION && config_915resolution
 

@@ -1026,13 +1026,6 @@ fi
 }
 # }}}
 
-# {{{ Interactive configuration
-config_interactive(){
-  ewarn "config_interactive is deprecated nowadays."
-  ewarn "Please set CONFIG_INTERACTIVE='no' in /etc/grml/autoconfig" ; eend 0
-}
-# }}}
-
 # {{{ AGP
 config_agp(){
 if checkbootparam 'forceagp' ; then
@@ -1517,14 +1510,6 @@ fi
 }
 # }}}
 
-# {{{ Check for persistent homedir option and eventually mount /home from there, or use a loopback file.
-config_homedir(){
-if checkbootparam 'home' ; then
-   ewarn "The \"home\" bootoption is deprecated, please use the persistency feature instead."; eend 1
-fi
-}
-# }}}
-
 # {{{ Sound
 config_mixer () {
    if ! [ -x /usr/bin/amixer ] ; then
@@ -1799,13 +1784,6 @@ fix_unionfs(){
   if [ -z "$INSTALLED" ]; then
    touch /var/cache/apt/*cache.bin
   fi
-}
-# }}}
-
-# {{{ create all /mnt-directories
-create_mnt_dirs(){
-  ewarn "create_mnt_dirs is deprecated as grml-rebuildfstab does all we need."
-  ewarn "Please set CONFIG_CREATE_MNT_DIRS='no' in /etc/grml/autoconfig" ; eend 0
 }
 # }}}
 
@@ -2610,15 +2588,6 @@ if checkbootparam 'distri'; then
      cp "${LIVECD_PATH}"/desktop/"$DISTRI".jpg /usr/share/grml/desktop.jpg
   fi
 fi
-}
-# }}}
-
-### {{{ backwards compatible stuff
-config_environment(){
-  ewarn "config_environment is deprecated. Please set CONFIG_ENVIRONMENT in /etc/grml/autoconfig to 'no'." ; eend 0
-}
-config_keyboard(){
-  ewarn "config_keyboard is deprecated. Please set CONFIG_KEYBOARD in /etc/grml/autoconfig to 'no'." ; eend 0
 }
 # }}}
 
