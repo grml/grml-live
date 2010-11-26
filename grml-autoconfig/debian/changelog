@@ -1,3 +1,10 @@
+grml-autoconfig (0.9.19) unstable; urgency=low
+
+  * [d20e91b] config_cpu(): get rid of cpufreq-detect.sh (just
+    rely on /etc/init.d/loadcpufreq) and simplify code.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 26 Nov 2010 14:09:47 +0100
+
 grml-autoconfig (0.9.18) unstable; urgency=low
 
   * [239898a] config_mixer: rework volume handling, get rid of aumix and
