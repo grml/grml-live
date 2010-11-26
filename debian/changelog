@@ -1,3 +1,11 @@
+grml-etc (1.2.5) unstable; urgency=low
+
+  [ Michael Gebetsroither ]
+  * [dabe98c] Xmodmap: superseed keycode 92 up to 120 with updated codes
+    from us layout (this should fix keycode problems on current X.org).
+
+ -- Michael Prokop <mika@grml.org>  Fri, 26 Nov 2010 12:26:10 +0100
+
 grml-etc (1.2.4) unstable; urgency=low
 
   [ Christian Hofstaedtler ]
