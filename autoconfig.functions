@@ -1362,102 +1362,65 @@ fi
 config_cpu(){
 if checkbootparam 'nocpu'; then
   ewarn "Skipping CPU detection as requested on boot commandline." ; eend 0
+  return 0
+fi
+
+if [[ $(grep -c processor /proc/cpuinfo) -gt 1 ]] ; then
+   einfo "Detecting CPU:"
+   CPU=$(awk -F: '/^processor/{printf "	Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG)
+   echo $CPU | sed 's/ \{1,\}/ /g'
+   eend 0
 else
-  # check module dependencies
-  cpufreq_check() {
-   if ! [ -e /lib/modules/${KERNEL}/kernel/arch/x86/kernel/cpu/cpufreq ] ; then
-      if [ -e /lib64 ] ; then
-         [ -e /lib/modules/${KERNEL}/kernel/arch/x86_64/kernel/cpufreq ] || return 1
+   einfo "Detecting CPU: `awk -F: '/^processor/{printf " Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG` " ; eend 0
+fi
+
+# Virtual Box supports ACPI and laptop-detect would return with '0', so check for it:
+if [ -r /proc/acpi/battery/BAT0/info ] && grep -q 'OEM info:.*innotek' /proc/acpi/battery/BAT0/info ; then
+   einfo 'Virtual Box detected, skipping cpufreq setup.' ; eend 0
+   return 0
+fi
+
+if [ -x /etc/init.d/loadcpufreq ] ; then
+   einfo "Trying to set up cpu frequency scaling:"
+   eindent
+   SKIP_CPU_GOVERNOR=''
+   LOADCPUFREQ=$(mktemp)
+   /etc/init.d/loadcpufreq start >"$LOADCPUFREQ" 2>&1 ; RC=$?
+   if grep -q FATAL "$LOADCPUFREQ" ; then
+      eindent
+        SKIP_CPU_GOVERNOR=1
+        oldIFS="$IFS"
+        IFS="
+"
+         for line in $(grep FATAL "$LOADCPUFREQ" | sed 's/.*FATAL: //; s/ (.*)//') ; do
+             eerror "$line" ; eend $RC
+         done
+         IFS="$oldIFS"
+      eoutdent
+   elif grep -q done "$LOADCPUFREQ" ; then
+      MODULE=$(grep done "$LOADCPUFREQ" | sed 's/.*done (\(.*\))./\1/')
+      if [ -n "$MODULE" -a "$MODULE" != none ]; then
+         einfo "Loading cpufreq kernel module $MODULE" ; eend 0
       else
-         [ -e /lib/modules/${KERNEL}/kernel/arch/i386/kernel/cpu/cpufreq -o ! -e /lib/modules/${KERNEL}/kernel/drivers/cpufreq ] || return 1
+         ewarn "Could not find an appropriate kernel module for cpu frequency scaling." ; eend 1
       fi
    fi
-  }
 
-  if [[ `grep -c processor /proc/cpuinfo` -gt 1 ]] ; then
-     einfo "Detecting CPU:"
-     CPU=$(awk -F: '/^processor/{printf "	Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG)
-     echo $CPU | sed 's/ \{1,\}/ /g'
-     eend 0
-  else
-     einfo "Detecting CPU: `awk -F: '/^processor/{printf " Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG` " ; eend 0
-  fi
+   rm -f $LOADCPUFREQ
 
-  # Disclaimer: sorry for the tons of if/then/else... but this makes sure we use:
-  # * it only if we have the according kernel modules available
-  # * cpufreq not inside Virtual Box
-  # * current version of /etc/init.d/loadcpufreq from Debian (to stay in sync)
-  #   -> parse output of the initscript and output it according to our look'n'feel
-  # * our own cpufreq-detect.sh if /etc/init.d/loadcpufreq isn't present
-  if ! cpufreq_check ; then
-    ewarn "Skipping cpufreq setup as module dependencies are not fulfilled." ; eend 1
-  else
-     # Virtual Box supports ACPI and laptop-detect would return with '0', so check for it:
-     if [ -r /proc/acpi/battery/BAT0/info ] ; then
-        if grep -q 'OEM info:                innotek' /proc/acpi/battery/BAT0/info ; then
-           einfo 'Virtual Box detected, skipping cpufreq setup.' ; eend 0
-           return 0
-        fi
-     fi
-     einfo "Trying to set up cpu frequency scaling:"
-     eindent
-     if [ -x /etc/init.d/loadcpufreq ] ; then
-        SKIP_CPU_GOVERNOR=''
-        LOADCPUFREQ=$(mktemp)
-        /etc/init.d/loadcpufreq start >"$LOADCPUFREQ" 2>&1 ; RC=$?
-        if grep -q FATAL "$LOADCPUFREQ" ; then
-           eindent
-             SKIP_CPU_GOVERNOR=1
-             oldIFS="$IFS"
-             IFS="
-"
-              for line in $(grep FATAL "$LOADCPUFREQ" | sed 's/.*FATAL: //; s/ (.*)//') ; do
-                  eerror "$line" ; eend $RC
-              done
-              IFS="$oldIFS"
-           eoutdent
-         elif grep -q done "$LOADCPUFREQ" ; then
-           MODULE=$(grep done "$LOADCPUFREQ" | sed 's/.*done (\(.*\))./\1/')
-           if [ -n "$MODULE" -a "$MODULE" != none ]; then
-              einfo "Loading cpufreq kernel module $MODULE" ; eend 0
-           else
-              ewarn "Could not find an appropriate kernel module for cpu frequency scaling." ; eend 1
-           fi
-        fi
-        rm -f $LOADCPUFREQ
-     elif [ -r /usr/bin/cpufreq-detect.sh ] ; then
-        . /usr/bin/cpufreq-detect.sh
-        if [ -n "$MODULE" -a "$MODULE" != none ]; then
-           einfo "Loading modules ${MODULE}"
-           modprobe "$MODULE" >>$DEBUG || modprobe "$MODULE_FALLBACK" >>$DEBUG
-           RC=$?
-           if [[ "$RC" == 0 ]]; then
-              eend 0
-           else
-              SKIP_CPU_GOVERNOR=1
-              eend $RC
-           fi
-        else
-           ewarn "Could not detect an appropriate CPU for use with cpu frequency scaling - skipping."
-           eend 1
-        fi # $MODULE
-     fi # loadcpufreq
+   if [ -z "$SKIP_CPU_GOVERNOR" ] ; then
+      einfo "Loading cpufreq_ondemand, setting ondemand governor"
+      RC=0
+      if modprobe cpufreq_ondemand ; RC=$? ; then
+         for file in $(find /sys/devices/system/cpu/ -name scaling_governor 2>/dev/null) ; do
+            echo ondemand > $file
+         done
+      fi
+      eend $RC
+   fi # cpu-governor
 
-     if [ -z "$SKIP_CPU_GOVERNOR" ] ; then
-        einfo "Loading cpufreq_ondemand, setting ondemand governor"
-        RC=0
-        if modprobe cpufreq_ondemand ; RC=$? ; then
-           for file in $(find /sys/devices/system/cpu/ -name scaling_governor 2>/dev/null) ; do
-               echo ondemand > $file
-           done
-        fi
-        eend $RC
-     fi # cpu-governor
-
-     eoutdent
-
-  fi # cpufreq_check
-fi # checkbootparam nocpu
+   eoutdent
+fi
 }
 # }}}
 
