@@ -1,3 +1,15 @@
+grml-autoconfig (0.9.20) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [78d1364] Remove CONFIG_{QEMU,VMWARE} - its handled in grml-x
+    nowadays.
+
+  [ Michael Prokop ]
+  * [a33161e] Drop deprecated config_environment, config_keyboard,
+    config_interactive, config_homedir and create_mnt_dirs.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 26 Nov 2010 22:52:13 +0100
+
 grml-autoconfig (0.9.19) unstable; urgency=low
 
   * [d20e91b] config_cpu(): get rid of cpufreq-detect.sh (just
