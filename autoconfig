@@ -106,7 +106,6 @@ CONFIG_NETIPV6='yes'          # check for bootparam ipv6
 CONFIG_PARTCONF='yes'         # do we want partconf to work?
 CONFIG_PASSWD='yes'           # set password via bootparam passwd
 CONFIG_PCMCIA='no'            # check for pcmcia and start cardmgr
-CONFIG_QEMU='yes'             # qemu specific stuff
 CONFIG_SCRIPTS='yes'          # execute scripts from the scripts option
 CONFIG_SERVICES='yes'         # check for services to run, provided via bootparam
 CONFIG_SETKEYCODES='yes'      # run setkeycodes when bootoption setkeycodes found
@@ -119,7 +118,6 @@ CONFIG_TIME='yes'             # set clock, check for bootparam utc/gmt [only in 
 CONFIG_TIMEZONE='yes'         # get bootparam 'tz' and set it as /etc/localtime [only in live-mode]
 CONFIG_TOHD='yes'             # bootoption tohd=...
 CONFIG_USERFSTAB='yes'        # check for username of uid 1000
-CONFIG_VMWARE='yes'           # vmware specific stuff (use xorg.conf.vmware)
 CONFIG_VNC='yes'              # check for bootparam vnc
 CONFIG_WELCOME='yes'          # play welcome sound (audio)
 CONFIG_WONDERSHAPER='yes'     # start wondershaper with options provided via bootparam

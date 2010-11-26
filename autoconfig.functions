@@ -461,41 +461,6 @@ config_kernel(){
 }
 # }}}
 
-# {{{ vmware specific stuff
-config_vmware(){
-if checkbootparam 'novmware' ; then
-   ewarn "Skipping running vmware specific stuff as requested on boot commandline." ; eend 0
-else
-   if [ -z "$INSTALLED" ] ; then
-      if vmware-detect || checkbootparam "BOOT_IMAGE=vmware" ; then
-         if ! checkbootparam 'qemu' ; then
-            if [ -r /etc/X11/xorg.conf.vmware ] ; then
-               einfo "VMware: Copying /etc/X11/xorg.conf.vmware to /etc/X11/xorg.conf"
-               cp /etc/X11/xorg.conf.vmware /etc/X11/xorg.conf ; eend $?
-            fi
-         fi
-      elif [ -r /proc/acpi/battery/BAT0/info -a -r /etc/X11/xorg.conf.virtualbox ] ; then
-         if grep -q 'OEM info:                innotek' /proc/acpi/battery/BAT0/info ; then
-            einfo 'Virtual Box: Copying /etc/X11/xorg.conf.virtualbox to /etc/X11/xorg.conf'
-            cp /etc/X11/xorg.conf.virtualbox /etc/X11/xorg.conf ; eend $?
-         fi
-      fi
-   fi
-fi
-}
-# }}}
-
-# {{{ qemu specific stuff
-config_qemu(){
-if checkbootparam 'qemu' ; then
-   if [ -r /etc/X11/xorg.conf.example ] ; then
-      einfo "Qemu: Copying /etc/X11/xorg.conf.example to /etc/X11/xorg.conf"
-      cp /etc/X11/xorg.conf.example /etc/X11/xorg.conf ; eend $?
-   fi
-fi
-}
-# }}}
-
 # {{{ ld.so.cache + depmod
 config_ld_mod(){
 if [ -n "$INSTALLED" ]; then
