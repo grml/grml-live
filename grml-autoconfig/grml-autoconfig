@@ -117,10 +117,6 @@ checkvalue $CONFIG_TIME && config_time
 
 checkvalue $CONFIG_KERNEL &&  config_kernel
 
-checkvalue $CONFIG_VMWARE &&  config_vmware
-
-checkvalue $CONFIG_QEMU && config_qemu
-
 checkvalue $CONFIG_SMALL && config_small
 
 checkvalue $CONFIG_LD_MOD && config_ld_mod
