@@ -7,16 +7,16 @@ cmostest:
 gcry_rijndael: crypto
 echo: extcmd
 cpio:
-gcry_sha512: crypto
 gcry_cast5: crypto
+gcry_sha512: crypto
 boot:
 part_sun:
 gzio:
 ls: extcmd normal
 gfxterm: video extcmd bitmap_scale bitmap font
 video:
-gcry_tiger: crypto
 gcry_serpent: crypto
+gcry_tiger: crypto
 aout:
 gcry_blowfish: crypto
 extcmd:
