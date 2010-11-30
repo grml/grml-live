@@ -1031,6 +1031,21 @@ Configure approx:
 Don't forget to restart approx (/etc/init.d/approx restart). That's it.
 All downloaded files will be cached in /var/cache/approx now.
 
+[[revert_manifold]]
+How do I revert the manifold feature from an ISO?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The so called manifold feature Grml ISOs use by default allows to use the same
+ISO for CD boot and USB boot. If you notice any problems when booting just
+revert the manifold feature running:
+
+  % dd if=/dev/zero of=grml.iso bs=512 count=1 conv=notrunc
+
+To switch from manifold to isohybrid mode (an alternative approach provided by
+syslinux) then just execute:
+
+  % isohybrid grml.iso
+
 [[question]]
 I've a question which isn't answered by this document
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
