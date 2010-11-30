@@ -12,6 +12,8 @@ set -e
 [ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
 [ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
 
+fcopy /etc/modprobe.d/radeon-kms.conf
+
 # Make sure all modprobe configuration files use .conf as filename suffix.
 # See http://bugs.debian.org/cgi-bin/pkgreport.cgi?pkg=module-init-tools;dist=unstable
 # and http://blog.bofh.it/debian/id_236
