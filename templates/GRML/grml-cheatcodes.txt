@@ -25,8 +25,6 @@ grub                                Boot Grub bootloader (special all-in-one-ima
 dos                                 Boot FreeDOS
 bsd                                 Boot MirOS BSD
 hdt                                 Boot Hardware Detection Tool (from syslinux project)
-qemu                                Boot with special options for use in Qemu
-vmware                              Boot with special options for use in VMware
 
 Further documentation regarding the init process can be found at:
 * http://git.grml.org/?p=live-initramfs-grml.git;a=blob_plain;f=manpages/live-initramfs.en.7.txt;hb=HEAD
