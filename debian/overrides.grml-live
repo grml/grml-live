@@ -344,6 +344,7 @@ grml-live: executable-not-elf-or-script ./usr/share/grml-live/templates/windows/
 grml-live: executable-not-elf-or-script ./usr/share/grml-live/templates/windows/autostart/autorun.pif
 grml-live: extra-license-file usr/share/grml-live/templates/GRML/LICENSE.txt
 grml-live: script-not-executable ./usr/share/grml-live/scripts/bootgrub.mksh
+grml-live: script-not-executable ./usr/share/grml-live/scripts/bootilnx.mksh
 grml-live: unknown-section grml
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/915resolution.mod
 grml-live: unstripped-binary-or-object ./usr/share/grml-live/templates/boot/grub/acpi.mod
