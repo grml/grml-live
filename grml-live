@@ -1093,7 +1093,7 @@ else
            sed -n '/^.*\[ *\([0-9]*\)[] ].*  ISOLINUX.BIN;1 *$/s//\1/p')
          if ! [ -r boot/grub/core.img ] ; then
            ewarn "boot/grub/core.img not found, not creating manifold boot ISO file"
-         elif [ $bootoff -lt 1 ] ; then
+         elif [ "${bootoff:-0}" -lt 1 ] ; then
            ewarn "isolinux.bin not found on the ISO file, disabling manifold boot"
          else
            log "Creating hybrid ISO file with manifold method"
