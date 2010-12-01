@@ -1090,7 +1090,7 @@ else
       else
          # isoinfo is part of both mkisofs and genisoimage so we're good
          bootoff=$(isoinfo -l -i "${ISO_OUTPUT}/${ISO_NAME}" | \
-           sed -n '/^.*\[ *\([0-9]*\)[] ].*  ISOLINUX.BIN;1 *$/s//\1/p')
+           sed -n '/^.*\[ *\([0-9]*\)[] ].* ISOLINUX.BIN;1 *$/s//\1/p')
          if ! [ -r boot/grub/core.img ] ; then
            ewarn "boot/grub/core.img not found, not creating manifold boot ISO file"
          elif [ "${bootoff:-0}" -lt 1 ] ; then
