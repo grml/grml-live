@@ -1,3 +1,78 @@
+grml-live (0.12.0) unstable; urgency=low
+
+  The "give back - get back 2.6.36-grml[64]" Release.
+
+  [ Ulrich Dangel ]
+  * [b6a2954] Check version of grml-live against changelog before
+    building
+  * [e4296db] Overwrite the radeon-kms settings [Closes: issue935]
+
+  [ Michael Prokop ]
+  * [8d75e30] config/scripts/GRMLBASE/21-usersetup: add grml user to
+    group netdev
+  * [822c092] docs: Update FAI-URL references regarding its new home
+    (http://fai-project.org/).
+  * [bfe370b + 8f57397] Update to bsd4grml v20101001 (thanks to
+    Thorsten Glaser).
+  * [df6303e] scripts/release_helper.sh: cancel if editing changelog
+    returned error, provide cmdline options to git-buildpackage cmd.
+  * Software related changes:
+    - [b25619d] Drop unavailable fnord package from all grml flavours
+      (see #596044).
+    - [690257e] Drop libpam* and pamusb-tools packages.
+      [Closes: issue920]
+    - [704c046] Drop figlet and toilet-fonts (which is a dependency of
+      toilet) [Closes: issue915]
+    - [29517fe] Drop i386-only-software [Closes: issue923] - thanks to
+      Christian Hofstaedtler <ch@grml.org>
+    - [9d2d73a] Drop deprecated kqemu-common package from GRML_FULL.
+  * [5d4cdf0] Provide /etc/runlevel.conf via grml-live using fcopy and
+    its class concept
+  * [3e5fb23] Further /etc/runlevel.conf related fixes.
+  * [25ea895] Do not set ERROR=2 twice. - thanks to Christian
+    Hofstaedtler <ch@grml.org>
+  * [da2a27c] Proberly quote $CURRENT_DIR. - thanks to Andreas Marschke
+  * [74d9301] support for kernel 2.6.36-grml[64], drop backwards
+    compatibility support, adjust depends, update docs
+  * [c12baa8] docs: Document how to revert the manifold feature.
+  * [f5434b2] Drop qemu and vmware bootoptions as they are not necessary
+    any longer.
+  * [09667d4] templates/boot/grub/grub.cfg: drop insmod part_{msdos,gpt}
+    as it breaks booting - thanks to Thorsten Glaser <tg@mirbsd.org>
+  * [c686c84] Add script-not-executable ./usr/share/grml-
+    live/scripts/bootilnx.mksh to debian/overrides.grml-live.
+  * [594972d] Provide nokms bootoption and according menus in the
+    graphical bootmenu to disable Kernel Mode-Setting.
+
+  [ Bernd Arnold ]
+  * [f4d8e72] Fix typo in grml-cheatcodes.
+
+  [ Thorsten Glaser ]
+  * [58a29c5] Update to bsd4grml version 20100815.
+  * [7ed3014 + a0ae611 + d222479] Manifold supporting and using
+    ISOLINUX now.
+
+  [ Christian Hofstaedtler ]
+  * Software related changes:
+    - [ba2ebc1] remove packages with unclear live-cd usage case
+    - [07409bb] move bibcursed to LATEX class
+    - [2794ab4] replace ispell with hunspell
+    - [046d13d] drop Essential/Required packages from GRMLBASE
+    - [fb91169] remove mgetty
+    - [bfd1dd6] replace console-tools with kbd
+    - [ed73ede] remove grml-etc dependencies
+    - [d4c848e] don't try to install i386-only software on amd64
+    - [9034de9] remove no longer available software
+    - [c78ef28] remove fvwm-crystal-minimal
+  * [535a90f] remove further backup files in /etc
+  * [1455f91] fcopy motd instead of relying on grml-etc plus weirdness
+  * [ad7a862] allow all users to start X server [Closes: issue926]
+  * [987dd5d] grub: memdisk is a "linux16"-style kernel
+    [Closes: issue937]
+  * [8b54550] update grub to 1.98+20100804-8 [Closes: issue938]
+
+ -- Michael Prokop <mika@grml.org>  Thu, 02 Dec 2010 13:34:43 +0100
+
 grml-live (0.11.0) unstable; urgency=low
 
   The "kernel 2.6.35-grml[64] party" Release.
