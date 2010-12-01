@@ -25,4 +25,7 @@ else
    fi
 fi
 
+# Ctrl+Alt+Backspace killing xserver
+setxkbmap -option terminate:ctrl_alt_bksp
+
 ## END OF FILE #################################################################
