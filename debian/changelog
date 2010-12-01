@@ -1,3 +1,10 @@
+grml-etc (1.2.6) unstable; urgency=low
+
+  * [e8776c4] /etc/skel/.xinitrc.d/grml_keyboard: Ctrl+Alt+Backspace
+    kills xserver [Closes: issue908] - thanks to Sedat Dilek.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 01 Dec 2010 23:28:47 +0100
+
 grml-etc (1.2.5) unstable; urgency=low
 
   [ Michael Gebetsroither ]
