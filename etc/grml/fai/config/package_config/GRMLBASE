@@ -32,7 +32,7 @@ hdparm
 hwinfo
 initramfs-tools
 less
-live-initramfs
+live-boot
 lvm2
 mdadm
 nfs-common
