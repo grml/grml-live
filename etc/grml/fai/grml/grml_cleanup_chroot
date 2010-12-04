@@ -229,14 +229,15 @@ else
 fi
 
 einfo "Cleaning and removing some misc files and directories"
+  find /etc -type f -name *.pre_fcopy -delete
   rm -f  /etc/sysconfig/* /etc/motd.dpkg-new /etc/auto.master.distrib.dpkg-new    \
          /etc/samba/*.SID /etc/samba/*.tdb /dev/mouse* /dev/cdrom* /dev/cdwriter* \
          /var/run/*/* /var/run/* /var/log/ksymoops/* /var/lock/*/* /var/lock/*    \
          /var/state/*/* /var/state/* /var/log/nessus/*                            \
          /halt /reboot /ash.static /etc/dhcpc/*.info /etc/dhcpc/resolv*           \
          /etc/*passwd- /etc/*shadow- /etc/*group- /var/spool/postfix/maildrop/*   \
-         /etc/*.old /etc/*.pre_fcopy /etc/*.original /etc/lvm/.cache              \
-         /etc/lvm/cache/.cache /etc/lvm/backup/main 2>/dev/null
+         /etc/*.old /etc/*.original                                               \
+         /etc/lvm/.cache /etc/lvm/cache/.cache /etc/lvm/backup/main 2>/dev/null
   rm -rf /tmp/* /var/tmp/* /var/tmp/.* /var/backups/* /.ssh /root/.ssh /home/*/.ssh \
          /home/grml/* /home/grml/.??* /var/lib/texmf/ls-R  /var/spool/texmf/ls-R    \
          /var/lib/mysql /var/log/lilo_log.* /core* 2>/dev/null
