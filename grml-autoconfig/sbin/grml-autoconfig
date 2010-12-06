@@ -51,10 +51,6 @@ is_set()
 }
 check_current_state()
 {
-  is_set $CONFIG_DHCP       && DHCPSTATUS=ON     || DHCPSTATUS=OFF
-  if [ "$(grep '^auto' /etc/network/interfaces | sed 's/ lo// ; s/auto// ; s/ //g')" != "" ] ; then
-     DHCPSTATUS=OFF
-  fi
   is_set $CONFIG_FSTAB      && FSTABSTATUS=ON    || FSTABSTATUS=OFF
   is_set $CONFIG_CPU        && CPUSTATUS=ON      || CPUSTATUS=OFF
   is_set $CONFIG_ACPI_APM   && ACPI_APMSTATUS=ON || ACPI_APMSTATUS=OFF
@@ -80,7 +76,6 @@ For example disabling dhcp here will NOT deactivate any configured network
 settings in /etc/network/interfaces, it just configures grml-autoconfig
 related settings instead.
 " 0 0 0 \
-dhcp "check for network devices and run pump (get ip-address via DHCP)" $DHCPSTATUS \
 fstab "update /etc/fstab entries (check for devices)" $FSTABSTATUS \
 cpufreq "activate cpu frequency scaling" $CPUSTATUS \
 acpi_apm "load ACPI/APM modules" $ACPI_APMSTATUS \
@@ -91,7 +86,6 @@ gpm "start GPM (mouse on console)" $GPMSTATUS \
 
 set_values()
 {
-  check_setting dhcp      && activate_value CONFIG_DHCP=     || deactivate_value CONFIG_DHCP=
   check_setting fstab     && activate_value CONFIG_FSTAB=    || deactivate_value CONFIG_FSTAB=
   check_setting cpufreq   && activate_value CONFIG_CPU=      || deactivate_value CONFIG_CPU=
   check_setting acpi_apm  && activate_value CONFIG_ACPI_APM= || deactivate_value CONFIG_ACPI_APM=

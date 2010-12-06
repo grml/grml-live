@@ -25,12 +25,6 @@
 # set console font, default: Lat15-Terminus16
 # CONSOLEFONT='iso15graf-16'
 
-# check for network devices and run pump for every present network device?
-# use script grml-network for interactive configuration and
-# /etc/network/interfaces for persistent configuration
-# default: yes
-CONFIG_DHCP='yes'
-
 # check for frequency-scalable CPU and activate cpydyn/powernowd (default: yes)
 CONFIG_CPU='yes'
 
