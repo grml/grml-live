@@ -8,7 +8,6 @@
 
 set -e
 
-fcopy /etc/live.conf
 fcopy /usr/share/initramfs-tools/scripts/init-top/grml
 
 FILE=$(ls -1 $target/boot/vmlinuz-* 2>/dev/null| sort -r | head -1)
