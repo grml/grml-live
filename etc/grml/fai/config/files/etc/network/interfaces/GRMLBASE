@@ -1,4 +1,7 @@
+# This file was deployed via grml-live's
+# /etc/grml/fai/config/scripts/GRMLBASE/35-network script, using
+# /etc/grml/fai/config/files/etc/network/interfaces/GRMLBASE
+
 # The loopback interface
-# automatically added when upgrading
 auto lo
 iface lo inet loopback

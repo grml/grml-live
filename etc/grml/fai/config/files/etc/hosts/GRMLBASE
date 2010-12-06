@@ -1,3 +1,7 @@
+# This file was deployed via grml-live's
+# /etc/grml/fai/config/scripts/GRMLBASE/34-hosts script, using
+# /etc/grml/fai/config/files/etc/hosts/GRMLBASE
+
 127.0.0.1       $HOSTNAME    localhost
 
 # The following lines are desirable for IPv6 capable hosts

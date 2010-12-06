@@ -1,1 +1,14 @@
+# This file was deployed via grml-live's
+# /etc/grml/fai/config/scripts/GRMLBASE/39-modprobe script, using
+# /etc/grml/fai/config/files/etc/modprobe.d/radeon-kms.conf/GRMLBASE
+#
+# Filename:      /etc/modprobe.d/radeon-kms.conf
+# Purpose:       Disable KMS for radeon, due to bugs on ES1000 radeons
+#                making the screen unusable.
+# Authors:       grml-team (grml.org),
+#                (c) Ulrich Dangel <mru@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
 options radeon modeset=0

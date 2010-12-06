@@ -1,3 +1,5 @@
+// This file is installed by grml-live.
+//
 // allow overwriting via grml-live:
 Package: *
 Pin: release o=The grml project,a=grml-live,l=grml,c=main

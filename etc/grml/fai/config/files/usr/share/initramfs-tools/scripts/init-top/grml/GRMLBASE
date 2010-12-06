@@ -1,4 +1,16 @@
 #!/bin/sh
+#
+# This file was deployed via grml-live's
+# /etc/grml/fai/config/scripts/GRMLBASE/10-build-initramfs script, using
+# /etc/grml/fai/config/files/usr/share/initramfs-tools/scripts/init-top/grml/GRMLBASE
+#
+# Filename:      /usr/share/initramfs-tools/scripts/init-top/grml
+# Purpose:       Early boot progress handler
+# Authors:       grml-team (grml.org),
+#                (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
 
 # prereq header {{{
 # without this header booting will fail with:

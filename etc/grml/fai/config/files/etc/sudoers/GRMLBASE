@@ -2,6 +2,10 @@
 # This file MUST be edited with the "visudo" command as root.
 # See the man page for details on how to write a sudoers file.
 
+# This file was deployed via grml-live's
+# /etc/grml/fai/config/scripts/GRMLBASE/20-sudo script, using
+# /etc/grml/fai/config/files/etc/sudoers/GRMLBASE
+
 # Host alias specification
 
 # User alias specification
