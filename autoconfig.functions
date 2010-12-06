@@ -2340,45 +2340,8 @@ config_lvm(){
 # {{{ debnet: setup network based on an existing one found on a partition
 config_debnet(){
 if checkbootparam 'debnet' ; then
- iszsh && setopt localoptions shwordsplit
- DEVICES="$(< /proc/partitions tail -n +3 | awk '{print "/dev/"$4}' | tr "\n" " ")"
- DEVICES="$DEVICES $(ls /dev/mapper/*)"
- FOUND_DEBNET=""
-
  einfo "Bootoption 'debnet' found. Searching for Debian network configuration: "
- eindent
- if ! mount | grep '/mnt ' >/dev/null 2>&1 ; then
-    for i in $DEVICES; do
-     if mount -o ro -t auto "$i" /mnt >/dev/null 2>&1; then
-         einfo "Scanning on $i"
-       if [ -f /mnt/etc/network/interfaces ]; then
-         einfo "/etc/network/interfaces found on ${i}" ; eend 0
-         FOUND_DEBNET="$i"
-         break
-       fi
-       umount /mnt
-     fi
-    done
-
-   if [ -n "$FOUND_DEBNET" ]; then
-     einfo "Stopping network."
-       pump -k >/dev/null 2>&1
-       /etc/init.d/networking stop >/dev/null 2>&1 ; eend $?
-     einfo "Copying Debian network configuration from $FOUND_DEBNET to running system."
-       rm -rf /etc/network/run
-       cp -a /mnt/etc/network /etc
-       rm -rf /etc/network/run
-       mkdir /etc/network/run
-       umount /mnt ; eend $?
-     einfo "Starting network."
-       invoke-rc.d networking start ; eend $?
-   else
-     eerror "/etc/network/interfaces not found." ; eend 1
-   fi
-   eoutdent
- else
-  eerror "Error: /mnt already mounted." ; eend 1
- fi
+ /usr/sbin/debnet
 fi
 }
 # }}}
