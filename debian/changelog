@@ -1,3 +1,10 @@
+grml-autoconfig (0.9.23) unstable; urgency=low
+
+  * [124715e] debian/rules: drop broken dhcp expansion from
+    dh_installdirs call.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 07 Dec 2010 16:22:06 +0100
+
 grml-autoconfig (0.9.22) unstable; urgency=low
 
   [ Ulrich Dangel ]
