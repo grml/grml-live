@@ -1,3 +1,18 @@
+grml-live (0.12.1) unstable; urgency=low
+
+  [ Michael Prokop ]
+  * [439b54c] grml-live: drop useless of of ls(1).
+  * [424c8ef] SW: switch from live-initramfs to live-boot in GRMLBASE.
+
+  [ Christian Hofstaedtler ]
+  * [5bc75ae] radeon-kms: overwrite file at the correct time
+    [Closes: issue935]
+  * [e1e1975] remove fcopy backups all across /etc
+  * [26c2731] tag all files installed by grml-live
+  * [d5677ef] remove obsolete live.conf
+
+ -- Michael Prokop <mika@grml.org>  Tue, 07 Dec 2010 12:51:20 +0100
+
 grml-live (0.12.0) unstable; urgency=low
 
   The "give back - get back 2.6.36-grml[64]" Release.
