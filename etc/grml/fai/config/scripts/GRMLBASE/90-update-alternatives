@@ -52,7 +52,7 @@ fi
 
 if [ -r $target/usr/bin/wm-ng ] ; then
    # activate wm-ng only if it is registered as x-window-manager:
-   if update-alternatives --list x-window-manager | grep -q wm-ng ; then
+   if $ROOTCMD update-alternatives --list x-window-manager | grep -q wm-ng ; then
      $ROOTCMD update-alternatives --set x-window-manager /usr/bin/wm-ng
    fi
 fi
