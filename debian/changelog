@@ -1,3 +1,12 @@
+grml-autoconfig (0.9.22) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [efc764b] Remove CONFIG_DHCP bootoption and config_dhcp function.
+  * [8147fe1] Use dhclient hooks instead of proprietary pump hooks for
+    dhcphostname.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 07 Dec 2010 14:00:37 +0100
+
 grml-autoconfig (0.9.21) unstable; urgency=low
 
   [ Christian Hofstaedtler ]
