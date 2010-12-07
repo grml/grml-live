@@ -30,7 +30,7 @@ install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	dh_installdirs etc/grml etc/dhcp{3,}/dhclient-exit-hooks.d etc/init.d usr/sbin usr/bin usr/share/doc/grml-saveconfig
+	dh_installdirs etc/grml etc/init.d usr/sbin usr/bin usr/share/doc/grml-saveconfig
 
 	# Add here commands to install the package into debian/grml-autoconfig.
 	install -m 755 grml-autoconfig      debian/grml-autoconfig/etc/init.d/grml-autoconfig
