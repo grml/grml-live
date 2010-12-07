@@ -178,8 +178,6 @@ checkvalue $CONFIG_FSTAB && config_fstab
 
 checkvalue $CONFIG_MOUSE && config_mouse
 
-checkvalue $CONFIG_DHCP && config_dhcp
-
 [ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||||||">/dev/tty14
 
 checkvalue $CONFIG_CPU && config_cpu

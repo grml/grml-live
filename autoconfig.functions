@@ -1292,30 +1292,6 @@ fi
 }
 # }}}
 
-# {{{ Fat-Client-Version: DHCP Broadcast for IP address
-config_dhcp(){
-if checkbootparam 'nodhcp'; then
-  ewarn "Skipping DHCP broadcast/network detection as requested on boot commandline." ; eend 0
-else
-  NETDEVICES="$(awk -F: '/eth.:|tr.:|wlan.:/{print $1}' /proc/net/dev 2>>$DEBUG)"
-  rm -rf /etc/network/status ; mkdir -p /etc/network/status
-  for DEVICE in `echo "$NETDEVICES"` ; do
-    einfo "Network device ${WHITE}${DEVICE}${NORMAL} detected, DHCP broadcasting for IP. (Backgrounding)"
-    trap 2 3 11
-    ifconfig $DEVICE up >>$DEBUG 2>&1
-    ( pump -i $DEVICE --script=/usr/lib/grml-autoconfig/pump-runparts >>$DEBUG 2>&1 && echo finished_running_pump > /etc/network/status/$DEVICE ) &
-    trap "" 2 3 11
-    sleep 1
-    eend 0
-  done
-  if [ -n "$INSTALLED" ] ; then
-     ewarn 'If you want to disable automatic DHCP requests set CONFIG_DHCP=no in /etc/grml/autoconfig.'
-     eend 0
-  fi
-fi
-}
-# }}}
-
 # {{{ CPU-detection
 config_cpu(){
 if checkbootparam 'nocpu'; then
