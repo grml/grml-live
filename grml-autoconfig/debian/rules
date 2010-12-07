@@ -30,7 +30,7 @@ install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	dh_installdirs etc/grml etc/init.d usr/sbin usr/bin usr/share/doc/grml-saveconfig usr/lib/grml-autoconfig
+	dh_installdirs etc/grml etc/dhcp{3,}/dhclient-exit-hooks.d etc/init.d usr/sbin usr/bin usr/share/doc/grml-saveconfig
 
 	# Add here commands to install the package into debian/grml-autoconfig.
 	install -m 755 grml-autoconfig      debian/grml-autoconfig/etc/init.d/grml-autoconfig
@@ -43,7 +43,6 @@ install: build
 
 	install -m 755 bin/restore-config debian/grml-autoconfig/usr/bin/restore-config
 	install -m 755 bin/save-config debian/grml-autoconfig/usr/bin/save-config
-	install -m 755 lib/pump-runparts debian/grml-autoconfig/usr/lib/grml-autoconfig/pump-runparts
 
 	# just as a "backup" solution:
 	cp -a etc/* debian/grml-autoconfig/etc/
