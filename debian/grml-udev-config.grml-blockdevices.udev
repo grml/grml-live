@@ -1,4 +1,2 @@
 # regenerate /etc/fstab for new/removed devices:
 ENV{ID_FS_USAGE}=="filesystem", ACTION=="add|change|remove", SUBSYSTEM=="block", RUN+="/usr/sbin/rebuildfstab -r -config"
-#ACTION=="add",    SUBSYSTEM=="block", RUN+="/usr/sbin/rebuildfstab -r -config"
-#ACTION=="remove", SUBSYSTEM=="block", RUN+="/usr/sbin/rebuildfstab -r -config"
