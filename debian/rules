@@ -22,6 +22,7 @@ install: build
 	dh_installdirs /etc/udev/scripts
 
 	install -m 755 scripts/forensic-mark-readonly debian/grml-udev-config/etc/udev/scripts/forensic-mark-readonly
+	install -m 755 scripts/grml-udev-rebuildfstab debian/grml-udev-config/etc/udev/scripts/
 
 # Build architecture-dependent files here.
 binary-arch: install
