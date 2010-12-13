@@ -1,3 +1,18 @@
+grml-udev-config (0.0.5) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [5e5dfab] Remove old and unnecessary comments in grml-
+    blockdevices.udev.
+  * [820e58d] Add watch option for dm devices to get change notification
+    if devic changes.
+  * [b999254] Introduce grml-udev-rebuildfstab.
+
+  [ Michael Prokop ]
+  * [3e0e08c] grml-udev-rebuildfstab: drop trailing whitespace.
+  * [9a59695] Bump Standards-Version to 3.9.1.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 13 Dec 2010 12:15:42 +0100
+
 grml-udev-config (0.0.4) unstable; urgency=low
 
   * grml-blockdevices rule: do not react on changes in block devices
