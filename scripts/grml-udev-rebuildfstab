@@ -195,7 +195,7 @@ case $DEVNAME in
 	;;
 esac
 
-removeentries "$ADDEDBYGRML $DEVNAME" /etc/fstab 
+removeentries "$ADDEDBYGRML $DEVNAME" /etc/fstab
 
 device=$(get_device_name)
 mountpoint=$(get_mount_point $device)
