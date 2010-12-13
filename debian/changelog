@@ -1,3 +1,20 @@
+grml-live (0.12.2) unstable; urgency=low
+
+  [ Michael Prokop ]
+  * [c8e2121] 90-update-alternatives: make sure to run the update-
+    alternatives listing for x-window-manager inside the target chroot.
+  * [032da01] SW: add console-data and kbd to GRMLBASE.
+    [Closes: issue944] - thanks to Marc Haber for reporting and to
+    Christian Hofstaedtler for the fix.
+  * [179d5ea] Make sure hybrid mode works for the grub boot method out-
+    of-the-box too - thanks to Thorsten Glaser.
+
+  [ Thorsten Glaser ]
+  * [7741716] support BOOT_METHOD=grub2 (El Torito boot – Manifold boot
+    already did) [Closes: issue889]
+
+ -- Michael Prokop <mika@grml.org>  Mon, 13 Dec 2010 14:22:22 +0100
+
 grml-live (0.12.1) unstable; urgency=low
 
   [ Michael Prokop ]
