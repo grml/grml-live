@@ -3,6 +3,7 @@ PACKAGES aptitude
 aufs-tools
 busybox
 bzip2
+console-data
 deborphan
 dmidecode
 eject
@@ -31,6 +32,7 @@ grub-pc
 hdparm
 hwinfo
 initramfs-tools
+kbd
 less
 live-boot
 lvm2
