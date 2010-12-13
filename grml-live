@@ -253,6 +253,7 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 [ -n "$GRML_FAI_CONFIG" ]  || GRML_FAI_CONFIG='/etc/grml/fai'
 [ -n "$GRML_NAME" ]        || GRML_NAME='grml'
 [ -n "$HOSTNAME" ]         || HOSTNAME='grml'
+[ -n "$HYBRID_METHOD" ]    || HYBRID_METHOD='manifold'
 [ -n "$NFSROOT_CONF" ]     || NFSROOT_CONF='/etc/grml/fai/make-fai-nfsroot.conf'
 [ -n "$RELEASENAME" ]      || RELEASENAME='grml-live rocks'
 [ -n "$SQUASHFS_EXCLUDES_FILE " ] || SQUASHFS_EXCLUDES_FILE='/etc/grml/fai/squashfs-excludes'
@@ -313,6 +314,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$SUITE" ]               && echo "  Debian suite:      $SUITE"
    [ -n "$ARCH" ]                && echo "  Architecture:      $ARCH"
    [ -n "$BOOT_METHOD" ]         && echo "  Boot method:       $BOOT_METHOD"
+   [ -n "$HYBRID_METHOD" ]       && echo "  Hybrid method:     $HYBRID_METHOD"
    [ -n "$TEMPLATE_DIRECTORY" ]  && echo "  Template files:    $TEMPLATE_DIRECTORY"
    [ -n "$CHROOT_INSTALL" ]      && echo "  Install files from directory to chroot:  $CHROOT_INSTALL"
    [ -n "$BOOTID" ]              && echo "  Boot identifier:   $BOOTID"
@@ -1024,6 +1026,15 @@ elif [ "$BOOT_METHOD" = "grub" ] ; then
    BOOT_ARGS="-no-emul-boot -boot-load-size 4 -boot-info-table -b boot/grub/stage2"
 elif [ "$BOOT_METHOD" = "grub2" ] ; then
    BOOT_ARGS="-no-emul-boot -boot-load-size 4 -b boot/grub/toriboot.bin"
+fi
+
+# Just until http://bts.grml.org/grml/issue945 has been resolved.
+# HYBRID_METHOD defaults to manifold, so make sure the default works OOTB.
+if [[ $BOOT_METHOD != isolinux && ($HYBRID_METHOD = isohybrid || $HYBRID_METHOD = manifold) ]]; then
+  log   "Setting HYBRID_METHOD to grub2 as hybrid mode does not work with isohybrid yet."
+  ewarn "Setting HYBRID_METHOD to grub2 as hybrid mode does not work with isohybrid yet."
+  HYBRID_METHOD='grub2'
+  eend 0
 fi
 
 if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" -a "$FORCE_ISO_REBUILD" = "false" ]  ; then
