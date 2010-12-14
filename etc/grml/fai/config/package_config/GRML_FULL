@@ -87,7 +87,6 @@ texttools-doc
 thc-ipv6
 thinkfinger-tools
 upgrade-oldest
-zfs-fuse
 zsh-lovers
 ## }}}
 
@@ -1620,6 +1619,7 @@ yersinia
 youtube-dl
 zec
 zerofree
+zfs-fuse
 zgv
 zile
 zip
