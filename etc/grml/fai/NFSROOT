@@ -4,24 +4,22 @@ PACKAGES install
 fai-nfsroot module-init-tools dhcp3-client ssh rdate lshw hwinfo portmap
 bootpc rsync lftp rsh-client less dump reiserfsprogs usbutils
 hwinfo psmisc pciutils hdparm smartmontools parted mdadm lvm2
-dnsutils ntpdate dosfstools cvs jove xfsprogs xfsdump
+dnsutils ntpdate dosfstools xfsprogs xfsdump
 procinfo dialog discover mdetect
 kbd
-expect iproute udev subversion
-live-initramfs
+expect iproute udev
+live-boot
 
 # needed for the simple examples
-cfengine2 libapt-pkg-perl
+# cfengine2 libapt-pkg-perl
 
-# you should not edit the lines below
 # architecture dependend list of packages that are installed
-
 PACKAGES install I386
-grub lilo read-edid
+grub-pc lilo read-edid
 linux-image-486 unionfs-modules-2.6-486
 
 PACKAGES install AMD64
-grub lilo
+grub-pc lilo
 linux-image-2.6-amd64 unionfs-modules-2.6-amd64
 
 PACKAGES install IA64
@@ -33,4 +31,4 @@ silo sparc-utils
 PACKAGES install ALPHA
 aboot
 
-#PACKAGES install powerpc
+#PACKAGES install POWERPC
