@@ -1133,11 +1133,9 @@ python2.5
 python2.5-minimal
 python-apt
 python-cddb
-python-celementtree
 python-central
 python-crypto
 python-dbus
-python-elementtree
 python-eyed3
 python-fuse
 python-gnupginterface
