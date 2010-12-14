@@ -1,3 +1,11 @@
+grml-etc (1.2.7) unstable; urgency=low
+
+  * [b312a8b] Remove outdated rawdog configuration (we don't ship
+    rawdog, use newsbeuter instead nowdays).
+  * [f1b4e29] Remove .mrxvtrc (we do not ship mrxvt any longer).
+
+ -- Michael Prokop <mika@grml.org>  Tue, 14 Dec 2010 12:15:50 +0100
+
 grml-etc (1.2.6) unstable; urgency=low
 
   * [e8776c4] /etc/skel/.xinitrc.d/grml_keyboard: Ctrl+Alt+Backspace
