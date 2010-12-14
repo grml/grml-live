@@ -427,7 +427,6 @@ dpkg
 dpkg-awk
 dpkg-dev
 dpkg-ftp
-dpkg-multicd
 dpkg-repack
 dpkg-ruby
 dpkg-sig
