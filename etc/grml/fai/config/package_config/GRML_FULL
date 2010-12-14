@@ -426,7 +426,6 @@ dpatch
 dpkg
 dpkg-awk
 dpkg-dev
-dpkg-ftp
 dpkg-repack
 dpkg-ruby
 dpkg-sig
