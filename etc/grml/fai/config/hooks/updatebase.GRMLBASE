@@ -1,12 +1,25 @@
 #!/bin/bash
 # Filename:      /etc/grml/fai/config/hooks/updatebase.GRMLBASE
-# Purpose:       skip task updatebase of FAI when running softupdate
+# Purpose:       Updates the base packages of the system, prepare chroot for instsoft
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
+set -u
+set -e
+
+# visualize chroot inside zsh:
+echo grml_chroot > $target/etc/debian_chroot
+
+HOSTNAME=''
+[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
+[ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
+[ -n "$HOSTNAME" ] || HOSTNAME=grml
+echo "$HOSTNAME" > $target/etc/hostname
+
 if [ "$FAI_ACTION" = "softupdate" ] ; then
+   echo "Action $FAI_ACTION of FAI (hooks/updatebase.GRMLBASE) via grml-live running"
 
    ## we want to use our own sources.list:
    skiptask updatebase
@@ -34,7 +47,11 @@ EOF
    # skip the task if we want to build a new ISO only:
    [ -n "$BUILD_ONLY" ] && skiptask instsoft || /bin/true
 
-else # no softupdate but updating chroot based on /etc/grml/fai/config/basefiles/*
+   exit # make sure we don't continue behind the following "fi"
+fi
+
+# no softupdate but updating chroot e.g. based on /etc/grml/fai/config/basefiles/*
+echo "Action $FAI_ACTION of FAI (hooks/updatebase.GRMLBASE) via grml-live running"
 
 # install all apt related files
 fcopy -r /etc/apt
@@ -47,8 +64,6 @@ fi
 # install grml gpg key:
 fcopy /etc/apt/grml.key
 $ROOTCMD apt-key add /etc/apt/grml.key
-
-fi # softupdate check
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

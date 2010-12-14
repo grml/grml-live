@@ -1,6 +1,6 @@
 #!/bin/bash
-# Filename:      /etc/grml/fai/config/hooks/instsoft.GRML
-# Purpose:       grml specific Debian installation in the chroot
+# Filename:      /etc/grml/fai/config/hooks/instsoft.GRMLBASE
+# Purpose:       Grml specific software installation in the chroot, executed after updatebase
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
@@ -9,17 +9,8 @@
 set -u
 set -e
 
-# visualize chroot inside zsh:
-echo grml_chroot > $target/etc/debian_chroot
-
-HOSTNAME=''
-[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
-[ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
-[ -n "$HOSTNAME" ] || HOSTNAME=grml
-echo "$HOSTNAME" > $target/etc/hostname
-
 if [ "$FAI_ACTION" = "softupdate" ] ; then
-   echo "Softupdate of FAI via grml-live running"
+   echo "Action $FAI_ACTION of FAI (hooks/instsoft.GRMLBASE) via grml-live running"
 
    if [ -r /etc/resolv.conf ] ; then
       if [ -r $target/etc/resolvconf/run/resolv.conf ] ; then
@@ -43,13 +34,6 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
 //DPkg::Tools::Options::/usr/sbin/apt-listbugs "";
 //DPkg::Tools::Options::/usr/sbin/apt-listbugs::Version "2";
 EOF
-
-   # make sure we can handle kernel upgrades:
-   if [ -r $target/etc/kernel-img.conf ] ; then
-      if ! grep -q "silent_modules = Yes" $target/etc/kernel-img.conf ; then
-         echo "silent_modules = Yes" >> $target/etc/kernel-img.conf
-      fi
-   fi
 
    # FAI softupdate executes upgrade only with the sources.list being
    # present in the chroot - so let's do it on our own:
@@ -100,53 +84,24 @@ EOF
       APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD apt-get -y upgrade
    fi
 
-else # no softupdate but fresh installation
-
-# install all apt related files
-fcopy -r /etc/apt
-
-# remove grml-live's sources.list file from chroot:
-if [ -r $target/etc/apt/important_note.txt ] ; then
-   grep -q GRML_LIVE_SOURCES $target/etc/apt/important_note.txt && rm $target/etc/apt/important_note.txt
+   exit # make sure we don't continue behind the following "fi"
 fi
 
-# install grml gpg key:
-fcopy /etc/apt/grml.key
-$ROOTCMD apt-key add /etc/apt/grml.key
-#   gpg --keyserver subkeys.pgp.net      --recv-keys F61E2E7CECDEA787 || \
-#   gpg --keyserver blackhole.pca.dfn.de --recv-keys F61E2E7CECDEA787
-#   gpg --export F61E2E7CECDEA787 > $target/etc/apt/grml.key
-#   $ROOTCMD apt-key add /etc/apt/grml.key
+# no softupdate but fresh installation
+echo "Action $FAI_ACTION of FAI (hooks/instsoft.GRMLBASE) via grml-live running"
 
-# make sure the file exists
-[ -e $target/etc/apt/apt.conf ] || touch $target/etc/apt/apt.conf
-
-# work around http://trac.lighttpd.net/trac/ticket/657
-if ! grep -q 'Acquire::http::Pipeline-Depth.*0' $target/etc/apt/apt.conf ; then
-   echo "Acquire::http::Pipeline-Depth 0; // added by grml-live" >> $target/etc/apt/apt.conf
+# make sure we have file-rc available before package_config/GRML* is being executed {{{
+# the apt-get update might return an error if there's for example
+# a hashsum mismatch on Debian mirror sources, we might want to continue
+# but should warn the user
+if ! $ROOTCMD apt-get update ; then
+   echo "Warning: there was an error executing apt-get update, continuing anyway."
+   echo "Warning: there was an error executing apt-get update, continuing anyway." >&2
 fi
 
-# Recommends just pull in way tooooo much packages, so disable it:
-if ! grep -q 'APT::Install-Recommends.*false' $target/etc/apt/apt.conf ; then
-   echo "APT::Install-Recommends false; // added by grml-live"   >> $target/etc/apt/apt.conf
-fi
-
-# Notice: deprecated with aptitude (0.4.11-1):
-if ! grep -q 'Aptitude::Recommends-Important.*false' $target/etc/apt/apt.conf ; then
-   echo "Aptitude::Recommends-Important false; // added by grml-live" >> $target/etc/apt/apt.conf
-fi
-
-# make sure we have file-rc available before package_config/GRML is
-# being executed {{{
-  # the apt-get update might return an error if there's for example
-  # a hashsum mismatch on Debian mirror sources, we might want to continue
-  # but should warn the user
-  if ! $ROOTCMD apt-get update ; then
-     echo "Warning: there was an error executing apt-get update, continuing anyway."
-  fi
-  # newer aptitude versions won't remove essential packages using
-  # 'aptitude -f -y install file-rc' anymore, therefore force it:
-  $ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc
+# newer aptitude versions won't remove essential packages using
+# 'aptitude -f -y install file-rc' anymore, therefore force it via:
+$ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc
 # }}}
 
 # get rid of insserv:
@@ -175,8 +130,6 @@ if [ -L "$target"/usr/sbin/invoke-rc.d ] ; then
    rm -f "$target"/usr/sbin/invoke-rc.d
    $ROOTCMD dpkg-divert --package fai --rename --remove /usr/sbin/invoke-rc.d
 fi
-
-fi # end of FAI_ACTION = softupdate
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3

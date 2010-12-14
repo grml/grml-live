@@ -9,25 +9,14 @@
 set -u
 set -e
 
-# Restore usual Debian behaviour which has been changed
-# for FAI via /etc/grml/fai/config/hooks/instsoft.GRMLBASE
-if [ -r $target/etc/apt/apt.conf ] ; then
-   sed -i "s#^Acquire::http::Pipeline-Depth.*#// &#"  $target/etc/apt/apt.conf
-   sed -i "s#^APT::Install-Recommends.*#// &#"        $target/etc/apt/apt.conf
-   # Notice: deprecated since aptitude (0.4.11-1):
-   sed -i "s#^Aptitude::Recommends-Important.*#// &#" $target/etc/apt/apt.conf
-fi
+# Restore usual Debian behaviour
+#if [ -r "$target"/etc/apt/apt.conf.d/15grml-live ] ; then
+#   rm -f "$target"/etc/apt/apt.conf.d/15grml-live
+#fi
 
 # Restore original state from softupdate:
 if [ -r $target/etc/policy-rc.d.conf ] ; then
    sed -i "s/EXITSTATUS='101'/EXITSTATUS='0'/" $target/etc/policy-rc.d.conf
-fi
-
-# Restore usual behaviour:
-if [ -r $target/etc/kernel-img.conf ] ; then
-   if grep -q "silent_modules = Yes" $target/etc/kernel-img.conf ; then
-      sed -i "s/silent_modules = Yes/# &/" $target/etc/kernel-img.conf
-   fi
 fi
 
 # remove an existing /etc/debian_chroot file:
