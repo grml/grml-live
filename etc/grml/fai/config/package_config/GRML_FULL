@@ -1702,7 +1702,7 @@ PACKAGES aptitude I386
 
 ## general:
 grml
-perf
+linux-tools-2.6.36
 
 # i386-only software
 athcool
@@ -1738,7 +1738,7 @@ PACKAGES aptitude AMD64
 
 ## general:
 grml64
-perf
+linux-tools-2.6.36
 
 ## current kernel version 2.6.36-grml64:
 #fglrx-kernel-2.6.36-grml64
