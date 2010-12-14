@@ -1057,12 +1057,7 @@ pcscd
 pdfcube
 pdksh
 pdmenu
-pdns-backend-ldap
-pdns-backend-pgsql
-pdns-backend-pipe
-pdns-backend-sqlite
 pdns-recursor
-pdns-server
 pdsh
 perforate
 perl
