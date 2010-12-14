@@ -1064,7 +1064,6 @@ pdns-backend-sqlite
 pdns-recursor
 pdns-server
 pdsh
-pekwm
 perforate
 perl
 perl-doc
