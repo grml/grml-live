@@ -1328,7 +1328,6 @@ ssl-cert
 ssldump
 sslscan
 ssmping
-starttls
 statgrab
 statserial
 stealth
