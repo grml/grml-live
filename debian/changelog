@@ -1,3 +1,87 @@
+grml-live (0.12.3) unstable; urgency=low
+
+  The "let's clean the floor" release.
+
+  * Bugfix:
+    - [7bbfd24] Rework apt.conf handling in instsoft/updatebase (provide
+      /etc/apt/apt.conf.d/15grml-live), drop /etc/kernel-img.conf support.
+      The reworked apt.conf handling addresses the issue that with usage of
+      BASE.tgz there might result packages from recommends in the ISO (like
+      for example iso-codes via python-apt).
+
+  * Package list changes:
+    - [5476dee] replace perf with linux-tools-2.6.36 package in GRMLBASE.
+    - [ae6845f] Update package list in NFSROOT (grub->grub-pc, live-
+      initramfs->live-boot, drop cvs/subversion/jove/subversion, disable
+      cfengine2/libapt-pkg-perl).
+
+  * Get rid of window managers from GRML_FULL that are either too large,
+    unconfigured, unused,... - see issue897 for the discussion.
+    [Closes: issue897]
+    - [a4907de] Remove fvwm
+    - [a68ff37] Remove ratpoison and ratmenu
+    - [c44b1e3] Remove dwm and dwm-tools
+    - [5eb0e90] Remove twm
+    - [0a17b3c] Remove w9wm
+    - [69ca260] Remove evilwm
+    - [9df6db8] Remove jwm
+    - [d077db1] Remove pekwm
+
+  * Removals from GRML_FULL package list:
+    - [b88d7b5] Remove ysm (orphaned, see #595398).
+    - [50bc2fe] Remove emcast (orphaned, see #594619).
+    - [0040aec] Remove cdrbq (orphaned, see #602587).
+    - [0bcc921] Remove wyrd (not relevant enough).
+    - [372cd2d] Remove xaw3dg (not relevant enough).
+    - [07d1e00] Remove yaird (initramfs-tools is the
+      recommended and supported i-t generator).
+    - [f8990f6] Remove pdns* packages (except for pdns-recursor).
+    - [e601ea1] Remove nedit (too large for too many already
+      existing editors).
+    - [c402efd] Remove mrxvt[-common] from GRML_FULL.
+    - [13c5b0b] Remove zlib1g (library -> rdepends).
+    - [67cfcf5] Remove gq (unmaintained/dead, see #593165).
+    - [bed9733] Remove cdda2wav + cdrecord from GRML_FULL (unavailable).
+    - [57280bf] Remove geresh (dead/unmaintained, see #595478).
+    - [e240523] Remove dietlibc (dietlibc-dev is the relevant package).
+    - [09ec6b0] Remove dumputils (orphaned upstream, see #466870).
+    - [d8e5c2d] Remove cbrowser (dead upstream, see #595987).
+    - [2a296ca] Remove dpkg-multicd (unavailable, merged into
+      dselect, see #557063).
+    - [a4b7699] Remove dpkg-ftp (unavailable, merged into
+      dselect, see #557062).
+    - [6537f9e] Remove tcl8.3 (unavailable, tcl8.4 is there).
+    - [ed0a6ab] Remove jikes (orphaned, see #508366).
+    - [72eff19] Remove metamail (orphaned, see #274451).
+    - [ebfec95] Remove mkisofs (unavailable).
+    - [847ba32] Remove python-celementtree + python-elementtree
+      (unavailable + only useful with python < 2.5, see #564377).
+    - [547476e] Remove realtime-lsm (deprecated, see #499245).
+    - [266c05b] Remove nictools-nopci (i386-only).
+    - [73bfef1] Remove star (unavailable).
+    - [bbfde64] Remove starttls (dead, see #587264).
+    - [4d62e55] Remove swapd (dead, see #595091).
+    - [a20335f] Remove webcpp (abandoned upstream, see #547528).
+    - [6ca58fa] Remove xvncviewer (unavailable).
+    - [2fc6daf] Move zfs-fuse from Grml packages to Debian packages.
+    - [a317c5c] Remove speechd-up (i386-only, espeakup replaces it).
+    - [d9d3706] Remove abs-guide (not important enough)
+    - [c4c9c35] Remove uswsusp (has issues in older Debian
+      releases, should not be too relevant for Grml).
+    - [2e7c1fb] Remove ike-scan (4MB is too much)
+    - [a01048a] Remove hasciicam (out-of-scope).
+    - [6b5262f] Remove gocr (out-of-scope).
+    - [33578dc] Remove hal (out-of-scope).
+    - [962a5cb] Remove hal-info (out-of-scope).
+    - [7a1b346] Remove fusesmb (out-of-scope).
+    - [ca8f465] Remove icecast2 (out-of-scope).
+    - [05cfbd2] Remove moosic (out-of-scope).
+    - [4774440] Remove mp3blaster (out-of-scope).
+    - [5baa139] Remove mplayer-skin-blue (out-of-scope).
+    - [3806828] Remove lkl (orphaned, see #553307).
+
+ -- Michael Prokop <mika@grml.org>  Wed, 15 Dec 2010 16:11:27 +0100
+
 grml-live (0.12.2) unstable; urgency=low
 
   [ Michael Prokop ]
