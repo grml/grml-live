@@ -1,3 +1,9 @@
+grml-udev-config (0.0.6) unstable; urgency=low
+
+  * [0c368ae] Make sure to always clean up on exit.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 16 Dec 2010 17:58:08 +0100
+
 grml-udev-config (0.0.5) unstable; urgency=low
 
   [ Ulrich Dangel ]
