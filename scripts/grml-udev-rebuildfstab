@@ -50,7 +50,7 @@ fi
 
 
 if grep -q " nofstab" /proc/cmdline ; then
-   exit
+   bailout 0
 fi
 
 grep -q 'nolabel' /proc/cmdline && NOLABEL='TRUE' || LABEL='TRUE'
@@ -58,13 +58,13 @@ grep -q 'nolabel' /proc/cmdline && NOLABEL='TRUE' || LABEL='TRUE'
 
 
 if [ "$CONFIG_FSTAB" = "no" ] ; then
-    exit
+    bailout 0
 fi
 
 
 if grep -q ' /mnt ' /proc/mounts ; then
    logit '/mnt is a mounted directory, exiting.'
-   exit 1
+   bailout 1
 fi
 
 # make sure we have the $MNTFILE before reading/writing into it
@@ -106,7 +106,7 @@ fi
 
 [ ! -w /etc/fstab ] && {
   logit "fatal - /etc/fstab not writeable, exiting"
-  exit
+  bailout 0
 }
 
 # Simple shell grep, searches for lines STARTING with string
@@ -185,13 +185,13 @@ fi
 
 if [ -z "$ACTION" ] ; then
     logit "Seems that $0 is not run in a udev environment, exiting." >&2
-    exit 1
+    bailout 1
 fi
 
 # ignore loop devices for now.
 case $DEVNAME in
 /dev/loop*)
-	exit 0
+	bailout 0
 	;;
 esac
 
@@ -209,11 +209,11 @@ mountpoint=$(get_mount_point $device)
 for devicelink in $DEVLINKS ; do
     # ignore external
     case "$devicelink" in "*external*") continue ;; esac
-    stringinfile $devicelink $TMPFILE && exit
+    stringinfile $devicelink $TMPFILE && bailout 0
 done
 
 # if entry is already present ignore it
-stringinfile $device $TMPFILE && exit
+stringinfile $device $TMPFILE && bailout 0
 
 options=noauto,user,dev,suid,exec
 case $ID_FS_TYPE in
@@ -277,5 +277,7 @@ if [ -r "$MNTFILE" ] ; then
    grep '^/.*$' $MNTFILE | sort -u > $TMPFILE
    cat $TMPFILE > $MNTFILE
 fi
+
+bailout 0
 
 ## END OF FILE #################################################################
