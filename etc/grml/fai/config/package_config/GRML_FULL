@@ -1181,7 +1181,6 @@ renameutils
 reniced
 reportbug
 reprepro
-retty
 rinetd
 rinse
 rkhunter
@@ -1641,6 +1640,7 @@ fnfx-client
 fnfxd
 s3switch
 spicctrl
+retty
 
 # use linux-kernel-headers-grml instead of linux-libc-dev?
 # linux-kernel-headers-grml
