@@ -1097,7 +1097,6 @@ psad
 pscan
 psmisc
 pssh
-pstack
 pstotext
 psutils
 pterm
@@ -1634,9 +1633,10 @@ athcool
 atitvout
 fnfx-client
 fnfxd
+pstack
+retty
 s3switch
 spicctrl
-retty
 
 # use linux-kernel-headers-grml instead of linux-libc-dev?
 # linux-kernel-headers-grml
