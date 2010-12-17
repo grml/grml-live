@@ -241,7 +241,6 @@ bsd-mailx
 bsdmainutils
 bsdtar
 bsdutils
-bsign
 btrfs-tools
 btscanner
 buffer
@@ -1627,6 +1626,7 @@ linux-tools-2.6.36
 # i386-only software
 athcool
 atitvout
+bsign
 fnfx-client
 fnfxd
 pstack
