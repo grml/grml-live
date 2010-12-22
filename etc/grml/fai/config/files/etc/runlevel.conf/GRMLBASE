@@ -29,6 +29,7 @@
 36	-	S		/etc/init.d/ifupdown
 36	-	S		/etc/init.d/udev-mtab
 38	-	S		/etc/init.d/resolvconf
+40	-	S		/etc/init.d/networking
 55	-	S		/etc/init.d/bootmisc.sh
 90	-	0		/etc/init.d/halt
 90	-	6		/etc/init.d/reboot
