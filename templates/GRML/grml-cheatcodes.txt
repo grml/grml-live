@@ -67,6 +67,7 @@ grml hostname=...                   Set hostname to given argument
 grml hostname                       Set a random hostname
                                     [Note: only available with releases newer than 2010.04]
 grml nodhcphostname                 Do not to set the hostname according to the dns information
+grml nonetworking                   Do not create/overwrite /etc/network/interface during startup
 grml distri=...                     Set distribution name to given argument. If a jpg file named like the
                                     given distri name can be found in directory desktop on the ISO
                                     (/cdrom/desktop/"$DISTRI") it will be taken as wallpaper for grml
