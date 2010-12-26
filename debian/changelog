@@ -1,3 +1,12 @@
+grml-etc (1.2.8) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [9e41d1f] Fix outstanding keycode changes for .Xmodmap as well
+    as .Xmodmap.german
+  * [8cacb97] Updated Xmodmap.neo.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 26 Dec 2010 23:03:32 +0100
+
 grml-etc (1.2.7) unstable; urgency=low
 
   * [b312a8b] Remove outdated rawdog configuration (we don't ship
