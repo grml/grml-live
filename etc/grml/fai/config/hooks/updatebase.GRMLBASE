@@ -33,17 +33,6 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    [ -f /etc/init.d/udev ] && mount --bind /dev $FAI_ROOT/dev
    mount -t devpts devpts $FAI_ROOT/dev/pts
 
-   ## make sure we don't start any daemons - removed
-   ## later on via /etc/grml/fai/config/scripts/GRMLBASE/98-clean-chroot
-   if ! [ -r $target/usr/sbin/policy-rc.d ] ; then
-      cat > $target/usr/sbin/policy-rc.d << EOF
-#!/bin/sh
-# FAI_ACTION=updatebase
-exit 101
-EOF
-      chmod 755 $target/usr/sbin/policy-rc.d
-   fi
-
    # skip the task if we want to build a new ISO only:
    [ -n "$BUILD_ONLY" ] && skiptask instsoft || /bin/true
 

@@ -8,14 +8,6 @@
 
 set -e
 
-# check for policy-rc.d workaround of
-# /etc/grml/fai/config/hooks/updatebase.GRMLBASE
-if [ -r $target/usr/sbin/policy-rc.d ] ; then
-   if grep -q 'FAI_ACTION=updatebase' $target/usr/sbin/policy-rc.d ; then
-      rm -f $target/usr/sbin/policy-rc.d
-   fi
-fi
-
 # remove some big directories when using class LATEX_CLEANUP:
 if ifclass LATEX_CLEANUP ; then
    cp /etc/grml/fai/grml/grml_cleanup_chroot.latex_cleanup $target/root/
