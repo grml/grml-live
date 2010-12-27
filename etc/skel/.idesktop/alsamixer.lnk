@@ -1,7 +1,7 @@
 table Icon
-  Caption: aumix
+  Caption: alsamixer
   ToolTip.Caption: adjust sound mixer settings
-  Command: grml-exec-wrapper -p aumix x-terminal-emulator -T "aumix" -e aumix
+  Command: grml-exec-wrapper -p alsamixer x-terminal-emulator -T "alsamixer" -e alsamixer
   Icon: /home/grml/.idesktop/icons/l33t_AUD_kmix.png
   X: 18
   Y: 331

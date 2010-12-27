@@ -1,9 +1,0 @@
-table Icon
-  Caption: [iso-]xterm
-  ToolTip.Caption: run x-terminal-emulator in iso environment
-  Command: grml-exec-wrapper iso-term
-  Icon: /home/grml/.idesktop/icons/l33t_TER_Eterm.png
-  X: 28
-  Y: 131
-end
-

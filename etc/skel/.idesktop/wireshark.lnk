@@ -3,7 +3,7 @@ table Icon
   ToolTip.Caption:  Interactively dump and analyze network traffic (once known as ethereal)
   Command: grml-exec-wrapper sudo wireshark
   Icon: /home/grml/.idesktop/icons/l33t_UNK_ethereal.png
-  X: 644
+  X: 544
   Y: 13
 end
 
