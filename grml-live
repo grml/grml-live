@@ -509,8 +509,8 @@ else
    fi
 
    if [ -d "$CHROOT_OUTPUT/bin" -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
-      log   "Skiping stage 'fai dirinstall' as $CHROOT_OUTPUT exists already."
-      ewarn "Skiping stage 'fai dirinstall' as $CHROOT_OUTPUT exists already." ; eend 0
+      log   "Skipping stage 'fai dirinstall' as $CHROOT_OUTPUT exists already."
+      ewarn "Skipping stage 'fai dirinstall' as $CHROOT_OUTPUT exists already." ; eend 0
    else
       mkdir -p "$CHROOT_OUTPUT" || bailout 5 "Problem with creating $CHROOT_OUTPUT for FAI"
 
