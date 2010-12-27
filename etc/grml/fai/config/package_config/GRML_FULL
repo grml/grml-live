@@ -200,7 +200,6 @@ base-passwd
 bash
 bash-builtins
 bash-doc
-bash-static
 bastille
 bb
 bbe
