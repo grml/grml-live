@@ -138,9 +138,18 @@ iso9660)
 break;
 ;;
 *)
-if [ -n "$LABEL" ]  && [ -n "$ID_FS_LABEL" ] ; then
-  case $ID_FS_LABEL in *\ *|*\x20*) break ;; esac
-  echo "LABEL=$ID_FS_LABEL"
+if [ -n "$LABEL" ]  && [ -n "$ID_FS_LABEL_ENC" ] ; then
+  # see check_for_label() in scanpartitions for details
+  case $ID_FS_LABEL_ENC in
+    *\ *|*\x20*)
+      addinfo=" # space char inside label ($ID_FS_LABEL_ENC) not supported"
+      break ;;
+    /)
+      addinfo=" # label '/' not supported"
+      break ;;
+  esac
+
+  echo "LABEL=$ID_FS_LABEL_ENC"
   return
 fi
 ;;
