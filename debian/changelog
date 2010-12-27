@@ -1,3 +1,55 @@
+grml-live (0.12.4) unstable; urgency=low
+
+  The "where is all the dirt" release.
+
+  [ Christian Hofstaedtler ]
+  * Software related changes:
+    - [8b01f6c] Remove wacom-tools from GRML_FULL.
+    - [377f9fe] Remove xar from GRML_FULL (Debian RoQA; see #574023).
+    - [15d82e2] Remove tra, tss from GRML_FULL.
+    - [cce8558] Remove snoopy from GRML_FULL (removed from Debian,
+      see #548918).
+    - [1b93265] Remove sam from GRML_FULL (orphaned, see #503546).
+    - [78eb19a] Remove slat from GRML_FULL (dead upstream, see
+      #541373).
+    - [9d7b098] Remove shc from GRML_FULL (RoM, see #508109).
+    - [a952d6b] Remove sdd from GRML_FULL (RoQA, see #572379).
+    - [c9a3214] Move retty to x86-only section.
+    - [e2dc668] Remove rain from GRML_FULL (RoQA, see #455002).
+    - [e7dcc71] Remove isakmpd from GRML_FULL.
+    - [ae7a104] Remove psh from GRML_FULL (RoQA, see #596551).
+    - [01c0a56] Remove ras from GRML_FULL (dead upstream, see
+      #558672).
+    - [99fa5ea] Move pstack to x86-only section.
+    - [48c3d54] Remove pcopy from GRML_FULL (dead upstream, see
+      #596552).
+    - [703e0b6] Remove mp3c from GRML_FULL (uninstallable, very old).
+    - [e2ac468] Remove nstx from GRML_FULL (dead upstream, see
+      #595988).
+    - [c36d74e] Do the mtd-tools -> mtd-utils transition.
+    - [cc932b9] Remove mirrordir from GRML_FULL (RoM; see #555130).
+    - [d8fa87a] Move bsign to x86-only section.
+    - [845f37b] Remove cabber from GRML_FULL (RoQA, see #553902).
+    - [3c65350] Remove jail from GRML_FULL (RoM, see #448725).
+
+  [ Ulrich Dangel ]
+  * [1c74730] Run /etc/init.d/networking by default.
+
+  [ Michael Prokop ]
+  * [d61b3b8] Drop unnecessary policy-rc.d handler from
+    hooks/updatebase.GRMLBASE and scripts/GRMLBASE/98-clean-chroot -
+    grml-policy-rc.d does it for us.
+  * [07e33ed] grml-cheatcodes.txt: Document nonetworking bootoption.
+  * Software related changes:
+    - [ee607a4] Add tmux to GRML_FULL. - thanks to Marek Straka
+    - [b4b0e5a] Add grml-rescueboot to all grml flavours.
+    - [af3b852] Add fai-setup-storage to GRML_FULL.
+    - [567872d] Remove policyrcd-script-zg2 from GRML_FULL.
+    - [8151e7f] Remove zsh-static from GRML_FULL.
+    - [27e4380] Remove bash-static from GRML_FULL.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 27 Dec 2010 17:40:40 +0100
+
 grml-live (0.12.3) unstable; urgency=low
 
   The "let's clean the floor" release.
