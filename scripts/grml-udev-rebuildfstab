@@ -141,16 +141,14 @@ break;
 if [ -n "$LABEL" ]  && [ -n "$ID_FS_LABEL_ENC" ] ; then
   # see check_for_label() in scanpartitions for details
   case $ID_FS_LABEL_ENC in
-    *\ *|*\x20*)
-      addinfo=" # space char inside label ($ID_FS_LABEL_ENC) not supported"
+    *\x*)
+      addinfo=" # special char in label ($ID_FS_LABEL_ENC) not supported"
       break ;;
-    /)
-      addinfo=" # label '/' not supported"
-      break ;;
+    *)
+      echo "LABEL=$ID_FS_LABEL_ENC"
+      return
+      break;
   esac
-
-  echo "LABEL=$ID_FS_LABEL_ENC"
-  return
 fi
 ;;
 esac
@@ -159,7 +157,7 @@ esac
 NAME="$DEVNAME"
 for name in $DEVLINKS ; do
     case $name in
-        *usb*|*cdrom*|*dvd*)
+        *usb-sd*|*cdrom*|*dvd*)
             NAME="$name"
 	    break;
         ;;
