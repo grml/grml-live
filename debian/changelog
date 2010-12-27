@@ -1,3 +1,10 @@
+grml-desktop (0.3.5) unstable; urgency=low
+
+  * [e9f695e] idesktop: drop xterm-iso, use alsamixer instead of aumix,
+    re-adjust placement of other icons.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 27 Dec 2010 23:13:58 +0100
+
 grml-desktop (0.3.4) unstable; urgency=low
 
   * [b9e0c6c] Remove fluxbare (which we don't ship any longer) from
