@@ -1,9 +1,9 @@
 #!/bin/bash
-# Filename:      rebuildfstab
-# Purpose:       calls scanpartitions as root and adds entries to /etc/fstab
-# Authors:       grml-team (grml.org),  (c) Klaus Knopper Nov 2002, (c) Michael Prokop <mika@grml.org>
+# Filename:      scripts/grml-udev-rebuildfstab
+# Purpose:       udev script to update /etc/fstab
+# Authors:       grml-team (grml.org)
 # Bug-Reports:   see http://grml.org/bugs/
-# License:       This file is licensed under the GPL v2.
+# License:       This file is licensed under the GPL v2+.
 ################################################################################
 
 PATH="/bin:/sbin:/usr/bin:/usr/sbin"
