@@ -4,7 +4,6 @@
         [exec] (firefox webbrowser) {grml-exec-wrapper firefox} 
         [exec] (w3m webbrowser) {grml-exec-wrapper -p w3m x-terminal-emulator -T "w3m" -e /usr/bin/w3m /usr/share/doc/grml-docs/startpage.html} <>
         [exec] (gkrellm) {grml-exec-wrapper gkrellm} <>
-        [exec] (configure fluxbox [fluxbare]) {grml-exec-wrapper fluxbare} <>
         [exec] (file manager [rox-filer]) {grml-exec-wrapper rox-filer} <>
     [end]
     [submenu] (grml) {} <>
