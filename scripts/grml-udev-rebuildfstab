@@ -208,7 +208,7 @@ mountpoint=$(get_mount_point $device)
 
 for devicelink in $DEVLINKS ; do
     # ignore external
-    case "$devicelink" in "*external*") continue ;; esac
+    case "$devicelink" in *external*) continue ;; esac
     stringinfile $devicelink $TMPFILE && bailout 0
 done
 
