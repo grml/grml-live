@@ -608,6 +608,7 @@ graphviz
 grep
 grepmail
 groff
+grub-imageboot
 gsfonts
 gsfonts-x11
 gsm-utils

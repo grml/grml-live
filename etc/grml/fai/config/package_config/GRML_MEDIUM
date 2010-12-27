@@ -71,6 +71,7 @@ grml-small
 grml-templates
 grml-terminalserver
 grml-x
+grub-imageboot
 guessnet
 htop
 ifupdown

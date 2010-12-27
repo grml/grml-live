@@ -42,6 +42,7 @@ grml-docs
 grml-paste
 grml-quickconfig-standard
 grml-rescueboot
+grub-imageboot
 guessnet
 htop
 ifupdown
