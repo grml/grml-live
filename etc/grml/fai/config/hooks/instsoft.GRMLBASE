@@ -9,6 +9,14 @@
 set -u
 set -e
 
+# if hooks/updatebase.GRMLBASE fails for whatever reason
+# and can't skip instsoft.GRMLBASE we have to make sure
+# we exit here as well
+if [ -n "$BUILD_ONLY" ] ; then
+   "Exiting hooks/instsoft.GRMLBASE as BUILD_ONLY environment is set."
+   exit 0
+fi
+
 if [ "$FAI_ACTION" = "softupdate" ] ; then
    echo "Action $FAI_ACTION of FAI (hooks/instsoft.GRMLBASE) via grml-live running"
 

@@ -24,17 +24,27 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    ## we want to use our own sources.list:
    skiptask updatebase
 
-   ## taken from FAI's lib/updatebase:
+   ## based on FAI's lib/updatebase:
    # some packages must access /proc even in chroot environment
-   mount -t proc proc $FAI_ROOT/proc
+   if ! [ -d $FAI_ROOT/proc/1 ] ; then
+      mount -t proc proc $FAI_ROOT/proc || true
+   fi
    # some packages must access /sys even in chroot environment
-   mount -t sysfs sysfs $FAI_ROOT/sys
+   if ! [ -d $FAI_ROOT/sys/kernel ] ; then
+      mount -t sysfs sysfs $FAI_ROOT/sys
+   fi
    # if we are using udev, also mount it into $FAI_ROOT
-   [ -f /etc/init.d/udev ] && mount --bind /dev $FAI_ROOT/dev
-   mount -t devpts devpts $FAI_ROOT/dev/pts
+   if [ -f /etc/init.d/udev ] ; then
+      mount --bind /dev $FAI_ROOT/dev || true
+   fi
 
-   # skip the task if we want to build a new ISO only:
-   [ -n "$BUILD_ONLY" ] && skiptask instsoft || /bin/true
+   mount -t devpts devpts $FAI_ROOT/dev/pts || true
+
+   # skip the task if we want to build a new ISO only,
+   # this means we do NOT update any packages
+   if [ -n "$BUILD_ONLY" ] ; then
+      skiptask instsoft || true
+   fi
 
    exit # make sure we don't continue behind the following "fi"
 fi
