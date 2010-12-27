@@ -498,6 +498,7 @@ fai-client
 fai-doc
 fail2ban
 fai-server
+fai-setup-storage
 fake
 fakeroot
 faketime
