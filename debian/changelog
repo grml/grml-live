@@ -1,3 +1,20 @@
+grml-udev-config (0.0.7) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [7ba68d3] Really ignore external symlinks.
+  * [9647e6a] Ignore unsupported labes and always use ID_FS_LABEL if
+    valid.
+  * [8ef3bb6] Ingore all special characters and only use usb-sd* as
+    preferred name.
+
+  [ Michael Prokop ]
+  * [bcb6b08] Check for space char inside label and ignore label then.
+  * [fd5cfa9] Add device name itself to end of device entry line in
+    /etc/fstab.
+  * [1aca06d] grml-udev-rebuildfstab: update script header.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 27 Dec 2010 17:40:30 +0100
+
 grml-udev-config (0.0.6) unstable; urgency=low
 
   * [0c368ae] Make sure to always clean up on exit.
