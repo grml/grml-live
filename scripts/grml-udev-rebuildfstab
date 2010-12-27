@@ -254,8 +254,8 @@ case $ACTION in
 add|change)
 (
     flock -x 200
-    echo $ADDEDBYGRML $DEVNAME >> /etc/fstab
-    echo $device $mountpoint $ID_FS_TYPE $options 0 0 $addinfo >> /etc/fstab
+    echo "$ADDEDBYGRML $DEVNAME" >> /etc/fstab
+    echo "$device $mountpoint $ID_FS_TYPE $options 0 0 $addinfo # $DEVNAME" >> /etc/fstab
 ) 200>/var/run/rebuildfstab.lock
 
 
