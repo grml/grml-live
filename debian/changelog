@@ -1,3 +1,11 @@
+grml-desktop (0.3.3) unstable; urgency=low
+
+  * [c3655a5] Drop /etc/skel/.idesktop/aterm.lnk + remove aterm from
+    /etc/skel/.fluxbox/menu. - thanks to Jan-Pieter Jacobs
+    <janpieter.jacobs@gmail.com> for reporting.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 27 Dec 2010 14:13:43 +0100
+
 grml-desktop (0.3.2) unstable; urgency=low
 
   * [b1c4cdb] Remove pekwm configuration (see issue897 for the
