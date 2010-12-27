@@ -65,6 +65,7 @@ grml-live
 grml-paste
 grml-pylib
 grml-quickconfig-standard
+grml-rescueboot
 grml-sectools
 grml-small
 grml-templates
