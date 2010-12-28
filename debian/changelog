@@ -1,3 +1,17 @@
+grml-autoconfig (0.9.24) unstable; urgency=low
+
+  [ Christian Hofstaedtler ]
+  * [f95a8d0 + 27f8438] Fix sound volume init with multiple cards /
+    duplicate control names.
+
+  [ Michael Prokop ]
+  * [7d61530] Check for "grml2hd" as valid bootoption for
+    config_grml2hd() as well.
+  * [1e32461] Drop pump from Depends now that we support dhclient. -
+    thanks to Christian Hofstaedtler <ch@grml.org>
+
+ -- Michael Prokop <mika@grml.org>  Tue, 28 Dec 2010 23:30:02 +0100
+
 grml-autoconfig (0.9.23) unstable; urgency=low
 
   * [124715e] debian/rules: drop broken dhcp expansion from
