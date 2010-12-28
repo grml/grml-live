@@ -61,8 +61,10 @@ grml file=foobar.tbz                Use specified file as name for configuration
                                     instead of the default one (config.tbz)
 grml extract=/etc                   Extract only /etc from configuration archive,
                                     use it in combination with myconfig or netconfig
-grml persistent                     Enable persistency feature, more details available at
+grml persistent=nofiles             Enable persistency feature, more details available at
                                     http://wiki.grml.org/doku.php?id=persistency
+                                    Notice that the "=nofiles" argument is optional, though recommended
+                                    as default setting.
 grml hostname=...                   Set hostname to given argument
 grml hostname                       Set a random hostname
                                     [Note: only available with releases newer than 2010.04]
@@ -76,12 +78,18 @@ grml debnet                         Search through local partitions for file /et
 grml mypath=...                     Add specified option into $PATH of Zsh
                                     For example when using "grml mypath=/foobar" then /foobar
                                     will be added to the end of $PATH inside Zsh
-grml debs=path-name-wildcard        install Debian packages matching the path-name-wildcard in the
-                                    DCS dir
-grml scripts=path-name              execute script (defaulting to grml.sh) inside DCS dir. Path names
+grml debs                           Install all Debian packages from the "debs" directory of your DCS
+                                    directory (see myconfig=, typically the root of your ISO image).
+grml debs=path-name-wildcard        Install Debian packages from DCS directory (see myconfig=,
+                                    typically the root of your ISO image). If path does not contain a
+                                    "/" the package(s) will be installed from directory "debs" of the
+				    DCS directory instead.  The "path-name-wildcard" can contain
+				    wildcards (e.g. debs=rat* will install a packages starting with "rat"
+				    from directory debs/).
+grml scripts=path-name              Execute script (defaulting to grml.sh) inside DCS dir. Path names
                                     allowed. If path-name points to a directory, all scripts found in
                                     the directory are executed.
-grml config=path-name               unpack archive that path-name points to
+grml config=path-name               Unpack archive that path-name points to
 grml noautoconfig                   Disable searching for device labeled GRMLCFG
 
 Notice: Take a look at http://grml.org/config/ and 'man 1 grml-autoconfig'
@@ -89,13 +97,11 @@ for more information regarding the configuration framework of grml.
 
 Booting related options:
 ------------------------
-grml2ram                            Copy Grml's squashfs file to RAM and run from there
 grml toram                          Copy the whole CD/medium to RAM and run from there
 grml toram=filename.squashfs        Copy the specified file to RAM and run from there
                                     Usage example: grml toram=grml-medium.squashfs
                                     Notice: grml2ram is an alias for this option which
                                     corresponds with the grml flavour settings by default
-
 grml tohd=/dev/sda1                 Copy Grml's squashfs file to harddisk partition for later
                                     use via "grml bootfrom=/dev/sda1"
 grml bootfrom=/dev/sda1             Use the squashfs file from directory 'live' of the specified device
@@ -109,7 +115,7 @@ grml isofrom=/dev/sda1/grml.iso     Use specified ISO image for booting
                                     "boot=live isofrom=/dev/sda1/grml.iso"
                                     Notice: "fromiso" does the same as "isofrom", it's just there
                                     to prevent any typing errors
-grml findiso=/grml_2010.04.iso      Look for the specified ISO file on all disks where it usually
+grml findiso=/grml_2010.12.iso      Look for the specified ISO file on all disks where it usually
                                     looks for the .squashfs file (so you don't have to know the device name
                                     as in isofrom=....).
 grml fetch=$IP/filename.squashfs    Download a squashfs image from a given url, copying to ram and booting it.
@@ -131,7 +137,6 @@ grml ignore_bootid                  Disable bootid verification.
 
 Debugging related settings:
 ---------------------------
-debug                               Get shells during process of booting, using GNU screen, be very verbose
 grml debug                          Get shells during process of booting, using GNU screen, be verbose
 grml debug=1                        Get shells during process of booting, using GNU screen, be verbose and
                                     display shell code being executed in initramfs.
