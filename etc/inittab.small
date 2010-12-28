@@ -59,9 +59,9 @@ po::powerokwait:/etc/init.d/powerfail stop
 #5:2345:respawn:/sbin/rungetty tty5 -u grml -g grml --autologin grml /usr/bin/grml-init
 #6:2345:respawn:/sbin/rungetty tty6 -u grml -g grml --autologin grml /usr/bin/grml-init
 #9:2345:respawn:/sbin/getty  38400 tty9
-#10:2345:respawn:/bin/zsh --login -c "/usr/sbin/grml-iptstate ; /usr/bin/grml-init-screen" >/dev/tty10 2>&1 </dev/tty10
-#11:2345:respawn:/bin/zsh --login -c "/usr/bin/htop ; /usr/bin/grml-init-screen" >/dev/tty11 2>&1 </dev/tty11
-#12:2345:respawn:/bin/zsh --login -c "/usr/bin/grml-init-multitail ; /usr/bin/grml-init-screen" >/dev/tty12 2>&1 </dev/tty12
+#10:2345:respawn:/bin/zsh --login -c "/usr/sbin/grml-iptstate ; /usr/bin/grml-screen" >/dev/tty10 2>&1 </dev/tty10
+#11:2345:respawn:/bin/zsh --login -c "/usr/bin/htop ; /usr/bin/grml-screen" >/dev/tty11 2>&1 </dev/tty11
+#12:2345:respawn:/bin/zsh --login -c "/usr/bin/grml-init-multitail ; /usr/bin/grml-screen" >/dev/tty12 2>&1 </dev/tty12
 
 ################################################################################
 # Please do NOT remove the line with the marker as it is important for the
