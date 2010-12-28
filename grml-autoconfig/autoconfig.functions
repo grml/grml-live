@@ -1499,7 +1499,7 @@ config_mixer () {
       fi
 
       for card in $(cat /proc/asound/cards| grep -e '^\s*[0-9]' | awk '{print $1}') ; do
-         einfo "Configuring soundcard $(cat /proc/asound/cards| grep -e "$card" | awk -F\[ '{print $2}' | awk '{print $1}')"
+         einfo "Configuring soundcard \"$(cat /proc/asound/cards| awk -F\[ '/^ '$card'/{ FS=" "; $0=$2; print $1 }' )\""
          eindent
 
          if checkbootparam 'vol' ; then
@@ -1533,7 +1533,7 @@ config_mixer () {
             fi
 
             for CONTROL in Master PCM ; do
-               if amixer -q | grep -q "Simple mixer control.*$CONTROL" ; then
+               if amixer -q | grep -q "Simple mixer control '$CONTROL'" ; then
                   amixer -q set "${CONTROL}" "${VOL}"%
                   eend $?
                fi
