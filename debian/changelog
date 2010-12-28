@@ -1,3 +1,10 @@
+grml-etc (1.2.10) unstable; urgency=low
+
+  * [34a666b + 89fc5a7] xinitrc.d/grml_keyboard + Xmodmaps: fix
+    the Ctrl+Alt+Backspace issue.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 28 Dec 2010 23:46:28 +0100
+
 grml-etc (1.2.9) unstable; urgency=low
 
   * [0c9efa9] /etc/inittab*: use grml-screen instead of grml-init-
