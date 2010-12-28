@@ -10,9 +10,6 @@ if [ "$XINIT_GRML_KEYBOARD" = "false" ] ; then
    exit 0
 fi
 
-# Ctrl+Alt+Backspace killing xserver
-setxkbmap -option terminate:ctrl_alt_bksp
-
 if ! [ -r /etc/sysconfig/keyboard ] ; then
    [ -r $HOME/.Xmodmap ] && xmodmap $HOME/.Xmodmap || setxkbmap us
 else
@@ -27,5 +24,8 @@ else
       fi
    fi
 fi
+
+# Ctrl+Alt+Backspace killing xserver
+setxkbmap -option terminate:ctrl_alt_bksp
 
 ## END OF FILE #################################################################
