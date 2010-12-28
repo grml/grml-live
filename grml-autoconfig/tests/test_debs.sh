@@ -16,7 +16,7 @@ dpkg() {
 
 test_debs() {
     . ../autoconfig.functions
-    CMDLINE='debs=*'
+    CMDLINE='debs'
     INSTALLED=''
 
     TMPDIR=$(mktemp -d)
