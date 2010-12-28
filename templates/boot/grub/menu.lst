@@ -15,8 +15,12 @@ title %GRML_NAME% %VERSION% - Default boot (using 1024x768 framebuffer)
 kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=791 quiet boot=live bootid=%BOOTID% nomce 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
-title %GRML_NAME% %VERSION% - without framebuffer
-kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=normal video=ofonly quiet initrd=initrd.gz boot=live bootid=%BOOTID% nomce 
+title %GRML_NAME% %VERSION% - disable framebuffer
+kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=normal video=ofonly quiet initrd=initrd.gz boot=live bootid=%BOOTID% nomce radeon.modeset=0 i915.modeset=0 nouveau.modeset=0 nomodeset 
+initrd /boot/%SHORT_NAME%/initrd.gz
+
+title %GRML_NAME% %VERSION% - disable Kernel Mode Setting
+kernel /boot/%SHORT_NAME%/linux26 apm=power-off quiet initrd=initrd.gz boot=live bootid=%BOOTID% nomce radeon.modeset=0 i915.modeset=0 nouveau.modeset=0 nomodeset vga=791 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - with 1280x1024 framebuffer
@@ -28,7 +32,7 @@ kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=788 quiet initrd=initrd.gz b
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - failsafe boot
-kernel /boot/%SHORT_NAME%/linux26 vga=normal boot=live bootid=%BOOTID% noautoconfig atapicd noapic noacpi acpi=off nomodules nofirewire noudev nousb nohotplug noapm nopcmcia nosmp maxcpus=0 noscsi noagp nodma ide=nodma noswap nofstab nosound nogpm nosyslog nodhcp nocpu nodisc nomodem xmodule=vesa noraid nolvm noresume selinux=0 edd=off 
+kernel /boot/%SHORT_NAME%/linux26 vga=normal boot=live bootid=%BOOTID% noautoconfig atapicd noapic noacpi acpi=off nomodules nofirewire noudev nousb nohotplug noapm nopcmcia nosmp maxcpus=0 noscsi noagp nodma ide=nodma noswap nofstab nosound nogpm nosyslog nodhcp nocpu nodisc nomodem xmodule=vesa noraid nodmraid nolvm noresume selinux=0 edd=off 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - debug mode
@@ -44,11 +48,11 @@ kernel /boot/%SHORT_NAME%/linux26 toram apm=power-off vga=791 quiet boot=live bo
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - grml2hd - install grml to local harddisk [adjust it!]
-kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=791 quiet boot=live bootid=%BOOTID% nomce partition=/dev/ice1 mbr=/dev/ice
+kernel /boot/%SHORT_NAME%/linux26 apm=power-off vga=791 quiet boot=live bootid=%BOOTID% nomce BOOT_IMAGE=grml2hd grml2hd partition=/dev/ice1 mbr=/dev/ice user=grml filesystem=ext3
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - forensic mode
-kernel /boot/%SHORT_NAME%/linux26 vga=791 nofstab noraid nolvm noautoconfig noswap raid=noautodetect quiet initrd=initrd.gz boot=live bootid=%BOOTID% 
+kernel /boot/%SHORT_NAME%/linux26 vga=791 nofstab noraid nodmraid nolvm noautoconfig noswap raid=noautodetect quiet initrd=initrd.gz boot=live bootid=%BOOTID% 
 initrd /boot/%SHORT_NAME%/initrd.gz
 
 title %GRML_NAME% %VERSION% - serial console mode
