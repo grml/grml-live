@@ -1499,7 +1499,7 @@ config_mixer () {
       fi
 
       for card in $(cat /proc/asound/cards| grep -e '^\s*[0-9]' | awk '{print $1}') ; do
-         einfo "Configuring soundcard \"$(cat /proc/asound/cards| awk -F\[ '/^ '$card'/{ FS=" "; $0=$2; print $1 }' )\""
+         einfo "Configuring soundcard \"$(awk -F\[ '/^ *'$card' \[/{ FS=" "; $0=$2; print $1}' < /proc/asound/cards)\""
          eindent
 
          if checkbootparam 'vol' ; then
