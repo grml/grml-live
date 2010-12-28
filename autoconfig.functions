@@ -2375,7 +2375,7 @@ config_tohd()
 # {{{ grml2hd: automatic installation
 config_grml2hd(){
 
-if checkbootparam "BOOT_IMAGE=grml2hd" ; then
+if checkbootparam "grml2hd" || checkbootparam "BOOT_IMAGE=grml2hd" ; then
 
 if checkbootparam 'user' ; then
    NEWUSER=''
