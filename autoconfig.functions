@@ -1921,7 +1921,7 @@ if checkbootparam 'debs' ; then
    iszsh && setopt localoptions shwordsplit
    DEBS="$(getbootparam 'debs' 2>>$DEBUG)"
    if [ -z "$DEBS" ] ; then
-      DEBS="*"
+      DEBS="*.deb"
    fi
    if ! echo $DEBS | grep -q '/'; then
      # backwards compatibility: if no path is given get debs from debs/
