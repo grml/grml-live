@@ -1138,19 +1138,6 @@ if checkbootparam 'swap' || checkbootparam 'anyswap' ; then
    checkbootparam 'anyswap' && export ANYSWAP='yes' || export ANYSWAP=""
 fi
 
-if checkbootparam 'nofstab' || checkbootparam 'forensic' ; then
-  ewarn "Skipping /etc/fstab creation as requested on boot commandline." ; eend 0
-else
-  einfo "Scanning for harddisk partitions and creating /etc/fstab. (Disable this via boot option: nofstab)"
-  iszsh && setopt nonomatch
-  if [ -x /usr/sbin/rebuildfstab ] ; then
-     config_userfstab || fstabuser=grml
-     /usr/sbin/rebuildfstab -r -u $fstabuser -g $fstabuser ; eend $?
-  else
-     ewarn "Command rebuildfstab not found. Install package grml-rebuildfstab." ; eend 1
-  fi
-fi # checkbootparam nofstab/forensic
-
 # Scan for swap, config, homedir - but only in live-mode
 if [ -z "$INSTALLED" ] ; then
    [ -z "$NOSWAP" ] && einfo "Searching for swap partition(s) as requested."
