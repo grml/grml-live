@@ -2430,7 +2430,7 @@ fi # if checkbootparam "BOOT_IMAGE=grml2hd ...
 # {{{ debootstrap: automatic installation
 config_debootstrap(){
 
-if checkbootparam "BOOT_IMAGE=debian2hd" ; then
+if checkbootparam "BOOT_IMAGE=debian2hd" || checkbootparam "debian2hd" ; then
 
 einfo "Bootoption debian2hd found. Setting up environment for automatic installation via grml-debootstrap." ; eend 0
 
