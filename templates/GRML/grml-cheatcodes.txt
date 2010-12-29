@@ -26,9 +26,11 @@ dos                                 Boot FreeDOS
 bsd                                 Boot MirOS BSD
 hdt                                 Boot Hardware Detection Tool (from syslinux project)
 
-Further documentation regarding the init process can be found at:
+Further documentation regarding the boot process can be found at:
 * http://git.grml.org/?p=live-initramfs-grml.git;a=blob_plain;f=manpages/live-initramfs.en.7.txt;hb=HEAD
+* http://git.grml.org/?p=live-boot-grml.git;a=blob;f=manpages/en/live-boot.7;hb=HEAD
 * http://git.debian.org/?p=kernel/initramfs-tools.git;a=blob_plain;f=initramfs-tools.8;hb=HEAD
+* http://www.kernel.org/doc/Documentation/kernel-parameters.txt
 
 The following boot options can be combined.
 Notice: not all of them are available on all the Grml flavours.
@@ -93,7 +95,7 @@ grml config=path-name               Unpack archive that path-name points to
 grml noautoconfig                   Disable searching for device labeled GRMLCFG
 
 Notice: Take a look at http://grml.org/config/ and 'man 1 grml-autoconfig'
-for more information regarding the configuration framework of grml.
+for more information regarding the configuration framework of Grml.
 
 Booting related options:
 ------------------------
@@ -227,8 +229,11 @@ grml libata.force=[ID:]VAL          Force configurations for libata.
                                     to force pio4 mode on device "ata1:00:"
 grml libata.dma=0                   Disable DMA on PATA and SATA devices
 grml libata.ignore_hpa=1            Disable host protected area (which should enable the whole disk)
-grml vga=normal [video=ofonly]      No-framebuffer mode (does not influence X)
-grml vga=ask [video=ofonly]         Display menu for framebuffer mode
+grml vga=normal                     No-framebuffer mode (does not influence X)
+grml vga=ask                        Display menu for framebuffer mode
+grml radeon.modeset=0  nomodeset    Disable Kernel Mode Setting (KMS) for Radeon driver.
+grml i915.modeset=0    nomodeset    Disable Kernel Mode Setting (KMS) for Intel driver.
+grml nouveau.modeset=0 nomodeset    Disable Kernel Mode Setting (KMS) for Nouveau driver.
 
 Installation related settings:
 ------------------------------
