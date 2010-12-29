@@ -1,3 +1,27 @@
+grml-live (0.12.5) unstable; urgency=low
+
+  The "new release is coming so >< close" release.
+
+  * [69f74a6] grml-live: Fix typo (Skiping->Skipping).
+  * [7468864] SW: Add grub-imageboot to all Grml flavours.
+  * [ea8df13] hooks/{instsoft,updatebase}.GRMLBASE: be more careful
+    about BUILD_ONLY environment.
+  * [1b66676] isolinux/grml.cfg: use vga=791 by default for "disabled
+    KMS" boot menu entry.
+  * [ebc2594] isolinux/grml.cfg: disable KMS in "Disable Framebuffer"
+    boot menu entry.
+  * [7883c5f] templates/boot: set nodmraid and grml2hd accordingly, make
+    sure "No KMS" and "nofb" are consistent accross bootloaders.
+  * [b8a13e3] templates/boot: Use persistent=nofiles as default, as this
+    causes less problems by default.
+  * [5c896d0] Update templates/GRML/grml-cheatcodes.txt to reflect
+    recent development. - thanks to Ulrich Dangel <mru@grml.org> for
+    feedback.
+  * [894aac9] templates/GRML/grml-cheatcodes.txt: document KMS and add
+    URL for Documentation/kernel-parameters.txt.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 29 Dec 2010 01:24:43 +0100
+
 grml-live (0.12.4) unstable; urgency=low
 
   The "where is all the dirt" release.
