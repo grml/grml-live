@@ -1060,7 +1060,6 @@ portsentry
 posh
 poster
 postfix
-postfix-ldap
 postfix-pcre
 postgresql-client
 postmark
