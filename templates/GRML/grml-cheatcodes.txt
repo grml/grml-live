@@ -57,7 +57,7 @@ grml myconfig=/dev/fd0              Set the DCS dir (debs, config, scripts) to t
                                     /dev/sda1 for USB-stick/first SCSI-device
 grml netconfig=server/config.tbz    Download file and extract configuration archive
 grml netscript=server/file          Download and execute file
-grml partconf=/dev/hda2             Copy files specified in /etc/grml/partconf from /dev/hda2
+grml partconf=/dev/sda2             Copy files specified in /etc/grml/partconf from /dev/sda2
                                     to booting grml system
 grml file=foobar.tbz                Use specified file as name for configuration archive
                                     instead of the default one (config.tbz)
@@ -238,22 +238,21 @@ grml nouveau.modeset=0 nomodeset    Disable Kernel Mode Setting (KMS) for Nouvea
 Installation related settings:
 ------------------------------
 
-Caution: do *not* use the grml2hd and/or debian2hd bootoption if you do not know what you are doing!
+Caution: do *NOT* use the grml2hd and/or debian2hd bootoption if you do not know what you are doing!
 
 Install plain Debian via debian2hd bootoption (which runs grml-debootstrap in non-interactive mode):
 
 debian2hd <options>                 ... whereas valid options for debian2hd are:
 
-  target=       target partition/directory of the new Debian system, e.g.: target=/dev/hda1
-  grub=         where to install grub to? Use grub syntax for specifying, e.g.: grub=hd0
-  groot=        specify root device for usage in grub (use grub syntax), e.g.: groot=hd0,0
+  target=       target partition/directory of the new Debian system, e.g.: target=/dev/sda1
+  grub=         where to install grub to, e.g.: grub=/dev/sda
   release=      specify release of new Debian system (default is stable), e.g.: release=sid
-  mirror=       specify mirror for apt-get/aptitude, e,g.: mirror=ftp://ftp.tugraz.at/mirror/debian
+  mirror=       specify mirror for apt-get/aptitude, e,g.: mirror=http://cdn.debian.net/debian/
   password=     set passwort of user root without prompting for it, e.g.: password=AiTh5ahn
 
   Usage example for automatic installation:
 
-    debian2hd target=/dev/hda1 grub=hd0 groot=hd0,0 mirror=ftp://ftp.tugraz.at/mirror/debian password=foobar
+    debian2hd target=/dev/sda1 grub=hd0 groot=hd0,0 mirror=ftp://ftp.tugraz.at/mirror/debian password=foobar
 
   See http://grml.org/grml-debootstrap/ for more information.
 
@@ -267,7 +266,7 @@ grml2hd <options>                   ... whereas valid options for grml2hd are:
    partition=/dev/...                partition where grml should be installed
 
   Usage example for booting:
-   grml2hd partition=/dev/hda4 mbr=/dev/hda filesystem=ext3 user=mika
+   grml2hd partition=/dev/sda4 mbr=/dev/sda filesystem=ext3 user=mika
 
   Passwords of user root and user are "grml" - please adjust after hd-install!
 
