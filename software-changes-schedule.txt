@@ -1,0 +1,19 @@
+Candidates for addition
+-----------------------
+
+None currently.
+
+Candidates for removal
+----------------------
+
+zec [ch]
+yatm [ch]
+xmms2* [ch]
+xfaces [ch]
+weechat\* [ch]
+user-setup [ch]
+unrar-free (unrar is already present) [ch]
+tidy [ch]
+tetradraw [ch]
+rc [ch]
+sp, openjade, sgml-data, docbook-xml [ch]
