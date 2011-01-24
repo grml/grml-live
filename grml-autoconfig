@@ -232,8 +232,6 @@ checkvalue $CONFIG_DEBNET && config_debnet
 
 checkvalue $CONFIG_CONSOLE && config_console
 
-checkvalue $CONFIG_SETKEYCODES && config_setkeycodes
-
 checkvalue $CONFIG_BLINDSOUND && config_blindsound
 
 checkvalue $CONFIG_WELCOME && config_welcome

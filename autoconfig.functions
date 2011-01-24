@@ -1553,34 +1553,6 @@ fi
 }
 # }}}
 
-# {{{ keyboard add-ons
-config_setkeycodes(){
-if checkbootparam 'setkeycodes' ; then
- einfo "Setting keycodes as requested via bootparameter 'setkeycodes'."
-  # MS MM keyboard add-on
-  # fix
-  setkeycodes e001 126 &>/dev/null
-  setkeycodes e059 127 &>/dev/null
-  # fn keys
-  setkeycodes e03b 59 &>/dev/null
-  setkeycodes e008 60 &>/dev/null
-  setkeycodes e007 61 &>/dev/null
-  setkeycodes e03e 62 &>/dev/null
-  setkeycodes e03f 63 &>/dev/null
-  setkeycodes e040 64 &>/dev/null
-  setkeycodes e041 65 &>/dev/null
-  setkeycodes e042 66 &>/dev/null
-  setkeycodes e043 67 &>/dev/null
-  setkeycodes e023 68 &>/dev/null
-  setkeycodes e057 87 &>/dev/null
-  setkeycodes e058 88 &>/dev/null
-  # hp keycodes
-  setkeycodes e00a 89 e008 90 &>/dev/null
- eend 0
-fi
-}
-# }}}
-
 # {{{ wondershaper
 config_wondershaper(){
  if checkbootparam 'wondershaper' ; then
