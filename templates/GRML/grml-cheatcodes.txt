@@ -46,7 +46,6 @@ grml utc                            Use Coordinated Universal Time (UTC=yes)
 grml localtime                      Use local time (UTC=no)
 grml tz=Europe/Vienna               Use specified timezone for TZ
 grml keyboard=us xkeyboard=us       Use different keyboard layout (text-console/X)
-grml setkeycodes                    Set some special function keys for MS/HP keyboards
 
 Configuration settings:
 -----------------------
