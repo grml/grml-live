@@ -1046,6 +1046,23 @@ syslinux) then just execute:
 
   % isohybrid grml.iso
 
+[[basetgz]]
+How to I create a base tar.gz (I386.tar.gz or AMD64.tar.gz)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execute the following commands (requires root):
+
+  ARCH='amd64' # replace with i386 if necessary
+  SUITE='squeeze' # using the current stable release should always work
+  debootstrap --arch "$ARCH" --exclude=info,tasksel,tasksel-data "$SUITE" "$ARCH" http://debian.netcologne.de/debian
+  cd "$ARCH"
+  rm var/cache/apt/archives/*.deb
+  tar zcf ../"${ARCH}".tar.gz *
+
+And finally place the generated tarball in /etc/grml/fai/config/basefiles/ (note
+that it needs to be uppercase letters matching the class names, so: AMD64.tar.gz
+for amd64 and I386.tar.gz for i386).
+
 [[question]]
 I've a question which isn't answered by this document
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
