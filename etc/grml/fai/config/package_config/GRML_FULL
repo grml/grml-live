@@ -37,7 +37,6 @@ ftpbackup
 gateguardian
 gatling
 gifshuffle
-glipper-nognome
 grml-debugtools
 grml-desktop
 grml-docs
@@ -285,6 +284,7 @@ clamav-daemon
 clamav-freshclam
 clamav-testfiles
 clex
+clipit
 cloop-utils
 cmus
 codeville
