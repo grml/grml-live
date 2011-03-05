@@ -120,6 +120,7 @@ ntfs-3g
 ntfsprogs
 ntpdate
 nvi
+parted
 passwd
 patch
 pcmciautils
