@@ -12,20 +12,31 @@ set -u
 debian_version=''
 script_version=''
 
-if git status --porcelain | grep -q '^?? '; then
-  printf "Uncommited changes in current working tree. Please commit/clean up.\n"
-  exit 1
+if [ -n "${AUTOBUILD:-}" ] ; then
+  git checkout autobuild # has to exist
+else
+  if git status --porcelain | grep -q '^?? '; then
+    printf "Uncommited changes in current working tree. Please commit/clean up.\n"
+    exit 1
+  fi
+fi
+
+if [ -n "${AUTOBUILD:-}" ] ; then
+  since=$(git show -s --pretty="tformat:%h")
+else
+  since=v$(dpkg-parsechangelog | awk '/^Version:/ {print $2}')
 fi
 
 printf "Building debian/changelog: "
-git-dch --debian-branch="$(git branch | awk -F\*\  '/^* / { print $2}' )" \
-        --since=v$(dpkg-parsechangelog | awk '/^Version:/ {print $2}') \
+git-dch --ignore-branch --since=$since \
         --id-length=7 --meta --multimaint-merge -S
 printf "OK\n"
 
-if ! $EDITOR debian/changelog ; then
-  printf "Exiting as editing debian/changelog returned an error." >&2
-  exit 1
+if [ -z "${AUTOBUILD:-}" ] ; then
+  if ! $EDITOR debian/changelog ; then
+    printf "Exiting as editing debian/changelog returned an error." >&2
+    exit 1
+  fi
 fi
 
 debian_version="$(dpkg-parsechangelog | awk '/^Version:/ {print $2}')"
@@ -52,13 +63,28 @@ else
   exit 1
 fi
 
-if $dorelease ; then
+if $dorelease || [ -n "${AUTOBUILD:-}" ] ; then
   git add debian/changelog grml-live
   git commit -s -m "Release new version ${debian_version}."
 fi
 
 printf "Building debian packages:\n"
-git-buildpackage --git-debian-branch="$(git branch | awk -F\*\  '/^* / { print $2}' )" --git-ignore-new $*
-printf "Finished execution of $(basename $0). Do not forget to tag release ${debian_version}\n"
+if [ -n "${AUTOBUILD:-}" ] ; then
+  [ -d ../grml-live.build-area ] || mkdir ../grml-live.build-area
+  git-buildpackage --git-ignore-branch --git-ignore-new --git-export-dir=../grml-live.build-area -us -uc
+else
+  git-buildpackage --git-ignore-branch --git-ignore-new $*
+  printf "Finished execution of $(basename $0). Do not forget to tag release ${debian_version}\n"
+fi
+
+if [ -n "${AUTOBUILD:-}" ] ; then
+   (
+     cd ../grml-live.build-area
+     dpkg-scanpackages . /dev/null > Packages
+   )
+   apt-get update
+   PACKAGES=$(dpkg --list grml-live\* | awk '/^ii/ {print $2}')
+   apt-get -y --allow-unauthenticated install $PACKAGES
+fi
 
 ## END OF FILE #################################################################
