@@ -1,3 +1,32 @@
+grml-live (0.12.6) unstable; urgency=low
+
+  [ Michael Prokop ]
+  * [312d86a] templates/GRML/grml-cheatcodes.txt: update debian2hd
+    bootoption documentation; replace all references to /dev/hdx with
+    /dev/sdx
+  * [22e838c] templates/GRML/grml-cheatcodes.txt: update usage example
+    cmdline for debian2hd (thanks, Christian).
+  * [0d5dccc] Add software-changes-schedule.txt to handle scheduled
+    software additions/removals via git.
+  * [66f1c71] grml-cheatcodes.txt: drop setkeycodes (being dropped from
+    grml-autconfig).
+  * [956db16] docs: add generation of the base tar.gz to the FAQ
+  * [32627d5] scripts/release_helper.sh: support autobuild
+    infrastructure through AUTOBUILD
+  * Software related changes:
+    - [58de1cc] Drop postfix-ldap from GRML_FULL.
+    - [f3deac4] Drop cfengine2 from GRML_FULL.
+    - [23a96e0] Add puppet to GRML_FULL.
+    - [c00baf7] Add puppetmaster to GRML_FULL.
+    - [285e5c3] Add rdfind to GRML_FULL.
+    - [38fad6b] Replace glipper-nognome with clipit.
+
+  [ Ulrich Dangel ]
+  * [5f2b199] SW: Add parted to GRML_MEDIUM (Thanks to Jordi Funollet
+    for the bug report)
+
+ -- Michael Prokop <mika@grml.org>  Fri, 11 Mar 2011 23:16:57 +0100
+
 grml-live (0.12.5) unstable; urgency=low
 
   The "new release is coming so >< close" release.
