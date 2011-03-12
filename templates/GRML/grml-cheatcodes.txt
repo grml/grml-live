@@ -54,6 +54,8 @@ grml myconfig=/dev/fd0              Set the DCS dir (debs, config, scripts) to t
                                     If a file /config.tbz exists, it is extracted from there.
                                     /dev/fd0  for floppy disk
                                     /dev/sda1 for USB-stick/first SCSI-device
+grml autoconfig=SOMELABEL           Set the DCS dir to the root of the device labeled with SOMELABEL.
+                                    If undefined search for a device labeled with GRMLCFG.
 grml netconfig=server/config.tbz    Download file and extract configuration archive
 grml netscript=server/file          Download and execute file
 grml partconf=/dev/sda2             Copy files specified in /etc/grml/partconf from /dev/sda2
