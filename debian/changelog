@@ -1,3 +1,15 @@
+grml-autoconfig (0.9.27) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [ce2da01] Remove config_setkeycodes. Should be handled nowadays in
+    the kernel anyways.
+
+  [ Martin Scharm ]
+  * [6b32452] add autoconfig parameter to change GRMLCFG label
+    [Closes: issue673]
+
+ -- Michael Prokop <mika@grml.org>  Sat, 12 Mar 2011 13:40:14 +0100
+
 grml-autoconfig (0.9.26) unstable; urgency=low
 
   [ Ulrich Dangel ]
