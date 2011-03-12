@@ -13,7 +13,9 @@ The DCS directory defaults to the root directory of the GRML live image. If a
 file system labeled GRMLCFG is found, the DCS directory is the root directory of
 that file system. Alternatively, the myconfig boot parameter can be used to
 directly specify a device which is then taken as DCS directory
-(myconfig=/dev/sda1, for example).
+(myconfig=/dev/sda1, for example). If your device is labeled different to
+GRMLCFG the proper label can be set via the autoconfig boot parameter
+(autoconfig=SOMELABEL, for example).
 
 Without any additional boot parameters, the GCA at DCSDIR/config.tbz is
 automatically unpacked and DCSDIR/scrips/grml.sh is automatically executed on
@@ -33,6 +35,14 @@ myconfig::
 
   myconfig=/dev/sda1                        => read DCS from usb-device
   myconfig=/dev/fd0                         => read DCS from floppy-disk
+
+autoconfig::
+
+   This parameter specifies the label used to determine the DCS device.
+   If undefined the label GRMLCFG is used to find the DCS device.
+
+  autoconfig=SOMELABEL      => search for device labeled SOMELABEL to use as
+                               DCS device.
 
 home::
 

@@ -1791,8 +1791,11 @@ config_finddcsdir() {
 #    foo, even if a GRMLCFG partition is present.
 DCSDIR=""
 DCSMP="/mnt/grml"
+# autoconfig, see issue673
+GRMLCFG="$(getbootparam 'autoconfig' 2>>$DEBUG)"
+[ -n "$GRMLCFG" ] || GRMLCFG="GRMLCFG"
 if checkbootparam 'noautoconfig' || checkbootparam 'forensic' ; then
-  ewarn "Skipping running automount of device(s) labeled GRMLCFG as requested." ; eend 0
+  ewarn "Skipping running automount of device(s) labeled $GRMLCFG as requested." ; eend 0
 else
   if [ -z "$INSTALLED" ] ; then
     if checkbootparam 'myconfig' ; then
@@ -1801,7 +1804,7 @@ else
         eerror "Error: No device for bootoption myconfig provided." ; eend 1
       fi # [ -z "$DCSDEVICE" ]
     elif checkvalue $CONFIG_MYCONFIG; then # checkbootparam myconfig
-      einfo "Searching for device(s) labeled with GRMLCFG. (Disable this via boot option: noautoconfig)" ; eend 0
+      einfo "Searching for device(s) labeled with $GRMLCFG. (Disable this via boot option: noautoconfig)" ; eend 0
       eindent
       # We do need the following fix so floppy disk is available to blkid in any case :-/
       if [ -r /dev/fd0 ] ; then
@@ -1810,7 +1813,7 @@ else
            blkid /dev/fd0 >>$DEBUG 2>&1
         fi
       fi
-      DCSDEVICE=$(blkid -t LABEL=GRMLCFG | head -1 | awk -F: '{print $1}')
+      DCSDEVICE=$(blkid -t LABEL=$GRMLCFG | head -1 | awk -F: '{print $1}')
       if [ -n "$DCSDEVICE" ]; then
         DCSMP="/mnt/grmlcfg"
       fi
