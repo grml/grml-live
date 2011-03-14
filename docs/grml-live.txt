@@ -168,8 +168,8 @@ Specify name of the release.
   -s **SUITE**::
 
 Specify the Debian suite you want to use for your live-system.  Defaults to
-"lenny" (being current Debian/stable). Supported values are: etch, lenny, sid.
-Debian "squeeze" (current Debian/testing) requires base.tgz
+"squeeze" (being current Debian/stable). Supported values are: etch, lenny,
+squeeze, sid. Debian "squeeze" requires a recent base.tgz
 (/etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz) or a recent version of
 debootstrap.
 
@@ -947,7 +947,7 @@ How do I create a base.tgz for use as NFSROOT?
 First of all build the chroot system:
 
   mkdir /tmp/nfsroot && cd /tmp/nfsroot
-  debootstrap lenny /tmp/nfsroot/ http://cdn.debian.net/debian
+  debootstrap squeeze /tmp/nfsroot/ http://cdn.debian.net/debian
   tar zcf base.tgz ./
 
 Then check out where your NFSROOT is located:
@@ -996,10 +996,10 @@ FAI_DEBOOTSTRAP:
   GRML_LIVE_SOURCES="
   deb http://localhost:3142/deb.grml.org grml-stable  main
   deb http://localhost:3142/deb.grml.org grml-testing main
-  deb http://localhost:3142/cdn.debian.net/debian lenny main contrib non-free
+  deb http://localhost:3142/cdn.debian.net/debian squeeze main contrib non-free
   "
   [...]
-  FAI_DEBOOTSTRAP="lenny http://localhost:3142/cdn.debian.net/debian lenny main contrib non-free"
+  FAI_DEBOOTSTRAP="squeeze http://localhost:3142/cdn.debian.net/debian squeeze main contrib non-free"
 
 Make sure apt-cacher / apt-cacher-ng is running ('/etc/init.d/apt-cacher
 restart' or '/etc/init.d/apt-cacher-ng restart'). That's it.  All downloaded
@@ -1017,9 +1017,9 @@ FAI_DEBOOTSTRAP:
   GRML_LIVE_SOURCES="
   deb http://localhost:9999/grml            grml-stable  main
   deb http://localhost:9999/grml            grml-testing main
-  deb http://localhost:9999/debian lenny    main contrib non-free
+  deb http://localhost:9999/debian squeeze  main contrib non-free
   "
-  FAI_DEBOOTSTRAP="lenny http://localhost:9999/debian"
+  FAI_DEBOOTSTRAP="squeeze http://localhost:9999/debian"
 
 Configure approx:
 
