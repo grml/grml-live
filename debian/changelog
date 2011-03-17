@@ -1,3 +1,22 @@
+grml-live (0.13.1) unstable; urgency=low
+
+  [ Martin Scharm ]
+  * [1c721a6] grml-cheatcodes.txt: added autoconfig boot parameter
+
+  [ Christian Hofstaedtler ]
+  * [4bc574e] Assume 'squeeze' as default SUITE.
+  * [27a6aab] buildd: squeeze has been promoted to stable, adapt texts
+  * [0c3993f] buildd: show sha1sum files instead of md5
+
+  [ Michael Prokop ]
+  * [66ce999] Update for kernel 2.6.38-grml[64], featuring LZMA/XZ
+    support - requiring squashfs-tools >=4.2-1.
+  * [e88fb8e] Depend on squashfs-tools (>= 1:4.2-1~grml00).
+  * [1c0980c] scripts/release_helper.sh: manually build debian/changelog
+    during autobuilds, improve branch handling
+
+ -- Michael Prokop <mika@grml.org>  Thu, 17 Mar 2011 23:08:20 +0100
+
 grml-live (0.12.6) unstable; urgency=low
 
   [ Michael Prokop ]
