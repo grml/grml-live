@@ -59,7 +59,7 @@ Usage: $PN [options, see as follows]
    -u                      update existing chroot instead of rebuilding it from scratch
    -v <version_number>     specify version number of the release
    -V                      increase verbosity in the build process
-   -z                      use ZLIB instead of LZMA compression
+   -z                      use ZLIB instead of LZMA/XZ compression
 
 Usage examples:
 
@@ -322,7 +322,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$DEFAULT_BOOTOPTIONS" ] && echo "  Adding default bootoptions: \"$DEFAULT_BOOTOPTIONS\""
    [ -n "$FAI_ARGS" ]            && echo "  Additional arguments for FAI: $FAI_ARGS"
    [ -n "$LOGFILE" ]             && echo "  Logging to file:   $LOGFILE"
-   [ -n "$SQUASHFS_ZLIB" ]       && echo "  Using ZLIB (instead of LZMA) compression."
+   [ -n "$SQUASHFS_ZLIB" ]       && echo "  Using ZLIB (instead of LZMA/XZ) compression."
    [ -n "$SQUASHFS_OPTIONS" ]    && echo "  Using SQUASHFS_OPTIONS ${SQUASHFS_OPTIONS}"
    [ -n "$VERBOSE" ]             && echo "  Using VERBOSE mode."
    [ -n "$UPDATE" ]              && echo "  Executing UPDATE instead of fresh installation."
@@ -967,9 +967,9 @@ else
      # use blocksize 256k as this gives best result with regards to time + compression
      SQUASHFS_OPTIONS="-b 256k"
 
-     # set lzma compression by default, unless -z option has been specified on command line
+     # set lzma/xz compression by default, unless -z option has been specified on command line
      if [ -z "$SQUASHFS_ZLIB" ] ; then
-        SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -comp lzma"
+        SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -comp xz"
      fi
    fi
 

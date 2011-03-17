@@ -193,9 +193,9 @@ PACKAGES aptitude I386
 # we want to use linux-kernel-headers-grml instead of linux-libc-dev:
 linux-kernel-headers-grml
 
-linux-image-2.6.36-grml
+linux-image-2.6.38-grml
 powernowd
-virtualbox-ose-guest-modules-2.6.36-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
+virtualbox-ose-guest-modules-2.6.38-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
 
 PACKAGES aptitude AMD64
-linux-image-2.6.36-grml64
+linux-image-2.6.38-grml64
