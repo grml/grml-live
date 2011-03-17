@@ -9,11 +9,18 @@
 set -e
 set -u
 
+export LC_ALL=C
+export LANG=C
+
 debian_version=''
 script_version=''
 
+autobuild_branch="autobuild_$(date +%Y%m%d_%H%M%S)"
+
 if [ -n "${AUTOBUILD:-}" ] ; then
-  git checkout autobuild # has to exist
+  git checkout master
+  git pull
+  git checkout -b "$autobuild_branch"
 else
   if git status --porcelain | grep -q '^?? '; then
     printf "Uncommited changes in current working tree. Please commit/clean up.\n"
@@ -21,16 +28,31 @@ else
   fi
 fi
 
+printf "Building debian/changelog: "
 if [ -n "${AUTOBUILD:-}" ] ; then
-  since=$(git show -s --pretty="tformat:%h")
+  # since=$(git show -s --pretty="tformat:%h")
+  eval $(grep '^GRML_LIVE_VERSION=' grml-live)
+  DATE=$(date -R)
+  UNIXTIME=$(date +%s)
+
+  cat > debian/changelog << EOF
+grml-live (${GRML_LIVE_VERSION}~autobuild${UNIXTIME}) UNRELEASED; urgency=low
+
+  * Automatically built package based on the state of
+    git repository at http://git.grml.org/?p=grml-live.git
+    on $DATE
+
+ -- grml-live Auto Build <mika@grml.org>  $DATE
+
+EOF
+  git add debian/changelog
+  git commit -m "Releasing ${GRML_LIVE_VERSION}-~autobuild${UNIXTIME} (auto build)"
 else
   since=v$(dpkg-parsechangelog | awk '/^Version:/ {print $2}')
+  git-dch --ignore-branch --since=$since \
+          --id-length=7 --meta --multimaint-merge -S
+  printf "OK\n"
 fi
-
-printf "Building debian/changelog: "
-git-dch --ignore-branch --since=$since \
-        --id-length=7 --meta --multimaint-merge -S
-printf "OK\n"
 
 if [ -z "${AUTOBUILD:-}" ] ; then
   if ! $EDITOR debian/changelog ; then
@@ -82,6 +104,8 @@ if [ -n "${AUTOBUILD:-}" ] ; then
      cd ../grml-live.build-area
      dpkg-scanpackages . /dev/null > Packages
    )
+   git checkout master
+   git branch -D ${autobuild_branch} || true
    apt-get update
    PACKAGES=$(dpkg --list grml-live\* | awk '/^ii/ {print $2}')
    apt-get -y --allow-unauthenticated install $PACKAGES
