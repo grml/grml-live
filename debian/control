@@ -11,7 +11,7 @@ Vcs-Browser: http://git.grml.org/?p=grml-live.git
 
 Package: grml-live
 Architecture: all
-Depends: ${misc:Depends}, bc, fai-client (>= 3.4.0), fai-server (>= 3.4.0), mkisofs | genisoimage, mksh, moreutils, squashfs-tools (>= 1:4.2-1), wget
+Depends: ${misc:Depends}, bc, fai-client (>= 3.4.0), fai-server (>= 3.4.0), mkisofs | genisoimage, mksh, moreutils, squashfs-tools (>= 1:4.2-1~grml00), wget
 Recommends: grml-live-addons, grml-live-db, ia32-libs
 Suggests: fai-doc
 Description: build system for creating a Grml (based) Linux live system
