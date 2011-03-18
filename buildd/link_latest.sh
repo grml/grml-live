@@ -17,9 +17,9 @@ DAILY_DIR=/srv/mirror/www.grml.org/daily
 
 cd "$DAILY_DIR"
 echo "---------------------------" >> "$DAILY_DIR"/.timestamp_link
-for flavour in grml-medium_lenny   grml-medium_squeeze   grml-medium_sid   grml-small_lenny   grml-small_squeeze  grml-small_sid \
-               grml64-medium_lenny grml64-medium_squeeze grml64-medium_sid grml64-small_lenny grml64-small_squeeze grml64-small_sid \
-               grml64_lenny grml64_squeeze grml64_sid grml_lenny grml_squeeze grml_sid ; do
+for flavour in grml-medium_squeeze   grml-medium_wheezy   grml-medium_sid   grml-small_squeeze   grml-small_wheezy  grml-small_sid \
+               grml64-medium_squeeze grml64-medium_wheezy grml64-medium_sid grml64-small_squeeze grml64-small_wheezy grml64-small_sid \
+               grml64_squeeze grml64_wheezy grml64_sid grml_squeeze grml_wheezy grml_sid ; do
   ISO="$(ls -1 $flavour/*.iso | tail -1)"
   if [ -n "$ISO" ] ; then
      latest="$(basename ${ISO%%_[0-9]*})_latest.iso"

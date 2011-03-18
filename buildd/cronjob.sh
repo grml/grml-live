@@ -23,25 +23,25 @@ fi
 
 echo $$ > /usr/share/grml-live/buildd/buildd_running
 
-/usr/share/grml-live/buildd/grml-live_autobuild_grml64-small_lenny.sh && \
 /usr/share/grml-live/buildd/grml-live_autobuild_grml64-small_squeeze.sh && \
+/usr/share/grml-live/buildd/grml-live_autobuild_grml64-small_wheezy.sh && \
 /usr/share/grml-live/buildd/grml-live_autobuild_grml64-small_sid.sh && \
-/usr/share/grml-live/buildd/grml-live_autobuild_grml-small_lenny.sh && \
 /usr/share/grml-live/buildd/grml-live_autobuild_grml-small_squeeze.sh && \
+/usr/share/grml-live/buildd/grml-live_autobuild_grml-small_wheezy.sh && \
 /usr/share/grml-live/buildd/grml-live_autobuild_grml-small_sid.sh
 
-/usr/share/grml-live/buildd/grml-live_autobuild_grml64-medium_lenny.sh && \
 /usr/share/grml-live/buildd/grml-live_autobuild_grml64-medium_squeeze.sh && \
+/usr/share/grml-live/buildd/grml-live_autobuild_grml64-medium_wheezy.sh && \
 /usr/share/grml-live/buildd/grml-live_autobuild_grml64-medium_sid.sh && \
-/usr/share/grml-live/buildd/grml-live_autobuild_grml-medium_lenny.sh && \
 /usr/share/grml-live/buildd/grml-live_autobuild_grml-medium_squeeze.sh && \
+/usr/share/grml-live/buildd/grml-live_autobuild_grml-medium_wheezy.sh && \
 /usr/share/grml-live/buildd/grml-live_autobuild_grml-medium_sid.sh
 
-/usr/share/grml-live/buildd/grml-live_autobuild_grml64-large_lenny.sh && \
 /usr/share/grml-live/buildd/grml-live_autobuild_grml64-large_squeeze.sh && \
+/usr/share/grml-live/buildd/grml-live_autobuild_grml64-large_wheezy.sh && \
 /usr/share/grml-live/buildd/grml-live_autobuild_grml64-large_sid.sh && \
-/usr/share/grml-live/buildd/grml-live_autobuild_grml-large_lenny.sh && \
 /usr/share/grml-live/buildd/grml-live_autobuild_grml-large_squeeze.sh && \
+/usr/share/grml-live/buildd/grml-live_autobuild_grml-large_wheezy.sh && \
 /usr/share/grml-live/buildd/grml-live_autobuild_grml-large_sid.sh
 
 /usr/share/grml-live/buildd/upload_isos.sh && \

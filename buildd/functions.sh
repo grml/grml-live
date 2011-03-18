@@ -58,6 +58,7 @@ grml_live_run() {
   case $SUITE in
     sid)      CODENAME=sid   ;;
     squeeze)  CODENAME=squ   ;;
+    wheezy)   CODENAME=wheez ;;
     lenny)    CODENAME=lenny ;;
     etch)     CODENAME=etch  ;;
   esac

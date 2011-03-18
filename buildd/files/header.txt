@@ -14,23 +14,23 @@ Thanks for helping us improve grml!
 
 Explanation of filenames (the date describes the time of building the ISO):
 
-  * grml_lenny:            normal, 32bit version based on Debian/lenny   (oldstable)
   * grml_squeeze:          normal, 32bit version based on Debian/squeeze (stable)
+  * grml_wheezy:           normal, 32bit version based on Debian/wheezy  (testing)
   * grml_sid:              normal, 32bit version based on Debian/sid     (unstable)
-  * grml-medium_lenny:     medium, 32bit version based on Debian/lenny   (oldstable)
   * grml-medium_squeeze:   medium, 32bit version based on Debian/squeeze (stable)
+  * grml-medium_wheezy:    medium, 32bit version based on Debian/wheezy  (testing)
   * grml-medium_sid:       medium, 32bit version based on Debian/sid     (unstable)
-  * grml-small_lenny:      small,  32bit version based on Debian/lenny   (oldstable)
   * grml-small_squeeze:    small,  32bit version based on Debian/squeeze (stable)
+  * grml-small_wheezy:     small,  32bit version based on Debian/wheezy  (testing)
   * grml-small_sid:        small,  32bit version based on Debian/sid     (unstable)
-  * grml64_lenny:          normal, 64bit version based on Debian/lenny   (oldstable)
   * grml64_squeeze:        normal, 64bit version based on Debian/squeeze (stable)
+  * grml64_wheezy:         normal, 64bit version based on Debian/wheezy  (testing)
   * grml64_sid:            normal, 64bit version based on Debian/sid     (unstable)
-  * grml64-medium-lenny:   medium, 64bit version based on Debian/lenny   (oldstable)
   * grml64-medium-squeeze: medium, 64bit version based on Debian/squeeze (stable)
+  * grml64-medium-wheezy:  medium, 64bit version based on Debian/wheezy  (testing)
   * grml64-medium-sid:     medium, 64bit version based on Debian/sid     (unstable)
-  * grml64-small-lenny:    small,  64bit version based on Debian/lenny   (oldstable)
   * grml64-small-squeeze:  small,  64bit version based on Debian/squeeze (stable)
+  * grml64-small-wheezy:   small,  64bit version based on Debian/wheezy  (testing)
   * grml64-small-sid:      small,  64bit version based on Debian/sid     (unstable)
 
-       Michael 'mika' Prokop - http://grml.org/
+    -- Michael 'mika' Prokop - http://grml.org/

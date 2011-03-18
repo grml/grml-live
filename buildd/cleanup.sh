@@ -19,9 +19,9 @@ cd $MIRROR_DIRECTORY || exit 2
 DAYS=3
 
 REMOVE_ME=""
-for flavour in grml-medium_lenny   grml-medium_squeeze   grml-medium_sid   grml-small_lenny   grml-small_squeeze  grml-small_sid \
-               grml64-medium_lenny grml64-medium_squeeze grml64-medium_sid grml64-small_lenny grml64-small_squeeze grml64-small_sid \
-               grml64_lenny grml64_squeeze grml64_sid grml_lenny grml_squeeze grml_sid ; do
+for flavour in grml-medium_squeeze   grml-medium_wheezy   grml-medium_sid   grml-small_squeeze   grml-small_wheezy  grml-small_sid \
+               grml64-medium_squeeze grml64-medium_wheezy grml64-medium_sid grml64-small_squeeze grml64-small_wheezy grml64-small_sid \
+               grml64_squeeze grml64_wheezy grml64_sid grml_squeeze grml_wheezy grml_sid ; do
   FILE_COUNT=$(ls -1 $flavour/$flavour*.iso | wc -l)
   if [ "$FILE_COUNT" -gt "$DAYS" ] ; then
      FILES=$(ls -1 $flavour/$flavour*.iso | tail -"$DAYS")

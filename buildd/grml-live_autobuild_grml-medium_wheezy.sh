@@ -2,10 +2,10 @@
 
 # settings for grml_live_run:
 DATE=$(date +%Y%m%d)
-ISO_NAME=grml-small_lenny_$DATE.iso
-SUITE=lenny
-CLASSES='GRMLBASE,GRML_SMALL,REMOVE_DOCS,RELEASE,I386'
-NAME=grml-small
+ISO_NAME=grml-medium_wheezy_$DATE.iso
+SUITE=wheezy
+CLASSES='GRMLBASE,GRML_MEDIUM,RELEASE,I386'
+NAME=grml-medium
 SCRIPTNAME="$(basename $0)"
 ARCH=i386
 
