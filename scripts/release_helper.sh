@@ -69,7 +69,7 @@ grml-live (${GRML_LIVE_VERSION}~autobuild${UNIXTIME}) UNRELEASED; urgency=low
 
     $(git log --format=oneline -1)
 
-  -- grml-live Auto Build <grml-live-git@$(hostname)>  $DATE
+ -- grml-live Auto Build <grml-live-git@$(hostname)>  $DATE
 
 EOF
   git add debian/changelog
