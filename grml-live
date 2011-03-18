@@ -424,6 +424,7 @@ case $SUITE in
    etch)     ;;
    lenny)    ;;
    squeeze)  ;;
+   wheezy)   ;;
    sid)      ;;
    *) echo "Sorry, $SUITE is not a valid Debian suite, exiting.">&2; bailout 1 ;;
 esac

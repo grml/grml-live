@@ -13,7 +13,7 @@ die() {
 
 . /etc/grml/grml-buildd.conf || die "Could not source /etc/grml/grml-buildd.conf. Exiting."
 
-which nail >/dev/null 2>&1 || die "nail binary not found. Exiting."
+which mutt >/dev/null 2>&1 || die "mutt binary not found. Exiting."
 
 # exit if important variables aren't set:
 [ -n "$STORAGE" ]  || die "\$STORAGE is not set. Exiting."
@@ -26,15 +26,17 @@ which nail >/dev/null 2>&1 || die "nail binary not found. Exiting."
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11
 DATE=$(date +'%Y%m%d_%H%M%S')
 TMP_DIR="$(mktemp -d)"
+MUTT_HEADERS="$(mktemp)"
 [ -n "$TMP_DIR" ]      || die "Could not create \$TMP_DIR. Exiting."
+[ -n "$MUTT_HEADERS" ] || die "Could not create $\MUTT_HEADERS. Exiting."
 
 # make sure we have same safe defaults:
 [ -n "$OUTPUT_DIR" ]    || OUTPUT_DIR="${STORAGE}/grml-live_${DATE}.$$"
 [ -n "$ISO_DIR" ]       || ISO_DIR=$STORAGE/grml-isos
 [ -n "$RECIPIENT" ]     || RECIPIENT=root@localhost
-[ -n "$ATTACHMENT" ]    || ATTACHMENT="$TMP_DIR/grml-live-logs_$DATE.tar.gz"
 [ -n "$FROM" ]          || FROM=root@localhost
 [ -n "$ARCH" ]          || ARCH="$(dpkg --print-architecture)"
+ATTACHMENT="$TMP_DIR/grml-live-logs_$DATE.tar.gz"
 
 if [ -n "$LOGFILE" ] ; then
    GRML_LOGFILE="$LOGFILE"
@@ -43,6 +45,7 @@ else
 fi
 
 [ -n "$FAI_LOGFILES" ]  || FAI_LOGFILES=/var/log/fai/grml/last
+echo "my_hdr From: grml-live autobuild daemon <$FROM>" > $MUTT_HEADERS
 
 # execute grml-live:
 grml_live_run() {
@@ -68,7 +71,7 @@ grml_live_run() {
 
   grml-live -F $* -a $ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
             -g "$grml_name" -v "$shortdate" -r grml-live-autobuild -i $ISO_NAME \
-            1>/var/log/grml-buildd.stdout \
+             >/var/log/grml-buildd.stdout \
             2>/var/log/grml-buildd.stderr ; RC=$?
 
   if [ "$RC" = "0" ] ; then
@@ -81,7 +84,7 @@ grml_live_run() {
 
 # create log archive:
 create_logs() {
-  ( cd / && tar zcf $ATTACHMENT $FAI_LOGFILES /var/log/grml-buildd.stderr /var/log/grml-buildd.stdout $GRML_LOGFILE 1>/dev/null )
+  ( cd / && tar zcf $ATTACHMENT $FAI_LOGFILES /var/log/grml-buildd.stderr /var/log/grml-buildd.stdout $GRML_LOGFILE >/dev/null )
 }
 
 # store logs on remote server:
@@ -104,6 +107,9 @@ iso_details() {
 send_mail() {
   # create logs if using 'send_mail -e'
   [ "$1" = "-e" ] && create_logs
+
+  # attach logs only if we have some:
+  [ -r "$ATTACHMENT" ] && MUTT_ATTACH="-a $ATTACHMENT" || MUTT_ATTACH=''
 
   echo -en "Automatically generated mail by $SCRIPTNAME
 
@@ -132,10 +138,10 @@ The following packages could not be installed:
 $(grep -i "Couldn't find.*package" $FAI_LOGFILES/software.log | sed 's/\(.*\)"\(.*\)"\(.*\)/\2/' | sort -u || echo "* nothing")
 
 See attached files:
-/var/log/grml-buildd.stderr /var/log/grml-buildd.stdout $ATTACHMENT
+/var/log/grml-buildd.stderr $ATTACHMENT
 
 EOF" | \
-  nail -r "grml-live autobuild daemon <$FROM>" -s "$SCRIPTNAME [${DATE}] - $RC_INFO" -a /var/log/grml-buildd.stderr $ATTACHMENT "$RECIPIENT"
+  mutt -s "$SCRIPTNAME [${DATE}] - $RC_INFO" -a /var/log/grml-buildd.stderr $MUTT_ATTACH -- "$RECIPIENT"
 }
 
 # make sure we store the final iso:
@@ -155,9 +161,9 @@ store_iso() {
 # allow clean exit:
 bailout() {
   if [ "$RC" = "0" ] ; then
-     rm -rf "$ATTACHMENT" "$TMP_DIR" "$OUTPUT_DIR"
+     rm -rf "$ATTACHMENT" "$TMP_DIR" "$OUTPUT_DIR" "$MUTT_HEADERS"
   else
-     rm -f "$ATTACHMENT"
+     rm -f "$ATTACHMENT" "$MUTT_HEADERS"
      echo "building ISO failed, keeping build files [${OUTPUT_DIR} / ${TMP_DIR}]">&2
   fi
 

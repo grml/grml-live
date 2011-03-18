@@ -5,31 +5,6 @@
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
-## How to set up autobuild (for automatically updating grml-live.git and
-## build packages out of git tree and install them, e.g. for usage on
-## daily.grml.org):
-# echo "deb file:/home/grml-live-git/grml-live.build-area/ ./" >> /etc/apt/sources.list.d/grml-live.list
-# adduser --disabled-login --disabled-password grml-live-git
-# visudo -> add "grml-live-git ALL=NOPASSWD: /usr/bin/apt-get"
-# su - grml-live-git
-# mkdir /home/grml-live-git/grml-live.build-area
-# git clone git://git.grml.org/grml-live.git
-# git config --global user.name "Grml-Live Git Autobuild"
-# git config --global user.email "grml-live-git@$(hostname)"
-#
-# Finally install a cron job (as user grml-live-git) like:
-# 30 00 * * * cd /home/grml-live-git/grml-live.git/ && env AUTOBUILD=1 scripts/release_helper.sh >/home/grml-live-git/grml-live-build.log
-#
-# Tip: To find out the build date of the installed grml-live package just run:
-#
-# % apt-cache policy grml-live | grep 'Installed.*autobuild'
-#  Installed: 0.13.1~autobuild1300450381
-#
-# and run "date -ud @$STRING" where $STRING is the number
-# behind the "autobuild", like:
-# % date -ud @1300450081
-# Fri Mar 18 12:08:01 UTC 2011
-################################################################################
 
 set -e
 set -u
