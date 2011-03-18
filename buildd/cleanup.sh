@@ -37,7 +37,7 @@ done
 for file in $REMOVE_ME ; do
     test -f ${file}     && rm -f $file
     # ... but keep their md5sum / sha1sum:
-    test -f ${file}.md5  && mv ${file}.md5   .archive
+    test -f ${file}.md5  && mv ${file}.md5  .archive
     test -f ${file}.sha1 && mv ${file}.sha1 .archive
 done
 

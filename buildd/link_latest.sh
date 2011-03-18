@@ -28,6 +28,8 @@ for flavour in grml-medium_squeeze   grml-medium_wheezy   grml-medium_sid   grml
      # http://bts.grml.org/grml/issue814
      name=$(awk '{print $2}' "${ISO}".md5)
      sed "s/$name/$latest/" "${ISO}".md5 > "${latest}".md5
+     name=$(awk '{print $2}' "${ISO}".sha1)
+     sed "s/$name/$latest/" "${ISO}".sha1 > "${latest}".sha1
      echo "$ISO" >> "$DAILY_DIR"/.timestamp_link
   fi
 done
