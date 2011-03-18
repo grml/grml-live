@@ -26,9 +26,7 @@ which mutt >/dev/null 2>&1 || die "mutt binary not found. Exiting."
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11
 DATE=$(date +'%Y%m%d_%H%M%S')
 TMP_DIR="$(mktemp -d)"
-MUTT_HEADERS="$(mktemp)"
 [ -n "$TMP_DIR" ]      || die "Could not create \$TMP_DIR. Exiting."
-[ -n "$MUTT_HEADERS" ] || die "Could not create $\MUTT_HEADERS. Exiting."
 
 # make sure we have same safe defaults:
 [ -n "$OUTPUT_DIR" ]    || OUTPUT_DIR="${STORAGE}/grml-live_${DATE}.$$"
@@ -45,7 +43,6 @@ else
 fi
 
 [ -n "$FAI_LOGFILES" ]  || FAI_LOGFILES=/var/log/fai/grml/last
-echo "my_hdr From: grml-live autobuild daemon <$FROM>" > $MUTT_HEADERS
 
 # execute grml-live:
 grml_live_run() {
@@ -137,11 +134,11 @@ The following packages could not be installed:
 
 $(grep -i "Couldn't find.*package" $FAI_LOGFILES/software.log | sed 's/\(.*\)"\(.*\)"\(.*\)/\2/' | sort -u || echo "* nothing")
 
-See attached files:
-/var/log/grml-buildd.stderr $ATTACHMENT
+See attached files for further details.
 
 EOF" | \
-  mutt -s "$SCRIPTNAME [${DATE}] - $RC_INFO" -a /var/log/grml-buildd.stderr $MUTT_ATTACH -- "$RECIPIENT"
+  mutt -e "my_hdr From: grml-live autobuild daemon <$FROM>" -s "$SCRIPTNAME [${DATE}] - $RC_INFO" \
+       -a /var/log/grml-buildd.stderr $MUTT_ATTACH -- "$RECIPIENT"
 }
 
 # make sure we store the final iso:
@@ -161,9 +158,9 @@ store_iso() {
 # allow clean exit:
 bailout() {
   if [ "$RC" = "0" ] ; then
-     rm -rf "$ATTACHMENT" "$TMP_DIR" "$OUTPUT_DIR" "$MUTT_HEADERS"
+     rm -rf "$ATTACHMENT" "$TMP_DIR" "$OUTPUT_DIR"
   else
-     rm -f "$ATTACHMENT" "$MUTT_HEADERS"
+     rm -f "$ATTACHMENT"
      echo "building ISO failed, keeping build files [${OUTPUT_DIR} / ${TMP_DIR}]">&2
   fi
 
