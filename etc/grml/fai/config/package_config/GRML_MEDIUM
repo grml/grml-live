@@ -121,6 +121,7 @@ ntfsprogs
 ntpdate
 nvi
 parted
+partimage
 passwd
 patch
 pcmciautils

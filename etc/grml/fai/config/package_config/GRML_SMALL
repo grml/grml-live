@@ -82,6 +82,7 @@ ntfsprogs
 ntpdate
 # nvi -> see #490361
 parted
+partimage
 passwd
 patch
 portmap
