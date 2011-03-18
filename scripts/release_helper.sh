@@ -106,6 +106,7 @@ if [ -n "${AUTOBUILD:-}" ] ; then
    (
      cd ../grml-live.build-area
      dpkg-scanpackages . /dev/null > Packages
+     dpkg-scanpackages . /dev/null | gzip > Packages.gz
    )
    git checkout master
    git branch -D ${autobuild_branch} || true
