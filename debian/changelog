@@ -1,3 +1,33 @@
+grml-live (0.13.2) unstable; urgency=low
+
+  [ Christian Hofstaedtler ]
+  * [82e7ad3] fix buildd header (no more unoldstable!)
+
+  [ Michael Prokop ]
+  * Bunch of buildd improvements:
+    - [f96dfbf] Add support for wheezy, drop lenny (being oldstable
+      nowadays). [Closes: issue962]
+    - [aaa0017] Rename HEADER.html to index.html, as being
+      used on daily.grml.org.
+    - [2a5e5e6] Update index.html file.
+    - [a08d1d1] Finalize sha1sum support.
+    - [b4f406a] Support setting variables through grml-buildd.conf
+      in working directory, support $STORAGE_ADMIN instead of hard coded
+      mail address for storage host.
+    - [79b6032] Fix suite information for wheezy links.
+    - [cc7e99d] cronjob: upload and remove ISOs after each grml-flavour.
+    - [4d1178f] Use mutt instead of nail again (plus further improvement
+      in [79e4473d]).
+  * scripts/release_helper.sh improvements for autobuilds:
+    - provide autobuild install instructions in official
+      grml-live documentation
+    - support sudo [c6bcaeb]
+    - remove leftover files and directories from grml-live.build-area
+      to avoid pollution [307773c] [d0a25f7]
+    - provide git log in debian/changelog [83ef159] [833dd6d]
+
+ -- Michael Prokop <mika@grml.org>  Fri, 18 Mar 2011 14:19:08 +0100
+
 grml-live (0.13.1) unstable; urgency=low
 
   [ Martin Scharm ]
