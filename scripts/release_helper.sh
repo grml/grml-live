@@ -120,7 +120,7 @@ fi
 printf "Building debian packages:\n"
 if [ -n "${AUTOBUILD:-}" ] ; then
   [ -d ../grml-live.build-area ] || mkdir ../grml-live.build-area
-  rm -f ../grml-live.build-area/grml-live* # otherwise we're keeping files forever...
+  rm -rf ../grml-live.build-area/grml-live* # otherwise we're keeping files forever...
   git-buildpackage --git-ignore-branch --git-ignore-new --git-export-dir=../grml-live.build-area -us -uc
 else
   git-buildpackage --git-ignore-branch --git-ignore-new $*
