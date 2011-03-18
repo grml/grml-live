@@ -8,15 +8,26 @@
 
 set -e
 
-. /etc/grml/grml-buildd.conf
+dir="$(dirname $0)"
 
-[ -n "$MIRROR_DIRECTORY" ] || exit 1
-cd $MIRROR_DIRECTORY || exit 2
+if [ -r /etc/grml/grml-buildd.conf ] ; then
+  . /etc/grml/grml-buildd.conf
+elif [ -r "${dir}/grml-buildd.conf" ] ; then
+  . "${dir}/grml-buildd.conf"
+fi
 
-DAILY_DIR=/srv/mirror/www.grml.org/daily
+# directory where daily ISOs are stored locally
+if [ -z "$MIRROR_DIRECTORY" ] ; then
+  echo "Error: \$MIRROR_DIRECTORY is not set. Exiting." >&2
+  exit 1
+fi
 
-cd "$DAILY_DIR"
-echo "---------------------------" >> "$DAILY_DIR"/.timestamp_link
+if ! cd "$MIRROR_DIRECTORY" ; then
+  echo "Error: could not change directory to $MIRROR_DIRECTORY" >&2
+  exit 1
+fi
+
+echo "---------------------------" >> "$MIRROR_DIRECTORY"/.timestamp_link
 for flavour in grml-medium_squeeze   grml-medium_wheezy   grml-medium_sid   grml-small_squeeze   grml-small_wheezy  grml-small_sid \
                grml64-medium_squeeze grml64-medium_wheezy grml64-medium_sid grml64-small_squeeze grml64-small_wheezy grml64-small_sid \
                grml64_squeeze grml64_wheezy grml64_sid grml_squeeze grml_wheezy grml_sid ; do
@@ -30,9 +41,9 @@ for flavour in grml-medium_squeeze   grml-medium_wheezy   grml-medium_sid   grml
      sed "s/$name/$latest/" "${ISO}".md5 > "${latest}".md5
      name=$(awk '{print $2}' "${ISO}".sha1)
      sed "s/$name/$latest/" "${ISO}".sha1 > "${latest}".sha1
-     echo "$ISO" >> "$DAILY_DIR"/.timestamp_link
+     echo "$ISO" >> "$MIRROR_DIRECTORY"/.timestamp_link
   fi
 done
-echo "---------------------------" >> "$DAILY_DIR"/.timestamp_link
+echo "---------------------------" >> "$MIRROR_DIRECTORY"/.timestamp_link
 
 ## END OF FILE #################################################################

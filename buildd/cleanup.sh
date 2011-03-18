@@ -8,10 +8,30 @@
 
 set -e
 
-. /etc/grml/grml-buildd.conf
+dir="$(dirname $0)"
 
-[ -n "$MIRROR_DIRECTORY" ] || exit 1
-cd $MIRROR_DIRECTORY || exit 2
+if [ -r /etc/grml/grml-buildd.conf ] ; then
+  . /etc/grml/grml-buildd.conf
+elif [ -r "${dir}/grml-buildd.conf" ] ; then
+  . "${dir}/grml-buildd.conf"
+fi
+
+# directory where daily ISOs are stored locally
+if [ -z "$MIRROR_DIRECTORY" ] ; then
+  echo "Error: \$MIRROR_DIRECTORY is not set. Exiting." >&2
+  exit 1
+fi
+
+# mail address where reports should be sent to
+if [ -z "$STORAGE_ADMIN" ] ; then
+  echo "Error: \$STORAGE_ADMIN is not set. Exiting." >&2
+  exit 2
+fi
+
+if ! cd "$MIRROR_DIRECTORY" ; then
+  echo "Error: could not change directory to $MIRROR_DIRECTORY" >&2
+  exit 3
+fi
 
 # we want to always keep a few images, no matter how old they are
 # but get rid of the oldest ones first of course :)
@@ -43,7 +63,7 @@ done
 
 # inform on successful removal:
 if [ "$(echo "$REMOVE_ME" | tr -d ' ' )" != "" ] ; then
-   echo "deleted files $REMOVE_ME" | mail -s "daily-builds cleanup script" mika@grml.org
+   echo "deleted files $REMOVE_ME" | mail -s "daily-builds cleanup script" "$STORAGE_ADMIN"
 fi
 
 ## END OF FILE #################################################################
