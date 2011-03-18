@@ -18,7 +18,7 @@
 # git config --global user.email "grml-live-git@$(hostname)"
 #
 # Finally install a cron job (as user grml-live-git) like:
-# 30 00 * * * cd /home/grml-live-git/grml-live.git/ && env AUTOBUILD=1 /home/grml-live-git/release_helper.sh >/home/grml-live-git/grml-live-build.log
+# 30 00 * * * cd /home/grml-live-git/grml-live.git/ && env AUTOBUILD=1 scripts/release_helper.sh >/home/grml-live-git/grml-live-build.log
 ################################################################################
 
 set -e
@@ -108,6 +108,7 @@ fi
 printf "Building debian packages:\n"
 if [ -n "${AUTOBUILD:-}" ] ; then
   [ -d ../grml-live.build-area ] || mkdir ../grml-live.build-area
+  rm -f ../grml-live.build-area/grml-live* # otherwise we're keeping files forever...
   git-buildpackage --git-ignore-branch --git-ignore-new --git-export-dir=../grml-live.build-area -us -uc
 else
   git-buildpackage --git-ignore-branch --git-ignore-new $*
