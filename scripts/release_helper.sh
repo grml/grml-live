@@ -19,6 +19,16 @@
 #
 # Finally install a cron job (as user grml-live-git) like:
 # 30 00 * * * cd /home/grml-live-git/grml-live.git/ && env AUTOBUILD=1 scripts/release_helper.sh >/home/grml-live-git/grml-live-build.log
+#
+# Tip: To find out the build date of the installed grml-live package just run:
+#
+# % apt-cache policy grml-live | grep 'Installed.*autobuild'
+#  Installed: 0.13.1~autobuild1300450381
+#
+# and run "date -ud @$STRING" where $STRING is the number
+# behind the "autobuild", like:
+# % date -ud @1300450081
+# Fri Mar 18 12:08:01 UTC 2011
 ################################################################################
 
 set -e
@@ -55,9 +65,11 @@ grml-live (${GRML_LIVE_VERSION}~autobuild${UNIXTIME}) UNRELEASED; urgency=low
 
   * Automatically built package based on the state of
     git repository at http://git.grml.org/?p=grml-live.git
-    on $DATE
+    on $DATE ->
 
- -- grml-live Auto Build <mika@grml.org>  $DATE
+    $(git log --format=oneline -1)
+
+  -- grml-live Auto Build <grml-live-git@$(hostname)>  $DATE
 
 EOF
   git add debian/changelog
