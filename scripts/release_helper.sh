@@ -1,9 +1,24 @@
 #!/bin/bash
 # Filename:      scripts/release_helper.sh
-# Purpose:       helper script to build grml-live Debian packages (WFM style though)
+# Purpose:       helper script to build grml-live Debian packages
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+## How to set up autobuild (for automatically updating grml-live.git and
+## build packages out of git tree and install them, e.g. for usage on
+## daily.grml.org):
+# echo "deb file:/home/grml-live-git/grml-live.build-area/ ./" >> /etc/apt/sources.list.d/grml-live.list
+# adduser --disabled-login --disabled-password grml-live-git
+# visudo -> add "grml-live-git ALL=NOPASSWD: /usr/bin/apt-get"
+# su - grml-live-git
+# mkdir /home/grml-live-git/grml-live.build-area
+# git clone git://git.grml.org/grml-live.git
+# git config --global user.name "Grml-Live Git Autobuild"
+# git config --global user.email "grml-live-git@$(hostname)"
+#
+# Finally install a cron job (as user grml-live-git) like:
+# 30 00 * * * cd /home/grml-live-git/grml-live.git/ && env AUTOBUILD=1 /home/grml-live-git/release_helper.sh >/home/grml-live-git/grml-live-build.log
 ################################################################################
 
 set -e
@@ -106,9 +121,9 @@ if [ -n "${AUTOBUILD:-}" ] ; then
    )
    git checkout master
    git branch -D ${autobuild_branch} || true
-   apt-get update
+   sudo apt-get update
    PACKAGES=$(dpkg --list grml-live\* | awk '/^ii/ {print $2}')
-   apt-get -y --allow-unauthenticated install $PACKAGES
+   sudo apt-get -y --allow-unauthenticated install $PACKAGES
 fi
 
 ## END OF FILE #################################################################
