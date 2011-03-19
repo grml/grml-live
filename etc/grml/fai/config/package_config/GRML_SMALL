@@ -39,6 +39,7 @@ ed
 ethtool
 findutils
 grml-docs
+grml-feedback
 grml-paste
 grml-quickconfig-standard
 grml-rescueboot
