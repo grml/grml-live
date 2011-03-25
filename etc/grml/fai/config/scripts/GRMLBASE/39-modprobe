@@ -20,5 +20,8 @@ find $target/etc/modprobe.d -maxdepth 1 -type f ! -name \*\.conf -exec mv {} {}.
 # Replace modprobe configuration files to workaround issues.
 fcopy /etc/modprobe.d/radeon-kms.conf
 
+# Copy the loop options
+fcopy /etc/modprobe.d/loop-part.conf
+
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
