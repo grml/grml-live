@@ -1280,8 +1280,6 @@ speechd-el
 speech-dispatcher
 speedometer
 speex
-spell
-spellutils
 splint
 sqlite
 sqlite3
