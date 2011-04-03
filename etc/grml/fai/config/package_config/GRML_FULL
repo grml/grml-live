@@ -1642,11 +1642,9 @@ linux-doc-2.6.38-grml
 linux-headers-2.6.38-grml
 linux-image-2.6.38-grml
 #linux-source-2.6.38-grml
-loop-aes-modules-2.6.38-grml
 ndiswrapper-modules-2.6.38-grml
 #nvidia-kernel-2.6.38-grml
 openafs-modules-2.6.38-grml
-speakup-modules-2.6.38-grml
 sysprof-module-2.6.38-grml
 tp-smapi-modules-2.6.38-grml
 virtualbox-ose-guest-modules-2.6.38-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
@@ -1667,11 +1665,9 @@ linux-doc-2.6.38-grml64
 linux-headers-2.6.38-grml64
 linux-image-2.6.38-grml64
 #linux-source-2.6.38-grml
-loop-aes-modules-2.6.38-grml64
 ndiswrapper-modules-2.6.38-grml64
 #nvidia-kernel-2.6.38-grml64
 openafs-modules-2.6.38-grml64
-speakup-modules-2.6.38-grml64
 sysprof-module-2.6.38-grml64
 tp-smapi-modules-2.6.38-grml64
 xtables-addons-modules-2.6.38-grml64
