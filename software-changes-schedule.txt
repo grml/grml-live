@@ -17,3 +17,29 @@ tidy [ch]
 tetradraw [ch]
 rc [ch]
 sp, openjade, sgml-data, docbook-xml [ch]
+
+Candidates that need to be checked because of:
+
+  Couldn't find any package whose name or description matched
+
+are:
+
+asn1c
+cedet-common
+ctrlproxy
+detachtty
+hotkey-setup
+msort
+muscletools
+netsurf
+nilfs2-tools
+olsrd-plugins
+orpheus
+prismstumbler
+pytris
+qprof
+tcptrack
+tn5250
+viewglob
+xcardii
+zoidberg
