@@ -198,6 +198,8 @@ checkvalue $CONFIG_CONFIG && config_config
 
 checkvalue $CONFIG_SCRIPTS && config_scripts
 
+checkvalue $CONFIG_FINDDCSDIR && config_umount_dcsdir
+
 checkvalue $CONFIG_PARTCONF && config_partconf
 
 [ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||||||||">/dev/tty14

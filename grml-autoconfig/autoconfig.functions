@@ -1947,9 +1947,13 @@ if checkbootparam 'config' || [ "$DCSMP" = "/mnt/grmlcfg" ]; then
     fi
   fi
 fi
-# umount $DCSMP if it was mounted by finddcsdir
-# this doesn't really belong here
-grep -q '$DCSMP' /proc/mounts && umount $DCSMP
+}
+# }}}
+
+# {{{ confing_umount_dcsdir
+config_umount_dcsdir(){
+   # umount $DCSMP if it was mounted by finddcsdir
+   grep -q "$DCSMP" /proc/mounts && umount "$DCSMP"
 }
 # }}}
 
