@@ -14,7 +14,7 @@ grml-live-remaster <destination.iso>
 Description
 -----------
 
-grml-live-remaster is a script which lets you remaster a grml directlry from a
+grml-live-remaster is a script which lets you remaster a grml directly from a
 running live CD session.
 
 Options
