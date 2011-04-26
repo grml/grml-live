@@ -429,7 +429,7 @@ case $SUITE in
    *) echo "Sorry, $SUITE is not a valid Debian suite, exiting.">&2; bailout 1 ;;
 esac
 
-DIST=" etch\| stable\| lenny\| squeeze\| testing\| sid\| unstable"
+DIST=" etch\| stable\| lenny\| squeeze\| wheezy\| testing\| sid\| unstable"
 sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE\4\5/" "$SOURCES_LIST_FILE" | sponge "$SOURCES_LIST_FILE"
 for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
     if [ -n "$file" ] ; then
