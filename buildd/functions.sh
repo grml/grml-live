@@ -81,7 +81,7 @@ grml_live_run() {
 
 # create log archive:
 create_logs() {
-  ( cd / && tar zcf $ATTACHMENT $FAI_LOGFILES /var/log/grml-buildd.stderr /var/log/grml-buildd.stdout $GRML_LOGFILE >/dev/null )
+  ( cd / && tar zcfh $ATTACHMENT $FAI_LOGFILES /var/log/grml-buildd.stderr /var/log/grml-buildd.stdout $GRML_LOGFILE >/dev/null )
 }
 
 # store logs on remote server:
