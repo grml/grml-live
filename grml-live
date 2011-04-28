@@ -234,7 +234,7 @@ while getopts "a:C:c:d:g:i:I:o:r:s:t:v:bBFnquVz" opt; do
     F) FORCE=1 ;;
     u) UPDATE=1 ;;
     V) VERBOSE="-v" ;;
-    z) SQUASHFS_ZLIB="true" ;;
+    z) SQUASHFS_ZLIB=1 ;;
     ?) echo "invalid option -$OPTARG" >&2; bailout 1 ;;
   esac
 done
@@ -971,6 +971,8 @@ else
      # set lzma/xz compression by default, unless -z option has been specified on command line
      if [ -z "$SQUASHFS_ZLIB" ] ; then
         SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -comp xz"
+     else
+        SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -comp gzip"
      fi
    fi
 
@@ -989,14 +991,13 @@ else
 
    # informational stuff
    [ -n "$SQUASHFS_OPTIONS" ]  && SQUASHFS_INFO_MSG="$SQUASHFS_OPTIONS"
-   [ -n "$SQUASHFS_ZLIB" ]     && SQUASHFS_INFO_MSG="$SQUASHFS_INFO_MSG $SQUASHFS_ZLIB"
    [ -n "$SQUASHFS_INFO_MSG" ] && SQUASHFS_INFO_MSG="using options: $SQUASHFS_INFO_MSG"
    einfo "Squashfs build information: running binary $SQUASHFS_BINARY $SQUASHFS_INFO_MSG"
 
-   log "$SQUASHFS_BINARY $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/${GRML_NAME}.squashfs -noappend $SQUASHFS_OPTIONS $SQUASHFS_ZLIB"
+   log "$SQUASHFS_BINARY $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/${GRML_NAME}.squashfs -noappend $SQUASHFS_OPTIONS"
 
    if $SQUASHFS_BINARY $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/"${GRML_NAME}".squashfs \
-      -noappend $SQUASHFS_OPTIONS $SQUASHFS_ZLIB 2>"${SQUASHFS_STDERR}" ; then
+      -noappend $SQUASHFS_OPTIONS 2>"${SQUASHFS_STDERR}" ; then
       echo "${GRML_NAME}.squashfs" > $BUILD_OUTPUT/live/filesystem.module
       log "Finished execution of stage 'squashfs' [$(date)]"
       einfo "Finished execution of stage 'squashfs'" ; eend 0
