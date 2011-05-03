@@ -26,7 +26,6 @@ are:
 
 hotkey-setup
 msort
-muscletools
 netsurf
 nilfs2-tools
 olsrd-plugins
