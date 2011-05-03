@@ -27,7 +27,6 @@ are:
 hotkey-setup
 msort
 netsurf
-nilfs2-tools
 olsrd-plugins
 orpheus
 prismstumbler

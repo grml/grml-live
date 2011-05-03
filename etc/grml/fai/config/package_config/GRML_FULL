@@ -936,7 +936,7 @@ nginx
 ngrep
 nictools-pci
 nikto
-nilfs2-tools
+nilfs-tools
 nload
 nmap
 normalize-audio
