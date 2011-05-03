@@ -30,7 +30,6 @@ netsurf
 olsrd-plugins
 prismstumbler
 pytris
-qprof
 tcptrack
 tn5250
 viewglob
