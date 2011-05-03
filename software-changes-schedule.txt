@@ -24,7 +24,6 @@ Candidates that need to be checked because of:
 
 are:
 
-asn1c
 cedet-common
 ctrlproxy
 detachtty
