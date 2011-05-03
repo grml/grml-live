@@ -28,7 +28,6 @@ hotkey-setup
 msort
 netsurf
 olsrd-plugins
-orpheus
 prismstumbler
 pytris
 qprof
