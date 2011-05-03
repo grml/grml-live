@@ -24,7 +24,6 @@ Candidates that need to be checked because of:
 
 are:
 
-detachtty
 hotkey-setup
 msort
 muscletools

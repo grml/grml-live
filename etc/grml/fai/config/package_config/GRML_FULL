@@ -368,7 +368,6 @@ debootstrap
 debsecan
 debsigs
 debsums
-detachtty
 detox
 devio
 devscripts
