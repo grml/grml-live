@@ -28,7 +28,6 @@ hotkey-setup
 msort
 netsurf
 olsrd-plugins
-pytris
 tcptrack
 tn5250
 viewglob
