@@ -28,7 +28,6 @@ hotkey-setup
 msort
 netsurf
 olsrd-plugins
-prismstumbler
 pytris
 tcptrack
 tn5250
