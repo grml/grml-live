@@ -29,6 +29,5 @@ msort
 netsurf
 olsrd-plugins
 tcptrack
-viewglob
 xcardii
 zoidberg
