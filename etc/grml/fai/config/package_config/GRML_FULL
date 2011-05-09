@@ -1210,7 +1210,6 @@ setserial
 sformat
 sg3-utils
 sgml-base
-sgml-data
 sgmltools-lite
 sgrep
 shaperd

@@ -7,7 +7,7 @@ Candidates for removal
 ----------------------
 
 rc [ch]
-sgml-data, docbook-xml [ch]
+docbook-xml [ch]
 
 
 Candidates that need to be checked because of:
