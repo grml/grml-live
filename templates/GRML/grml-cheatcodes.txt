@@ -122,8 +122,7 @@ grml findiso=/grml_2010.12.iso      Look for the specified ISO file on all disks
                                     looks for the .squashfs file (so you don't have to know the device name
                                     as in isofrom=....).
 grml fetch=$IP/filename.squashfs    Download a squashfs image from a given url, copying to ram and booting it.
-                                    Due to current limitations in busyboxs wget and DNS resolution, an URL
-                                    can not contain a hostname but an IP only.
+                                    [Note: releases before 2011.05 didn't support DNS but IP only.]
 grml live-media-path=live           Sets the path to the live filesystem on the medium
                                     By default, it is set to /live
 grml module=grml                    Instead of using the default "$name.module" another file can
