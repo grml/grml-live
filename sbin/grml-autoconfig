@@ -61,12 +61,12 @@ check_current_state()
 # main program
 interface()
 {
-  dialog --cr-wrap --clear --cancel-label "Exit" --title "$PN" --checklist "grml-autoconfig is the framework which includes hardware
-detection, activation of system services and this is the
+  dialog --cr-wrap --clear --cancel-label "Exit" --title "$PN" --checklist \
+"grml-autoconfig is the framework which includes hardware
+detection, activation of system services. This is the
 interface to activate or deactivate some features.
 
-If you do not know what to do at this stage just leave it untouched,
-the defaults represent the recommended values.
+If you do not know what to do at this stage just leave it untouched.
 
 All the configuration happens in the file /etc/grml/autoconfig.local -
 you can edit the file manually as well.
@@ -74,7 +74,6 @@ you can edit the file manually as well.
 Please do not confuse these settings with plain Debian configuration.
 For example disabling dhcp here will NOT deactivate any configured network
 settings in /etc/network/interfaces, it just configures grml-autoconfig
-related settings instead.
 " 0 0 0 \
 fstab "update /etc/fstab entries (check for devices)" $FSTABSTATUS \
 cpufreq "activate cpu frequency scaling" $CPUSTATUS \
