@@ -9,6 +9,7 @@
 set -e
 
 fcopy /usr/share/initramfs-tools/scripts/init-top/grml
+fcopy /etc/initramfs-tools/hooks/000-udev-shutup
 
 FILE=$(ls -1 $target/boot/vmlinuz-* 2>/dev/null| sort -r | head -1)
 KERNELVERSION=$(echo "${FILE##$target/boot/vmlinuz-}")
