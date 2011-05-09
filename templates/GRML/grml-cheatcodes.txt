@@ -78,6 +78,7 @@ grml distri=...                     Set distribution name to given argument. If 
                                     (/cdrom/desktop/"$DISTRI") it will be taken as wallpaper for grml
 grml debnet                         Search through local partitions for file /etc/network/interfaces,
                                     copy /etc/network to local system and restart networking then
+grml dns=8.8.8.8,8.8.4.4            Set DNS resolvers during boot and for live system.
 grml mypath=...                     Add specified option into $PATH of Zsh
                                     For example when using "grml mypath=/foobar" then /foobar
                                     will be added to the end of $PATH inside Zsh
