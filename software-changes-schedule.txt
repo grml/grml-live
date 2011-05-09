@@ -6,7 +6,6 @@ None currently.
 Candidates for removal
 ----------------------
 
-zec [ch]
 yatm [ch]
 xfaces [ch]
 weechat\* [ch]
