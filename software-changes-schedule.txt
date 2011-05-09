@@ -6,7 +6,6 @@ None currently.
 Candidates for removal
 ----------------------
 
-weechat\* [ch]
 user-setup [ch]
 unrar-free (unrar is already present) [ch]
 tidy [ch]
