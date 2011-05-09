@@ -6,7 +6,6 @@ None currently.
 Candidates for removal
 ----------------------
 
-unrar-free (unrar is already present) [ch]
 tidy [ch]
 tetradraw [ch]
 rc [ch]
