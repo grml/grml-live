@@ -6,7 +6,6 @@ None currently.
 Candidates for removal
 ----------------------
 
-yatm [ch]
 xfaces [ch]
 weechat\* [ch]
 user-setup [ch]
