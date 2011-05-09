@@ -1617,7 +1617,6 @@ fnfx-client
 fnfxd
 pstack
 retty
-spicctrl
 
 # use linux-kernel-headers-grml instead of linux-libc-dev?
 # linux-kernel-headers-grml
