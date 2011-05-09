@@ -100,13 +100,6 @@ else
   ewarn "localepurg not available" ; eend 0
 fi
 
-if [ -d /var/lib/backuppc/pc/localhost/ ] ; then
-  einfo "Cleaning /var/lib/backuppc/pc/localhost/"
-  rm -rf /var/lib/backuppc/pc/localhost/* ; eend $?
-else
-  ewarn "backuppc not installed" ; eend 0
-fi
-
 # find /var -name \*.pid
 einfo "Removing pid-files"
   find /var/run -name \*.pid -exec rm {} \;
