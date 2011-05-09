@@ -8,7 +8,6 @@ Candidates for removal
 
 zec [ch]
 yatm [ch]
-xmms2* [ch]
 xfaces [ch]
 weechat\* [ch]
 user-setup [ch]

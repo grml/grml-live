@@ -1512,14 +1512,6 @@ xloadimage
 xml-core
 xmlindent
 xmlstarlet
-xmms2
-xmms2-client-cli
-xmms2-core
-xmms2-plugin-alsa
-xmms2-plugin-id3v2
-xmms2-plugin-jack
-xmms2-plugin-mad
-xmms2-plugin-vorbis
 xmount
 xnee
 xnest
