@@ -932,7 +932,6 @@ nilfs-tools
 nload
 nmap
 normalize-audio
-noshell
 nsd
 ntfs-3g
 ntfsprogs
