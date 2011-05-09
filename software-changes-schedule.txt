@@ -7,8 +7,6 @@ Candidates for removal
 ----------------------
 
 rc [ch]
-docbook-xml [ch]
-
 
 Candidates that need to be checked because of:
   Couldn't find any package whose name or description matched
