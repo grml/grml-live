@@ -1,3 +1,97 @@
+grml-live (0.13.3) unstable; urgency=low
+
+  The "cleanup before marrying" release.
+
+  [ Michael Prokop ]
+  * Bugfixes / changes / new features:
+    - [5a8f565] scripts/release_helper.sh: also build Packages.gz file for
+      http usage in sources.list.
+    - [9dd04ba] scripts/release_helper.sh: disable apt-listchanges and
+      apt-listbugs.
+    - [261d88e] modprobe.d/loop-part.conf: add max_loop=32.
+    - [aac340b] Pass 1:0x96 instead of 4:0x96 to bootilnx.mksh to use
+      first partition as boot system. - thanks to Thorsten Glaser
+    - [55dde69] Addon: Replace gPXE with iPXE (see Debian BTS #474034).
+    - [346b946] Support wheezy as suite inside fai/apt/sources.list.
+    - [95f3494] GRMLBASE/01-packages: fix path to logfile for
+      packages.list.
+
+  * buildd related changes:
+    - [cfa2c50] buildd: support IGNORE class to ignore requests to install
+      software packages from other classes.
+    - [d88753b] buildd: follow symlinks to archive and dump the log files
+      they point to.
+
+  * Software related chanages:
+    - [3902afc] Add partimage to GRML_MEDIUM and GRML_SMALL.
+      [Closes: issue972] - thanks to neXyon for reporting.
+    - [782eccc] + [ce0a794] Update software-changes-schedule.txt.
+    - [e646663] remove loop-aes-modules-2.6.38-grml[64] and
+      speakup-modules-2.6.38-grml[64] from GRML_FULL.
+    - [a671278] add rs to GRML_FULL.
+    - [a7043e9] remove ekeyd from GRML_FULL (broken, several known issues).
+    - [b023489] remove backuppc from GRML_FULL (too big, currently
+      uninstallable, not that relevant on live system).
+    - [faf3a38] remove irb from GRML_FULL (provided by ruby since squeeze).
+    - [ac64887] replace portmap with rpcbind in all Grml flavours.
+    - [d17a90f] remove rodc and rdoc1.8 from GRML_FULL (provided by
+      ruby since squeeze).
+    - [3c4a7ae] remove eieio from GRML_FULL (obsoleted by Emacs 23.2,
+      see #617267).
+    - [3aee43f] remove gfs-tools + gfs2-tools from GRML_FULL.
+    - [9f0aed3] remove noshell from GRML_FULL (transitional to
+      non-free titantools).
+    - [4f0d06e] remove all xmms2 packages from GRML_FULL.
+    - [8a01c70] remove zec from GRML_FULL.
+    - [59165cd] remove yatm from GRML_FULL.
+    - [5e5e0d4] remove xfaces from GRML_FULL.
+    - [965616d] remove weechat* from GRML_FULL.
+    - [2cfa836] remove user-setup from GRML_FULL.
+    - [3b6256f] remove unrar-free from GRML_FULL.
+    - [d96fa97] remove tidy from GRML_FULL.
+    - [c041899] remove tetradraw from GRML_FULL.
+    - [af79834] remove csstidy from GRML_FULL (too unrelevant).
+    - [141c5d3] remove sp from GRML_FULL (too unrelevant).
+    - [46fc19e] remove openjade from GRML_FULL (too unrelevant).
+    - [3cac8ad] remove sgml-data from GRML_FULL (too unrelevant).
+    - [575494b] add docbook-utils to GRML_FULL.
+    - [2457691] removed dired (32bit-only, unmaintained in Grml).
+    - [ba487c1] remove rc from GRML_FULL.
+
+  [ Ulrich Dangel ]
+  * [6aa99b2] SW: Added grml-feedback to GRML_{FULL,MEDIUM,SMALL}.
+  * [ddb0378] Enable loopback partitions per default.
+
+  [ Christian Hofstaedtler ]
+  * [3c591d6] typo fix in grml-live-remaster man page.
+  * [5a34b68] fix squashfs builds with gzip compression.
+  * [3604d28] Remove available packages from to-check list.
+  * Software related changes:
+    - [715ee57] remove spell, spellutils from GRML_FULL.
+    - [d3c3b59] remove doxygen from GRML_FULL.
+    - [86873e3] remove asn1c from GRML_FULL.
+    - [b34bcb4] remove cedet-common from GRML_FULL.
+    - [f965ea0] remove ctrlproxy from GRML_FULL.
+    - [108c559] remove detachtty from GRML_FULL.
+    - [6b628f3] remove muscletools from GRML_FULL.
+    - [624a0f0] follow nilfs-tools transition for GRML_FULL.
+    - [06acda8] remove orpheus from GRML_FULL.
+    - [689dfb3] remove qprof from GRML_FULL.
+    - [91398f8] remove prismstumbler from GRML_FULL.
+    - [2f94a13] remove pytris from GRML_FULL.
+    - [adfe220] remove tn5250 from GRML_FULL.
+    - [838302e] remove viewglob from GRML_FULL.
+    - [47e47e9] remove xcardii from GRML_FULL.
+    - [9624eec] remove opie-client from GRML_FULL.
+    - [fbe325d] remove s3switch from GRML_FULL.
+    - [b34282b] remove spicctrl from GRML_FULL.
+    - [696df8a] remove log2mail from GRML_FULL.
+    - [2560a80] remove python2.4 from GRML_FULL.
+    - [7728fde] remove sbm from GRML_FULL.
+    - [fd90761] remove dog from GRML_FULL.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 09 May 2011 13:53:49 +0200
+
 grml-live (0.13.2) unstable; urgency=low
 
   [ Christian Hofstaedtler ]
