@@ -407,6 +407,7 @@ docbook
 docbook2odf
 docbook-dsssl
 docbook-to-man
+docbook-utils
 doscan
 dosfstools
 dov4l
