@@ -6,7 +6,6 @@ None currently.
 Candidates for removal
 ----------------------
 
-xfaces [ch]
 weechat\* [ch]
 user-setup [ch]
 unrar-free (unrar is already present) [ch]
