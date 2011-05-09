@@ -1,3 +1,16 @@
+grml-autoconfig (0.9.28) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [e65b6fd] Quote $DCSMP to check if DCSMP was mounted. Thanks to K.
+    Wulff for the the bug report.
+
+  [ Michael Prokop ]
+  * [726de5e] grml-autoconfig script: shorten dialog message a bit, so
+    it better fixs on 80x25 consoles.
+  * [4f81354] Bump Standards-Version to 3.9.2.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 09 May 2011 16:57:20 +0200
+
 grml-autoconfig (0.9.27) unstable; urgency=low
 
   [ Ulrich Dangel ]
