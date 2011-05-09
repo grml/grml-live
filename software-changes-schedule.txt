@@ -6,7 +6,6 @@ None currently.
 Candidates for removal
 ----------------------
 
-tidy [ch]
 tetradraw [ch]
 rc [ch]
 sp, openjade, sgml-data, docbook-xml [ch]
