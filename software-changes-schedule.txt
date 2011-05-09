@@ -7,7 +7,7 @@ Candidates for removal
 ----------------------
 
 rc [ch]
-sp, openjade, sgml-data, docbook-xml [ch]
+openjade, sgml-data, docbook-xml [ch]
 
 
 Candidates that need to be checked because of:
