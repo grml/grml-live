@@ -559,8 +559,6 @@ genext2fs
 getmail4
 gettext
 gettext-el
-gfs2-tools
-gfs-tools
 gftp-common
 gftp-text
 ghostscript
