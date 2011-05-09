@@ -86,7 +86,6 @@ parted
 partimage
 passwd
 patch
-portmap
 ppp
 # pppoeconf
 # prism54-firmware
@@ -96,6 +95,7 @@ psmisc
 pump
 readline-common
 reiserfsprogs
+rpcbind
 rungetty
 screen
 sed

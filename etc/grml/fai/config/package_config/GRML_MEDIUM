@@ -126,7 +126,6 @@ partimage
 passwd
 patch
 pcmciautils
-portmap
 postfix
 powertop
 ppp
@@ -138,6 +137,7 @@ psmisc
 pump
 readline-common
 reiserfsprogs
+rpcbind
 rungetty
 screen
 scsitools
