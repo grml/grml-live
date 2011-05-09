@@ -6,7 +6,7 @@ None currently.
 Candidates for removal
 ----------------------
 
-rc [ch]
+None currently.
 
 Candidates that need to be checked because of:
   Couldn't find any package whose name or description matched
