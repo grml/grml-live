@@ -1555,6 +1555,7 @@ bluez-firmware
 firmware-iwlwifi
 firmware-qlogic
 firmware-ralink
+firmware-realtek
 iozone3
 lha
 manpages-posix

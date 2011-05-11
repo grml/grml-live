@@ -51,6 +51,7 @@ ethtool
 findutils
 firmware-iwlwifi
 firmware-ralink
+firmware-realtek
 fluxbox
 fuse-utils
 gcc
