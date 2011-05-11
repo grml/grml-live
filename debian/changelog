@@ -1,3 +1,30 @@
+grml-live (0.14.0) unstable; urgency=low
+
+  [ Michael Prokop ]
+  * [900b82d] grml-cheatcodes.txt: update documentation regarding
+    fetch= bootoption (supports DNS nowadays).
+  * [cb537a8] Revert "Pass 1:0x96 instead of 4:0x96 to bootilnx.mksh
+    to use first partition as boot system."
+  * [ab97d7b] Bump Standards-Version to 3.9.2.
+  * [bebbbad] docs: fix wording ("allows one to"), thanks lintian.
+  * [3ba06da] Adjust lintian overrides for new lintian and policy.
+  * [6f9a4ab] initramfs-tools: use xz with -8 and --check=crc32.
+  * Software related changes:
+    - [2113bc5] remove docbook-utils again (pulling in luatex + more).
+    - [a67a5ab] remove darcs from GRML_FULL (too large).
+    - [230f7fc] remove c3270 from GRML_FULL (ENOSPACE).
+
+  [ Christian Hofstaedtler ]
+  * [d62a6be] document dns= boot option
+  * [e910ecb] document ip= boot option
+  * [14b6242] work around udev's "cosmetic warnings"
+  * [5f1adca] rebuild mtab during boot
+  * [e1b5d40] arrange /run like on a normal system
+  * [779971e] SW: add firmware-realtek to GRML_FULL,GRML_MEDIUM
+  * [5de2fe3] SW: re-add ratpoison to GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Wed, 11 May 2011 23:17:28 +0200
+
 grml-live (0.13.3) unstable; urgency=low
 
   The "cleanup before marrying" release.
