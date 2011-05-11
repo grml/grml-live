@@ -1035,7 +1035,7 @@ All downloaded files will be cached in /var/cache/approx now.
 How do I revert the manifold feature from an ISO?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The so called manifold feature Grml ISOs use by default allows to use the same
+The so called manifold feature Grml ISOs use by default allows one to use the same
 ISO for CD boot and USB boot. If you notice any problems when booting just
 revert the manifold feature running:
 
