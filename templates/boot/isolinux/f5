@@ -14,7 +14,7 @@
  grml swspeak               prepare system for use with software synthesizer,  
                                            run "swspeak" after booting system  
  grml toram / grml2ram      copy the whole CD/media to RAM and run from there  
- grml toram=%SQUASHFS_NAME%            copy only specified squashfs file  
+ grml toram=%SQUASHFS_NAME%                 copy only specified squashfs file  
                                                     to RAM and run from there  
  grml vga=ask  / vga=791            prompt for framebuffer menu / set options  
                                                                                
