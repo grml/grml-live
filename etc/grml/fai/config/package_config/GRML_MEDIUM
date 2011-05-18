@@ -202,3 +202,4 @@ virtualbox-ose-guest-modules-2.6.38-grml virtualbox-ose-guest-utils virtualbox-o
 
 PACKAGES aptitude AMD64
 linux-image-2.6.38-grml64
+virtualbox-ose-guest-modules-2.6.38-grml64 virtualbox-ose-guest-utils virtualbox-ose-guest-x11
