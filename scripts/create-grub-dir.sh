@@ -31,12 +31,13 @@ oldpwd=$(pwd)
 
 ARCH=$(dpkg --print-architecture)
 
-if ! [ -f "grub-pc_${GRUB}_${ARCH}.deb" ] || ! [ -f "grub-common_${GRUB}_${ARCH}.deb" ]  ; then
+if ! [ -f "grub-pc_${GRUB}_${ARCH}.deb" ] || ! [ -f "grub-pc-bin_${GRUB}_${ARCH}.deb" ] || ! [ -f "grub-common_${GRUB}_${ARCH}.deb" ]  ; then
   wget http://cdn.debian.net/debian/pool/main/g/grub2/grub-pc_"${GRUB}"_${ARCH}.deb
+  wget http://cdn.debian.net/debian/pool/main/g/grub2/grub-pc-bin_"${GRUB}"_${ARCH}.deb
   wget http://cdn.debian.net/debian/pool/main/g/grub2/grub-common_"${GRUB}"_${ARCH}.deb
 fi
 
-if ! [ -f "grub-pc_${GRUB}_${ARCH}.deb" ] || ! [ -f "grub-common_${GRUB}_${ARCH}.deb" ]  ; then
+if ! [ -f "grub-pc_${GRUB}_${ARCH}.deb" ] || ! [ -f "grub-pc-bin_${GRUB}_${ARCH}.deb" ] || ! [ -f "grub-common_${GRUB}_${ARCH}.deb" ]  ; then
   echo "Error reading grub files version $GRUB - exiting.">&2
   exit 1
 fi
@@ -48,6 +49,8 @@ cd "$GRUBDIR"
 mkdir -p grub
 
 ar x "${oldpwd}"/"grub-pc_${GRUB}_${ARCH}.deb"
+tar xzf data.tar.gz
+ar x "${oldpwd}"/"grub-pc-bin_${GRUB}_${ARCH}.deb"
 tar xzf data.tar.gz
 ar x "${oldpwd}"/"grub-common_${GRUB}_${ARCH}.deb"
 tar xzf data.tar.gz
