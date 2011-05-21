@@ -1,4 +1,4 @@
-# $MirOS: src/distrib/common/grml/loopback.0,v 1.2 2010/08/15 17:03:31 tg Exp $
+# $MirOS: src/distrib/common/grml/loopback.0,v 1.3 2011/01/03 17:49:38 tg Exp $
 #
 set image /bsd
 set timeout 12
@@ -8,7 +8,7 @@ macro grml echo GRUB is deactivated in loopback.cfg!
 macro slx machine exec dos
 echo
 echo ==================================================================
-echo # MirOS BSD #10-current [grml] | (c) 2002-2010 The MirOS Project #
+echo # MirOS BSD #10-current [grml] | (c) 2002-2011 The MirOS Project #
 echo ==================================================================
 echo
 echo To boot the MirOS BSD based rescue system, wait twelve seconds or
