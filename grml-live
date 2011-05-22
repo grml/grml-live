@@ -131,12 +131,23 @@ LIVE_CONF=/etc/grml/grml-live.conf
 . $LIVE_CONF
 # }}}
 
+# umount all directories {{{
+umount_all() {
+   # make sure we don't leave any mounts - FAI doesn't remove them always
+   umount $CHROOT_OUTPUT/proc 2>/dev/null || /bin/true
+   umount $CHROOT_OUTPUT/sys  2>/dev/null || /bin/true
+   umount $CHROOT_OUTPUT/dev/pts 2>/dev/null || /bin/true
+   umount $CHROOT_OUTPUT/dev 2>/dev/null || /bin/true
+   [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
+}
+# }}}
+
 # clean exit {{{
 bailout() {
   rm -f /var/run/fai/fai_softupdate_is_running \
         /var/run/fai/FAI_INSTALLATION_IN_PROGRESS
   [ -n "$SQUASHFS_STDERR" ]  && rm -rf "$SQUASHFS_STDERR"
-  [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
+  umount_all
   [ -n "$1" ] && EXIT="$1" || EXIT="1"
   [ -n "$2" ] && eerror "$2">&2
   log "------------------------------------------------------------------------------"
@@ -548,13 +559,7 @@ else
          rm -rf "$CHROOT_OUTPUT"/var/log/fai/*
       fi
 
-      # make sure we don't leave any mounts - FAI doesn't remove them always
-      umount $CHROOT_OUTPUT/proc 2>/dev/null || /bin/true
-      umount $CHROOT_OUTPUT/sys  2>/dev/null || /bin/true
-      umount $CHROOT_OUTPUT/dev/pts 2>/dev/null || /bin/true
-      umount $CHROOT_OUTPUT/dev 2>/dev/null || /bin/true
-
-      [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
+      umount_all
 
       # notice: 'fai dirinstall' does not seem to exit appropriate, so:
       ERROR=''
