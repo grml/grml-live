@@ -42,7 +42,7 @@ should make it easier to use.
 Starting with Grml release 2009.05 its possible to use root persistency on grml.
 This means you can store your settings and reuse them on reboot, without having
 to deal with this config framework. Visit
-link:http://wiki.grml.org/doku.php?id=persistency for further information.
+link:http://wiki.grml.org/doku.php?id=persistency[] for further information.
 
 [[current-versions]]
 include::grml-autoconfig.current.txt[]
@@ -224,7 +224,7 @@ configuraton archives alongside the .iso.
 
 Bugs
 ----
-If you find a bug please report it. See link:http://grml.org/bugs/ for details
+If you find a bug please report it. See link:http://grml.org/bugs/[] for details
 about how to report bugs.
 
 See also
