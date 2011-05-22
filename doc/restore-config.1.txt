@@ -60,7 +60,7 @@ Restore configuration from file config.tbz.
 
 Bugs
 ----
-If you find a bug please report it. See link:http://grml.org/bugs/ for details
+If you find a bug please report it. See link:http://grml.org/bugs/[] for details
 about how to report bugs.
 
 See also
