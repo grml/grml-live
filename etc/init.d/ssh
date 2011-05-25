@@ -41,6 +41,7 @@ KEYGEN=/usr/bin/ssh-keygen
 RSA1_KEY=/etc/ssh/ssh_host_key
 RSA_KEY=/etc/ssh/ssh_host_rsa_key
 DSA_KEY=/etc/ssh/ssh_host_dsa_key
+ECDSA_KEY=/etc/ssh/ssh_host_ecdsa_key
 
 # Are we running from init?
 run_by_init() {
@@ -107,6 +108,10 @@ case "$1" in
 	if ! test -f $DSA_KEY ; then
 	   log_action_msg "Generating SSH2 DSA host key..."
 	   $KEYGEN -t dsa -f $DSA_KEY -C '' -N '' || exit 1
+	fi
+	if ! test -f "$ECDSA_KEY" && grep -q "$ECDSA_KEY" /etc/ssh/sshd_config ; then
+	   log_action_msg "Generating SSH2 ECDSA host key..."
+	   $KEYGEN -t ecdsa -f "$ECDSA_KEY" -C '' -N '' || exit 1
 	fi
 
 	log_daemon_msg "Starting OpenBSD Secure Shell server" "sshd"
