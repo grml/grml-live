@@ -1,3 +1,14 @@
+grml-etc (1.2.11) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [913dcbf] Support SSHD_OPTS option
+  * [20a1e40] Generate ECDSA key if necessary
+
+  [ Christian Hofstaedtler ]
+  * [281e66b] Resync ssh initscript with Debian
+
+ -- Christian Hofstaedtler <ch@grml.org>  Wed, 25 May 2011 16:37:04 +0200
+
 grml-etc (1.2.10) unstable; urgency=low
 
   * [34a666b + 89fc5a7] xinitrc.d/grml_keyboard + Xmodmaps: fix
