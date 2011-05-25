@@ -193,7 +193,6 @@ zsh
 
 PACKAGES aptitude I386
 linux-image-2.6.38-grml
-powernowd
 virtualbox-ose-guest-modules-2.6.38-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
 
 PACKAGES aptitude AMD64
