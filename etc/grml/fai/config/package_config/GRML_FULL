@@ -154,7 +154,6 @@ apwal
 ara
 argus-client
 arj
-arping
 arp-scan
 arptables
 arpwatch
@@ -685,6 +684,7 @@ ipsec-tools
 iptables
 iptraf
 iptstate
+iputils-arping
 iputils-ping
 iputils-tracepath
 ipv6calc
