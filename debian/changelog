@@ -1,3 +1,9 @@
+grml-etc (1.2.13) unstable; urgency=low
+
+  * [8c5479e] Also enable allowFontOps for UXTerm
+
+ -- Christian Hofstaedtler <ch@grml.org>  Thu, 26 May 2011 23:23:59 +0200
+
 grml-etc (1.2.12) unstable; urgency=low
 
   * [8f5c29d] Remove dillo from Recommends, it's gone from Debian
