@@ -24,12 +24,25 @@ set -u
       $ROOTCMD ln -sf /usr/bin/vim.tiny /etc/alternatives/editor
       $ROOTCMD ln -sf /etc/alternatives/vi /usr/bin/vi
       $ROOTCMD ln -sf /usr/bin/vim.tiny /etc/alternatives/vi
+      $ROOTCMD ln -sf /etc/alternatives/vim /usr/bin/vim
+      $ROOTCMD ln -sf /usr/bin/vim.tiny /etc/alternatives/vim
+      $ROOTCMD ln -sf /etc/alternatives/view /usr/bin/view
+      $ROOTCMD ln -sf /usr/bin/vim.tiny /etc/alternatives/view
    fi
 fi
 
 if [ -r $target/usr/bin/vim.basic ] ; then
    $ROOTCMD update-alternatives --set editor /usr/bin/vim.basic
    $ROOTCMD update-alternatives --set vi     /usr/bin/vim.basic
+   $ROOTCMD update-alternatives --set vim    /usr/bin/vim.basic
+   $ROOTCMD update-alternatives --set view   /usr/bin/vim.basic
+fi
+
+if [ -r $target/usr/bin/vim.gtk ] ; then
+   $ROOTCMD update-alternatives --set editor /usr/bin/vim.gtk
+   $ROOTCMD update-alternatives --set vi     /usr/bin/vim.gtk
+   $ROOTCMD update-alternatives --set vim    /usr/bin/vim.gtk
+   $ROOTCMD update-alternatives --set view   /usr/bin/vim.gtk
 fi
 
 if [ -r $target/usr/bin/uxterm ] ; then
