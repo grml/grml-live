@@ -74,6 +74,7 @@ XTerm*visualBell: true
 XTerm*saveLines:  8192
 XTerm*shading: 80
 
+XTerm*allowFontOps:    true
 XTerm*allowSendEvents: true
 XTerm*internalBorder:  0
 XTerm*borderWidth:     0
