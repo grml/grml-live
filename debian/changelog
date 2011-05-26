@@ -1,3 +1,10 @@
+grml-etc (1.2.12) unstable; urgency=low
+
+  * [8f5c29d] Remove dillo from Recommends, it's gone from Debian
+  * [f2b9af6] Allow fontOps for xterm [Closes: issue994]
+
+ -- Christian Hofstaedtler <ch@grml.org>  Thu, 26 May 2011 21:15:12 +0200
+
 grml-etc (1.2.11) unstable; urgency=low
 
   [ Ulrich Dangel ]
