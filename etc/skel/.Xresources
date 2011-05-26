@@ -33,6 +33,7 @@ UXTerm*utf8Fonts.wideFont:      -misc-fixed-medium-r-normal-ko-18-120-100-100-c-
 
 UXTerm*.background: black
 UXTerm*.foreground: lightgrey
+UXTerm*allowFontOps: true
 
 ! enable UTF8
 ! XTerm*utf8: 0
