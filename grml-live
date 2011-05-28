@@ -439,7 +439,7 @@ for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
 done
 
 # notice: activate grml-live pool only if we are building against unstable:
-if grep -qe unstable -qe sid "$SOURCES_LIST_FILE" ; then
+if grep -qwe unstable -qwe sid "$SOURCES_LIST_FILE" ; then
    grep -q 'grml-live.*main' "$SOURCES_LIST_FILE" || \
    grep grml-stable "$SOURCES_LIST_FILE" | \
         sed 's/grml-stable/grml-live/' >> "$SOURCES_LIST_FILE"
