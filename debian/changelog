@@ -1,3 +1,24 @@
+grml-live (0.14.1) unstable; urgency=low
+
+  [ Christian Hofstaedtler ]
+  * [739beb8] Fix name of SQUASHFS_NAME var in templates
+  * [c5b7145] Update shipped grub2 to 1.99-4
+  * [1be2433] Update bsd4grml to version 20110521
+  * [9f5975e] SW: Add xtightvncviewer to GRML_FULL. [Closes: issue990]
+  * [7650b54] SW: Remove powernowd from GRML_FULL,GRML_MEDIUM
+  * [93530f2] Revert "isolinux f5: fix layout."
+  * [f5dd81b] SW: Replace arping with iputils-arping
+  * [4fd4ee2] Sync vi,vim,view,editor alternatives
+
+  [ Michael Prokop ]
+  * [be46a0b] isolinux f5: fix layout.
+  * [8ba6757] SW: Add virtualbox packages to amd64 flavour.
+  * [e738d23] SW: Remove linux-kernel-headers-grml from grml-medium.
+  * [2017df2] sources.list handling: match "sid" and "unstable" only as
+    whole words.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 29 May 2011 12:09:50 +0200
+
 grml-live (0.14.0) unstable; urgency=low
 
   [ Michael Prokop ]
