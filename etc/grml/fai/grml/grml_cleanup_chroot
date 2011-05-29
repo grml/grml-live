@@ -306,10 +306,17 @@ fi
 
 # installation of resolvconf in chroot *with* /proc
 # is different from an installation without /proc,
-# so make sure it is OK in any case; don't use /dev/shm
+# so make sure it is OK in any case
 if [ -d /etc/resolvconf ] ; then
-   rm -rf /etc/resolvconf/run
-   mkdir /etc/resolvconf/run
+  if [ -L /etc/resolvconf/run ] ; then # resolvconf with /run
+    # /etc/resolvconf/run symlinks to /run/resolvconf
+    rm -rf /run/resolvconf
+    mkdir -p /run/resolvconf
+  else # no /run present
+    rm -rf /etc/resolvconf/run
+    mkdir /etc/resolvconf/run
+  fi
+
    touch /etc/resolvconf/run/enable-updates
    mkdir /etc/resolvconf/run/interface
    cat > /etc/resolvconf/run/resolv.conf << EOF

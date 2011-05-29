@@ -21,7 +21,7 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    echo "Action $FAI_ACTION of FAI (hooks/instsoft.GRMLBASE) via grml-live running"
 
    if [ -r /etc/resolv.conf ] ; then
-     if [ -d $target/etc/resolvconf/run ] ; then # resolvconf
+     if [ -d $target/etc/resolvconf/run ] ; then # resolvconf without /run
        # sanity check to avoid "input file is output file",
        # see http://bts.grml.org/grml/issue984
        if ! [ -L $target/etc/resolvconf/run/resolv.conf ] ; then
@@ -31,6 +31,10 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
          echo "       Looks like something is wrong, please fix manually." >&2
          exit 1
        fi
+     elif [ -L $target/etc/resolvconf/run ] ; then # resolvconf with /run
+       # /etc/resolvconf/run symlinks to /run/resolvconf
+       mkdir -p $target/run/resolvconf
+       cat /etc/resolv.conf >> $target/run/resolvconf/resolv.conf
      else # no resolvconf installed in chroot
        if ! [ -L $target/etc/resolv.conf ] ; then
          cat /etc/resolv.conf >> $target/etc/resolv.conf
@@ -153,4 +157,4 @@ if [ -L "$target"/usr/sbin/invoke-rc.d ] ; then
 fi
 
 ## END OF FILE #################################################################
-# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
