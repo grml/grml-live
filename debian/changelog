@@ -1,3 +1,10 @@
+grml-autoconfig (0.9.29) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [816eea8] Update asciidoc files to use correct link syntax.
+
+ -- Christian Hofstaedtler <ch@grml.org>  Sun, 29 May 2011 14:34:13 +0200
+
 grml-autoconfig (0.9.28) unstable; urgency=low
 
   [ Ulrich Dangel ]
