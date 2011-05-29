@@ -774,8 +774,6 @@ login
 logrotate
 logtools
 logwatch
-loop-aes-testsuite
-loop-aes-utils
 lrzsz
 lsb-base
 lsb-release
