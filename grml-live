@@ -20,7 +20,8 @@ else
 fi
 
 # exit on any error:
-set -e
+# disable for now since it seems to cause some problems
+# set -e
 
 # global variables
 GRML_LIVE_VERSION='0.14.1'
