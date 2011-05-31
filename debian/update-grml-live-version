@@ -1,0 +1,14 @@
+#!/bin/sh
+if [ ! -e ./grml-live ] || [ ! -d debian ] ; then
+    echo "Not a grml-live repo!" >&2
+    exit 1
+fi
+if [ $# -ne 0 ] ; then
+    echo "Usage: $0" >&2
+    echo "This script updates the version used in grml-live to the debian/changelog!" >&2
+    exit 1
+fi
+
+version=$(dpkg-parsechangelog | awk '/^Version:/ {print $2}')
+sed -i 's/^\(GRML_LIVE_VERSION=.\).*\(.\)\s*$/\1'$version'\2/' grml-live
+
