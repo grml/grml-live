@@ -154,7 +154,8 @@ bailout() {
   log "------------------------------------------------------------------------------"
   exit "$EXIT"
 }
-trap bailout 1 2 3 3 6 9 14 15 EXIT
+trap bailout 1 2 3 3 6 9 14 15
+trap umount_all EXIT
 # }}}
 
 # log file stuff {{{
