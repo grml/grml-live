@@ -79,7 +79,6 @@ ncftp
 netbase
 netcat
 net-tools
-ntfsprogs
 ntpdate
 # nvi -> see #490361
 parted
