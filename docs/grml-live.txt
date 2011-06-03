@@ -12,7 +12,7 @@ Synopsis
 
 grml-live [-a <architecture>] [-c <classe[s]>] [-C <configfile>] [-g
 <grml_name>] [-i <iso_name> ] [-o <output_directory>] [-r <release_name>] [-s
-<suite>] [-t <template_directory>] [-v <version_number>] [-bBFhquVz]
+<suite>] [-t <template_directory>] [-v <version_number>] [-bBFnNquVz]
 
 CAUTION: Please check out <<current_state,the 'Current state of grml-live with
 squashfs-tools and kernel' section>> for details about current state of involved
@@ -147,6 +147,18 @@ in the chroot so you have to create the rootfs structure on your own.
 
 Skip creation of the ISO file. This option is useful if you want to build/update
 the chroot and/or recreate the squashfs file without building an ISO file.
+
+  -N::
+
+Bootstrap the chroot without building bootloader, squashfs, or finalizing the
+ISO. Use this option if installation of some packages fails, you want to run
+custom commands or similar.
+The main use of this option is to save time by skipping stages which aren't
+necessary for bootstrapping the chroot and which would get executed more than
+once when iterating through the initial bootstrapping.
+Alternatively, use this option as a test run of grml-live. Once you are
+satisfied with the state of your grml_chroot, use grml-live **-u** to build the
+remaining stages and finalize the ISO.
 
   -o **OUTPUT_DIRECTORY**::
 

@@ -49,6 +49,11 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    exit # make sure we don't continue behind the following "fi"
 fi
 
+if [ -n "$BOOTSTRAP_ONLY" ] ; then
+  echo "Skipping task configure in hooks/updatebase.GRMLBASE as BOOTSTRAP_ONLY environment is set."
+  skiptask configure
+fi
+
 # no softupdate but updating chroot e.g. based on /etc/grml/fai/config/basefiles/*
 echo "Action $FAI_ACTION of FAI (hooks/updatebase.GRMLBASE) via grml-live running"
 

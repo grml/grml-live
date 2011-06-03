@@ -52,6 +52,7 @@ Usage: $PN [options, see as follows]
    -I <src_directory>      directory which provides files that should become
                            part of the chroot/ISO
    -n                      skip generation of ISO
+   -N                      bootstrap (build chroot) only, do not create files for ISO
    -o <output_directory>   main output directory of the build process
    -q                      skip mksquashfs
    -r <release_name>       release name
@@ -114,6 +115,7 @@ FORCE=''
 UPDATE=''
 BUILD_ONLY=''
 BUILD_DIRTY=''
+BOOTSTRAP_ONLY=''
 HOSTNAME=''
 
 if [ -r /etc/grml/lsb-functions ] ; then
@@ -226,7 +228,7 @@ fi
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:d:g:i:I:o:r:s:t:v:bBFnquVz" opt; do
+while getopts "a:C:c:d:g:i:I:o:r:s:t:v:bBFnNquVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     b) BUILD_ONLY=1 ;;
@@ -238,6 +240,7 @@ while getopts "a:C:c:d:g:i:I:o:r:s:t:v:bBFnquVz" opt; do
     i) ISO_NAME="$OPTARG" ;;
     I) CHROOT_INSTALL="$OPTARG" ;;
     n) SKIP_MKISOFS=1 ;;
+    N) BOOTSTRAP_ONLY=1; SKIP_MKISOFS=1; SKIP_MKSQUASHFS=1 ;;
     o) OUTPUT="$OPTARG" ;;
     q) SKIP_MKSQUASHFS=1 ;;
     r) RELEASENAME="$OPTARG" ;;
@@ -339,10 +342,14 @@ if [ -z "$FORCE" ] ; then
    [ -n "$SQUASHFS_OPTIONS" ]    && echo "  Using SQUASHFS_OPTIONS ${SQUASHFS_OPTIONS}"
    [ -n "$VERBOSE" ]             && echo "  Using VERBOSE mode."
    [ -n "$UPDATE" ]              && echo "  Executing UPDATE instead of fresh installation."
-   [ -n "$SKIP_MKSQUASHFS" ]     && echo "  Skipping creation of SQUASHFS file."
-   [ -n "$SKIP_MKISOFS" ]        && echo "  Skipping creation of ISO file."
-   [ -n "$BUILD_ONLY" ]          && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
-   [ -n "$BUILD_DIRTY" ]         && echo "  Executing BUILD_DIRTY to leave chroot untouched."
+   if [ -n "$BOOTSTRAP_ONLY" ] ; then
+     echo "  Bootstrapping only and not building (files for) ISO."
+   else
+     [ -n "$SKIP_MKSQUASHFS" ]     && echo "  Skipping creation of SQUASHFS file."
+     [ -n "$SKIP_MKISOFS" ]        && echo "  Skipping creation of ISO file."
+     [ -n "$BUILD_ONLY" ]          && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
+     [ -n "$BUILD_DIRTY" ]         && echo "  Executing BUILD_DIRTY to leave chroot untouched."
+   fi
    echo
    echo -n "Is this ok for you? [y/N] "
    read a
@@ -534,8 +541,8 @@ else
       fi
 
       log "Executed FAI command line:"
-      log "BUILD_ONLY=$BUILD_ONLY fai $VERBOSE -C $GRML_FAI_CONFIG -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
-      BUILD_ONLY="$BUILD_ONLY" fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u \
+      log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY fai $VERBOSE -C $GRML_FAI_CONFIG -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
+      BUILD_ONLY="$BUILD_ONLY" BOOTSTRAP_ONLY="$BOOTSTRAP_ONLY" fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u \
       "$HOSTNAME" $FAI_ACTION "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
       RC="$PIPESTATUS" # notice: bash-only
 
@@ -621,310 +628,315 @@ fi
 [ -n "$BUILD_OUTPUT" ] || BUILD_OUTPUT="$OUTPUT/grml_cd"
 mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for stage ARCH"
 
-# i386:
+# prepare ISO
 if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
-   if [ -d "$BUILD_OUTPUT"/boot/isolinux -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
-      log   "Skipping stage 'boot' as $BUILD_OUTPUT/boot/isolinux exists already."
-      ewarn "Skipping stage 'boot' as $BUILD_OUTPUT/boot/isolinux exists already." ; eend 0
-   else
-      # booting stuff:
-      [ -d "$BUILD_OUTPUT"/boot/isolinux ] || mkdir -p "$BUILD_OUTPUT"/boot/isolinux
-      [ -d "$BUILD_OUTPUT"/boot/"${SHORT_NAME}" ] || mkdir -p "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"
+  if [ -n "$BOOTSTRAP_ONLY" ] ; then
+     log   "Skipping stage 'boot' as building with bootstrap only."
+     ewarn "Skipping stage 'boot' as building with bootstrap only." ; eend 0
+  else
+    if [ -d "$BUILD_OUTPUT"/boot/isolinux -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
+       log   "Skipping stage 'boot' as $BUILD_OUTPUT/boot/isolinux exists already."
+       ewarn "Skipping stage 'boot' as $BUILD_OUTPUT/boot/isolinux exists already." ; eend 0
+    else
+       # booting stuff:
+       [ -d "$BUILD_OUTPUT"/boot/isolinux ] || mkdir -p "$BUILD_OUTPUT"/boot/isolinux
+       [ -d "$BUILD_OUTPUT"/boot/"${SHORT_NAME}" ] || mkdir -p "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"
 
-      if [ -z "$NO_ADDONS" ] ; then
-         [ -d "$BUILD_OUTPUT"/boot/addons   ] || mkdir -p "$BUILD_OUTPUT"/boot/addons
-         if [ -r "$TEMPLATE_DIRECTORY"/boot/addons/memtest ] ; then
-            log "Installing $TEMPLATE_DIRECTORY/boot/addons/memtest"
-            cp "$TEMPLATE_DIRECTORY"/boot/addons/memtest "$BUILD_OUTPUT"/boot/addons/memtest
-         elif [ -r /boot/memtest86+.bin ] ; then
-            log "Installing /boot/memtest86+.bin"
-            cp /boot/memtest86+.bin "$BUILD_OUTPUT"/boot/addons/memtest
-         else
-            ewarn "No memtest binary found (either install package grml-live-addons or memtest86+), skipping."
-            log "No memtest binary found (either install package grml-live-addons or memtest86+), skipping."
-            eend 0
-         fi
-      fi
-
-      # if we don't have an initrd we a) can't boot and b) there was an error
-      # during build, so check for the file:
-      INITRD="$(ls $CHROOT_OUTPUT/boot/initrd* 2>/dev/null| grep -v '.bak$' | sort -r | head -1)"
-      if [ -n "$INITRD" ] ; then
-         cp $INITRD "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/initrd.gz
-         find $CHROOT_OUTPUT/boot/ -name initrd\*.bak -exec rm {} \;
-      else
-         log    "Error: No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting"
-         eerror "Error: No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
-         bailout 10
-      fi
-
-      KERNEL_IMAGE="$(ls $CHROOT_OUTPUT/boot/vmlinuz* 2>/dev/null | sort -r | head -1)"
-      if [ -n "$KERNEL_IMAGE" ] ; then
-         cp "$KERNEL_IMAGE" "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/linux26
-      else
-         log    "Error: No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting"
-         eerror "Error: No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
-         bailout 11
-      fi
-
-      [ -n "$TEMPLATE_DIRECTORY" ] || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
-      if ! [ -d "${TEMPLATE_DIRECTORY}"/boot ] ; then
-         log    "Error: ${TEMPLATE_DIRECTORY}/boot does not exist. Exiting."
-         eerror "Error: ${TEMPLATE_DIRECTORY}/boot does not exist. Exiting." ; eend 1
-         bailout 8
-      fi
-
-      # *always* copy files to output directory so the variables
-      # get adjusted according to the build
-      cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
-
-      if [ -n "$NO_ADDONS" ] ; then
-         log   "Skipping installation of boot addons as requested via \$NO_ADDONS."
-         einfo "Skipping installation of boot addons as requested via \$NO_ADDONS."; eend 0
-      else
-         if ! [ -d "$TEMPLATE_DIRECTORY"/boot/addons ] ; then
-           log   "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)"
-           ewarn "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)" ; eend 0
-         else
-           # copy only files so we can handle bsd4grml on its own
-           for file in ${TEMPLATE_DIRECTORY}/boot/addons/* ; do
-             test -f $file && cp $file "$BUILD_OUTPUT"/boot/addons/
-           done
-
-           if [ -n "$NO_ADDONS_BSD4GRML" ] ; then
-              log   "Skipping installation of bsd4grml as requested via \$NO_ADDONS_BSD4GRML."
-              einfo "Skipping installation of bsd4grml as requested via \$NO_ADDONS_BSD4GRML."; eend 0
-           else
-              if [ -d "$TEMPLATE_DIRECTORY"/boot/addons/bsd4grml ] ; then
-                cp -a ${TEMPLATE_DIRECTORY}/boot/addons/bsd4grml "$BUILD_OUTPUT"/boot/addons/
-              else
-                log   "bsd4grml addon not found, skipping therefore."
-                ewarn "bsd4grml addon not found, skipping therefore." ; eend 0
-              fi
-           fi
-
-         fi # no "$TEMPLATE_DIRECTORY"/boot/addons
-      fi # NO_ADDONS
-
-      if ! [ -d ${TEMPLATE_DIRECTORY}/boot/grub ] ; then
-         log   "grub templates do not exist, skipping therefore."
-         ewarn "grub templates do not exist, skipping therefore." ; eend 0
-      else
-         if ! [ -d "${BUILD_OUTPUT}/boot/grub" ] ; then
-            cp -a ${TEMPLATE_DIRECTORY}/boot/grub  "$BUILD_OUTPUT"/boot/
-         fi
-
-         # make sure we have recent template files available, otherwise updating
-         # the strings like $GRML_NAME and $VERSION might be out of date
-         cp ${TEMPLATE_DIRECTORY}/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
-      fi
-
-      if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
-         log    "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
-         eerror "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting." ; eend 1
-         bailout 9
-      fi
-
-      [ -d "$BUILD_OUTPUT"/GRML ] || mkdir "$BUILD_OUTPUT"/GRML
-      cp -a ${TEMPLATE_DIRECTORY}/GRML/* "$BUILD_OUTPUT"/GRML/
-
-      # adjust boot splash information:
-      RELEASE_INFO="$GRML_NAME $VERSION - Release Codename $RELEASENAME"
-      RELEASE_INFO="$(cut_string 68 "$RELEASE_INFO")"
-      RELEASE_INFO="$(extend_string_end 68 "$RELEASE_INFO")"
-
-      if [ -r "$BUILD_OUTPUT"/GRML/grml-version ] ; then
-         sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/GRML/grml-version
-         sed -i "s/%DATE%/$DATE/"                                      "$BUILD_OUTPUT"/GRML/grml-version
-      fi
-
-      # make sure the squashfs filename is set accordingly:
-      SQUASHFS_NAME="$GRML_NAME.squashfs"
-
-      if [ -n "$NO_BOOTID" ] ; then
-         log   'Skipping bootid feature as requested via $NO_BOOTID.'
-         einfo 'Skipping bootid feature as requested via $NO_BOOTID.'
-      else
-         [ -n "$BOOTID" ] || BOOTID="$(echo ${GRML_NAME}${VERSION} | tr -d ',./;\- ')"
-         [ -d "$BUILD_OUTPUT"/conf ] || mkdir "$BUILD_OUTPUT"/conf
-         einfo "Generating /conf/bootid.txt with entry ${BOOTID}."
-         log   "Generating /conf/bootid.txt with entry ${BOOTID}."
-         echo "$BOOTID" > "$BUILD_OUTPUT"/conf/bootid.txt
-         eend $?
-      fi
-
-      # adjust all variables in the templates with the according distribution information
-      for file in "${BUILD_OUTPUT}"/boot/isolinux/*.cfg "${BUILD_OUTPUT}"/boot/isolinux/*.msg \
-                  "${BUILD_OUTPUT}"/boot/grub/* ; do
-        if [ -r "${file}" ] ; then
-          sed -i "s/%ARCH%/$ARCH/g"                    "${file}"
-          sed -i "s/%DATE%/$DATE/g"                    "${file}"
-          sed -i "s/%DISTRI_INFO%/$DISTRI_INFO/g"      "${file}"
-          sed -i "s/%DISTRI_NAME%/$DISTRI_NAME/g"      "${file}"
-          sed -i "s/%DISTRI_SPLASH%/$DISTRI_SPLASH/g"  "${file}"
-          sed -i "s/%GRML_NAME%/$GRML_NAME/g"          "${file}"
-          sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/g"  "${file}"
-          sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/g"    "${file}"
-          sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
-          sed -i "s/%VERSION%/$VERSION/g"              "${file}"
-
-          [ -n "$DEFAULT_BOOTOPTIONS" ] && sed -i "s/ boot=live/ boot=live $DEFAULT_BOOTOPTIONS/"  "${file}"
-
-          if [ -n "$NO_BOOTID" ] ; then
-             sed -i "s/ bootid=%BOOTID%//g" "${file}" # drop bootid bootoption
+       if [ -z "$NO_ADDONS" ] ; then
+          [ -d "$BUILD_OUTPUT"/boot/addons   ] || mkdir -p "$BUILD_OUTPUT"/boot/addons
+          if [ -r "$TEMPLATE_DIRECTORY"/boot/addons/memtest ] ; then
+             log "Installing $TEMPLATE_DIRECTORY/boot/addons/memtest"
+             cp "$TEMPLATE_DIRECTORY"/boot/addons/memtest "$BUILD_OUTPUT"/boot/addons/memtest
+          elif [ -r /boot/memtest86+.bin ] ; then
+             log "Installing /boot/memtest86+.bin"
+             cp /boot/memtest86+.bin "$BUILD_OUTPUT"/boot/addons/memtest
           else
-             sed -i "s/%BOOTID%/$BOOTID/g" "${file}" # adjust bootid=... argument
+             ewarn "No memtest binary found (either install package grml-live-addons or memtest86+), skipping."
+             log "No memtest binary found (either install package grml-live-addons or memtest86+), skipping."
+             eend 0
           fi
-        fi
-      done
+       fi
 
-      # adjust bootsplash accordingly but make sure the string has the according lenght
-      SQUASHFS_NAME="$(cut_string 20 "$SQUASHFS_NAME")"
-      SQUASHFS_NAME="$(extend_string_end 20 "$SQUASHFS_NAME")"
-      for file in f4 f5 ; do
-         if [ -r "${BUILD_OUTPUT}/boot/isolinux/${file}" ] ; then
-            sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
-            sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
-         fi
-      done
+       # if we don't have an initrd we a) can't boot and b) there was an error
+       # during build, so check for the file:
+       INITRD="$(ls $CHROOT_OUTPUT/boot/initrd* 2>/dev/null| grep -v '.bak$' | sort -r | head -1)"
+       if [ -n "$INITRD" ] ; then
+          cp $INITRD "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/initrd.gz
+          find $CHROOT_OUTPUT/boot/ -name initrd\*.bak -exec rm {} \;
+       else
+          log    "Error: No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting"
+          eerror "Error: No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
+          bailout 10
+       fi
 
-      # generate addon list
-      rm "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
-      for name in "${BUILD_OUTPUT}"/boot/isolinux/addon_*.cfg ; do
-        include_name=$(basename "$name")
-        echo "include $include_name"  >> "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
-      done
+       KERNEL_IMAGE="$(ls $CHROOT_OUTPUT/boot/vmlinuz* 2>/dev/null | sort -r | head -1)"
+       if [ -n "$KERNEL_IMAGE" ] ; then
+          cp "$KERNEL_IMAGE" "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/linux26
+       else
+          log    "Error: No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting"
+          eerror "Error: No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
+          bailout 11
+       fi
 
-      if ! [ -r "${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg" ] || [ "$DISTRI_NAME" = "grml" ] ; then
-         log "including grmlmain.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-         echo "include grmlmain.cfg"    >  "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-         echo "include default.cfg"     >  "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-         echo "include menuoptions.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-         echo "include grml.cfg"        >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+       [ -n "$TEMPLATE_DIRECTORY" ] || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
+       if ! [ -d "${TEMPLATE_DIRECTORY}"/boot ] ; then
+          log    "Error: ${TEMPLATE_DIRECTORY}/boot does not exist. Exiting."
+          eerror "Error: ${TEMPLATE_DIRECTORY}/boot does not exist. Exiting." ; eend 1
+          bailout 8
+       fi
 
-         for f in "${BUILD_OUTPUT}"/boot/isolinux/submenu*.cfg ; do
-           echo "include $(basename $f)"     >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-         done
+       # *always* copy files to output directory so the variables
+       # get adjusted according to the build
+       cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
 
-         echo "include options.cfg"     >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-         if [ ! -n "$NO_ADDONS" ] ; then
-           echo "include addons.cfg"    >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-         fi
-         echo "include isoprompt.cfg"   >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-         echo "include hd.cfg"          >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-         echo "include hidden.cfg"      >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-      else # assume we are building a custom distribution:
-         log "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
-         einfo "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
-         if grep -q "^include ${DISTRI_NAME}.cfg" "${BUILD_OUTPUT}/boot/isolinux/distri.cfg" ; then
-           log "include for ${DISTRI_NAME}.cfg already present, nothing to do."
-           eindent
-           einfo "include for ${DISTRI_NAME}.cfg already present, nothing to do."
-           eoutdent
-           eend $?
-        else
-           log "including ${DISTRI_NAME}.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-           echo "include ${DISTRI_NAME}.cfg" > "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-           [ -n "$NO_ADDONS" ] || echo "include addons.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-         fi
-      fi
+       if [ -n "$NO_ADDONS" ] ; then
+          log   "Skipping installation of boot addons as requested via \$NO_ADDONS."
+          einfo "Skipping installation of boot addons as requested via \$NO_ADDONS."; eend 0
+       else
+          if ! [ -d "$TEMPLATE_DIRECTORY"/boot/addons ] ; then
+            log   "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)"
+            ewarn "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)" ; eend 0
+          else
+            # copy only files so we can handle bsd4grml on its own
+            for file in ${TEMPLATE_DIRECTORY}/boot/addons/* ; do
+              test -f $file && cp $file "$BUILD_OUTPUT"/boot/addons/
+            done
 
-      # use old style console based isolinux method only if requested:
-      if [[ "${ISOLINUX_METHOD}" == "console" ]] ; then
-         log 'Using console based isolinux method as requested via $ISOLINUX_METHOD.'
-         einfo 'Using console based isolinux method as requested via $ISOLINUX_METHOD.'
-         if grep -q '^include console.cfg' "${BUILD_OUTPUT}/boot/isolinux/distri.cfg" ; then
-           einfo "include for console.cfg already foud, nothing to do."
-           eend 0
-         else
-           log "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-           einfo "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-           echo "include console.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-           eend $?
-         fi
-      else
-         log 'Using graphical boot menu.'
-         if grep -q '^include vesamenu.cfg' "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg" ; then
-           log "include for vesamenu.cfg already foud, nothing to do."
-         else
-           log "including vesamenu.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-           echo "include vesamenu.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-         fi
-      fi
-
-      # jump back to grub from bsd4grml (/boot/grub/stage2):
-      GRUB_LEGACY=stage2
-
-      if [ -e "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6 ]; then
-         if [ -e "$BUILD_OUTPUT"/boot/grub/core.img ]; then
-            GRUB_VERSION=2
-         else
-            GRUB_VERSION=1
-         fi
-
-         for file in "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6 \
-                     "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.cfg \
-                     "$BUILD_OUTPUT"/boot/isolinux/*.cfg \
-                     "$BUILD_OUTPUT"/boot/grub/grub.cfg \
-                     "$BUILD_OUTPUT"/boot/grub/menu.lst ; do
-             if [ -e "$file" ] ; then
-               sed -i -e "s!%GRUB_VERSION%!$GRUB_VERSION!g" \
-                      -e "s!%GRUB_LEGACY%!$GRUB_LEGACY!g" "$file"
-             fi
-         done
-
-         sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6
-      fi
-
-      if [ -e "$BUILD_OUTPUT"/boot/grub/$GRUB_LEGACY ]; then
-         sed -i "s/%GRUB_LEGACY%/$GRUB_LEGACY/g" "$BUILD_OUTPUT"/boot/grub/menu.lst
-         sed -i "s/%GRUB_LEGACY%/$GRUB_LEGACY/g" "$BUILD_OUTPUT"/boot/grub/grub.cfg
-      elif [ -e "$BUILD_OUTPUT"/boot/grub/menu.lst -a -e "$BUILD_OUTPUT"/boot/grub/grub.cfg ] ; then
-         sed -i "/%GRUB_LEGACY%/d" "$BUILD_OUTPUT"/boot/grub/menu.lst
-         sed -i "/%GRUB_LEGACY%/d" "$BUILD_OUTPUT"/boot/grub/grub.cfg
-      fi
-
-      DPKG_LIST="/var/log/fai/$HOSTNAME/last/dpkg.list" # the dpkg --list output of the chroot
-      if ! [ -r "$DPKG_LIST" ] ; then
-         ewarn "$DPKG_LIST could not be read, ignoring to store package information on ISO therefore."
-      else
-         einfo "Storing package list information as /GRML/${GRML_NAME}-packages.txt on ISO."
-         cp "$DPKG_LIST" "${BUILD_OUTPUT}/GRML/${GRML_NAME}-packages.txt"
-         eend $?
-      fi
-
-      # autostart for Windows:
-      if [ -d "${TEMPLATE_DIRECTORY}/windows/autostart/" ] ; then
-         cp ${TEMPLATE_DIRECTORY}/windows/autostart/* "$BUILD_OUTPUT"/
-      fi
-
-      # windows-binaries:
-      if [ -n "$NO_WINDOWS_BINARIES" ] ; then
-         log   "Skipping download of windows binaries as requested via \$NO_WINDOWS_BINARIES."
-         einfo "Skipping download of windows binaries as requested via \$NO_WINDOWS_BINARIES."
-         eend 0
-      else
-         if [ -f "$BUILD_OUTPUT"/windows/putty.exe ] ; then
-            log   "Skipping stage 'WINDOWS_BINARIES' as $BUILD_OUTPUT/windows exists already."
-            ewarn "Skipping stage 'WINDOWS_BINARIES' as $BUILD_OUTPUT/windows exists already." ; eend 0
-         else
-            if ! [ -d "$BUILD_OUTPUT"/windows ] ; then
-               mkdir "$BUILD_OUTPUT"/windows
-               ( cd "$BUILD_OUTPUT"/windows
-                 for file in pageant plink pscp psftp putty puttygen ; do
-                    wget -O ${file}.exe ${WINDOWS_BINARIES}/${file}.exe
-                    md5sum ${file}.exe > ${file}.exe.md5
-                 done )
+            if [ -n "$NO_ADDONS_BSD4GRML" ] ; then
+               log   "Skipping installation of bsd4grml as requested via \$NO_ADDONS_BSD4GRML."
+               einfo "Skipping installation of bsd4grml as requested via \$NO_ADDONS_BSD4GRML."; eend 0
+            else
+               if [ -d "$TEMPLATE_DIRECTORY"/boot/addons/bsd4grml ] ; then
+                 cp -a ${TEMPLATE_DIRECTORY}/boot/addons/bsd4grml "$BUILD_OUTPUT"/boot/addons/
+               else
+                 log   "bsd4grml addon not found, skipping therefore."
+                 ewarn "bsd4grml addon not found, skipping therefore." ; eend 0
+               fi
             fi
 
-            log "Finished execution of stage 'WINDOWS_BINARIES' [$(date)]"
-            einfo "Finished execution of stage 'WINDOWS_BINARIES'" ; eend 0
-         fi
-      fi
+          fi # no "$TEMPLATE_DIRECTORY"/boot/addons
+       fi # NO_ADDONS
 
-   FORCE_ISO_REBUILD=true
-   einfo "Finished execution of stage 'boot'" ; eend 0
-   fi
+       if ! [ -d ${TEMPLATE_DIRECTORY}/boot/grub ] ; then
+          log   "grub templates do not exist, skipping therefore."
+          ewarn "grub templates do not exist, skipping therefore." ; eend 0
+       else
+          if ! [ -d "${BUILD_OUTPUT}/boot/grub" ] ; then
+             cp -a ${TEMPLATE_DIRECTORY}/boot/grub  "$BUILD_OUTPUT"/boot/
+          fi
+
+          # make sure we have recent template files available, otherwise updating
+          # the strings like $GRML_NAME and $VERSION might be out of date
+          cp ${TEMPLATE_DIRECTORY}/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
+       fi
+
+       if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
+          log    "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
+          eerror "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting." ; eend 1
+          bailout 9
+       fi
+
+       [ -d "$BUILD_OUTPUT"/GRML ] || mkdir "$BUILD_OUTPUT"/GRML
+       cp -a ${TEMPLATE_DIRECTORY}/GRML/* "$BUILD_OUTPUT"/GRML/
+
+       # adjust boot splash information:
+       RELEASE_INFO="$GRML_NAME $VERSION - Release Codename $RELEASENAME"
+       RELEASE_INFO="$(cut_string 68 "$RELEASE_INFO")"
+       RELEASE_INFO="$(extend_string_end 68 "$RELEASE_INFO")"
+
+       if [ -r "$BUILD_OUTPUT"/GRML/grml-version ] ; then
+          sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/GRML/grml-version
+          sed -i "s/%DATE%/$DATE/"                                      "$BUILD_OUTPUT"/GRML/grml-version
+       fi
+
+       # make sure the squashfs filename is set accordingly:
+       SQUASHFS_NAME="$GRML_NAME.squashfs"
+
+       if [ -n "$NO_BOOTID" ] ; then
+          log   'Skipping bootid feature as requested via $NO_BOOTID.'
+          einfo 'Skipping bootid feature as requested via $NO_BOOTID.'
+       else
+          [ -n "$BOOTID" ] || BOOTID="$(echo ${GRML_NAME}${VERSION} | tr -d ',./;\- ')"
+          [ -d "$BUILD_OUTPUT"/conf ] || mkdir "$BUILD_OUTPUT"/conf
+          einfo "Generating /conf/bootid.txt with entry ${BOOTID}."
+          log   "Generating /conf/bootid.txt with entry ${BOOTID}."
+          echo "$BOOTID" > "$BUILD_OUTPUT"/conf/bootid.txt
+          eend $?
+       fi
+
+       # adjust all variables in the templates with the according distribution information
+       for file in "${BUILD_OUTPUT}"/boot/isolinux/*.cfg "${BUILD_OUTPUT}"/boot/isolinux/*.msg \
+                   "${BUILD_OUTPUT}"/boot/grub/* ; do
+         if [ -r "${file}" ] ; then
+           sed -i "s/%ARCH%/$ARCH/g"                    "${file}"
+           sed -i "s/%DATE%/$DATE/g"                    "${file}"
+           sed -i "s/%DISTRI_INFO%/$DISTRI_INFO/g"      "${file}"
+           sed -i "s/%DISTRI_NAME%/$DISTRI_NAME/g"      "${file}"
+           sed -i "s/%DISTRI_SPLASH%/$DISTRI_SPLASH/g"  "${file}"
+           sed -i "s/%GRML_NAME%/$GRML_NAME/g"          "${file}"
+           sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/g"  "${file}"
+           sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/g"    "${file}"
+           sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
+           sed -i "s/%VERSION%/$VERSION/g"              "${file}"
+
+           [ -n "$DEFAULT_BOOTOPTIONS" ] && sed -i "s/ boot=live/ boot=live $DEFAULT_BOOTOPTIONS/"  "${file}"
+
+           if [ -n "$NO_BOOTID" ] ; then
+              sed -i "s/ bootid=%BOOTID%//g" "${file}" # drop bootid bootoption
+           else
+              sed -i "s/%BOOTID%/$BOOTID/g" "${file}" # adjust bootid=... argument
+           fi
+         fi
+       done
+
+       # adjust bootsplash accordingly but make sure the string has the according lenght
+       SQUASHFS_NAME="$(cut_string 20 "$SQUASHFS_NAME")"
+       SQUASHFS_NAME="$(extend_string_end 20 "$SQUASHFS_NAME")"
+       for file in f4 f5 ; do
+          if [ -r "${BUILD_OUTPUT}/boot/isolinux/${file}" ] ; then
+             sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
+             sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
+          fi
+       done
+
+       # generate addon list
+       rm "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
+       for name in "${BUILD_OUTPUT}"/boot/isolinux/addon_*.cfg ; do
+         include_name=$(basename "$name")
+         echo "include $include_name"  >> "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
+       done
+
+       if ! [ -r "${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg" ] || [ "$DISTRI_NAME" = "grml" ] ; then
+          log "including grmlmain.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+          echo "include grmlmain.cfg"    >  "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+          echo "include default.cfg"     >  "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+          echo "include menuoptions.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+          echo "include grml.cfg"        >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+
+          for f in "${BUILD_OUTPUT}"/boot/isolinux/submenu*.cfg ; do
+            echo "include $(basename $f)"     >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+          done
+
+          echo "include options.cfg"     >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+          if [ ! -n "$NO_ADDONS" ] ; then
+            echo "include addons.cfg"    >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+          fi
+          echo "include isoprompt.cfg"   >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+          echo "include hd.cfg"          >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+          echo "include hidden.cfg"      >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+       else # assume we are building a custom distribution:
+          log "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
+          einfo "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
+          if grep -q "^include ${DISTRI_NAME}.cfg" "${BUILD_OUTPUT}/boot/isolinux/distri.cfg" ; then
+            log "include for ${DISTRI_NAME}.cfg already present, nothing to do."
+            eindent
+            einfo "include for ${DISTRI_NAME}.cfg already present, nothing to do."
+            eoutdent
+            eend $?
+         else
+            log "including ${DISTRI_NAME}.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+            echo "include ${DISTRI_NAME}.cfg" > "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+            [ -n "$NO_ADDONS" ] || echo "include addons.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+          fi
+       fi
+
+       # use old style console based isolinux method only if requested:
+       if [[ "${ISOLINUX_METHOD}" == "console" ]] ; then
+          log 'Using console based isolinux method as requested via $ISOLINUX_METHOD.'
+          einfo 'Using console based isolinux method as requested via $ISOLINUX_METHOD.'
+          if grep -q '^include console.cfg' "${BUILD_OUTPUT}/boot/isolinux/distri.cfg" ; then
+            einfo "include for console.cfg already foud, nothing to do."
+            eend 0
+          else
+            log "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
+            einfo "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
+            echo "include console.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
+            eend $?
+          fi
+       else
+          log 'Using graphical boot menu.'
+          if grep -q '^include vesamenu.cfg' "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg" ; then
+            log "include for vesamenu.cfg already foud, nothing to do."
+          else
+            log "including vesamenu.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
+            echo "include vesamenu.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
+          fi
+       fi
+
+       # jump back to grub from bsd4grml (/boot/grub/stage2):
+       GRUB_LEGACY=stage2
+
+       if [ -e "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6 ]; then
+          if [ -e "$BUILD_OUTPUT"/boot/grub/core.img ]; then
+             GRUB_VERSION=2
+          else
+             GRUB_VERSION=1
+          fi
+
+          for file in "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6 \
+                      "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.cfg \
+                      "$BUILD_OUTPUT"/boot/isolinux/*.cfg \
+                      "$BUILD_OUTPUT"/boot/grub/grub.cfg \
+                      "$BUILD_OUTPUT"/boot/grub/menu.lst ; do
+              if [ -e "$file" ] ; then
+                sed -i -e "s!%GRUB_VERSION%!$GRUB_VERSION!g" \
+                       -e "s!%GRUB_LEGACY%!$GRUB_LEGACY!g" "$file"
+              fi
+          done
+
+          sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6
+       fi
+
+       if [ -e "$BUILD_OUTPUT"/boot/grub/$GRUB_LEGACY ]; then
+          sed -i "s/%GRUB_LEGACY%/$GRUB_LEGACY/g" "$BUILD_OUTPUT"/boot/grub/menu.lst
+          sed -i "s/%GRUB_LEGACY%/$GRUB_LEGACY/g" "$BUILD_OUTPUT"/boot/grub/grub.cfg
+       elif [ -e "$BUILD_OUTPUT"/boot/grub/menu.lst -a -e "$BUILD_OUTPUT"/boot/grub/grub.cfg ] ; then
+          sed -i "/%GRUB_LEGACY%/d" "$BUILD_OUTPUT"/boot/grub/menu.lst
+          sed -i "/%GRUB_LEGACY%/d" "$BUILD_OUTPUT"/boot/grub/grub.cfg
+       fi
+
+       DPKG_LIST="/var/log/fai/$HOSTNAME/last/dpkg.list" # the dpkg --list output of the chroot
+       if ! [ -r "$DPKG_LIST" ] ; then
+          ewarn "$DPKG_LIST could not be read, ignoring to store package information on ISO therefore."
+       else
+          einfo "Storing package list information as /GRML/${GRML_NAME}-packages.txt on ISO."
+          cp "$DPKG_LIST" "${BUILD_OUTPUT}/GRML/${GRML_NAME}-packages.txt"
+          eend $?
+       fi
+
+       # autostart for Windows:
+       if [ -d "${TEMPLATE_DIRECTORY}/windows/autostart/" ] ; then
+          cp ${TEMPLATE_DIRECTORY}/windows/autostart/* "$BUILD_OUTPUT"/
+       fi
+
+       # windows-binaries:
+       if [ -n "$NO_WINDOWS_BINARIES" ] ; then
+          log   "Skipping download of windows binaries as requested via \$NO_WINDOWS_BINARIES."
+          einfo "Skipping download of windows binaries as requested via \$NO_WINDOWS_BINARIES."
+          eend 0
+       else
+          if [ -f "$BUILD_OUTPUT"/windows/putty.exe ] ; then
+             log   "Skipping stage 'WINDOWS_BINARIES' as $BUILD_OUTPUT/windows exists already."
+             ewarn "Skipping stage 'WINDOWS_BINARIES' as $BUILD_OUTPUT/windows exists already." ; eend 0
+          else
+             if ! [ -d "$BUILD_OUTPUT"/windows ] ; then
+                mkdir "$BUILD_OUTPUT"/windows
+                ( cd "$BUILD_OUTPUT"/windows
+                  for file in pageant plink pscp psftp putty puttygen ; do
+                     wget -O ${file}.exe ${WINDOWS_BINARIES}/${file}.exe
+                     md5sum ${file}.exe > ${file}.exe.md5
+                  done )
+             fi
+
+             log "Finished execution of stage 'WINDOWS_BINARIES' [$(date)]"
+             einfo "Finished execution of stage 'WINDOWS_BINARIES'" ; eend 0
+          fi
+       fi
+
+    FORCE_ISO_REBUILD=true
+    einfo "Finished execution of stage 'boot'" ; eend 0
+    fi
+  fi # BOOTSTRAP_ONLY
 else
    log    'Error: Unsupported ARCH, sorry. Want to support it? Contribute!'
    eerror 'Error: Unsupported ARCH, sorry. Want to support it? Contribute!' ; eend 1
@@ -950,8 +962,8 @@ if [ -f "$BUILD_OUTPUT"/live/${GRML_NAME}.squashfs -a -z "$UPDATE" -a -z "$BUILD
    log   "Skipping stage 'squashfs' as $BUILD_OUTPUT/live exists already."
    ewarn "Skipping stage 'squashfs' as $BUILD_OUTPUT/live exists already." ; eend 0
 elif [ -n "$SKIP_MKSQUASHFS" ] ; then
-   log   "Skipping stage 'squashfs' as requested via option -q"
-   ewarn "Skipping stage 'squashfs' as requested via option -q" ; eend 0
+   log   "Skipping stage 'squashfs' as requested via option -q or -N"
+   ewarn "Skipping stage 'squashfs' as requested via option -q or -N" ; eend 0
 else
    [ -d "$BUILD_OUTPUT"/live ] || mkdir "$BUILD_OUTPUT"/live
    # make sure we don't leave (even an empty) base.tgz:
@@ -1022,8 +1034,10 @@ else
 fi
 
 # create md5sum file:
-( cd $BUILD_OUTPUT/GRML &&
-find .. -type f -not -name md5sums -not -name isolinux.bin -exec md5sum {} \; > md5sums )
+if [ -z "$BOOTSTRAP_ONLY" ] ; then
+  ( cd $BUILD_OUTPUT/GRML &&
+  find .. -type f -not -name md5sums -not -name isolinux.bin -exec md5sum {} \; > md5sums )
+fi
 # }}}
 
 # ISO_OUTPUT - mkisofs {{{
@@ -1051,8 +1065,8 @@ if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$
    log   "Skipping stage 'iso build' as $ISO_OUTPUT/${ISO_NAME} exists already."
    ewarn "Skipping stage 'iso build' as $ISO_OUTPUT/${ISO_NAME} exists already." ; eend 0
 elif [ -n "$SKIP_MKISOFS" ] ; then
-   log   "Skipping stage 'iso build' as requested via option -n"
-   ewarn "Skipping stage 'iso build' as requested via option -n" ; eend 0
+   log   "Skipping stage 'iso build' as requested via option -n or -N"
+   ewarn "Skipping stage 'iso build' as requested via option -n or -N" ; eend 0
 else
    mkdir -p "$ISO_OUTPUT" || bailout 6 "Problem with creating $ISO_OUTPUT for stage 'iso build'"
 
