@@ -19,7 +19,7 @@ if ! [ -r "$target/${PACKAGE_LIST}" ] ; then
    echo "No $target/${PACKAGE_LIST} found, will not run package validation check."
 else
    printf "Validating package list: "
-   if $ROOTCMD dpkg --list $(grep -v '^#' $target/${PACKAGE_LIST}) >/dev/null 2>$LOGDIR/package_errors.log ; then
+   if $ROOTCMD dpkg --list $(grep -v '^#' $target/${PACKAGE_LIST} | grep -v -- '-$') >/dev/null 2>$LOGDIR/package_errors.log ; then
       printf "done - no errors found\n"
    else
       printf "failed (there have been errors, find them at $LOGDIR/package_errors.log)\n"
