@@ -13,8 +13,10 @@ TIMEZONE=Europe/Vienna
 # root password for the new installed linux system; md5 and crypt are possible
 ROOTPW='x'
 
-# MODULESLIST contains modules that will be loaded by the new system,
-# not during installation these modules will be written to /etc/modules
-# If you need a module during installation, add it to $kernelmodules
-# in 20-hwdetect.source. But discover should do most of this job
-# MODULESLIST="usbkbd ehci-hcd ohci-hcd uhci-hcd usbhid psmouse"
+# Retrieve sources and store theme
+# FAI_DEBSOURCESDIR=/grml/sources/
+
+# Maximum number of packages installed at a time,
+# needs to be quite high so we can override installation
+# of specific packages through the IGNORE class.
+MAXPACKAGES=3000
