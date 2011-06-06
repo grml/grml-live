@@ -36,7 +36,7 @@ if [ -n "${AUTOBUILD:-}" ] ; then
   UNIXTIME=$(date +%s)
 
   cat > debian/changelog << EOF
-grml-live (${GRML_LIVE_VERSION}~autobuild${UNIXTIME}) UNRELEASED; urgency=low
+grml-live (${GRML_LIVE_VERSION}+autobuild${UNIXTIME}) UNRELEASED; urgency=low
 
   * Automatically built package based on the state of
     git repository at http://git.grml.org/?p=grml-live.git
