@@ -12,20 +12,12 @@ fcopy /usr/share/initramfs-tools/scripts/init-top/grml
 fcopy /etc/initramfs-tools/hooks/000-udev-shutup
 fcopy /etc/initramfs-tools/conf.d/xz-compress
 
-FILE=$(ls -1 $target/boot/vmlinuz-* 2>/dev/null| sort -r | head -1)
-KERNELVERSION=$(echo "${FILE##$target/boot/vmlinuz-}")
-
-if [ -z "$KERNELVERSION" ] ; then
-   echo "Error: No kernel found, can not create initramfs. Exiting.">&2
+if ! [ -f $target/usr/share/initramfs-tools/scripts/live ] ; then
+   echo "Error: live-boot/-initramfs does not seem to be present, can not create initramfs. Exiting.">&2
    exit 1
 fi
 
-if [ -f $target/usr/share/initramfs-tools/scripts/live ] ; then
-   $ROOTCMD update-initramfs -c -t -k $KERNELVERSION
-else
-   echo "Error: live-initramfs does not seem to be present, can not create initramfs. Exiting.">&2
-   exit 1
-fi
+# The initramfs itself will be created through grml-live script itself.
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
