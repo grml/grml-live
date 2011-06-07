@@ -77,14 +77,6 @@ einfo "Creating ~/.zshrc"
   touch ~/.zshrc
 eend $?
 
-if [ -r /usr/share/lintian/overrides/ion3 ] ; then
-  einfo "Stripping ion3-stuff"
-  cat /usr/share/lintian/overrides/ion3 | sed 's#.*./usr#/usr#' | \
-  sed 's/.comment//' | xargs strip --strip-unneeded ; eend $?
-else
-  ewarn "ion3 not installed" ; eend 0
-fi
-
 if [ -d /usr/lib/valgrind/x86-linux/ ] ; then
   einfo "Stripping /usr/lib/valgrind/x86-linux/"
   strip  --strip-unneeded  /usr/lib/valgrind/x86-linux/*
