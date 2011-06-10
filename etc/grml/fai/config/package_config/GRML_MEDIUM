@@ -5,13 +5,12 @@ acpi-support
 adduser
 agrep
 alsa-base
-alsa-tools
 alsa-utils
 apt
 atftp
 atftpd
 attr
-aumix alsa-utils
+aumix
 bash
 beep
 bing
