@@ -220,11 +220,11 @@ checkvalue $CONFIG_GPM && config_gpm
 
 [ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||||||||">/dev/tty14
 
-checkvalue $CONFIG_SERVICES && config_services
-
 checkvalue $CONFIG_NETCONFIG && config_netconfig
 
 checkvalue $CONFIG_NETSCRIPT && config_netscript
+
+checkvalue $CONFIG_SERVICES && config_services
 
 checkvalue $CONFIG_NETIPV6 && config_ipv6
 
