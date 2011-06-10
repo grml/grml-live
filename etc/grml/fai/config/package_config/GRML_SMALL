@@ -77,7 +77,7 @@ mtools
 mtr-tiny
 ncftp
 netbase
-netcat
+netcat-openbsd
 net-tools
 ntpdate
 # nvi -> see #490361

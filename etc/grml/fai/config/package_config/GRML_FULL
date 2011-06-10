@@ -897,8 +897,7 @@ ndisc6
 ndiswrapper-utils-1.9
 ne
 netbase
-netcat
-netcat6
+netcat-openbsd
 netdiag
 netdiscover
 nethack-common

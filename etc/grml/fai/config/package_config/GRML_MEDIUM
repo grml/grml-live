@@ -116,7 +116,7 @@ mtr-tiny
 multitail
 ncftp
 netbase
-netcat
+netcat-openbsd
 net-tools
 nfs-kernel-server
 ntfs-3g
