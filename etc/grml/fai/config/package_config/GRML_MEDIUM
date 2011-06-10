@@ -148,7 +148,6 @@ setserial
 sharutils
 smartmontools
 socat
-socket
 sshfs
 statserial
 sudo

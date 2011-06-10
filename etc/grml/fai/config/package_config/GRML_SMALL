@@ -102,7 +102,6 @@ ser2net
 setserial
 sharutils
 smartmontools
-socket
 statserial
 sudo
 symlinks
