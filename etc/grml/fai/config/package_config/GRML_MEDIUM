@@ -91,6 +91,7 @@ kexec-tools
 keychain
 knockd
 latencytop
+libnss-myhostname
 lilo
 links
 links2

@@ -58,6 +58,7 @@ jfsutils
 kexec-tools
 keychain
 knockd
+libnss-myhostname
 lilo
 links
 lockfile-progs

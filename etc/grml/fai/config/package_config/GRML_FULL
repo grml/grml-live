@@ -752,6 +752,7 @@ libaa-bin
 libcap2-bin
 libewf1
 libnss-mdns
+libnss-myhostname
 libsmbios-bin
 libtool
 lighttpd
