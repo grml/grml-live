@@ -1527,7 +1527,6 @@ agrep
 atmel-firmware
 bluez-firmware
 firmware-iwlwifi
-firmware-ipw2x00
 firmware-qlogic
 firmware-ralink
 firmware-realtek
