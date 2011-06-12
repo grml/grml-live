@@ -16,25 +16,15 @@ PACKAGES aptitude
 ## }}}
 
 ## grml specific packages {{{
-aamath
-advchk
 aesutil
-afflib
-amap
 bfa
 bkp
-cmospwd
-ctris
-dd-rhelp
 deletemail
-dupmerge
 dupseek
-elizatalk
 ex
 ext3rminator
 ftpbackup
 gateguardian
-gatling
 gifshuffle
 grml-debugtools
 grml-desktop
@@ -53,36 +43,25 @@ grml-templates
 grml-terminalserver
 grml-x
 heirloom-sh
-histring
-i855crt
 icmp-mtu
 icmp-quench
 icmp-reset
-ipw-firmware
 lcdtest
 libacme-bleach-perl
 libacme-eyedrops-perl
 libacme-smirch-perl
-md5deep
-minised
 msgid-chooser
 nat-traverse
 ncp
-pip
-prism54-firmware
 prosilla
 ptfinder
-rainbowcrack
 rootsh
 shadowfs
 shish
-shmux
-sitar
 smap
 sudosh
 svn-ssh-wrappers
 tal
-texttools-doc
 thc-ipv6
 thinkfinger-tools
 upgrade-oldest
@@ -107,6 +86,7 @@ acpitool
 adduser
 aespipe
 aewan
+afflib-tools
 afio
 aggregate
 aiccu
@@ -282,6 +262,7 @@ clamav-testfiles
 clex
 clipit
 cloop-utils
+cmospwd
 cmus
 codeville
 colorgcc
@@ -345,7 +326,6 @@ dconf
 dcraw
 dctrl-tools
 ddclient
-ddrescue
 dds2tar
 debarchiver
 debconf
@@ -542,6 +522,7 @@ fxload
 g++
 gaffitter
 gamin
+gatling
 gcal
 gcc
 gcolor2
@@ -945,7 +926,6 @@ odt2txt
 oinkmaster
 olsrd
 olsrd-plugins
-op
 opalmod
 openafs-client
 openafs-krb5
@@ -1547,6 +1527,7 @@ agrep
 atmel-firmware
 bluez-firmware
 firmware-iwlwifi
+firmware-ipw2x00
 firmware-qlogic
 firmware-ralink
 firmware-realtek
@@ -1574,9 +1555,6 @@ fnfx-client
 fnfxd
 pstack
 retty
-
-# use linux-kernel-headers-grml instead of linux-libc-dev?
-# linux-kernel-headers-grml
 
 ## current kernel version 2.6.38-grml:
 #fglrx-kernel-2.6.38-grml

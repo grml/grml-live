@@ -50,7 +50,6 @@ ifupdown
 inetutils-inetd
 iproute
 iputils-ping
-ipw-firmware
 iw
 jed
 jed-common
@@ -88,7 +87,6 @@ passwd
 patch
 ppp
 # pppoeconf
-# prism54-firmware
 procinfo
 procps
 psmisc

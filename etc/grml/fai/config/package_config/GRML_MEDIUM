@@ -49,6 +49,7 @@ eterm
 ethtool
 findutils
 firmware-iwlwifi
+firmware-ipw2x00
 firmware-ralink
 firmware-realtek
 fluxbox
@@ -81,7 +82,6 @@ iproute
 iptraf
 iptstate
 iputils-ping
-ipw-firmware
 irqbalance
 iw
 jed
@@ -131,7 +131,6 @@ postfix
 powertop
 ppp
 pppoeconf
-prism54-firmware
 procinfo
 procps
 psmisc
