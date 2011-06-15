@@ -540,11 +540,17 @@ else
          mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
       fi
 
+      # tell dpkg to use "unsafe io" during the build
+      [ -d "$CHROOT_OUTPUT/etc/dpkg/dpkg.cfg.d" ] || mkdir -p "$CHROOT_OUTPUT/etc/dpkg/dpkg.cfg.d"
+      echo force-unsafe-io > "$CHROOT_OUTPUT/etc/dpkg/dpkg.cfg.d/unsafe-io"
+
       log "Executed FAI command line:"
       log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY fai $VERBOSE -C $GRML_FAI_CONFIG -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
       BUILD_ONLY="$BUILD_ONLY" BOOTSTRAP_ONLY="$BOOTSTRAP_ONLY" fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u \
       "$HOSTNAME" $FAI_ACTION "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
       RC="$PIPESTATUS" # notice: bash-only
+
+      rm -f "$CHROOT_OUTPUT/etc/dpkg/dpkg.cfg.d/unsafe-io"
 
       FORCE_ISO_REBUILD=true
 
