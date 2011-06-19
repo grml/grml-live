@@ -21,7 +21,7 @@ Patches, ideas and feedback welcome.
 * support multiple kernel versions installed in one single live-system
 
 * support configuration of grml-live through specific directory instead
-  of /etc/grml/*
+  of /etc/grml/* [see http://bts.grml.org/grml/issue880]
 
 * Provide different interfaces for easy and common use of grml-live:
   - a console interface (using dialog/stfl/...)
