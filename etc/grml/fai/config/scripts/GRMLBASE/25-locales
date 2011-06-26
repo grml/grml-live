@@ -1,36 +1,26 @@
 #!/bin/bash
-# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/25-locales
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/25-locales
 # Purpose:       locales (language) configuration of the live system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
+set -u
 set -e
 
-if [ -z "$ROOTCMD" ] ; then
-   echo "variable \$ROOTCMD not set, exiting to avoid any possible damage">&2
-   exit 1
-fi
-
-# use full locales setup only in classes GRML_FULL and LOCALES
-if ifclass GRML_FULL || ifclass LOCALES ; then
-   echo 'Using /etc/locale.gen.grml for locales generation'
-   cp $target/etc/locale.gen.grml $target/etc/locale.gen
-else
-   echo 'Using /etc/locale.gen.minimal for locales generation'
-   cp $target/etc/locale.gen.minimal $target/etc/locale.gen
-fi
+# set up /etc/locale.gen, only GRML_FULL and LOCALES have
+# the full setup, GRMLBASE installs a minimal configuration
+fcopy /etc/locale.gen
 
 # get rid of locales unless using class LOCALES
-# TODO
-# * this should be improved in the long run, ideas welcome :)
-# * what about /usr/share/i18n/locales?
+set +u
 if ! ifclass LOCALES ; then
+set -u
    echo 'Removing /usr/share/locale'
 
    # get rid of the original
-   $ROOTCMD rm -rf /usr/share/locale
+   rm -rf $target/usr/share/locale
 
    # restore *empty* directories because otherwise installation/upgrade of packages might fail
    [ -d "$target"/usr/share/locale ] || mkdir "$target"/usr/share/locale
@@ -52,15 +42,19 @@ if [ -x $target/usr/sbin/localepurge ] ; then
    $ROOTCMD dpkg-reconfigure -f noninteractive localepurge
 fi
 
-if [ -x $target/usr/sbin/locale-gen ] ; then
-   $ROOTCMD locale-gen
+if ! [ -x $target/usr/sbin/locale-gen ] ; then
+   echo 'Warning: locale-gen [package locales] not installed'
 else
-   echo 'Warning: locale-gen [package locales] not available'
+   echo "Running locale-gen"
+   $ROOTCMD locale-gen
 fi
 
-if [ -x $target/usr/sbin/localepurge ] ; then
-   $ROOTCMD localepurge
+if ! [ -x $target/usr/sbin/localepurge ] ; then
+  echo "Warning: localepurge not installed"
+else
+  echo "Running localepurge."
+  $ROOTCMD localepurge
 fi
 
 ## END OF FILE #################################################################
-# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

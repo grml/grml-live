@@ -1,0 +1,23 @@
+# This file was deployed via grml-live's
+# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/25-locales script, using
+# ${GRML_FAI_CONFIG}/config/files/etc/locale.gen/GRMLBASE
+################################################################################
+# This file lists locales that you wish to have built. You can find a list
+# of valid supported locales at /usr/share/i18n/SUPPORTED. Other
+# combinations are possible, but may not be well tested. If you change
+# this file, you need to rerun locale-gen.
+
+de_AT ISO-8859-1
+de_AT.UTF-8 UTF-8
+de_AT@euro ISO-8859-15
+de_CH ISO-8859-1
+de_CH.UTF-8 UTF-8
+de_DE ISO-8859-1
+de_DE.UTF-8 UTF-8
+de_DE@euro ISO-8859-15
+en_GB ISO-8859-1
+en_GB.ISO-8859-15 ISO-8859-15
+en_GB.UTF-8 UTF-8
+en_US ISO-8859-1
+en_US.ISO-8859-15 ISO-8859-15
+en_US.UTF-8 UTF-8

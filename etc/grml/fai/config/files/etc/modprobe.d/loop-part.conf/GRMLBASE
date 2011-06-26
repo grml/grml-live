@@ -1,6 +1,6 @@
 # This file was deployed via grml-live's
-# /etc/grml/fai/config/scripts/GRMLBASE/39-modprobe script, using
-# /etc/grml/fai/config/files/etc/modprobe.d/loop-part.conf/GRMLBASE
+# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/39-modprobe script, using
+# ${GRML_FAI_CONFIG}/config/files/etc/modprobe.d/loop-part.conf/GRMLBASE
 #
 # Filename:      /etc/modprobe.d/loop-part.conf
 # Purpose:       Enable partitions for loop devices per default in Grml

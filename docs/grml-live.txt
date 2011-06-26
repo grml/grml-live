@@ -35,8 +35,9 @@ to include on your very own Linux Live-CD without having to deal with all the
 details of a build process.
 
 CAUTION: grml-live does **not** use /etc/fai for configuration but instead
-provides and uses /etc/grml/fai. This ensures that it does not clash with
-default FAI configuration and packages, so you can use grml-live and FAI
+provides and uses ${GRML_FAI_CONFIG} which is pointing to /etc/grml/fai by default
+(unless overriden using the ''-D'' option). This ensures that it does not clash
+with default FAI configuration and packages, so you can use grml-live and FAI
 completely independent at the same time!
 
 [NOTE]
@@ -104,9 +105,9 @@ Please notice that all configuration files have to be adjusted during execution
 of grml-live, so please make sure you use /etc/grml/grml-live.conf as a base for
 your own configuration file (usually /etc/grml/grml-live.local). Please also
 notice that the configuration file specified via this option is **not** (yet)
-supported inside the scripts/hooks/classes at /etc/grml/fai/config. Instead use
+supported inside the scripts/hooks/classes at ${GRML_FAI_CONFIG}/config. Instead use
 /etc/grml/grml-live.local for configuration stuff used inside
-/etc/grml/fai/config.
+${GRML_FAI_CONFIG}/config.
 
   -d **DATE**::
 
@@ -117,6 +118,16 @@ executing 'date +%Y-%m-%d'). The information is stored inside the file
 the bootsplash related files. This option is useful if you want to provide an
 ISO with release information for a specific date but have to build it in
 advance. Usage example: '-d 2009-10-30'
+
+  -D **CONFIGURATION_DIRECTORY**::
+
+The specified directory is used as configuration directory for grml-live and its
+FAI. By default /etc/grml/fai is used as default configuration directory.  If
+you want to have different configuration scripts, package definitions, etc. with
+without messing with the global configuration under /etc/grml/fai provided by
+grml-live this option provides you the option to use your own configuration
+directory. This directory is what's being referred to as ${GRML_FAI_CONFIG}
+throughout this documentation.
 
   -F::
 
@@ -182,7 +193,7 @@ Specify name of the release.
 Specify the Debian suite you want to use for your live-system.  Defaults to
 "squeeze" (being current Debian/stable). Supported values are: etch, lenny,
 squeeze, sid. Debian "squeeze" requires a recent base.tgz
-(/etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz) or a recent version of
+(${GRML_FAI_CONFIG}/config/basefiles/$CLASSNAME.tar.gz) or a recent version of
 debootstrap.
 
   -t **TEMPLATE_DIRECTORY**::
@@ -273,11 +284,11 @@ grml-live, as well as the architecture dependent class which provides the kernel
 GRML_SMALL, GRML_MEDIUM or GRML_FULL). The following files and directories are
 relevant for class GRMLBASE by default:
 
-  /etc/grml/fai/config/scripts/GRMLBASE/
-  /etc/grml/fai/config/debconf/GRMLBASE
-  /etc/grml/fai/config/class/GRMLBASE.var
-  /etc/grml/fai/config/hooks/instsoft.GRMLBASE
-  /etc/grml/fai/config/package_config/GRMLBASE
+  ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/
+  ${GRML_FAI_CONFIG}/config/debconf/GRMLBASE
+  ${GRML_FAI_CONFIG}/config/class/GRMLBASE.var
+  ${GRML_FAI_CONFIG}/config/hooks/instsoft.GRMLBASE
+  ${GRML_FAI_CONFIG}/config/package_config/GRMLBASE
 
 Take a look at the next section for information about the concept of those
 files/directories.
@@ -298,8 +309,8 @@ Available classes
 -----------------
 
 The package selection part of the classes can be found in
-/etc/grml/fai/config/package_config whereas some further classes are defined for
-example in /etc/grml/fai/config/scripts/ so specific feature sets can be
+${GRML_FAI_CONFIG}/config/package_config whereas some further classes are defined for
+example in ${GRML_FAI_CONFIG}/config/scripts/ so specific feature sets can be
 selected. The following classes are predefined:
 
 * DEBORPHAN: get rid of all packages listed in output of Deborphan
@@ -347,7 +358,7 @@ Files
 Notice that grml-live ships FAI configuration files that do not use the same
 namespace as the FAI packages itself. This ensures that grml-live does not clash
 with your usual FAI configuration, so instead of /etc/fai/fai.conf (package
-fai-client) grml uses /etc/grml/fai/fai.conf instead. For more details see
+fai-client) grml uses ${GRML_FAI_CONFIG}/fai.conf instead. For more details see
 below. To get an idea how another configuration or example files could look like
 check out /usr/share/doc/fai-doc/examples/simple/ (provided by Debian package
 fai-doc). Furthermore /usr/share/doc/fai-doc/fai-guide.html/ch-config.html
@@ -371,56 +382,56 @@ over the ones from /etc/grml/grml-live.conf. If you want to override settings
 from /etc/grml/grml-live.local as well you have to specify them on the grml-live
 commandline.
 
-  /etc/grml/fai/fai.conf
+  ${GRML_FAI_CONFIG}/fai.conf
 
 Main configuration file for FAI which specifies where all the configuration
 files and scripts for FAI/grml-live can be found. By default the configuration
 variables are FAI_CONFIG_SRC=file:///etc/grml/fai/config and
-FAI_CONFIGDIR=/etc/grml/fai/config - both pointing to a directory shipped by
+GRML_FAI_CONFIG=/etc/grml/fai/config - both pointing to a directory shipped by
 grml-live out-of-the-box so you shouldn't have to configure anything in this
 file.
 
-  /etc/grml/fai/make-fai-nfsroot.conf
+  ${GRML_FAI_CONFIG}/make-fai-nfsroot.conf
 
 This file is used by make-fai-nfsroot(8) only. Usually you don't have to change
 anything inside this file. If you want to modify NFSROOT though you can adjust
 it there.
 
-  /etc/grml/fai/NFSROOT
+  ${GRML_FAI_CONFIG}/NFSROOT
 
 This file specifies the package list for creating the NFSROOT.
 
-  /etc/grml/fai/apt/sources.list
+  ${GRML_FAI_CONFIG}/apt/sources.list
 
 This file specifies which mirrors should be considered for retrieving the Debian
 packages when creating the main chroot (including all the software you would
 like to see included). Important: this file should *not* be adjusted manually!
 Instead use the GRML_LIVE_SOURCES variable inside /etc/grml/grml-live.conf or
-/etc/grml/grml-live.local which modifies /etc/grml/fai/apt/sources.list
+/etc/grml/grml-live.local which modifies ${GRML_FAI_CONFIG}/apt/sources.list
 on-the-fly via grml-live then. If you want to generally adjust apt configuration
-use FAI's fcopy command with /etc/grml/fai/config/files instead.
+use FAI's fcopy command with ${GRML_FAI_CONFIG}/config/files instead.
 
-  /etc/grml/fai/config/
+  ${GRML_FAI_CONFIG}/config/
 
 The main directory for configuration of FAI/grml-live. More details below.
 
-  /etc/grml/fai/config/class/
+  ${GRML_FAI_CONFIG}/config/class/
 
 This directory contains files which specify main configuration variables for the
 FAI classes.
 
-  /etc/grml/fai/config/debconf/
+  ${GRML_FAI_CONFIG}/config/debconf/
 
 This directory provides the files for preseeding/configuration of debconf
 through files.
 
-  /etc/grml/fai/config/hooks/
+  ${GRML_FAI_CONFIG}/config/hooks/
 
 This directory provides files for customising the build process through hooks.
 Hooks are user defined programs or scripts, which are called during the
 installation process.
 
-  /etc/grml/fai/config/package_config/
+  ${GRML_FAI_CONFIG}/config/package_config/
 
 Directory with lists of software packages to be installed or removed.  The
 different classes describe what should find its way to your ISO.  When running
@@ -432,11 +443,11 @@ adjust the package selection according to your needs.  Please notice that the
 directory GRMLBASE contains a package list defining a minimum but still
 reasonable package configuration.
 
-  /etc/grml/fai/config/scripts/
+  ${GRML_FAI_CONFIG}/config/scripts/
 
 Scripts for customising the ISO within the build process.
 
-  /etc/grml/fai/live-initramfs/
+  ${GRML_FAI_CONFIG}/live-initramfs/
 
 This directory provides the files used for building the initramfs/initrd via
 live-initramfs(8).
@@ -812,6 +823,18 @@ worked as expected the last line of the shell output should look like:
 
 and the ISO can be found inside /grml-live/grml-live/grml_isos/ then.
 
+[[grml_fai_config_variable]]
+What is $GRML_FAI_CONFIG?
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The variable '$GRML_FAI_CONFIG' is pointing to the directory /etc/grml/fai by
+default.  To provide you a maximum of flexibility you can set up your own
+configuration directory (e.g. based on /etc/grml/fai) and use this directory
+running grml-live with the '-D <config_dir>' option. Now '$GRML_FAI_CONFIG'
+points to the specified directory instead of using /etc/grml/fai and all the
+configuration files, scripts and hooks will be taken from your
+'$GRML_FAI_CONFIG' directory.
+
 [[fai-on-etch]]
 Help, I'm using Debian etch and I don't have FAI version >3.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -908,7 +931,7 @@ adjust MIRROR_DIRECTORY and MIRROR_SOURCES inside /etc/grml/grml-live.conf as
 well.
 
 Unless you specify GRML_LIVE_SOURCES and/or FAI_DEBOOTSTRAP the default from
-/etc/grml/fai/apt/sources.list and /etc/grml/fai/make-fai-nfsroot.conf will be
+${GRML_FAI_CONFIG}/apt/sources.list and ${GRML_FAI_CONFIG}/make-fai-nfsroot.conf will be
 taken. If you customise the variables in /etc/grml/grml-live.conf then the two
 files will be adjusted during runtime automatically.
 

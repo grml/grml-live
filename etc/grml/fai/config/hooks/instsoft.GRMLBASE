@@ -1,5 +1,5 @@
 #!/bin/bash
-# Filename:      /etc/grml/fai/config/hooks/instsoft.GRMLBASE
+# Filename:      ${GRML_FAI_CONFIG}/hooks/instsoft.GRMLBASE
 # Purpose:       Grml specific software installation in the chroot, executed after updatebase
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
@@ -8,6 +8,9 @@
 
 set -u
 set -e
+
+GRML_SOURCES_LIST="$target/etc/apt/sources.list.d/grml.list"
+DEBIAN_SOURCES_LIST="$target/etc/apt/sources.list.d/debian.list"
 
 # if hooks/updatebase.GRMLBASE fails for whatever reason
 # and can't skip instsoft.GRMLBASE we have to make sure
@@ -62,28 +65,22 @@ EOF
 
    # FAI softupdate executes upgrade only with the sources.list being
    # present in the chroot - so let's do it on our own:
-   if [ -r /etc/grml/fai/apt/sources.list ] ; then
-      if [ -L $target/etc/apt/sources.list ] ; then
-         rm $target/etc/apt/sources.list
-      fi
+   fcopy /etc/apt/sources.list
 
-      # install grml-live's (on the fly adjusted) sources.list config
-      cp /etc/grml/fai/apt/sources.list $target/etc/apt/sources.list.d/grml-live.list
+   # when re-running grml-live with the -u option we do not want to use the
+   # sources.list config of the live system but grml-live's config instead,
+   # therefore temporarly move known files and restore them again later on
+   # through /etc/grml/fai/config/scripts/GRMLBASE/33-aptsetup:
+   if [ -r "$GRML_SOURCES_LIST" ] ; then
+      mv "$GRML_SOURCES_LIST" "${GRML_SOURCES_LIST}.unused"
+   fi
 
-      # when re-running grml-live with the -u option we do not want to use the
-      # sources.list config of the live system but grml-live's config instead,
-      # therefore temporarly move known files and restore them again later on
-      # through /etc/grml/fai/config/scripts/GRMLBASE/33-aptsetup:
-      if [ -r  $target/etc/apt/sources.list.d/grml.list ] ; then
-         mv $target/etc/apt/sources.list.d/grml.list $target/etc/apt/sources.list.d/grml.unused
-      fi
-      if [ -r  $target/etc/apt/sources.list.d/debian.list ] ; then
-         mv $target/etc/apt/sources.list.d/debian.list $target/etc/apt/sources.list.d/debian.unused
-      fi
+   if [ -r "$DEBIAN_SOURCES_LIST" ] ; then
+      mv "$DEBIAN_SOURCES_LIST" "${DEBIAN_SOURCES_LIST}.unused"
    fi
 
    # run it on our own, as updatebase is used at the wrong stage for our needs,
-   # see /etc/grml/fai/config/hooks/updatebase.GRMLBASE
+   # see ${GRML_FAI_CONFIG}/hooks/updatebase.GRMLBASE
    # the apt-get update might return an error if there's for example
    # a hashsum mismatch on Debian mirror sources, we might want to continue
    # but should warn the user

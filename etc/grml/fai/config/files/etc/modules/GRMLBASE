@@ -1,0 +1,10 @@
+# This file was deployed via grml-live's
+# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/41-modules script, using
+# ${GRML_FAI_CONFIG}/config/files/etc/modules/GRMLBASE
+################################################################################
+# This file should contain the names of kernel modules that are
+# to be loaded at boot time, one per line.  Comments begin with
+# a `#', and everything on the line after them are ignored.
+
+evdev
+fuse

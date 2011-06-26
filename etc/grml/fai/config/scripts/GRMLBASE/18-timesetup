@@ -1,5 +1,5 @@
 #!/bin/bash
-# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/18-timesetup
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/18-timesetup
 # Purpose:       apply default time and timezone settings
 # Authors:       (c) Thomas Lehmann <thomas.lehmann@kvt.de>
 # Bug-Reports:   send to author and see http://grml.org/bugs/
@@ -31,4 +31,4 @@ if [ -n "$TIMEZONE" ] ; then
 fi
 
 ## END OF FILE ################################################################
-# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

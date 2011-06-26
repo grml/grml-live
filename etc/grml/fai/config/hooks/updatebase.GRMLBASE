@@ -1,5 +1,5 @@
 #!/bin/bash
-# Filename:      /etc/grml/fai/config/hooks/updatebase.GRMLBASE
+# Filename:      ${GRML_FAI_CONFIG}/hooks/updatebase.GRMLBASE
 # Purpose:       Updates the base packages of the system, prepare chroot for instsoft
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
@@ -54,20 +54,14 @@ if [ -n "$BOOTSTRAP_ONLY" ] ; then
   skiptask configure
 fi
 
-# no softupdate but updating chroot e.g. based on /etc/grml/fai/config/basefiles/*
+# no softupdate but updating chroot e.g. based on ${GRML_FAI_CONFIG}/basefiles/*
 echo "Action $FAI_ACTION of FAI (hooks/updatebase.GRMLBASE) via grml-live running"
 
 # install all apt related files
 fcopy -r /etc/apt
 
-# remove grml-live's notice file from chroot:
-if [ -r $target/etc/apt/important_note.txt ] ; then
-   grep -q GRML_LIVE_SOURCES $target/etc/apt/important_note.txt && rm $target/etc/apt/important_note.txt
-fi
-
-# install grml gpg key:
-fcopy /etc/apt/grml.key
+# install Grml gpg key:
 $ROOTCMD apt-key add /etc/apt/grml.key
 
 ## END OF FILE #################################################################
-# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

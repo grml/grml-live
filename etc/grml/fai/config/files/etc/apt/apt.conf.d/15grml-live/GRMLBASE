@@ -1,4 +1,4 @@
-// Installed via /etc/grml/fai/config/files/etc/apt/apt.conf.d/15grml-live/GRMLBASE
+// Installed via ${GRML_FAI_CONFIG}/config/files/etc/apt/apt.conf.d/15grml-live/GRMLBASE
 
 // work around http://trac.lighttpd.net/trac/ticket/657
 Acquire::http::Pipeline-Depth 0; // added by grml-live"

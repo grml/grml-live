@@ -1,70 +1,195 @@
 #!/bin/bash
-# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/98-clean-chroot
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/98-clean-chroot
 # Purpose:       clean up chroot system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
-# License:       This file is licensed under the GPL v2 or any later version.
+# License:       This file is licensed under the GPL v2.
 ################################################################################
 
+set -u
 set -e
 
-# remove some big directories when using class LATEX_CLEANUP:
-if ifclass LATEX_CLEANUP ; then
-   cp /etc/grml/fai/grml/grml_cleanup_chroot.latex_cleanup $target/root/
-   $ROOTCMD  /root/grml_cleanup_chroot.latex_cleanup
-   rm $target/root/grml_cleanup_chroot.latex_cleanup
+if ! [ $(ls $target/boot/config-* 2>/dev/null) ] ; then
+  echo "No kernel config files (/boot/config-*) found. No kernel-image package installed?" >&2
+  exit 1
 fi
 
-# skip tasks which require only when using class NO_ONLINE:
-if ! ifclass NO_ONLINE ; then
-   cp /etc/grml/fai/grml/grml_cleanup_chroot.online $target/root/
-   $ROOTCMD  /root/grml_cleanup_chroot.online
-   rm $target/root/grml_cleanup_chroot.online
+echo "Creating ~/.zshrc"
+touch $target/root/.zshrc
+
+if [ -x $target/usr/sbin/localepurge ] ; then
+  echo "Running localepurge"
+  $ROOTCMD localepurge
+else
+  echo "Warning: localepurg not installed"
 fi
 
-# make sure to drop from grml-small what's unnecessary:
-if ifclass GRML_SMALL ; then
-   $ROOTCMD apt-get -y --purge remove aptitude
-   for pkg in groff-base info locales man-db manpages nano; do
-     $ROOTCMD apt-get --purge remove --yes $pkg || true
-   done
+# find /var -name \*.pid
+echo "Removing pid-files"
+find $target/var/run -name \*.pid -exec rm {} \;
+
+echo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
+rm -f $target/var/lib/apt/lists/*Packages \
+      $target/var/lib/apt/lists/*Release \
+      $target/var/lib/apt/lists/*Sources \
+      $target/var/lib/apt/lists/*IndexDiff \
+      $target/var/lib/apt/lists/*.gpg \
+      $target/var/cache/apt-show-versions/* \
+      $target/var/cache/debconf/templates.dat-old \
+      $target/var/cache/apt/*.bin
+$ROOTCMD apt-get check 2>/dev/null
+$ROOTCMD dpkg --clear-avail
+$ROOTCMD apt-cache gencaches 2>/dev/null
+$ROOTCMD apt-get clean
+
+rm -f $target/var/lib/dpkg/status-old $target/var/lib/dpkg/available-old
+
+if ! [ -x $target/usr/bin/grep-dctrl ] ; then
+  echo "Warning: grep-dctrl not installed"
+else
+  echo "Cleaning up /var/lib/dpkg/status"
+  if $ROOTCMD grep-dctrl -v -F Status "purge ok not-installed" \
+    /var/lib/dpkg/status > $target/var/lib/dpkg/status.new ; then
+    mv $target/var/lib/dpkg/status.new $target/var/lib/dpkg/status
+    chmod 644 $target/var/lib/dpkg/status
+    chown root:root $target/var/lib/dpkg/status
+  fi
 fi
 
-# drop unnecessary software:
-if ifclass GRML_SMALL || ifclass DEBORPHAN ; then
-   if [ -f /etc/grml/fai/grml/grml_cleanup_chroot.deborphan ] ; then
-      cp /etc/grml/fai/grml/grml_cleanup_chroot.deborphan $target/root/
-      $ROOTCMD  /root/grml_cleanup_chroot.deborphan
-      rm $target/root/grml_cleanup_chroot.deborphan
-   fi
+echo "Removing host ssh-keys"
+rm -f $target/etc/ssh/*key*
+
+if [ -d $target/var/spool/squid/ ] ; then
+  echo "Cleaning /var/spool/squid/0*"
+  rm -rf $target/var/spool/squid/0*
 fi
 
-# remove /usr/share/doc, /usr/share/info,... only in class REMOVE_DOCS:
-# (important: remove them *after* deinstalling packages, otherwise
-# removing packages might fail due to lack of /usr/share/man/...)
-if ifclass REMOVE_DOCS ; then
-   cp /etc/grml/fai/grml/grml_cleanup_chroot.remove_docs $target/root/
-   $ROOTCMD  /root/grml_cleanup_chroot.remove_docs
-   rm $target/root/grml_cleanup_chroot.remove_docs
-fi
-# misc cleanup:
-if [ -f /etc/grml/fai/grml/grml_cleanup_chroot ] ; then
-   cp /etc/grml/fai/grml/grml_cleanup_chroot $target/root/
-   $ROOTCMD  /root/grml_cleanup_chroot
-   rm $target/root/grml_cleanup_chroot
+echo "Cleaning and removing some misc files and directories"
+find $target/etc -type f -name *.pre_fcopy -delete
+rm -rf $target/etc/sysconfig/* $target/etc/motd.dpkg-* $target/etc/auto.master.*dpkg* \
+       $target/etc/samba/*.SID $target/etc/samba/*.tdb \
+       $target/var/run/ $target/var/log/ksymoops/* $target/var/lock/*  \
+       $target/var/state/* $target/var/log/nessus/* \
+       $target/halt $target/reboot $target/ash.static \
+       $target/etc/dhcpc/*.info $target/etc/dhcpc/resolv* \
+       $target/etc/*passwd- $target/etc/*shadow- \
+       $target/etc/*group- $target/var/spool/postfix/maildrop/* \
+       $target/etc/*.old $target/etc/*.original \
+       $target/etc/lvm/.cache $target/etc/lvm/cache/.cache \
+       $target/etc/lvm/backup/main $target/tmp/* \
+       $target/var/tmp/* $target/var/backups/* \
+       $target/var/lib/mysql $target/var/log/lilo_log.* $target/core*
+
+# remove only "temporary" or saved files in the given directories
+nuke(){
+  for i in $(find "$@" -name \*.gz -o -name \*.bz2 -o -name \*.0 2>/dev/null); do
+    rm -f "$i"
+  done
+}
+
+# set all files in the given directories to a length of zero
+zero(){
+  for i in $(find "$@" -type f -size +0 -not -name \*.ini 2>/dev/null); do
+    :> "$i"
+  done
+}
+
+echo "Cleaning log and cache directories"
+nuke ${target}/var/log       ${target}/var/cache
+zero ${target}/var/local     ${target}/var/log \
+     ${target}/var/spool     ${target}/var/lib/games \
+     ${target}/var/cache/man ${target}/var/lib/nfs \
+     ${target}/var/lib/xkb   ${target}/var/mail/grml \
+     ${target}/var/account/pacct
+
+# on /run we don't have to create it
+if [ -d ${target}/var/run ] ; then
+  echo "Recreate empty utmp and wtmp"
+  :>${target}/var/run/utmp
+  :>${target}/var/run/wtmp
 fi
 
-# make sure GRML_SMALL uses the appropriate configuration:
-if ifclass GRML_SMALL ; then
-   cp $target/etc/inittab.small $target/etc/inittab
+if ! [ -x $target/usr/sbin/update-ca-certificates ] ; then
+  echo "Warning: update-ca-certificates not installed"
+else
+  echo "Updating ca-certificates"
+  $ROOTCMD update-ca-certificates
 fi
 
-if ifclass RELEASE ; then
-   # Remove all FAI logs from chroot via grml-live later then:
-   touch $target/etc/grml_fai_release
-   # Remove all files inside /root/ of chroot:
-   rm -rf $target/root && mkdir -m 0755 $target/root
+# regenerate ls.so.cache
+if ! [ -x $target/sbin/ldconfig ] ; then
+  echo "Warning: ldconfig not installed"
+else
+  echo "Updating ld.so.cache"
+  $ROOTCMD ldconfig
+fi
+
+if [ -x $target/usr/bin/update-menus ] ; then
+  echo "Warning: update-menus not installed"
+else
+  echo "Updating windowmanager menus"
+  $ROOTCMD update-menus -v
+fi
+
+if ! [ -x $target/usr/bin/mandb ] ; then
+  echo "Warning: mandb not installed"
+else
+  echo "Updating mandb"
+  $ROOTCMD mandb -c
+  $ROOTCMD man doesnotexist >/dev/null 2>&1 || true
+fi
+
+if ! [ -d $target/var/lib/clamav/ ] ; then
+  echo "Warning: clamav[-freshclam] not installed"
+else
+  echo "Cleaning /var/lib/clamav/"
+  rm -f $target/var/lib/clamav/clamav-*
+
+  echo "Setting up daily.cvd and main.cvd symlinks"
+  if [ -f $target/var/lib/clamav/daily.cvd ] ; then
+    mkdir -p $target/usr/share/doc/clamav-freshclam/examples/
+    ln -sf /var/lib/clamav/daily.cvd $target/usr/share/doc/clamav-freshclam/examples/
+    ln -sf /var/lib/clamav/main.cvd  $target/usr/share/doc/clamav-freshclam/examples/
+  fi
+fi
+
+if ! [ -r $target/etc/ld.so.nohwcap ] ; then
+   echo "Creating /etc/ld.so.nohwcap"
+   touch $target/etc/ld.so.nohwcap
+fi
+
+# installation of resolvconf in chroot *with* /proc
+# is different from an installation without /proc,
+# so make sure it is OK in any case
+if ! [ -d $target/etc/resolvconf ] ; then
+  echo "Warning: resolvconf not installed"
+else
+  echo "Setting up resolvconf"
+  if [ -L $target/etc/resolvconf/run ] ; then # resolvconf with /run
+    # /etc/resolvconf/run symlinks to /run/resolvconf
+    RESOLV_CONF=/run/resolvconf/
+  else # no /run present
+    RESOLV_CONF=/etc/resolvconf/run/
+  fi
+
+  rm -rf   ${target}/${RESOLV_CONF}
+  mkdir -p ${target}/${RESOLV_CONF}
+
+  touch ${target}/${RESOLV_CONF}/enable-updates
+  mkdir ${target}/${RESOLV_CONF}/interface
+
+  cat > ${target}/${RESOLV_CONF}/resolv.conf << EOF
+# Dynamic resolv.conf(5) file for glibc resolver(3) generated by resolvconf(8)
+#     DO NOT EDIT THIS FILE BY HAND -- YOUR CHANGES WILL BE OVERWRITTEN
+EOF
+fi
+
+if ! [ -x $target/usr/bin/updatedb ] ; then
+  echo "Warning: updatedb not installed"
+else
+  echo "Updating locate-database"
+  $ROOTCMD updatedb --prunepaths='/tmp /usr/tmp /var/tmp /grml /root /proc /sys'
 fi
 
 ## END OF FILE #################################################################
-# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

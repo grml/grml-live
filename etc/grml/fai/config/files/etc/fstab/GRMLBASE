@@ -1,8 +1,8 @@
 # /etc/fstab - static file system information
 #
 # This file was deployed via grml-live's
-# /etc/grml/fai/config/scripts/GRMLBASE/30-fstab script, using
-# /etc/grml/fai/config/files/etc/fstab/GRMLBASE
+# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/30-fstab script, using
+# ${GRML_FAI_CONFIG}/config/files/etc/fstab/GRMLBASE
 #
 # <filesystem> <mountpoint>   <type> <options>                             <dump> <pass>
 proc           /proc          proc   rw,nosuid,nodev,noexec                 0      0

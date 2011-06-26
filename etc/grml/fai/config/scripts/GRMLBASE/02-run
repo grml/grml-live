@@ -1,5 +1,5 @@
 #!/bin/bash
-# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/02-run
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/02-run
 # Purpose:       cleanup after initscripts postinst for /run
 # Authors:       grml-team (grml.org)
 # Bug-Reports:   see http://grml.org/bugs/
@@ -25,4 +25,4 @@ if [ -L "$target/run" ] ; then
 fi
 
 ## END OF FILE #################################################################
-# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

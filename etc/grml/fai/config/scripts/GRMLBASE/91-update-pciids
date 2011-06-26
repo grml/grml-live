@@ -1,0 +1,33 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/91-update-pciids
+# Purpose:       update pciids
+# Authors:       (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+if ifclass NO_ONLINE ; then
+  echo "Ignoring script 91-update-pciids as NO_ONLINE is set."
+  exit 0
+fi
+
+set -u
+set -e
+
+[ -x $target/usr/bin/timeout ] && TIMEOUT="10" || TIMEOUT=""
+
+if ! [ -x $target/usr/bin/update-pciids ] ; then
+  echo "Warning: update-pciids/update-usbids not installed"
+else
+  echo "Updating PCI- and USB-ids"
+  if [ -n "$TIMEOUT" ] ; then
+     $ROOTCMD timeout $TIMEOUT update-pciids
+     $ROOTCMD timeout $TIMEOUT update-usbids
+  else
+     $ROOTCMD update-pciids
+     $ROOTCMD update-usbids
+  fi
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

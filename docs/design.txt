@@ -57,7 +57,7 @@ Configuration handling:
 
 * parse_config_files(mainconfig=/etc/grml/grml-live.conf, localconfig=/etc/grml/grml-live.local): read /etc/grml/grml-live.local and /etc/grml/grml-live.conf
 * cmdline_opts(): parse commandline, overrides configuration from parse_config()
-* update_config_files(): write active configuration to configuration files (like /etc/grml/fai/apt/sources.list)
+* update_config_files(): write active configuration to configuration files (like ${GRML_FAI_CONFIG}/apt/sources.list)
 
 Installation of files:
 

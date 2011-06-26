@@ -1,5 +1,5 @@
 #!/bin/bash
-# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/05-hostname
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/05-hostname
 # Purpose:       set hostname of live-system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
@@ -37,4 +37,4 @@ if [ -r $target/etc/bacula/bacula-fd.conf ] ; then
 fi
 
 ## END OF FILE #################################################################
-# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

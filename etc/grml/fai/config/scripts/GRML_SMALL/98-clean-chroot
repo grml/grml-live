@@ -1,0 +1,60 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRML_SMALL/98-clean-chroot
+# Purpose:       clean up Grml chroot on grml-small
+# Authors:       (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+set -e
+set -u
+
+echo "Removing /var/cache/debconf/templates.dat"
+rm -f $target/var/cache/debconf/templates.dat
+
+echo "Removing /usr/share/ssh/blacklist.*"
+rm -f $target/usr/share/ssh/blacklist.DSA-1024 $target/usr/share/ssh/blacklist.RSA-2048
+
+# get rid of large kernel modules:
+echo "Removing some very large kernel drivers:"
+for kernel in $(find $target/lib/modules/ -maxdepth 1 -type d -name [0-9]*) ; do
+  kernelversion=$(basename $kernel)
+  if [ -r "${target}/lib/modules/${kernelversion}/kernel/fs/ocfs2/ocfs2.ko" ] ; then
+    echo "Removing /lib/modules/${kernelversion}/kernel/fs/ocfs2/ocfs2.ko"
+    rm -f "${target}/lib/modules/${kernelversion}/kernel/fs/ocfs2/ocfs2.ko"
+  fi
+  if [ -d "${target}/lib/modules/${kernelversion}/kernel/drivers/isdn/hisax/" ] ; then
+    echo "Removing /lib/modules/${kernelversion}/kernel/drivers/isdn/hisax"
+    rm -rf "${target}/lib/modules/${kernelversion}/kernel/drivers/isdn/hisax"
+  fi
+done
+
+# make sure to drop from grml-small what's unnecessary:
+$ROOTCMD apt-get -y --purge remove aptitude
+for pkg in groff-base info locales man-db manpages nano; do
+  $ROOTCMD apt-get --purge remove --yes $pkg || true
+done
+
+echo "Cleaning documentation directories"
+if [ -d $target/usr/share/doc/grml-docs ] ; then
+  mv $target/usr/share/doc/grml-docs $target/tmp/
+fi
+
+rm -rf $target/usr/share/doc
+mkdir $target/usr/share/doc
+
+if [ -d $target/tmp/grml-docs ] ; then
+  mv $target/tmp/grml-docs $target/usr/share/doc/grml-docs
+fi
+
+rm -rf $target/usr/share/gtk-doc/ \
+       $target/usr/share/man/ \
+       $target/usr/man \
+       $target/usr/share/info \
+       $target/var/cache/man/*
+
+echo "Creating /usr/share/info/..."
+mkdir -p $target/usr/share/info/
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

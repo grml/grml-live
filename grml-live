@@ -27,7 +27,6 @@ fi
 GRML_LIVE_VERSION='0.14.1'
 PN="$(basename $0)"
 CMDLINE="$0 $@"
-SOURCES_LIST_FILE='/etc/grml/fai/apt/sources.list'
 ADDONS_LIST_FILE='/boot/isolinux/addons_list.cfg'
 # }}}
 
@@ -45,6 +44,7 @@ Usage: $PN [options, see as follows]
    -c <classe[s]>          classes to be used for building the ISO via FAI
    -C <configfile>         configuration file for grml-live
    -d <date>               use specified date instead of build time as date of release
+   -D <configdir>          use specified configuration directory instead of /etc/grml/fai
    -F                      force execution without prompting
    -g <grml_name>          set the grml flavour name
    -h                      display short usage information and exit
@@ -228,7 +228,7 @@ fi
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:d:g:i:I:o:r:s:t:v:bBFnNquVz" opt; do
+while getopts "a:C:c:d:D:g:i:I:o:r:s:t:v:bBFnNquVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     b) BUILD_ONLY=1 ;;
@@ -236,6 +236,7 @@ while getopts "a:C:c:d:g:i:I:o:r:s:t:v:bBFnNquVz" opt; do
     c) CLASSES="$OPTARG" ;;
     C) CONFIG="$OPTARG" ;;
     d) DATE="$OPTARG" ;;
+    D) GRML_FAI_CONFIG="$OPTARG" ;;
     g) GRML_NAME="$OPTARG" ;;
     i) ISO_NAME="$OPTARG" ;;
     I) CHROOT_INSTALL="$OPTARG" ;;
@@ -258,25 +259,27 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 # }}}
 
 # assume sane defaults (if not set already) {{{
-[ -n "$ARCH" ]             || ARCH="$(dpkg --print-architecture)"
-[ -n "$BOOT_METHOD" ]      || BOOT_METHOD='isolinux'
-[ -n "$CLASSES" ]          || CLASSES="GRMLBASE,GRML_MEDIUM,I386"
-[ -n "$DATE" ]             || DATE="$(date +%Y-%m-%d)"
-[ -n "$DISTRI_INFO" ]      || DISTRI_INFO='Grml - Live Linux for system administrators   '
-[ -n "$DISTRI_NAME" ]      || DISTRI_NAME="grml"
-[ -n "$DISTRI_SPLASH" ]    || DISTRI_SPLASH='grml.png'
-[ -n "$FORCE_ISO_REBUILD" ] || FORCE_ISO_REBUILD="false"
-[ -n "$GRML_FAI_CONFIG" ]  || GRML_FAI_CONFIG='/etc/grml/fai'
-[ -n "$GRML_NAME" ]        || GRML_NAME='grml'
-[ -n "$HOSTNAME" ]         || HOSTNAME='grml'
-[ -n "$HYBRID_METHOD" ]    || HYBRID_METHOD='manifold'
-[ -n "$NFSROOT_CONF" ]     || NFSROOT_CONF='/etc/grml/fai/make-fai-nfsroot.conf'
-[ -n "$RELEASENAME" ]      || RELEASENAME='grml-live rocks'
-[ -n "$SQUASHFS_EXCLUDES_FILE " ] || SQUASHFS_EXCLUDES_FILE='/etc/grml/fai/squashfs-excludes'
-[ -n "$SUITE" ]            || SUITE='squeeze'
-[ -n "$TEMPLATE_DIRECTORY" ] || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
-[ -n "$USERNAME" ]         || USERNAME='grml'
-[ -n "$VERSION" ]          || VERSION='0.0.1'
+[ -n "$ARCH" ]                    || ARCH="$(dpkg --print-architecture)"
+[ -n "$BOOT_METHOD" ]             || BOOT_METHOD='isolinux'
+[ -n "$CLASSES" ]                 || CLASSES="GRMLBASE,GRML_MEDIUM,I386"
+[ -n "$DATE" ]                    || DATE="$(date +%Y-%m-%d)"
+[ -n "$DISTRI_INFO" ]             || DISTRI_INFO='Grml - Live Linux for system administrators   '
+[ -n "$DISTRI_NAME" ]             || DISTRI_NAME="grml"
+[ -n "$DISTRI_SPLASH" ]           || DISTRI_SPLASH='grml.png'
+[ -n "$FORCE_ISO_REBUILD" ]       || FORCE_ISO_REBUILD="false"
+[ -n "$GRML_FAI_CONFIG" ]         || GRML_FAI_CONFIG='/etc/grml/fai'
+[ -n "$GRML_NAME" ]               || GRML_NAME='grml'
+[ -n "$HOSTNAME" ]                || HOSTNAME='grml'
+[ -n "$HYBRID_METHOD" ]           || HYBRID_METHOD='manifold'
+[ -n "$NFSROOT_CONF" ]            || NFSROOT_CONF="${GRML_FAI_CONFIG}/make-fai-nfsroot.conf"
+[ -n "$RELEASENAME" ]             || RELEASENAME='grml-live rocks'
+[ -n "$SOURCES_LIST_INPUT" ]      || SOURCES_LIST_INPUT="${GRML_FAI_CONFIG}/apt/sources.list"
+[ -n "$SOURCES_LIST_OUTPUT" ]     || SOURCES_LIST_OUTPUT="${GRML_FAI_CONFIG}/config/files/etc/apt/sources.list/GRMLBASE"
+[ -n "$SQUASHFS_EXCLUDES_FILE " ] || SQUASHFS_EXCLUDES_FILE="${GRML_FAI_CONFIG}/config/grml/squashfs-excludes"
+[ -n "$SUITE" ]                   || SUITE='squeeze'
+[ -n "$TEMPLATE_DIRECTORY" ]      || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
+[ -n "$USERNAME" ]                || USERNAME='grml'
+[ -n "$VERSION" ]                 || VERSION='0.0.1'
 
 # output specific stuff, depends on $OUTPUT (iff not set):
 [ -n "$OUTPUT" ]           || OUTPUT='/grml/grml-live'
@@ -318,6 +321,7 @@ if [ -z "$FORCE" ] ; then
    echo "  FAI classes:       $CLASSES"
    [ -r "$LOCAL_CONFIG" ]        && echo "  Local config:      /etc/grml/grml-live.local"
    [ -n "$CONFIG" ]              && echo "  Configuration:     $CONFIG"
+   [ -n "$GRML_FAI_CONFIG" ]     && echo "  Config directory:  $GRML_FAI_CONFIG"
    echo "  main directory:    $OUTPUT"
    [ -n "$CHROOT_OUTPUT" ]       && echo "  Chroot target:     $CHROOT_OUTPUT"
    [ -n "$BUILD_OUTPUT" ]        && echo "  Build target:      $BUILD_OUTPUT"
@@ -402,34 +406,30 @@ einfo "Logging actions to logfile $LOGFILE"
 # }}}
 
 # on-the-fly configuration {{{
+mkdir -p "$(dirname $SOURCES_LIST_OUTPUT)" # might not be present in -D config space
+
+cat > "$SOURCES_LIST_OUTPUT" << EOF
+# NOTE: This file is *NOT* meant for manual customisation! This file is
+# modified by grml-live and any changes will be overridden.
+# You might consider using GRML_LIVE_SOURCES in /etc/grml/grml-live.conf*
+# or FAI's fcopy command with ${GRML_FAI_CONFIG}/config/files instead!
+EOF
+
 if [ -n "$MIRROR_DIRECTORY" ] ; then
-   if ! [ -d "$MIRROR_DIRECTORY/debian" ] ; then
-      log    "Error: $MIRROR_DIRECTORY/debian does not seem to exist. Exiting. [$(date)]"
-      eerror "Error: $MIRROR_DIRECTORY/debian does not seem to exist. Exiting." ; eend 1
-      bailout 1
-   fi
-   cat > "$SOURCES_LIST_FILE" << EOF
-# NOTE: This file is *NOT* meant for manual customisation! This file is
-# modified by grml-live and any changes might be overridden.
-# You might consider using GRML_LIVE_SOURCES in /etc/grml/grml-live.conf*
-# or FAI's fcopy command with /etc/grml/fai/config/files instead!
-EOF
-   echo "$MIRROR_SOURCES" >> "$SOURCES_LIST_FILE"
-   if [ -n "$GRML_LIVE_SOURCES" ] ; then
-      echo "$GRML_LIVE_SOURCES" >> "$SOURCES_LIST_FILE"
-   fi
-elif [ -n "$GRML_LIVE_SOURCES" ] ; then
-   cat > "$SOURCES_LIST_FILE" << EOF
-# NOTE: This file is *NOT* meant for manual customisation! This file is
-# modified by grml-live and any changes might be overridden.
-# You might consider using GRML_LIVE_SOURCES in /etc/grml/grml-live.conf*
-# or FAI's fcopy command with /etc/grml/fai/config/files instead!
-EOF
-   echo "$GRML_LIVE_SOURCES" >> "$SOURCES_LIST_FILE"
+  if ! [ -d "$MIRROR_DIRECTORY/debian" ] ; then
+    log    "Error: $MIRROR_DIRECTORY/debian does not seem to exist. Exiting. [$(date)]"
+    eerror "Error: $MIRROR_DIRECTORY/debian does not seem to exist. Exiting." ; eend 1
+    bailout 1
+  fi
+  echo "$MIRROR_SOURCES" >> "$SOURCES_LIST_OUTPUT"
+fi
+
+if [ -n "$GRML_LIVE_SOURCES" ] ; then
+  echo "$GRML_LIVE_SOURCES" >> "$SOURCES_LIST_OUTPUT"
 fi
 
 if [ -n "$FAI_DEBOOTSTRAP" ] ; then
-   sed "s#^FAI_DEBOOTSTRAP=.*#FAI_DEBOOTSTRAP=\"$FAI_DEBOOTSTRAP\"#" "$NFSROOT_CONF" | sponge "$NFSROOT_CONF"
+  sed "s#^FAI_DEBOOTSTRAP=.*#FAI_DEBOOTSTRAP=\"$FAI_DEBOOTSTRAP\"#" "$NFSROOT_CONF" | sponge "$NFSROOT_CONF"
 fi
 
 # does this suck? YES!
@@ -449,7 +449,7 @@ case $SUITE in
 esac
 
 DIST=" etch\| stable\| lenny\| squeeze\| wheezy\| testing\| sid\| unstable"
-sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE\4\5/" "$SOURCES_LIST_FILE" | sponge "$SOURCES_LIST_FILE"
+sed "s/\(^deb .\+\)\([ \t]*\)\($DIST\)\([ \t]*\)\(main \)/\1 \2$SUITE\4\5/" "$SOURCES_LIST_INPUT" | sponge "$SOURCES_LIST_OUTPUT"
 for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
     if [ -n "$file" ] ; then
        sed "s/^SUITE=.*/SUITE=\"$SUITE\"/" $file | sponge $file
@@ -458,13 +458,13 @@ for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" ; do
 done
 
 # notice: activate grml-live pool only if we are building against unstable:
-if grep -qwe unstable -qwe sid "$SOURCES_LIST_FILE" ; then
-   grep -q 'grml-live.*main' "$SOURCES_LIST_FILE" || \
-   grep grml-stable "$SOURCES_LIST_FILE" | \
-        sed 's/grml-stable/grml-live/' >> "$SOURCES_LIST_FILE"
+if grep -qwe unstable -qwe sid "$SOURCES_LIST_INPUT" ; then
+   grep -q 'grml-live.*main' "$SOURCES_LIST_OUTPUT" || \
+   grep grml-stable "$SOURCES_LIST_OUTPUT" | \
+        sed 's/grml-stable/grml-live/' >> "$SOURCES_LIST_OUTPUT"
 else
-   grep -q 'grml-live.*main' "$SOURCES_LIST_FILE" && \
-   sed 's/.*grml-live.*/# removed grml-live repository/' "$SOURCES_LIST_FILE" | sponge "$SOURCES_LIST_FILE"
+   grep -q 'grml-live.*main' "$SOURCES_LIST_INPUT" && \
+   sed 's/.*grml-live.*/# removed grml-live repository/' "$SOURCES_LIST_INPUT" | sponge "$SOURCES_LIST_OUTPUT"
 fi
 
 for file in "$LIVE_CONF" "$CONFIG" "$LOCAL_CONFIG" "$NFSROOT_CONF" ; do
@@ -544,9 +544,10 @@ else
       echo force-unsafe-io > "$CHROOT_OUTPUT/etc/dpkg/dpkg.cfg.d/unsafe-io"
 
       log "Executed FAI command line:"
-      log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY fai $VERBOSE -C $GRML_FAI_CONFIG -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
-      BUILD_ONLY="$BUILD_ONLY" BOOTSTRAP_ONLY="$BOOTSTRAP_ONLY" fai $VERBOSE -C "$GRML_FAI_CONFIG" -c"$CLASSES" -u \
-      "$HOSTNAME" $FAI_ACTION "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
+      log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY fai $VERBOSE -C $GRML_FAI_CONFIG -s file:///$GRML_FAI_CONFIG/config -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
+      BUILD_ONLY="$BUILD_ONLY" BOOTSTRAP_ONLY="$BOOTSTRAP_ONLY" fai $VERBOSE \
+                  -C "$GRML_FAI_CONFIG" -s "file:///$GRML_FAI_CONFIG/config" -c"$CLASSES" \
+                  -u "$HOSTNAME" "$FAI_ACTION" "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
       RC="$PIPESTATUS" # notice: bash-only
 
       rm -f "$CHROOT_OUTPUT/etc/dpkg/dpkg.cfg.d/unsafe-io"
@@ -1229,4 +1230,4 @@ bailout 0
 # }}}
 
 ## END OF FILE #################################################################
-# vim:foldmethod=marker ts=2 ft=sh ai expandtab tw=80 sw=3
+# vim:foldmethod=marker ts=2 ft=sh ai expandtab tw=80 sw=2

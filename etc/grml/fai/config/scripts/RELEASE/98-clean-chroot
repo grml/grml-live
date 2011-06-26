@@ -1,0 +1,25 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/RELEASE/98-clean-chroot
+# Purpose:       clean up $HOMEs for release
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# Remove all FAI logs from chroot via grml-live later then
+echo "Setting up /etc/grml_fai_release for grml-live"
+touch $target/etc/grml_fai_release
+
+echo "Removing all files inside /root"
+rm -rf $target/root
+mkdir -m 0755 $target/root
+
+echo "Removing all files inside /home/grml"
+rm -rf $target/home/grml
+mkdir -m 0755 $target/home/grml
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

@@ -3,8 +3,8 @@
 # Read runlevel.conf(5) man page for more information about this file.
 ############################################################################
 # This file was deployed via grml-live's
-# /etc/grml/fai/config/scripts/GRMLBASE/15-initsetup script, using
-# /etc/grml/fai/config/files/etc/runlevel.conf/GRMLBASE
+# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/15-initsetup script, using
+# ${GRML_FAI_CONFIG}/config/files/etc/runlevel.conf/GRMLBASE
 ############################################################################
 # *IMPORTANT* This is the file used by the Grml live system.
 # Please notice that customization of this file will not work with the

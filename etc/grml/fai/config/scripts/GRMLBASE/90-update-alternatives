@@ -1,5 +1,5 @@
 #!/bin/bash
-# Filename:      /etc/grml/fai/config/scripts/GRMLBASE/90-update-alternatives
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/90-update-alternatives
 # Purpose:       set up /etc/alternatives/* according to grml preferences
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
@@ -9,72 +9,50 @@
 set -u
 set -e
 
-## Editor:
-# Too many people don't expect to get that, so use it only for grml-small
-# avoid "debug: unbound variable":
-set +u
-if ifclass GRML_SMALL ; then
-set -u
-   if [ -r $target/usr/bin/vim.tiny ] ; then
-      # update-alternates does not work without /usr/share/man because
-      # it configures (in our case non-existent) manpages as well :-/
-      # $ROOTCMD update-alternatives --set editor /usr/bin/vim.tiny
-      # $ROOTCMD update-alternatives --set vi     /usr/bin/vim.tiny
-      $ROOTCMD ln -sf /etc/alternatives/editor /usr/bin/editor
-      $ROOTCMD ln -sf /usr/bin/vim.tiny /etc/alternatives/editor
-      $ROOTCMD ln -sf /etc/alternatives/vi /usr/bin/vi
-      $ROOTCMD ln -sf /usr/bin/vim.tiny /etc/alternatives/vi
-      $ROOTCMD ln -sf /etc/alternatives/vim /usr/bin/vim
-      $ROOTCMD ln -sf /usr/bin/vim.tiny /etc/alternatives/vim
-      $ROOTCMD ln -sf /etc/alternatives/view /usr/bin/view
-      $ROOTCMD ln -sf /usr/bin/vim.tiny /etc/alternatives/view
-   fi
-fi
-
 if [ -r $target/usr/bin/vim.basic ] ; then
-   $ROOTCMD update-alternatives --set editor /usr/bin/vim.basic
-   $ROOTCMD update-alternatives --set vi     /usr/bin/vim.basic
-   $ROOTCMD update-alternatives --set vim    /usr/bin/vim.basic
-   $ROOTCMD update-alternatives --set view   /usr/bin/vim.basic
+  $ROOTCMD update-alternatives --set editor /usr/bin/vim.basic
+  $ROOTCMD update-alternatives --set vi     /usr/bin/vim.basic
+  $ROOTCMD update-alternatives --set vim    /usr/bin/vim.basic
+  $ROOTCMD update-alternatives --set view   /usr/bin/vim.basic
 fi
 
 if [ -r $target/usr/bin/vim.gtk ] ; then
-   $ROOTCMD update-alternatives --set editor /usr/bin/vim.gtk
-   $ROOTCMD update-alternatives --set vi     /usr/bin/vim.gtk
-   $ROOTCMD update-alternatives --set vim    /usr/bin/vim.gtk
-   $ROOTCMD update-alternatives --set view   /usr/bin/vim.gtk
+  $ROOTCMD update-alternatives --set editor /usr/bin/vim.gtk
+  $ROOTCMD update-alternatives --set vi     /usr/bin/vim.gtk
+  $ROOTCMD update-alternatives --set vim    /usr/bin/vim.gtk
+  $ROOTCMD update-alternatives --set view   /usr/bin/vim.gtk
 fi
 
 if [ -r $target/usr/bin/uxterm ] ; then
-   $ROOTCMD update-alternatives --set x-terminal-emulator /usr/bin/uxterm
+  $ROOTCMD update-alternatives --set x-terminal-emulator /usr/bin/uxterm
 elif [ -r $target/usr/bin/xterm ] ; then
-   $ROOTCMD update-alternatives --set x-terminal-emulator /usr/bin/xterm
+  $ROOTCMD update-alternatives --set x-terminal-emulator /usr/bin/xterm
 fi
 
 if [ -r $target/etc/X11/cursors/whiteglass.theme ] ; then
-   $ROOTCMD update-alternatives --set x-cursor-theme /etc/X11/cursors/whiteglass.theme
+  $ROOTCMD update-alternatives --set x-cursor-theme /etc/X11/cursors/whiteglass.theme
 fi
 
 if [ -r $target/usr/bin/iceweasel ] || [ -L $target/usr/bin/iceweasel ] ; then
-   $ROOTCMD update-alternatives --set x-www-browser /usr/bin/iceweasel
+  $ROOTCMD update-alternatives --set x-www-browser /usr/bin/iceweasel
 fi
 
 if [ -r $target/usr/bin/w3m ] ; then
-   $ROOTCMD update-alternatives --set www-browser /usr/bin/w3m
+  $ROOTCMD update-alternatives --set www-browser /usr/bin/w3m
 fi
 
 if [ -r $target/usr/bin/wm-ng ] ; then
-   # activate wm-ng only if it is registered as x-window-manager:
-   if $ROOTCMD update-alternatives --list x-window-manager | grep -q wm-ng ; then
-     $ROOTCMD update-alternatives --set x-window-manager /usr/bin/wm-ng
-   fi
+  # activate wm-ng only if it is registered as x-window-manager:
+  if $ROOTCMD update-alternatives --list x-window-manager | grep -q wm-ng ; then
+    $ROOTCMD update-alternatives --set x-window-manager /usr/bin/wm-ng
+  fi
 fi
 
 # sadly isn't available via update-alternates, anyway - use
 # ntfs-3g (if available) as default for ntfs
 if [ -r $target/sbin/mount.ntfs-3g ] || [ -L $target/sbin/mount.ntfs-3g ] ; then
-   $ROOTCMD ln -sf /sbin/mount.ntfs-3g /sbin/mount.ntfs
+  $ROOTCMD ln -sf /sbin/mount.ntfs-3g /sbin/mount.ntfs
 fi
 
 ## END OF FILE #################################################################
-# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=3
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

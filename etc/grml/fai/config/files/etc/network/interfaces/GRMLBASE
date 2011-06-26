@@ -1,6 +1,6 @@
 # This file was deployed via grml-live's
-# /etc/grml/fai/config/scripts/GRMLBASE/35-network script, using
-# /etc/grml/fai/config/files/etc/network/interfaces/GRMLBASE
+# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/35-network script, using
+# ${GRML_FAI_CONFIG}/config/files/etc/network/interfaces/GRMLBASE
 
 # The loopback interface
 auto lo

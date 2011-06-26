@@ -1,0 +1,31 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/92-update-freshclam
+# Purpose:       update freshclam database
+# Authors:       (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+if ifclass NO_ONLINE ; then
+  echo "Ignoring script 91-update-pciids as NO_ONLINE is set."
+  exit 0
+fi
+
+set -u
+set -e
+
+[ -x $target/usr/bin/timeout ] && TIMEOUT="10" || TIMEOUT=""
+
+if ! [ -x $target/usr/bin/freshclam ] ; then
+  echo "freshclam not installed"
+else
+  echo "Updating clamav database via running freshclam"
+  if [ -n "$TIMEOUT" ] ; then
+     $ROOTCMD timeout $TIMEOUT /usr/bin/freshclam
+  else
+     $ROOTCMD /usr/bin/freshclam
+  fi
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

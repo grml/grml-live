@@ -1,17 +1,21 @@
 #!/bin/bash
-# Filename:      /etc/grml/fai/grml/grml_cleanup_chroot.deborphan
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/DEBORPHAN/98-clean-chroot
 # Purpose:       drop as many packages from grml as possible
 # Authors:       (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
 ################################################################################
 
+set -u
+set -e
+
 # remove all packages not necessary anymore:
-apt-get -y --purge autoremove
+$ROOTCMD apt-get -y --purge autoremove
 
 # remove packages until deborphan does not find anymore:
-while [ "$(deborphan)" != "" ] ; do
-  apt-get -y --purge remove $(deborphan)
+while [ "$($ROOTCMD deborphan)" != "" ] ; do
+  $ROOTCMD apt-get -y --purge remove $(deborphan)
 done
 
 ## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

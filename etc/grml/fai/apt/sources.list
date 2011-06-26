@@ -1,7 +1,9 @@
-# NOTE: This file is *NOT* meant for manual customisation! This file is
-# modified by grml-live and any changes might be overridden.
-# You might consider using GRML_LIVE_SOURCES in /etc/grml/grml-live.conf*
-# or FAI's fcopy command with /etc/grml/fai/config/files instead!
+# NOTE: This file is used as input file for generating
+# ${GRML_FAI_CONFIG}/config/files/etc/apt/sources.list/GRMLBASE
+# which is copied to /etc/apt/sources.list to the chroot.
+# Do *NOT* modify this file directly but instead consider using
+# GRML_LIVE_SOURCES in /etc/grml/grml-live.conf* or FAI's
+# fcopy command with ${GRML_FAI_CONFIG}/config/files instead!
 deb http://deb.grml.org/            grml-stable  main
 deb http://deb.grml.org/            grml-testing main
-deb http://cdn.debian.net/debian lenny        main contrib non-free
+deb http://cdn.debian.net/debian squeeze        main contrib non-free

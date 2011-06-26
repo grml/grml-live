@@ -1,0 +1,33 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/REMOVE_DOCS/98-clean-chroot
+# Purpose:       remove docs in Grml chroot
+# Authors:       (c) Michael Prokop <mika@grml.org>
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+set -u
+set -e
+
+echo "Cleaning documentation directories"
+if [ -d $target/usr/share/doc/grml-docs ] ; then
+  mv $target/usr/share/doc/grml-docs $target/tmp/
+fi
+
+rm -rf $target/usr/share/doc
+mkdir $target/usr/share/doc
+
+if [ -d $target/tmp/grml-docs ] ; then
+  mv $target/tmp/grml-docs $target/usr/share/doc/grml-docs
+fi
+
+rm -rf $target/usr/share/gtk-doc/ \
+       $target/usr/share/man/ \
+       $target/usr/man \
+       $target/usr/share/info \
+       $target/var/cache/man/*
+
+echo "Creating /usr/share/info/..."
+mkdir -p $target/usr/share/info/
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
