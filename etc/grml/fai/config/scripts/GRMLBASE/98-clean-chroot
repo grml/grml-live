@@ -37,6 +37,8 @@ rm -f $target/var/lib/apt/lists/*Packages \
       $target/var/cache/apt-show-versions/* \
       $target/var/cache/debconf/templates.dat-old \
       $target/var/cache/apt/*.bin
+
+echo "Cleaning apt places"
 $ROOTCMD apt-get check 2>/dev/null
 $ROOTCMD dpkg --clear-avail
 $ROOTCMD apt-cache gencaches 2>/dev/null
@@ -66,9 +68,10 @@ fi
 
 echo "Cleaning and removing some misc files and directories"
 find $target/etc -type f -name *.pre_fcopy -delete
-rm -rf $target/etc/sysconfig/* $target/etc/motd.dpkg-* $target/etc/auto.master.*dpkg* \
+rm -rf --one-file-system $target/etc/sysconfig/* \
+       $target/etc/motd.dpkg-* $target/etc/auto.master.*dpkg* \
        $target/etc/samba/*.SID $target/etc/samba/*.tdb \
-       $target/var/run/ $target/var/log/ksymoops/* $target/var/lock/*  \
+       $target/var/run $target/var/log/ksymoops/* $target/var/lock/*  \
        $target/var/state/* $target/var/log/nessus/* \
        $target/halt $target/reboot $target/ash.static \
        $target/etc/dhcpc/*.info $target/etc/dhcpc/resolv* \
@@ -83,7 +86,7 @@ rm -rf $target/etc/sysconfig/* $target/etc/motd.dpkg-* $target/etc/auto.master.*
 # remove only "temporary" or saved files in the given directories
 nuke(){
   for i in $(find "$@" -name \*.gz -o -name \*.bz2 -o -name \*.0 2>/dev/null); do
-    rm -f "$i"
+    rm -f --one-file-system "$i"
   done
 }
 
