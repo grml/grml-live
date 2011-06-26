@@ -1,3 +1,123 @@
+grml-live (0.15.0) unstable; urgency=low
+
+  The "redesign ftw \o/" release.
+
+  [ Christian Hofstaedtler ]
+  * [c315d7d] Update lintian overrides for grub 1.99-4 drop
+  * [9269536] Enable --force-unsafe-io for dpkg
+  * [9d16d7a] No longer install PuTTY and other windows binaries
+  * [7270085] Update SQUASHFS_EXCLUDES_FILE example to match code
+  * [5c58f1d] Fix SQUASHFS_EXCLUDES_FILE default not being set
+  * [dd60c7e] Drop * expansion from mksquashfs call
+  * [6782d44] Turn on wildcard support for mksquashfs excludes
+  * [2889351] Move /run, /var/run, /var/lock exclusion to mksquashfs
+
+  * Software related changes:
+    - [ed9696d] remove loop-aes-{utils,testsuite}
+    - [bcf093e] add atftp to GRML_FULL
+    - [1c39c7d] add links to GRML_MEDIUM
+    - [406dff8] remove socket from GRML_MEDIUM,GRML_SMALL
+    - [5b77db8] transition from netcat to netcat-openbsd
+    - [c521af7] remove alsa-tools from GRML_MEDIUM
+    - [c08f56e] Spring cleaning
+
+  [ Michael Prokop ]
+  * Bugfixes:
+    - [c9ebd4a] 01-packages: Ignore packages marked for un-installation.
+    - [8a35993] Remove /var/log/install_packages.list on release.
+      File is emtpy then anyway.
+    - [6c00c3c] Update resolv.conf handling to properly support /run
+      [Closes: issue984].
+    - [b8c8c53] grml-live: try updating initramfs if creating fresh
+      one failed.
+    - [8d897e7] Adjust trap handling to get clean exit.
+    - [e0f701f] 98-clean-chroot: make sure rm does not resolve the symlink
+    - [1374521] scripts/release_helper.sh: force confmiss and confnew
+      options when installing package so automated installation works when
+      having modified configuration files.
+    - [1b426d8] GRMLBASE/98-clean-chroot: recursively remove
+      /var/lib/clamav/clamav-*.
+    - [649b40f] DEBORPHAN/98-clean-chroot: Make sure deborphan exists
+      in chroot.
+    - [7580b07] 98-clean-chroot: fix check for presence of update-menus.
+    - [f605fe8] debconf/GRMLBASE: drop wicd preseeding to avoid
+      errors with installation.
+    - [866b47c] Implement dpkg-divert handling to address failing update-grub
+      in openvz environments.
+    - [1cef31a] Add workaround to solve udev packaging bug (see #632624).
+
+  * New features / improvements:
+    - [9ecfe24] GRMLBASE.var: set maximum number of packages installed
+      at a time to 3000.
+    - [1e9092e] Support -N option to only bootstrap the grml_chroot
+      and skip building of [files for] ISO.
+    - [d95eed1] Try to reduce build time and do not build initramfs twice.
+    - [6998e9e] scripts/release_helper.sh: Use +autobuild instead of
+      ~autobuild for version suffix.
+    - [8d2eced] Iterate over kernel versions when generating initramfs.
+    - [47b815e] syslinux configuration: use localboot -1 to boot
+      from next boot device instead of using 0x80. [Closes: issue957]
+    - [f3b335e] Implement -D option to set configuration directory.
+      Accordingly adjust fai.conf (don't set variables grml-live is
+      setting via cmdline now). Provide new scripts to deploy
+      configuration files (/etc/inittab, /etc/locale.gen, /etc/modules).
+      Rework and adapt cleanup scripts accordingly. [Closes: issue880]
+    - [0bc24c4] Rename scripts/GRMLBASE/10-build-initramfs to
+      scripts/GRMLBASE/10-configure-initramfs to reflect current
+      state of script's action.
+    - [0811b5f] Provide update-usbids as separate script to avoid
+      errors on missing update-usbids.
+    - [2e0d659] buildd: check for "FAILED with exit code" in logs.
+    - [03c92fc] GRMLBASE/37-portmap: do not touch /etc/default/portmap
+      if the file does not exist.
+    - [e13f6a8] 92-update-freshclam: do not error out on exit code 124
+      by freshclam.
+    - [3c03961] Update apt preferences: always use live-boot* packages
+      from Grml.
+    - [a242e27] Redesign sources.list handling. Get rid of
+      /etc/grml/fai/apt/sources.list.
+    - [dd81475] GRMLBASE scripts: run all fcopy commands in verbose mode.
+    - [2d7aecf] Add security.debian.org to sources.list of lenny, squeezy,
+      wheezy, stable and testing (thanks to the sources.list redesign).
+      Thanks to Christian Hofstaedtler <ch@grml.org>
+
+  * Minor changes:
+    - [bdc6192] docs: drop outdated fai-on-etch entry.
+    - [befccab] Add README.md for github.
+    - [0be5e94] Drop unused GRML_FAI_CONFIG from make-fai-nfsroot.conf.
+    - [96e44ee] cleanup script: Drop ion3 stuff, since we do not ship
+      ion3 anymore.
+    - [00fd941] Drop patches/ directory, patch fai_chroot_update.patch
+      is not relevant anymore.
+    - [3c52d9d] Drop patches directory from debian/grml-live.install.
+    - [50215e9] Provide debian/NEWS entry for release 0.15.0.
+
+  * Software related changes:
+    - [be3c863] Drop python2.5 and python2.5-minimal from GRML_FULL.
+    - [781e6ce] Drop ntfsprogrs (replaced by ntfs-3g, see #627823).
+    - [071f1ec] Drop firmware-ipw2x00 which has been integrated in
+      last commit ("Spring cleaning") from GRML_MEDIUM + GRML_FULL.
+    - [63e2a03] Add firmware-brcm80211 to GRML_FULL and GRML_MEDIUM.
+      [Closes: issue1007]
+
+  [ Ulrich Dangel ]
+  * [5c91ce9] Add a script to update the grml-live version string
+  * [6ce3dbc] Umount all directories in bailout handler
+  * [e91516d] add EXIT trap as set -e may terminate the program
+    without a signal
+  * [12e281b] Disable set -e as it causes some problems with
+    umounting fs.
+  * [90b73e6] Don't remove pid files in $target/var/run as it
+    is deleted afterwards anyway.
+
+  * Software related changes:
+    - [4b65e8d] remove inotail as coreutils supports inotify
+      nowadays anyways.
+    - [9951735] add libnss-myhostname
+    - [44bc5af] remove grml-rebuildfstab [Closes: issue1001]
+
+ -- Michael Prokop <mika@grml.org>  Sun, 26 Jun 2011 20:23:53 +0200
+
 grml-live (0.14.1) unstable; urgency=low
 
   [ Christian Hofstaedtler ]
