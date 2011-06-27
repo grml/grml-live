@@ -1005,9 +1005,9 @@ else
    [ -n "$SQUASHFS_INFO_MSG" ] && SQUASHFS_INFO_MSG="using options: $SQUASHFS_INFO_MSG"
    einfo "Squashfs build information: running binary $SQUASHFS_BINARY $SQUASHFS_INFO_MSG"
 
-   log "$SQUASHFS_BINARY $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/${GRML_NAME}.squashfs -noappend $SQUASHFS_OPTIONS"
+   log "$SQUASHFS_BINARY $CHROOT_OUTPUT/ $BUILD_OUTPUT/live/${GRML_NAME}.squashfs -noappend $SQUASHFS_OPTIONS"
 
-   if $SQUASHFS_BINARY $CHROOT_OUTPUT/* $BUILD_OUTPUT/live/"${GRML_NAME}".squashfs \
+   if $SQUASHFS_BINARY $CHROOT_OUTPUT/ $BUILD_OUTPUT/live/"${GRML_NAME}".squashfs \
       -noappend $SQUASHFS_OPTIONS 2>"${SQUASHFS_STDERR}" ; then
       echo "${GRML_NAME}.squashfs" > $BUILD_OUTPUT/live/filesystem.module
       log "Finished execution of stage 'squashfs' [$(date)]"
