@@ -275,7 +275,7 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 [ -n "$RELEASENAME" ]             || RELEASENAME='grml-live rocks'
 [ -n "$SOURCES_LIST_INPUT" ]      || SOURCES_LIST_INPUT="${GRML_FAI_CONFIG}/apt/sources.list"
 [ -n "$SOURCES_LIST_OUTPUT" ]     || SOURCES_LIST_OUTPUT="${GRML_FAI_CONFIG}/config/files/etc/apt/sources.list/GRMLBASE"
-[ -n "$SQUASHFS_EXCLUDES_FILE " ] || SQUASHFS_EXCLUDES_FILE="${GRML_FAI_CONFIG}/config/grml/squashfs-excludes"
+[ -n "$SQUASHFS_EXCLUDES_FILE" ]  || SQUASHFS_EXCLUDES_FILE="${GRML_FAI_CONFIG}/config/grml/squashfs-excludes"
 [ -n "$SUITE" ]                   || SUITE='squeeze'
 [ -n "$TEMPLATE_DIRECTORY" ]      || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
 [ -n "$USERNAME" ]                || USERNAME='grml'
