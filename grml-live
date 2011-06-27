@@ -989,7 +989,7 @@ else
 
    # support exclusion of files via exclude-file:
    if [ -n "$SQUASHFS_EXCLUDES_FILE" -a "$SQUASHFS_EXCLUDES_FILE" ] ; then
-      SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -ef $SQUASHFS_EXCLUDES_FILE"
+      SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -ef $SQUASHFS_EXCLUDES_FILE -wildcards"
    fi
 
    # get rid of unnecessary files when building grml-small for final release:
