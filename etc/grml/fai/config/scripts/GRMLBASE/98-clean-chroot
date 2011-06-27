@@ -24,10 +24,6 @@ else
   echo "Warning: localepurg not installed"
 fi
 
-# find /var -name \*.pid
-echo "Removing pid-files"
-find $target/var/run -name \*.pid -exec rm {} \;
-
 echo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
 rm -f $target/var/lib/apt/lists/*Packages \
       $target/var/lib/apt/lists/*Release \
