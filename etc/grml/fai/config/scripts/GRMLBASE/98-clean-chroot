@@ -142,7 +142,7 @@ if ! [ -d $target/var/lib/clamav/ ] ; then
   echo "Warning: clamav[-freshclam] not installed"
 else
   echo "Cleaning /var/lib/clamav/"
-  rm -f $target/var/lib/clamav/clamav-*
+  $ROOTCMD rm -rf /var/lib/clamav/clamav-*
 
   echo "Setting up daily.cvd and main.cvd symlinks"
   if [ -f $target/var/lib/clamav/daily.cvd ] ; then
