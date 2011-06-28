@@ -110,9 +110,14 @@ if [ -n "${AUTOBUILD:-}" ] ; then
    )
    git checkout master
    git branch -D ${autobuild_branch} || true
+
    env APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none sudo apt-get update
+
    PACKAGES=$(dpkg --list grml-live\* | awk '/^ii/ {print $2}')
-   env APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none sudo apt-get -y --allow-unauthenticated install $PACKAGES
+   env APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none sudo apt-get -y \
+     -o DPkg::Options::=--force-confmiss \
+     -o DPkg::Options::=--force-confnew  \
+     --allow-unauthenticated install $PACKAGES
 fi
 
 ## END OF FILE #################################################################
