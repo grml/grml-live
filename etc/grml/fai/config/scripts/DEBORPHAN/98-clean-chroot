@@ -9,12 +9,17 @@
 set -u
 set -e
 
+if ! [ -x $target/usr/bin/deborphan ] ; then
+  echo "Warning: deborphan not installed"
+  exit 0
+fi
+
 # remove all packages not necessary anymore:
 $ROOTCMD apt-get -y --purge autoremove
 
 # remove packages until deborphan does not find anymore:
 while [ "$($ROOTCMD deborphan)" != "" ] ; do
-  $ROOTCMD apt-get -y --purge remove $(deborphan)
+  $ROOTCMD apt-get -y --purge remove $($ROOTCMD deborphan)
 done
 
 ## END OF FILE #################################################################
