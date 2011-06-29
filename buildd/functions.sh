@@ -122,6 +122,10 @@ The following errors have been noticed (several might be warnings only):
 
 $(grep -i error $FAI_LOGFILES/* /var/log/grml-buildd.std* | grep -ve liberror -ve libgpg-error || echo "* nothing")
 
+The following errors have been noticed in FAI scripts:
+
+$(grep -B2 "FAILED with exit code" $FAI_LOGFILES/* | echo "* nothing")
+
 The following warnings have been noticed:
 
 $(grep -i warn $FAI_LOGFILES/* /var/log/grml-buildd.std* || echo "* nothing")
