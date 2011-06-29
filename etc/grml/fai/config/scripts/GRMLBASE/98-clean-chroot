@@ -123,7 +123,7 @@ else
   $ROOTCMD ldconfig
 fi
 
-if [ -x $target/usr/bin/update-menus ] ; then
+if ! [ -x $target/usr/bin/update-menus ] ; then
   echo "Warning: update-menus not installed"
 else
   echo "Updating windowmanager menus"
