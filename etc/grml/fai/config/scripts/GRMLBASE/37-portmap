@@ -17,6 +17,7 @@ set -e
 
 CONFFILE="$target/etc/default/portmap"
 
+# modify only if the file is present, nowadays we have rpcbind
 if [ -r "$CONFFILE" ] ; then
  # modify it iff we have portmap's default configuration
  if grep -q '^OPTIONS="-i 127.0.0.1"' "$CONFFILE" ; then
@@ -25,21 +26,6 @@ if [ -r "$CONFFILE" ] ; then
    printf "Removing loopback-interface-only option (workaround #317358) in /etc/default/portmap: "
    sed -i 's/^OPTIONS.*/# OPTIONS="-i 127.0.0.1"/' "$CONFFILE" && echo OK || echo ERROR
  fi
-else # no /etc/default/portmap available yet:
- printf "Building fresh /etc/default/portmap configuration file."
- cat > "$CONFFILE" << EOF
-# Portmap configuration file
-#
-# Note: if you manually edit this configuration file,
-# portmap configuration scripts will avoid modifying it
-# (for example, by running 'dpkg-reconfigure portmap').
-
-# If you want portmap to listen only to the loopback
-# interface, uncomment the following line (it will be
-# uncommented automatically if you configure this
-# through debconf).
-# OPTIONS="-i 127.0.0.1"
-EOF
 fi
 
 ## END OF FILE #################################################################
