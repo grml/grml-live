@@ -1,3 +1,28 @@
+grml-autoconfig (0.9.30) unstable; urgency=low
+
+  The "spring^Wsummer cleanup" release.
+
+  [ Ulrich Dangel ]
+  * [0a7ee77] Run config_services after config_netconfig
+    and config_netscript.
+
+  [ Michael Prokop ]
+  * [b4e2826] Drop deprecated config_cdrom_perm().
+  * [0153caf] Drop non-existing CONFIG_CREATE_MNT_DIRS
+    configuration option.
+  * [336d22f] Drop deprecated config_discover().
+  * [660eb87] Drop deprecated config_firewire_dev().
+  * [b15ea38] Drop deprecated config_hotplug_agent(),
+    config_hotplug_blacklist() and config_hotplug().
+  * [9af1e4e] Drop deprecated config_pcmcia().
+  * [bedf2f6] Drop deprecated config_hwinfo().
+  * [e855fb6] Drop disabled config_automounter().
+  * [d9ef93f] Drop hotplug[-light] as alternative from depends.
+  * [30df2f0] Replace (optional) dependency on syslog-ng
+    with rsyslog.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 07 Jul 2011 00:49:38 +0200
+
 grml-autoconfig (0.9.29) unstable; urgency=low
 
   [ Ulrich Dangel ]
