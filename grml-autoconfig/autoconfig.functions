@@ -689,25 +689,6 @@ fi
 }
 # }}}
 
-# {{{ hardware detection via discover
-config_discover(){
-if checkbootparam 'nodisc' ; then
-  ewarn "Skipping hardware detection via discover as requested on boot commandline." ; eend 0
-else
- if [ -x /sbin/discover ] ; then
-  einfo "Discovering hardware. Trying to load the following modules in background:"
-   eindent
-   einfo "$(discover --data-path=linux/module/name --data-path=linux/modules/options --format="%s %s" --data-version=`uname -r` --enable-bus all | sort -u | xargs echo)"
-   eoutdent
-  /sbin/discover-modprobe -v >>$DEBUG 2>&1 &
-  eend 0
- else
-  eerror "Application discover not available. Information: udev should handle hardware recognition." ; eend 0
- fi
-fi
-}
-# }}}
-
 # {{{ hardware detection via hwinfo
 config_hwinfo(){
 if checkbootparam 'hwinfo' >>$DEBUG 2>&1; then
