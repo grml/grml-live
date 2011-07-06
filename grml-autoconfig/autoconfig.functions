@@ -766,33 +766,6 @@ fi
 }
 # }}}
 
-# {{{ PCMCIA Check/Setup
-# This needs to be done before other modules are being loaded (by hwsetup)
-config_pcmcia(){
-if checkbootparam 'nopcmcia'; then
-  ewarn "Skipping PCMCIA detection as requested on boot commandline." ; eend 0
-else
-  if /usr/sbin/laptop-detect ; then
-    einfo "Detected Laptop - checking for PCMCIA." && eend 0
-    modprobe pcmcia_core >>$DEBUG 2>&1
-    # Try Cardbus or normal PCMCIA socket drivers
-    modprobe yenta_socket >>$DEBUG 2>&1 || modprobe i82365 >>$DEBUG 2>&1 || modprobe pd6729 >>$DEBUG 2>&1 || modprobe tcic >>$DEBUG 2>&1
-    if [ "$?" = "0" ]; then
-      modprobe ds >>$DEBUG 2>&1
-      if [ -d /proc/bus/pccard ] ; then
-       if [ -x /sbin/cardmgr ] ; then
-        einfo "PCMCIA found, starting cardmgr."
-        cardmgr >>$DEBUG 2>&1 && sleep 6 && eend 0
-       else
-        eerror "No cardmgr found. Make sure package pcmciautils is installed, it should handle it instead." ; eend 1
-       fi
-      fi
-    fi
-  fi
-fi
-}
-# }}}
-
 # {{{ run software synthesizer via speakup
 config_swspeak(){
    if checkbootparam 'swspeak' ; then

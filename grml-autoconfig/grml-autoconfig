@@ -144,13 +144,11 @@ checkvalue $CONFIG_TESTCD && config_testcd
 
 checkvalue $CONFIG_HWINFO && config_hwinfo
 
+[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||||">/dev/tty14
+
 checkvalue $CONFIG_MODULES && config_modules
 
 checkvalue $CONFIG_ACPI_APM && config_acpi_apm
-
-[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||||">/dev/tty14
-
-checkvalue $CONFIG_PCMCIA && config_pcmcia
 
 [ -n "$SPLASH" ] &&  /usr/bin/grml-bootsplash "||||||">/dev/tty14
 
