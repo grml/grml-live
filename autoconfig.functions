@@ -617,16 +617,6 @@ fi
 }
 # }}}
 
-# For burning on IDE-CD-Roms, k3b (and others) check for special permissions {{{
-config_cdrom_perm(){
-CDROMS=""
-for DEVICE in /proc/ide/hd?; do
- [ "$(cat $DEVICE/media 2>/dev/null)" = "cdrom" ] && CDROMS="$CDROMS /dev/${DEVICE##*/}"
-done
-[ -n "$CDROMS" ] && { chown root.cdrom $CDROMS; chmod 666 $CDROMS; } 2>/dev/null
-}
-# }}}
-
 # {{{ Bring up loopback interface now
 config_local_net(){
  if [ -z "$INSTALLED" ] ; then

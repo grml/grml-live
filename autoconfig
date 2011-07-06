@@ -54,7 +54,6 @@ CONFIG_AUTOMOUNT='yes'        # automounting of device labeled GRMLCFG
 CONFIG_BLANKING='yes'         # check for bootoption noblank to disable console blanking
 CONFIG_BLINDSOUND='yes'       # play 'beep' and play welcome message
 CONFIG_BLIND='yes'            # check for blind option or brltty
-CONFIG_CDROM_PERM='yes'       # for burning on IDE-CD-Roms, k3b (and others) check for special permissions
 CONFIG_CONFIG='yes'           # do we want config unpacking to work?
 CONFIG_CONSOLE='yes'          # activate mgetty when using console=... as bootparam
 CONFIG_CREATE_MNT_DIRS='no'   # create /mnt-directories
