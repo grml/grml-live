@@ -154,8 +154,6 @@ checkvalue $CONFIG_BLIND && config_blind
 
 checkvalue $CONFIG_AGP && config_agp
 
-checkvalue $CONFIG_AUTOMOUNTER && config_automounter
-
 checkvalue $CONFIG_DMA && config_dma
 
 checkvalue $CONFIG_FSTAB && config_fstab

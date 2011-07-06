@@ -49,7 +49,6 @@ CONFIG_GPM='yes'
 # what you are doing!
 CONFIG_915RESOLUTION='yes'    # run 915resolution with specified options for adjusting resolution
 CONFIG_AGP='yes'              # check for bootparam forceagp
-CONFIG_AUTOMOUNTER='no'       # activate automounter
 CONFIG_AUTOMOUNT='yes'        # automounting of device labeled GRMLCFG
 CONFIG_BLANKING='yes'         # check for bootoption noblank to disable console blanking
 CONFIG_BLINDSOUND='yes'       # play 'beep' and play welcome message
