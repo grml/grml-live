@@ -1439,11 +1439,18 @@ config_services(){
     SERVICE="$(getbootparam 'services' 2>>$DEBUG)"
     SERVICELIST=$(echo "$SERVICE" | sed 's/,/\\n/g')
     SERVICENL=$(echo "$SERVICE" | sed 's/,/ /g')
-    einfo "Starting service(s) ${SERVICENL} in background."
     for service in $(echo -e $SERVICELIST) ; do
-       /etc/init.d/${service} start >>$DEBUG &
+      # support running (custom) init scripts in non-blocking mode
+      # if they contain the keyword "DO_NO_RUN_IN_BACKGROUND".
+      if grep -q 'DO_NO_RUN_IN_BACKGROUND' "/etc/init.d/${service}" 2>>$DEBUG ; then
+        einfo "Starting service ${service}."
+        /etc/init.d/${service} start >>$DEBUG
+      else
+        einfo "Starting service ${service} in background."
+        /etc/init.d/${service} start >>$DEBUG &
+      fi
     done
-    [ "$?" == "0" ] ; eend $?
+    eend $?
  fi
 }
 # }}}
