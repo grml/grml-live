@@ -679,55 +679,6 @@ fi
 }
 # }}}
 
-# {{{ disable hotplug agents on request
-config_hotplug_agent(){
-if checkbootparam 'noagent' ; then
-  AGENT="$(getbootparam 'noagent' 2>>$DEBUG)"
-  AGENTLIST=$(echo "$AGENT" | sed 's/,/\\n/g')
-  AGENTNL=$(echo "$AGENT" | sed 's/,/ /g')
-  einfo "Disabling hotplug-agent(s) $AGENTNL"
-  for agent in $(echo -e $AGENTLIST) ; do
-    mv /etc/hotplug/${agent}.rc /etc/hotplug/${agent}.norc
-  done
-  [ "$?" == "0" ] ; eend $?
-fi
-}
-# }}}
-
-# {{{ blacklist of hotplug-modules
-config_hotplug_blacklist(){
-if checkbootparam 'black' ; then
-  BLACK="$(getbootparam 'black' 2>>$DEBUG)"
-  BLACKLIST=$(echo "$BLACK" | sed 's/,/\\n/g')
-  BLACKNL=$(echo "$BLACK" | sed 's/,/ /g')
-  einfo "Blacklisting $BLACKNL via /etc/hotplug/blacklist.d/hotplug-light"
-  echo -e "$BLACKLIST" >> /etc/hotplug/blacklist.d/hotplug-light
-  echo -e "$BLACKLIST" >> /etc/hotplug/blacklist
-  eend 0
-fi
-}
-# }}}
-
-# {{{ run hotplug
-config_hotplug(){
-if checkbootparam 'nohotplug' ; then
-  ewarn "Skipping running hotplug as requested on boot commandline." ; eend 0
-else
-  if [ -r /etc/init.d/hotplug ] ; then
-    einfo "Starting hotplug system in background."
-    /etc/init.d/hotplug start >>$DEBUG 2>>$DEBUG &
-    eend 0
-  elif [ -r /etc/init.d/hotplug-light ] ; then
-    einfo "Starting hotplug-light system in background."
-    /etc/init.d/hotplug-light start >>$DEBUG 2>>$DEBUG &
-    eend 0
-  else
-    ewarn "No hotplug system found. Should be handled by udev. Skipping execution." ; eend 0
-  fi
-fi
-}
-# }}}
-
 # {{{ blacklist specific module [ used in /etc/init.d/udev ]
 config_blacklist(){
 if checkbootparam 'blacklist' ; then

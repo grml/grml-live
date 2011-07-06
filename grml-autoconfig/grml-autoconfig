@@ -144,12 +144,6 @@ checkvalue $CONFIG_TESTCD && config_testcd
 
 checkvalue $CONFIG_HWINFO && config_hwinfo
 
-checkvalue $CONFIG_HOTPLUG_AGENT && config_hotplug_agent
-
-checkvalue $CONFIG_HOTPLUG_BLACKLIST && config_hotplug_blacklist
-
-checkvalue $CONFIG_HOTPLUG_MAIN && config_hotplug
-
 checkvalue $CONFIG_MODULES && config_modules
 
 checkvalue $CONFIG_ACPI_APM && config_acpi_apm
