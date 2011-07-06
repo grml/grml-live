@@ -67,7 +67,6 @@ CONFIG_DMRAID='yes'           # support for dmraid
 CONFIG_EXTRACT='yes'          # specify which (only in combination with bootparam myconfig/netconfig useful)
 CONFIG_FAST='yes'             # skip startup of w3m on tty1
 CONFIG_FINDDCSDIR='yes'       # search for a debs, config, scripts directory
-CONFIG_FIREWIRE_DEV='no'      # bugfix for kernel >=2.6.11 - create some firewire-devices
 CONFIG_FIX_PASSWD='yes'       # fix unionfs-problem with passwd
 CONFIG_FIX_UNIONFS='yes'      # fix/workaround for unionfs
 CONFIG_FWTIMEOUT='yes'        # set timeout for firmware loading

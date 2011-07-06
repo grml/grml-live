@@ -138,8 +138,6 @@ echo "0" > /proc/sys/kernel/printk
 
 checkvalue $CONFIG_LOCAL_NET && config_local_net
 
-checkvalue $CONFIG_FIREWIRE_DEV && config_firewire_dev
-
 checkvalue $CONFIG_TESTCD && config_testcd
 
 [ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||||">/dev/tty14

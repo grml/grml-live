@@ -629,28 +629,6 @@ config_local_net(){
 }
 # }}}
 
-# firewire devices {{{
-# the raw1394 driver does not yet export info into SYSFS,
-# so let's create raw1394 device manually
-# http://www.michael-prokop.at/blog/index.php?p=352
-config_firewire_dev(){
-if checkbootparam 'nofirewiredev' ; then
-  ewarn "Skipping creating some firewire devices as requested on boot commandline." ; eend 0
-else
-#if [ "${KERNEL%-*}" == "2.6.11" ] ; then
-  einfo "Creating some firewire devices (fix kernel 2.6-bug)."
-#  cd /dev && MAKEDEV video1394 raw1394
-  [ -r /dev/raw1394 ]   || mknod /dev/raw1394 c 171 0
-  [ -r /dev/video1394 ] || mknod -m 666 /dev/video1394 c 171 16
-# mknod -m 666 /dev/dv1394 c 171 32 # for NTSC
-  [ -r /dev/dv1394 ]    || mknod -m 666 /dev/dv1394 c 171 34 # for PAL
-  chown -R root:video /dev/raw1394 /dev/video1394 /dev/dv1394
-  chmod -R 664 /dev/raw1394 /dev/video1394 /dev/dv1394 ; eend $?
-fi
-#fi
-}
-# }}}
-
 # {{{ copy passwd-lockfile to ramdisk (fix unionfs-behaviour)
 # otherwise we will get: passwd: Authentication token lock busy
 config_fix_passwd(){
