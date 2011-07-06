@@ -144,8 +144,6 @@ checkvalue $CONFIG_TESTCD && config_testcd
 
 [ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||||">/dev/tty14
 
-checkvalue $CONFIG_DISCOVER && config_discover
-
 checkvalue $CONFIG_HWINFO && config_hwinfo
 
 checkvalue $CONFIG_HOTPLUG_AGENT && config_hotplug_agent
