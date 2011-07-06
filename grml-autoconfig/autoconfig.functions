@@ -667,18 +667,6 @@ fi
 }
 # }}}
 
-# {{{ hardware detection via hwinfo
-config_hwinfo(){
-if checkbootparam 'hwinfo' >>$DEBUG 2>&1; then
-  einfo "Discovering hardware via hwinfo:"
-  MODULES=$(su grml hwinfo | grep "Cmd: \"modprobe" | awk '{print $5}' | sed 's/"//')
-  echo -n "  Loading modules: "
-  for i in `echo $MODULES` ; do echo -n $i && modprobe $i ; done
-  eend 0
-fi
-}
-# }}}
-
 # {{{ blacklist specific module [ used in /etc/init.d/udev ]
 config_blacklist(){
 if checkbootparam 'blacklist' ; then
