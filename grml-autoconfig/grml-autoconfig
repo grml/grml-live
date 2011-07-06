@@ -136,8 +136,6 @@ checkvalue $CONFIG_LVM && config_lvm
 # No kernel messages while probing modules
 echo "0" > /proc/sys/kernel/printk
 
-checkvalue $CONFIG_CDROM_PERM && config_cdrom_perm
-
 checkvalue $CONFIG_LOCAL_NET && config_local_net
 
 checkvalue $CONFIG_FIREWIRE_DEV && config_firewire_dev
