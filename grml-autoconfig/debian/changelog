@@ -1,3 +1,10 @@
+grml-autoconfig (0.9.31) unstable; urgency=low
+
+  * [5a37523] Support running scripts in bootoption "services"
+    in foreground if they contain the string DO_NO_RUN_IN_BACKGROUND.
+
+ -- Michael Prokop <mika@grml.org>  Thu, 07 Jul 2011 01:02:17 +0200
+
 grml-autoconfig (0.9.30) unstable; urgency=low
 
   The "spring^Wsummer cleanup" release.
