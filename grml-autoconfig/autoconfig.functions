@@ -896,59 +896,6 @@ fi
 }
 # }}}
 
-# {{{ automount(er)
-config_automounter(){
-if checkbootparam 'automounter' ; then
-  RUNLEVEL="$(runlevel)"
-  AUTOMOUNTER=""
-  [ -x /etc/init.d/autofs ] && [ "$RUNLEVEL" != "N 1" ] && [ "$RUNLEVEL" != "N S" ] && AUTOMOUNTER="yes"
-
-addautomount(){
-# /dev/ice  options
-  d="${1##*/}"
-  if [ -n "$AUTOMOUNTER" ]; then
-    [ -d "/mnt/$d" -a ! -L "/mnt/$d" ] && rmdir /mnt/$d
-    [ -d "/mnt/auto/$d" ] || mkdir -p "/mnt/auto/$d"
-    [ -L "/mnt/$d" ]      || ln -s "/mnt/auto/$d" "/mnt/$d"
-    anew="$d        -fstype=auto,$2 :$i"
-    grep -q "$anew" "/etc/auto.mnt" || echo "$anew" >> /etc/auto.mnt
-    AUTOMOUNTS="$AUTOMOUNTS $d"
-    new="$1 /mnt/auto/$d  auto   users,noauto,exec,$2 0 0"
-  else
-    [ -d /mnt/$d ] && mkdir -p /mnt/$d
-    new="$1 /mnt/$d  auto   users,noauto,exec,$2 0 0"
-  fi
-  grep -q "$new" "/etc/fstab" || echo "$new" >> /etc/fstab
-}
-
-  AUTOMOUNTS="floppy cdrom"
-# Add new devices to /etc/fstab and /etc/auto.mnt
-  for i in /dev/cdrom?*; do
-    if [ -L $i ]; then
-      addautomount "$i" "ro"
-    fi
-  done
-fi
-
-if [ -n "$AUTOMOUNTER" ]; then
-# Check for floppy dir, reinstall with automounter
-  [ -d /mnt/floppy -a ! -L /mnt/floppy ] && rmdir /mnt/floppy
-  [ -d /mnt/auto/floppy ] || mkdir -p /mnt/auto/floppy
-  [ -L /mnt/floppy ] || ln -s /mnt/auto/floppy /mnt/floppy
-  [ -d /mnt/cdrom -a ! -L /mnt/cdrom ] && rmdir /mnt/cdrom
-  [ -d /mnt/auto/cdrom ] || mkdir -p /mnt/auto/cdrom
-  [ -L /mnt/cdrom ] || ln -s /mnt/auto/cdrom /mnt/cdrom
-  rm -f /etc/fstab.new
-# Replace paths from bootfloppy
-  sed 's|/mnt/cdrom|/mnt/auto/cdrom|g;s|/mnt/floppy|/mnt/auto/floppy|g' /etc/fstab > /etc/fstab.new
-  mv -f /etc/fstab.new /etc/fstab
-# Start automounter now
-  einfo "Starting automounter for ${AUTOMOUNTS}."
-  /etc/init.d/autofs start >>$DEBUG ; eend $?
-fi
-}
-# }}}
-
 # {{{ Collect partitions from /proc/partitions first for enabling DMA
 check_partitions(){
 partitions=""
