@@ -17,7 +17,12 @@ Pin-Priority: 995
 Package: *
 Pin: origin deb.grml.org
 Pin-Priority: 994
-// debian unstable pool (default):
-//Package: *
-//Pin: release a=unstable,o=Debian
-//Pin-Priority: 991
+
+// make sure we never use the version from Debian
+Package: live-boot
+Pin: origin deb.grml.org
+Pin-Priority: 900
+
+Package: live-boot-initramfs-tools
+Pin: origin deb.grml.org
+Pin-Priority: 900
