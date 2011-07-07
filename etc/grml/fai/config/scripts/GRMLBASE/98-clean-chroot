@@ -24,6 +24,15 @@ else
   echo "Warning: localepurg not installed"
 fi
 
+# revert dpkg-divert of hooks/instsoft.GRMLBASE, which is
+# used to work around /etc/kernel/postinst.d/zz-update-grub failing
+# inside openvz environment, see #597084
+if $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/update-grub' ; then
+  echo "Undoing dpkg-divert of update-grub executable"
+  $ROOTCMD rm -f /usr/sbin/update-grub
+  $ROOTCMD dpkg-divert --rename --remove /usr/sbin/update-grub
+fi
+
 echo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
 rm -f $target/var/lib/apt/lists/*Packages \
       $target/var/lib/apt/lists/*Release \

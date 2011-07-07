@@ -88,6 +88,14 @@ EOF
       echo "Warning: there was an error executing apt-get update, continuing anyway."
    fi
 
+   # work around /etc/kernel/postinst.d/zz-update-grub failing
+   # inside openvz environment, see #597084
+   if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/update-grub' ; then
+     echo "Diverting update-grub executable"
+     $ROOTCMD dpkg-divert --rename --add /usr/sbin/update-grub
+     $ROOTCMD ln -s /bin/true /usr/sbin/update-grub
+   fi
+
   # newer aptitude versions won't remove essential packages using
   # 'aptitude -f -y install file-rc' anymore, therefore force it:
   $ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc
