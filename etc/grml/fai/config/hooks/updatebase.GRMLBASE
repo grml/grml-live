@@ -57,6 +57,12 @@ fi
 # no softupdate but updating chroot e.g. based on ${GRML_FAI_CONFIG}/basefiles/*
 echo "Action $FAI_ACTION of FAI (hooks/updatebase.GRMLBASE) via grml-live running"
 
+# work around #632624: udev fails to install on systems with old kernel versions
+if ! [ -e ${target}/etc/udev/kernel-upgrade ] ; then
+  echo "Working around udev package bug, creating /etc/udev/kernel-upgrade"
+  echo "# installed via updatebase.GRMLBASE" > ${target}/etc/udev/kernel-upgrade
+fi
+
 # install all apt related files
 fcopy -r /etc/apt
 

@@ -33,6 +33,12 @@ if $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/update-grub' ; then
   $ROOTCMD dpkg-divert --rename --remove /usr/sbin/update-grub
 fi
 
+# revert udev workaround of hooks/updatebase.GRMLBASE
+if grep -q 'updatebase.GRMLBASE' ${target}/etc/udev/kernel-upgrade 2>/dev/null ; then
+  echo "Removing /etc/udev/kernel-upgrade created by updatebase.GRMLBASE"
+  $ROOTCMD rm -f /etc/udev/kernel-upgrade
+fi
+
 echo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
 rm -f $target/var/lib/apt/lists/*Packages \
       $target/var/lib/apt/lists/*Release \
