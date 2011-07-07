@@ -9,9 +9,6 @@
 set -u
 set -e
 
-GRML_SOURCES_LIST="$target/etc/apt/sources.list.d/grml.list"
-DEBIAN_SOURCES_LIST="$target/etc/apt/sources.list.d/debian.list"
-
 # if hooks/updatebase.GRMLBASE fails for whatever reason
 # and can't skip instsoft.GRMLBASE we have to make sure
 # we exit here as well
@@ -62,22 +59,6 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
 //DPkg::Tools::Options::/usr/sbin/apt-listbugs "";
 //DPkg::Tools::Options::/usr/sbin/apt-listbugs::Version "2";
 EOF
-
-   # FAI softupdate executes upgrade only with the sources.list being
-   # present in the chroot - so let's do it on our own:
-   fcopy /etc/apt/sources.list
-
-   # when re-running grml-live with the -u option we do not want to use the
-   # sources.list config of the live system but grml-live's config instead,
-   # therefore temporarly move known files and restore them again later on
-   # through /etc/grml/fai/config/scripts/GRMLBASE/33-aptsetup:
-   if [ -r "$GRML_SOURCES_LIST" ] ; then
-      mv "$GRML_SOURCES_LIST" "${GRML_SOURCES_LIST}.unused"
-   fi
-
-   if [ -r "$DEBIAN_SOURCES_LIST" ] ; then
-      mv "$DEBIAN_SOURCES_LIST" "${DEBIAN_SOURCES_LIST}.unused"
-   fi
 
    # run it on our own, as updatebase is used at the wrong stage for our needs,
    # see ${GRML_FAI_CONFIG}/hooks/updatebase.GRMLBASE

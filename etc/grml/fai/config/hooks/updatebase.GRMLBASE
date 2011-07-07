@@ -64,7 +64,14 @@ if ! [ -e ${target}/etc/udev/kernel-upgrade ] ; then
 fi
 
 # install all apt related files
-fcopy -r /etc/apt
+fcopy -v /etc/apt/grml.key
+fcopy -v /etc/apt/preferences
+fcopy -v /etc/apt/apt.conf.d/20pdiffs
+fcopy -v /etc/apt/apt.conf.d/15grml-live
+
+# this is the auto-generated sources.list file by grml-live,
+# will be overriden by $GRML_FAI_CONFIG/scripts/GRMLBASE/33-aptsetup
+fcopy -v -c GRML_LIVE_SOURCES_LIST /etc/apt/sources.list
 
 # install Grml gpg key:
 $ROOTCMD apt-key add /etc/apt/grml.key

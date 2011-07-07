@@ -1,0 +1,3 @@
+# testing/developer Grml repository:
+  deb     http://deb.grml.org/ grml-testing main
+#  deb-src http://deb.grml.org/ grml-testing main

@@ -9,90 +9,34 @@
 set -u
 set -e
 
-GRML_SOURCES_LIST="$target/etc/apt/sources.list.d/grml.list"
-DEBIAN_SOURCES_LIST="$target/etc/apt/sources.list.d/debian.list"
+fcopy -v /etc/apt/sources.list
+fcopy -v /etc/apt/sources.list.d/grml-stable.list
 
-# restore original grml sources.list file (temporarly moved via
-# /etc/grml/fai/config/hooks/instsoft.GRMLBASE):
-if [ -r "${GRML_SOURCES_LIST}.unused" ] ; then
-   mv "${GRML_SOURCES_LIST}.unused" "${GRML_SOURCES_LIST}"
-fi
-if [ -r "${DEBIAN_SOURCES_LIST}.unused" ] ; then
-   mv "${DEBIAN_SOURCES_LIST}.unused" "${DEBIAN_SOURCES_LIST}"
-fi
+case "${SUITE:-}" in
+  etch)         suite_class=DEBIAN_ETCH ;;
+  lenny)        suite_class=DEBIAN_LENNY ;;
+  squeeze)      suite_class=DEBIAN_SQUEEZE ;;
+  stable)       suite_class=DEBIAN_STABLE ;;
+  testing)      suite_class=DEBIAN_TESTING ;;
+  unstable|sid) suite_class=DEBIAN_SID ;;
+  wheezy)       suite_class=DEBIAN_WHEEZY ;;
+  *)            suite_class=DEBIAN_SID ;; # default to sid otherwise
+esac
 
-[ -d $target/etc/apt/sources.list.d ] || mkdir $target/etc/apt/sources.list.d
-
-# remove any existing sources.list and inform user about the new
-# /etc/apt/sources.list.d/ setup:
-cat > $target/etc/apt/sources.list << EOF
-##### IMPORTANT NOTE ##############################################
-# The configuration file /etc/apt/sources.list has been split
-# into structured files in /etc/apt/sources.list.d/ - check out:
-#
-#  /etc/apt/sources.list.d/grml.list   for the grml related repositories
-#  /etc/apt/sources.list.d/debian.list for official Debian repositories
-#
-# If you're looking for the "old" /etc/apt/sources.list file or
-# need some further repositories please take a look at the file
-# /etc/apt/sources.list.grml
-##### IMPORTANT NOTE ##############################################
-EOF
-
-# retrieve build information ($SUITE):
-if [ -r $target/etc/grml_live_version ] ; then
-  . $target/etc/grml_live_version
+if ! [ -r $FAI/files/etc/apt/sources.list.d/debian.list/$suite_class ] ; then
+  echo "Error: could not find $FAI/files/etc/apt/sources.list.d/debian.list/$suite_class" >&2
+  echo "Please provide an according sources.list template." >&2
+  exit 1
 fi
 
-# if we stil do not know which Debian suite we are building assume "stable"
-[ -n "$SUITE" ] || SUITE="stable"
+# install according sources.list, depending on deployed Debian suite
+fcopy -v -c $suite_class /etc/apt/sources.list.d/debian.list
 
-# configure official Debian repositories:
-cat > "$DEBIAN_SOURCES_LIST" << EOF
-# official debian repository (mirror selected via geo-ip):
-  deb     http://cdn.debian.net/debian/ $SUITE main contrib non-free
-#  deb-src http://cdn.debian.net/debian/ $SUITE main contrib non-free
-
-# official debian repository:
-#  deb     http://ftp.debian.org/debian/ sid main contrib non-free
-#  deb-src http://ftp.debian.org/debian/ sid main contrib non-free
-
-# official debian DE repository:
-#  deb     http://ftp.de.debian.org/debian/ sid main contrib non-free
-#  deb-src http://ftp.de.debian.org/debian/ sid main contrib non-free
-
-# official debian AT repository:
-#  deb     http://ftp.at.debian.org/debian/ sid main contrib non-free
-#  deb-src http://ftp.at.debian.org/debian/ sid main contrib non-free
-EOF
-
-# configure grml-stable repository:
-cat > "$GRML_SOURCES_LIST" << EOF
-# stable grml repository:
-  deb     http://deb.grml.org/ grml-stable  main
-#  deb-src http://deb.grml.org/ grml-stable  main
-EOF
-
-ENABLE_GRML_TESTING=false
-# if we have a devel-version or a daily snapshot enable grml-testing by default:
+# if we have a devel-version or a daily snapshot enable grml-testing repos:
 if [ -n "$GRML_NAME" -o -n "$RELEASENAME" ] ; then
-   if echo "$GRML_NAME" "$RELEASENAME" | grep -e devel -e autobuild 1>/dev/null ; then
-      ENABLE_GRML_TESTING=true
-   fi
-fi
-
-if $ENABLE_GRML_TESTING ; then
-  cat >> "$GRML_SOURCES_LIST" << EOF
-# testing/developer grml repository:
-  deb     http://deb.grml.org/ grml-testing main
-#  deb-src http://deb.grml.org/ grml-testing main
-EOF
-else # no devel/daily build:
-  cat >> "$GRML_SOURCES_LIST" << EOF
-# testing/developer grml repository:
-#  deb     http://deb.grml.org/ grml-testing main
-#  deb-src http://deb.grml.org/ grml-testing main
-EOF
+  if echo "$GRML_NAME" "$RELEASENAME" | grep -e devel -e autobuild >/dev/null ; then
+    fcopy -v /etc/apt/sources.list.d/grml-testing.list
+  fi
 fi
 
 ## END OF FILE #################################################################
