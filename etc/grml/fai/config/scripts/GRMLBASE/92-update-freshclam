@@ -12,19 +12,39 @@ if ifclass NO_ONLINE ; then
 fi
 
 set -u
-set -e
+
+bailout() {
+  if [ "${1:-}" = "124" ] ; then
+    echo "Warning: freshclam returned with exit code 124." >&2
+
+    # be verbose in logs
+    echo "Warning: freshclam returned with exit code 124."
+    echo "-> This might happen when the incremental daily update failed to run, and"
+    echo "   retrieving the full daily.cvd failed as well."
+    echo "   This is known to be a problem in automated builds causing build errors."
+    echo "   Therefore we are ignoring this issue."
+    echo "   If a fresh clamav database is important for you, execute freshclam in the chroot."
+
+    exit 0
+  fi
+
+  exit "${1:-0}"
+}
 
 [ -x $target/usr/bin/timeout ] && TIMEOUT="10" || TIMEOUT=""
 
 if ! [ -x $target/usr/bin/freshclam ] ; then
   echo "freshclam not installed"
+  exit 0
+fi
+
+echo "Updating clamav database via running freshclam"
+if [ -n "$TIMEOUT" ] ; then
+   $ROOTCMD timeout $TIMEOUT /usr/bin/freshclam
+   bailout $?
 else
-  echo "Updating clamav database via running freshclam"
-  if [ -n "$TIMEOUT" ] ; then
-     $ROOTCMD timeout $TIMEOUT /usr/bin/freshclam
-  else
-     $ROOTCMD /usr/bin/freshclam
-  fi
+   $ROOTCMD /usr/bin/freshclam
+   bailout $?
 fi
 
 ## END OF FILE #################################################################
