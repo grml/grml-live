@@ -3,7 +3,6 @@ docs/grml-live-remaster.8   usr/share/man/man8/
 etc/grml                    etc
 examples                    usr/share/doc/grml-live/
 grml-live                   usr/sbin/
-patches                     usr/share/grml-live/
 remaster/grml-live-remaster usr/sbin/
 scripts                     usr/share/grml-live/
 templates/boot/grub         usr/share/grml-live/templates/boot/
