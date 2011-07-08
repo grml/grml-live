@@ -1,3 +1,33 @@
+grml-live (0.15.0) unstable; urgency=low
+
+  1) The new command line option -D supports setting a
+  configuration directory instead of /etc/grml/fai. This is
+  the same as setting GRML_FAI_CONFIG.
+
+  2) Removed /etc/grml/fai/apt/sources.list, thanks to a redesign
+  of sources.list handling which provides a more consistent
+  approach. /etc/apt/sources.list will no longer use entries from
+  GRML_LIVE_SOURCES once the system has been initially installed.
+  Now handling of sources.list works as follows:
+
+  ${GRML_FAI_CONFIG}/config/files/etc/apt/sources.list/GRML_LIVE_SOURCES_LIST
+  is generated based on $GRML_LIVE_SOURCES (if set by the user,
+  otherwise falling back to Grml repositories plus Debian).  This
+  GRML_LIVE_SOURCES_LIST file then gets deployed on *fresh*
+  deployments. It won't be installed again when running grml-live
+  -u.  This provides more flexibility combined with a more
+  transparent and consistent behaviour for the user.
+
+  /etc/apt/sources.list.d/debian.list will be set up based on the
+  detected Debian suite and the files from
+  ${GRML_FAI_CONFIG}/config/files/etc/apt/sources.list.d/debian.list/DEBIAN_*.
+
+  /etc/apt/sources.list/grml-stable.list will be deployed and
+  (depending on the build type) also
+  /etc/apt/sources.list.d/grml-testing.list might be installed.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 08 Jul 2011 13:45:45 +0200
+
 grml-live (0.9.35) unstable; urgency=low
 
   The files from /etc/grml/fai/files have been moved to
@@ -5,8 +35,8 @@ grml-live (0.9.35) unstable; urgency=low
   /etc/grml/fai/live-initramfs has been moved to
   /etc/grml/fai/config/ as well). This is an important step
   to use the config space and class concept of FAI in a more
-  decent and clean way. It allows much better customization. 
-  
+  decent and clean way. It allows much better customization.
+
   Please notice: If you didn't modify anything inside
   /etc/grml/fai/files you can safely remove the directory.
   Otherwise please check out the structure of the new
