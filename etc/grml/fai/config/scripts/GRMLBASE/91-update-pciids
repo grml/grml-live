@@ -12,7 +12,24 @@ if ifclass NO_ONLINE ; then
 fi
 
 set -u
-set -e
+
+bailout() {
+  if [ "${1:-}" = "4" ] ; then
+    echo "Warning: freshclam returned with exit code 4." >&2
+
+    # be verbose in logs
+    echo "Warning: freshclam returned with exit code 4."
+    echo "-> This indicates that networking inside the chroot did not work"
+    echo "   while GRMLBASE/91-update-pciids was running."
+    echo "   To address this issue you can either configure /etc/resolv.conf"
+    echo "   accordingly or just run dnsmasq on your host."
+
+    exit 0
+  fi
+
+  exit "${1:-0}"
+}
+
 
 [ -x $target/usr/bin/timeout ] && TIMEOUT="10" || TIMEOUT=""
 
@@ -24,8 +41,10 @@ fi
 echo "Updating PCI-IDs"
 if [ -n "$TIMEOUT" ] ; then
    $ROOTCMD timeout $TIMEOUT update-pciids
+   bailout $?
 else
    $ROOTCMD update-pciids
+   bailout $?
 fi
 
 ## END OF FILE #################################################################
