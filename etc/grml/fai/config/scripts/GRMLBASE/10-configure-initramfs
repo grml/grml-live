@@ -9,9 +9,9 @@
 set -u
 set -e
 
-fcopy /usr/share/initramfs-tools/scripts/init-top/grml
-fcopy /etc/initramfs-tools/hooks/000-udev-shutup
-fcopy /etc/initramfs-tools/conf.d/xz-compress
+fcopy -v /usr/share/initramfs-tools/scripts/init-top/grml
+fcopy -v /etc/initramfs-tools/hooks/000-udev-shutup
+fcopy -v /etc/initramfs-tools/conf.d/xz-compress
 
 if ! [ -f $target/usr/share/initramfs-tools/scripts/live ] ; then
   echo "Error: live-boot/-initramfs does not seem to be present, can not create initramfs. Exiting.">&2

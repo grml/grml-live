@@ -9,7 +9,7 @@
 set -u
 set -e
 
-fcopy /etc/network/interfaces
+fcopy -v /etc/network/interfaces
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

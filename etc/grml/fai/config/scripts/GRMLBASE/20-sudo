@@ -14,7 +14,7 @@ USERNAME=''
 [ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
 [ -n "$USERNAME" ] || USERNAME=grml
 
-fcopy /etc/sudoers
+fcopy -v /etc/sudoers
 sed -i "s/\$USERNAME/$USERNAME/" $target/etc/sudoers
 chmod 440 $target/etc/sudoers
 

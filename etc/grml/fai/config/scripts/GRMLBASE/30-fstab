@@ -14,7 +14,7 @@ USERNAME=''
 [ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
 [ -n "$USERNAME" ] || USERNAME=grml
 
-fcopy /etc/fstab
+fcopy -v /etc/fstab
 sed -i "s/uid=USERNAME,gid=USERNAME/uid=$USERNAME,gid=$USERNAME/" $target/etc/fstab
 
 ## END OF FILE #################################################################

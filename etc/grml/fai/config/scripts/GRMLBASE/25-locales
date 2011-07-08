@@ -11,7 +11,7 @@ set -e
 
 # set up /etc/locale.gen, only GRML_FULL and LOCALES have
 # the full setup, GRMLBASE installs a minimal configuration
-fcopy /etc/locale.gen
+fcopy -v /etc/locale.gen
 
 # get rid of locales unless using class LOCALES
 set +u
