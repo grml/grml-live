@@ -2,6 +2,10 @@
   deb     http://cdn.debian.net/debian/ lenny main contrib non-free
 #  deb-src http://cdn.debian.net/debian/ lenny main contrib non-free
 
+# security updates:
+  deb     http://security.debian.org/ lenny/updates main contrib
+#  deb-src http://security.debian.org/ lenny/updates main contrib
+
 # official debian repository:
 #  deb     http://ftp.debian.org/debian/ lenny main contrib non-free
 #  deb-src http://ftp.debian.org/debian/ lenny main contrib non-free
