@@ -198,7 +198,7 @@ else
 EOF
 fi
 
-if ! [ -x $target/usr/bin/updatedb ] ; then
+if ! $ROOTCMD test -x /usr/bin/updatedb ; then
   echo "Warning: updatedb not installed"
 else
   echo "Updating locate-database"
