@@ -81,11 +81,11 @@ EOF
   # 'aptitude -f -y install file-rc' anymore, therefore force it:
   $ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc
 
-   if ! [ -x $target/usr/bin/aptitude ] ; then
+   if ! $ROOTCMD test -x /usr/bin/aptitude ; then
       $ROOTCMD apt-get -y install aptitude
    fi
 
-   if [ -x $target/usr/bin/aptitude ] ; then
+   if $ROOTCMD test -x /usr/bin/aptitude ; then
       if $ROOTCMD aptitude --help | grep -q safe-upgrade ; then
          APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD aptitude -y safe-upgrade
       else
