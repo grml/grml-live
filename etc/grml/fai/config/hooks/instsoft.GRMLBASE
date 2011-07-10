@@ -92,7 +92,7 @@ EOF
          APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD aptitude -y upgrade
       fi
    else
-      APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD apt-get -y upgrade
+      APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD apt-get -y --force-yes upgrade
    fi
 
    exit # make sure we don't continue behind the following "fi"
