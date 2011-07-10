@@ -85,14 +85,21 @@ EOF
       $ROOTCMD apt-get -y install aptitude
    fi
 
+   # make sure we can upgrade automatically,
+   # even with unsigned repos, but only if user wants it
+   if [ "${FAI_ALLOW_UNSIGNED:-}" = "1" ] ; then
+     APTGET_OPTS="${APTGET_OPTS:-} --allow-unauthenticated"
+     APTITUDE_OPTS="${APTITUDE_OPTS:-} --allow-untrusted"
+   fi
+
    if $ROOTCMD test -x /usr/bin/aptitude ; then
       if $ROOTCMD aptitude --help | grep -q safe-upgrade ; then
-         APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD aptitude -y safe-upgrade
+         APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD aptitude -y $APTITUDE_OPTS safe-upgrade
       else
-         APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD aptitude -y upgrade
+         APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD aptitude -y $APTITUDE_OPTS upgrade
       fi
    else
-      APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD apt-get -y --force-yes upgrade
+      APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD apt-get -y $APTGET_OPTS --force-yes upgrade
    fi
 
    exit # make sure we don't continue behind the following "fi"
