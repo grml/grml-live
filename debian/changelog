@@ -1,3 +1,10 @@
+grml-autoconfig (0.9.32) unstable; urgency=low
+
+  * [a4ecc32] Automatically set up shared folder environment
+    if running in VirtualBox environment.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 11 Jul 2011 19:25:29 +0200
+
 grml-autoconfig (0.9.31) unstable; urgency=low
 
   * [5a37523] Support running scripts in bootoption "services"
