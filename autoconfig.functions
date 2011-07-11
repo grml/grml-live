@@ -2300,6 +2300,45 @@ fi # checkbootparam "BOOT_IMAGE=debian2hd
 }
 # }}}
 
+config_virtualbox_shared_folders() {
+if [ -r /proc/acpi/battery/BAT0/info ] && grep -q 'OEM info:.*innotek' /proc/acpi/battery/BAT0/info ; then
+  einfo "VirtualBox detected, trying to set up Shared Folders."
+  if ! modprobe -l | grep -q vboxsf.ko ; then
+    ewarn "vboxsf driver not present, not setting up VirtualBox Shared Folders."
+    eend 0
+  elif ! [ -x /usr/sbin/VBoxService ] ; then
+    ewarn "virtualbox-guest-utils not installed, not setting up VirtualBox Shared Folders."
+    eend 0
+  else
+    eindent
+
+      einfo "Loading vboxsf driver."
+      lsmod | grep -q vboxsf || modprobe vboxsf
+      eend $?
+
+      einfo "Adjusting /dev/vboxguest."
+      chown root:vboxsf /dev/vboxguest
+      chmod 660 /dev/vboxguest
+      eend $?
+
+      if [ -n "$CONFIG_FSTAB_USER" ] ; then
+        fstabuser="$CONFIG_FSTAB_USER"
+      else
+        fstabuser=$(getent passwd 1000 | cut -d: -f1)
+      fi
+      einfo "Adding $fstabuser to group vboxsf."
+      adduser grml vboxsf &>/dev/null
+      eend $?
+
+      einfo "Starting VBoxService."
+      VBoxService >/dev/null &
+      eend $?
+
+    eoutdent
+  fi
+fi
+}
+
 # {{{ Support customization
 config_distri(){
 if checkbootparam 'distri'; then
