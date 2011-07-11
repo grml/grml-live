@@ -224,6 +224,8 @@ checkvalue $CONFIG_FIX_UNIONFS && fix_unionfs
 
 checkvalue $CONFIG_915RESOLUTION && config_915resolution
 
+checkvalue $CONFIG_VIRTUALBOX_SHARED_FOLDERS && config_virtualbox_shared_folders
+
 checkvalue $CONFIG_MYPATH && config_mypath
 
 checkvalue $CONFIG_DISTCC && config_distcc
