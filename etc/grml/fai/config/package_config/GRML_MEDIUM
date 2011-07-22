@@ -190,9 +190,9 @@ zoo
 zsh
 
 PACKAGES aptitude I386
-linux-image-2.6.38-grml
-virtualbox-ose-guest-modules-2.6.38-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
+linux-image-3.0-grml
+virtualbox-ose-guest-modules-3.0-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
 
 PACKAGES aptitude AMD64
-linux-image-2.6.38-grml64
-virtualbox-ose-guest-modules-2.6.38-grml64 virtualbox-ose-guest-utils virtualbox-ose-guest-x11
+linux-image-3.0-grml64
+virtualbox-ose-guest-modules-3.0-grml64 virtualbox-ose-guest-utils virtualbox-ose-guest-x11

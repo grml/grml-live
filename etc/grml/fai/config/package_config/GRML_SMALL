@@ -130,7 +130,7 @@ zoo
 zsh
 
 PACKAGES aptitude I386
-linux-image-2.6.38-grml
+linux-image-3.0-grml
 
 PACKAGES aptitude AMD64
-linux-image-2.6.38-grml64
+linux-image-3.0-grml64

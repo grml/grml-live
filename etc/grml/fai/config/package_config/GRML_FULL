@@ -1547,7 +1547,7 @@ PACKAGES aptitude I386
 
 ## general:
 grml
-linux-tools-2.6.38
+linux-tools-3.0
 
 # i386-only software
 athcool
@@ -1558,20 +1558,20 @@ fnfxd
 pstack
 retty
 
-## current kernel version 2.6.38-grml:
-#fglrx-kernel-2.6.38-grml
-iscsitarget-module-2.6.38-grml
-linux-doc-2.6.38-grml
-linux-headers-2.6.38-grml
-linux-image-2.6.38-grml
-#linux-source-2.6.38-grml
-ndiswrapper-modules-2.6.38-grml
-#nvidia-kernel-2.6.38-grml
-openafs-modules-2.6.38-grml
-sysprof-module-2.6.38-grml
-tp-smapi-modules-2.6.38-grml
-virtualbox-ose-guest-modules-2.6.38-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
-xtables-addons-modules-2.6.38-grml
+## current kernel version 3.0-grml:
+#fglrx-kernel-3.0-grml
+iscsitarget-module-3.0-grml
+linux-doc-3.0-grml
+linux-headers-3.0-grml
+linux-image-3.0-grml
+#linux-source-3.0-grml
+ndiswrapper-modules-3.0-grml
+#nvidia-kernel-3.0-grml
+openafs-modules-3.0-grml
+sysprof-module-3.0-grml
+tp-smapi-modules-3.0-grml
+virtualbox-ose-guest-modules-3.0-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
+xtables-addons-modules-3.0-grml
 ## }}}
 
 ## amd64 specific packages {{{
@@ -1579,22 +1579,22 @@ PACKAGES aptitude AMD64
 
 ## general:
 grml64
-linux-tools-2.6.38
+linux-tools-3.0
 
-## current kernel version 2.6.38-grml64:
-#fglrx-kernel-2.6.38-grml64
-iscsitarget-module-2.6.38-grml64
-linux-doc-2.6.38-grml64
-linux-headers-2.6.38-grml64
-linux-image-2.6.38-grml64
-#linux-source-2.6.38-grml
-ndiswrapper-modules-2.6.38-grml64
-#nvidia-kernel-2.6.38-grml64
-openafs-modules-2.6.38-grml64
-sysprof-module-2.6.38-grml64
-tp-smapi-modules-2.6.38-grml64
-xtables-addons-modules-2.6.38-grml64
-virtualbox-ose-guest-modules-2.6.38-grml64 virtualbox-ose-guest-utils virtualbox-ose-guest-x11
+## current kernel version 3.0-grml64:
+#fglrx-kernel-3.0-grml64
+iscsitarget-module-3.0-grml64
+linux-doc-3.0-grml64
+linux-headers-3.0-grml64
+linux-image-3.0-grml64
+#linux-source-3.0-grml
+ndiswrapper-modules-3.0-grml64
+#nvidia-kernel-3.0-grml64
+openafs-modules-3.0-grml64
+sysprof-module-3.0-grml64
+tp-smapi-modules-3.0-grml64
+xtables-addons-modules-3.0-grml64
+virtualbox-ose-guest-modules-3.0-grml64 virtualbox-ose-guest-utils virtualbox-ose-guest-x11
 ## }}}
 
 # vim: foldmethod=marker
