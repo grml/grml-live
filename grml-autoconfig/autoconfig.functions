@@ -720,7 +720,7 @@ if [ -d /proc/acpi ]; then
     else
       ewarn "(none)" ; eend 1
     fi
-    if ! ps x | grep -q /usr/sbin/acpid ; then
+    if ! ps x 2>>$DEBUG | grep -q /usr/sbin/acpid ; then
       if ! [ -r /var/run/dbus/pid ] ; then
         einfo "Starting acpi daemon."
         /etc/init.d/acpid start >>$DEBUG 2>&1 ; eend $?
