@@ -1,3 +1,9 @@
+grml-autoconfig (0.9.33) unstable; urgency=low
+
+  * [25a9d31] config_acpi_apm(): redirect stderr of ps to debug log.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 22 Jul 2011 22:30:01 +0200
+
 grml-autoconfig (0.9.32) unstable; urgency=low
 
   * [a4ecc32] Automatically set up shared folder environment
