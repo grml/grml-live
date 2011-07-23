@@ -14,9 +14,24 @@ if ! [ -x $target/sbin/depmod ] ; then
   exit 0
 fi
 
-# detect kernel version, assume newest kernel version
+NEEDS_CHECK=false
+depmod_version=$($ROOTCMD depmod --version | awk '/module-init-tools/ {print $2}')
+if [ -n "${depmod_version:-}" ] ; then
+  # depmod of module-init-tools from squeeze or older
+  dpkg --compare-versions "$depmod_version" lt "3.13" && NEEDS_CHECK=true
+fi
+
 for kernel in $(find $target/lib/modules/ -maxdepth 1 -type d -name [0-9]*) ; do
   kernelversion=$(basename $kernel)
+
+  # provide verbose error message regarding the annoying
+  # kernel x.y-grml[64] <-> module-init-tools v3.12 situation
+  if $NEEDS_CHECK && echo "$kernelversion" | grep -q '[[:digit:]]\.[[:digit:]]-' ; then
+    echo "Error: module-init-tools version <= 3.12 with two-digit kernel version found." >&2
+    echo "This is known to be broken and does not provide a working modules.dep. :(" >&2
+    exit 1
+  fi
+
   echo "Updating modules.dep for kernel $kernelversion"
   $ROOTCMD depmod -ae -F /boot/System.map-"$kernelversion" "$kernelversion"
 done
