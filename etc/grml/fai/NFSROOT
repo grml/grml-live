@@ -8,7 +8,7 @@ dnsutils ntpdate dosfstools xfsprogs xfsdump
 procinfo dialog discover mdetect
 kbd
 expect iproute udev
-live-boot
+live-boot-grml
 
 # needed for the simple examples
 # cfengine2 libapt-pkg-perl
