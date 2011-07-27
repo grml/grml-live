@@ -79,8 +79,8 @@ case "$0" in
 esac
 
 mysleep() {
-  for i in $(seq 1 40) ; do
-    usleep 75000
+  for i in $(seq 1 30) ; do
+    sleep 1
     echo -n "$1.${NORMAL}"
   done
   echo ""
