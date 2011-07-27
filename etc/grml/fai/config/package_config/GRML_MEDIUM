@@ -62,15 +62,11 @@ grml-desktop
 grml-docs
 grml-feedback
 grml-files
-grml-laptop
 grml-live
 grml-paste
-grml-pylib
 grml-quickconfig-standard
 grml-rescueboot
-grml-sectools
 grml-small
-grml-templates
 grml-terminalserver
 grml-x
 grub-imageboot
