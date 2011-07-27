@@ -8,6 +8,8 @@ Build-Depends-Indep: asciidoc, docbook-xsl, xsltproc, shunit2, zsh
 Homepage: http://git.grml.org/?p=grml-autoconfig.git
 Vcs-git: git://git.grml.org/grml-autoconfig.git
 Vcs-Browser: http://git.grml.org/?p=grml-autoconfig.git
+Origin: Grml
+Bugs: mailto:bugs@grml.org
 
 Package: grml-autoconfig
 Architecture: all
