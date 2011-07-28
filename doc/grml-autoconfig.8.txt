@@ -32,21 +32,6 @@ dialog-based interface to the configuration file. You can either use the script
 for configuring grml-autoconfig or modify the configuration file manually on
 your own (there is no interference).
 
-The grml-autoconfig package creates three initscripts on installation:
-/etc/init.d/bootlocal.first, /etc/init.d/bootlocal.middle and
-/etc/init.d/bootlocal.last.
-
-They are created in the maintainer scripts of the grml-autoconfig package.  This
-means they are not part of the package itself and therefore also not marked as
-configuration files of the package. As a result the files won't be touched
-anymore, neither when upgrading nor when removing the package! If you want to
-add your own bootup commands you can use these files.
-/etc/init.d/bootlocal.first is executed at the very beginning, in runlevel 'S'.
-/etc/init.d/bootlocal.middle is executed right before startup of grml-autoconfig
-itself in runlevel '2' only (where grml-autoconfig is located as well).  Finally
-/etc/init.d/bootlocal.last is executed as one of the last initscripts in
-runlevel '2' only.
-
 Files
 -----
 
