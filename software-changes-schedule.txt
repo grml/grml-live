@@ -6,7 +6,7 @@ None currently.
 Candidates for removal
 ----------------------
 
-* pppoe (ppp + pppoeconf should be sufficient) [mika, formorer]
+None currently.
 
 Candidates that need to be checked because of:
   Couldn't find any package whose name or description matched
