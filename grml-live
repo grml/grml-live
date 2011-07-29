@@ -716,6 +716,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
             # copy addons from Depended packages
             cp -a /usr/lib/ipxe/ipxe.lkrn "${TEMPLATE_DIRECTORY}/boot/addons/"
             cp -a /usr/share/misc/pci.ids "${TEMPLATE_DIRECTORY}/boot/addons/"
+            cp -a /boot/memtest86+.bin "${TEMPLATE_DIRECTORY}/boot/addons/memtest"
 
             # copy only files so we can handle bsd4grml on its own
             for file in ${TEMPLATE_DIRECTORY}/boot/addons/* ; do

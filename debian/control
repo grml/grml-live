@@ -13,7 +13,7 @@ Bugs: mailto:bugs@grml.org
 
 Package: grml-live
 Architecture: all
-Depends: ${misc:Depends}, bc, fai-client (>= 3.4.0), fai-server (>= 3.4.0), genisoimage, mksh, moreutils, squashfs-tools (>= 1:4.2-1~grml00), grub-pc-bin, ipxe, pciutils
+Depends: ${misc:Depends}, bc, fai-client (>= 3.4.0), fai-server (>= 3.4.0), genisoimage, mksh, moreutils, squashfs-tools (>= 1:4.2-1~grml00), grub-pc-bin, ipxe, pciutils, memtest86+
 Recommends: grml-live-addons, grml-live-db, ia32-libs
 Suggests: fai-doc
 Description: build system for creating a Grml (based) Linux live system
