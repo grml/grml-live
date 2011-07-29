@@ -14,21 +14,12 @@ Bugs: mailto:bugs@grml.org
 Package: grml-live
 Architecture: all
 Depends: ${misc:Depends}, bc, fai-client (>= 3.4.0), fai-server (>= 3.4.0), genisoimage, mksh, moreutils, squashfs-tools (>= 1:4.2-1~grml00), grub-pc-bin, ipxe, pciutils, memtest86+, syslinux-common
-Recommends: grml-live-addons, grml-live-db, ia32-libs
-Suggests: fai-doc
+Recommends: grml-live-db, ia32-libs
+Suggests: fai-doc, grml-live-addons, grml-live-compat
 Description: build system for creating a Grml (based) Linux live system
  This package provides the build system for creating a Debian /
  Grml based Linux live system (also known as live cd). It is
  based on the FAI (Fully Automatic Installation) framework.
-
-Package: grml-live-addons
-Architecture: all
-Depends: ${misc:Depends}, grml-live
-Conflicts: grml-live (<< 0.9.13)
-Description: templates/boot/addons for grml-live
- This package provides the boot addons known as the features
- providing bootoptions bsd, dos, grub and hdt. You can safely
- skip this package if you don't need the addons.
 
 Package: grml-live-db
 Architecture: all

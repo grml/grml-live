@@ -32,14 +32,6 @@ License information for the syslinux files shipped as
    Upstream Author: H. Peter Anvin <hpa@zytor.com>
    Copyright (C) 1994-2007 H. Peter Anvin <hpa@zytor.com>
 
-License information for the bsd4grml files shipped as
-/usr/share/grml-live/templates/boot/addons/bsd4grml:
-
-   Downloaded from <https://dl.mirbsd.org/MirOS/current/bsd4grml-20100815.tgz>.
-   Thorsten "mirabilos" Glaser <tg@mirbsd.de>
-   See /usr/share/grml-live/templates/boot/addons/bsd4grml/LICENCE.TXT
-   for details.
-
 On Debian systems, the complete text of the GNU General
 Public License can be found in `/usr/share/common-licenses/GPL'.
 
