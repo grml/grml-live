@@ -458,8 +458,8 @@ deb http://cdn.debian.net/debian $SUITE  main contrib non-free
 EOF
 fi
 
-# notice: activate grml-live pool only if we are building against unstable:
-if grep -qwe unstable -qwe sid "$SOURCES_LIST_OUTPUT" ; then
+# notice: activate grml-live pool when building against unstable or testing:
+if grep -qwe unstable -qwe sid -qwe testing -qwe wheezy "$SOURCES_LIST_OUTPUT" ; then
    grep -q 'grml-live.*main' "$SOURCES_LIST_OUTPUT" || \
    grep grml-stable "$SOURCES_LIST_OUTPUT" | \
         sed 's/grml-stable/grml-live/' >> "$SOURCES_LIST_OUTPUT"
