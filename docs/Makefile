@@ -14,11 +14,11 @@ doc_man: man-stamp
 
 man-stamp: grml-live.txt grml-live-remaster.txt
 	asciidoc -d manpage -b docbook grml-live.txt
-	xsltproc /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl grml-live.xml
+	xsltproc --novalid /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl grml-live.xml
 	asciidoc -d manpage -b docbook grml-live-remaster.txt
-	xsltproc /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl grml-live-remaster.xml
+	xsltproc --novalid /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl grml-live-remaster.xml
 	asciidoc -d manpage -b docbook grml-live-db.txt
-	xsltproc /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl grml-live-db.xml
+	xsltproc --novalid /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl grml-live-db.xml
 	touch man-stamp
 
 doc_epub: epub-stamp
