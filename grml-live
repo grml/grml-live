@@ -701,8 +701,15 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
           bailout 8
        fi
 
+       # copy system-provided isolinux files
+       for file in ifcpu64.c32 isolinux.bin vesamenu.c32; do
+         cp -a "/usr/lib/syslinux/${file}" "${TEMPLATE_DIRECTORY}/boot/isolinux/"
+       done
+
        # *always* copy files to output directory so the variables
        # get adjusted according to the build
+       # Note: if grml-live-compat is installed, this will update the
+       # system-provided isolinux files.
        cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
 
        if [ -n "$NO_ADDONS" ] ; then
@@ -722,6 +729,8 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
             done
 
             # copy only files so we can handle bsd4grml on its own
+            # Note: if grml-live-compat is installed, this will update the
+            # system-provided files.
             for file in ${TEMPLATE_DIRECTORY}/boot/addons/* ; do
               test -f $file && cp $file "$BUILD_OUTPUT"/boot/addons/
             done
