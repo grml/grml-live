@@ -40,16 +40,6 @@ License information for the bsd4grml files shipped as
    See /usr/share/grml-live/templates/boot/addons/bsd4grml/LICENCE.TXT
    for details.
 
-License information for the file ipxe.lkrn shipped as
-/usr/share/grml-live/templates/boot/addons/ipxe.lkrn:
-
-   Extracted from the Debian package ipxe version 1.0.0+git-1.293e34-2
-   The majority of iPXE is licensed under the GNU GPL version 2 (or, at your option,
-   any later version). For historical reasons, some portions of the code are licensed
-   under GPL-compatible licences such as the two-clause BSD licence.
-   Visit http://git.debian.org/?p=users/waldi/ipxe.git;a=blob;f=debian/copyright;hb=HEAD
-   and http://ipxe.org/licensing for details.
-
 License information for the file hdt.c32 shipped as
 /usr/share/grml-live/templates/boot/addons/hdt.c32
 

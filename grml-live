@@ -713,6 +713,9 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
             log   "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)"
             ewarn "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)" ; eend 0
           else
+            # copy addons from Depended packages
+            cp -a /usr/lib/ipxe/ipxe.lkrn "${TEMPLATE_DIRECTORY}/boot/addons/"
+
             # copy only files so we can handle bsd4grml on its own
             for file in ${TEMPLATE_DIRECTORY}/boot/addons/* ; do
               test -f $file && cp $file "$BUILD_OUTPUT"/boot/addons/
