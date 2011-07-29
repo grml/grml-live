@@ -1,19 +1,7 @@
 // This file is installed by grml-live.
 //
-// allow overwriting via grml-live:
+// Allow overriding packages via grml-live repository:
 Package: *
 Pin: release o=The grml project,a=grml-live,l=grml,c=main
 Pin-Priority: 997
 
-// main grml-repository:
-Package: *
-Pin: release o=The grml project,a=grml-testing,l=grml,c=main
-Pin-Priority: 996
-
-Package: *
-Pin: release o=The grml project,a=grml-stable,l=grml,c=main
-Pin-Priority: 995
-
-Package: *
-Pin: origin deb.grml.org
-Pin-Priority: 994
