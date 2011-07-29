@@ -40,22 +40,6 @@ License information for the bsd4grml files shipped as
    See /usr/share/grml-live/templates/boot/addons/bsd4grml/LICENCE.TXT
    for details.
 
-License information for the file hdt.c32 shipped as
-/usr/share/grml-live/templates/boot/addons/hdt.c32
-
-   Downloaded from <http://syslinux.zytor.com/wiki/index.php/Hdt_(Hardware_Detection_Tool)>
-   Copyright 2009 Erwan Velu <erwan(dot)velu(point)free(fr)>
-   Licensed under the MIT license, see directory com32/hdt
-   of the syslinux source package.
-
-License information for the memtest file shipped as
-/usr/share/grml-live/templates/boot/addons/memtest
-
-   Downloaded from <http://www.memtest.org/>
-   Upstream Author: Samuel Demeulemeester <memtest@memtest.org>, based on
-   memtest86 by Chris Brady <cbrady@sgi.com>, and various contributors.
-   Licensed unter the GPL v2.
-
 On Debian systems, the complete text of the GNU General
 Public License can be found in `/usr/share/common-licenses/GPL'.
 
