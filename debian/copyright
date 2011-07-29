@@ -9,11 +9,6 @@ Copyright:
 
     © 2007++ by Michael Prokop <mika@grml.org>
 
-    Copyright of /usr/share/grml-live/i386_files/boot/grub/splash.xpm.gz by
-    Robin Bakels <robin@crondor.net>, which is licensed under "GPL v2 or higher"
-    and hase been taken from Debian package grub-splashimages
-    (file /boot/grub/splashimages/fiesta.xpm.gz).
-
 License:
 
     This package is free software; you can redistribute it and/or modify
@@ -29,13 +24,6 @@ License:
     You should have received a copy of the GNU General Public License
     along with this package; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
-
-License information for the grub files shipped as
-/usr/share/grml-live/templates/boot/grub/:
-
-   Extracted from the Debian packages grub2, grub-pc and grub-common.
-   Copyright: 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc
-   License: GPL-3+
 
 License information for the syslinux files shipped as
 /usr/share/grml-live/templates/boot/isolinux/:
