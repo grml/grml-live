@@ -31,5 +31,10 @@ fcopy -v /etc/runlevel.conf
 # provide Grml's inittab configuration
 fcopy -v /etc/inittab
 
+# provide Grml's bootlocal init scripts
+fcopy -v /etc/init.d/bootlocal.first
+fcopy -v /etc/init.d/bootlocal.middle
+fcopy -v /etc/init.d/bootlocal.last
+
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

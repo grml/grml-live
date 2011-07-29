@@ -1,0 +1,7 @@
+#!/bin/sh
+# This file is NOT upgraded during system upgrades.
+# You can use it to customize the boot process.
+# bootlocal.middle is executed in runlevel '2', right before grml-autoconfig.
+################################################################################
+
+## END OF FILE #################################################################
