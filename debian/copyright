@@ -48,21 +48,13 @@ License information for the file hdt.c32 shipped as
    Licensed under the MIT license, see directory com32/hdt
    of the syslinux source package.
 
-License information for the pci.ids file shipped as
+License information for the memtest file shipped as
 /usr/share/grml-live/templates/boot/addons/memtest
 
    Downloaded from <http://www.memtest.org/>
    Upstream Author: Samuel Demeulemeester <memtest@memtest.org>, based on
    memtest86 by Chris Brady <cbrady@sgi.com>, and various contributors.
    Licensed unter the GPL v2.
-
-License information for the pci.ids file shipped as
-/usr/share/grml-live/templates/boot/addons/pci.ids
-
-   Downloaded from <http://pciids.sourceforge.net/>.
-   Maintained by Martin Mares <mj@ucw.cz> and other volunteers
-   Distributed under the terms of either the GNU General Public License
-   (version 2 or later) or of the 3-clause BSD License.
 
 On Debian systems, the complete text of the GNU General
 Public License can be found in `/usr/share/common-licenses/GPL'.
