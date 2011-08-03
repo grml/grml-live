@@ -537,7 +537,7 @@ gftp-common
 gftp-text
 ghostscript
 giblib1
-git-core
+git
 git-email
 gitpkg
 git-svn
