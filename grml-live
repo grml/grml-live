@@ -214,6 +214,34 @@ extend_string_end() {
   done
   echo -ne "\n"
 }
+
+# Copy addonfile $1 from the TEMPLATE_DIRECTORY/compat (if exists),
+# or from $2 (the system path), or warn about the missing file.
+# This is because:
+#   * On unstable, we Recommend the Debian packages containing
+#     these files. The user can override them by putting his
+#     "better" version into TEMPLATE_DIRECTORY/compat.
+#   * On stable, the Debian packages are probably not available,
+#     or outdated, so we look in TEMPLATE_DIRECTORY/compat first, where
+#     our grml-live-compat package installs current file versions.
+copy_addon_file() {
+  if [ ! -d "${BUILD_OUTPUT}/boot/$3/" ]; then
+    mkdir -p "${BUILD_OUTPUT}/boot/$3"
+  fi
+  if [ -e "${TEMPLATE_DIRECTORY}/compat/$3/$1" ]; then
+    cp "${TEMPLATE_DIRECTORY}/compat/$3/$1" "${BUILD_OUTPUT}/boot/$3/"
+    return $?
+  fi
+  if [ -e "$2/$1" ]; then
+    echo "Copying $1 from system"
+    cp "$2/$1" "${BUILD_OUTPUT}/boot/$3/"
+    return $?
+  fi
+
+  msg="Missing addon file: \"$1\""
+  ewarn "$msg" ; eend 1
+  log "copy_addon_file: $msg"
+}
 # }}}
 
 # read local (non-packaged) configuration {{{
@@ -658,21 +686,6 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        [ -d "$BUILD_OUTPUT"/boot/isolinux ] || mkdir -p "$BUILD_OUTPUT"/boot/isolinux
        [ -d "$BUILD_OUTPUT"/boot/"${SHORT_NAME}" ] || mkdir -p "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"
 
-       if [ -z "$NO_ADDONS" ] ; then
-          [ -d "$BUILD_OUTPUT"/boot/addons   ] || mkdir -p "$BUILD_OUTPUT"/boot/addons
-          if [ -r "$TEMPLATE_DIRECTORY"/boot/addons/memtest ] ; then
-             log "Installing $TEMPLATE_DIRECTORY/boot/addons/memtest"
-             cp "$TEMPLATE_DIRECTORY"/boot/addons/memtest "$BUILD_OUTPUT"/boot/addons/memtest
-          elif [ -r /boot/memtest86+.bin ] ; then
-             log "Installing /boot/memtest86+.bin"
-             cp /boot/memtest86+.bin "$BUILD_OUTPUT"/boot/addons/memtest
-          else
-             ewarn "No memtest binary found (either install package grml-live-addons or memtest86+), skipping."
-             log "No memtest binary found (either install package grml-live-addons or memtest86+), skipping."
-             eend 0
-          fi
-       fi
-
        # if we don't have an initrd we a) can't boot and b) there was an error
        # during build, so check for the file:
        INITRD="$(ls $CHROOT_OUTPUT/boot/initrd* 2>/dev/null| grep -v '.bak$' | sort -r | head -1)"
@@ -701,15 +714,13 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
           bailout 8
        fi
 
-       # copy system-provided isolinux files
+       # copy _required_ isolinux files
        for file in ifcpu64.c32 isolinux.bin vesamenu.c32; do
-         cp -a "/usr/lib/syslinux/${file}" "${TEMPLATE_DIRECTORY}/boot/isolinux/"
+         copy_addon_file "${file}" /usr/lib/syslinux isolinux
        done
 
        # *always* copy files to output directory so the variables
-       # get adjusted according to the build
-       # Note: if grml-live-compat is installed, this will update the
-       # system-provided isolinux files.
+       # get adjusted according to the build.
        cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
 
        if [ -n "$NO_ADDONS" ] ; then
@@ -720,17 +731,18 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
             log   "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)"
             ewarn "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)" ; eend 0
           else
-            # copy addons from Depended packages
-            cp -a /usr/lib/ipxe/ipxe.lkrn "${TEMPLATE_DIRECTORY}/boot/addons/"
-            cp -a /usr/share/misc/pci.ids "${TEMPLATE_DIRECTORY}/boot/addons/"
-            cp -a /boot/memtest86+.bin "${TEMPLATE_DIRECTORY}/boot/addons/memtest"
+            # copy addons from system packages or grml-live-compat
+            copy_addon_file ipxe.lkrn /usr/lib/ipxe addons
+            copy_addon_file pci.ids /usr/share/misc addons
+            copy_addon_file memtest86+.bin /boot addons
             for file in memdisk chain.c32 hdt.c32 menu.c32; do
-              cp -a "/usr/lib/syslinux/${file}" "${TEMPLATE_DIRECTORY}/boot/addons/"
+              copy_addon_file "${file}" /usr/lib/syslinux addons
             done
+	    # make memtest filename FAT16/8.3 compatible
+	    mv "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" \
+              "${BUILD_OUTPUT}/boot/addons/memtest"
 
             # copy only files so we can handle bsd4grml on its own
-            # Note: if grml-live-compat is installed, this will update the
-            # system-provided files.
             for file in ${TEMPLATE_DIRECTORY}/boot/addons/* ; do
               test -f $file && cp $file "$BUILD_OUTPUT"/boot/addons/
             done
@@ -750,23 +762,22 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
           fi # no "$TEMPLATE_DIRECTORY"/boot/addons
        fi # NO_ADDONS
 
-       if ! [ -d ${TEMPLATE_DIRECTORY}/boot/grub ] ; then
-          log   "grub templates do not exist, skipping therefore."
-          ewarn "grub templates do not exist, skipping therefore." ; eend 0
-       else
-          if ! [ -d "${BUILD_OUTPUT}/boot/grub" ] ; then
-            mkdir -p "${BUILD_OUTPUT}/boot/grub"
-            cp -a /usr/lib/grub/*-pc/*.mod "${BUILD_OUTPUT}/boot/grub"
-            cp -a /usr/lib/grub/*-pc/*.o "${BUILD_OUTPUT}/boot/grub"
-            cp -a /usr/lib/grub/*-pc/*.lst "${BUILD_OUTPUT}/boot/grub"
-            cp -a /usr/share/grub/ascii.pf2 "${BUILD_OUTPUT}/boot/grub"
-            /usr/bin/grub-mkimage -d /usr/lib/grub/*-pc -o \
-              "${BUILD_OUTPUT}/boot/grub/core.img" biosdisk iso9660 --format=i386-pc
-          fi
+       if ! [ -d "${BUILD_OUTPUT}/boot/grub" ] ; then
+         mkdir -p "${BUILD_OUTPUT}/boot/grub"
+       fi
+       cp ${TEMPLATE_DIRECTORY}/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
 
-          # make sure we have recent template files available, otherwise updating
-          # the strings like $GRML_NAME and $VERSION might be out of date
-          cp ${TEMPLATE_DIRECTORY}/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
+       if [ -e ${TEMPLATE_DIRECTORY}/compat/grub/linux.mod ]; then
+         cp "${TEMPLATE_DIRECTORY}"/compat/grub/* "${BUILD_OUTPUT}"/boot/grub/
+       else
+         # copy system grub files if grml-live-compat is not
+         # installed.
+         cp -a /usr/lib/grub/*-pc/*.mod "${BUILD_OUTPUT}"/boot/grub/
+         cp -a /usr/lib/grub/*-pc/*.o "${BUILD_OUTPUT}"/boot/grub/
+         cp -a /usr/lib/grub/*-pc/*.lst "${BUILD_OUTPUT}"/boot/grub/
+         cp -a /usr/share/grub/ascii.pf2 "${BUILD_OUTPUT}"/boot/grub/
+         /usr/bin/grub-mkimage -d /usr/lib/grub/*-pc -o \
+           "${BUILD_OUTPUT}/boot/grub/core.img" biosdisk iso9660 --format=i386-pc
        fi
 
        if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
