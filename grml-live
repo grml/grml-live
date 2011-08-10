@@ -816,7 +816,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        done
 
        # generate addon list
-       rm "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
+       rm -f "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
        for name in "${BUILD_OUTPUT}"/boot/isolinux/addon_*.cfg ; do
          include_name=$(basename "$name")
          echo "include $include_name"  >> "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
