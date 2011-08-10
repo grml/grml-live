@@ -861,7 +861,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
           log 'Using console based isolinux method as requested via $ISOLINUX_METHOD.'
           einfo 'Using console based isolinux method as requested via $ISOLINUX_METHOD.'
           if grep -q '^include console.cfg' "${BUILD_OUTPUT}/boot/isolinux/distri.cfg" ; then
-            einfo "include for console.cfg already foud, nothing to do."
+            einfo "include for console.cfg already found, nothing to do."
             eend 0
           else
             log "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
@@ -872,7 +872,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        else
           log 'Using graphical boot menu.'
           if grep -q '^include vesamenu.cfg' "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg" ; then
-            log "include for vesamenu.cfg already foud, nothing to do."
+            log "include for vesamenu.cfg already found, nothing to do."
           else
             log "including vesamenu.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
             echo "include vesamenu.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
