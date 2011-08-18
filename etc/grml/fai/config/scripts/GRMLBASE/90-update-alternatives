@@ -9,43 +9,54 @@
 set -u
 set -e
 
-if [ -r $target/usr/bin/vim.basic ] ; then
-  $ROOTCMD update-alternatives --set editor /usr/bin/vim.basic
-  $ROOTCMD update-alternatives --set vi     /usr/bin/vim.basic
-  $ROOTCMD update-alternatives --set vim    /usr/bin/vim.basic
-  $ROOTCMD update-alternatives --set view   /usr/bin/vim.basic
-fi
-
-if [ -r $target/usr/bin/vim.gtk ] ; then
+if $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q vim.gtk ; then
+  echo "Setting vim.gtk as editor using update-alternatives."
   $ROOTCMD update-alternatives --set editor /usr/bin/vim.gtk
   $ROOTCMD update-alternatives --set vi     /usr/bin/vim.gtk
   $ROOTCMD update-alternatives --set vim    /usr/bin/vim.gtk
   $ROOTCMD update-alternatives --set view   /usr/bin/vim.gtk
+elif $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q vim.basic ; then
+  echo "Setting vim.basic as editor using update-alternatives."
+  $ROOTCMD update-alternatives --set editor /usr/bin/vim.basic
+  $ROOTCMD update-alternatives --set vi     /usr/bin/vim.basic
+  $ROOTCMD update-alternatives --set vim    /usr/bin/vim.basic
+  $ROOTCMD update-alternatives --set view   /usr/bin/vim.basic
+elif $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q vim.tiny ; then
+  echo "Setting vim.tiny as editor using update-alternatives."
+  $ROOTCMD update-alternatives --set editor /usr/bin/vim.tiny
+  $ROOTCMD update-alternatives --set vi     /usr/bin/vim.tiny
+  $ROOTCMD update-alternatives --set vim    /usr/bin/vim.tiny
+  $ROOTCMD update-alternatives --set view   /usr/bin/vim.tiny
+else
+  echo "Warning: No vim binary suitable for update-alternatives found."
 fi
 
-if [ -r $target/usr/bin/uxterm ] ; then
+if $ROOTCMD update-alternatives --list x-terminal-emulator 2>/dev/null | grep -q '/uxterm' ; then
+  echo "Setting uxterm as x-terminal-emulator using update-alternatives."
   $ROOTCMD update-alternatives --set x-terminal-emulator /usr/bin/uxterm
-elif [ -r $target/usr/bin/xterm ] ; then
+elif $ROOTCMD update-alternatives --list x-terminal-emulator 2>/dev/null | grep -q '/xterm' ; then
+  echo "Setting xterm as x-terminal-emulator using update-alternatives."
   $ROOTCMD update-alternatives --set x-terminal-emulator /usr/bin/xterm
 fi
 
-if [ -r $target/etc/X11/cursors/whiteglass.theme ] ; then
+if $ROOTCMD update-alternatives --list x-cursor-theme 2>/dev/null | grep -q '/whiteglass.theme' ; then
+  echo "Setting whiteglass.theme as x-cursor-theme using update-alternatives."
   $ROOTCMD update-alternatives --set x-cursor-theme /etc/X11/cursors/whiteglass.theme
 fi
 
-if [ -r $target/usr/bin/iceweasel ] || [ -L $target/usr/bin/iceweasel ] ; then
+if $ROOTCMD update-alternatives --list x-www-browser 2>/dev/null | grep -q '/iceweasel' ; then
+  echo "Setting iceweasel as x-www-browser using update-alternatives."
   $ROOTCMD update-alternatives --set x-www-browser /usr/bin/iceweasel
 fi
 
-if [ -r $target/usr/bin/w3m ] ; then
+if $ROOTCMD update-alternatives --list www-browser 2>/dev/null | grep -q '/w3m' ; then
+  echo "Setting w3m as www-browser using update-alternatives."
   $ROOTCMD update-alternatives --set www-browser /usr/bin/w3m
 fi
 
-if [ -r $target/usr/bin/wm-ng ] ; then
-  # activate wm-ng only if it is registered as x-window-manager:
-  if $ROOTCMD update-alternatives --list x-window-manager | grep -q wm-ng ; then
-    $ROOTCMD update-alternatives --set x-window-manager /usr/bin/wm-ng
-  fi
+if $ROOTCMD update-alternatives --list x-window-manager 2>/dev/null | grep -q '/wm-ng' ; then
+  echo "Setting wm-ng as x-window-manager using update-alternatives."
+  $ROOTCMD update-alternatives --set x-window-manager /usr/bin/wm-ng
 fi
 
 # sadly isn't available via update-alternates, anyway - use
