@@ -1,3 +1,51 @@
+grml-live (0.15.1) unstable; urgency=low
+
+  The "right before the storm" release.
+
+  [ Michael Prokop ]
+  * [4a05b54] 98-clean-chroot: check existence of updatedb binary via
+    $ROOTCMD.
+  * [6d5124d] 98-clean-chroot: check existence of aptitude binary via
+    $ROOTCMD.
+  * [91e9fb2] instsoft.GRMLBASE: Use --force-yes option when using apt-get
+    for upgrade.
+  * [fc9bf3c] instsoft.GRMLBASE: make sure we can upgrade automatically
+    even with unsigned repos if FAI_ALLOW_UNSIGNED is set
+  * [dcc3ba1] GRMLBASE/16-depmod: provide verbose error message regarding
+    the kernel x.y-grml[64] <-> module-init-tools v3.12 situation.
+  * [e725f1f] buildd/cronjob.sh: no longer build daily ISOs of
+    Debian/squeeze.
+  * [990cf8d] Do not complain about missing addons_list.cfg file.
+  * [f180765] Fix typo in log message for isolinux includes.
+  * [e4cf035] 90-update-alternatives: check for available alternatives
+    before setting them.
+  * [6afe668] 25-locales: make sure the localepurge package exists, not
+    only the binary.
+  * Software related changes:
+    - [deeedac] add bti to GRML_FULL. [Closes: issue1010] Thanks to
+      Pawel Sadkowski <azhag@dug.net.pl>
+    - [0e8d730] Update to kernel version 3.0.
+    - [5bb1e78] Remove grml-laptop, grml-pylib, grml-sectools and grml-
+      templates from GRML_MEDIUM and GRML_FULL.
+    - [1bceaed] replace git-core with git package in GRML_FULL. Thanks
+      to Uli Martens <uli@youam.net>
+
+  [ Christian Hofstaedtler ]
+  * [d0d3390] Switch to live-boot-grml and remove pins
+  * [4e325f9] Remove squeeze ISOs from daily.grml.org index
+  * [b3b8d85] Add debian/control headers Origin, Bugs
+  * [209bd84] Remove haltlocal.first from runlevel.conf
+  * [aa30e6f] Move bootlocal.* from grml-autoconfig here
+  * [e677c45] Remove pinning for grml-stable, grml-testing
+  * [905546a] Enable grml-live repository for testing, too
+  * [9f96a38] docs: don't download DTDs when building docs
+  * [f66079e] usersetup: Fixup path to inittab after f3b335ea landed
+  * Software related changes:
+    - [f181637] Remove pppoe from GRML_FULL.
+    - [ea03835] Remove svn-ssh-wrappers from GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Thu, 18 Aug 2011 18:44:42 +0200
+
 grml-live (0.15.0) unstable; urgency=low
 
   The "redesign ftw \o/" release.
