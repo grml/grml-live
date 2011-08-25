@@ -755,8 +755,8 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
                if [ -d "$TEMPLATE_DIRECTORY"/boot/addons/bsd4grml ] ; then
                  cp -a ${TEMPLATE_DIRECTORY}/boot/addons/bsd4grml "$BUILD_OUTPUT"/boot/addons/
                else
-                 log   "bsd4grml addon not found, skipping therefore."
-                 ewarn "bsd4grml addon not found, skipping therefore." ; eend 0
+                 log   "Missing addon file: bsd4grml"
+                 ewarn "Missing addon file: bsd4grml" ; eend 0
                fi
             fi
 
