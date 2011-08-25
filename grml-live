@@ -770,14 +770,20 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        if [ -e ${TEMPLATE_DIRECTORY}/compat/grub/linux.mod ]; then
          cp "${TEMPLATE_DIRECTORY}"/compat/grub/* "${BUILD_OUTPUT}"/boot/grub/
        else
-         # copy system grub files if grml-live-compat is not
-         # installed.
-         cp -a /usr/lib/grub/*-pc/*.mod "${BUILD_OUTPUT}"/boot/grub/
-         cp -a /usr/lib/grub/*-pc/*.o "${BUILD_OUTPUT}"/boot/grub/
-         cp -a /usr/lib/grub/*-pc/*.lst "${BUILD_OUTPUT}"/boot/grub/
-         cp -a /usr/share/grub/ascii.pf2 "${BUILD_OUTPUT}"/boot/grub/
-         /usr/bin/grub-mkimage -d /usr/lib/grub/*-pc -o \
-           "${BUILD_OUTPUT}/boot/grub/core.img" biosdisk iso9660 --format=i386-pc
+         if ! [ -x /usr/bin/grub-mkimage ] ; then
+           log   "grub-mkimage not found, skipping Grub step therefore." ; eend 0
+           ewarn "grub-mkimage not found, skipping Grub step therefore."
+           ewarn "Either install grub-common >= 1.98+20100804-14 or grub-pc." ; eend 0
+         else
+           # copy system grub files if grml-live-compat is not
+           # installed.
+           cp -a /usr/lib/grub/*-pc/*.mod "${BUILD_OUTPUT}"/boot/grub/
+           cp -a /usr/lib/grub/*-pc/*.o "${BUILD_OUTPUT}"/boot/grub/
+           cp -a /usr/lib/grub/*-pc/*.lst "${BUILD_OUTPUT}"/boot/grub/
+           cp -a /usr/share/grub/ascii.pf2 "${BUILD_OUTPUT}"/boot/grub/
+           /usr/bin/grub-mkimage -d /usr/lib/grub/*-pc -o \
+             "${BUILD_OUTPUT}/boot/grub/core.img" biosdisk iso9660 --format=i386-pc
+         fi
        fi
 
        if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
