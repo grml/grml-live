@@ -738,8 +738,9 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
             for file in memdisk chain.c32 hdt.c32 menu.c32; do
               copy_addon_file "${file}" /usr/lib/syslinux addons
             done
-	    # make memtest filename FAT16/8.3 compatible
-	    mv "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" \
+
+            # make memtest filename FAT16/8.3 compatible
+            mv "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" \
               "${BUILD_OUTPUT}/boot/addons/memtest"
 
             # copy only files so we can handle bsd4grml on its own
