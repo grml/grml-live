@@ -14,18 +14,15 @@ if $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q vim.gtk ; th
   $ROOTCMD update-alternatives --set editor /usr/bin/vim.gtk
   $ROOTCMD update-alternatives --set vi     /usr/bin/vim.gtk
   $ROOTCMD update-alternatives --set vim    /usr/bin/vim.gtk
-  $ROOTCMD update-alternatives --set view   /usr/bin/vim.gtk
 elif $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q vim.basic ; then
   echo "Setting vim.basic as editor using update-alternatives."
   $ROOTCMD update-alternatives --set editor /usr/bin/vim.basic
   $ROOTCMD update-alternatives --set vi     /usr/bin/vim.basic
   $ROOTCMD update-alternatives --set vim    /usr/bin/vim.basic
-  $ROOTCMD update-alternatives --set view   /usr/bin/vim.basic
 elif $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q vim.tiny ; then
   echo "Setting vim.tiny as editor using update-alternatives."
   $ROOTCMD update-alternatives --set editor /usr/bin/vim.tiny
   $ROOTCMD update-alternatives --set vi     /usr/bin/vim.tiny
-  $ROOTCMD update-alternatives --set view   /usr/bin/vim.tiny
 else
   echo "Warning: No vim binary suitable for update-alternatives found."
 fi
