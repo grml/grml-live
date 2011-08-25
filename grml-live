@@ -233,7 +233,7 @@ copy_addon_file() {
     return $?
   fi
   if [ -e "$2/$1" ]; then
-    echo "Copying $1 from system"
+    log   "Copying $1 from system"
     cp "$2/$1" "${BUILD_OUTPUT}/boot/$3/"
     return $?
   fi
