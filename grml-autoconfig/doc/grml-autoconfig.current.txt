@@ -83,7 +83,7 @@ netscript::
     This can be used to detect if the script is executed via the netscript bootoption.
     Usage example:
 
-  netcript=server.tld/path/to/script       =>   download and run script/executable from server
+  netscript=server.tld/path/to/script      =>   download and run script/executable from server
   netscript=server.tld/script-$HOSTNAME    =>   download and run script/executable for specific host
 
 extract::
