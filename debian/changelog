@@ -1,3 +1,21 @@
+grml-etc (1.3.0) unstable; urgency=low
+
+  * [afec092] No longer depend on grml-usleep
+  * [2d7bc93] Add debian/control headers Origin, Bugs
+  * [9e113fa] Remove removed packages from Suggests
+  * [f25809f] Refresh Debian packaging
+  * [b0fc6d7] Update overrides for current lintian version
+  * Config changes:
+    * [8f1dd84] Remove unused inittab.grml, inittab.small
+    * [7e47abf] Remove autostart of grml-info / browser
+    * [acdf19e] Remove irssi/scripts/scriptassist.pl symlink
+    * [0e80e59] Remove kismet and pcmcia config files
+    * [10698fd] Remove old dillo user config
+    * [78e6e7f] Remove muttng user configuration
+    * [901abaf] Remove samba config, as Debian ships a useful one nowadays
+
+ -- Christian Hofstaedtler <ch@grml.org>  Thu, 13 Oct 2011 22:58:36 +0200
+
 grml-etc (1.2.13) unstable; urgency=low
 
   * [8c5479e] Also enable allowFontOps for UXTerm
