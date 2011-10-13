@@ -9,9 +9,6 @@
 set -e
 
 TO_UNDIVERT1="ssh"
-TO_UNDIVERT2="kismet.conf"
-TO_UNDIVERT3="wlan-ng.conf"
-TO_UNDIVERT4="smb.conf"
 
 undivert_gen() {
     DEXT=${3:-original}
@@ -33,15 +30,6 @@ case "$1" in
     purge)
         for cmd in $TO_UNDIVERT1; do
                 undivert_gen $cmd /etc/init.d
-        done
-        for cmd in $TO_UNDIVERT2; do
-                undivert_gen $cmd /etc/kismet
-        done
-        for cmd in $TO_UNDIVERT3; do
-                undivert_gen $cmd /etc/pcmcia
-        done
-        for cmd in $TO_UNDIVERT4; do
-                undivert_gen $cmd /etc/samba
         done
 
 	# make sure the ssh init script even exists if something is failing...

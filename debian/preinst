@@ -10,13 +10,17 @@
 set -e
 
 TO_DIVERT1="ssh"
-TO_DIVERT2="kismet.conf"
-TO_DIVERT3="wlan-ng.conf"
 
 divert_gen() {
     DEXT=${3:-original}
     dpkg-divert --add --rename --package grml-etc \
         --divert $2/$1.$DEXT $2/$1 > /dev/null
+}
+
+undivert_gen() {
+    DEXT=${3:-original}
+    dpkg-divert --remove --rename --package grml-etc \
+        --divert $2/$1.$DEXT $2/$1 #> /dev/null
 }
 
 # move files from package grml-etc to grml-etc-core
@@ -41,23 +45,10 @@ case "$1" in
             divert_gen $cmd /etc/init.d
         done
 
-        for cmd in $TO_DIVERT2; do
-            divert_gen $cmd /etc/kismet
-        done
-
-        for cmd in $TO_DIVERT3; do
-            divert_gen $cmd /etc/pcmcia
-        done
-
-        # did I mention that dpkg-divert sucks?
-        if [ -n "$2" ] ; then
-           if dpkg --compare-versions "${2}" lt 0.8 ; then
-              if dpkg-divert --list | grep -q /etc/init.d/postgresql-8.0 ; then
-                 rm -f /etc/init.d/postgresql-8.0
-                 dpkg-divert --quiet --package grml-etc --remove --rename --divert /etc/init.d/postgresql-8.0.original /etc/init.d/postgresql-8.0
-              fi
-           fi
-        fi
+        # Remove files we no longer ship
+        undivert_gen "kismet.conf" /etc/kismet
+        undivert_gen "wlan-ng.conf" /etc/pcmcia
+        undivert_gen "smb.conf" /etc/samba
 
         # move files from package grml-etc to grml-etc-core
         for file in /etc/zsh/zlogin /etc/zsh/zprofile /etc/zsh/zshenv /etc/zsh/zshrc \
@@ -71,11 +62,6 @@ case "$1" in
         if dpkg-divert --list /etc/skel/.zshrc | grep -q 'grml-etc$' ; then
            [ -f /etc/skel/.zshrc.original ] && rm /etc/skel/.zshrc
            dpkg-divert --quiet --package grml-etc --remove --rename --divert /etc/skel/.zshrc.original /etc/skel/.zshrc
-        fi
-
-        if dpkg-divert --list /etc/samba/smb.conf | grep -q 'grml-etc$' ; then
-           [ -f /etc/samba/smb.conf.original ] && rm /etc/samba/smb.conf.original
-           dpkg-divert --quiet --package grml-etc --remove --rename --divert /etc/samba/smb.conf.original /etc/samba/smb.conf
         fi
 
      ;;
