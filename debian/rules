@@ -47,7 +47,6 @@ binary-indep: build install
 	dh_link /etc/rcS.d/important_notice /etc/rc5.d/important_notice
 	dh_link /etc/rcS.d/important_notice /etc/rc6.d/important_notice
 	dh_link /etc/init.d/grml-reboot     /etc/init.d/grml-halt
-	dh_link /usr/share/irssi/scripts/scriptassist.pl /etc/skel/.irssi/scripts/autorun/scriptassist.pl
 	dh_compress
 	mkdir -p debian/grml-etc/usr/share/lintian/overrides/ 
 	cp -av debian/overrides debian/grml-etc/usr/share/lintian/overrides/grml-etc
