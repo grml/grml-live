@@ -180,20 +180,6 @@ grml nostartx                       If using startx as default bootoption the no
                                     which decide to enable startx by default only, plain grml does not use
                                     automatic startup of X by default.)
 
-Accessibility related settings:
--------------------------------
-grml blind                          Start Braille-Terminal (no X)
-grml hwspeak                        Probe all available speakup hardware modules
-grml swspeak                        Prepare system for use with software synthesizer through speakup
-                                    Run 'swspeak' after booting up to activate sound output
-grml swspeak=espeak                 Use espeakup (if available) as connector to speakup
-                                    Run 'swspeak' after booting up to activate sound output
-grml swspeak=speechd                Use speech-dispatcher / speechd-up (if available) as connector to speakup
-                                    Run 'swspeak' after booting up to activate sound output
-grml brltty=type,port,table         Parameters for Braille device (e.g.: brltty=al,/dev/ttyS0,text.de.tbl)
-grml speakup.synth=...              Use speakup kernel module with given hardware type
-                                    Usage example: speakup.synth=apollo
-
 Hardware related settings:
 --------------------------
 grml swap                           Activate present/detected swap partitions

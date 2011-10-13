@@ -172,8 +172,6 @@ bonnie++
 bootchart
 boxes
 bridge-utils
-brltty
-brltty-flite
 bsdgames
 bsdiff
 bsd-mailx
@@ -386,7 +384,6 @@ ebtables
 ecryptfs-utils
 ed
 edbrowse
-eflite
 electric-fence
 elfsh
 elinks
@@ -402,8 +399,6 @@ ent
 epdfview
 equivs
 erc
-espeak
-espeakup
 etckeeper
 eterm
 etherwake
@@ -454,7 +449,6 @@ flawfinder
 fl-cow
 flex
 flexbackup
-flite
 fluxbox
 fondu
 fontconfig
@@ -1183,9 +1177,6 @@ sniffit
 snmp
 socat
 sox
-speakup-tools
-speechd-el
-speech-dispatcher
 speedometer
 speex
 splint

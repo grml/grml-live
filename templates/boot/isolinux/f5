@@ -11,8 +11,6 @@
  grml startx[=windowmanager]   autostart X.org via grml-x (default WM: wm-ng)  
  grml swap                                   activate present swap partitions  
  grml testcd                              check CD data integrity and md5sums  
- grml swspeak               prepare system for use with software synthesizer,  
-                                           run "swspeak" after booting system  
  grml toram / grml2ram      copy the whole CD/media to RAM and run from there  
  grml toram=%SQUASHFS_NAME%            copy only specified squashfs file  
                                                     to RAM and run from there  
