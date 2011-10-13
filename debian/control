@@ -2,8 +2,8 @@ Source: grml-etc
 Section: grml
 Priority: optional
 Maintainer: Michael Prokop <mika@grml.org>
-Build-Depends: debhelper (>= 5)
-Standards-Version: 3.9.1
+Build-Depends: debhelper (>= 8)
+Standards-Version: 3.9.2
 Homepage: http://git.grml.org/?p=grml-etc.git
 Vcs-git: git://git.grml.org/grml-etc.git
 Vcs-Browser: http://git.grml.org/?p=grml-etc.git
@@ -13,7 +13,7 @@ Bugs: mailto:bugs@grml.org
 Package: grml-etc
 Architecture: all
 Replaces: automount-knoppix
-Suggests: grml-desktop, grml-shlib, grml-files, grml-docs, grml-x, policyrcd-script-zg2
+Suggests: grml-desktop, grml-docs, grml-x, policyrcd-script-zg2
 Recommends: eterm, python, vim (>= 7.0)
 Depends: ${misc:Depends}, grml-scripts (>= 0.9), grml-etc-core (>= 0.3)
 Conflicts: smbconf-pfeifle, grml-etc-core (<= 0.2.25), grml-sysvinit
