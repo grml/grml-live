@@ -26,7 +26,6 @@ grml-quickconfig
 grml-scripts
 grml-tips
 grml-udev-config
-grml-vpn
 grub-pc
 hdparm
 hwinfo

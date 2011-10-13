@@ -16,22 +16,11 @@ PACKAGES aptitude
 ## }}}
 
 ## grml specific packages {{{
-aesutil
-bfa
-bkp
-deletemail
-dupseek
-ex
-ext3rminator
-ftpbackup
-gateguardian
-gifshuffle
 grml-debugtools
 grml-desktop
 grml-docs
 grml-feedback
 grml-files
-grml-firefox
 grml-live
 grml-paste
 grml-quickconfig-standard
@@ -39,27 +28,7 @@ grml-rescueboot
 grml-terminalserver
 grml-x
 heirloom-sh
-icmp-mtu
-icmp-quench
-icmp-reset
-lcdtest
-libacme-bleach-perl
-libacme-eyedrops-perl
-libacme-smirch-perl
-msgid-chooser
-nat-traverse
-ncp
-prosilla
 ptfinder
-rootsh
-shadowfs
-shish
-smap
-sudosh
-tal
-thc-ipv6
-thinkfinger-tools
-upgrade-oldest
 zsh-lovers
 ## }}}
 
@@ -1541,7 +1510,6 @@ zd1211-firmware
 PACKAGES aptitude I386
 
 ## general:
-grml
 linux-tools-3.0
 
 # i386-only software
@@ -1573,7 +1541,6 @@ xtables-addons-modules-3.0-grml
 PACKAGES aptitude AMD64
 
 ## general:
-grml64
 linux-tools-3.0
 
 ## current kernel version 3.0-grml64:
