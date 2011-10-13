@@ -98,10 +98,6 @@ checkgrmlsmall(){
   grep -q small /etc/grml_version 2>>$DEBUG && return 0 || return 1
 }
 
-# execute flite only if it's present
-flitewrapper() {
-   [ -x /usr/bin/flite ] && flite -o play -t "$*"
-}
 ### }}}
 
 # {{{ filesystems (proc, pts, sys) and fixes
@@ -754,139 +750,6 @@ fi
 }
 # }}}
 
-# {{{ run software synthesizer via speakup
-config_swspeak(){
-   if checkbootparam 'swspeak' ; then
-      einfo "Bootoption swspeak found."
-
-      if [ ! -d /proc/speakup/ ] && ! grep -q speakup_soft /proc/modules ; then
-         ewarn "Kernel does not support software speakup - trying to load kernel module:" ; eend 0
-         eindent
-         einfo "Loading speakup_soft"
-         if modprobe speakup_soft ; then
-            eend 0
-         else
-            flitewrapper "Fatal error setting up software speakup"
-            eend 1
-            return 1
-         fi
-         eoutdent
-      fi
-
-      if [ -d /proc/speakup/ ] || grep -q speakup_soft /proc/modules ; then
-         einfo "Kernel supports speakup." ; eend 0
-         eindent
-            einfo "Just run swspeak if you want to use software synthesizer via speakup."
-            flitewrapper "Finished activating software speakup. Just run swspeak when booting finished."
-         eoutdent
-      else
-         eerror "Kernel does not seem to support speakup. Skipping swspeak." ; eend 1
-         flitewrapper "Kernel does not seem to support speakup. Sorry."
-      fi
-   fi
-}
-# }}}
-
-# {{{ support hardware synthesizer via speakup
-config_hwspeak(){
-   if checkbootparam 'speakup.synth' ; then
-      einfo "Bootoption speakup.synth found."
-      eindent
-
-      module="$(getbootparam 'speakup.synth' 2>>$DEBUG)"
-      if [ -z "$module" ] ; then
-         eerror "Sorry, no speakup module specified for bootoption speakup.synth."
-         flitewrapper "Sorry, no speakup module specified for bootoption speakup.synth."
-      else
-         einfo "Trying to load $module"
-         modprobe "speakup_${module}"
-         eend $?
-      fi
-
-      if [ -d /proc/speakup/ ] || grep -q speakup /proc/modules ; then
-         einfo "Kernel should support speakup now." ; eend 0
-         flitewrapper "Kernel should support speakup now."
-      else
-         eerror "Kernel or hardware do not seem to support speakup. Skipping hwspeak." ; eend 1
-         flitewrapper "Kernel or hardware do not seem to support speakup. Sorry."
-      fi
-
-      eoutdent
-
-   # hwspeak:
-   elif checkbootparam 'hwspeak' ; then
-      einfo "Bootoption hwspeak found."
-
-      if [ ! -d /proc/speakup/ ] && ! grep -q speakup /proc/modules ; then
-         ewarn "Kernel does not support hardware speakup - trying to load kernel modules:" ; eend 0
-         eindent
-         if ! [ -d "/lib/modules/${KERNEL}/extra/speakup/" ] ; then
-            eerror "Kernel does not provide speakup modules, sorry." ; eend 1
-         else
-           for module in $(find "/lib/modules/${KERNEL}/extra/speakup/" -name \*.ko | \
-                           sed 's#.*speakup/##g ; s#.ko$##g' | \
-                           grep -ve speakup_soft -ve speakup_dummy | sort -u) ; do
-              einfo "Trying to load $module"
-              modprobe $module
-              eend $?
-           done
-         fi
-         eoutdent
-      fi
-
-      if [ -d /proc/speakup/ ] || grep -q speakup /proc/modules ; then
-         einfo "Kernel should support speakup now." ; eend 0
-         flitewrapper "Kernel should support speakup now."
-      else
-         eerror "Kernel or hardware do not seem to support speakup. Skipping hwspeak." ; eend 1
-         flitewrapper "Kernel or hardware do not seem to support speakup. Sorry."
-      fi
-   fi
-}
-# }}}
-
-# {{{ Check for blind option or brltty
-config_blind(){
-BLIND=""
-checkbootparam 'blind' && BLIND="yes"
-BRLTTY="$(getbootparam 'brltty' 2>>$DEBUG)"
-
-if [ -n "$BLIND" -o -n "$BRLTTY" ]; then
-  if [ -x /sbin/brltty ]; then
-    # Blind option detected, start brltty now.
-    # modprobe serial_core parport_serial generic_serial && echo "done"
-    CMD=brltty
-    BRLTYPE=""
-    BRLDEV=""
-    BRLTEXT=""
-    if [ -n "$BRLTTY" ]; then
-      # Extra options
-      BRLTYPE="${BRLTTY%%,*}"
-      R="${BRLTTY#*,}"
-      if [ -n "$R" -a "$R" != "$BRLTTY" ]; then
-        BRLTTY="$R"
-        BRLDEV="${BRLTTY%%,*}"
-        R="${BRLTTY#*,}"
-        if [ -n "$R" -a "$R" != "$BRLTTY" ]; then
-          BRLTTY="$R"
-          BRLTEXT="${BRLTTY%%,*}"
-          R="${BRLTTY#*,}"
-        fi
-      fi
-    fi
-    [ -n "$BRLTYPE" ] && CMD="$CMD -b $BRLTYPE"
-    [ -n "$BRLDEV"  ] && CMD="$CMD -d $BRLDEV"
-    [ -n "$BRLTEXT" ] && CMD="$CMD -t $BRLTEXT"
-    einfo "Starting braille-display manager."
-#    ( exec $CMD & )
-    ( sh -c "$CMD" & )
-    sleep 2 && BLINDSOUND="yes"
-    eend 0
-  fi
-fi
-}
-# }}}
-
 # {{{ AGP
 config_agp(){
 if checkbootparam 'forceagp' ; then
@@ -1508,23 +1371,6 @@ config_netscript() {
     einfo "Running ${WHITE}${SCRIPTFILE}${NORMAL}:" && NETSCRIPT=${CONFIG} ${SCRIPTFILE} ; eend $?
   fi
 
- fi
-}
-# }}}
-
-# {{{ blindsound
-config_blindsound(){
- if checkbootparam 'blind' ; then
-    beep
-    flitewrapper "welcome to the gremel system"
- fi
-}
-# }}}
-
-# {{{ welcome sound
-config_welcome(){
- if checkbootparam 'welcome' ; then
-    flitewrapper "welcome to the gremel system"
  fi
 }
 # }}}

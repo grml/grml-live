@@ -99,10 +99,6 @@ checkvalue $CONFIG_LANGUAGE && config_language
 
 checkvalue $CONFIG_LOG && config_log
 
-checkvalue $CONFIG_SWSPEAK && config_swspeak
-
-checkvalue $CONFIG_HWSPEAK && config_hwspeak
-
 checkvalue $CONFIG_FWTIMEOUT && config_fwtimeout
 
 checkvalue $CONFIG_FIX_PASSWD && config_fix_passwd
@@ -149,8 +145,6 @@ checkvalue $CONFIG_MODULES && config_modules
 checkvalue $CONFIG_ACPI_APM && config_acpi_apm
 
 [ -n "$SPLASH" ] &&  /usr/bin/grml-bootsplash "||||||">/dev/tty14
-
-checkvalue $CONFIG_BLIND && config_blind
 
 checkvalue $CONFIG_AGP && config_agp
 
@@ -215,10 +209,6 @@ checkvalue $CONFIG_DEBNET && config_debnet
 [ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||||||||||">/dev/tty14
 
 checkvalue $CONFIG_CONSOLE && config_console
-
-checkvalue $CONFIG_BLINDSOUND && config_blindsound
-
-checkvalue $CONFIG_WELCOME && config_welcome
 
 checkvalue $CONFIG_FIX_UNIONFS && fix_unionfs
 
