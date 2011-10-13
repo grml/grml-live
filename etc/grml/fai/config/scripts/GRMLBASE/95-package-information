@@ -15,10 +15,6 @@ HOSTNAME=''
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 PACKAGE_LOG=/var/log/fai/"$HOSTNAME"/last/
 
-# generate the package list and store it on the ISO itself for grml-docs:
-[ -d $target/usr/share/doc/grml-docs/packages ] || mkdir -p $target/usr/share/doc/grml-docs/packages
-COLUMNS=200 $ROOTCMD dpkg --list > $target/usr/share/doc/grml-docs/packages/dpkg_list
-
 if ! [ -w "$PACKAGE_LOG" ] ; then
    echo "Error: can not write to ${PACKAGE_LOG}. Exiting.">&2
    exit 1

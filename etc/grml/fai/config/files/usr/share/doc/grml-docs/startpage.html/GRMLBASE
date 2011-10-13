@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!--
+# Filename:      startpage.html
+# Purpose:       information page on Grml
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+-->
+
+<html>
+<head>
+<title>grml.org - Linux for system administrators and users of texttools</title>
+</head>
+
+<body bgcolor="#FFCC33">
+
+<p>&nbsp;</p>
+
+<h1 align="center">Welcome to your Grml system!</h1>
+
+<img src="logo.png" border="0" alt="">
+
+<p>Grml is a Debian based Linux Live system for x86 and x86_64 systems. Its main
+purpose is providing a system for system administrators and users of
+texttools.</p>
+
+<p>You are reading this page probably in the w3m or links browser on the console
+or in xlinks2, dillo or firefox/iceweasel running under X. To switch between
+links in w3m and links press the &lt;tab&gt;-key. You can move the cursor via
+the cursor keys.  'B' is the key for going back one page in the browser history,
+pressing 'H' brings you to the help of w3m.  Press 'Q' for exiting w3m, links
+and xlinks2.</p>
+
+<p><strong>Notice:</strong> if you find any bugs please <a
+href="http://grml.org/bugs/">report them to us</a>!  Thank you for helping
+us to improve Grml!</p>
+
+<h2>Overview</h2>
+
+<ul>
+
+  <li>Find the package list of installed software at <a
+  href="http://grml.org/files/">grml.org/files/</a>.</li>
+
+</ul>
+
+<p><strong>Tips of the release:</strong>
+
+<ul>
+  <li>Use 'grml-tips $KEYWORD' to get hints and tips.</li>
+  <li>Use 'grml-x $WINDOWMANAGER' to start the X window system.</li>
+</ul>
+
+<p>Subscribe to <a href="http://grml.org/mailinglist/">the Grml mailinglist</a>
+and join #grml on irc.freenode.net!</p>
+
+<h2>Online resources</h2>
+
+<ul>
+  <li><a href="http://grml.org/">grml.org</a></li>
+  <li><a href="http://wiki.grml.org/">grml-Wiki</a></li>
+  <li><a href="http://grml.org/news/">news @ grml.org</a></li>
+  <li><a href="http://grml.org/faq/">faq @ grml.org</a></li>
+  <li><a href="http://grml.org/docs/">docs @ grml.org</a></li>
+  <li><a href="http://grml.org/bugs/">bugs @ grml.org</a></li>
+  <li><a href="http://grml.org/zsh/">zsh @ grml.org</a></li>
+  <li><a href="http://grml-solutions.com/">Grml Solutions</a></li>
+  <li><a href="http://grml.org/contact/">contact the grml-team</a></li>
+  <li><a href="http://www.tldp.org/">Linux Documentation Project</a></li>
+</ul>
+
+<p>Press 'Q' for exiting the browsers w3m, links and xlinks2 or Ctrl-q for exiting dillo.
+Have fun with Grml!</p>
+
+<p align="center">(C) 2004++ by the <a href="http://grml.org/team/">grml-team</a>.</p>
+
+</body>
+</html>
+<!--
+## END OF FILE #################################################################
+-->

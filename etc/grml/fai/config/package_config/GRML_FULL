@@ -18,7 +18,6 @@ PACKAGES aptitude
 ## grml specific packages {{{
 grml-debugtools
 grml-desktop
-grml-docs
 grml-feedback
 grml-live
 grml-paste
