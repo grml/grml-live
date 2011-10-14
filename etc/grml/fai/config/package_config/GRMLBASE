@@ -24,6 +24,7 @@ grml-network
 grml-policyrcd
 grml-quickconfig
 grml-scripts
+grml-scripts-core
 grml-tips
 grml-udev-config
 grub-pc
