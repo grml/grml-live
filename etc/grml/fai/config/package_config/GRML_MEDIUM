@@ -53,7 +53,6 @@ firmware-ralink
 firmware-realtek
 fluxbox
 fuse-utils
-gcc
 gddrescue
 genext2fs
 grml-debugtools

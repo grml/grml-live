@@ -151,7 +151,6 @@ bin86
 binclock
 bind9
 bind9-host
-binfmtc
 binfmt-support
 bing
 binstats
@@ -180,7 +179,6 @@ bti
 btrfs-tools
 btscanner
 buffer
-build-essential
 burn
 bvi
 bwm-ng
@@ -194,7 +192,6 @@ cbm
 ccache
 ccal
 cciss-vol-status
-ccontrol
 ccrypt
 ccze
 cdbackup
@@ -218,13 +215,11 @@ clamav-base
 clamav-daemon
 clamav-freshclam
 clamav-testfiles
-clex
 clipit
 cloop-utils
 cmospwd
 cmus
 codeville
-colorgcc
 comgt
 compartment
 concalc
@@ -242,7 +237,6 @@ cpio
 cpipe
 cplay
 cpp
-cproto
 cpu
 cpuburn
 cpufrequtils
@@ -471,12 +465,10 @@ fuseiso9660
 fuse-utils
 fwlogwatch
 fxload
-g++
 gaffitter
 gamin
 gatling
 gcal
-gcc
 gcolor2
 gdb
 gddrescue
@@ -650,7 +642,6 @@ jp2a
 juke
 kanif
 keepalived
-kernel-package
 ketchup
 kexec-tools
 keychain
@@ -1173,7 +1164,6 @@ squid
 squid-common
 squidview
 src2tex
-srcinst
 ssdeep
 ssed
 ssh
@@ -1496,14 +1486,10 @@ pstack
 retty
 
 ## current kernel version 3.0-grml:
-#fglrx-kernel-3.0-grml
 iscsitarget-module-3.0-grml
 linux-doc-3.0-grml
-linux-headers-3.0-grml
 linux-image-3.0-grml
-#linux-source-3.0-grml
 ndiswrapper-modules-3.0-grml
-#nvidia-kernel-3.0-grml
 openafs-modules-3.0-grml
 sysprof-module-3.0-grml
 tp-smapi-modules-3.0-grml
@@ -1518,14 +1504,10 @@ PACKAGES aptitude AMD64
 linux-tools-3.0
 
 ## current kernel version 3.0-grml64:
-#fglrx-kernel-3.0-grml64
 iscsitarget-module-3.0-grml64
 linux-doc-3.0-grml64
-linux-headers-3.0-grml64
 linux-image-3.0-grml64
-#linux-source-3.0-grml
 ndiswrapper-modules-3.0-grml64
-#nvidia-kernel-3.0-grml64
 openafs-modules-3.0-grml64
 sysprof-module-3.0-grml64
 tp-smapi-modules-3.0-grml64
