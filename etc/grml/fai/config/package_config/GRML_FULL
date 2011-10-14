@@ -683,7 +683,6 @@ libewf1
 libnss-mdns
 libnss-myhostname
 libsmbios-bin
-libtool
 lighttpd
 lilo
 links
