@@ -74,7 +74,6 @@ apache2-mpm-prefork
 apache2-utils
 apcupsd
 apcupsd-cgi
-apel
 apf-client
 apf-server
 apg
@@ -386,7 +385,6 @@ edbrowse
 electric-fence
 elfsh
 elinks
-elscreen
 elvis
 elvis-common
 emacs
@@ -397,7 +395,6 @@ enscript
 ent
 epdfview
 equivs
-erc
 etckeeper
 eterm
 etherwake
@@ -491,7 +488,6 @@ genders
 genext2fs
 getmail4
 gettext
-gettext-el
 gftp-common
 gftp-text
 ghostscript
@@ -1354,7 +1350,6 @@ vsftpd
 vtgrab
 vtun
 w3m
-w3m-el
 w3m-img
 wajig
 wakeonlan
