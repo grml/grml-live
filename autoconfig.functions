@@ -594,7 +594,7 @@ if checkbootparam 'console'; then
           eindent
             einfo "Activating console login on device ${device} with speed ${speed}."
             local number="${device#ttyS}"
-            sed -i "/^T$number:/d;/^#grmlserial#/iT$number:23:respawn:/bin/bash -c \"/sbin/getty -L $device -l /usr/bin/zsh-login $speed vt100 || sleep 30\"" /etc/inittab
+            sed -i "/^T$number:/d;/^#grmlserial#/iT$number:23:respawn:/bin/bash -c \"/sbin/getty -L $device -l /usr/share/grml-scripts/run-welcome $speed vt100 || sleep 30\"" /etc/inittab
             eend $?
             telinitq="1"
           eoutdent
@@ -1407,9 +1407,9 @@ EOF
 
    # adjust inittab for xstartup
    if grep -q '^6:' /etc/inittab ; then
-      sed -i 's|^6:.*|6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /usr/bin/zsh-login" >/dev/tty6 2>\&1 </dev/tty6|' /etc/inittab
+      sed -i 's|^6:.*|6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>\&1 </dev/tty6|' /etc/inittab
    else # just append tty6 to inittab if no definition is present:
-      echo '6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /usr/bin/zsh-login" >/dev/tty6 2>&1 < /dev/tty6' >> /etc/inittab
+      echo '6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>&1 < /dev/tty6' >> /etc/inittab
    fi
 
    /sbin/telinit q ; eend $?
