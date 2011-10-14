@@ -34,7 +34,6 @@ dosfstools
 dpkg
 dselect
 e2fsprogs
-e3
 ed
 ethtool
 findutils
