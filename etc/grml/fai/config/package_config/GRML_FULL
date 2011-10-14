@@ -60,7 +60,6 @@ alsa-oss
 alsaplayer-alsa
 alsaplayer-common
 alsaplayer-gtk
-alsaplayer-jack
 alsaplayer-oss
 alsa-utils
 amanda-client
@@ -637,8 +636,6 @@ itop
 ivtv-utils
 iw
 iwatch
-jack
-jackd
 jailer
 jed
 jed-common
@@ -1034,7 +1031,6 @@ python-twisted-bin
 python-urwid
 qc-usb-utils
 qiv
-qjackctl
 qla-tools
 qpxtool
 quilt
