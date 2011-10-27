@@ -110,11 +110,14 @@ zero(){
 
 echo "Cleaning log and cache directories"
 nuke ${target}/var/log       ${target}/var/cache
-zero ${target}/var/local     ${target}/var/log \
-     ${target}/var/spool     ${target}/var/lib/games \
-     ${target}/var/cache/man ${target}/var/lib/nfs \
-     ${target}/var/lib/xkb   ${target}/var/mail/grml \
-     ${target}/var/account/pacct
+zero ${target}/var/account/pacct \
+     ${target}/var/cache/man \
+     ${target}/var/lib/games \
+     ${target}/var/lib/nfs   \
+     ${target}/var/lib/xkb   \
+     ${target}/var/local     \
+     ${target}/var/log       \
+     ${target}/var/mail/grml
 
 # on /run we don't have to create it
 if [ -d ${target}/var/run ] ; then
