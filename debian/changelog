@@ -1,3 +1,75 @@
+grml-live (0.16.1) unstable; urgency=low
+
+  The "right before the storm v2-ng++" release.
+
+  [ Christian Hofstaedtler ]
+  * Packaging related changes:
+    - [d6d48a3] Remove bundled grub2
+    - [560e0f3] Remove wget dependency
+    - [bfbf9fb] Remove grub1 (binaries and support for it)
+    - [3e2ceba] Use ipxe.lkrn from ipxe package
+    - [92d38ed] Use pci.ids file from pciutils
+    - [db2672a] Remove mkisofs from Depends:
+    - [dc9f2f5] Use memtest binary from memtest86+ package
+    - [7734643] Use memdisk and hdt from syslinux-common package
+    - [d4af86e] Remove bsd4grml, freedos and grml-live-addons deb
+    - [9c238dc] Use ifcpu64.c32, vesamenu.c32, isolinux.bin from
+      syslinux-common
+    - [7a0c07b] Loose dependencies so we can be installed on squeeze
+
+  * Features and improvements:
+    - [d0a99d9] Use grml-runtty to run our ttys
+    - [bbfff0f] remove empty and unused GRML_POWERPC package config
+    - [f35b52a] Install desktop wallpaper using grml-live, replacing
+      grml-files
+    - [1b9dc6e] On GRML_FULL add Iceweasel "branding"
+
+  * Software related changes:
+    - [f1d0f49] add grml-scripts-core to GRMLBASE
+    - [19e99f6] remove e3
+    - [2dcc29e] remove supplemental emacs libraries
+    - [673f796] remove jack server and clients
+    - [b48a1ee] remove ophcrack
+    - [768313f] remove guymager
+    - [ac466e6] remove pxfw
+    - [82ce059] remove qpxtool
+    - [5b4a5de] remove libtool
+    - [515a8f0] remove C(++) compilers and linux headers
+    - [bfe1fbd] remove grml-docs and install startpage with grml-live
+    - [f500775] remove spurious grml-small package from grml-medium
+    - [3dd2f8d] remove unmaintained accessibility support
+    - [0b47ab3] No longer install packages that will be sunset on Oct30
+
+  [ Michael Prokop ]
+  * Bugfixes:
+    - [dc885d9] 90-update-alternatives: do not set alternative for vim if
+      we just have vim.tiny.
+    - [24bc671] 90-update-alternatives: do not set vim as alternative for
+      `view`
+    - [6339a34] Check for --format option support in grub-mkimage, do not
+      use absolute path for binary call
+    - [e0306d0] + [611ad6b] fix kernel version detection in config/scripts/
+    - [4eac603] do not zero out /var/spool in GRMLBASE/98-clean-chroot
+      [Closes: issue1065] Thanks to Marek Malevic
+    - [9d50a44] mark bootlocal scripts as executables
+
+  * Changes and improvements:
+    - [5780f4d] 98-clean-chroot: fix typo (localepurg->localepurge) in
+      warning message
+    - [0aa4a5e] Make sure grub-mkimage exists, otherwise warn user about
+      grub-common/grub-pc
+    - [c45c995] Fix indention of memtest mv command
+    - [fbf963a] copy_addon_file(): do not be verbose to the user, but
+      send it to the log instead
+    - [09b2ee2] Unify warning message for missing adddon file for bsd4grml
+    - [4fcf199] inittab configs: drop commented lines mentioning zsh-login
+
+  * Software related changes:
+    - [bcf837f] add reptyr to GRML_SMALL, GRML_MEDIUM and GRML_FULL
+    - [ae41521] update to kernel version 3.1.0-grml
+
+ -- Michael Prokop <mika@grml.org>  Fri, 28 Oct 2011 00:05:07 +0200
+
 grml-live (0.15.1) unstable; urgency=low
 
   The "right before the storm" release.

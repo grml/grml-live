@@ -24,7 +24,7 @@ fi
 # set -e
 
 # global variables
-GRML_LIVE_VERSION='0.15.1'
+GRML_LIVE_VERSION='0.16.1'
 PN="$(basename $0)"
 CMDLINE="$0 $@"
 ADDONS_LIST_FILE='/boot/isolinux/addons_list.cfg'
