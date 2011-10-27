@@ -18,7 +18,9 @@ rm -f $target/usr/share/ssh/blacklist.DSA-1024 $target/usr/share/ssh/blacklist.R
 # get rid of large kernel modules:
 echo "Removing some very large kernel drivers:"
 for kernel in ${target}/boot/vmlinuz-* ; do
-  kernelversion=${kernel##/boot/vmlinuz-}
+  kernelversion=${kernel##$target}
+  kernelversion=${kernelversion##/boot/vmlinuz-}
+
   if [ -r "${target}/lib/modules/${kernelversion}/kernel/fs/ocfs2/ocfs2.ko" ] ; then
     echo "Removing /lib/modules/${kernelversion}/kernel/fs/ocfs2/ocfs2.ko"
     rm -f "${target}/lib/modules/${kernelversion}/kernel/fs/ocfs2/ocfs2.ko"

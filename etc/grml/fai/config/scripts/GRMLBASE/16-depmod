@@ -22,7 +22,8 @@ if [ -n "${depmod_version:-}" ] ; then
 fi
 
 for kernel in ${target}/boot/vmlinuz-* ; do
-  kernelversion=${kernel##/boot/vmlinuz-}
+  kernelversion=${kernel##$target}
+  kernelversion=${kernelversion##/boot/vmlinuz-}
 
   # provide verbose error message regarding the annoying
   # kernel x.y-grml[64] <-> module-init-tools v3.12 situation
