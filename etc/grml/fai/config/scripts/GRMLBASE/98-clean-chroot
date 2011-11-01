@@ -9,7 +9,7 @@
 set -u
 set -e
 
-if ! [ $(ls $target/boot/config-* 2>/dev/null) ] ; then
+if ! ls $target/boot/config-* &>/dev/null ; then
   echo "No kernel config files (/boot/config-*) found. No kernel-image package installed?" >&2
   exit 1
 fi
