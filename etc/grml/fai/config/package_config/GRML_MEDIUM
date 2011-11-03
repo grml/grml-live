@@ -181,6 +181,10 @@ zip
 zoo
 zsh
 
+# accessibility testing
+brltty
+espeakup
+
 PACKAGES aptitude I386
 linux-image-3.1.0-grml
 virtualbox-ose-guest-modules-3.1.0-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
