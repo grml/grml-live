@@ -392,7 +392,6 @@ eterm
 etherwake
 ethstatus
 ethtool
-ettercap-gtk
 evms
 evms-bootdebug
 evms-cli
