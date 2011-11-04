@@ -393,7 +393,6 @@ eterm
 etherwake
 ethstatus
 ethtool
-etpan-ng
 ettercap-gtk
 evms
 evms-bootdebug
@@ -922,7 +921,6 @@ perl
 perl-doc
 perlmagick
 perl-modules
-perl-suid
 perl-tk
 pfqueue
 pia
