@@ -418,7 +418,7 @@ farpd
 fatattr
 fatresize
 fatsort
-fbgrab
+fbcat
 fbi
 fbset
 fbterm
