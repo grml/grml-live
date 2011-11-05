@@ -23,8 +23,6 @@ binfmt-support
 binutils
 bonnie++
 bridge-utils
-btrfs-tools
-cabextract
 ca-certificates
 cciss-vol-status
 cdebootstrap
@@ -41,11 +39,8 @@ cpufrequtils
 cpuid
 crosshurd
 cryptsetup
-dash
 dbus
 dcfldd
-debconf
-debconf-utils
 debootstrap
 dhcp3-client
 dialog
@@ -55,10 +50,8 @@ dmidecode
 dmraid
 dmsetup
 dnsmasq
-dosfstools
 dstat
 duplicity
-e2fsprogs
 ethstatus
 ethtool
 facter
@@ -68,6 +61,7 @@ firmware-iwlwifi
 firmware-ralink
 firmware-realtek
 fuse-utils
+fuser
 gddrescue
 git
 grml-debootstrap
@@ -84,6 +78,7 @@ grub-efi-ia32-bin
 grub-pc-bin
 htop
 ifupdown
+imvirt
 ipcalc
 iproute
 iptraf
@@ -122,9 +117,7 @@ ntfs-3g
 ntp
 ntpdate
 nullmailer
-openvpn
 parted
-partimage
 partimage
 partimage-server
 passwd
@@ -135,18 +128,14 @@ psmisc
 pv
 pwgen
 qemu-kvm
-racoon
 recover
 recoverjpeg
-reiser4progs
-reiserfsprogs
 rpcbind
 samba
 screen
 scsitools
 secure-delete
 sed
-sharutils
 sipcalc
 smartmontools
 snmp
@@ -160,8 +149,6 @@ sudo
 syslinux
 sysvinit
 sysvinit-utils
-tar
-tcpd
 tcpdump
 telnet
 testdisk
@@ -171,9 +158,6 @@ tshark
 tsocks
 tzdata
 udpcast
-ufsutils
-unp
-unzip
 update-inetd
 usbview
 util-linux
@@ -181,16 +165,33 @@ vlan
 whiptail
 whois
 wipe
-xfsdump
-xfsprogs
 zerofree
-zip
-zoo
 zsh
+
+# deploy on remote sites
+racoon
+openvpn
 
 # editors
 nano
 vim
+
+# filesystem utils
+btrfs-tools
+dosfstools
+e2fsprogs
+reiser4progs
+reiserfsprogs
+ufsutils
+xfsdump
+xfsprogs
+
+# packers/unpackers
+cabextract
+tar
+unp
+unzip
+zip
 
 # serial
 cu
