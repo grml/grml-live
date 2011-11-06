@@ -30,7 +30,6 @@ apt
 binfmt-support
 dbus
 findutils
-fuser
 htop
 libnss-myhostname
 localepurge
@@ -66,7 +65,7 @@ dmraid
 dmsetup
 fio
 hdparm
-lvm
+lvm2
 mdadm
 mpt-status
 multipath-tools
