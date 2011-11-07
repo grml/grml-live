@@ -39,10 +39,10 @@ echo $$ > /usr/share/grml-live/buildd/buildd_running
 /usr/share/grml-live/buildd/upload_isos.sh && \
 /usr/share/grml-live/buildd/remove_isos.sh
 
-/usr/share/grml-live/buildd/grml-live_autobuild_grml64-large_wheezy.sh && \
-/usr/share/grml-live/buildd/grml-live_autobuild_grml64-large_sid.sh && \
-/usr/share/grml-live/buildd/grml-live_autobuild_grml-large_wheezy.sh && \
-/usr/share/grml-live/buildd/grml-live_autobuild_grml-large_sid.sh
+/usr/share/grml-live/buildd/grml-live_autobuild_grml64-full_wheezy.sh && \
+/usr/share/grml-live/buildd/grml-live_autobuild_grml64-full_sid.sh && \
+/usr/share/grml-live/buildd/grml-live_autobuild_grml-full_wheezy.sh && \
+/usr/share/grml-live/buildd/grml-live_autobuild_grml-full_sid.sh
 
 /usr/share/grml-live/buildd/upload_isos.sh && \
 /usr/share/grml-live/buildd/remove_isos.sh
