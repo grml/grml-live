@@ -80,7 +80,7 @@ esac
 
 mysleep() {
   for i in $(seq 1 30) ; do
-    sleep 1
+    sleep 0.1
     echo -n "$1.${NORMAL}"
   done
   echo ""
