@@ -149,6 +149,12 @@ esac
 [ -r /etc/noprompt ] && NOPROMPT=true
 [ -r /etc/noeject ]  && NOPROMPT=true && NOEJECT=true
 
+if [ "$(/usr/bin/imvirt 2>/dev/null)" != "Physical" ] ; then
+  log_begin_msg "System seems to be a virtual machine, assuming noprompt as default."
+  NOPROMPT=true
+  log_end_msg 0
+fi
+
 # Turn on autoeject of CD-ROMs
 if $NOEJECT ; then
    for dev in /proc/sys/dev/cdrom*/lock;      do [ -f "$dev" ] && echo 0 > "$dev"; done
