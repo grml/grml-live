@@ -68,6 +68,7 @@ grub-imageboot
 guessnet
 htop
 ifupdown
+imvirt
 inetutils-inetd
 iproute
 iptraf

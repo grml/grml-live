@@ -45,6 +45,7 @@ grub-imageboot
 guessnet
 htop
 ifupdown
+imvirt
 inetutils-inetd
 iproute
 iputils-ping
