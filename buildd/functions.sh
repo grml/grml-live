@@ -66,10 +66,13 @@ grml_live_run() {
   grml_name="$NAME-daily-$CODENAME"
   shortdate="$(date +%y%m%d)"
 
+  TIME_START=$(date +%s)
   grml-live -F $* -a $ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
             -g "$grml_name" -v "$shortdate" -r grml-live-autobuild -i $ISO_NAME \
              >/var/log/grml-buildd.stdout \
             2>/var/log/grml-buildd.stderr ; RC=$?
+  TIME_END=$(date +%s)
+  let WALLTIME=$TIME_END-$TIME_START
 
   if [ "$RC" = "0" ] ; then
      RC_INFO=success
@@ -108,11 +111,12 @@ send_mail() {
   # attach logs only if we have some:
   [ -r "$ATTACHMENT" ] && MUTT_ATTACH="-a $ATTACHMENT" || MUTT_ATTACH=''
 
-  echo -en "Automatically generated mail by $SCRIPTNAME
+  echo "Automatically generated mail by $SCRIPTNAME
 
 $ISO_DETAILS
 
-Return code of grml-live run was: $RC
+Return code of grml-live was: $RC
+Time: $WALLTIME
 
 $(grep -A2 'Executed grml-live' $GRML_LOGFILE || echo "* executed grml-live command line not available")
 
@@ -120,7 +124,7 @@ $(grep -A2 'Executed FAI' $GRML_LOGFILE || echo "* executed FAI command line not
 
 The following errors have been noticed (several might be warnings only):
 
-$(grep -i error $FAI_LOGFILES/* /var/log/grml-buildd.std* | grep -ve liberror -ve libgpg-error || echo "* nothing")
+$(grep -i error $FAI_LOGFILES/*.log /var/log/grml-buildd.std* | grep -ve liberror -ve libgpg-error -ve libcomerr -ve 'no errors found' || echo "* nothing")
 
 The following errors have been noticed in FAI scripts:
 
