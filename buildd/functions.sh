@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Filename:      /usr/share/grml-live/buildd/functions.sh
 # Purpose:       main function file for grml-live buildd
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
@@ -72,7 +72,7 @@ grml_live_run() {
              >/var/log/grml-buildd.stdout \
             2>/var/log/grml-buildd.stderr ; RC=$?
   TIME_END=$(date +%s)
-  let WALLTIME=$TIME_END-$TIME_START
+  WALLTIME=$(($TIME_END-$TIME_START))
 
   if [ "$RC" = "0" ] ; then
      RC_INFO=success
