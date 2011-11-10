@@ -9,6 +9,7 @@
 . /etc/grml/grml-buildd.conf || exit 1
 [ -n "$RSYNC_MIRROR" ] || exit 2
 [ -n "$ISO_DIR" ] || exit 3
+[ -n "$FLAVOURS" ] || exit 5
 
 cd $ISO_DIR || exit 4
 
@@ -19,13 +20,10 @@ for file in *.iso ; do
     chmod 664 "${file}" "${file}".md5 "${file}".sha1
 done
 
-for distri in squeeze wheezy sid ; do
-  for flavour in grml-small_$distri   grml-medium_$distri   grml_$distri \
-                 grml64-small_$distri grml64-medium_$distri grml64_$distri ; do
-                 if ls $flavour* 1>/dev/null 2>&1 ; then
-                   rsync --times --partial -az --quiet $flavour* $RSYNC_MIRROR/$flavour/
-                 fi
-  done
+for flavour in $FLAVOURS; do
+  if ls $flavour* 1>/dev/null 2>&1 ; then
+    rsync --times --partial -az --quiet $flavour* $RSYNC_MIRROR/$flavour/
+  fi
 done
 
 ## END OF FILE #################################################################

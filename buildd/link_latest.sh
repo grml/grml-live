@@ -22,15 +22,18 @@ if [ -z "$MIRROR_DIRECTORY" ] ; then
   exit 1
 fi
 
+if [ -z "$FLAVOURS" ] ; then
+  echo "Error: \$FLAVOURS is not set. Exiting." >&2
+  exit 2
+fi
+
 if ! cd "$MIRROR_DIRECTORY" ; then
   echo "Error: could not change directory to $MIRROR_DIRECTORY" >&2
   exit 1
 fi
 
 echo "---------------------------" >> "$MIRROR_DIRECTORY"/.timestamp_link
-for flavour in grml-medium_wheezy   grml-medium_sid   grml-small_wheezy   grml-small_sid \
-               grml64-medium_wheezy grml64-medium_sid grml64-small_wheezy grml64-small_sid \
-               grml64_wheezy        grml64_sid        grml_wheezy         grml_sid ; do
+for flavour in $FLAVOURS; do
   ISO="$(ls -1 $flavour/*.iso | tail -1)"
   if [ -n "$ISO" ] ; then
      latest="$(basename ${ISO%%_[0-9]*})_latest.iso"

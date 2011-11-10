@@ -28,6 +28,11 @@ if [ -z "$STORAGE_ADMIN" ] ; then
   exit 2
 fi
 
+if [ -z "$FLAVOURS" ] ; then
+  echo "Error: \$FLAVOURS is not set. Exiting." >&2
+  exit 2
+fi
+
 if ! cd "$MIRROR_DIRECTORY" ; then
   echo "Error: could not change directory to $MIRROR_DIRECTORY" >&2
   exit 3
@@ -39,9 +44,7 @@ fi
 DAYS=3
 
 REMOVE_ME=""
-for flavour in grml-medium_wheezy   grml-medium_sid   grml-small_wheezy   grml-small_sid \
-               grml64-medium_wheezy grml64-medium_sid grml64-small_wheezy grml64-small_sid \
-               grml64_wheezy        grml64_sid        grml_wheezy         grml_sid ; do
+for flavour in $FLAVOURS; do
   FILE_COUNT=$(ls -1 $flavour/$flavour*.iso | wc -l)
   if [ "$FILE_COUNT" -gt "$DAYS" ] ; then
      FILES=$(ls -1 $flavour/$flavour*.iso | tail -"$DAYS")
