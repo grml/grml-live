@@ -22,12 +22,6 @@ if [ -z "$MIRROR_DIRECTORY" ] ; then
   exit 1
 fi
 
-# mail address where reports should be sent to
-if [ -z "$STORAGE_ADMIN" ] ; then
-  echo "Error: \$STORAGE_ADMIN is not set. Exiting." >&2
-  exit 2
-fi
-
 if [ -z "$FLAVOURS" ] ; then
   echo "Error: \$FLAVOURS is not set. Exiting." >&2
   exit 2
@@ -66,7 +60,7 @@ done
 
 # inform on successful removal:
 if [ "$(echo "$REMOVE_ME" | tr -d ' ' )" != "" ] ; then
-   echo "deleted files $REMOVE_ME" | mail -s "daily-builds cleanup script" "$STORAGE_ADMIN"
+   echo "Removed previous files $REMOVE_ME" | logger -t grml-buildd
 fi
 
 ## END OF FILE #################################################################
