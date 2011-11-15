@@ -966,7 +966,7 @@ else
    einfo "Detecting CPU: `awk -F: '/^processor/{printf " Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG` " ; eend 0
 fi
 
-# Virtual Box supports ACPI and laptop-detect would return with '0', so check for it:
+# no cpufreq setup inside VirtualBox
 if [ -r /proc/acpi/battery/BAT0/info ] && grep -q 'OEM info:.*innotek' /proc/acpi/battery/BAT0/info ; then
    einfo 'Virtual Box detected, skipping cpufreq setup.' ; eend 0
    return 0
