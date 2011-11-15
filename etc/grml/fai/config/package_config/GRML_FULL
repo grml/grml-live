@@ -1,34 +1,18 @@
 PACKAGES aptitude
 
-atftp
-cpp
-dstat
-facter
-git
 grml-debugtools
 grml-feedback
 grml-live
 grml-paste
 grml-quickconfig-standard
 grml-terminalserver
-ipcalc
-makedev
-mcollective
-passwd
-apg
-pwgen
-sipcalc
-snmp
 squashfs-lzma-tools
-subversion
-tzdata
-util-linux
-whois
 
 # base os
 apt
 binfmt-support
 dbus
+dstat
 findutils
 htop
 libnss-myhostname
@@ -36,16 +20,20 @@ localepurge
 locales
 lsb-release
 lsof
+makedev
 mount
 multitail
 ntp
 ntpdate
 nullmailer
+passwd
 procps
 psmisc
 sudo
 sysvinit
 sysvinit-utils
+tzdata
+util-linux
 
 # basic accessibility
 brltty
@@ -119,6 +107,10 @@ clamav-base
 clamav-freshclam
 mtools
 
+# generic tools
+cpp
+whois
+
 # install linux
 cdebootstrap
 crosshurd
@@ -132,6 +124,7 @@ iscsitarget
 tgt
 
 # networking
+atftp
 avahi-daemon
 bind9-host
 bridge-utils
@@ -145,6 +138,7 @@ firmware-iwlwifi
 firmware-ralink
 firmware-realtek
 ifupdown
+ipcalc
 iproute
 iptraf
 iputils-arping
@@ -156,6 +150,8 @@ netbase
 netcat-openbsd
 net-tools
 nmap
+sipcalc
+snmp
 socat
 ssh
 tcpdump
@@ -183,6 +179,14 @@ tar
 unp
 unzip
 zip
+
+# password generators
+apg
+pwgen
+
+# popular VCS to pull config from
+git
+subversion
 
 # recovery
 afflib-tools
@@ -221,6 +225,10 @@ screen
 sed
 tmux
 zsh
+
+# system info/mgmt
+facter
+mcollective
 
 # virtualization support
 imvirt
