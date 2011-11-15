@@ -12,8 +12,9 @@ Bugs: mailto:bugs@grml.org
 
 Package: grml-desktop
 Architecture: all
-Depends: idesk, grml-scripts (>= 1.1.18), moblin-icon-theme
-Suggests: fluxbox, fvwm | fvwm2 | fvwm-crystal, awesome, pekwm
+Depends: grml-scripts (>= 1.1.18), moblin-icon-theme
+Recommends: fluxbox
+Suggests: idesk, fvwm | fvwm2 | fvwm-crystal, awesome, pekwm
 Conflicts: grml-etc (<< 0.9.14)
 Description: configuration files for the X desktop at grml
  This package provides several configuration files for
