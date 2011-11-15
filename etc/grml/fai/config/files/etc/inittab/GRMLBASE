@@ -63,7 +63,7 @@ po::powerokwait:/etc/init.d/powerfail stop
 5:2345:respawn:/sbin/grml-runtty /dev/tty5 /bin/zsh grml
 6:2345:respawn:/sbin/grml-runtty /dev/tty6 /bin/zsh grml
 9:2345:respawn:/sbin/getty  38400 tty9
-10:2345:respawn:/sbin/grml-runtty /dev/tty10 /usr/sbin/grml-iptstate root
+#10:2345:respawn:/sbin/grml-runtty /dev/tty10 /usr/sbin/grml-iptstate root
 11:2345:respawn:/sbin/grml-runtty /dev/tty11 /usr/bin/htop root
 12:2345:respawn:/sbin/grml-runtty /dev/tty12 /usr/share/grml-scripts/run-multitail root
 

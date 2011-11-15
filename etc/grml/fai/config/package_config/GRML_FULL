@@ -37,6 +37,7 @@ locales
 lsb-release
 lsof
 mount
+multitail
 ntp
 ntpdate
 nullmailer
