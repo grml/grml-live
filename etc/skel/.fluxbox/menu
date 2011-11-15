@@ -1,33 +1,22 @@
 [begin] (Fluxbox) {} <>
     [exec] (xterm) {x-terminal-emulator} <>
-    [submenu] (handy stuff) {} <>
-        [exec] (firefox webbrowser) {grml-exec-wrapper firefox} 
-        [exec] (w3m webbrowser) {grml-exec-wrapper -p w3m x-terminal-emulator -T "w3m" -e /usr/bin/w3m /usr/share/doc/grml-docs/startpage.html} <>
-        [exec] (gkrellm) {grml-exec-wrapper gkrellm} <>
-        [exec] (file manager [rox-filer]) {grml-exec-wrapper rox-filer} <>
-    [end]
-    [submenu] (grml) {} <>
-        [exec] (grml info screen) {grml-exec-wrapper xlinks2 -mode 640x480 /usr/share/doc/grml-docs/startpage.html} <>
-        [exec] (lock X) {grml-exec-wrapper -p grml-lock x-terminal-emulator -T "grml-lock" -e /usr/bin/grml-lock} <>
-        [exec] (configure mailclient mutt) {grml-exec-wrapper -p grml-mutt x-terminal-emulator -T "grml-mutt" -e /usr/bin/grml-mutt} <>
-        [exec] (configure newsreader slrn) {grml-exec-wrapper -p grml-slrn x-terminal-emulator -T "grml-slrn" -e /usr/bin/grml-slrn} <>
-        [exec] (configure network) {sudo x-terminal-emulator -T "grml-network" -e /usr/sbin/grml-network} <>
-        [exec] (configure and run terminalserver) {grml-exec-wrapper -p grml-terminalserver sudo x-terminal-emulator -T "grml-terminalserver" -e /usr/sbin/grml-terminalserver} <>
-    [end]
+    [exec] (Run ...) {fbrun} <>
+    [exec] (xlinks2 webbrowser) {grml-exec-wrapper xlinks2 -mode 640x480 /usr/share/doc/grml-docs/startpage.html} <>
+    [exec] (w3m webbrowser) {grml-exec-wrapper -p w3m x-terminal-emulator -T "w3m" -e /usr/bin/w3m /usr/share/doc/grml-docs/startpage.html} <>
+    [exec] (configure network) {sudo x-terminal-emulator -T "grml-network" -e /usr/sbin/grml-network} <>
+    [exec] (configure and run terminalserver) {grml-exec-wrapper -p grml-terminalserver sudo x-terminal-emulator -T "grml-terminalserver" -e /usr/sbin/grml-terminalserver} <>
     [submenu] (Debian) {} <>
         [include] (/etc/X11/fluxbox/menudefs.hook) {} <>
     [end]
-    [config] (Configure) {} <>
-    [submenu] (Styles) {Choose a style...} <>
-        [stylesdir] (/usr/share/fluxbox/styles) {} <>
-        [stylesdir] (~/.fluxbox/styles) {} <>
+    [submenu] (Fluxbox) {} <>
+        [config] (Configure) {} <>
+        [submenu] (Styles) {Choose a style...} <>
+            [stylesdir] (/usr/share/fluxbox/styles) {} <>
+            [stylesdir] (~/.fluxbox/styles) {} <>
+        [end]
+        [reconfig] (Reload config) {} <>
+        [restart] (Restart) {} <>
     [end]
     [workspaces] (Workspace List) {} <>
-    [submenu] (Tools) {} <>
-        [exec] (Windowname) {xprop|grep WM_CLASS|cut -d \" -f 2|xmessage -file - -center} <>
-        [exec] (Run) {fbrun} <>
-    [end]
-    [reconfig] (Reload config) {} <>
-    [restart] (Restart) {} <>
     [exit] (Exit) {} <>
 [end]
