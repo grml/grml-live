@@ -85,6 +85,7 @@ wipe
 # editors
 nano
 vim
+zile
 
 # filesystem support
 acl
