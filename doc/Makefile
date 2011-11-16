@@ -9,7 +9,7 @@
 	sed -i 's/\.sp//' `echo $^ | sed -e 's/.txt//'`
 	gzip -f --best `echo $^ |sed -e 's/.txt//'`
 
-MANPAGES = grml-autoconfig.1 grml-autoconfig.8 grml-bootsplash.1 restore-config.1 save-config.1
+MANPAGES = grml-autoconfig.1 grml-autoconfig.8 restore-config.1 save-config.1
 
 all: doc
 
