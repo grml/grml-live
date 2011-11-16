@@ -198,8 +198,6 @@ grml xmodule=radeon|svga|i810       Use specified X.org-Module (3)
 grml no{acpi,agp,cpu,dhcp}          Skip parts of HW-detection (1)
 grml no{dma,fstab,modem}            Skip parts of HW-detection (2)
 grml no{pcmcia,scsi,swap,usb}       Skip parts of HW-detection (3)
-grml 915resolution=...              Start resolution modify tool for Intel graphic chipset
-                                    usage: $MODE,$XRESO,$YRESO
 grml blacklist=modulename[,module2] Completely disable loading of specified module(s) via
                                     blacklisting through udev's /etc/modprobe.d/grml
 grml fwtimeout=50                   Set firmware timeout via /sys/class/firmware/timeout to specified value
