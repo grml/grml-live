@@ -1724,6 +1724,7 @@ config_swraid(){
      checkbootparam 'forensic' || checkbootparam 'raid=noautodetect' ; then
      ewarn "Skipping SW-RAID code as requested on boot commandline." ; eend 0
   else
+    [ -e /proc/mdstat ] || modprobe md_mod
     if ! [ -x /sbin/mdadm ] ; then
        eerror "mdadm not available, can not execute it." ; eend 1
     else
