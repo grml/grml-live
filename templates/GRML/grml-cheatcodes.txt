@@ -195,7 +195,7 @@ grml ethdevice=...                  Use specified network device for network boo
 grml xmodule=ati|fbdev|i810|mga     Use specified X.org-Module (1)
 grml xmodule=nv|radeon|savage|s3    Use specified X.org-Module (2)
 grml xmodule=radeon|svga|i810       Use specified X.org-Module (3)
-grml no{acpi,agp,apm,cpu,dhcp}      Skip parts of HW-detection (1)
+grml no{acpi,agp,cpu,dhcp}          Skip parts of HW-detection (1)
 grml no{dma,fstab,modem}            Skip parts of HW-detection (2)
 grml no{pcmcia,scsi,swap,usb}       Skip parts of HW-detection (3)
 grml 915resolution=...              Start resolution modify tool for Intel graphic chipset
@@ -263,7 +263,7 @@ error if you have DMA enabled. Also, please read the grml-FAQ.
 
 *) In case of a failing hardware autodetection, try booting with any of
 the "no-" options as shown in the table above, like in
-   grml noagp noapm noapic acpi=off nodma
+   grml noagp noapic acpi=off nodma
 to skip some critical parts of the autodetection system.
 
 *) Some boards (especially those with E-ISA slots) apparently don't pass
