@@ -208,8 +208,6 @@ grml vol=number                     Set mixer volumes to level $number
 grml micvol=number                  Set mixer volume of microphone to level $number (default: 0)
 grml pnpbios=off                    No PnP Bios initialization
 grml acpi=off                       Disable ACPI Bios completely
-grml nousb2                         Disable initialization of USB 2.x controller(s)
-grml nousb                          Disable initialization of USB in booting sequence
 grml nofirewire                     Disable initialization of firewire devices in booting sequence
 grml pci=irqmask=0x0e98             Try this, if PS/2 mouse doesn't work *)
 grml pci=bios                       Workaround for bad PCI controllers
