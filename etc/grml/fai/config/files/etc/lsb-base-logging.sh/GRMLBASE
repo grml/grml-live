@@ -1,0 +1,22 @@
+# This file was deployed via grml-live's
+# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/20-sudo script, using
+# ${GRML_FAI_CONFIG}/config/files/etc/lsb-base-logging.sh/GRMLBASE
+
+if log_use_fancy_output; then
+  __LSB_PFX="$(tput -S << EOGREEN
+  bold
+  setaf 2
+EOGREEN
+  ) * $(tput -S << EONORMAL
+  sgr0
+  op
+EONORMAL
+  )"
+else
+  __LSB_PFX=" * "
+fi
+
+log_daemon_msg_pre() {
+  printf "${__LSB_PFX}"
+}
+
