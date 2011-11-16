@@ -744,15 +744,6 @@ fi
 }
 # }}}
 
-# {{{ AGP
-config_agp(){
-if checkbootparam 'forceagp' ; then
-# Probe for AGP. Hope this can fail safely
-  grep -q "AGP" "/proc/pci" 2>>$DEBUG && { modprobe agpgart || modprobe agpgart agp_try_unsupported=1; } >>$DEBUG 2>&1 && einfo "AGP bridge detected." ; eend 0
-fi
-}
-# }}}
-
 # {{{ Collect partitions from /proc/partitions first for enabling DMA
 check_partitions(){
 partitions=""
