@@ -159,10 +159,6 @@ if [ -n "$GRML_VERSION" ] ; then
    echo
 fi
 
-# don't output anything if running with bootsplash feature
-if checkbootparam "splash" ; then
-  exec >/dev/null </dev/null 2>&1
-fi
 # }}}
 
 ## /proc/cmdline handling {{{

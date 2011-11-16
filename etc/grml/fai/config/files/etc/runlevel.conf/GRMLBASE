@@ -16,7 +16,6 @@
 ############################################################################
 # Format:
 # <sort> <off-> <on-levels>     <command>
-01	-	2		/etc/init.d/bootsplash_start.sh
 01	-	S		/etc/init.d/bootlocal.first
 02	-	S		/etc/init.d/mountkernfs.sh
 02	-	S		/etc/init.d/hostname.sh
@@ -41,6 +40,5 @@
 90	-	1		/etc/init.d/single
 98	-	2		/etc/init.d/grml-home
 99	-	2		/etc/init.d/grml-misc
-99	-	2		/etc/init.d/bootsplash_end.sh
 99	-	2		/etc/init.d/bootlocal.last
 # THE LAST LINE IS NEVER READ
