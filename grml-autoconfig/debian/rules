@@ -39,7 +39,6 @@ install: build
 	install -m 755 autoconfig.functions debian/grml-autoconfig/etc/grml/autoconfig.functions
 	install -m 644 language-functions   debian/grml-autoconfig/etc/grml/language-functions
 	install -m 755 sbin/grml-autoconfig debian/grml-autoconfig/usr/sbin/grml-autoconfig
-	install -m 755 grml-bootsplash      debian/grml-autoconfig/usr/bin/grml-bootsplash
 
 	install -m 755 bin/restore-config debian/grml-autoconfig/usr/bin/restore-config
 	install -m 755 bin/save-config debian/grml-autoconfig/usr/bin/save-config
@@ -57,10 +56,8 @@ binary-indep: build install
 	dh_testroot
 	dh_installchangelogs
 	dh_installdocs doc/grml-autoconfig.1.html doc/grml-autoconfig.8.html \
-			doc/grml-bootsplash.1.html \
 			doc/restore-config.1.html doc/save-config.1.html
 	dh_installman doc/grml-autoconfig.1.gz doc/grml-autoconfig.8.gz \
-			doc/grml-bootsplash.1.gz \
 			doc/restore-config.1.gz doc/save-config.1.gz
 	# backward compability:
 	dh_link /usr/share/doc/grml-autoconfig/grml-autoconfig.1.html /usr/share/doc/grml-saveconfig/grml-config.html

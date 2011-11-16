@@ -56,11 +56,6 @@ mount_sys
 # {{{ main grml-autoconfig
 checkvalue $CONFIG_DEBUG && config_debug
 
-SPLASH=''
-if checkbootparam 'textsplash' || checkbootparam 'tsplash'; then
-   SPLASH=1
-fi
-
 # update /etc/mtab if running in live-initramfs mode:
 if [ -z "$INSTALLED" -a -e /live/cow ] ; then
    if ! grep -q rootfs /etc/mtab ; then
@@ -70,10 +65,8 @@ if [ -z "$INSTALLED" -a -e /live/cow ] ; then
    fi
 fi
 
-if [ -z "$SPLASH" ] ; then
-   stage=5
-   rundebugshell
-fi
+stage=5
+rundebugshell
 
 if [ -z "$BOOTDEBUG" ] ; then
    einfo "Setting kernel ring buffer to level 2."
@@ -90,11 +83,6 @@ if checkbootparam 'forensic' ; then
    ewarn " Do *NOT* boot with something like 'grml forensic ...' but always use 'forensic ...' instead!" ; eend 0
 fi
 
-if [ -n "$SPLASH" ] ; then
-   /usr/bin/grml-bootsplash "|">/dev/tty14
-   chvt 14
-fi
-
 checkvalue $CONFIG_LANGUAGE && config_language
 
 checkvalue $CONFIG_LOG && config_log
@@ -102,8 +90,6 @@ checkvalue $CONFIG_LOG && config_log
 checkvalue $CONFIG_FWTIMEOUT && config_fwtimeout
 
 checkvalue $CONFIG_FIX_PASSWD && config_fix_passwd
-
-[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||">/dev/tty14
 
 checkvalue $CONFIG_HOSTNAME && config_hostname
 
@@ -121,8 +107,6 @@ checkvalue $CONFIG_TIMEZONE && config_timezone
 
 checkvalue $CONFIG_FAST && config_fast
 
-[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||">/dev/tty14
-
 checkvalue $CONFIG_SWRAID && config_swraid
 
 checkvalue $CONFIG_DMRAID && config_dmraid
@@ -136,23 +120,15 @@ checkvalue $CONFIG_LOCAL_NET && config_local_net
 
 checkvalue $CONFIG_TESTCD && config_testcd
 
-[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||||">/dev/tty14
-
 checkvalue $CONFIG_MODULES && config_modules
 
-[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||||">/dev/tty14
-
 checkvalue $CONFIG_ACPI && config_acpi
-
-[ -n "$SPLASH" ] &&  /usr/bin/grml-bootsplash "||||||">/dev/tty14
 
 checkvalue $CONFIG_DMA && config_dma
 
 checkvalue $CONFIG_FSTAB && config_fstab
 
 checkvalue $CONFIG_MOUSE && config_mouse
-
-[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||||||">/dev/tty14
 
 checkvalue $CONFIG_CPU && config_cpu
 
@@ -176,8 +152,6 @@ checkvalue $CONFIG_FINDDCSDIR && config_umount_dcsdir
 
 checkvalue $CONFIG_PARTCONF && config_partconf
 
-[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||||||||">/dev/tty14
-
 # device symlinks {{{
   [ -r /mnt/floppy ] || mkdir /mnt/floppy
   [ -r /mnt/cdrom ]  || mkdir /mnt/cdrom
@@ -192,8 +166,6 @@ checkvalue $CONFIG_WONDERSHAPER && config_wondershaper
 
 checkvalue $CONFIG_GPM && config_gpm
 
-[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||||||||">/dev/tty14
-
 checkvalue $CONFIG_NETCONFIG && config_netconfig
 
 checkvalue $CONFIG_NETSCRIPT && config_netscript
@@ -203,8 +175,6 @@ checkvalue $CONFIG_SERVICES && config_services
 checkvalue $CONFIG_NETIPV6 && config_ipv6
 
 checkvalue $CONFIG_DEBNET && config_debnet
-
-[ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "||||||||||">/dev/tty14
 
 checkvalue $CONFIG_CONSOLE && config_console
 
@@ -220,11 +190,6 @@ checkvalue $CONFIG_DISTRI && config_distri
 
 checkvalue $CONFIG_BLANKING && config_blanking
 
-if [ -n "$SPLASH" ] ; then
-   /usr/bin/grml-bootsplash "|||||||||||">/dev/tty14
-   chvt 1
-fi
-
 checkvalue $CONFIG_TOHD && config_tohd
 
 checkvalue $CONFIG_DEBOOTSTRAP && config_debootstrap
@@ -233,10 +198,8 @@ checkvalue $CONFIG_XSTARTUP && config_x_startup
 # }}}
 
 # {{{ debug
-if [ -z "$SPLASH" ] ; then
-   stage=6
-   rundebugshell
-fi
+stage=6
+rundebugshell
 
 if [ -n "$BOOTDEBUG" ] ; then
    # set only if not already set
