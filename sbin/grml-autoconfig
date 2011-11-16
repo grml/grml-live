@@ -53,7 +53,7 @@ check_current_state()
 {
   is_set $CONFIG_FSTAB      && FSTABSTATUS=ON    || FSTABSTATUS=OFF
   is_set $CONFIG_CPU        && CPUSTATUS=ON      || CPUSTATUS=OFF
-  is_set $CONFIG_ACPI_APM   && ACPI_APMSTATUS=ON || ACPI_APMSTATUS=OFF
+  is_set $CONFIG_ACPI       && ACPISTATUS=ON     || ACPISTATUS=OFF
   is_set $CONFIG_SYSLOG     && SYSLOGSTATUS=ON   || SYSLOGSTATUS=OFF
   is_set $CONFIG_GPM        && GPMSTATUS=ON      || GPMSTATUS=OFF
 }
@@ -77,7 +77,7 @@ settings in /etc/network/interfaces, it just configures grml-autoconfig
 " 0 0 0 \
 fstab "update /etc/fstab entries (check for devices)" $FSTABSTATUS \
 cpufreq "activate cpu frequency scaling" $CPUSTATUS \
-acpi_apm "load ACPI/APM modules" $ACPI_APMSTATUS \
+acpi "load ACPI modules" $ACPISTATUS \
 syslog "start syslog-ng" $SYSLOGSTATUS \
 gpm "start GPM (mouse on console)" $GPMSTATUS \
   2>$TMPFILE
@@ -87,7 +87,7 @@ set_values()
 {
   check_setting fstab     && activate_value CONFIG_FSTAB=    || deactivate_value CONFIG_FSTAB=
   check_setting cpufreq   && activate_value CONFIG_CPU=      || deactivate_value CONFIG_CPU=
-  check_setting acpi_apm  && activate_value CONFIG_ACPI_APM= || deactivate_value CONFIG_ACPI_APM=
+  check_setting acpi      && activate_value CONFIG_ACPI=     || deactivate_value CONFIG_ACPI=
   check_setting syslog    && activate_value CONFIG_SYSLOG=   || deactivate_value CONFIG_SYSLOG=
   check_setting gpm       && activate_value CONFIG_GPM=      || deactivate_value CONFIG_GPM=
 }
