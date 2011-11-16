@@ -9,7 +9,6 @@
 set -u
 set -e
 
-fcopy -v /usr/share/initramfs-tools/scripts/init-top/grml
 fcopy -v /etc/initramfs-tools/hooks/000-udev-shutup
 fcopy -v /etc/initramfs-tools/conf.d/xz-compress
 

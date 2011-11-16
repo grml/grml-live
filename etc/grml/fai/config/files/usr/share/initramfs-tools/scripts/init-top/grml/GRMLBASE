@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # This file was deployed via grml-live's
-# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/10-build-initramfs script, using
+# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/42-branding script, using
 # ${GRML_FAI_CONFIG}/config/files/usr/share/initramfs-tools/scripts/init-top/grml/GRMLBASE
 #
 # Filename:      /usr/share/initramfs-tools/scripts/init-top/grml
