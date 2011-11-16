@@ -717,14 +717,8 @@ if [ -d /proc/acpi ]; then
       ewarn "(none)" ; eend 1
     fi
     if ! ps x 2>>$DEBUG | grep -q /usr/sbin/acpid ; then
-      if ! [ -r /var/run/dbus/pid ] ; then
-        einfo "Starting acpi daemon."
-        /etc/init.d/acpid start >>$DEBUG 2>&1 ; eend $?
-      else
-        eerror "acpid error: it seems you are running d-bus/hal, but acpid needs to be started before d-bus."
-        eerror "Solution: please activate acpid via /etc/runlevel.conf"
-        eend 1
-      fi
+      einfo "Starting acpi daemon."
+      /etc/init.d/acpid start >>$DEBUG 2>&1 ; eend $?
     else
       ewarn "acpi daemon already running."
       eend 0
