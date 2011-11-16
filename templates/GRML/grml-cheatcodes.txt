@@ -229,7 +229,7 @@ grml nouveau.modeset=0 nomodeset    Disable Kernel Mode Setting (KMS) for Nouvea
 Installation related settings:
 ------------------------------
 
-Caution: do *NOT* use the grml2hd and/or debian2hd bootoption if you do not know what you are doing!
+Caution: do *NOT* use the debian2hd bootoption if you do not know what you are doing!
 
 Install plain Debian via debian2hd bootoption (which runs grml-debootstrap in non-interactive mode):
 
@@ -246,22 +246,6 @@ debian2hd <options>                 ... whereas valid options for debian2hd are:
     debian2hd target=/dev/sda1 grub=/dev/sda mirror=http://cdn.debian.net/debian password=foobar
 
   See http://grml.org/grml-debootstrap/ for more information.
-
-Install grml via grml2hd bootoption (which runs grml2hd in non-interactive mode):
-
-grml2hd <options>                   ... whereas valid options for grml2hd are:
-
-   user=                user name for user which should be used at hd-install
-   filesystem={ext2|ext3|reiserfs|reiser4|jfs|xfs}      filesystem to be used
-   mbr=/dev/...  partition where MBR should be installed (default:=partition)
-   partition=/dev/...                partition where grml should be installed
-
-  Usage example for booting:
-   grml2hd partition=/dev/sda4 mbr=/dev/sda filesystem=ext3 user=mika
-
-  Passwords of user root and user are "grml" - please adjust after hd-install!
-
-  See http://grml.org/grml2hd/ for more information.
 
 Additional notes:
 -----------------
