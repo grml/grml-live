@@ -146,7 +146,7 @@ ${RED} | |  _| |_) | |\/| | |
 ${RED} | |_| |  _ <| |  | | |___
 ${RED}  \____|_| \_\_|  |_|_____|
 
-${WHITE}grml.org - Linux for sysadmins and texttool users.${NORMAL}"
+${WHITE}Grml Live Linux - http://grml.org/${NORMAL}"
 fi
 
 echo ""
