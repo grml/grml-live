@@ -142,7 +142,7 @@ checkvalue $CONFIG_MODULES && config_modules
 
 [ -n "$SPLASH" ] && /usr/bin/grml-bootsplash "|||||">/dev/tty14
 
-checkvalue $CONFIG_ACPI_APM && config_acpi_apm
+checkvalue $CONFIG_ACPI && config_acpi
 
 [ -n "$SPLASH" ] &&  /usr/bin/grml-bootsplash "||||||">/dev/tty14
 

@@ -692,54 +692,37 @@ fi
 # }}}
 
 # {{{ ACPI
-config_acpi_apm(){
-if [ -d /proc/acpi ]; then
-  if checkbootparam 'noacpi'; then
-    ewarn "ACPI: Not loading modules as requested by boot option \"noacpi\"." ; eend 0
-  elif checkbootparam 'nogrmlacpi' ; then
-    ewarn "ACPI: Not loading modules as requested by boot option \"nogrmlacpi\"." ; eend 0
-  else
-    einfo "ACPI: Loading modules (disable with boot option noacpi / nogrmlacpi): "
-    eindent
-    found=""
-    for a in /lib/modules/$KERNEL/kernel/drivers/acpi/*; do
-      basename="${a##*/}"
-      basename="${basename%%.*}"
-      case "$basename" in *_acpi)
-       egrep -qi "${basename%%_acpi}" /proc/acpi/dsdt 2>>$DEBUG || continue ;;
-      esac
-      modprobe $basename >>$DEBUG 2>&1 && found="yes"
-      local BASE="$BASE $basename"
-    done
-    if [ -n "$found" ] ; then
-      einfo "$BASE"  ; eend 0
-    else
-      ewarn "(none)" ; eend 1
-    fi
-    if ! ps x 2>>$DEBUG | grep -q /usr/sbin/acpid ; then
-      einfo "Starting acpi daemon."
-      /etc/init.d/acpid start >>$DEBUG 2>&1 ; eend $?
-    else
-      ewarn "acpi daemon already running."
-      eend 0
-    fi
-    eoutdent
-  fi
+config_acpi(){
+if checkbootparam 'noacpi'; then
+  ewarn "ACPI: Not loading modules as requested by boot option \"noacpi\"." ; eend 0
+elif checkbootparam 'nogrmlacpi' ; then
+  ewarn "ACPI: Not loading modules as requested by boot option \"nogrmlacpi\"." ; eend 0
 else
-# APM
-  if checkbootparam 'noapm'; then
-    ewarn "Skipping APM Bios detection as requested on boot commandline." ; eend 0
+  einfo "ACPI: Loading modules (disable with boot option noacpi / nogrmlacpi): "
+  eindent
+  found=""
+  for a in /lib/modules/$KERNEL/kernel/drivers/acpi/*; do
+    basename="${a##*/}"
+    basename="${basename%%.*}"
+    case "$basename" in *_acpi)
+     egrep -qi "${basename%%_acpi}" /proc/acpi/dsdt 2>>$DEBUG || continue ;;
+    esac
+    modprobe $basename >>$DEBUG 2>&1 && found="yes"
+    local BASE="$BASE $basename"
+  done
+  if [ -n "$found" ] ; then
+    einfo "$BASE"  ; eend 0
   else
-    modprobe apm power_off=1 >>$DEBUG 2>&1
-    if [ "$?" = "0" ] ; then
-       if [ -x /etc/init.d/apmd ] ;then
-          einfo "APM Bios found, enabling power management functions."
-          /etc/init.d/apmd start ; eend $?
-       fi
-    else
-      eerror "Loading apm module failed." ; eend 1
-    fi
+    ewarn "(none)" ; eend 1
   fi
+  if ! ps x 2>>$DEBUG | grep -q /usr/sbin/acpid ; then
+    einfo "Starting acpi daemon."
+    /etc/init.d/acpid start >>$DEBUG 2>&1 ; eend $?
+  else
+    ewarn "acpi daemon already running."
+    eend 0
+  fi
+  eoutdent
 fi
 }
 # }}}
