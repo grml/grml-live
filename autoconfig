@@ -48,7 +48,6 @@ CONFIG_GPM='yes'
 # Notice! Do not touch the following options except you really know
 # what you are doing!
 CONFIG_915RESOLUTION='yes'    # run 915resolution with specified options for adjusting resolution
-CONFIG_AGP='yes'              # check for bootparam forceagp
 CONFIG_AUTOMOUNT='yes'        # automounting of device labeled GRMLCFG
 CONFIG_BLANKING='yes'         # check for bootoption noblank to disable console blanking
 CONFIG_CONFIG='yes'           # do we want config unpacking to work?
