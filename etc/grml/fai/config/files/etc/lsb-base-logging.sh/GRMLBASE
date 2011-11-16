@@ -3,11 +3,11 @@
 # ${GRML_FAI_CONFIG}/config/files/etc/lsb-base-logging.sh/GRMLBASE
 
 if log_use_fancy_output; then
-  __LSB_PFX="$(tput -S << EOGREEN
+  __LSB_PFX="$($TPUT -S << EOGREEN
   bold
   setaf 2
 EOGREEN
-  ) * $(tput -S << EONORMAL
+  ) * $($TPUT -S << EONORMAL
   sgr0
   op
 EONORMAL
