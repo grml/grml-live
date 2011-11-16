@@ -66,7 +66,6 @@ CONFIG_FINDDCSDIR='yes'       # search for a debs, config, scripts directory
 CONFIG_FIX_PASSWD='yes'       # fix unionfs-problem with passwd
 CONFIG_FIX_UNIONFS='yes'      # fix/workaround for unionfs
 CONFIG_FWTIMEOUT='yes'        # set timeout for firmware loading
-CONFIG_GRML2HD='yes'          # check for 'grml2hd' bootoption
 CONFIG_HOMEDIR='yes'          # check for persistent homedir option
 CONFIG_HOSTNAME='yes'         # set hostname to 'grml' on systems running from CD
 CONFIG_KERNEL='yes'           # display information on running kernel

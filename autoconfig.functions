@@ -1970,58 +1970,6 @@ config_tohd()
 }
 # }}}
 
-# {{{ grml2hd: automatic installation
-config_grml2hd(){
-
-if checkbootparam "grml2hd" || checkbootparam "BOOT_IMAGE=grml2hd" ; then
-
-if checkbootparam 'user' ; then
-   NEWUSER=''
-   NEWUSER="$(getbootparam 'user' 2>>$DEBUG)"
-   sed -i "s/^NEWUSER=.*/NEWUSER=$NEWUSER/" /etc/grml2hd/config || export GRML2HD_FAIL=1
-fi
-
-if checkbootparam 'filesystem' ; then
-   FILESYSTEM=''
-   FILESYSTEM="$(getbootparam 'filesystem' 2>>$DEBUG)"
-   sed -i "s/^FILESYSTEM=.*/FILESYSTEM=$FILESYSTEM/" /etc/grml2hd/config || export GRML2HD_FAIL=1
-fi
-
-if checkbootparam 'partition' ; then
-   PARTITION=''
-   PARTITION="$(getbootparam 'partition' 2>>$DEBUG)"
-   # notice: the following checks whether the given partition is available, if not the skip
-   # execution of grml2hd as it might result in data loss...
-   if [ -r $PARTITION ] ; then
-      sed -i "s#^PARTITION=.*#PARTITION=$PARTITION#" /etc/grml2hd/config || export GRML2HD_FAIL=1
-   else
-      ewarn "Partition $PARTITION does not exist. Skipping execution of grml2hd therefore." ; eend 1
-   fi
-fi
-
-if checkbootparam 'mbr' ; then
-   BOOT_PARTITION=''
-   BOOT_PARTITION="$(getbootparam 'mbr' 2>>$DEBUG)"
-   sed -i "s#^BOOT_PARTITION=.*#BOOT_PARTITION=$BOOT_PARTITION#" /etc/grml2hd/config || export GRML2HD_FAIL=1
-fi
-
-cat>|/usr/bin/grml2hd_noninteractive<<EOF
-#!/bin/sh
-GRML2HD_NONINTERACTIVE='yes' grml2hd
-EOF
-
-chmod 755 /usr/bin/grml2hd_noninteractive
-einfo "Bootoption grml2hd found. Running automatic installation via grml2hd using /etc/grml2hd/config." && eend 0
-if [ -z "$GRML2HD_FAIL" ] ; then
-   screen /usr/bin/grml2hd_noninteractive ; einfo "Invoking a shell, just exit to continue booting..." ; /bin/zsh
-else
-   ewarn "There was an error adjusting /etc/grml2hd/config. Skipping execution of grml2hd for security reasons." ; eend 1
-fi
-
-fi # if checkbootparam "BOOT_IMAGE=grml2hd ...
-}
-# }}}
-
 # {{{ debootstrap: automatic installation
 config_debootstrap(){
 
