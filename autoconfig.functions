@@ -1715,38 +1715,6 @@ fi
 }
 # }}}
 
-# {{{ 915resolution
-config_915resolution(){
-if checkbootparam '915resolution' ; then
- OPTIONS="$(getbootparam '915resolution' 2>>$DEBUG)"
-  if [ -x /usr/sbin/915resolution ]; then
-    CMD=915resolution
-    MODE=""
-    XRESO=""
-    YRESO=""
-    if [ -n "$OPTIONS" ]; then
-      # Extra options
-      MODE="${OPTIONS%%,*}"
-      R="${OPTIONS#*,}"
-      if [ -n "$R" -a "$R" != "$OPTIONS" ]; then
-        OPTIONS="$R"
-        XRESO="${OPTIONS%%,*}"
-        R="${OPTIONS#*,}"
-        if [ -n "$R" -a "$R" != "$OPTIONS" ]; then
-          OPTIONS="$R"
-          YRESO="${OPTIONS%%,*}"
-          R="${OPTIONS#*,}"
-        fi
-      fi
-    fi
-    einfo "Running 915resolution with options ${MODE} ${XRESO} ${YRESO}."
-    [ -n "$MODE" ] && [ -n "$XRESO"  ] && [ -n "$YRESO" ]  && ( sh -c "$CMD $MODE $XRESO $YRESO" & )
-    eend 0
-  fi
-fi
-}
-# }}}
-
 # {{{ SW-RAID
 config_swraid(){
   [ -n "$INSTALLED" ] && return 0
