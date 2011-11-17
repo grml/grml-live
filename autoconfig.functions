@@ -928,12 +928,12 @@ if checkbootparam 'nocpu'; then
 fi
 
 if [[ $(grep -c processor /proc/cpuinfo) -gt 1 ]] ; then
-   einfo "Detecting CPU:"
+   einfo "Found CPU:"
    CPU=$(awk -F: '/^processor/{printf "	Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG)
    echo $CPU | sed 's/ \{1,\}/ /g'
    eend 0
 else
-   einfo "Detecting CPU: `awk -F: '/^processor/{printf " Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG` " ; eend 0
+   einfo "Found CPU: `awk -F: '/^processor/{printf " Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG` " ; eend 0
 fi
 
 # no cpufreq setup inside VirtualBox
