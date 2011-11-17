@@ -85,11 +85,11 @@ case "$1" in
         # execution of udev (being bootoption noudev)
         if ! grep -q noudev /proc/cmdline ; then
            check_for_non_interactive && \
-              log_warning_msg "If your system hangs now skip execution of udev via bootoption noudev"
+              log_action_msg "If your system hangs now, disable udev with bootoption \"noudev\""
         else
            # - allow execution of initscript through FORCE=1 when booting with noudev
            if [ -z "$FORCE" ] ; then
-              log_failure_msg "Bootoption noudev found. Skipping execution of udev init script."
+              log_failure_msg "Bootoption \"noudev\" found. Skipping execution of udev init script."
               if ! check_for_non_interactive ; then
                  printf "\nIt has been detected that the udev init script\n"
                  printf "has been run from an interactive shell.\n"
