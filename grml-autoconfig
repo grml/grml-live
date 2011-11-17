@@ -32,7 +32,7 @@ fi
 # }}}
 
 # {{{ path, signals, umask, zsh, colors
-export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin"
+export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 umask 022
 # Ignore these signals: INT, TERM, SEGV
 trap "" 2 3 11
