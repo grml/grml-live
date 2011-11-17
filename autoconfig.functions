@@ -7,7 +7,7 @@
 ################################################################################
 
 # {{{ path, variables, signals, umask, zsh
-export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin"
+export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 DEBUG="/dev/null"
 KERNEL="$(uname -r)"
 ARCH="$(uname -m)"
@@ -1395,7 +1395,7 @@ EOF
     eerror " -> Please use something like xdm, gdm or kdm for starting X on a harddisk system!" ; eend 1
   fi
  else
-   eerror "/usr/X11R6/bin/X is not present on this grml flavour."
+   eerror "/usr/bin/X is not present on this grml flavour."
    eerror "  -> Boot parameter startx does not work therefore." ; eend 1
  fi
 fi
