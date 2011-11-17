@@ -1,6 +1,5 @@
 PACKAGES aptitude
 
-grml-debugtools
 grml-feedback
 grml-live
 grml-paste
