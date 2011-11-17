@@ -551,7 +551,7 @@ eoutdent
 config_fast(){
 if checkbootparam 'fast'; then
   ewarn "Bootoption fast detected. Skipping startup of grml-quickconfig."
-    sed -i 's#^1:.*#1:12345:respawn:/usr/bin/openvt -f -c 1 -w -- /bin/zsh#' /etc/inittab
+    sed -i '/1:/s#/usr/share/grml-scripts/run-welcome#/bin/zsh#' /etc/inittab
   /sbin/telinit q ; eend $?
 fi
 }
