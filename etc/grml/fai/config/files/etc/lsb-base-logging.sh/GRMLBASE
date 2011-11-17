@@ -19,4 +19,9 @@ fi
 log_daemon_msg_pre() {
   printf "${__LSB_PFX}"
 }
-
+log_action_msg() {
+  printf "${__LSB_PFX}$@."
+}
+log_action_begin_msg() {
+  printf "${__LSB_PFX}$@... "
+}
