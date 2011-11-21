@@ -186,6 +186,7 @@ pwgen
 
 # popular VCS to pull config from
 git
+mercurial
 subversion
 
 # recovery
