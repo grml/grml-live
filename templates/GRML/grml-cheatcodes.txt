@@ -91,9 +91,9 @@ grml debs                           Install all Debian packages from the "debs" 
 grml debs=path-name-wildcard        Install Debian packages from DCS directory (see myconfig=,
                                     typically the root of your ISO image). If path does not contain a
                                     "/" the package(s) will be installed from directory "debs" of the
-				    DCS directory instead.  The "path-name-wildcard" can contain
-				    wildcards (e.g. debs=rat* will install a packages starting with "rat"
-				    from directory debs/).
+                                    DCS directory instead.  The "path-name-wildcard" can contain
+                                    wildcards (e.g. debs=rat* will install a packages starting with "rat"
+                                    from directory debs/).
 grml scripts=path-name              Execute script (defaulting to grml.sh) inside DCS dir. Path names
                                     allowed. If path-name points to a directory, all scripts found in
                                     the directory are executed.
@@ -131,6 +131,10 @@ grml fetch=$IP/filename.squashfs    Download a squashfs image from a given url, 
                                     [Note: releases before 2011.05 didn't support DNS but IP only.]
 grml live-media-path=live           Sets the path to the live filesystem on the medium
                                     By default, it is set to /live
+grml nostats                        Don't send any information to the Grml project at startup.
+                                    Parameters sent are Grml version, if the cpu supports 64bit,
+                                    anonymized boot parameters and boot source (remote or local).
+                                    [Note: only available since release 2011.12]
 grml module=grml                    Instead of using the default "$name.module" another file can
                                     be specified without the extension ".module"; it should be placed
                                     on "/live" directory of the live medium
