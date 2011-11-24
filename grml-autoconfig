@@ -170,6 +170,8 @@ checkvalue $CONFIG_NETCONFIG && config_netconfig
 
 checkvalue $CONFIG_NETSCRIPT && config_netscript
 
+checkvalue $CONFIG_STATS && config_stats
+
 checkvalue $CONFIG_SERVICES && config_services
 
 checkvalue $CONFIG_NETIPV6 && config_ipv6
