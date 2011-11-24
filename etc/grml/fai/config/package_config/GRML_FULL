@@ -59,6 +59,7 @@ dmraid
 dmsetup
 fio
 gdisk
+gptsync
 hdparm
 lvm2
 mdadm
