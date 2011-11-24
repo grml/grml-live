@@ -69,8 +69,8 @@ grml_live_run() {
   TIME_START=$(date +%s)
   grml-live -F $* -a $ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
             -g "$grml_name" -v "$shortdate" -r grml-live-autobuild -i $ISO_NAME \
-             >/var/log/grml-buildd.stdout \
-            2>/var/log/grml-buildd.stderr ; RC=$?
+             >/var/log/grml-buildd.stdout.log \
+            2>/var/log/grml-buildd.stderr.log ; RC=$?
   TIME_END=$(date +%s)
   WALLTIME=$(($TIME_END-$TIME_START))
 
@@ -84,7 +84,7 @@ grml_live_run() {
 
 # create log archive:
 create_logs() {
-  ( cd / && tar zcfh $ATTACHMENT $FAI_LOGFILES /var/log/grml-buildd.stderr /var/log/grml-buildd.stdout $GRML_LOGFILE >/dev/null )
+  ( cd / && tar zcfh $ATTACHMENT $FAI_LOGFILES /var/log/grml-buildd.stderr.log /var/log/grml-buildd.stdout $GRML_LOGFILE >/dev/null )
 }
 
 # store logs on remote server:
@@ -146,7 +146,7 @@ See attached files for further details.
 
 EOF" | \
   mutt -e "my_hdr From: grml-live autobuild daemon <$FROM>" -s "$SCRIPTNAME [${DATE}] - $RC_INFO" \
-       -a /var/log/grml-buildd.stderr $MUTT_ATTACH -- "$RECIPIENT"
+       -a /var/log/grml-buildd.stderr.log $MUTT_ATTACH -- "$RECIPIENT"
 }
 
 # make sure we store the final iso:
