@@ -58,6 +58,7 @@ cryptsetup
 dmraid
 dmsetup
 fio
+gdisk
 hdparm
 lvm2
 mdadm
