@@ -118,6 +118,12 @@ BUILD_DIRTY=''
 BOOTSTRAP_ONLY=''
 HOSTNAME=''
 
+# don't use colors/escape sequences
+if [ -r /lib/lsb/init-functions ] ; then
+  . /lib/lsb/init-functions
+  ! log_use_fancy_output && NOCOLORS=true
+fi
+
 if [ -r /etc/grml/lsb-functions ] ; then
    . /etc/grml/lsb-functions
 else
