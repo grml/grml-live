@@ -1,0 +1,60 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/03-get-sources
+# Purpose:       download sources of Debian packages
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
+[ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
+
+if ifclass SOURCES ; then
+  echo "Class SOURCES set, retrieving source packages."
+else
+  echo "Class SOURCES not set, nothing to do."
+  exit 0
+fi
+
+set -u
+
+PACKAGE_LIST=$(mktemp)
+
+bailout() {
+  rm -f "${target}/grml-live/sources/errors.log"
+  rm -f "$PACKAGE_LIST"
+}
+
+$ROOTCMD dpkg-query -W -f='${Package}\n' > "${PACKAGE_LIST}"
+
+if ! [ -r "${PACKAGE_LIST}" ] ; then
+  echo "Can not read ${PACKAGE_LIST}, can not download source packages as requested." >&2
+  bailout
+  exit 1
+else
+  mkdir -p "${target}"/grml-live/sources
+
+  # needs to be done for each package to get:
+  # | Picking 'acpi-support' as source package instead of 'acpi-fakekey'
+  # instead of:
+  # | E: Unable to find a source package for acpi-fakekey
+  for package in $(grep -v '^#' ${PACKAGE_LIST}) ; do
+    cat << EOT | chroot "$target" /bin/bash
+cd /grml-live/sources
+apt-get --download-only source "$package" 2>>/grml-live/sources/errors.log
+EOT
+  done
+
+  if grep -q . "${target}/grml-live/sources/errors.log" ; then
+    echo "Errors noticed while retrieving sources:" >&2
+    cat "${target}/grml-live/sources/errors.log" >&2
+    bailout
+    exit 1
+  fi
+
+fi
+
+bailout
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

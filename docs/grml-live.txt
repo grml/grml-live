@@ -358,6 +358,9 @@ official grml release
 * REMOVE_DOCS: get rid of documentation directories (like /usr/share/doc,
 /usr/share/man/, /usr/share/info,...)
 
+* SOURCES: retrieve Debian source packages after installation. Files will be
+placed in the output directory under grml_sources.
+
 * XORG: providing important packages for use with a base grml-featured X.org
 setup
 
