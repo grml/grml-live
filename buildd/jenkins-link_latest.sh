@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 . /etc/grml/grml-buildd.conf
 
 if [ -z "$MIRROR_DIRECTORY" ] ; then
@@ -12,22 +11,26 @@ if [ -z "$FLAVOURS" ] ; then
   exit 2
 fi
 
+JOBS=/var/lib/jenkins/jobs
+
 cd $MIRROR_DIRECTORY || exit 1
 for f in $FLAVOURS; do
-  rm -r ./$f
-  rm ./$f*.iso*
+  [ -d $JOBS/$f/builds ] || continue
+  [ -d ./$f ] && rm -r ./$f
+  for link in ./$f*.iso*; do rm $link; done
   mkdir $f
-  for buildpath in /var/lib/jenkins/jobs/$f/builds/*_*; do
+  for buildpath in $JOBS/$f/builds/*_*; do
     build=$(basename $buildpath)
     mkdir $f/$build
-    for isofile in $buildpath/archive/iso/*; do
-      ln -s $isofile $f/$build/
+    for isofile in $buildpath/archive/grml_isos/*; do
+      [ -e $isofile ] && ln -s $isofile $f/$build/
     done
-    ln -s $buildpath/archive/logs $f/$build/logs
+    [ -d $buildpath/archive/grml_logs ] && ln -s $buildpath/archive/grml_logs $f/$build/logs
   done
-  latest=$(basename $(readlink /var/lib/jenkins/jobs/$f/lastStable))
-  ln -s $f/$latest/*.iso ${f}_latest.iso
-  ln -s $f/$latest/*.iso.md5 ${f}_latest.iso.md5
-  ln -s $f/$latest/*.iso.sha1 ${f}_latest.iso.sha1
+  latest=$(basename $(readlink $JOBS/$f/lastStable))
+  if [ -e $f/$latest/*.iso ]; then
+    ln -s $f/$latest/*.iso ${f}_latest.iso
+    ln -s $f/$latest/*.iso.md5 ${f}_latest.iso.md5
+    ln -s $f/$latest/*.iso.sha1 ${f}_latest.iso.sha1
+  fi
 done
-
