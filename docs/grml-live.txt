@@ -928,6 +928,9 @@ taken as first entry in the generated sources.list so it's preferred over
 non-local mirrors. Using a fallback mirror (via providing several mirrors in
 GRML_LIVE_SOURCES as used by default) is a recommended setting.
 
+If you want to use a HTTP Proxy (like apt-cacher-ng), set APT_PROXY. Example:
+APT_PROXY="http://localhost:3142/"
+
 [[add-additional-debian-packages]]
 How do I add additional Debian package(s) to my CD/ISO?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1008,25 +1011,20 @@ or if using /etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz for:
 Existing base.tgz can be found at http://daily.grml.org/
 
 [[apt-cacher]]
-Set up apt-cacher / apt-cacher-ng for use with grml-live
+Set up apt-cacher-ng for use with grml-live
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Make sure /etc/grml/grml-live.conf provides according GRML_LIVE_SOURCES and
+Make sure /etc/grml/grml-live.local provides according APT_PROXY and
 FAI_DEBOOTSTRAP:
 
-  # cat /etc/grml/grml-live.conf
+  # cat /etc/grml/grml-live.local
   [...]
-  GRML_LIVE_SOURCES="
-  deb http://localhost:3142/deb.grml.org grml-stable  main
-  deb http://localhost:3142/deb.grml.org grml-testing main
-  deb http://localhost:3142/cdn.debian.net/debian squeeze main contrib non-free
-  "
+  APT_PROXY="http://localhost:3142/"
   [...]
   FAI_DEBOOTSTRAP="squeeze http://localhost:3142/cdn.debian.net/debian squeeze main contrib non-free"
 
-Make sure apt-cacher / apt-cacher-ng is running ('/etc/init.d/apt-cacher
-restart' or '/etc/init.d/apt-cacher-ng restart'). That's it.  All downloaded
-files will be cached in /var/cache/apt-cacher/ or /var/cache/apt-cacher-ng then.
+Make sure apt-cacher-ng is running ('/etc/init.d/apt-cacher-ng restart').
+That's it.  All downloaded files will be cached in /var/cache/apt-cacher-ng then.
 
 [[approx]]
 Set up approx for use with grml-live

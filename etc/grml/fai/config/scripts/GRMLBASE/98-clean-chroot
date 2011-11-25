@@ -17,6 +17,8 @@ fi
 echo "Creating ~/.zshrc"
 touch $target/root/.zshrc
 
+$ROOTCMD rm -f /etc/apt/apt.conf.d/90grml-apt-proxy.conf
+
 if [ -x $target/usr/sbin/localepurge ] ; then
   echo "Running localepurge"
   $ROOTCMD localepurge
