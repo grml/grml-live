@@ -13,7 +13,7 @@ fi
 
 JOBS=/var/lib/jenkins/jobs
 
-cd $MIRROR_DIRECTORY || exit 1
+cd $MIRROR_DIRECTORY/new || exit 1
 for f in $FLAVOURS; do
   [ -d $JOBS/$f/builds ] || continue
   [ -d ./$f ] && rm -r ./$f
