@@ -18,7 +18,7 @@ HOSTNAME=''
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 echo "$HOSTNAME" > $target/etc/hostname
 
-if [ -n "$APT_PROXY" ] ; then
+if [ -n "${APT_PROXY:-}" ] ; then
   cat > $target/etc/apt/apt.conf.d/90grml-apt-proxy.conf <<EOF
 Acquire::http { Proxy "$APT_PROXY"; };
 EOF
