@@ -160,13 +160,6 @@ trap bailout 1 2 3 3 6 9 14 15
 trap umount_all EXIT
 # }}}
 
-# log file stuff {{{
-[ -n "$LOGFILE" ] || LOGFILE=/var/log/grml-live.log
-touch $LOGFILE
-chown root:adm $LOGFILE
-chmod 664 $LOGFILE
-# }}}
-
 # some important functions {{{
 
 # log output:
@@ -260,10 +253,8 @@ copy_addon_file() {
 # read local (non-packaged) configuration {{{
 LOCAL_CONFIG=/etc/grml/grml-live.local
 if [ -r "$LOCAL_CONFIG" ] ; then
-   log "Sourcing $LOCAL_CONFIG"
    . $LOCAL_CONFIG
 else
-   log "No $LOCAL_CONFIG found, not sourcing it"
    LOCAL_CONFIG=''
 fi
 # }}}
@@ -403,6 +394,14 @@ if [ -z "$FORCE" ] ; then
 fi
 # }}}
 
+# create log file {{{
+[ -n "$LOGFILE" ] || LOGFILE=${OUTPUT}/grml_logs/grml-live.log
+mkdir -p $(dirname "${LOGFILE}")
+touch $LOGFILE
+chown root:adm $LOGFILE
+chmod 664 $LOGFILE
+# }}}
+
 # clean/zero/remove logfiles {{{
 
 if [ -n "$PRESERVE_LOGFILE" ] ; then
@@ -439,6 +438,9 @@ fi
 start_seconds=$(cut -d . -f 1 /proc/uptime)
 log "------------------------------------------------------------------------------"
 log "Starting grml-live [${GRML_LIVE_VERSION}] run on $(date)"
+if [ -n "$LOCAL_CONFIG" ]; then
+  log "Using local config file: $LOCAL_CONFIG"
+fi
 log "Executed grml-live command line:"
 log "$CMDLINE"
 
