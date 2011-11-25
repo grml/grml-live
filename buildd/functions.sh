@@ -91,7 +91,7 @@ create_logs() {
 upload_logs() {
   [ -n "$RSYNC_MIRROR" ] || return 1
   rsync --exclude dmesg.log --times --partial --copy-links -rltDz --quiet /var/log/grml-buildd.log \
-  $FAI_LOGFILES $GRML_LOGFILE $RSYNC_MIRROR/logs/"${NAME}_${DATE}"/
+  $FAI_LOGFILES $GRML_LOGFILE $RSYNC_MIRROR/logs/"${PRODUCT_NAME}_${DATE}"/
 }
 
 # store information of ISO size:
