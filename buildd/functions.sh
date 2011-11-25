@@ -35,7 +35,7 @@ ISO_NAME="${PRODUCT_NAME}.iso"
 [ -n "$RECIPIENT" ]     || RECIPIENT=root@localhost
 [ -n "$FROM" ]          || FROM=root@localhost
 [ -n "$ARCH" ]          || ARCH="$(dpkg --print-architecture)"
-ATTACHMENT="$TMP_DIR/grml-live-logs_$DATE.tar.gz"
+MIRROR_LOG_PATH="logs/${PRODUCT_NAME}_${DATE}"
 
 if [ -n "$LOGFILE" ] ; then
    GRML_LOGFILE="$LOGFILE"
@@ -82,16 +82,11 @@ grml_live_run() {
   fi
 }
 
-# create log archive:
-create_logs() {
-  ( cd / && tar zcfh $ATTACHMENT $FAI_LOGFILES /var/log/grml-buildd.log $GRML_LOGFILE >/dev/null )
-}
-
 # store logs on remote server:
 upload_logs() {
   [ -n "$RSYNC_MIRROR" ] || return 1
   rsync --exclude dmesg.log --times --partial --copy-links -rltDz --quiet /var/log/grml-buildd.log \
-  $FAI_LOGFILES $GRML_LOGFILE $RSYNC_MIRROR/logs/"${PRODUCT_NAME}_${DATE}"/
+  $FAI_LOGFILES/* $GRML_LOGFILE $RSYNC_MIRROR/$MIRROR_LOG_PATH/
 }
 
 # store information of ISO size:
@@ -105,18 +100,12 @@ iso_details() {
 
 # send status mail:
 send_mail() {
-  # create logs if using 'send_mail -e'
-  [ "$1" = "-e" ] && create_logs
-
-  # attach logs only if we have some:
-  [ -r "$ATTACHMENT" ] && MUTT_ATTACH="-a $ATTACHMENT" || MUTT_ATTACH=''
-
-  echo "Automatically generated mail by $SCRIPTNAME
-
-$ISO_DETAILS
+  echo "$ISO_DETAILS
 
 Return code of grml-live was: $RC
 Time: $WALLTIME
+
+Full logs at: $MIRROR_URL/$MIRROR_LOG_PATH/
 
 $(grep -A2 'Executed grml-live' $GRML_LOGFILE || echo "* executed grml-live command line not available")
 
@@ -142,11 +131,13 @@ The following packages could not be installed:
 
 $(grep -i "Couldn't find.*package" $FAI_LOGFILES/software.log | sed 's/\(.*\)"\(.*\)"\(.*\)/\2/' | sort -u || echo "* nothing")
 
-See attached files for further details.
+See full logs for further details.
 
-EOF" | \
-  mutt -e "my_hdr From: grml-live autobuild daemon <$FROM>" -s "$SCRIPTNAME [${DATE}] - $RC_INFO" \
-       -a /var/log/grml-buildd.log $MUTT_ATTACH -- "$RECIPIENT"
+--" "
+Automatically generated mail by $SCRIPTNAME
+" | \
+  mutt -e "my_hdr From: grml-live autobuild daemon <$FROM>" -s "$PRODUCT_NAME - $RC_INFO" \
+       -a /var/log/grml-buildd.log -- "$RECIPIENT"
 }
 
 # make sure we store the final iso:
@@ -166,9 +157,8 @@ store_iso() {
 # allow clean exit:
 bailout() {
   if [ "$RC" = "0" ] ; then
-     rm -rf "$ATTACHMENT" "$TMP_DIR" "$OUTPUT_DIR"
+     rm -rf "$TMP_DIR" "$OUTPUT_DIR"
   else
-     rm -f "$ATTACHMENT"
      echo "building ISO failed, keeping build files [${OUTPUT_DIR} / ${TMP_DIR}]">&2
   fi
 

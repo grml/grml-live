@@ -9,7 +9,7 @@
 . /usr/share/grml-live/buildd/functions.sh || exit 1
 
 # execute main grml-live
-grml_live_run || create_logs
+grml_live_run
 
 # store logs on remote server
 upload_logs
@@ -17,7 +17,7 @@ upload_logs
 # store information about ISO size
 iso_details
 
-# create logs for adding to mail, but only if it fails
+# send report
 send_mail
 
 # move the ISO to final destination
