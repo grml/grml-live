@@ -464,7 +464,7 @@ The FAI part of grml-live logs to /var/log/fai/$HOSTNAME/ - so the
 default being /var/log/fai/grml/.
 
 If you are using the grml-live buildd you will find the logs of the grml-live
-run at /var/log/grml-buildd.stdout.log and /var/log/grml-buildd.stderr.log.
+run at /var/log/grml-buildd.log.
 
 If you want to store build information in a database just install the
 grml-live-db Debian package. Further details available in the grml-live-db

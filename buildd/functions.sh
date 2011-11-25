@@ -70,8 +70,7 @@ grml_live_run() {
   TIME_START=$(date +%s)
   grml-live -F $* -a $ARCH -s $SUITE -c $CLASSES -o $OUTPUT_DIR \
             -g "$grml_name" -v "$shortdate" -r grml-live-autobuild -i $ISO_NAME \
-             >/var/log/grml-buildd.stdout.log \
-            2>/var/log/grml-buildd.stderr.log ; RC=$?
+             >/var/log/grml-buildd.log 2>&1 ; RC=$?
   TIME_END=$(date +%s)
   WALLTIME=$(($TIME_END-$TIME_START))
 
@@ -85,13 +84,13 @@ grml_live_run() {
 
 # create log archive:
 create_logs() {
-  ( cd / && tar zcfh $ATTACHMENT $FAI_LOGFILES /var/log/grml-buildd.stderr.log /var/log/grml-buildd.stdout $GRML_LOGFILE >/dev/null )
+  ( cd / && tar zcfh $ATTACHMENT $FAI_LOGFILES /var/log/grml-buildd.log $GRML_LOGFILE >/dev/null )
 }
 
 # store logs on remote server:
 upload_logs() {
   [ -n "$RSYNC_MIRROR" ] || return 1
-  rsync --exclude dmesg.log --times --partial --copy-links -rltDz --quiet /var/log/grml-buildd.* \
+  rsync --exclude dmesg.log --times --partial --copy-links -rltDz --quiet /var/log/grml-buildd.log \
   $FAI_LOGFILES $GRML_LOGFILE $RSYNC_MIRROR/logs/"${NAME}_${DATE}"/
 }
 
@@ -125,7 +124,7 @@ $(grep -A2 'Executed FAI' $GRML_LOGFILE || echo "* executed FAI command line not
 
 The following errors have been noticed (several might be warnings only):
 
-$(grep -i error $FAI_LOGFILES/*.log /var/log/grml-buildd.std* | grep -ve liberror -ve libgpg-error -ve libcomerr -ve 'no errors found' || echo "* nothing")
+$(grep -i error $FAI_LOGFILES/*.log /var/log/grml-buildd.log | grep -ve liberror -ve libgpg-error -ve libcomerr -ve 'no errors found' || echo "* nothing")
 
 The following errors have been noticed in FAI scripts:
 
@@ -133,7 +132,7 @@ $(grep -B2 "FAILED with exit code" $FAI_LOGFILES/* | echo "* nothing")
 
 The following warnings have been noticed:
 
-$(grep -i warn $FAI_LOGFILES/* /var/log/grml-buildd.std* || echo "* nothing")
+$(grep -i warn $FAI_LOGFILES/* /var/log/grml-buildd.log || echo "* nothing")
 
 There following dependency problems have been noticed:
 
@@ -147,7 +146,7 @@ See attached files for further details.
 
 EOF" | \
   mutt -e "my_hdr From: grml-live autobuild daemon <$FROM>" -s "$SCRIPTNAME [${DATE}] - $RC_INFO" \
-       -a /var/log/grml-buildd.stderr.log $MUTT_ATTACH -- "$RECIPIENT"
+       -a /var/log/grml-buildd.log $MUTT_ATTACH -- "$RECIPIENT"
 }
 
 # make sure we store the final iso:
