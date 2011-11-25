@@ -148,6 +148,12 @@ umount_all() {
    umount $CHROOT_OUTPUT/sys  2>/dev/null || /bin/true
    umount $CHROOT_OUTPUT/dev/pts 2>/dev/null || /bin/true
    umount $CHROOT_OUTPUT/dev 2>/dev/null || /bin/true
+
+   # certain FAI versions sadly leave a ramdisk behind, so better safe than sorry
+   if [ -x /usr/lib/fai/mkramdisk ] ; then
+     /usr/lib/fai/mkramdisk -u "$(realpath ${CHROOT_OUTPUT}/var/lib/dpkg)" >/dev/null 2>&1 || /bin/true
+   fi
+
    umount "${CHROOT_OUTPUT}/grml-live/sources/" 2>/dev/null || /bin/true
    [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
 }
