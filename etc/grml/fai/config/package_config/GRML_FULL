@@ -57,6 +57,7 @@ cciss-vol-status
 cryptsetup
 dmraid
 dmsetup
+fai-setup-storage
 fio
 gdisk
 gptsync
