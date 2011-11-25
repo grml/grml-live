@@ -72,6 +72,9 @@ fi
 echo "Removing host ssh-keys"
 rm -f $target/etc/ssh/*key*
 
+echo "Removing dbus machine-id"
+rm -f $target/var/lib/dbus/machine-id
+
 if [ -d $target/var/spool/squid/ ] ; then
   echo "Cleaning /var/spool/squid/0*"
   rm -rf $target/var/spool/squid/0*
