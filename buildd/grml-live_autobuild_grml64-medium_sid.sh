@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # settings for grml_live_run:
-DATE=$(date +%Y%m%d)
-ISO_NAME=grml64-medium_sid_$DATE.iso
+SHORTDATE=$(date +%Y%m%d)
+PRODUCT_NAME=grml64-medium_sid_$SHORTDATE
 SUITE=sid
 CLASSES='GRMLBASE,GRML_MEDIUM,RELEASE,AMD64,IGNORE'
 NAME=grml64-medium

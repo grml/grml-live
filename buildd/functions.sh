@@ -20,13 +20,14 @@ which mutt >/dev/null 2>&1 || die "mutt binary not found. Exiting."
 [ -n "$SUITE" ]    || die "\$SUITE is not set. Exiting."
 [ -n "$CLASSES" ]  || die "\$CLASSES is not set. Exiting."
 [ -n "$NAME" ]     || die "\$NAME is not set. Exiting."
-[ -n "$ISO_NAME" ] || die "\$ISO_NAME is not set. Exiting."
+[ -n "$PRODUCT_NAME" ] || die "\$PRODUCT_NAME is not set. Exiting."
 
 # some defaults:
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11
 DATE=$(date +'%Y%m%d_%H%M%S')
 TMP_DIR="$(mktemp -d)"
 [ -n "$TMP_DIR" ]      || die "Could not create \$TMP_DIR. Exiting."
+ISO_NAME="${PRODUCT_NAME}.iso"
 
 # make sure we have same safe defaults:
 [ -n "$OUTPUT_DIR" ]    || OUTPUT_DIR="${STORAGE}/grml-live_${DATE}.$$"

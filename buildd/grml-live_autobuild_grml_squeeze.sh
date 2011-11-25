@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # settings for grml_live_run:
-DATE=$(date +%Y%m%d)
-ISO_NAME=grml_squeeze_$DATE.iso
+SHORTDATE=$(date +%Y%m%d)
+PRODUCT_NAME=grml_squeeze_$SHORTDATE
 SUITE=squeeze
 CLASSES='GRMLBASE,GRML_FULL,LATEX_CLEANUP,RELEASE,I386,IGNORE'
 NAME=grml
