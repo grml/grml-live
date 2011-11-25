@@ -106,7 +106,7 @@ nuke(){
 
 # set all files in the given directories to a length of zero
 zero(){
-  for i in $(find "$@" -type f -size +0 -not -name \*.ini 2>/dev/null); do
+  for i in $(find "$@" -type f -size +0 -not -name \*.ini -not -path '*/fai/*' 2>/dev/null); do
     :> "$i"
   done
 }

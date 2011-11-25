@@ -622,11 +622,15 @@ else
          eend $?
       fi
 
+      # move fai logs into grml_logs directory
+      mkdir -p "$OUTPUT"/grml_logs/fai/
+      cp -r "$CHROOT_OUTPUT"/var/log/fai/"$HOSTNAME"/last/* "$OUTPUT"/grml_logs/fai/
+      chown root:adm "$OUTPUT"/grml_logs/fai/*
+      chmod 664 "$OUTPUT"/grml_logs/fai/*
+      rm -rf "$CHROOT_OUTPUT"/var/log/fai
+
       # Remove all FAI logs from chroot if class RELEASE is used:
-      if [ -f "$CHROOT_OUTPUT"/etc/grml_fai_release ] ; then
-         rm -rf "$CHROOT_OUTPUT"/var/log/fai/*
-         rm -f "$CHROOT_OUTPUT"/var/log/install_packages.list
-      fi
+      rm -f "$CHROOT_OUTPUT"/var/log/install_packages.list
 
       umount_all
 
