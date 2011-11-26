@@ -1,3 +1,32 @@
+grml-autoconfig (0.9.34) unstable; urgency=low
+
+  [ Christian Hofstaedtler ]
+  * [8c86cea] Add debian/control headers Origin, Bugs
+  * [b663511] Move bootlocal.*, haltlocal.* to grml-live
+  * [1de4d8f] Fix typo in docs
+  * [1b589c0] Remove unmaintained accessibility support
+  * [4e88b7a] Remove spurious laptop-detect dependency
+  * [65fdd00] Remove obsolete acpid/dbus dependency check
+  * [2144a3a] Update ACPI progress strings
+  * [84fb68b] Remove forceagp support
+  * [c0391de] Remove APM support
+  * [a5945ac] Remove grml2hd support
+  * [74180ee] ACPI: re-add check for kernel support
+  * [282d568] Remove 915resolution support
+  * [b9c9186] Load md_mod if /proc/mdstat isn't there
+  * [d694c20] Remove bootsplash
+  * [62d727b] Fixup acpid already running check
+  * [a18ac56] Update sed expression for boot option 'fast'
+  * [d393d31] Remove long gone X11R6 from PATH
+  * [1774d86] Remove further X11R6 remnants
+  * [4acf9c9] Don't load cpufreq governor if cpufreq is unsupported
+  * [fadf5ac] Update CPU info strings
+
+  [ Michael Prokop ]
+  * [3b169f7] Replace references to zsh-login with run-welcome
+
+ -- Michael Prokop <mika@grml.org>  Sat, 26 Nov 2011 17:12:13 +0100
+
 grml-autoconfig (0.9.33) unstable; urgency=low
 
   * [25a9d31] config_acpi_apm(): redirect stderr of ps to debug log.
