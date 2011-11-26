@@ -39,6 +39,7 @@ $PN - build process script for generating a (grml based) Linux Live-ISO
 Usage: $PN [options, see as follows]
 
    -a <architecture>       architecture; available values: i386 and amd64
+   -A                      ensure clean build and pack artifacts
    -b                      build the ISO without updating the chroot via FAI
    -B                      build the ISO without touching the chroot (skips cleanup)
    -c <classe[s]>          classes to be used for building the ISO via FAI
@@ -159,6 +160,13 @@ bailout() {
   umount_all
   [ -n "$1" ] && EXIT="$1" || EXIT="1"
   [ -n "$2" ] && eerror "$2">&2
+  if [ -n "$PACK_ARTIFACTS" ]; then
+    log "Cleaning up"
+    einfo "Cleaning up"
+    [ -n "${CHROOT_OUTPUT}" -a -d "${CHROOT_OUTPUT}" ] && rm -r "${CHROOT_OUTPUT}"
+    [ -n "${BUILD_OUTPUT}"  -a -d "${BUILD_OUTPUT}"  ] && rm -r "${BUILD_OUTPUT}"
+    eend 0
+  fi
   log "------------------------------------------------------------------------------"
   exit "$EXIT"
 }
@@ -266,9 +274,10 @@ fi
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:d:D:g:i:I:o:r:s:t:v:bBFnNquVz" opt; do
+while getopts "a:C:c:d:D:g:i:I:o:r:s:t:v:AbBFnNquVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
+    A) PACK_ARTIFACTS=1 ;;
     b) BUILD_ONLY=1 ;;
     B) BUILD_DIRTY=1 ;;
     c) CLASSES="$OPTARG" ;;
@@ -322,7 +331,9 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 [ -n "$OUTPUT" ]           || OUTPUT='/grml/grml-live'
 [ -n "$BUILD_OUTPUT" ]     || BUILD_OUTPUT="$OUTPUT/grml_cd"
 [ -n "$CHROOT_OUTPUT" ]    || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
+[ -n "$CHROOT_ARCHIVE" ]   || CHROOT_ARCHIVE="$OUTPUT/$(basename $CHROOT_OUTPUT).tgz"
 [ -n "$ISO_OUTPUT" ]       || ISO_OUTPUT="$OUTPUT/grml_isos"
+[ -n "$LOG_OUTPUT" ]       || LOG_OUTPUT="$OUTPUT/grml_logs"
 # }}}
 
 # some misc checks before executing FAI {{{
@@ -381,6 +392,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$SQUASHFS_ZLIB" ]       && echo "  Using ZLIB (instead of LZMA/XZ) compression."
    [ -n "$SQUASHFS_OPTIONS" ]    && echo "  Using SQUASHFS_OPTIONS ${SQUASHFS_OPTIONS}"
    [ -n "$VERBOSE" ]             && echo "  Using VERBOSE mode."
+   [ -n "$PACK_ARTIFACTS" ]      && echo "  Will prepare packed artifacts and ensure clean build."
    [ -n "$UPDATE" ]              && echo "  Executing UPDATE instead of fresh installation."
    if [ -n "$BOOTSTRAP_ONLY" ] ; then
      echo "  Bootstrapping only and not building (files for) ISO."
@@ -400,8 +412,19 @@ if [ -z "$FORCE" ] ; then
 fi
 # }}}
 
+# clean up before start {{{
+if [ -n "${PACK_ARTIFACTS}" ]; then
+  echo "Wiping old artifacts"
+  [ -n "${CHROOT_OUTPUT}"  -a -d "${CHROOT_OUTPUT}"  ] && rm -r "${CHROOT_OUTPUT}"
+  [ -n "${CHROOT_ARCHIVE}" -a -d "${CHROOT_ARCHIVE}" ] && rm -r "${CHROOT_ARCHIVE}"
+  [ -n "${BUILD_OUTPUT}"   -a -d "${BUILD_OUTPUT}"   ] && rm -r "${BUILD_OUTPUT}"
+  [ -n "${ISO_OUTPUT}"     -a -d "${ISO_OUTPUT}"     ] && rm -r "${ISO_OUTPUT}"
+  [ -n "${LOG_OUTPUT}"     -a -d "${LOG_OUTPUT}"     ] && rm -r "${LOG_OUTPUT}"
+fi
+# }}}
+
 # create log file {{{
-[ -n "$LOGFILE" ] || LOGFILE=${OUTPUT}/grml_logs/grml-live.log
+[ -n "$LOGFILE" ] || LOGFILE=${LOG_OUTPUT}/grml-live.log
 mkdir -p $(dirname "${LOGFILE}")
 touch $LOGFILE
 chown root:adm $LOGFILE
@@ -629,10 +652,10 @@ else
       fi
 
       # move fai logs into grml_logs directory
-      mkdir -p "$OUTPUT"/grml_logs/fai/
-      cp -r "$CHROOT_OUTPUT"/var/log/fai/"$HOSTNAME"/last/* "$OUTPUT"/grml_logs/fai/
-      chown root:adm "$OUTPUT"/grml_logs/fai/*
-      chmod 664 "$OUTPUT"/grml_logs/fai/*
+      mkdir -p "$LOG_OUTPUT"/fai/
+      cp -r "$CHROOT_OUTPUT"/var/log/fai/"$HOSTNAME"/last/* "$LOG_OUTPUT"/fai/
+      chown root:adm "$LOG_OUTPUT"/fai/*
+      chmod 664 "$LOG_OUTPUT"/fai/*
       rm -rf "$CHROOT_OUTPUT"/var/log/fai
 
       # Remove all FAI logs from chroot if class RELEASE is used:
@@ -1215,6 +1238,16 @@ else
       eerror "Error: there was a critical error executing stage 'iso build'" ; eend 1
       bailout $RC
    fi
+fi
+# }}}
+
+# pack artifacts {{{
+if [ -n "$PACK_ARTIFACTS" ]; then
+  log "Packing artifcats"
+  einfo "Packing artifacts"
+  [ -f "${CHROOT_ARCHIVE}" ] && rm -r "${CHROOT_ARCHIVE}"
+  tar -c -a -f ${CHROOT_ARCHIVE} --preserve-permissions -C "$(dirname ${CHROOT_OUTPUT})" "$(basename ${CHROOT_OUTPUT})"
+  eend 0
 fi
 # }}}
 
