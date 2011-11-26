@@ -642,7 +642,7 @@ else
 
       # notice: 'fai dirinstall' does not seem to exit appropriate, so:
       ERROR=''
-      CHECKLOG=/var/log/fai/$HOSTNAME/last
+      CHECKLOG="$LOG_OUTPUT"/fai/
       if [ -r "$CHECKLOG/software.log" ] ; then
          # 1 errors during executing of commands
          grep 'dpkg: error processing' $CHECKLOG/software.log >> $LOGFILE && ERROR=1
@@ -666,10 +666,6 @@ else
          log "Finished execution of stage 'fai dirinstall' [$(date)]"
          einfo "Finished execution of stage 'fai dirinstall'"
       fi
-
-      einfo "Find FAI build logs at $(readlink -f /var/log/fai/$HOSTNAME/last)"
-      log   "Find FAI build logs at $(readlink -f /var/log/fai/$HOSTNAME/last)"
-      eend 0
    fi
 fi # BUILD_DIRTY?
 # }}}
