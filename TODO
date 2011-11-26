@@ -15,9 +15,6 @@ Patches, ideas and feedback welcome.
 
 * add support for ppc?
 
-* check out how FAI_DEBMIRROR of /etc/grml/fai/fai.conf could be merged with our
-  MIRROR_DIRECTORY and MIRROR_SOURCES feature of /etc/grml/grml-live.conf
-
 * support multiple kernel versions installed in one single live-system
 
 * Provide different interfaces for easy and common use of grml-live:

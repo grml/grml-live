@@ -922,27 +922,18 @@ own. Usage example:
 Can I use my own (local) Debian mirror?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Sure. Just adjust the variables GRML_LIVE_SOURCES and FAI_DEBOOTSTRAP (if not
-already using NFSROOT's base.tgz) inside /etc/grml/grml-live.conf according to
-your needs. Please don't forget that you should use the grml servers as well
-(see default configuration) so all the grml packages can be downloaded as well.
+Yes. Set up an according sources.list configuration as class file in
+${GRML_FAI_CONFIG}/config/files/etc/apt/sources.list.d/ and adjust the variable
+FAI_DEBOOTSTRAP (if not already using NFSROOT's base.tgz) inside
+/etc/grml/grml-live.conf[.local]. If you're setting up your own class file don't
+forget to include the class name in the class list (grml-live -c ...).
 
-If you want to use a local (for example NFS mount) mirror additionally, just
-adjust MIRROR_DIRECTORY and MIRROR_SOURCES inside /etc/grml/grml-live.conf as
-well.
-
-Unless you specify GRML_LIVE_SOURCES and/or FAI_DEBOOTSTRAP the default from
-${GRML_FAI_CONFIG}/apt/sources.list and ${GRML_FAI_CONFIG}/make-fai-nfsroot.conf will be
-taken. If you customise the variables in /etc/grml/grml-live.conf then the two
-files will be adjusted during runtime automatically.
-
-If MIRROR_DIRECTORY and MIRROR_SOURCES are specified the local mirror will be
-taken as first entry in the generated sources.list so it's preferred over
-non-local mirrors. Using a fallback mirror (via providing several mirrors in
-GRML_LIVE_SOURCES as used by default) is a recommended setting.
+If you want to use a local (for example NFS mount) mirror additionally then
+adjust MIRROR_DIRECTORY in /etc/grml/grml-live.conf[.local] as well.
 
 If you want to use a HTTP Proxy (like apt-cacher-ng), set APT_PROXY. Example:
-APT_PROXY="http://localhost:3142/"
+
+  APT_PROXY="http://localhost:3142/"
 
 [[add-additional-debian-packages]]
 How do I add additional Debian package(s) to my CD/ISO?
