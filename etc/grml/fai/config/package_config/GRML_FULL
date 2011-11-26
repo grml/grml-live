@@ -148,6 +148,7 @@ iputils-arping
 iputils-ping
 iputils-tracepath
 iw
+libnss-mdns
 mtr-tiny
 netbase
 netcat-openbsd
