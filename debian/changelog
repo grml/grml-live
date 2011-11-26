@@ -1,3 +1,14 @@
+grml-udev-config (0.0.8) unstable; urgency=low
+
+  [ Christian Hofstaedtler ]
+  * [45e0a36] Add debian/control headers Origin, Bugs
+  * [01b4a8e] Update noudev info texts
+
+  [ Michael Prokop ]
+  * [bfe4009] Bump Standards-Version to 3.9.2
+
+ -- Michael Prokop <mika@grml.org>  Sat, 26 Nov 2011 20:07:57 +0100
+
 grml-udev-config (0.0.7) unstable; urgency=low
 
   [ Ulrich Dangel ]
