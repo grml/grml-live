@@ -631,12 +631,12 @@ else
       # move fai logs into grml_logs directory
       mkdir -p "$LOG_OUTPUT"/fai/
       cp -r "$CHROOT_OUTPUT"/var/log/fai/"$HOSTNAME"/last/* "$LOG_OUTPUT"/fai/
+      rm -rf "$CHROOT_OUTPUT"/var/log/fai
+      # copy fai package list
+      cp "$CHROOT_OUTPUT"/var/log/install_packages.list "$LOG_OUTPUT"/fai/
+      # fixup owners
       chown root:adm "$LOG_OUTPUT"/fai/*
       chmod 664 "$LOG_OUTPUT"/fai/*
-      rm -rf "$CHROOT_OUTPUT"/var/log/fai
-
-      # Remove all FAI logs from chroot if class RELEASE is used:
-      rm -f "$CHROOT_OUTPUT"/var/log/install_packages.list
 
       umount_all
 
