@@ -208,6 +208,11 @@ debootstrap.
 Specify place of the templates used for building the ISO. By default
 (and if not manually specified) this is /usr/share/grml-live/templates/.
 
+  -T **CHROOT_ARCHIVE**::
+
+Unpack chroot tar archive before starting. Most useful in combination with
+-A and -b or -u.
+
   -u::
 
 Update existing chroot instead of rebuilding it from scratch. This option is
