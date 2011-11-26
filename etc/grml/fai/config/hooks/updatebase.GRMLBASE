@@ -27,9 +27,6 @@ fi
 if [ "$FAI_ACTION" = "softupdate" ] ; then
    echo "Action $FAI_ACTION of FAI (hooks/updatebase.GRMLBASE) via grml-live running"
 
-   ## we want to use our own sources.list:
-   skiptask updatebase
-
    ## based on FAI's lib/updatebase:
    # some packages must access /proc even in chroot environment
    if ! [ -d $FAI_ROOT/proc/1 ] ; then
@@ -51,17 +48,12 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    if [ -n "$BUILD_ONLY" ] ; then
       skiptask instsoft || true
    fi
-
-   exit # make sure we don't continue behind the following "fi"
 fi
 
 if [ -n "$BOOTSTRAP_ONLY" ] ; then
   echo "Skipping task configure in hooks/updatebase.GRMLBASE as BOOTSTRAP_ONLY environment is set."
   skiptask configure
 fi
-
-# no softupdate but updating chroot e.g. based on ${GRML_FAI_CONFIG}/basefiles/*
-echo "Action $FAI_ACTION of FAI (hooks/updatebase.GRMLBASE) via grml-live running"
 
 # work around #632624: udev fails to install on systems with old kernel versions
 if ! [ -e ${target}/etc/udev/kernel-upgrade ] ; then
