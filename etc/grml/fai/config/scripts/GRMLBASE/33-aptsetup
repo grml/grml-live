@@ -6,37 +6,12 @@
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
-set -u
 set -e
 
-fcopy -v /etc/apt/sources.list
-fcopy -v /etc/apt/sources.list.d/grml-stable.list
-
-case "${SUITE:-}" in
-  etch)         suite_class=DEBIAN_ETCH ;;
-  lenny)        suite_class=DEBIAN_LENNY ;;
-  squeeze)      suite_class=DEBIAN_SQUEEZE ;;
-  stable)       suite_class=DEBIAN_STABLE ;;
-  testing)      suite_class=DEBIAN_TESTING ;;
-  unstable|sid) suite_class=DEBIAN_SID ;;
-  wheezy)       suite_class=DEBIAN_WHEEZY ;;
-  *)            suite_class=DEBIAN_SID ;; # default to sid otherwise
-esac
-
-if ! [ -r $FAI/files/etc/apt/sources.list.d/debian.list/$suite_class ] ; then
-  echo "Error: could not find $FAI/files/etc/apt/sources.list.d/debian.list/$suite_class" >&2
-  echo "Please provide an according sources.list template." >&2
-  exit 1
-fi
-
-# install according sources.list, depending on deployed Debian suite
-fcopy -v -c $suite_class /etc/apt/sources.list.d/debian.list
-
-# if we have a devel-version or a daily snapshot enable grml-testing repos:
-if [ -n "$GRML_NAME" -o -n "$RELEASENAME" ] ; then
-  if echo "$GRML_NAME" "$RELEASENAME" | grep -e devel -e autobuild >/dev/null ; then
-    fcopy -v /etc/apt/sources.list.d/grml-testing.list
-  fi
+if ifclass SNAPSHOT ; then
+  set -u
+  debianlist="${target}/etc/apt/sources.list.d/debian.list"
+  perl -pi -e 's#(deb.* )(.*://.*?)( .*)$#$1http://snapshot.debian.org/archive/debian/'$(date +%Y%m%d)'/$3#' ${debianlist}
 fi
 
 ## END OF FILE #################################################################
