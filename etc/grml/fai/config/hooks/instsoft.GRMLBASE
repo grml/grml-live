@@ -60,15 +60,6 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
 //DPkg::Tools::Options::/usr/sbin/apt-listbugs::Version "2";
 EOF
 
-   # run it on our own, as updatebase is used at the wrong stage for our needs,
-   # see ${GRML_FAI_CONFIG}/hooks/updatebase.GRMLBASE
-   # the apt-get update might return an error if there's for example
-   # a hashsum mismatch on Debian mirror sources, we might want to continue
-   # but should warn the user
-   if ! $ROOTCMD apt-get update ; then
-      echo "Warning: there was an error executing apt-get update, continuing anyway."
-   fi
-
    # work around /etc/kernel/postinst.d/zz-update-grub failing
    # inside openvz environment, see #597084
    if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/update-grub' ; then
