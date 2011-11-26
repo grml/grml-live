@@ -60,6 +60,7 @@ Usage: $PN [options, see as follows]
    -s <suite>              Debian suite; values: etch, lenny, squeeze, sid
    -t <template_directory> place of the templates
    -u                      update existing chroot instead of rebuilding it from scratch
+   -U <username>           arrange output to be owned by specified username
    -v <version_number>     specify version number of the release
    -V                      increase verbosity in the build process
    -z                      use ZLIB instead of LZMA/XZ compression
@@ -163,8 +164,19 @@ bailout() {
   if [ -n "$PACK_ARTIFACTS" ]; then
     log "Cleaning up"
     einfo "Cleaning up"
-    [ -n "${CHROOT_OUTPUT}" -a -d "${CHROOT_OUTPUT}" ] && rm -r "${CHROOT_OUTPUT}"
     [ -n "${BUILD_OUTPUT}"  -a -d "${BUILD_OUTPUT}"  ] && rm -r "${BUILD_OUTPUT}"
+    [ -n "${CHROOT_OUTPUT}" -a -d "${CHROOT_OUTPUT}" ] && rm -r "${CHROOT_OUTPUT}"
+    eend 0
+  fi
+  if [ -n "$CHOWN_USER" ]; then
+    log "Setting ownership"
+    einfo "Setting ownership"
+    [ -n "${OUTPUT}"         -a -d "${OUTPUT}"         ] && chown -R "${CHOWN_USER}:" "${OUTPUT}"
+    [ -n "${BUILD_OUTPUT}"   -a -d "${BUILD_OUTPUT}"   ] && chown -R "${CHOWN_USER}:" "${BUILD_OUTPUT}"
+    [ -n "${CHROOT_OUTPUT}"  -a -d "${CHROOT_OUTPUT}"  ] && chown -R "${CHOWN_USER}:" "${CHROOT_OUTPUT}"
+    [ -n "${CHROOT_ARCHIVE}" -a -d "${CHROOT_ARCHIVE}" ] && chown -R "${CHOWN_USER}:" "${CHROOT_ARCHIVE}"
+    [ -n "${ISO_OUTPUT}"     -a -d "${ISO_OUTPUT}"     ] && chown -R "${CHOWN_USER}:" "${ISO_OUTPUT}"
+    [ -n "${LOG_OUTPUT}"     -a -d "${LOG_OUTPUT}"     ] && chown -R "${CHOWN_USER}:" "${LOG_OUTPUT}"
     eend 0
   fi
   log "------------------------------------------------------------------------------"
@@ -274,7 +286,7 @@ fi
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:d:D:g:i:I:o:r:s:t:v:AbBFnNquVz" opt; do
+while getopts "a:C:c:d:D:g:i:I:o:r:s:t:U:v:AbBFnNquVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     A) PACK_ARTIFACTS=1 ;;
@@ -297,6 +309,7 @@ while getopts "a:C:c:d:D:g:i:I:o:r:s:t:v:AbBFnNquVz" opt; do
     v) VERSION="$OPTARG" ;;
     F) FORCE=1 ;;
     u) UPDATE=1 ;;
+    U) CHOWN_USER="$OPTARG" ;;
     V) VERBOSE="-v" ;;
     z) SQUASHFS_ZLIB=1 ;;
     ?) echo "invalid option -$OPTARG" >&2; bailout 1 ;;
@@ -386,6 +399,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$CHROOT_INSTALL" ]      && echo "  Install files from directory to chroot:  $CHROOT_INSTALL"
    [ -n "$BOOTID" ]              && echo "  Boot identifier:   $BOOTID"
    [ -n "$NO_BOOTID" ]           && echo "  Skipping bootid feature."
+   [ -n "$CHOWN_USER" ]          && echo "  Output owner:      $CHOWN_USER"
    [ -n "$DEFAULT_BOOTOPTIONS" ] && echo "  Adding default bootoptions: \"$DEFAULT_BOOTOPTIONS\""
    [ -n "$FAI_ARGS" ]            && echo "  Additional arguments for FAI: $FAI_ARGS"
    [ -n "$LOGFILE" ]             && echo "  Logging to file:   $LOGFILE"
