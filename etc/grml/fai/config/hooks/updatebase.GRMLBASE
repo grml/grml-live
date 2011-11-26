@@ -70,7 +70,7 @@ if ! [ -e ${target}/etc/udev/kernel-upgrade ] ; then
 fi
 
 # install all apt related files
-fcopy -v -r /etc/apt
+fcopy -B -v -r /etc/apt
 
 # install Grml gpg key:
 $ROOTCMD apt-key add /etc/apt/grml.key
