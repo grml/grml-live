@@ -1,3 +1,17 @@
+grml-desktop (0.3.8) unstable; urgency=low
+
+  [ Christian Hofstaedtler ]
+  * [3b2016e] Add debian/control headers Origin, Bugs
+  * [e071224] Remove xsay from fluxbox config
+  * [84451f1] irssi shortcut must check for irssi binary, not x-t-e
+  * [7a10a63] Remove unavailable programs from fluxbox menu
+  * [e9a66bf] Downgrade idesk to Suggests
+
+  [ Michael Prokop ]
+  * [6e59819] Bump Standards-Version to 3.9.2
+
+ -- Michael Prokop <mika@grml.org>  Sat, 26 Nov 2011 19:02:34 +0100
+
 grml-desktop (0.3.7) unstable; urgency=low
 
   [ Ulrich Dangel ]
