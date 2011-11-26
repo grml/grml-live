@@ -99,6 +99,7 @@ grml scripts=path-name              Execute script (defaulting to grml.sh) insid
                                     the directory are executed.
 grml config=path-name               Unpack archive that path-name points to
 grml noautoconfig                   Disable searching for device labeled GRMLCFG
+grml nobeep                         Disable welcome chime, sounded before grml-quickconfig starts.
 
 Notice: Take a look at http://grml.org/config/ and 'man 1 grml-autoconfig'
 for more information regarding the configuration framework of Grml.
