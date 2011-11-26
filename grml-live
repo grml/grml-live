@@ -196,7 +196,7 @@ trap umount_all EXIT
 
 # log output:
 # usage: log "string to log"
-log() { echo "$*" >> $LOGFILE ; }
+log() { [ -n "$LOGFILE" ] && echo "$*" >> $LOGFILE ; }
 
 # cut string at character number int = $1
 # usage: cut_string 5 "1234567890" will output "12345"
