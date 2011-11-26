@@ -1,0 +1,74 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-efi
+# Purpose:       create grub image for use in ISO for EFI boot
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -e
+
+if ! ifclass AMD64 ; then
+  echo "Not in AMD64 class but EFI feature is restricted to amd64 only, skipping."
+  exit 0
+fi
+
+set -u
+
+if ! [ -r "${target}"/usr/lib/grub/x86_64-efi/moddep.lst ] ; then
+  echo "/usr/lib/grub/x86_64-efi/moddep.lst could not be found, skipping."
+  echo "NOTE: grub-efi-amd64-bin not installed?"
+  exit 0
+fi
+
+GRUB_EFI_IMAGE="${target}/tmp/grub_efi_image"
+TMP_CONFIG="${target}/tmp/grub_config_efi"
+EFI_IMAGE="${target}/tmp/efi_image"
+
+rm -f "$GRUB_EFI_IMAGE" "$TMP_CONFIG" "$EFI_IMAGE"
+
+cat > "$TMP_CONFIG" <<EOF
+search --set -f /conf/bootid.txt root
+if [ -e /boot/grub/grub.cfg ]; then
+ set prefix=\$root/boot/grub
+ load_video
+ configfile /boot/grub/grub.cfg
+else
+ echo "E: Could not find root device!"
+fi
+EOF
+
+GRUB_EFI_IMAGE="${GRUB_EFI_IMAGE##${target}}"
+TMP_CONFIG="${TMP_CONFIG##${target}}"
+EFI_IMAGE="${EFI_IMAGE##${target}}"
+
+$ROOTCMD grub-mkimage -O x86_64-efi -o "$GRUB_EFI_IMAGE" --prefix=/boot/grub/ --config="$TMP_CONFIG" \
+  bitmap boot btrfs cat chain cmp configfile cpio echo efi_gop      \
+  efi_uga elf ext2 fat gfxmenu gfxterm gzio help iso9660 jpeg linux \
+  loopback lvm minicmd multiboot normal part_gpt part_msdos png     \
+  probe raid reiserfs search search_fs_file search_fs_uuid          \
+  search_label terminal test video videoinfo xfs
+
+if ! [ -r "${target}/${GRUB_EFI_IMAGE}" ] ; then
+  echo "Can not access grub efi image." >&2
+  exit 1
+fi
+
+SIZE=$(du -sk "${target}/${GRUB_EFI_IMAGE}" | awk -F" " '{print $1'})
+SIZE=$(((($SIZE / 32 )+2)*32))
+
+dd if=/dev/zero of="${target}/${EFI_IMAGE}" bs=1k count="$SIZE" 2>/dev/null
+$ROOTCMD mkfs.vfat -n GRML "$EFI_IMAGE" >/dev/null
+$ROOTCMD mmd -i "$EFI_IMAGE" ::EFI
+$ROOTCMD mmd -i "$EFI_IMAGE" ::EFI/BOOT
+$ROOTCMD mcopy -i "$EFI_IMAGE" "$GRUB_EFI_IMAGE" ::EFI/BOOT/bootx64.efi >/dev/null
+
+rm -f "${target}/${TMP_CONFIG}"
+mv "${target}/${EFI_IMAGE}" "${target}/var/lib/grml_live_efi.img"
+mv "${target}/${GRUB_EFI_IMAGE}" "${target}/var/lib/grml_live_bootx64.efi"
+
+echo "Generated EFI image ${target}/var/lib/grml_live_efi.img"
+echo "Generated bootx64 image ${target}/var/lib/grml_live_bootx64.efi"
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
