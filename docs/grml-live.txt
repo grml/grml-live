@@ -12,7 +12,8 @@ Synopsis
 
 grml-live [-a <architecture>] [-c <classe[s]>] [-C <configfile>] [-g
 <grml_name>] [-i <iso_name> ] [-o <output_directory>] [-r <release_name>] [-s
-<suite>] [-t <template_directory>] [-v <version_number>] [-bBFnNquVz]
+<suite>] [-t <template_directory>] [-v <version_number>] [-U <username>] [
+-AbBFnNquVz]
 
 CAUTION: Please check out <<current_state,the 'Current state of grml-live with
 squashfs-tools and kernel' section>> for details about current state of involved
@@ -53,6 +54,11 @@ for details).
 
 Options
 -------
+
+  -A::
+
+Clean up output directories before attempting the build. Packs the chroot
+into a tar archive, and removes chroot and iso build directories before exiting.
 
   -a **ARCHITECTURE**::
 
@@ -205,6 +211,10 @@ Specify place of the templates used for building the ISO. By default
 
 Update existing chroot instead of rebuilding it from scratch. This option is
 based on the softupdate feature of FAI.
+
+  -U **USERNAME**::
+
+Sets ownership of all build output files to specified username before exiting.
 
   -v **VERSION_NUMBER**::
 
