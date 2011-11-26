@@ -86,12 +86,13 @@ really know that you do not want to update the chroot.
   -c **CLASSES**::
 
 Specify the CLASSES to be used for building the ISO via FAI.  By default only
-the classes GRMLBASE, GRML_MEDIUM and I386 are assumed, resulting in a small base
-system (being about ~180MB total ISO size). If using a non-I386 system (like
-AMD64) you should specify the appropriate architecture as well. Additionally you
-can specify a class providing a grml-kernel (see
-<<classes,the 'CLASSES' section in this document>> for details about available classes).
-So instead of GRML_MEDIUM you can also use GRML_SMALL and GRML_FULL.
+the classes GRMLBASE, GRML_MEDIUM and I386/AMD64 (depending on system
+architecture) are assumed, resulting in a small base system (being about ~180MB
+total ISO size). If using a non-I386 system (like AMD64) you should specify the
+appropriate architecture as well. Additionally you can specify a class providing
+a grml-kernel (see <<classes,the 'CLASSES' section in this document>> for
+details about available classes).  So instead of GRML_MEDIUM you can also use
+GRML_SMALL and GRML_FULL.
 
 [IMPORTANT]
 All class names should be written in uppercase letters. Do not use a dash, use
@@ -240,18 +241,18 @@ as build and output directory just run:
 To get a small Debian-unstable and grml-small based Live-CD using
 /home/mika/grml-live as build and output directory just use:
 
-  # grml-live -s sid -c GRMLBASE,GRML_SMALL,I386 -o /home/mika/grml-live
+  # grml-live -s sid -c GRMLBASE,GRML_SMALL,AMD64 -o /home/mika/grml-live
 
-To get a medium sized, Debian-unstable and grml-based Live-CD for i386
+To get a medium sized, Debian-unstable and grml-based Live-CD for amd64
 architecture using /grml/grml-live as build and output directory just run:
 
-  # grml-live -s sid -a i386 -c GRMLBASE,GRML_MEDIUM,I386
+  # grml-live -s sid -a amd64 -c GRMLBASE,GRML_MEDIUM,AMD64
 
 To get a small, Debian-unstable and grml-based Live-CD using /tmp as build and
 output directory and use grml_0.0-3.iso as ISO name (placed inside
 /tmp/grml_isos) just invoke:
 
-  # grml-live -o /tmp -c GRMLBASE,GRML_SMALL,I386 -s sid -i grml_0.0-3.iso
+  # grml-live -o /tmp -c GRMLBASE,GRML_SMALL,AMD64 -s sid -i grml_0.0-3.iso
 
 [NOTE]
 
@@ -306,9 +307,9 @@ files/directories.
 If you want to use your own configuration, extend an existing configuration
 and/or add additional packages to your ISO just invent a new class (or extend an
 existing one). For example if you want to use your own class named "FOOBAR" just
-set CLASSES="GRMLBASE,GRML_SMALL,I386,FOOBAR" inside /etc/grml/grml-live.local
+set CLASSES="GRMLBASE,GRML_SMALL,AMD64,FOOBAR" inside /etc/grml/grml-live.local
 or invoke grml-live using the classes option: "grml-live -c
-GRMLBASE,GRML_SMALL,I386,FOOBAR ...".
+GRMLBASE,GRML_SMALL,AMD64,FOOBAR ...".
 
 More details regarding the class concept can be found in the documentation of
 FAI itself (being available at /usr/share/doc/fai-doc/).
@@ -448,10 +449,10 @@ installation process.
 
 Directory with lists of software packages to be installed or removed.  The
 different classes describe what should find its way to your ISO.  When running
-"grml-live -c GRMLBASE,GRML_SMALL,I386 ..." only the configuration of GRMLBASE,
-GRML_SMALL and and I386 will be taken. If you use 'grml-live -c
-GRMLBASE,GRML_SMALL,I386,FOOBAR ...' then the files of GRMLBASE, GRML_SMALL,
-I386 **plus** the files from FOOBAR will be taken. So just create a new class to
+"grml-live -c GRMLBASE,GRML_SMALL,AMD64 ..." only the configuration of GRMLBASE,
+GRML_SMALL and and AMD64 will be taken. If you use 'grml-live -c
+GRMLBASE,GRML_SMALL,AMD64,FOOBAR ...' then the files of GRMLBASE, GRML_SMALL,
+AMD64 **plus** the files from FOOBAR will be taken. So just create a new class to
 adjust the package selection according to your needs.  Please notice that the
 directory GRMLBASE contains a package list defining a minimum but still
 reasonable package configuration.
@@ -746,7 +747,7 @@ plain, original Debian installation is supported as well. So there we go.
 
 What we have: plain, original Debian Lenny (5.0).
 
-What we want: build a grml-medium ISO based on Debian/squeeze for the i386
+What we want: build a grml-medium ISO based on Debian/squeeze for the amd64
 architecture using grml-live.
 
 [IMPORTANT]
@@ -808,7 +809,7 @@ Instructions
   ## OUTPUT="/srv/grml-live"
   FAI_DEBOOTSTRAP="squeeze http://cdn.debian.net/debian/"
   ARCH="i386"
-  CLASSES="GRMLBASE,GRML_MEDIUM,I386"
+  CLASSES="GRMLBASE,GRML_MEDIUM,AMD64"
   # PRESERVE_LOGFILE='1'
   # ZERO_FAI_LOGFILE='1'
   GRML_LIVE_SOURCES="
@@ -951,7 +952,7 @@ Just create a new class (using the package_config directory):
 
 and specify it when invoking grml-live then:
 
-  # grml-live -c GRMLBASE,GRML_SMALL,I386,MIKA
+  # grml-live -c GRMLBASE,GRML_SMALL,AMD64,MIKA
 
 [[reset-grml-live-configuration]]
 I fscked up my grml-live configuration. How do I reset it to the defaults?
