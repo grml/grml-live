@@ -6,6 +6,10 @@
   deb     http://security.debian.org/ squeeze/updates main contrib
   deb-src http://security.debian.org/ squeeze/updates main contrib
 
+# backports:
+  deb     http://backports.debian.org/debian-backports squeeze-backports main
+  deb-src http://backports.debian.org/debian-backports squeeze-backports main
+
 # official debian repository:
 #  deb     http://ftp.debian.org/debian/ squeeze main contrib non-free
 #  deb-src http://ftp.debian.org/debian/ squeeze main contrib non-free

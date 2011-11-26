@@ -1,0 +1,5 @@
+PACKAGES aptitude
+
+# needed for linux-image-3.1.0-1-grml-amd64
+linux-base/squeeze-backports
+initramfs-tools/squeeze-backports
