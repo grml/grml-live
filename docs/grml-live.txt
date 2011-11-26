@@ -86,12 +86,12 @@ really know that you do not want to update the chroot.
   -c **CLASSES**::
 
 Specify the CLASSES to be used for building the ISO via FAI.  By default only
-the classes GRMLBASE, GRML_MEDIUM and I386/AMD64 (depending on system
+the classes GRMLBASE, GRML_FULL and I386/AMD64 (depending on system
 architecture) are assumed, resulting in a small base system (being about ~180MB
 total ISO size). If using a non-I386 system (like AMD64) you should specify the
 appropriate architecture as well. Additionally you can specify a class providing
 a grml-kernel (see <<classes,the 'CLASSES' section in this document>> for
-details about available classes).  So instead of GRML_MEDIUM you can also use
+details about available classes).  So instead of GRML_FULL you can also use
 GRML_SMALL and GRML_FULL.
 
 [IMPORTANT]
@@ -246,7 +246,7 @@ To get a small Debian-unstable and grml-small based Live-CD using
 To get a medium sized, Debian-unstable and grml-based Live-CD for amd64
 architecture using /grml/grml-live as build and output directory just run:
 
-  # grml-live -s sid -a amd64 -c GRMLBASE,GRML_MEDIUM,AMD64
+  # grml-live -s sid -a amd64 -c GRMLBASE,GRML_FULL,AMD64
 
 To get a small, Debian-unstable and grml-based Live-CD using /tmp as build and
 output directory and use grml_0.0-3.iso as ISO name (placed inside
@@ -327,18 +327,21 @@ selected. The following classes are predefined:
 * DEBORPHAN: get rid of all packages listed in output of Deborphan
 
 * GRMLBASE: the main class responsible for getting a minimal subset of what's
-defining a grml system. Important parts of the buildprocess are specified in
+defining a Grml system. Important parts of the buildprocess are specified in
 this class as well, so unless you have a really good reason you should always
 use this class.
 
-* GRML_FULL: full featured grml, also known as the "normal", full grml.
+* GRML_FULL: full featured grml, also known as the "normal", full grml as
+introduced in november 2011 (~350MB ISO size).
 
-* GRML_MEDIUM: medium sized grml version, known as grml-medium
+* GRML_MEDIUM: medium sized grml version, used to be known as grml-medium
+until november 2011 (~220MB ISO size).
 
-* GRML_POWERPC: grml for PowerPC architecture, not supported yet (still work in
-progress)
+* GRML_SMALL: minimum sized grml version, known as grml-small (~110MB ISO
+size).
 
-* GRML_SMALL: minimum sized grml version, known as grml-small
+* GRML_XL: large size Grml version, used to be known as "full grml" until
+november 2011 (~700MB ISO size).
 
 * LATEX: LaTeX(-related) packages like auctex, texlive,...
 (which used to be shipped by grml before the LaTeX removal)
@@ -809,7 +812,7 @@ Instructions
   ## OUTPUT="/srv/grml-live"
   FAI_DEBOOTSTRAP="squeeze http://cdn.debian.net/debian/"
   ARCH="i386"
-  CLASSES="GRMLBASE,GRML_MEDIUM,AMD64"
+  CLASSES="GRMLBASE,GRML_FULL,AMD64"
   # PRESERVE_LOGFILE='1'
   # ZERO_FAI_LOGFILE='1'
   GRML_LIVE_SOURCES="

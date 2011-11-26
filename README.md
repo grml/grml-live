@@ -8,7 +8,7 @@ Automatic Installation](http://fai-project.org/)).
 
 Building a Debian based 64bit live system is as simple as running:
 
-    # grml-live -s sid -a amd64 -c GRMLBASE,GRML_MEDIUM,AMD64
+    # grml-live -s sid -a amd64 -c GRMLBASE,GRML_FULL,AMD64
 
 You can fully customize the build process, including adding
 additional software and your very own configuration files.

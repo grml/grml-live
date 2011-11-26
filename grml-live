@@ -333,7 +333,7 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 # assume sane defaults (if not set already) {{{
 [ -n "$ARCH" ]                    || ARCH="$(dpkg --print-architecture)"
 [ -n "$BOOT_METHOD" ]             || BOOT_METHOD='isolinux'
-[ -n "$CLASSES" ]                 || CLASSES="GRMLBASE,GRML_MEDIUM,$(echo ${ARCH} | tr 'a-z' 'A-Z')"
+[ -n "$CLASSES" ]                 || CLASSES="GRMLBASE,GRML_FULL,$(echo ${ARCH} | tr 'a-z' 'A-Z')"
 [ -n "$DATE" ]                    || DATE="$(date +%Y-%m-%d)"
 [ -n "$DISTRI_INFO" ]             || DISTRI_INFO='Grml - Live Linux for system administrators   '
 [ -n "$DISTRI_NAME" ]             || DISTRI_NAME="grml"
