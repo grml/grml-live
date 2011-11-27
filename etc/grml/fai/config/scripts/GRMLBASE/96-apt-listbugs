@@ -24,28 +24,31 @@ set -u
   [ -n "$HOSTNAME" ] || HOSTNAME=grml
 
   if [ -r /etc/resolv.conf ] ; then
-    if [ -d $target/etc/resolvconf/run ] ; then # resolvconf without /run
-      # sanity check to avoid "input file is output file",
-      # see http://bts.grml.org/grml/issue984
-      if ! [ -L $target/etc/resolvconf/run/resolv.conf ] ; then
-	cat /etc/resolv.conf >> $target/etc/resolvconf/run/resolv.conf
-      else
-	echo "Error: /etc/resolvconf/run/resolv.conf in chroot should not be a symlink." >&2
-	echo "       Looks like something is wrong, please fix manually." >&2
-	exit 1
-      fi
-    elif [ -L $target/etc/resolvconf/run ] ; then # resolvconf with /run
-      # /etc/resolvconf/run symlinks to /run/resolvconf
-      mkdir -p $target/run/resolvconf
-      cat /etc/resolv.conf >> $target/run/resolvconf/resolv.conf
-    else # no resolvconf installed in chroot
-      if ! [ -L $target/etc/resolv.conf ] ; then
-	cat /etc/resolv.conf >> $target/etc/resolv.conf
-      else
-	echo "Error: /etc/resolv.conf in chroot should not be a symlink (resolvconf not installed)." >&2
-	exit 1
-      fi
-    fi
+    case "$(readlink -f ${target}/etc/resolv.conf)" in
+      /run/*) # resolvconf with /run
+        mkdir -p $target/run/resolvconf
+        cat /etc/resolv.conf >> $target/run/resolvconf/resolv.conf
+        ;;
+      /lib/*) # resolvconf without /run
+        # sanity check to avoid "input file is output file",
+        # see http://bts.grml.org/grml/issue984
+        if ! [ -L $target/etc/resolvconf/run/resolv.conf ] ; then
+          cat /etc/resolv.conf >> $target/etc/resolvconf/run/resolv.conf
+        else
+          echo "Error: /etc/resolvconf/run/resolv.conf in chroot should not be a symlink." >&2
+          echo "       Looks like something is wrong, please fix manually." >&2
+          exit 1
+        fi
+        ;;
+      *) # no resolvconf
+        if ! [ -L $target/etc/resolv.conf ] ; then
+          cat /etc/resolv.conf >> $target/etc/resolv.conf
+        else
+          echo "Error: /etc/resolv.conf in chroot should not be a symlink (resolvconf not installed)." >&2
+          exit 1
+        fi
+        ;;
+    esac
   fi
 
   if [ -x $target/usr/sbin/apt-listbugs -a -x $target/usr/bin/apt-show-source ] && \
