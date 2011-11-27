@@ -1,23 +1,20 @@
 #!/bin/bash
-. /etc/grml/grml-buildd.conf
 
+MIRROR_DIRECTORY=$1
 if [ -z "$MIRROR_DIRECTORY" ] ; then
-  echo "Error: \$MIRROR_DIRECTORY is not set. Exiting." >&2
+  echo "Usage: jenkins-link_latest.sh path_to_public_directory flavour1 ... flavourN" >&2
   exit 1
 fi
+shift
 
-if [ -z "$FLAVOURS" ] ; then
-  echo "Error: \$FLAVOURS is not set. Exiting." >&2
-  exit 2
-fi
+FLAVOURS=$*
 
 JOBS=/var/lib/jenkins/jobs
 
-cd $MIRROR_DIRECTORY/new || exit 1
+cd $MIRROR_DIRECTORY || exit 1
 for f in $FLAVOURS; do
   [ -d $JOBS/$f/builds ] || continue
   [ -d ./$f ] && rm -r ./$f
-  for link in ./$f*.iso*; do rm $link; done
   mkdir $f
   for buildpath in $JOBS/$f/builds/*_*; do
     build=$(basename $buildpath)
@@ -27,10 +24,12 @@ for f in $FLAVOURS; do
     done
     [ -d $buildpath/archive/grml_logs ] && ln -s $buildpath/archive/grml_logs $f/$build/logs
   done
-  latest=$(basename $(readlink $JOBS/$f/lastStable))
+  latest=$(basename $(readlink $JOBS/$f/lastSuccessful))
+  mkdir ${f}/latest
   if [ -e $f/$latest/*.iso ]; then
-    ln -s $f/$latest/*.iso ${f}_latest.iso
-    ln -s $f/$latest/*.iso.md5 ${f}_latest.iso.md5
-    ln -s $f/$latest/*.iso.sha1 ${f}_latest.iso.sha1
+    latestname=$(basename ${f}/$latest/*.iso)
+    ln -s ../$latest/${latestname} ${f}/latest/${f}_latest.iso
+    ln -s ../$latest/${latestname}.md5 ${f}/latest/${f}_latest.iso.md5
+    ln -s ../$latest/${latestname}.sha1 ${f}/latest/${f}_latest.iso.sha1
   fi
 done
