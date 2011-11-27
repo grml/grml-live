@@ -32,7 +32,6 @@ debconf-i18n
 debconf-utils
 debianutils
 debootstrap
-dhcp3-client
 dialog
 diffutils
 dmraid
@@ -75,6 +74,7 @@ iptraf
 iptstate
 iputils-ping
 irqbalance
+isc-dhcp-client
 iw
 jed
 jed-common

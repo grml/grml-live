@@ -25,7 +25,6 @@ ddrescue
 debconf
 debconf-i18n
 debianutils
-dhcp3-client
 dialog
 diffutils
 dmraid
@@ -49,6 +48,7 @@ imvirt
 inetutils-inetd
 iproute
 iputils-ping
+isc-dhcp-client
 iw
 jed
 jed-common

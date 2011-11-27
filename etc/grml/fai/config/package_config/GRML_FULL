@@ -133,7 +133,6 @@ avahi-daemon
 bind9-host
 bridge-utils
 cdpr
-dhcp3-client
 dnsmasq
 ethstatus
 ethtool
@@ -148,6 +147,7 @@ iptraf
 iputils-arping
 iputils-ping
 iputils-tracepath
+isc-dhcp-client
 iw
 libnss-mdns
 mtr-tiny

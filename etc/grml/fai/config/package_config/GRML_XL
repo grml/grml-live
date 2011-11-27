@@ -298,7 +298,6 @@ detox
 devio
 devscripts
 devtodo
-dhcp3-client
 dhcp3-server
 dhcpdump
 dhcping
@@ -616,6 +615,7 @@ irqbalance
 irssi
 irssi-plugin-xmpp
 irssi-scripts
+isc-dhcp-client
 iscsitarget
 isdnutils-base
 isdnvboxclient
