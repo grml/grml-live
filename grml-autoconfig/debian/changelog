@@ -1,3 +1,11 @@
+grml-autoconfig (0.9.35) unstable; urgency=low
+
+  * [a28c2ea] Drop grml-autoconfig dependency
+  * [dcf0098] Drop version from udev dependency
+  * [6469c35] Drop rungetty dependency
+
+ -- Christian Hofstaedtler <ch@grml.org>  Sun, 27 Nov 2011 17:23:35 +0100
+
 grml-autoconfig (0.9.34) unstable; urgency=low
 
   [ Christian Hofstaedtler ]
