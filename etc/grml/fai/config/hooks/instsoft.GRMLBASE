@@ -21,7 +21,7 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    echo "Action $FAI_ACTION of FAI (hooks/instsoft.GRMLBASE) via grml-live running"
 
    if [ -r /etc/resolv.conf ] ; then
-     case "$(readlink -f ${target}/etc/resolv.conf)" in
+     case "$(chroot $target readlink -f /etc/resolv.conf)" in
        /run/*) # resolvconf with /run
          mkdir -p $target/run/resolvconf
          cat /etc/resolv.conf >> $target/run/resolvconf/resolv.conf
