@@ -27,6 +27,9 @@ fi
 if [ "$FAI_ACTION" = "softupdate" ] ; then
    echo "Action $FAI_ACTION of FAI (hooks/updatebase.GRMLBASE) via grml-live running"
 
+   # otherwise we're running 'aptitude update' even on with -b option
+   skiptask updatebase
+
    ## based on FAI's lib/updatebase:
    # some packages must access /proc even in chroot environment
    if ! [ -d $FAI_ROOT/proc/1 ] ; then
