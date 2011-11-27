@@ -1,3 +1,9 @@
+grml-autoconfig (0.9.36) unstable; urgency=low
+
+  * [aea0368] Add beep to Depends
+
+ -- Michael Prokop <mika@grml.org>  Sun, 27 Nov 2011 23:15:38 +0100
+
 grml-autoconfig (0.9.35) unstable; urgency=low
 
   * [a28c2ea] Drop grml-autoconfig dependency
