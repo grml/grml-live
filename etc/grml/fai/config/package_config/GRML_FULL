@@ -64,6 +64,7 @@ gdisk
 gptsync
 hdparm
 lvm2
+lsscsi
 mdadm
 mpt-status
 multipath-tools
