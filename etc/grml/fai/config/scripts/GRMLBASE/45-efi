@@ -31,7 +31,6 @@ cat > "$TMP_CONFIG" <<EOF
 search --set -f /conf/bootid.txt root
 if [ -e /boot/grub/grub.cfg ]; then
  set prefix=\$root/boot/grub
- load_video
  configfile /boot/grub/grub.cfg
 else
  echo "E: Could not find root device!"
