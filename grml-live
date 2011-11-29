@@ -1185,16 +1185,52 @@ else
       einfo "Forcing rebuild of ISO because files on ISO have been modified."
    fi
 
-   # support mkisofs as well as genisoimage
-   if which mkisofs >/dev/null 2>&1; then
+   # support xorriso as well mkisofs and genisoimage
+   if which xorriso >/dev/null 2>&1 && \
+      dpkg --compare-versions $(dpkg-query -W -f='${Version}\n' xorriso 2>/dev/null) gt-nl 1.1.6-2 ; then
+      MKISOFS='xorriso -as mkisofs'
+    elif which mkisofs >/dev/null 2>&1; then
       MKISOFS='mkisofs'
    elif which genisoimage >/dev/null 2>&1; then
       MKISOFS='genisoimage'
    else
-      log    "Error: neither mkisofs nor genisoimage available - can not create ISO."
-      eerror "Error: neither mkisofs nor genisoimage available - can not create ISO." ; eend 1
+      log    "Error: neither xorriso nor mkisofs nor genisoimage available - can not create ISO."
+      eerror "Error: neither xorriso nor mkisofs nor genisoimage available - can not create ISO." ; eend 1
       bailout
    fi
+
+   case "$ARCH" in
+     amd64)
+       # using -eltorito-alt-boot is limited to xorriso for now
+       case "$MKISOFS" in
+         xorriso*)
+           einfo "Using xorriso for ISO generation." ;  eend 0
+
+           if [ -r "${CHROOT_OUTPUT}/var/lib/grml_live_efi.img" ] ; then
+             einfo "Found /var/lib/grml_live_efi.img - moving to /boot/efi.img for ISO."
+             log   "Found /var/lib/grml_live_efi.img - moving to /boot/efi.img for ISO."
+             mv "${CHROOT_OUTPUT}/var/lib/grml_live_efi.img" "${BUILD_OUTPUT}/boot/efi.img"
+             eend $?
+           fi
+
+           if [ -r "${CHROOT_OUTPUT}/var/lib/grml_live_bootx64.efi" ] ; then
+             einfo "Found /var/lib/grml_live_bootx64.efi - moving to /efi/boot/bootx64.efi for ISO"
+             log   "Found /var/lib/grml_live_bootx64.efi - moving to /efi/boot/bootx64.efi for ISO"
+             mkdir -p "${BUILD_OUTPUT}/efi/boot/"
+             mv "${CHROOT_OUTPUT}/var/lib/grml_live_bootx64.efi" "${BUILD_OUTPUT}/efi/boot/bootx64.efi"
+             eend $?
+           fi
+
+           if [ -r "${BUILD_OUTPUT}"/boot/efi.img ] ; then
+             einfo "/boot/efi.img found and amd64 architecture present, extending boot arguments."
+             log   "/boot/efi.img found and amd64 architecture present, extending boot arguments."
+             BOOT_ARGS="$BOOT_ARGS -boot-info-table -eltorito-alt-boot -e boot/efi.img -no-emul-boot"
+             eend $?
+           fi
+           ;;
+       esac
+       ;;
+   esac
 
    CURRENT_DIR=$(pwd)
    if cd "$BUILD_OUTPUT" ; then
@@ -1206,7 +1242,7 @@ else
             dd of=boot/grub/toriboot.bin conv=notrunc 2>/dev/null
       fi
       log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS -o ${ISO_OUTPUT}/${ISO_NAME} ."
-      "$MKISOFS" -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
+      $MKISOFS -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
               -l -r -J $BOOT_ARGS -no-pad \
               -o "${ISO_OUTPUT}/${ISO_NAME}" . ; RC=$?
       # both of these need core.img there, so it’s easier to write it here
@@ -1228,28 +1264,10 @@ else
          log   "Skipping creation of hybrid ISO file as requested via HYBRID_METHOD=disable"
          einfo "Skipping creation of hybrid ISO file as requested via HYBRID_METHOD=disable"
          eend 0
-      # use isohybrid only on request
-      elif [ "$HYBRID_METHOD" = "isohybrid" ] ; then
-         if ! which isohybrid >/dev/null 2>&1 ; then
-           bailout 12 "isohybrid binary not found - please install syslinux/syslinux-common"
-         else
-           log "Creating hybrid ISO file with isohybrid method"
-           einfo "Creating hybrid ISO file with isohybrid method"
-           # Notes for consideration:
-           # "-entry 4 -type 1c"
-           # * using 4 as the partition number is supposed to help with BIOSes
-           #   that only support USB-Zip boot
-           # * using 1c (i.e. hidden FAT32 LBA), instead of the default 0x17
-           #   (hidden NTFS, IIRC), as the partition type is sometimes needed
-           #   to get the BIOS even look at the partition created by isohybrid
-           isohybrid "${ISO_OUTPUT}/${ISO_NAME}"
-           eend $?
-         fi
-      # by default use our manifold boot method:
-      else
+      elif [ "$HYBRID_METHOD" = "manifold" ] ; then
          # isoinfo is part of both mkisofs and genisoimage so we're good
          bootoff=$(isoinfo -l -i "${ISO_OUTPUT}/${ISO_NAME}" | \
-           sed -n '/^.*\[ *\([0-9]*\)[] ].* ISOLINUX.BIN;1 *$/s//\1/p')
+           sed -n '/^.*\[ *\([0-9]*\)[] ].* ISOLINUX.BIN[;1]* *$/s//\1/p')
          if ! [ -r boot/grub/core.img ] ; then
            ewarn "boot/grub/core.img not found, not creating manifold boot ISO file"
          elif [ "${bootoff:-0}" -lt 1 ] ; then
@@ -1265,6 +1283,29 @@ else
               echo $bootoff $bootoff | \
                  mksh /usr/share/grml-live/scripts/bootilnx.mksh -A -M 4:0x96 -g $cyls:16:32 -S 2
            fi | dd of="${ISO_OUTPUT}/${ISO_NAME}" conv=notrunc 2>/dev/null
+           eend $?
+         fi
+      # use isohybrid as default
+      else
+         if ! which isohybrid >/dev/null 2>&1 ; then
+           bailout 12 "isohybrid binary not found - please install syslinux/syslinux-common"
+         else
+           log   "Creating hybrid ISO file with isohybrid method"
+           einfo "Creating hybrid ISO file with isohybrid method"
+           # Notes for consideration:
+           # "-entry 4 -type 1c"
+           # * using 4 as the partition number is supposed to help with BIOSes
+           #   that only support USB-Zip boot
+           # * using 1c (i.e. hidden FAT32 LBA), instead of the default 0x17
+           #   (hidden NTFS, IIRC), as the partition type is sometimes needed
+           #   to get the BIOS even look at the partition created by isohybrid
+           if isohybrid --help | grep -q -- --uefi ; then
+             einfo "Detected uefi support for isohybrid, enabling."
+             ISOHYBRID_OPTIONS=--uefi
+           fi
+
+           log "isohybrid $ISOHYBRID_OPTIONS ${ISO_OUTPUT}/${ISO_NAME}"
+           isohybrid $ISOHYBRID_OPTIONS "${ISO_OUTPUT}/${ISO_NAME}"
            eend $?
          fi
       fi
