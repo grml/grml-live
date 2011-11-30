@@ -7,7 +7,7 @@
 ################################################################################
 
 if ifclass NO_ONLINE ; then
-  echo "Ignoring script 91-update-pciids as NO_ONLINE is set."
+  echo "Ignoring script 92-update-freshclam as NO_ONLINE is set."
   exit 0
 fi
 
