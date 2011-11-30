@@ -84,8 +84,8 @@ case "$1" in
         # support bootoption noudev and inform user how to skip
         # execution of udev (being bootoption noudev)
         if ! grep -q noudev /proc/cmdline ; then
-           check_for_non_interactive && \
-              log_action_msg "If your system hangs now, disable udev with bootoption \"noudev\""
+          check_for_non_interactive && \
+            log_action_msg "If your system hangs now, disable udev with bootoption \"noudev\"" && echo
         else
            # - allow execution of initscript through FORCE=1 when booting with noudev
            if [ -z "$FORCE" ] ; then
