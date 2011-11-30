@@ -267,6 +267,7 @@ xserver-xorg-video-all
 xterm
 
 # x86 hardware support
+acpi
 acpid
 acpi-support
 cmospwd
