@@ -1465,6 +1465,7 @@ zd1211-firmware
 ## }}}
 
 ## kernel-version dependent packages {{{
+linux-doc-3.1
 linux-tools-3.1
 ## }}}
 
@@ -1481,30 +1482,28 @@ pstack
 retty
 
 ## current kernel version 3.1.0-grml:
-iscsitarget-module-3.1.0-grml
-linux-doc-3.1.0-grml
-linux-image-3.1.0-grml
-ndiswrapper-modules-3.1.0-grml
-openafs-modules-3.1.0-grml
-sysprof-module-3.1.0-grml
-tp-smapi-modules-3.1.0-grml
-virtualbox-ose-guest-modules-3.1.0-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
-xtables-addons-modules-3.1.0-grml
+#iscsitarget-module-3.1.0-grml
+linux-image-3.1.0-2-grml-686-pae
+#ndiswrapper-modules-3.1.0-grml
+#openafs-modules-3.1.0-grml
+#sysprof-module-3.1.0-grml
+#tp-smapi-modules-3.1.0-grml
+#virtualbox-ose-guest-modules-3.1.0-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
+#xtables-addons-modules-3.1.0-grml
 ## }}}
 
 ## amd64 specific packages {{{
 PACKAGES aptitude AMD64
 
 ## current kernel version 3.1.0-grml64:
-iscsitarget-module-3.1.0-grml64
-linux-doc-3.1.0-grml64
-linux-image-3.1.0-grml64
-ndiswrapper-modules-3.1.0-grml64
-openafs-modules-3.1.0-grml64
-sysprof-module-3.1.0-grml64
-tp-smapi-modules-3.1.0-grml64
-xtables-addons-modules-3.1.0-grml64
-virtualbox-ose-guest-modules-3.1.0-grml64 virtualbox-ose-guest-utils virtualbox-ose-guest-x11
+#iscsitarget-module-3.1.0-grml64
+linux-image-3.1.0-2-grml-amd64
+#ndiswrapper-modules-3.1.0-grml64
+#openafs-modules-3.1.0-grml64
+#sysprof-module-3.1.0-grml64
+#tp-smapi-modules-3.1.0-grml64
+#xtables-addons-modules-3.1.0-grml64
+#virtualbox-ose-guest-modules-3.1.0-grml64 virtualbox-ose-guest-utils virtualbox-ose-guest-x11
 ## }}}
 
 # vim: foldmethod=marker
