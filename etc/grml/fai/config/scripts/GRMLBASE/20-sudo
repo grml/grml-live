@@ -11,7 +11,7 @@ set -e
 
 USERNAME=''
 [ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
-[ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
+[ -n "$GRML_LIVE_LOCAL_CONFIG" ] && . "$GRML_LIVE_LOCAL_CONFIG"
 [ -n "$USERNAME" ] || USERNAME=grml
 
 fcopy -v /etc/sudoers

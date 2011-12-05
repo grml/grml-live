@@ -7,7 +7,7 @@
 ################################################################################
 
 [ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
-[ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
+[ -n "$GRML_LIVE_LOCAL_CONFIG" ] && . "$GRML_LIVE_LOCAL_CONFIG"
 
 if ifclass SOURCES ; then
   echo "Class SOURCES set, retrieving source packages."

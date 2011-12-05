@@ -11,7 +11,7 @@ set -e
 
 HOSTNAME=''
 [ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
-[ -r /etc/grml/grml-live.local ] && . /etc/grml/grml-live.local
+[ -n "$GRML_LIVE_LOCAL_CONFIG" ] && . "$GRML_LIVE_LOCAL_CONFIG"
 [ -n "$HOSTNAME" ] || HOSTNAME=grml
 
 # the hostname of the chroot usually isn't the same as the one for the live-system
