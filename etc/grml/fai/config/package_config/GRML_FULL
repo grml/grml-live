@@ -63,8 +63,9 @@ fio
 gdisk
 gptsync
 hdparm
-lvm2
+iotop
 lsscsi
+lvm2
 mdadm
 mpt-status
 multipath-tools
