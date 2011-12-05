@@ -1464,11 +1464,12 @@ unrar
 zd1211-firmware
 ## }}}
 
+## kernel-version dependent packages {{{
+linux-tools-3.1
+## }}}
+
 ## x86/32bit (class I386) specific packages {{{
 PACKAGES aptitude I386
-
-## general:
-linux-tools-3.0
 
 # i386-only software
 athcool
@@ -1493,9 +1494,6 @@ xtables-addons-modules-3.1.0-grml
 
 ## amd64 specific packages {{{
 PACKAGES aptitude AMD64
-
-## general:
-linux-tools-3.0
 
 ## current kernel version 3.1.0-grml64:
 iscsitarget-module-3.1.0-grml64
