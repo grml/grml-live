@@ -1,3 +1,11 @@
+grml-udev-config (0.0.9) unstable; urgency=low
+
+  * [f8e3b9c] Add man page for grml-udev-rebuildfstab
+  * [a8d4784] Refer to new grml-udev-rebuildfstab man page in /etc/fstab header
+  * [4c50911] Repair noudev info message
+
+ -- Christian Hofstaedtler <ch@grml.org>  Mon, 05 Dec 2011 16:05:39 +0100
+
 grml-udev-config (0.0.8) unstable; urgency=low
 
   [ Christian Hofstaedtler ]
