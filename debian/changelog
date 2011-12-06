@@ -1,3 +1,15 @@
+grml-autoconfig (0.9.37) grml-testing; urgency=low
+
+  [ Ulrich Dangel ]
+  * [df29c9f] Collect statistic information about this boot
+  * [7016c73] Run config_debnet before config_net{script,config}
+  * [29e7a54] Remove local_net as it is done by ifupdown nowadays
+
+  [ Christian Hofstaedtler ]
+  * [cd68869] Actually use $TIMEOUT for fw timeout
+
+ -- Christian Hofstaedtler <ch@grml.org>  Tue, 06 Dec 2011 22:40:11 +0100
+
 grml-autoconfig (0.9.36) unstable; urgency=low
 
   * [aea0368] Add beep to Depends
