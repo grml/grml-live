@@ -516,8 +516,7 @@ if [ -n "${UNPACK_CHROOT}" ]; then
   log "Unpacking chroot from ${UNPACK_CHROOT}"
   einfo "Unpacking chroot from ${UNPACK_CHROOT}"
   [ -d "$CHROOT_OUTPUT" ] || mkdir -p "${CHROOT_OUTPUT}"
-  tar -xf "${UNPACK_CHROOT}" -C "${CHROOT_OUTPUT}/" --strip-components 1 | RC=$?
-  echo $RC
+  tar -xf "${UNPACK_CHROOT}" -C "${CHROOT_OUTPUT}/" --strip-components 1 ; RC=$?
   if [ "$RC" != 0 ] ; then
     eend 1
     bailout 1
