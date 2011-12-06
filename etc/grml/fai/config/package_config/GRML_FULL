@@ -78,6 +78,7 @@ smartmontools
 grub-efi-amd64-bin
 grub-efi-ia32-bin
 grub-pc-bin
+gparted
 lilo
 mbr
 parted
