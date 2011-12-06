@@ -282,7 +282,7 @@ usbview
 # kernels
 
 PACKAGES aptitude I386
-linux-image-3.1.0-2-grml-686-pae
+linux-image-3.1.0-2-grml-486
 
 PACKAGES aptitude AMD64
 linux-image-3.1.0-2-grml-amd64

@@ -1483,7 +1483,7 @@ retty
 
 ## current kernel version 3.1.0-grml:
 #iscsitarget-module-3.1.0-grml
-linux-image-3.1.0-2-grml-686-pae
+linux-image-3.1.0-2-grml-486
 #ndiswrapper-modules-3.1.0-grml
 #openafs-modules-3.1.0-grml
 #sysprof-module-3.1.0-grml
