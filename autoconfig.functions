@@ -193,7 +193,7 @@ config_fwtimeout(){
  fi
  if [ -f /sys/class/firmware/timeout ] ; then
    einfo "Setting timeout for firmware loading to ${TIMEOUT}."
-   echo 100 > /sys/class/firmware/timeout ; eend $?
+   echo $TIMEOUT > /sys/class/firmware/timeout ; eend $?
  fi
 }
 # }}}
