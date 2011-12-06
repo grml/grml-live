@@ -70,7 +70,6 @@ CONFIG_HOSTNAME='yes'         # set hostname to 'grml' on systems running from C
 CONFIG_KERNEL='yes'           # display information on running kernel
 CONFIG_LANGUAGE='yes'         # allow language specification via commandline
 CONFIG_LD_MOD='yes'           # run ldconfig and depmod on systems running from harddisk; remove /etc/grml.first.boot for forcing
-CONFIG_LOCAL_NET='yes'        # bring up loopback interface
 CONFIG_LOG='yes'              # DEBUG=/dev/null or logfile int /tmp/...
 CONFIG_LVM='yes'              # logical volume setup
 CONFIG_MIXER='yes'            # set audio volumes [only in live-cd mode relevant, except for bootoption nosound]

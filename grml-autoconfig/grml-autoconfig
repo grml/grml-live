@@ -116,8 +116,6 @@ checkvalue $CONFIG_LVM && config_lvm
 # No kernel messages while probing modules
 echo "0" > /proc/sys/kernel/printk
 
-checkvalue $CONFIG_LOCAL_NET && config_local_net
-
 checkvalue $CONFIG_TESTCD && config_testcd
 
 checkvalue $CONFIG_MODULES && config_modules
