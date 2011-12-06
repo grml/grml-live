@@ -613,18 +613,6 @@ fi
 }
 # }}}
 
-# {{{ Bring up loopback interface now
-config_local_net(){
- if [ -z "$INSTALLED" ] ; then
-    if grep -q 'iface lo inet loopback' /etc/network/interfaces 2>/dev/null ; then
-       grep -q lo=lo /etc/network/run/ifstate 2>/dev/null || ifup lo
-    else
-       ifconfig lo up
-    fi
- fi
-}
-# }}}
-
 # {{{ copy passwd-lockfile to ramdisk (fix unionfs-behaviour)
 # otherwise we will get: passwd: Authentication token lock busy
 config_fix_passwd(){
