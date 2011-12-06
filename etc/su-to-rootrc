@@ -1,0 +1,9 @@
+# Filename:      /etc/su-to-rootrc
+# Purpose:       configuration file for su-to-root
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+################################################################################
+
+# Force su-to-root to use sudo, as root does not have a password on Grml.
+SU_TO_ROOT_SU=sudo
+
