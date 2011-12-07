@@ -1192,8 +1192,7 @@ else
    fi
 
    # support xorriso as well mkisofs and genisoimage
-   if which xorriso >/dev/null 2>&1 && \
-      dpkg --compare-versions $(dpkg-query -W -f='${Version}\n' xorriso 2>/dev/null) gt-nl 1.1.6-2 ; then
+   if which xorriso >/dev/null 2>&1 ; then
       MKISOFS='xorriso -as mkisofs'
     elif which mkisofs >/dev/null 2>&1; then
       MKISOFS='mkisofs'
@@ -1211,28 +1210,39 @@ else
        case "$MKISOFS" in
          xorriso*)
            einfo "Using xorriso for ISO generation." ;  eend 0
+           eindent
 
-           if [ -r "${CHROOT_OUTPUT}/var/lib/grml_live_efi.img" ] ; then
-             einfo "Found /var/lib/grml_live_efi.img - moving to /boot/efi.img for ISO."
-             log   "Found /var/lib/grml_live_efi.img - moving to /boot/efi.img for ISO."
-             mv "${CHROOT_OUTPUT}/var/lib/grml_live_efi.img" "${BUILD_OUTPUT}/boot/efi.img"
-             eend $?
+           if ! dpkg --compare-versions $(dpkg-query -W -f='${Version}\n' xorriso 2>/dev/null) gt-nl 1.1.6-1 ; then
+             log   "Disabling (U)EFI boot support since xorriso version is not recent enough."
+             ewarn "Disabling (U)EFI boot support since xorriso version is not recent enough." ; eend 0
+           else
+             log   "xorriso with -eltorito-alt-boot present, enabling (U)EFI boot support."
+             einfo "xorriso with -eltorito-alt-boot present, enabling (U)EFI boot support." ; eend 0
+
+             if [ -r "${CHROOT_OUTPUT}/var/lib/grml_live_efi.img" ] ; then
+               einfo "Found /var/lib/grml_live_efi.img - moving to /boot/efi.img for ISO."
+               log   "Found /var/lib/grml_live_efi.img - moving to /boot/efi.img for ISO."
+               mv "${CHROOT_OUTPUT}/var/lib/grml_live_efi.img" "${BUILD_OUTPUT}/boot/efi.img"
+               eend $?
+             fi
+
+             if [ -r "${CHROOT_OUTPUT}/var/lib/grml_live_bootx64.efi" ] ; then
+               einfo "Found /var/lib/grml_live_bootx64.efi - moving to /efi/boot/bootx64.efi for ISO"
+               log   "Found /var/lib/grml_live_bootx64.efi - moving to /efi/boot/bootx64.efi for ISO"
+               mkdir -p "${BUILD_OUTPUT}/efi/boot/"
+               mv "${CHROOT_OUTPUT}/var/lib/grml_live_bootx64.efi" "${BUILD_OUTPUT}/efi/boot/bootx64.efi"
+               eend $?
+             fi
+
+             if [ -r "${BUILD_OUTPUT}"/boot/efi.img ] ; then
+               einfo "/boot/efi.img found and amd64 architecture present, extending boot arguments."
+               log   "/boot/efi.img found and amd64 architecture present, extending boot arguments."
+               BOOT_ARGS="$BOOT_ARGS -boot-info-table -eltorito-alt-boot -e boot/efi.img -no-emul-boot"
+               eend $?
+             fi
            fi
 
-           if [ -r "${CHROOT_OUTPUT}/var/lib/grml_live_bootx64.efi" ] ; then
-             einfo "Found /var/lib/grml_live_bootx64.efi - moving to /efi/boot/bootx64.efi for ISO"
-             log   "Found /var/lib/grml_live_bootx64.efi - moving to /efi/boot/bootx64.efi for ISO"
-             mkdir -p "${BUILD_OUTPUT}/efi/boot/"
-             mv "${CHROOT_OUTPUT}/var/lib/grml_live_bootx64.efi" "${BUILD_OUTPUT}/efi/boot/bootx64.efi"
-             eend $?
-           fi
-
-           if [ -r "${BUILD_OUTPUT}"/boot/efi.img ] ; then
-             einfo "/boot/efi.img found and amd64 architecture present, extending boot arguments."
-             log   "/boot/efi.img found and amd64 architecture present, extending boot arguments."
-             BOOT_ARGS="$BOOT_ARGS -boot-info-table -eltorito-alt-boot -e boot/efi.img -no-emul-boot"
-             eend $?
-           fi
+           eoutdent
            ;;
        esac
        ;;
