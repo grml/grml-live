@@ -90,7 +90,7 @@ session.updateDelayTime:	0
 session.appsFile:	~/.fluxbox/apps
 session.styleOverlay:	~/.fluxbox/overlay
 session.tabsAttachArea:	Window
-session.styleFile:	/home/grml/.fluxbox/styles/Sn33z
+session.styleFile:	/home/grml/.fluxbox/styles/Squared_for_Grml
 session.menuFile:	~/.fluxbox/menu
 session.groupFile:	
 session.cacheLife:	5l
