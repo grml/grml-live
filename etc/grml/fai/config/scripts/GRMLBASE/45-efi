@@ -30,7 +30,7 @@ rm -f "$GRUB_EFI_IMAGE" "$TMP_CONFIG" "$EFI_IMAGE"
 cat > "$TMP_CONFIG" <<EOF
 search --set -f /conf/bootid.txt root
 if [ -e /boot/grub/grub.cfg ]; then
- set prefix=\$root/boot/grub
+ set prefix=(\$root)/boot/grub
  configfile /boot/grub/grub.cfg
 else
  echo "E: Could not find root device!"
