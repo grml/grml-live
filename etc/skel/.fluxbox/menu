@@ -4,7 +4,7 @@
     [exec] (Run ...) {fbrun} <>
     [exec] (configure network) {sudo x-terminal-emulator -T "grml-network" -e /usr/sbin/grml-network} <>
     [exec] (configure and run terminalserver) {grml-exec-wrapper -p grml-terminalserver sudo x-terminal-emulator -T "grml-terminalserver" -e /usr/sbin/grml-terminalserver} <>
-    [submenu] (Debian) {} <>
+    [submenu] (Applications) {} <>
         [include] (/etc/X11/fluxbox/menudefs.hook) {} <>
     [end]
     [submenu] (Fluxbox) {} <>
