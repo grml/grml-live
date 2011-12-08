@@ -17,8 +17,6 @@ XTerm*font3:     	-misc-fixed-medium-r-normal-*-*-100-*-*-c-*-iso8859-15
 XTerm*font4:     	-misc-fixed-medium-r-normal-*-*-120-*-*-c-*-iso8859-15
 XTerm*font5:     	-misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
 
-XTerm*.background: black
-XTerm*.foreground: lightgrey
 XTerm*utf8: 1
 
 UXTerm*font:            -misc-fixed-medium-r-normal-*-*-140-*-*-*-*-iso10646-1
@@ -31,8 +29,6 @@ UXTerm*font6:           -misc-fixed-medium-r-normal--20-200-75-75-c-100-iso10646
 UXTerm*utf8Fonts.font:          -misc-fixed-medium-r-normal--18-120-100-100-c-90-iso10646-1
 UXTerm*utf8Fonts.wideFont:      -misc-fixed-medium-r-normal-ko-18-120-100-100-c-180-iso10646-1
 
-UXTerm*.background: black
-UXTerm*.foreground: lightgrey
 UXTerm*allowFontOps: true
 
 ! enable UTF8
@@ -42,31 +38,6 @@ UXTerm*utf8: 1
 UXTerm*eightBitInput: false
 UXTerm*metaSendsEscape: true
 
-!XTerm.vt100.boldMode: false
-!XTerm.vt100.background: black
-!XTerm*foreground:   yellow
-!XTerm.eightBitInput:    true
-!XTerm*multiScroll:  on
-!XTerm*jumpScroll:   on
-!XTerm*font: -misc-console-medium-r-*-*-*-*-*-*-*-*-iso10646-1
-!XTerm*boldFont: -misc-console-medium-r-*-*-*-*-*-*-*-*-iso10646-1
-!XTerm*font: -misc-fixed-medium-r-normal--14-140-75-75-c-90-iso8859-15
-!XTerm*boldFont: -misc-fixed-medium-r-normal--14-140-75-75-c-90-iso8859-15
-!XTerm*ScrollBar: on
-!XTerm*SaveLines: 2000
-!XTerm.eightBitOutput:   true
-!XTerm.vt100.colorBDMode: false
-!XTerm.vt100.boldColors: true
-!XTerm.width: 640
-!XTerm.height: 480
-
-!XTerm*font: -misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-15
-!XTerm*boldFont: -misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-15
-
-!XTerm*foreground: gray90
-!XTerm*foreground: yellow
-!XTerm*background: black
-!XTerm*cursorColor: blue
 XTerm*cursorColor: orange
 XTerm*borderColor: white
 XTerm*scrollColor: black
@@ -90,54 +61,6 @@ XTerm*scrollBar:       false
 XTerm*eightBitInput:  false
 XTerm*metaSendsEscape: true
 
-!XTerm*internalBorder:  10
-!XTerm*highlightSelection:  true
-!XTerm*VT100*colorBDMode:  on
-!XTerm*VT100*colorBD:  blue
-!XTerm.VT100.eightBitOutput:  true
-!XTerm.VT100.titeInhibit:  false
-
-! original colorsetup
-!XTerm*color0: black
-!XTerm*color1: red3
-!XTerm*color2: green3
-!XTerm*color3: yellow3
-!XTerm*color4: blue
-!XTerm*color5: magenta3
-!XTerm*color6: cyan3
-!XTerm*color7: gray90
-!XTerm*color8: gray50
-!XTerm*color9: red
-!XTerm*color10: green
-!XTerm*color11: yellow
-!XTerm*color12: blue
-!XTerm*color13: magenta
-!XTerm*color14: cyan
-!XTerm*color15: white
-!XTerm*colorUL: yellow
-!XTerm*colorBD: white
-
-XTerm*boldMode: false
-XTerm*color0: black
-XTerm*color1: red3
-XTerm*color2: green3
-XTerm*color3: #fdfa22
-XTerm*color4: blue
-XTerm*color5: magenta3
-XTerm*color6: cyan3
-XTerm*color7: gray90
-XTerm*color8: gray50
-XTerm*color9: red
-XTerm*color10: green
-XTerm*color11: yellow
-!XTerm*color12: blue
-XTerm*color12: #4444FF
-XTerm*color13: magenta
-XTerm*color14: cyan
-XTerm*color15: white
-!XTerm*colorUL: yellow
-!XTerm*colorBD: white
-
 ! The following two sections take advantage of new features in version 7
 ! of the Athena widget library.  Comment them out if you have a shallow
 ! color depth.
@@ -151,8 +74,6 @@ XTerm*tekMenu*backgroundPixmap:      gradient:vertical?dimension=300&start=gray1
 XTerm*tekMenu*foreground:            white
 
 ! other terminals:
-rxvt*.background:  black
-rxvt*.foreground:  lightgrey
 rxvt*.cursorColor: orange
 rxvt*.borderColor: white
 rxvt*.scrollColor: black
@@ -164,24 +85,6 @@ URxvt.italicFont:        xft:Bitstream Vera Sans Mono:italic:autohint=true
 URxvt.boldItalicFont:    xft:Bitstream Vera Sans Mono:bold:italic:autohint=true
 !URxvt.background: black
 URxvt.background: rgba:0000/0000/0000/ccdd
-URxvt.foreground: white
-URxvt.color0: black
-URxvt.color1: red3
-URxvt.color2: green3
-URxvt.color3: yellow3
-URxvt.color4: DodgerBlue1
-URxvt.color5: magenta3
-URxvt.color6: cyan3
-URxvt.color7: gray90
-URxvt.color8: gray50
-URxvt.color9: red
-URxvt.color10: green
-URxvt.color11: yellow
-URxvt.color12: SteelBlue1
-URxvt.color13: magenta
-URxvt.color14: cyan
-URxvt.color15: white
-URxvt.colorUL: white
 URxvt.underlineColor: white
 URxvt.colorBD: white
 URxvt.colorIT: green
@@ -205,13 +108,26 @@ URxvt*scrollTtyOutput:   false
 URxvt*scrollWithBuffer:  true
 URxvt*scrollTtyKeypress: true
 
-! aterm
-aterm*.background:  white
-aterm*.foreground:  black
-aterm*.cursorColor: orange
-aterm*.borderColor: white
-aterm*.scrollColor: black
-aterm*.font:        -misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
+! Based on Tomorrow Theme
+*.foreground:   #c5c8c6
+*.background:   #1d1f21
+*.cursorColor:  orange
+*.color0:       #000000
+*.color1:       #912226
+*.color2:       #778900
+*.color3:       #ae7b00
+*.color4:       #1d2594
+*.color5:       #682a9b
+*.color6:       #2b6651
+*.color7:       #929593
+*.color8:       #666666
+*.color9:       #cc6666
+*.color10:      #b5bd68
+*.color11:      #f0c674
+*.color12:      #81a2be
+*.color13:      #b294bb
+*.color14:      #8abeb7
+*.color15:      #ecebec
 
 ! XTerm Profiles - use via 'xterm -name profilename'
 light*foreground: black
@@ -277,19 +193,5 @@ nedit*topShadowColor:               #fefefe
 nedit*XmText.background:            white
 nedit*XmTextField.background:       white
 nedit*XmList.background:            white
-
-!yeahconsole http://phrat.de/downloads.html
-!yeahconsole*term: urxvt
-!yeahconsole*term:urxvt
-!yeahconsole*background:black
-!yeahconsole*foreground:grey
-!yeahconsole*aniDelay:18
-!yeahconsole*stepSize:15
-!yeahconsole*consoleHeight:30
-!yeahconsole*toggleKey:Win+y
-!yeahconsole*keyBigger:Win+KP_Add
-!yeahconsole*keySmaller:Win+KP_Subtract
-!yeahconsole*keyFull:Win+F11
-!yeahconsole*restart:1
 
 !# END OF FILE #################################################################
