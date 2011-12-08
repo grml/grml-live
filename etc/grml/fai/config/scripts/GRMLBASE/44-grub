@@ -9,7 +9,7 @@
 set -e
 set -u
 
-$ROOTCMD grub-mkimage -d /usr/lib/grub/*-pc \
+$ROOTCMD grub-mkimage -d /usr/lib/grub/i386-pc \
   -o /boot/grub/core.img \
   biosdisk iso9660 \
   --format=i386-pc
