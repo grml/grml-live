@@ -1379,8 +1379,7 @@ if checkbootparam 'startx' && ! echo "$CMDLINE" | grep -q 'startx.*nostartx' ; t
   if [ -z "$INSTALLED" ] ; then
    WINDOWMANAGER="$(getbootparam 'startx' 2>>$DEBUG)"
    if [ -z "$WINDOWMANAGER" ] ; then
-     einfo "No window manager specified. Taking ${WHITE}wm-ng${NORMAL} as default." && eend 0
-     WINDOWMANAGER="wm-ng"
+     einfo "No window manager specified. Using default one." && eend 0
    else
      einfo "Window manager ${WHITE}${WINDOWMANAGER}${NORMAL} found as bootoption." && eend 0
    fi
@@ -1388,7 +1387,7 @@ if checkbootparam 'startx' && ! echo "$CMDLINE" | grep -q 'startx.*nostartx' ; t
    config_userfstab || fstabuser='grml'
  cat>|/etc/init.d/xstartup<<EOF
 #!/bin/sh
-su $fstabuser -c "/usr/bin/grml-x $WINDOWMANAGER"
+su $fstabuser -c "/usr/bin/grml-x"
 EOF
    chmod 755 /etc/init.d/xstartup
 
