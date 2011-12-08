@@ -1356,7 +1356,7 @@ config_stats() {
    ( [ -n "$COLUMNS" ] && [ -n "$LINES" ] ) && \
      ADDITIONAL_PARAMS="$ADDITIONAL_PARAMS&res=$((COLUMNS * 8))x$((LINES * 16))"
 
-   URI='$BASE_URL?action=${ACTION_NAME}\&$DATE_STRING\&unique_id=${HOST_ID}\&support_64bit=$HAS_64BIT\&version=$version\&bootup=$BOOT\&params=$PARAMS$ADDITIONAL_PARAMS'
+   URI='$BASE_URL?action=${ACTION_NAME}\&$DATE_STRING\&unique_id=${HOST_ID}\&support_64bit=$HAS_64BIT\&version=$VERSION\&bootup=$BOOT\&params=$PARAMS$ADDITIONAL_PARAMS'
 
    get_remote_file "$URI" "/dev/null"  >/dev/null 2>&1 &!
  fi
