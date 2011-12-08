@@ -1,3 +1,10 @@
+grml-desktop (0.3.10) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [fa67092] Use 24h clock without am/pm indicator in fluxbox
+
+ -- Michael Prokop <mika@grml.org>  Thu, 08 Dec 2011 21:19:22 +0100
+
 grml-desktop (0.3.9) unstable; urgency=low
 
   [ Ulrich Dangel ]
