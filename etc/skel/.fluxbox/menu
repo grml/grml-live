@@ -1,8 +1,7 @@
 [begin] (Fluxbox) {} <>
     [exec] (xterm) {x-terminal-emulator} <>
+    [exec] (Iceweasel / Firefox) {iceweasel} <>
     [exec] (Run ...) {fbrun} <>
-    [exec] (xlinks2 webbrowser) {grml-exec-wrapper xlinks2 -mode 640x480 /usr/share/doc/grml-docs/startpage.html} <>
-    [exec] (w3m webbrowser) {grml-exec-wrapper -p w3m x-terminal-emulator -T "w3m" -e /usr/bin/w3m /usr/share/doc/grml-docs/startpage.html} <>
     [exec] (configure network) {sudo x-terminal-emulator -T "grml-network" -e /usr/sbin/grml-network} <>
     [exec] (configure and run terminalserver) {grml-exec-wrapper -p grml-terminalserver sudo x-terminal-emulator -T "grml-terminalserver" -e /usr/sbin/grml-terminalserver} <>
     [submenu] (Debian) {} <>
