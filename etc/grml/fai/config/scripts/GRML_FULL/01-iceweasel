@@ -9,7 +9,7 @@
 set -u
 set -e
 
-fcopy -v /etc/iceweasel/profile/prefs.js
+fcopy -B -v /etc/iceweasel/profile/prefs.js
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
