@@ -878,27 +878,12 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        fi
        cp ${TEMPLATE_DIRECTORY}/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
 
-       if [ -e ${TEMPLATE_DIRECTORY}/compat/grub/linux.mod ]; then
-         cp "${TEMPLATE_DIRECTORY}"/compat/grub/* "${BUILD_OUTPUT}"/boot/grub/
-       else
-         if ! which "grub-mkimage" >/dev/null 2>&1 ; then
-           log   "grub-mkimage not found, skipping Grub step therefore." ; eend 0
-           ewarn "grub-mkimage not found, skipping Grub step therefore."
-           ewarn "Please install grub-pc-bin or grub-common >= 1.98+20100804-14." ; eend 0
-         elif ! grub-mkimage --help | grep -q -- --format ; then
-           log   "grub-mkimage does not support --format=i386-pc, skipping Grub step therefore." ; eend 0
-           ewarn "grub-mkimage does not support --format=i386-pc, skipping Grub step therefore."
-           ewarn "Please install grub-common >= 1.98+20100804-14 or grub-pc-bin." ; eend 0
-         else
-           # copy system grub files if grml-live-compat is not installed
-           cp -a /usr/lib/grub/*-pc/*.mod "${BUILD_OUTPUT}"/boot/grub/
-           cp -a /usr/lib/grub/*-pc/*.o "${BUILD_OUTPUT}"/boot/grub/
-           cp -a /usr/lib/grub/*-pc/*.lst "${BUILD_OUTPUT}"/boot/grub/
-           cp -a /usr/share/grub/ascii.pf2 "${BUILD_OUTPUT}"/boot/grub/
-           grub-mkimage -d /usr/lib/grub/*-pc -o \
-             "${BUILD_OUTPUT}/boot/grub/core.img" biosdisk iso9660 --format=i386-pc
-         fi
-       fi
+       # copy grub files from target
+       cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.mod "${BUILD_OUTPUT}"/boot/grub/
+       cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.o "${BUILD_OUTPUT}"/boot/grub/
+       cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.lst "${BUILD_OUTPUT}"/boot/grub/
+       cp -a "${CHROOT_OUTPUT}"/usr/share/grub/ascii.pf2 "${BUILD_OUTPUT}"/boot/grub/
+       cp -a "${CHROOT_OUTPUT}"/boot/grub/core.img "${BUILD_OUTPUT}"/boot/grub/
 
        if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
           log    "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
