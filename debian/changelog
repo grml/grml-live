@@ -1,3 +1,19 @@
+grml-desktop (0.3.9) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [1320806] Add iceweasel to menu and remove xlinks & w3m
+  * [1f6040d] Rename Debian menu entry to Applications
+  * [4b58e02] Add separator to fluxbox menu
+  * [77ce63b] Add new theme Squared_for_grml to fluxbox.
+  * [ba326aa] Change default them to Squared_for_Grml
+  * [703819a] Remove deprecated fluxbox styles.
+  * [679b2ad] Readd Squared_for_grml style to fluxbox.
+
+  [ Michael Prokop ]
+  * [bf88fdb] Update debian/overrides for recent changes
+
+ -- Michael Prokop <mika@grml.org>  Thu, 08 Dec 2011 14:16:09 +0100
+
 grml-desktop (0.3.8) unstable; urgency=low
 
   [ Christian Hofstaedtler ]
