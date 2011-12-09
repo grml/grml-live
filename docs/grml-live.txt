@@ -191,6 +191,10 @@ Build the ISO without (re-)creating the squashfs compressed file using mksquashf
 This option is useful if you just want to update parts outside the chroot in the ISO.
 Consider combining this option with the build-only option '-b'.
 
+  -Q::
+
+Build the ISO without generating a netboot package.
+
   -r **RELEASENAME**::
 
 Specify name of the release.

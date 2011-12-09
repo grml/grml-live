@@ -56,6 +56,7 @@ Usage: $PN [options, see as follows]
    -N                      bootstrap (build chroot) only, do not create files for ISO
    -o <output_directory>   main output directory of the build process
    -q                      skip mksquashfs
+   -Q                      skip netboot package build
    -r <release_name>       release name
    -s <suite>              Debian suite; values: etch, lenny, squeeze, sid
    -t <template_directory> place of the templates
@@ -183,6 +184,7 @@ bailout() {
     [ -n "${CHROOT_OUTPUT}"  -a -d "${CHROOT_OUTPUT}"  ] && chown -R "${CHOWN_USER}:" "${CHROOT_OUTPUT}"
     [ -n "${ISO_OUTPUT}"     -a -d "${ISO_OUTPUT}"     ] && chown -R "${CHOWN_USER}:" "${ISO_OUTPUT}"
     [ -n "${LOG_OUTPUT}"     -a -d "${LOG_OUTPUT}"     ] && chown -R "${CHOWN_USER}:" "${LOG_OUTPUT}"
+    [ -n "${NETBOOT}"        -a -d "${NETBOOT}"        ] && chown -R "${CHOWN_USER}:" "${NETBOOT}"
     [ -n "${CHROOT_ARCHIVE}" -a -f "${CHROOT_ARCHIVE}" ] && chown -R "${CHOWN_USER}:" "${CHROOT_ARCHIVE}"
     eend 0
   fi
@@ -284,7 +286,7 @@ copy_addon_file() {
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:d:D:g:i:I:o:r:s:t:T:U:v:AbBFnNquVz" opt; do
+while getopts "a:C:c:d:D:g:i:I:o:r:s:t:T:U:v:AbBFnNqQuVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     A) PACK_ARTIFACTS=1 ;;
@@ -301,6 +303,7 @@ while getopts "a:C:c:d:D:g:i:I:o:r:s:t:T:U:v:AbBFnNquVz" opt; do
     N) BOOTSTRAP_ONLY=1; SKIP_MKISOFS=1; SKIP_MKSQUASHFS=1 ;;
     o) OUTPUT="$OPTARG" ;;
     q) SKIP_MKSQUASHFS=1 ;;
+    Q) SKIP_NETBOOT=1 ;;
     r) RELEASENAME="$OPTARG" ;;
     s) SUITE="$OPTARG" ;;
     t) TEMPLATE_DIRECTORY="$OPTARG";;
@@ -371,6 +374,7 @@ fi
 [ -n "$ISO_OUTPUT" ]       || ISO_OUTPUT="$OUTPUT/grml_isos"
 [ -n "$LOG_OUTPUT" ]       || LOG_OUTPUT="$OUTPUT/grml_logs"
 [ -n "$REPORTS" ]          || REPORTS="${LOG_OUTPUT}/reports/"
+[ -n "$NETBOOT" ]          || NETBOOT="${OUTPUT}/netboot/"
 # }}}
 
 # some misc checks before executing FAI {{{
@@ -436,6 +440,7 @@ if [ -z "$FORCE" ] ; then
      echo "  Bootstrapping only and not building (files for) ISO."
    else
      [ -n "$SKIP_MKSQUASHFS" ]     && echo "  Skipping creation of SQUASHFS file."
+     [ -n "$SKIP_NETBOOT" ]        && echo "  Skipping creation of NETBOOT package."
      [ -n "$SKIP_MKISOFS" ]        && echo "  Skipping creation of ISO file."
      [ -n "$BUILD_ONLY" ]          && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
      [ -n "$BUILD_DIRTY" ]         && echo "  Executing BUILD_DIRTY to leave chroot untouched."
@@ -457,6 +462,7 @@ if [ -n "${PACK_ARTIFACTS}" ]; then
   [ -n "${BUILD_OUTPUT}"   -a -d "${BUILD_OUTPUT}"   ] && rm -r "${BUILD_OUTPUT}"
   [ -n "${ISO_OUTPUT}"     -a -d "${ISO_OUTPUT}"     ] && rm -r "${ISO_OUTPUT}"
   [ -n "${LOG_OUTPUT}"     -a -d "${LOG_OUTPUT}"     ] && rm -r "${LOG_OUTPUT}"
+  [ -n "${NETBOOT}"        -a -d "${NETBOOT}"        ] && rm -r "${NETBOOT}"
 fi
 # }}}
 
@@ -1337,6 +1343,61 @@ else
       bailout $RC
    fi
 fi
+# }}}
+
+# netboot package {{{
+create_netbootpackage() {
+  local OUTPUT_FILE="${NETBOOT}/grml_netboot_package_${GRML_NAME}_${VERSION}.tar.bz2"
+
+  if [ -f "${OUTPUT_FILE}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" ] ; then
+    log   "Skipping stage 'netboot' as $OUTPUT_FILE exists already."
+    ewarn "Skipping stage 'netboot' as $OUTPUT_FILE exists already." ; eend 0
+    return 0
+  elif [ -n "$SKIP_NETBOOT" ] ; then
+    log   "Skipping stage 'netboot' as requested via option -Q"
+    ewarn "Skipping stage 'netboot' as requested via option -Q" ; eend 0
+    return 0
+  fi
+
+  mkdir -p "$NETBOOT"
+
+  if ! [ -r "${CHROOT}/usr/lib/syslinux/pxelinux.0" ] ; then
+    ewarn "File /usr/lib/syslinux/pxelinux.0 not found in build chroot." ; eend 0
+    eindent
+    einfo "Install syslinux[-common] package in chroot to get a netboot package."
+    eoutdent
+    return 0
+  fi
+
+  local OUTPUTDIR="${NETBOOT}/build_tmp"
+  local WORKING_DIR="${OUTPUTDIR}/grml_netboot_package_${GRML_NAME}_${VERSION}/tftpboot/"
+
+  mkdir -p "$WORKING_DIR"
+
+  cp "${CHROOT_OUTPUT}"/boot/vmlinuz-*    "$WORKING_DIR"/linux26
+  cp "${CHROOT_OUTPUT}"/boot/initrd.img-* "$WORKING_DIR"/initrd.img
+  cp "${CHROOT_OUTPUT}"/usr/lib/syslinux/pxelinux.0 "${WORKING_DIR}/pxelinux.0"
+
+  if [ -r "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" ] ; then
+    mkdir -p "${WORKING_DIR}/pxelinux.cfg/default"
+    cp "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" "${WORKING_DIR}/pxelinux.cfg/default"
+  else
+    ewarn "File ${BUILD_OUTPUT}/boot/isolinux/netboot.cfg not found." ; eend 0
+  fi
+
+  mkdir -p "${WORKING_DIR}/pxelinux.cfg"
+
+  if tar -C "$OUTPUTDIR" -jcf "${OUTPUT_FILE}" "grml_netboot_package_${GRML_NAME}_${VERSION}" ; then
+    einfo "Generated netboot package ${OUTPUT_FILE}" ; eend 0
+    rm -rf "${OUTPUTDIR}"
+  else
+    rm -rf "${OUTPUTDIR}"
+    eerror "Could not generate netboot package ${OUTPUT_FILE}" ; eend 1
+    bailout 21
+  fi
+}
+
+create_netbootpackage
 # }}}
 
 # pack artifacts {{{
