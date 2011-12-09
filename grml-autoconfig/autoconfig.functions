@@ -1349,7 +1349,7 @@ config_stats() {
 
    PARAMS="$( echo "$CMDLINE" | sed -e 's/=[^ ]*/=x/g' | tr " " "\n"|sort|tr "\n" " " )"
 
-   echo "$CMDLINE" | grep -q -e "fetch|nfsroot" && BOOT="remote"
+   echo "$CMDLINE" | grep -q -e "fetch" -e "nfsroot" && BOOT="remote"
    [ -z "$BOOT" ] && BOOT="local"
 
    ADDITIONAL_PARAMS=""
