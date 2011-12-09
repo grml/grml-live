@@ -1,3 +1,137 @@
+grml-live (0.17.0) unstable; urgency=low
+
+  [ Michael Prokop ]
+  * [11ac4be] GRMLBASE/91-update-pciids: do not exit with error if network
+    does not work
+  * [7d9c9ef] GRMLBASE/91-update-pciids: fix wrong log message
+  * [17243dd] 98-clean-chroot: do not fail with more than one kernel
+    version installed
+  * [ceeb58b] Revert "Move 01-iceweasel to GRML_XL scripts"
+  * [b5dfcc4] don't use colors/escape sequences if running in dump
+    terminal
+  * [cc7616e] do not fail with empty $APT_PROXY
+  * [b97721f] retrieve source packages via grml-live using SOURCES class
+  * [c9141f4] rework sources setup (deprecated GRML_LIVE_SOURCES, install
+    /etc/apt files recursively)
+  * [b0b7374] use system architecture as default
+  * [22e1e9f] use AMD64 class in usage examples and use GRML_FULL instead
+    of GRML_MEDIUM/GRML_SMALL everywhere
+  * [809f9a6] make sure we don't leave any FAI ramdisks behind
+  * [220ee72] use GRML_FULL as default and update docs accordingly for
+    available classes
+  * [6245469] replace realpath with readlink -f to avoid dependency on
+    realpath
+  * [55405b9] 98-clean-chroot: do not zero out install_packages.list
+  * [a31a8fd] provide report of missing packages in xunit format for usage
+    within e.g. Jenkins
+  * [66a2581] GRMLBASE/16-depmod: drop the 2-digit check
+  * [2e1a0a3] provide package config for Debian/stable builds and enable
+    backports by default there
+  * [2861f16] updatebase.GRMLBASE: run recursive fcopy with -B to avoid
+    backup files
+  * [94a95c0] updatebase.GRMLBASE: do no longer skiptask updatebase and
+    exit in softupdate action
+  * [7d3ca65] instsoft.GRMLBASE: do not run explicit apt-get update any
+    longer
+  * [d338d0c] rework resolvconf handling
+  * [f4e1966] readd skiptask updatebase to updatebase.GRMLBASE
+  * [5a00bf3] resolv.conf handling: resolve symlink inside chroot + drop
+    resolvconf from 96-apt-listbugs
+  * [17e7145] initial UEFI support, using isohybrid as default now. Thanks
+    to Ulrich Dangel <mru@grml.org>
+  * [27a1660] Quote GRML_FAI_CONFIG in warning message since its unset
+  * [5a215cd] 92-update-freshclam: fix wrong file name in exit message
+  * [b4c258f] rework check for xorriso version and be more verbose about
+    its usage
+  * [dacf428] Provide DEBIAN_UNSTABLE sources.list config
+  * [c5d1013] 98-clean-chroot: also get rid of symlinks of *.pre_fcopy
+    files
+  * [f3768e9] 01-iceweasel: remove backup file in fcopy cmdline
+  * [b0f14af] Integrate netboot package generation
+  * [2462be5] Depends: support xorriso as alternative to genisoimage
+
+  * Software related changes:
+    - [e4c899f] drop bind9 from GRML_FULL
+    - [a45cb79] add imvirt to GRML_{SMALL,MEDIUM,FULL}
+    - [4bd3dc2] add gitk to GRML_FULL [Closes: issue1057]
+    - [67414c3] add iceweasel to new GRML_FULL
+    - [090c35d] replace dhcp3-client with isc-dhcp-client
+    - [69d1d92] add iotop to GRML_FULL
+
+  [ Christian Hofstaedtler ]
+  * Software related changes (with a lot of commits, skipping full
+    list here): rework GRML_FULL flavour to match our "install & rescue"
+    mission, GRML_FULL was renamed to GRML_XL.
+  * [eea9d23] Automatically start nfs client and avahi, dbus
+  * [d2937b0] Ignore more cruft, add runtime to buildd emails
+  * [8d172da] Rename GRML_FULL buildd scripts to match that name
+  * [bb0dec8] buildd: remove REMOVE_DOCS from small ISOs
+  * [472c316] buildd/functions.sh: use dash-compliant subtraction
+  * [89f0896] buildd: update sha1sums of base(64?).tgz
+  * [3cb3de3] buildd: disable squeeze flavours in cleanup,link_latest
+  * [fc97e07] buildd: configure $FLAVOURS
+  * [d90aede] buildd: use syslog for cleanup log
+  * [a5aaf33] buildd: use $FLAVOURS to control which flavours are built
+  * [301769f] Remove grml2hd boot options
+  * [8956f89] Remove noapm from boot options
+  * [b02525c] Remove duplicate mentions of nousb*
+  * [873eae1] Remove 915resolution boot option doc
+  * [ab2da74] Remove tsplash support
+  * [726a0a5] Update GRML Splash text to be neutral
+  * [c58ac42] Move init-top/grml into hands of 42-branding
+  * [00b6072] Deploy /etc/lsb-base-logging.sh
+  * [97bddb8] buildd: files moved to grml.org:/daily/
+  * [d82c4d5] lsb-base-logging: must use $TPUT for tput
+  * [5c514e0] Enhance lsb-base-logging styles for action messages
+  * [eff94dc] Ship sanitized rsyslog.conf
+  * [6833c8b] Move 01-iceweasel to GRML_XL scripts
+  * [164b594] Use addon files from chroot if present
+  * [c9ebd69] Switch back to /var/log/syslog
+  * [a135bda] Append .log to grml-buildd.std{out,err} logfile names
+  * [8970e98] Remove dbus machine-id
+  * [8e7b216] buildd: create ISO_NAME in function.sh
+  * [d3526f6] buildd: merge grml-buildd.std{out,err} into grml-buildd.log
+  * [d7655f4] buildd: prefix log dir target with PRODUCT_NAME
+  * [b3107d1] buildd: report email overhaul
+  * [d9a3489] Move grml-live.log to output directory
+  * [4152229] Retain FAI logs in grml_logs directory
+  * [005cdc1] Add APT_PROXY configuration variable
+  * [082aac8] buildd: add jenkins-link_latest.sh
+  * [877d273] buildd jenkins-link_latest.sh: handle non-existing files
+  * [c2fdb23] buildd jenkins: temporarily link into /new
+  * [8c79da9] Add -A option for ensuring clean builds and pack artifacts
+  * [a82f40f] Add -U option to ensure output files ownership
+  * [e253ce7] Don't treat CHROOT_ARCHIVE as a directory
+  * [b63a5f1] Add documentation for -A and -U
+  * [f016252] Copy install_packages.list to grml_logs
+  * [da6352e] Use grml_logs/fai as CHECKLOG source
+  * [b010f18] New: specify SNAPSHOT to change debian.list to
+    snapshot.debian.org
+  * [7690106] Silence LOGFILE errors when using log too early
+  * [eab80d9] Add -T option for unpacking chroot archives
+  * [f83953b] Document "nobeep" boot option.
+  * [9b8e3c9] jenkins-link_latest: prepare for standalone use
+  * [0aa6907] Refer to new grml-udev-rebuildfstab man page in /etc/fstab
+  * [0894980] Set Acquire::Check-Valid-Until false in APT config
+  * [9dafaad] Unifiy local config handling
+  * [a55b991] Always enable grml-live distribution
+  * [e68d43e] Fix unpacking of existing chroot tarball
+  * [d3176d7] Update grub background picture
+  * [b9dbe4c] Try to use a good gfx resolution by default
+  * [c30a975] Don't hardcode wm-ng as window manager for X
+  * [793ad3a] Embed squash4 in efigrub
+  * [98aec0d] Use grub from target
+  * [fba0f4e] Hardcode i386-pc for grub path
+
+  [ Ulrich Dangel ]
+  * [c73eca0] Remove load_video function call as function does not exist
+    anyway
+  * [8735823] Use prefix=($root) instead of prefix=$root in efi script
+  * [f09970d] Add piwik tracking code to startpage.html
+  * [0178232] Fix typo (1200 instead of 1280) in grub.cfg
+
+ -- Michael Prokop <mika@grml.org>  Fri, 09 Dec 2011 23:21:10 +0100
+
 grml-live (0.16.1) unstable; urgency=low
 
   The "right before the storm v2-ng++" release.

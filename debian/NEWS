@@ -1,3 +1,27 @@
+grml-live (0.17.0) unstable; urgency=low
+
+  1) The sources.list handling has been further improved and
+  better integrated, config variable $GRML_LIVE_SOURCES has gone.
+
+  2) This release provides initial support for generating netboot
+  packages during build process (enabled by default).
+
+  3) If the according dependencies are available (xorriso
+  >=1.1.6-1 on buildsystem, grub-efi-amd64-bin inside chroot and
+  building using AMD64 class) then the ISOs provide initial UEFI
+  support.
+
+  4) For better integration with Jenkins a report of missing
+  packages in xunit format is generated and new options -A (for
+  ensuring clean builds and pack artifacts), -T (for unpacking
+  chroot archives) and -U (to ensure output files ownership) has
+  been introduced.
+
+  5) Using the SOURCES class provides support to retrieve Debian
+  package sources in the build process.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 09 Dec 2011 23:30:02 +0100
+
 grml-live (0.15.0) unstable; urgency=low
 
   1) The new command line option -D supports setting a
