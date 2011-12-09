@@ -1,3 +1,10 @@
+grml-autoconfig (0.9.39) grml-testing; urgency=low
+
+  [ Ulrich Dangel ]
+  * Replace bootparameter values with x instead of VALUE
+
+ -- Christian Hofstaedtler <ch@grml.org>  Fri, 09 Dec 2011 20:52:45 +0100
+
 grml-autoconfig (0.9.38) grml-testing; urgency=low
 
   [ Ulrich Dangel ]
