@@ -1,3 +1,10 @@
+grml-desktop (0.3.11) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * Remove background spec from the Grml theme.
+
+ -- Christian Hofstaedtler <ch@grml.org>  Fri, 09 Dec 2011 21:03:23 +0100
+
 grml-desktop (0.3.10) unstable; urgency=low
 
   [ Ulrich Dangel ]
