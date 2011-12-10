@@ -133,6 +133,10 @@ kexec-tools
 iscsitarget
 tgt
 
+# ata-over-ethernet
+aoetools
+vblade
+
 # networking
 atftp
 avahi-daemon
