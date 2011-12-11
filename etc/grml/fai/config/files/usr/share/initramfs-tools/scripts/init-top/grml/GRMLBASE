@@ -142,9 +142,9 @@ else
 SPLASH="
 ${YELLOW}   ____              _
 ${YELLOW}  / ___| _ __ _____ | |
-${YELLOW} | |  _|| / /|     || |
-${YELLOW} | |_| ||  / | | | || |   
-${YELLOW}  \____||_|  |_|_|_||_|    
+${YELLOW} | |  _ | / /|     || |
+${YELLOW} | |_| ||  / | | | || |
+${YELLOW}  \____||_|  |_|_|_||_|
 
 ${WHITE}Grml Live Linux - http://grml.org/${NORMAL}"
 fi
