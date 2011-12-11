@@ -140,11 +140,11 @@ ${WHITE}based on grml.org.
 ${NORMAL}"
 else
 SPLASH="
-${RED}   ____ ____  __  __ _
-${RED}  / ___|  _ \|  \/  | |
-${RED} | |  _| |_) | |\/| | |
-${RED} | |_| |  _ <| |  | | |___
-${RED}  \____|_| \_\_|  |_|_____|
+${YELLOW}   ____              _
+${YELLOW}  / ___| _ __ _____ | |
+${YELLOW} | |  _|| / /|     || |
+${YELLOW} | |_| ||  / | | | || |   
+${YELLOW}  \____||_|  |_|_|_||_|    
 
 ${WHITE}Grml Live Linux - http://grml.org/${NORMAL}"
 fi
