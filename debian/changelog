@@ -1,3 +1,19 @@
+grml-desktop (0.3.12) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [809620e] Add meta4 keybindings
+  * [bfb272c] Add desktop related config files from grml-etc.
+  * [d3b417c] Add hsetroot to depends.
+  * [b001ef6] Update grml-etc conflict due to configfile move
+  * [1c06ab6] Set correct permissions on rox.sourceforge.net/MIME-types/image
+
+  [ Christian Hofstaedtler ]
+  * [0912108] Update xlock text
+  * [88eace2] Remove idesk, gkrellm2 config
+  * [e82b446] Add ${misc:Depends} to Depends
+
+ -- Christian Hofstaedtler <ch@grml.org>  Sun, 11 Dec 2011 20:54:42 +0100
+
 grml-desktop (0.3.11) unstable; urgency=low
 
   [ Ulrich Dangel ]
