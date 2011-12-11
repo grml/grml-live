@@ -120,6 +120,7 @@ BUILD_ONLY=''
 BUILD_DIRTY=''
 BOOTSTRAP_ONLY=''
 HOSTNAME=''
+CONFIGDUMP=''
 
 # don't use colors/escape sequences
 if [ -r /lib/lsb/init-functions ] ; then
@@ -165,6 +166,7 @@ umount_all() {
 bailout() {
   rm -f /var/run/fai/fai_softupdate_is_running \
         /var/run/fai/FAI_INSTALLATION_IN_PROGRESS
+  [ -n "$CONFIGDUMP"      ]  && rm -f  "$CONFIGDUMP"
   [ -n "$SQUASHFS_STDERR" ]  && rm -rf "$SQUASHFS_STDERR"
   umount_all
   [ -n "$1" ] && EXIT="$1" || EXIT="1"
@@ -517,6 +519,13 @@ log "$CMDLINE"
 einfo "Logging actions to logfile $LOGFILE"
 # }}}
 
+# dump config variables into file, for script access {{{
+CONFIGDUMP=$(mktemp)
+set | egrep \
+  '^(GRML_NAME|RELEASENAME|DATE|VERSION|SUITE|ARCH|DISTRI_NAME|USERNAME|HOSTNAME|APT_PROXY)=' \
+  > ${CONFIGDUMP}
+# }}}
+
 # unpack chroot {{{
 if [ -n "${UNPACK_CHROOT}" ]; then
   log "Unpacking chroot from ${UNPACK_CHROOT}"
@@ -631,8 +640,8 @@ else
       echo force-unsafe-io > "$CHROOT_OUTPUT/etc/dpkg/dpkg.cfg.d/unsafe-io"
 
       log "Executed FAI command line:"
-      log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY GRML_LIVE_LOCAL_CONFIG=$LOCAL_CONFIG fai $VERBOSE -C $GRML_FAI_CONFIG -s file:///$GRML_FAI_CONFIG/config -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
-      BUILD_ONLY="$BUILD_ONLY" BOOTSTRAP_ONLY="$BOOTSTRAP_ONLY" GRML_LIVE_LOCAL_CONFIG="$LOCAL_CONFIG" fai $VERBOSE \
+      log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY GRML_LIVE_CONFIG=$CONFIGDUMP fai $VERBOSE -C $GRML_FAI_CONFIG -s file:///$GRML_FAI_CONFIG/config -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
+      BUILD_ONLY="$BUILD_ONLY" BOOTSTRAP_ONLY="$BOOTSTRAP_ONLY" GRML_LIVE_CONFIG="$CONFIGDUMP" fai $VERBOSE \
                   -C "$GRML_FAI_CONFIG" -s "file:///$GRML_FAI_CONFIG/config" -c"$CLASSES" \
                   -u "$HOSTNAME" "$FAI_ACTION" "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
       RC="$PIPESTATUS" # notice: bash-only

@@ -8,14 +8,11 @@
 
 set -u
 set -e
+. "$GRML_LIVE_CONFIG"
 
 # visualize chroot inside zsh:
 echo grml_chroot > $target/etc/debian_chroot
 
-HOSTNAME=''
-[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
-[ -n "$GRML_LIVE_LOCAL_CONFIG" ] && . "$GRML_LIVE_LOCAL_CONFIG"
-[ -n "$HOSTNAME" ] || HOSTNAME=grml
 echo "$HOSTNAME" > $target/etc/hostname
 
 if [ -n "${APT_PROXY:-}" ] ; then

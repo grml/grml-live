@@ -9,10 +9,7 @@
 set -u
 set -e
 
-HOSTNAME=''
-[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
-[ -n "$GRML_LIVE_LOCAL_CONFIG" ] && . "$GRML_LIVE_LOCAL_CONFIG"
-[ -n "$HOSTNAME" ] || HOSTNAME=grml
+. "$GRML_LIVE_CONFIG"
 
 # the hostname of the chroot usually isn't the same as the one for the live-system
 BUILD_HOSTNAME="$($ROOTCMD hostname)"

@@ -8,11 +8,7 @@
 
 set -u
 set -e
-
-USERNAME=''
-[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
-[ -n "$GRML_LIVE_LOCAL_CONFIG" ] && . "$GRML_LIVE_LOCAL_CONFIG"
-[ -n "$USERNAME" ] || USERNAME=grml
+. "$GRML_LIVE_CONFIG"
 
 if grep -q "$USERNAME:x:1000" $target/etc/group ; then
    echo "group $USERNAME exists already, skipping"
