@@ -59,9 +59,9 @@ po::powerokwait:/etc/init.d/powerfail stop
 1:12345:respawn:/sbin/grml-runtty /dev/tty1 /usr/share/grml-scripts/run-welcome root
 2:2345:respawn:/sbin/grml-runtty /dev/tty2 /usr/share/grml-scripts/run-screen root
 3:2345:respawn:/sbin/grml-runtty /dev/tty3 /usr/share/grml-scripts/run-screen root
-4:2345:respawn:/sbin/grml-runtty /dev/tty4 /usr/share/grml-scripts/run-screen grml
-5:2345:respawn:/sbin/grml-runtty /dev/tty5 /bin/zsh grml
-6:2345:respawn:/sbin/grml-runtty /dev/tty6 /bin/zsh grml
+4:2345:respawn:/sbin/grml-runtty /dev/tty4 /usr/share/grml-scripts/run-screen $USERNAME
+5:2345:respawn:/sbin/grml-runtty /dev/tty5 /bin/zsh $USERNAME
+6:2345:respawn:/sbin/grml-runtty /dev/tty6 /bin/zsh $USERNAME
 9:2345:respawn:/sbin/getty  38400 tty9
 #10:2345:respawn:/sbin/grml-runtty /dev/tty10 /usr/sbin/grml-iptstate root
 11:2345:respawn:/sbin/grml-runtty /dev/tty11 /usr/bin/htop root

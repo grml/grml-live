@@ -68,12 +68,6 @@ add_user_to_group voice
 sed -i 's/^root::/root:*:/'            $target/etc/shadow
 sed -i "s/^$USERNAME:!:/$USERNAME:*:/" $target/etc/shadow
 
-# make sure users can log in on consoles 4, 5 and 6 if username != grml:
-if [ "$USERNAME" != "grml" ] ; then
-   sed -i "s/-u grml -g grml --autologin grml/-u ${USERNAME} -g ${USERNAME} --autologin ${USERNAME}/" \
-   $target/etc/inittab
-fi
-
 if [ -r $target/bin/zsh ] ; then
    $ROOTCMD chsh -s /bin/zsh root
    $ROOTCMD chsh -s /bin/zsh $USERNAME

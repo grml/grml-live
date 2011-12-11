@@ -9,6 +9,11 @@
 set -u
 set -e
 
+USERNAME=''
+[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
+[ -n "$GRML_LIVE_LOCAL_CONFIG" ] && . "$GRML_LIVE_LOCAL_CONFIG"
+[ -n "$USERNAME" ] || USERNAME=grml
+
 if ! [ -r $target/etc/runlevel.conf ] ; then
    echo 'Warning: /etc/runlevel.conf does not exist...'
    echo '... assuming we do not have file-rc, skipping 15-initsetup'
@@ -30,6 +35,7 @@ fcopy -v /etc/runlevel.conf
 
 # provide Grml's inittab configuration
 fcopy -v /etc/inittab
+sed -i "s/\$USERNAME\$/${USERNAME}/" $target/etc/inittab
 
 # provide Grml's bootlocal init scripts
 fcopy -v /etc/init.d/bootlocal.first
