@@ -1,99 +1,55 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>grml.org - Linux Live-CD for sysadmins and texttool-users</title>
+<title>Grml Live Linux</title>
 <link rel="home" href="http://grml.org/" title="grml.org" />
 <link rel="icon" href="images/favicon.png" type="image/png" />
-<meta http-equiv="content-Type" content="application/xhtml+xml; charset=iso-8859-1" />
 <style type="text/css">
-   @import url("style.css");
+@media all {
+  html {background-color: #FFDA62;}
+  a {color:#C70036; text-decoration: underline}
+  a.current {color:#999999}
+  a:hover {text-decoration: underline}
+  a.plain {text-decoration: none}
+  a.plain:hover {text-decoration: underline}
+  body {font-family: verdana, tahoma, helvetica, arial, sans-serif; font-size: 100%; background-color:#FFDA62; margin: 1em}
+  cite {font-size: 80%}
+  div.container {width: 90%; height: auto; text-align: left; background-color:#FFFFFF; border-style:solid; border-width:1px; border-color:#CFB8B8; margin: 0px auto 0px auto}
+  div.content {background-color:#FFFFFF; padding: 0.5em 0.5em 0.5em 0.5em; border-style:solid; border-width:1px; border-color:#F0F0F0; margin: 0.5em 0.5em 0.5em 0.5em}
+  div.content h3 a {color:#996666}
+  div.copyright {line-height: 3em; text-align:center; font-size:50%; background-color: #F8F8F8; color: #999999}
+  h1 {color:#9C6562 ; font-size:110%; font-weight:bold}
+  h2 {color:#00309C; font-size:100%; font-weight:bold}
+  h3 {color:#996666; font-size:90%; font-weight:bold; padding-bottom:0.3em; border-bottom-style:solid; border-bottom-width:1px; border-bottom-color:#CFB8B8;
+	margin-bottom:0em}
+  p {text-align:justify; color:#666666; font-size: 90%; line-height: 1.5em}
+}
 </style>
 </head>
 
 <body>
 <div class="container">
-      <div class="menu">
-            <h1><a class="plain" href="http://grml.org/"><img style="border: 0" alt="grml.org" src="images/logo.png" /></a></h1>
-            <h3><a class="plain">Online-Links:</h3>
-            <h3><a class="plain" href="http://grml.org/">HOME</a></h3>
-            <h3>About</h3>
-              <p>
-                <a class="plain" href="http://grml.org/features/">Features</a><br/>
-                <a class="plain" href="http://grml.org/team/">Team</a><br/>
-                <a class="plain" href="http://grml.org/roadmap/">Roadmap</a><br/>
-                <a class="plain" href="http://grml.org/screenshots/">Screenshots</a><br/>
-              </p>
-            <h3>News</h3>
-              <p>
-                <a class="plain" href="http://grml.org/news/">News</a><br/>
-                <a class="plain" href="http://grml.org/press/">Press</a><br/>
-                <a class="plain" href="http://grml.org/index.rss" title="subscribe RSS-feed"><abbr title="format for syndicating news">RSS-Feed</abbr></a>
-                <a class="plain" href="http://grml.org/index.rss"><span style="font-family: verdana, sans-serif; font-size: 70%;
-                font-weight: bold; text-decoration: none; color: #8B8D7B; background-color: #FFDA62;
-                border: 1px solid; border-color: #8B8D7B #8B8D7B #8B8D7B #8B8D7B; padding:0px 3px 0px 3px;
-                margin: 0px;">RSS</span></a><br/>
-              </p>
-            <h3>Getting grml</h3>
-              <p>
-                <a class="plain" href="http://grml.org/download/">Download</a><br />
-                <a class="plain" href="http://grml.org/order/">Order</a><br />
-                <a class="plain" href="http://grml.org/files/">Files</a><br />
-              </p>
-            <h3>Documentation</h3>
-              <p>
-                <a class="plain" href="http://grml.org/docs/">Documentation</a><br/>
-                <a class="plain" href="http://grml.org/faq/"><abbr title="Frequently Asked Questions">FAQ</abbr></a><br/>
-                <a class="plain" href="http://wiki.grml.org/">Wiki</a><br/>
-                <a class="plain" href="http://grml.org/books/">Books</a><br/>
-                <a class="plain" href="http://grml.org/kernel/">Kernel</a><br/>
-                <a class="plain" href="http://grml.org/zsh/">Zsh</a><br/>
-              </p>
-            <h3>Development</h3>
-              <p>
-                <a class="plain" href="http://grml.org/bugs/">Bugs</a><br/>
-                <a class="plain" href="http://solutions.grml.org/">grml-Solutions</a><br/>
-                <a class="plain" href="http://grml.org/beta-tester/">Beta-Tester</a><br/>
-                <a class="plain" href="http://grml.supersized.org/">Devel Blog</a><br/>
-              </p>
-            <h3>Communication</h3>
-              <p>
-                <a class="plain" href="http://grml.org/mailinglist/">Mailinglist</a><br/>
-                <a class="plain" href="http://grml.org/irc/">IRC</a><br/>
-                <a class="plain" href="http://grml.org/report/">Report wishes</a><br/>
-                <a class="plain" href="http://grml.org/contact/">Contact</a><br/>
-              </p>
-
-            <h3>Search for:</h3>
-              <form method="get" action="http://grml.org/cgi-bin/search.pl">
-               <fieldset style="border: 0px">
-                <input name="Terms" size="13" />
-                <input type="submit" value="Search" />
-               </fieldset>
-              </form>
-
-            <h3><a class="plain" href="http://grml.org/sitemap/">Sitemap</a></h3>
-
-            <p></p>
-      </div>
-
       <div class="content">
+            <a class="plain" href="http://grml.org/"><img style="border: 0" alt="grml.org" src="images/logo.png" align="right"></a>
 
-            <h1>grml - Linux for geeks</h1>
+            <h1>Grml Live Linux</h1>
+            <a href="http://grml.org/news/">News</a> |
+            <a href="http://grml.org/download/">Download</a> |
+            <a href="http://grml.org/docs/">Documentation</a>
+
+
+            <h2>This CD</h2>
+            <p>This CD is bootable! To use this grml CD, boot your computer from
+            it!</p>
 
             <h2>What is grml?</h2>
 
-            <p>grml is a bootable CD (Live-CD) originally based on <a
-            href="http://www.knopper.net/knoppix/">Knoppix</a> and nowadays
-            based on <a href="http://www.debian.org/">Debian</a>. grml includes
-            a collection of GNU/Linux software especially for users of
-            texttools and system administrators. grml provides automatic
+            <p>grml is a bootable CD (Live-CD) based on <a
+            href="http://www.debian.org/">Debian</a>. grml includes
+            a collection of GNU/Linux software especially for system
+            administrators. grml provides automatic
             hardware detection. You can use grml (for example) as a rescue
-            system, for analyzing systems/networks or as a working environment.
-            It is not necessary to install anything to a harddisk; you don't
-            even need a harddisk to run it. Due to on-the-fly decompression
-            grml includes about 2.1 GiB of software and documentation on the
-            CD. You don't have to pay anything to use grml because it is free
-            software!</p>
+            system, or to install new machines.</p>
 
             <img style="float: right" src="images/linux.jpg" alt="*" />
 
@@ -120,22 +76,14 @@
             href="http://grml.org/sources/">grml.org/sources/</a>.</p>
 
             <p>Please verify the proper download of the image with the supplied
-            MD5-hash and check your CD with readcd! Check out <a
+            SHA1-hash and check your CD with readcd! Check out <a
             href="http://wiki.grml.org/doku.php?id=problems">the
             problems webpage in the grml-wiki</a> for further
             information.</p>
 
       </div>
 
-      <div class="sub_links">
-            <a href="http://grml.org/features/">Features</a> |
-            <a href="http://grml.org/news/">News</a> |
-            <a href="http://grml.org/download/">Download</a> |
-            <a href="http://grml.org/docs/">Documentation</a> |
-            <a href="http://grml.org/contact/">Contact</a> |
-            <a href="http://grml.org/sitemap/">Sitemap</a> |
-            <a href="http://grml.org/copyright/">Impressum</a>
-      </div>
+
 
 <div class="copyright">&copy; Copyright 2003++ <a
 href="http://grml.org/"><img style="border: 0"
