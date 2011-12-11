@@ -12,7 +12,7 @@ Bugs: mailto:bugs@grml.org
 
 Package: grml-desktop
 Architecture: all
-Depends: grml-scripts (>= 1.1.18), moblin-icon-theme
+Depends: grml-scripts (>= 1.1.18), moblin-icon-theme, hsetroot
 Recommends: fluxbox
 Suggests: idesk, fvwm | fvwm2 | fvwm-crystal, awesome, pekwm
 Conflicts: grml-etc (<< 0.9.14)
