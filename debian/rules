@@ -51,7 +51,6 @@ binary-indep: build install
 	mkdir -p debian/grml-etc/usr/share/lintian/overrides/ 
 	cp -av debian/overrides debian/grml-etc/usr/share/lintian/overrides/grml-etc
 	dh_fixperms
-	chmod 0755  debian/grml-etc/etc/skel/.config/rox.sourceforge.net/MIME-types/image
 	dh_installdeb
 	find debian/grml-etc/etc -type f ! -name \*.xpm ! -name \*.png -print | \
 	sed -e 's#^debian/grml-etc##g' > debian/grml-etc/DEBIAN/conffiles
