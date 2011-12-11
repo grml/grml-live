@@ -9,9 +9,6 @@
 set -u
 set -e
 
-[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
-[ -n "$GRML_LIVE_LOCAL_CONFIG" ] && . "$GRML_LIVE_LOCAL_CONFIG"
-
 # Work around a bug in the portmap package, see
 # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=317358
 

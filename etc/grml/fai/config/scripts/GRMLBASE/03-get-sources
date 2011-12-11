@@ -6,9 +6,6 @@
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
-[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
-[ -n "$GRML_LIVE_LOCAL_CONFIG" ] && . "$GRML_LIVE_LOCAL_CONFIG"
-
 if ifclass SOURCES ; then
   echo "Class SOURCES set, retrieving source packages."
 else
