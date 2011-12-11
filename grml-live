@@ -293,15 +293,15 @@ while getopts "a:C:c:d:D:g:i:I:o:r:s:t:T:U:v:AbBFnNqQuVz" opt; do
     b) BUILD_ONLY=1 ;;
     B) BUILD_DIRTY=1 ;;
     c) CLASSES="$OPTARG" ;;
-    C) GRML_LIVE_LOCAL_CONFIG="$OPTARG" ;;
+    C) GRML_LIVE_LOCAL_CONFIG="$(readlink -f $OPTARG)" ;;
     d) DATE="$OPTARG" ;;
-    D) GRML_FAI_CONFIG="$OPTARG" ;;
+    D) GRML_FAI_CONFIG="$(readlink -f $OPTARG)" ;;
     g) GRML_NAME="$OPTARG" ;;
     i) ISO_NAME="$OPTARG" ;;
     I) CHROOT_INSTALL="$OPTARG" ;;
     n) SKIP_MKISOFS=1 ;;
     N) BOOTSTRAP_ONLY=1; SKIP_MKISOFS=1; SKIP_MKSQUASHFS=1 ;;
-    o) OUTPUT="$OPTARG" ;;
+    o) OUTPUT="$(readlink -f $OPTARG)" ;;
     q) SKIP_MKSQUASHFS=1 ;;
     Q) SKIP_NETBOOT=1 ;;
     r) RELEASENAME="$OPTARG" ;;
