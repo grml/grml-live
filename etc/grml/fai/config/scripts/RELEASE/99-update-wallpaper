@@ -1,0 +1,22 @@
+#!/bin/sh
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/RELEASE/99-update-wallpaper
+# Purpose:       Update the grml wallpaper
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+. "$GRML_LIVE_CONFIG"
+
+FONTFILE=${FONTFILE:-/usr/share/grml-live/fonts/graphicoreBitmapFont0-Light.otf}
+TITLE_FONTSIZE=${TITLE_FONTSIZE:-200}
+GRML_BG=${GRML_BG:-$target/usr/share/grml/desktop-bg.png}
+GRML_WALLPAPER=${GRML_WALLPAPER:-$target/usr/share/grml/desktop.jpg}
+
+echo "Creating release wallpaper"
+
+convert "$GRML_BG" -gravity center \
+    -fill white -font "$FONTFILE" \
+    -pointsize $TITLE_FONTSIZE \
+    -draw "text 0,0 \"$VERSION\"" "$GRML_WALLPAPER"
+
