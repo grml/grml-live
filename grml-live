@@ -1380,6 +1380,7 @@ create_netbootpackage() {
   mkdir -p "${WORKING_DIR}/pxelinux.cfg"
 
   if tar -C "$OUTPUTDIR" -jcf "${OUTPUT_FILE}" "grml_netboot_package_${GRML_NAME}_${VERSION}" ; then
+    sha1sum "${OUTPUT_FILE}" > "${OUTPUT_FILE}.sha1"
     einfo "Generated netboot package ${OUTPUT_FILE}" ; eend 0
     rm -rf "${OUTPUTDIR}"
   else
