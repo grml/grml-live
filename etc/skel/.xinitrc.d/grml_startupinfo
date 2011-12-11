@@ -1,0 +1,18 @@
+#!/bin/sh
+# Filename:      ~/.xinitrc.d/grml_startupinfo
+# Purpose:       display startup information
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+if [ "$XINIT_GRML_STARTUPINFO" = "false" ] ; then
+   exit 0
+fi
+
+if [ -x /usr/bin/osd_cat ] ; then
+   echo "Starting X window system and loading window manager..." | \
+   osd_cat -c white -A center -p middle -f "-misc-fixed-medium-r-normal-*-15-150-*-*-c-*-iso8859-15" &
+fi
+
+## END OF FILE #################################################################

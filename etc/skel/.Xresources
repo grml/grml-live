@@ -1,0 +1,200 @@
+! Filename:      .Xresources
+! Purpose:       config file for X
+! Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+! Bug-Reports:   see http://grml.org/bugs/
+! License:       This file is licensed under the GPL v2.
+!###############################################################################
+! Notice:   apply changes via running 'xrdb -merge ~/.Xresources'
+!           run "xprop WM_CLASS" to find out title of windows
+!###############################################################################
+
+! If you do not have any iso8859-15 fonts, use iso8859-1
+!*font:     		-misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
+
+XTerm*faceName:     Terminus
+XTerm*faceSize:     11
+XTerm*font2:		-misc-fixed-medium-r-normal-*-*-70-*-*-c-*-iso8859-15
+XTerm*font3:     	-misc-fixed-medium-r-normal-*-*-100-*-*-c-*-iso8859-15
+XTerm*font4:     	-misc-fixed-medium-r-normal-*-*-120-*-*-c-*-iso8859-15
+XTerm*font5:     	-misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
+
+XTerm*utf8: 1
+
+UXTerm*faceName:     Terminus
+UXTerm*faceSize:     11
+UXTerm*font1:           -misc-fixed-*-*-*-*-6-*-*-*-*-*-iso10646-*
+UXTerm*font2:           -misc-fixed-medium-r-normal--8-80-75-75-c-50-iso10646-1
+UXTerm*font3:           -misc-fixed-medium-r-normal--14-130-75-75-c-70-iso10646-1
+UXTerm*font4:           -misc-fixed-medium-r-normal--13-120-75-75-c-80-iso10646-1
+UXTerm*font5:           -misc-fixed-medium-r-normal--18-120-100-100-c-90-iso10646-1
+UXTerm*font6:           -misc-fixed-medium-r-normal--20-200-75-75-c-100-iso10646-1
+UXTerm*utf8Fonts.font:          -misc-fixed-medium-r-normal--18-120-100-100-c-90-iso10646-1
+UXTerm*utf8Fonts.wideFont:      -misc-fixed-medium-r-normal-ko-18-120-100-100-c-180-iso10646-1
+
+UXTerm*allowFontOps: true
+
+! enable UTF8
+! XTerm*utf8: 0
+! start via xterm -class UXTerm or 'uxterm'
+UXTerm*utf8: 1
+UXTerm*eightBitInput: false
+UXTerm*metaSendsEscape: true
+
+XTerm*cursorColor: orange
+XTerm*borderColor: white
+XTerm*scrollColor: black
+XTerm*loginShell: true
+XTerm*visualBell: true
+XTerm*saveLines:  8192
+XTerm*shading: 80
+
+XTerm*allowFontOps:    true
+XTerm*allowSendEvents: true
+XTerm*internalBorder:  0
+XTerm*borderWidth:     0
+XTerm*multiScroll:     true
+XTerm*utmpInhibit:     false
+XTerm*jumpScroll:      true
+XTerm*waitForMap:      true
+XTerm*scrollBar:       false
+!XTerm*title:           h
+
+!! Fix the Alt-p is wacko char problem.
+XTerm*eightBitInput:  false
+XTerm*metaSendsEscape: true
+
+! The following two sections take advantage of new features in version 7
+! of the Athena widget library.  Comment them out if you have a shallow
+! color depth.
+XTerm*mainMenu*backgroundPixmap:     gradient:vertical?dimension=400&start=gray10&end=gray40
+XTerm*mainMenu*foreground:           white
+XTerm*vtMenu*backgroundPixmap:       gradient:vertical?dimension=550&start=gray10&end=gray40
+XTerm*vtMenu*foreground:             white
+XTerm*fontMenu*backgroundPixmap:     gradient:vertical?dimension=300&start=gray10&end=gray40
+XTerm*fontMenu*foreground:           white
+XTerm*tekMenu*backgroundPixmap:      gradient:vertical?dimension=300&start=gray10&end=gray40
+XTerm*tekMenu*foreground:            white
+
+! other terminals:
+rxvt*.cursorColor: orange
+rxvt*.borderColor: white
+rxvt*.scrollColor: black
+rxvt*font: xft:Terminus:size=11
+
+
+! urxvt
+URxvt*font: xft:terminus:size=10
+URxvt.italicFont:        xft:Bitstream Vera Sans Mono:italic:autohint=true
+URxvt.boldItalicFont:    xft:Bitstream Vera Sans Mono:bold:italic:autohint=true
+!URxvt.background: black
+URxvt.background: rgba:0000/0000/0000/ccdd
+URxvt.underlineColor: white
+URxvt.colorBD: white
+URxvt.colorIT: green
+URxvt.fading: 30
+
+URxvt.scrollBar: off
+URxvt*scrollstyle: xterm
+
+! extensions:
+URxvt.perl-ext: default,matcher,tabbed
+URxvt.perl-ext-common: default,matcher,tabbed
+URxvt.urlLauncher: firefox
+URxvt.matcher.button: 1
+URxvt*matcher.pattern.1: \\b(mailto|http|https|ftp|file):[/]*[\\w-]\\.[\\w./?&@#-]*[\\w/-]
+URxvt*matcher.pattern.2: \\bwww\\.[\\w-]\\.[\\w./?&@#-]*[\\w/-]
+URxvt.matcher.rend.0: fg8
+
+! support stop scrolling on tty output
+URxvt.saveLines:         100000
+URxvt*scrollTtyOutput:   false
+URxvt*scrollWithBuffer:  true
+URxvt*scrollTtyKeypress: true
+
+! Based on Tomorrow Theme
+*.foreground:   #c5c8c6
+*.background:   #1d1f21
+*.cursorColor:  orange
+*.color0:       #000000
+*.color1:       #af7575
+*.color2:       #8baf83
+*.color3:       #ae7b00
+*.color4:       #8991b7
+*.color5:       #682a9b
+*.color6:       #2b6651
+*.color7:       #929593
+*.color8:       #666666
+*.color9:       #cc6666
+*.color10:      #b5bd68
+*.color11:      #f0c674
+*.color12:      #81a2be
+*.color13:      #b294bb
+*.color14:      #8abeb7
+*.color15:      #ecebec
+
+! XTerm Profiles - use via 'xterm -name profilename'
+light*foreground: black
+light*background: gray90
+light*cursorColor: blue
+light*font: -misc-fixed-medium-r-normal--14-140-75-75-c-90-iso8859-15
+
+local*foreground: rgb:f0/f0/ff
+local*background: rgb:00/00/25
+local*cursorColor: rgb:c0/c0/ff
+local*font: -misc-fixed-medium-r-normal--14-140-75-75-c-90-iso8859-15
+
+remote*foreground: rgb:f0/ff/f0
+remote*background: rgb:00/25/00
+remote*cursorColor: rgb:white
+remote*font: -misc-fixed-medium-r-normal--14-140-75-75-c-90-iso8859-15
+
+root*foreground: rgb:ff/f0/c0
+root*background: rgb:25/00/00
+root*cursorColor: rgb:ff/c0/c0
+root*font: -misc-fixed-medium-r-normal--14-140-75-75-c-90-iso8859-15
+
+small*foreground: white
+small*background: black
+small*cursorColor: red
+small*font: -misc-fixed-medium-r-normal-*-*-80-*-*-c-*-iso8859-15
+
+blind*foreground: white
+blind*background: black
+blind*cursorColor: red
+blind*font: -misc-fixed-medium-r-normal-*-*-150-*-*-c-*-iso8859-15
+
+huge*foreground: white
+huge*background: black
+huge*cursorColor: red
+huge*font: -misc-fixed-medium-r-normal-*-*-210-*-*-c-*-iso8859-15
+
+presentation*foreground: white
+presentation*background: black
+presentation*cursorColor: red
+presentation*color12: lightblue
+presentation*color4: lightblue
+presentation*font: -misc-fixed-medium-r-normal-*-*-210-*-*-c-*-iso8859-15
+
+!Emacs*font: -misc-fixed-medium-r-normal-*-13-*-*-*-*-*-*-*
+!Emacs*menubar*Font: -misc-fixed-medium-r-normal-*-13-*-*-*-*-*-*-*
+!Emacs*EmacsFrame*buffers-tab.attributeFont: -misc-fixed-medium-r-normal-*-13-*-*-*-*-*-*-*
+!Emacs.modeline*attributeFont: -misc-fixed-medium-r-normal-*-13-*-*-*-*-*-*-*
+!Emacs*popup*Font: -*-graphite light att-*-*-*-*-*-120-*-*-*-*-*
+
+! http://www.nedit.org/technotes/looks-1.php
+nedit*enableThinThickness:          True
+nedit*enableToggleVisual:           True
+nedit*enableToggleColor:            True
+nedit*XmToggleButton.indicatorSize: 11
+nedit*enableEtchedInMenu:           True
+nedit*text.background:              white
+nedit*text.selectBackground:        #D0D0FF
+nedit*statsForm.background:         gray85
+nedit*statsLine.background:         gray85
+nedit*bottomShadowColor:            gray65
+nedit*topShadowColor:               #fefefe
+nedit*XmText.background:            white
+nedit*XmTextField.background:       white
+nedit*XmList.background:            white
+
+!# END OF FILE #################################################################

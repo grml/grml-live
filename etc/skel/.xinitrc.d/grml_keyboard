@@ -1,0 +1,31 @@
+#!/bin/sh
+# Filename:      ~/.xinitrc.d/grml_keyboard
+# Purpose:       configuration of keyboard layout
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+if [ "$XINIT_GRML_KEYBOARD" = "false" ] ; then
+   exit 0
+fi
+
+# Ctrl+Alt+Backspace killing xserver
+setxkbmap -option terminate:ctrl_alt_bksp
+
+if ! [ -r /etc/sysconfig/keyboard ] ; then
+   [ -r $HOME/.Xmodmap ] && xmodmap $HOME/.Xmodmap || setxkbmap us
+else
+   . /etc/sysconfig/keyboard
+   if [ "$XKEYBOARD" = "us" ] ; then
+      [ -r $HOME/.Xmodmap ] && xmodmap $HOME/.Xmodmap
+   else
+      if [ -n "$XKEYMODEL" ] ; then
+         setxkbmap -model "$XKEYMODEL" -layout "$XKEYBOARD"
+      else
+         setxkbmap "$XKEYBOARD"
+      fi
+   fi
+fi
+
+## END OF FILE #################################################################
