@@ -10,8 +10,9 @@ set -e
 
 if ifclass SNAPSHOT ; then
   set -u
-  debianlist="${target}/etc/apt/sources.list.d/debian.list"
-  perl -pi -e 's#(deb.* )(.*://.*?)( .*)$#$1http://snapshot.debian.org/archive/debian/'$(date +%Y%m%d)'/$3#' ${debianlist}
+  perl -pi -e 'BEGIN { $d="'$(date +%Y%m%d)'"; } s#^(\s+)(deb.* )(.*://cdn.*?)(
+  .*)$#$1$2http://snapshot.debian.org/archive/debian/$d/$4#' \
+    "${target}/etc/apt/sources.list.d/debian.list"
 fi
 
 ## END OF FILE #################################################################
