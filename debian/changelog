@@ -1,3 +1,13 @@
+grml-autoconfig (0.9.40) grml-testing; urgency=low
+
+  [ Ulrich Dangel ]
+  * [4543759] Split patterns for grep in config_stats.
+
+  [ Christian Hofstaedtler ]
+  * [b5300e2] Don't load cpufreq_ondemand if it's built-in
+
+ -- Michael Prokop <mika@grml.org>  Sun, 11 Dec 2011 21:24:03 +0100
+
 grml-autoconfig (0.9.39) grml-testing; urgency=low
 
   [ Ulrich Dangel ]
