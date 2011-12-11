@@ -26,10 +26,14 @@ OnDesktop Mouse5 :prevWorkspace
 
 Mod1 Tab       :NextWindow
 Mod1 Shift Tab :PrevWindow
-Control Right  :NextWorkspace
-Mod1 Shift Right     :NextWorkspace
-Control Left   :PrevWorkspace
-Mod1 Shift Left      :PrevWorkspace
+
+Control Right		:NextWorkspace
+Mod1 Shift Right	:NextWorkspace
+Mod4 Right		:NextWorkspace
+
+Control Left		:PrevWorkspace
+Mod1 Shift Left	:PrevWorkspace
+Mod4 Left		:PrevWorkspace
 
 Mod1 q   :PrevWindow
 Mod1 w   :NextWindow
@@ -49,6 +53,18 @@ Mod1 F10 :Workspace 10
 Mod1 F11 :Workspace 11
 Mod1 F12 :Workspace 12
 
+
+Mod4 1 :Workspace 1
+Mod4 2 :Workspace 2
+Mod4 3 :Workspace 3
+Mod4 4 :Workspace 4
+Mod4 5 :Workspace 5
+Mod4 6 :Workspace 6
+Mod4 7 :Workspace 7
+Mod4 8 :Workspace 8
+Mod4 9 :Workspace 9
+Mod4 0 :Workspace 10
+
 Mod1 Shift F1  :SendToWorkspace 1
 Mod1 Shift F2  :SendToWorkspace 2
 Mod1 Shift F3  :SendToWorkspace 3
@@ -65,31 +81,22 @@ Mod1 Shift F12 :SendToWorkspace 12
 Mod1 plus       :MaximizeWindow
 Mod1 numbersign :Minimize
 Mod1 space      :RootMenu
-Control Mod1 a :ArrangeWindows
-# Mod1 m :Minimize
-# Mod1 d :DeIconify
+Control Mod1 a  :ArrangeWindows
 
 # keymappings for programs
 Control Mod1 l :ExecCommand xlock
-Control Mod1 d :ExecCommand xrandr -s 1024x768
-Control Mod1 f :ExecCommand mozilla-firefox
+Control Mod1 f :ExecCommand iceweasel
 
 # screenshot
 Control Shift s :ExecCommand import -window root `date +shot-%Y-%m-%d-%H%M%S.jpg`
 
 Mod1 c         :ExecCommand fbrun
+Mod4 space     :ExecCommand fbrun
 
 # terminals:
 Mod1 Escape    :ExecCommand x-terminal-emulator
-Mod1 t         :ExecCommand x-terminal-emulator -fn '-misc-fixed-medium-r-semicondensed-*-*-120-*-*-*-*-iso8859-15'
-Control Mod1 t :ExecCommand x-terminal-emulator -fn '-*-terminus-medium-*-*-*-16-*-*-*-*-*-iso8859-15'
+Mod1 t         :ExecCommand x-terminal-emulator
+Control Mod1 t :ExecCommand x-terminal-emulator
 Control Mod1 i :ExecCommand LANG=en_US.iso885915 x-terminal-emulator
-
-# None F13                  :ExecCommand x-terminal-emulator -T "aumix" -e aumix
-# None F14                  :ExecCommand mozilla-firefox
-# None F15                  :ExecCommand x-terminal-emulator
-None XF86AudioRaiseVolume :ExecCommand XF86AudioRaiseVolume
-None XF86AudioLowerVolume :ExecCommand XF86AudioLowerVolume
-None XF86AudioMute        :ExecCommand XF86AudioMute
-
+Mod4 Return    :ExecCommand x-terminal-emulator
 ## END OF FILE #################################################################
