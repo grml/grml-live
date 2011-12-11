@@ -1,3 +1,19 @@
+grml-etc (1.3.5) grml-testing; urgency=low
+
+  [ Ulrich Dangel ]
+  * [13d2020] Slighty change colortheme for xterm
+  * [2320c44] Move desktop related config files to grml-desktop.
+  * [89e3d7e] Remove permission fix for rox.sourceforge.net/MIME-types/image
+  * [1036936] Remove trailing whitespace
+  * [bbd6d23] Remove deprecated IPython config.
+
+  [ Christian Hofstaedtler ]
+  * [0567eb3] Use fbsetbg to set wallpaper
+  * [b89dc28] Remove code to unmangle inittab from postrm
+  * [ba129ba] Update motd text
+
+ -- Christian Hofstaedtler <ch@grml.org>  Sun, 11 Dec 2011 21:18:21 +0100
+
 grml-etc (1.3.4) grml-testing; urgency=low
 
   [ Ulrich Dangel ]
