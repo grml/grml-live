@@ -1,6 +1,6 @@
 #!/bin/sh
-# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/47-initramfs
-# Purpose:       Rebuild initramfs in chroot
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/80-initramfs
+# Purpose:       configure initramfs and rebuild it
 # Authors:       grml-team (grml.org)
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
@@ -8,6 +8,14 @@
 
 set -u
 set -e
+
+fcopy -v /etc/initramfs-tools/hooks/000-udev-shutup
+fcopy -v /etc/initramfs-tools/conf.d/xz-compress
+
+if ! [ -f $target/usr/share/initramfs-tools/scripts/live ] ; then
+  echo "Error: live-boot/-initramfs does not seem to be present, can not create initramfs. Exiting.">&2
+  exit 1
+fi
 
 echo "Rebuilding initramfs"
 
