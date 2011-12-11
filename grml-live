@@ -293,7 +293,7 @@ while getopts "a:C:c:d:D:g:i:I:o:r:s:t:T:U:v:AbBFnNqQuVz" opt; do
     b) BUILD_ONLY=1 ;;
     B) BUILD_DIRTY=1 ;;
     c) CLASSES="$OPTARG" ;;
-    C) GRML_LIVE_LOCAL_CONFIG="$(readlink -f $OPTARG)" ;;
+    C) LOCAL_CONFIG="$(readlink -f $OPTARG)" ;;
     d) DATE="$OPTARG" ;;
     D) GRML_FAI_CONFIG="$(readlink -f $OPTARG)" ;;
     g) GRML_NAME="$OPTARG" ;;
@@ -321,21 +321,21 @@ shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 # }}}
 
 # read local (non-packaged) configuration {{{
-if [ -z "$GRML_LIVE_LOCAL_CONFIG" ]; then
+if [ -z "$LOCAL_CONFIG" ]; then
   if [ -r "/etc/grml/grml-live.local" ]; then
-    GRML_LIVE_LOCAL_CONFIG="/etc/grml/grml-live.local"
+    LOCAL_CONFIG="/etc/grml/grml-live.local"
   fi
 fi
-if [ -n "$GRML_LIVE_LOCAL_CONFIG" ]; then
-  if [ -r "$GRML_LIVE_LOCAL_CONFIG" ]; then
-    . $GRML_LIVE_LOCAL_CONFIG
+if [ -n "$LOCAL_CONFIG" ]; then
+  if [ -r "$LOCAL_CONFIG" ]; then
+    . $LOCAL_CONFIG
   else
-    eerror "Could not read specified local configuration file \"$GRML_LIVE_LOCAL_CONFIG\"."
+    eerror "Could not read specified local configuration file \"$LOCAL_CONFIG\"."
     bailout 1
   fi
-  GRML_LIVE_LOCAL_CONFIG=$(readlink -f "$GRML_LIVE_LOCAL_CONFIG")
+  LOCAL_CONFIG=$(readlink -f "$LOCAL_CONFIG")
 else
-  GRML_LIVE_LOCAL_CONFIG=''
+  LOCAL_CONFIG=''
 fi
 
 if [ -n "${GRML_LIVE_SOURCES:-}" ] ; then
@@ -408,7 +408,7 @@ if [ -z "$FORCE" ] ; then
    echo "${PN} [${GRML_LIVE_VERSION}]: check your configuration (or use -F to force execution):"
    echo
    echo "  FAI classes:       $CLASSES"
-   [ -n "$GRML_LIVE_LOCAL_CONFIG" ] && echo "  Configuration:     $GRML_LIVE_LOCAL_CONFIG"
+   [ -n "$LOCAL_CONFIG" ]        && echo "  Configuration:     $LOCAL_CONFIG"
    [ -n "$GRML_FAI_CONFIG" ]     && echo "  Config directory:  $GRML_FAI_CONFIG"
    echo "  main directory:    $OUTPUT"
    [ -n "$UNPACK_CHROOT" ]       && echo "  Chroot from:       $UNPACK_CHROOT"
@@ -510,7 +510,7 @@ fi
 start_seconds=$(cut -d . -f 1 /proc/uptime)
 log "------------------------------------------------------------------------------"
 log "Starting grml-live [${GRML_LIVE_VERSION}] run on $(date)"
-log "Using local config file: $GRML_LIVE_LOCAL_CONFIG"
+log "Using local config file: $LOCAL_CONFIG"
 log "Executed grml-live command line:"
 log "$CMDLINE"
 
@@ -551,7 +551,7 @@ case $SUITE in
 esac
 export SUITE # make sure it's available in FAI scripts
 
-for file in "$LIVE_CONF" "$GRML_LIVE_LOCAL_CONFIG" "$NFSROOT_CONF" ; do
+for file in "$LIVE_CONF" "$LOCAL_CONFIG" "$NFSROOT_CONF" ; do
     if [ -n "$file" ] ; then
        sed "s|^FAI_DEBOOTSTRAP=\"[a-z]* |FAI_DEBOOTSTRAP=\"$SUITE |" "$file" | sponge "$file"
     fi
@@ -631,8 +631,8 @@ else
       echo force-unsafe-io > "$CHROOT_OUTPUT/etc/dpkg/dpkg.cfg.d/unsafe-io"
 
       log "Executed FAI command line:"
-      log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY GRML_LIVE_LOCAL_CONFIG=$GRML_LIVE_LOCAL_CONFIG fai $VERBOSE -C $GRML_FAI_CONFIG -s file:///$GRML_FAI_CONFIG/config -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
-      BUILD_ONLY="$BUILD_ONLY" BOOTSTRAP_ONLY="$BOOTSTRAP_ONLY" GRML_LIVE_LOCAL_CONFIG="$GRML_LIVE_LOCAL_CONFIG" fai $VERBOSE \
+      log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY GRML_LIVE_LOCAL_CONFIG=$LOCAL_CONFIG fai $VERBOSE -C $GRML_FAI_CONFIG -s file:///$GRML_FAI_CONFIG/config -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
+      BUILD_ONLY="$BUILD_ONLY" BOOTSTRAP_ONLY="$BOOTSTRAP_ONLY" GRML_LIVE_LOCAL_CONFIG="$LOCAL_CONFIG" fai $VERBOSE \
                   -C "$GRML_FAI_CONFIG" -s "file:///$GRML_FAI_CONFIG/config" -c"$CLASSES" \
                   -u "$HOSTNAME" "$FAI_ACTION" "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
       RC="$PIPESTATUS" # notice: bash-only
