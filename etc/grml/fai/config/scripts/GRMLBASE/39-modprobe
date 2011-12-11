@@ -17,9 +17,6 @@ set -e
 # and http://blog.bofh.it/debian/id_236
 find $target/etc/modprobe.d -maxdepth 1 -type f ! -name \*\.conf -exec mv {} {}.conf \;
 
-# Replace modprobe configuration files to workaround issues.
-fcopy -v /etc/modprobe.d/radeon-kms.conf
-
 # Copy the loop options
 fcopy -v /etc/modprobe.d/loop-part.conf
 
