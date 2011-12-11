@@ -116,10 +116,10 @@ URxvt*scrollTtyKeypress: true
 *.background:   #1d1f21
 *.cursorColor:  orange
 *.color0:       #000000
-*.color1:       #912226
-*.color2:       #778900
+*.color1:       #af7575
+*.color2:       #8baf83
 *.color3:       #ae7b00
-*.color4:       #1d2594
+*.color4:       #8991b7
 *.color5:       #682a9b
 *.color6:       #2b6651
 *.color7:       #929593
