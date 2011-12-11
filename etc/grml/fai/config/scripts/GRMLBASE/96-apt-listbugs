@@ -18,16 +18,11 @@ fi
 set +u
 if ifclass RELEASE ; then
 set -u
-  HOSTNAME=''
-  [ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
-  [ -n "$GRML_LIVE_LOCAL_CONFIG" ] && . "$GRML_LIVE_LOCAL_CONFIG"
-  [ -n "$HOSTNAME" ] || HOSTNAME=grml
-
   if [ -x $target/usr/sbin/apt-listbugs -a -x $target/usr/bin/apt-show-source ] && \
      [ -x $target/etc/apt/grml/listbugs ] ; then
      for severity in critical grave serious ; do
          SEVERITY=$severity $ROOTCMD /etc/apt/grml/listbugs > \
-         /var/log/fai/$HOSTNAME/last/bugs.${severity} || true # make sure it does not fail
+         $LOGDIR/bugs.${severity} || true # make sure it does not fail
      done
   fi
 

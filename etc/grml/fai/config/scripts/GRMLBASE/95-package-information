@@ -9,23 +9,17 @@
 set -u
 set -e
 
-HOSTNAME=''
-[ -r /etc/grml/grml-live.conf ]  && . /etc/grml/grml-live.conf
-[ -n "$GRML_LIVE_LOCAL_CONFIG" ] && . "$GRML_LIVE_LOCAL_CONFIG"
-[ -n "$HOSTNAME" ] || HOSTNAME=grml
-PACKAGE_LOG=/var/log/fai/"$HOSTNAME"/last/
-
-if ! [ -w "$PACKAGE_LOG" ] ; then
-   echo "Error: can not write to ${PACKAGE_LOG}. Exiting.">&2
+if ! [ -w "$LOGDIR" ] ; then
+   echo "Error: can not write to ${LOGDIR}. Exiting.">&2
    exit 1
 else
    # store package list for the build process logs as well:
-   COLUMNS=200 $ROOTCMD dpkg --list > "${PACKAGE_LOG}"/dpkg.list
-   COLUMNS=200 $ROOTCMD dpkg --get-selections > "${PACKAGE_LOG}"/dpkg.selections
+   COLUMNS=200 $ROOTCMD dpkg --list > "${LOGDIR}"/dpkg.list
+   COLUMNS=200 $ROOTCMD dpkg --get-selections > "${LOGDIR}"/dpkg.selections
    # store list of packages sorted by size:
    if [ -x $target/usr/bin/dpkg-query ] ; then
       $ROOTCMD dpkg-query -W --showformat='${Package}\t${Installed-Size;10}\n' > \
-      "${PACKAGE_LOG}"/packages.size
+      "${LOGDIR}"/packages.size
    fi
 fi
 
