@@ -37,7 +37,7 @@ binary-arch: build install
 binary-indep: build install
 	dh_testdir
 	dh_testroot
-	dh_installchangelogs 
+	dh_installchangelogs
 	dh_installdocs
 	dh_link /etc/rcS.d/important_notice /etc/rc0.d/important_notice
 	dh_link /etc/rcS.d/important_notice /etc/rc1.d/important_notice
@@ -48,7 +48,7 @@ binary-indep: build install
 	dh_link /etc/rcS.d/important_notice /etc/rc6.d/important_notice
 	dh_link /etc/init.d/grml-reboot     /etc/init.d/grml-halt
 	dh_compress
-	mkdir -p debian/grml-etc/usr/share/lintian/overrides/ 
+	mkdir -p debian/grml-etc/usr/share/lintian/overrides/
 	cp -av debian/overrides debian/grml-etc/usr/share/lintian/overrides/grml-etc
 	dh_fixperms
 	dh_installdeb
