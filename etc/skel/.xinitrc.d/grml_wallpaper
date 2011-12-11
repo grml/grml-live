@@ -11,9 +11,7 @@ if [ "$XINIT_GRML_WALLPAPER" = "false" ] ; then
 fi
 
 # set wallpaper
-# wmsetbg -t /usr/share/grml/desktop.png &
-  if [ -x /usr/bin/Esetroot ] ; then
-     [ -r /usr/share/grml/desktop.jpg ] && Esetroot -scale /usr/share/grml/desktop.jpg &
-  fi
+[ -x /usr/bin/fbsetbg ] && [ -r /usr/share/grml/desktop.jpg ] && \
+  fbsetbg -A /usr/share/grml/desktop.jpg &
 
 ## END OF FILE #################################################################
