@@ -1,0 +1,16 @@
+#!/bin/sh
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/46-grml-version
+# Purpose:       Update grml version in the chroot
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+. "$GRML_LIVE_CONFIG"
+
+echo "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$DATE]"
+echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$DATE]" > $target/etc/grml_version
+chmod 644 $target/etc/grml_version
+

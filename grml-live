@@ -655,24 +655,6 @@ else
          log    "Error: critical error while executing fai [exit code ${RC}]. Exiting."
          eerror "Error: critical error while executing fai [exit code ${RC}]. Exiting." ; eend 1
          bailout 1
-      else
-         einfo "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$DATE]"
-         log   "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$DATE]"
-         echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$DATE]" > $CHROOT_OUTPUT/etc/grml_version
-         chmod 644 $CHROOT_OUTPUT/etc/grml_version
-         einfo "Rebuilding initramfs"
-         # make sure new /etc/grml_version reaches initramfs, iterate over all
-         # present kernel versions (note: we can't really handle more than one
-         # kernel version anyway right now)
-         # chroot $CHROOT_OUTPUT update-initramfs -u -t => might break when using kernel-package :(
-         for initrd in "$(basename $CHROOT_OUTPUT/boot/vmlinuz-*)" ; do
-           if ! chroot $CHROOT_OUTPUT update-initramfs -k "${initrd##vmlinuz-}" -c ; then
-             einfo "Creating fresh initrd did not work, trying update instead:"
-             log   "Creating fresh initrd did not work, trying update instead:"
-             chroot $CHROOT_OUTPUT update-initramfs -k "${initrd##vmlinuz-}" -u
-           fi
-         done
-         eend $?
       fi
 
       # move fai logs into grml_logs directory
