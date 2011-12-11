@@ -1,8 +1,0 @@
-table Icon
-  Caption: OpenOffice
-  Command: grml-exec-wrapper ooffice
-  Icon: /home/grml/.idesktop/icons/l33t_OFF_openoffice.png
-  X: 1174
-  Y: 493
-end
-

@@ -1,9 +1,0 @@
-table Icon
-  Caption: screenshot
-  ToolTip.Caption: take a screenshot of desktop and store it in $HOME/
-  Command: grml-exec-wrapper import -window root ~/`date +shot-%Y-%m-%d-%H%M%S.jpg`
-  Icon: /home/grml/.idesktop/icons/l33t_DES_screenshot.png
-  X: 158
-  Y: 451
-end
-

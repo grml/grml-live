@@ -1,9 +1,0 @@
-table Icon
-  Caption: rox
-  ToolTip.Caption: a simple graphical file manager
-  Command: grml-exec-wrapper rox ~/
-  Icon: /home/grml/.idesktop/icons/l33t_UNK_rox.png
-  X: 224
-  Y: 13
-end
-

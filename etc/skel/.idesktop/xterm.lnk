@@ -1,9 +1,0 @@
-table Icon
-  Caption: xterm
-  ToolTip.Caption: run x-terminal-emulator
-  Command: grml-exec-wrapper x-terminal-emulator
-  Icon: /home/grml/.idesktop/icons/l33t_TER_Eterm.png
-  X: 24
-  Y: 13
-end
-
