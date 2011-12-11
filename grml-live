@@ -120,6 +120,7 @@ BUILD_ONLY=''
 BUILD_DIRTY=''
 BOOTSTRAP_ONLY=''
 HOSTNAME=''
+USERNAME=''
 CONFIGDUMP=''
 
 # don't use colors/escape sequences
