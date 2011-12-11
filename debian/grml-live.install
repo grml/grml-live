@@ -4,6 +4,7 @@ etc/grml                    etc
 examples                    usr/share/doc/grml-live/
 grml-live                   usr/sbin/
 remaster/grml-live-remaster usr/sbin/
+fonts                       usr/share/grml-live/
 scripts                     usr/share/grml-live/
 templates/boot/grub         usr/share/grml-live/templates/boot/
 templates/boot/isolinux     usr/share/grml-live/templates/boot/
