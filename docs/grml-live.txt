@@ -4,7 +4,7 @@ grml-live(8)
 Name
 ----
 
-grml-live - build framework based on FAI for generating a grml and Debian based
+grml-live - build framework based on FAI for generating a Grml and Debian based
 Linux Live system (CD/ISO)
 
 Synopsis
@@ -13,16 +13,12 @@ Synopsis
 grml-live [-a <architecture>] [-c <classe[s]>] [-C <configfile>] [-g
 <grml_name>] [-i <iso_name> ] [-o <output_directory>] [-r <release_name>] [-s
 <suite>] [-t <template_directory>] [-v <version_number>] [-U <username>] [
--AbBFnNquVz]
-
-CAUTION: Please check out <<current_state,the 'Current state of grml-live with
-squashfs-tools and kernel' section>> for details about current state of involved
-tools before starting with grml-live or if you encounter any problems.
+-AbBFnNqQuVz]
 
 Description
 -----------
 
-grml-live provides the build system for creating a grml and Debian based Linux
+grml-live provides the build system for creating a Grml and Debian based Linux
 Live-CD. The build system is based on
 link:http://fai-project.org/[FAI] (Fully Automatic
 Installation). grml-live uses the "fai dirinstall" feature to generate a chroot
@@ -37,7 +33,7 @@ details of a build process.
 
 CAUTION: grml-live does **not** use /etc/fai for configuration but instead
 provides and uses ${GRML_FAI_CONFIG} which is pointing to /etc/grml/fai by default
-(unless overriden using the ''-D'' option). This ensures that it does not clash
+(unless overridden using the ''-D'' option). This ensures that it does not clash
 with default FAI configuration and packages, so you can use grml-live and FAI
 completely independent at the same time!
 
@@ -49,8 +45,8 @@ local mirror (strongly recommended if you plan to use grml-live more than once)
 checkout mkdebmirror (see /usr/share/doc/grml-live/examples/mkdebmirror),
 debmirror(1), reprepro(1) (see /usr/share/doc/grml-live/examples/reprepro/ for a
 sample configuration), apt-cacher(1) and approx(8). To avoid downloading the
-base system again and again check out FAI's NFSROOT (see FAQ of this document
-for details).
+base system again and again check out <<create-a-base-tgz,the base tar.gz
+feature>>.
 
 Options
 -------
@@ -58,7 +54,7 @@ Options
   -A::
 
 Clean up output directories before attempting the build. Packs the chroot
-into a tar archive, and removes chroot and iso build directories before exiting.
+into a tar archive, and removes chroot and ISO build directories before exiting.
 
   -a **ARCHITECTURE**::
 
@@ -79,7 +75,7 @@ but intend to only build the ISO.
   -B::
 
 Build the ISO without touching the chroot at all. This option is useful if
-you modified anything that FAI or grml-live might adjust via grml's FAI
+you modified anything that FAI or grml-live might adjust via Grml's FAI
 scripts.  It's like the '-b' option but even more advanced. Use only if you
 really know that you do not want to update the chroot.
 
@@ -87,8 +83,8 @@ really know that you do not want to update the chroot.
 
 Specify the CLASSES to be used for building the ISO via FAI.  By default only
 the classes GRMLBASE, GRML_FULL and I386/AMD64 (depending on system
-architecture) are assumed, resulting in a small base system (being about ~180MB
-total ISO size). If using a non-I386 system (like AMD64) you should specify the
+architecture) are assumed, resulting in a base system of about 350MB
+total ISO size. If using a non-I386 system (like AMD64) you should specify the
 appropriate architecture as well. Additionally you can specify a class providing
 a grml-kernel (see <<classes,the 'CLASSES' section in this document>> for
 details about available classes).  So instead of GRML_FULL you can also use
@@ -242,41 +238,31 @@ Use ZLIB instead of LZMA/XZ compression in mksquashfs part of the build process.
 Usage examples
 --------------
 
-To get a small, Debian-stable and grml-based Live-CD using /grml/grml-live
+To get a Debian-stable and Grml-based Live-CD using /grml/grml-live
 as build and output directory just run:
 
   # grml-live
 
-To get a small Debian-unstable and grml-small based Live-CD using
-/home/mika/grml-live as build and output directory just use:
+To get a 64bit Debian-testing and grml-small based Live-CD using /srv/grml-live
+as build and output directory use the following command line on your amd64
+system:
 
-  # grml-live -s sid -c GRMLBASE,GRML_SMALL,AMD64 -o /home/mika/grml-live
-
-To get a medium sized, Debian-unstable and grml-based Live-CD for amd64
-architecture using /grml/grml-live as build and output directory just run:
-
-  # grml-live -s sid -a amd64 -c GRMLBASE,GRML_FULL,AMD64
-
-To get a small, Debian-unstable and grml-based Live-CD using /tmp as build and
-output directory and use grml_0.0-3.iso as ISO name (placed inside
-/tmp/grml_isos) just invoke:
-
-  # grml-live -o /tmp -c GRMLBASE,GRML_SMALL,AMD64 -s sid -i grml_0.0-3.iso
+  # grml-live -s testing -c GRMLBASE,GRML_SMALL,AMD64 -o /srv/grml-live
 
 [NOTE]
 
-If you have about 700MB of free space inside /dev/shm (being a tmpfs, usually
-you should have >=1GB of RAM) just run "mount -o remount,suid,dev,rw /dev/shm"
-and use /dev/shm as build and output directory - resulting in very fast build
-process.  But please be aware of the fact that rebooting your system will result
-in an empty /dev/shm, so please use another directory for $CHROOT_OUTPUT,
+If you have enough free space inside /dev/shm (being a tmpfs, usually you should
+have >=1GB of RAM) just run "mount -o remount,suid,dev,rw /dev/shm" and use
+/dev/shm as build and output directory - resulting in very fast build process.
+But please be aware of the fact that rebooting your system will result in an
+empty /dev/shm, so please use another directory for $CHROOT_OUTPUT,
 $BUILD_OUTPUT and $ISO_OUTPUT if you plan to create more persistent output. :)
 
 [[main-features]]
 Main features of grml-live
 --------------------------
 
-* create a grml-/Debian-based Linux Live-CD with one single command
+* create a Grml-/Debian-based Linux Live-CD with one single command
 
 * class based concept, providing a maximum of flexibility
 
@@ -286,8 +272,6 @@ Main features of grml-live
 Debian repositories
 
 * native support of FAI features
-
-* multi-arch support (work in progress)
 
 [[class-concept]]
 The class concept
@@ -333,24 +317,24 @@ ${GRML_FAI_CONFIG}/config/package_config whereas some further classes are define
 example in ${GRML_FAI_CONFIG}/config/scripts/ so specific feature sets can be
 selected. The following classes are predefined:
 
-* DEBORPHAN: get rid of all packages listed in output of Deborphan
+* DEBORPHAN: get rid of all packages listed in output of deborphan
 
 * GRMLBASE: the main class responsible for getting a minimal subset of what's
 defining a Grml system. Important parts of the buildprocess are specified in
 this class as well, so unless you have a really good reason you should always
 use this class.
 
-* GRML_FULL: full featured grml, also known as the "normal", full grml as
-introduced in november 2011 (~350MB ISO size).
+* GRML_FULL: full featured Grml, also known as the "normal", full grml as
+introduced in December 2011 (~350MB ISO size).
 
-* GRML_MEDIUM: medium sized grml version, used to be known as grml-medium
-until november 2011 (~220MB ISO size).
+* GRML_MEDIUM: medium sized Grml version, used to be known as grml-medium
+until December 2011 (~220MB ISO size).
 
-* GRML_SMALL: minimum sized grml version, known as grml-small (~110MB ISO
+* GRML_SMALL: minimum sized Grml version, known as grml-small (~110MB ISO
 size).
 
 * GRML_XL: large size Grml version, used to be known as "full grml" until
-november 2011 (~700MB ISO size).
+December 2011 (~700MB ISO size).
 
 * LATEX: LaTeX(-related) packages like auctex, texlive,...
 (which used to be shipped by grml before the LaTeX removal)
@@ -427,16 +411,6 @@ it there.
 
 This file specifies the package list for creating the NFSROOT.
 
-  ${GRML_FAI_CONFIG}/apt/sources.list
-
-This file specifies which mirrors should be considered for retrieving the Debian
-packages when creating the main chroot (including all the software you would
-like to see included). Important: this file should *not* be adjusted manually!
-Instead use the GRML_LIVE_SOURCES variable inside /etc/grml/grml-live.conf or
-/etc/grml/grml-live.local which modifies ${GRML_FAI_CONFIG}/apt/sources.list
-on-the-fly via grml-live then. If you want to generally adjust apt configuration
-use FAI's fcopy command with ${GRML_FAI_CONFIG}/config/files instead.
-
   ${GRML_FAI_CONFIG}/config/
 
 The main directory for configuration of FAI/grml-live. More details below.
@@ -482,28 +456,18 @@ live-initramfs(8).
 Available log files
 -------------------
 
-grml-live itself logs to /var/log/grml-live.log. Unless you set PRESERVE_LOGFILE
-in your grml-live configuration the file is cleared on each new invocation of
-grml-live.
+Starting with grml-live version 0.17.0 you should find log files in a directory
+named 'grml_logs' in the output directory (next to grml_isos, grml_chroot,...).
 
-The FAI part of grml-live logs to /var/log/fai/$HOSTNAME/ - so the
-default being /var/log/fai/grml/.
-
-If you are using the grml-live buildd you will find the logs of the grml-live
-run at /var/log/grml-buildd.log.
-
-If you want to store build information in a database just install the
-grml-live-db Debian package. Further details available in the grml-live-db
-manpage.
+grml-live versions before 0.17.0 used to log into /var/log/grml-live.log
+and /var/log/fai/grml.
 
 [[requirements]]
 Requirements for the build system
 ---------------------------------
 
 * any Debian based system should be sufficient (if it doesn't work it's a bug,
-please send us a bug report then) [a usual
-link:http://grml.org/grml2hd/[grml2hd] harddisk installation (using grml or
-grml-medium) ships all you need]. Check out <<deploy-on-debian,How do I deploy
+please send us a bug report then). Check out <<deploy-on-debian,How do I deploy
 grml-live on a plain Debian installation>> for details how to set up grml-live
 on a plain, original Debian system.
 
@@ -525,224 +489,8 @@ Current state of grml-live with squashfs-tools and kernel
 ---------------------------------------------------------
 
 Use squashfs-tools >=4.2-1 (available from Grml repositories as well as from
-Debian/unstable) to build Grml (based) ISOs featuring kernel version
-2.6.38-grml[64].
-
-////////////////////////////////////////////////////////////////////////////////
-Difference between squashfs-lzma-tools, squashfs-lzma-tools4 and squashfs-tools
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Whereas the ZLIB compression is much faster in the build process, the LZMA
-compression provides a smaller resulting ISO. If you're wondering: the official
-Grml builds use the LZMA compression.
-
-Squashfs-tools was introduced in Debian and once provided support for LZMA
-compression. Sadly LZMA compression within squashfs-tools became unsupported and
-therefore squashfs-lzma-tools[4] had to be introduced and maintained by the Grml
-team. Different kernel versions provide different squashfs file formats. Kernel
-versions until 2.6.28-grml[64] used the 3.x file format but those outdated
-kernels aren't supported by grml-live automatically anymore nowdays (manual
-handling through SQUASHFS_BINARY possible though). Kernel versions
-2.6.31-grml[64] and 2.6.33-grml[64] use openwrt's squashfs lzma file format
-version 4. Kernel versions starting with 2.6.35-grml[64] use the mainline ondisk
-file format version 4.
-
-If you're wondering which package supports what, here's a short overview:
-
-* squashfs-lzma-tools4 4.0-x: ZLIB as default, LZMA support via '-comp lzma'
-option (enabled by grml-live by default), file format version 4 (mainline
-version), package maintained and available from Grml, recommended for current
-grml-live builds featuring kernels >=2.6.35-grml[64]
-
-* squashfs-lzma-tools 4.0-2: ZLIB as default, LZMA support via '-lzma' option
-(enabled by grml-live by default), file format version 4 (openwrt style),
-package maintained and available from Grml, recommended for any grml-live builds
-with kernel versions 2.6.31-grml[64] and 2.6.33-grml[64]
-
-* squashfs-tools 1:4.0-x: ZLIB as default, no LZMA support/options, file format
-version 4, package maintained and available from Debian, recommended only for
-ZLIB-only builds of any grml-live builds with kernel versions >=2.6.31-grml[64]
-
-Outdated, JFTR:
-
-* squashfs-tools 1:3.3-7: ZLIB as default, no LZMA support/options, file format
-version 3
-
-* squashfs-tools 1:3.2r2-9exp1: LZMA as default, ZLIB support via '-nolzma'
-option, file format version 3
-
-* squashfs-lzma-tools 3.3-1: LZMA as default, ZLIB support via '-nolzma' option,
-file format version 3
-
-Now, depending on the kernel version you want to use you need different versions
-of squashfs-tools/squashfs-lzma-tools[4]. Yes, that's a mess (don't ask how much
-this sucks for us developers) - though we're putting lots of effort into our
-toolchain to automatically handle this for you through the grml-live build
-system and provide proper documentation. The situation is supposed to calm down
-with the recent integration of the squashfs file format 4 in the mainline
-kernel. Support for LZMA is pending and as soon as it's available mainline this
-should dramatically simplify the situation for developers as well as users.
-
-[TIP]
-If you want to force usage of a specific mksquashfs binary just set the
-SQUASHFS_BINARY configuration/environment variable. Set SQUASHFS_OPTIONS for
-customizing the options that should be used by the mksquashfs binary during
-build process.
-
-Using squashfs-lzma-tools4 4.0-1 on the build system
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-squashfs-lzma-tools4 4.0-1 is available via the Grml repositories. It provides
-the mksquashfs-lzma4 and unsquashfs-lzma4 binaries. The package does NOT
-conflict with neither Debian's squashfs-tools package nor Grml's
-squashfs-lzma-tools package, so you can install all of them at the same time and
-the build system will try to figure out the best matching binary automatically
-for you.
-
-The packages can be downloaded from
-link:http://deb.grml.org/pool/main/s/squashfs-lzma-tools4/[http://deb.grml.org/pool/main/s/squashfs-lzma-tools4/]
-
-It provides support for the new squashfs file format version 4 (as available in
-mainline, so *not* the one being used by squashfs-lzma-tools and kernel
-2.6.33-grml) and therefore requires kernel versions starting with
-2.6.35-grml[64]. It supports LZMA as well as ZLIB compression. Just use the
-defaults for enabling LZMA or use grml-live's '-z' option if you want to use
-ZLIB compression instead.
-
-* Kernel 2.6.31-grml[64]: works with ZLIB compression, fails with LZMA
-* Kernel 2.6.33-grml[64]: works with ZLIB compression, fails with LZMA
-* Kernel 2.6.35-grml[64]: works with ZLIB *and* LZMA compression
-* Kernel 2.6.36-grml[64]: works with ZLIB *and* LZMA compression
-
-[NOTE]
-squashfs-tools >=4.1-1 and/or squashfs-lzma-tools4 are the recommended package
-for building up2date ISOs with grml-live! Please use other squashfs-* packages
-only if you want to build live systems providing kernel versions older than
-2.6.35-grml*. Use squashfs-tools >=4.1-1 or squashfs-lzma-tools4 from Grml if
-you want to remaster any Grml releases MORE RECENT than 2010.04.
-
-Using squashfs-lzma-tools 4.0-2 on the build system
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-squashfs-lzma-tools 4.0-2 is available via the Grml repositories. It provides
-the mksquashfs-lzma and unsquashfs-lzma binaries. The package does NOT conflict
-with Debian's squashfs-tools package (you can install both of them at the same
-time).
-
-The packages can be downloaded from
-link:http://deb.grml.org/pool/main/s/squashfs-lzma-tools/[http://deb.grml.org/pool/main/s/squashfs-lzma-tools/]
-
-It provides support for the new squashfs file format version 4 (based on openwrt
-patches, this is *not* the mainline file format that's being used by kernel
-2.6.35-grml and squashfs-lzma-tools4!) and therefore requires kernel versions
-newer than 2.6.28-grml[64]. It supports LZMA as well as ZLIB compression. Just
-use the defaults for enabling LZMA or use grml-live's '-z' option if you want to
-use ZLIB instead.
-
-* Kernel \<=2.6.28-grml[64]: does not work
-* Kernel 2.6.31-grml[64]: works
-* Kernel 2.6.33-grml[64]: works
-* Kernel 2.6.35-grml[64]: works for ZLIB compression, fails for LZMA
-
-[NOTE]
-Please use squashfs-lzma-tools >=4.0-2 from Grml only if you want to remaster
-Grml releases 2009.10 and 2010.04 or live systems with their according kernel
-versions.
-
-Using squashfs-tools 1:4.0-X on the build system
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-squashfs-tools >=1:4.0-1 is available in Debian/unstable and Debian/testing. It
-provides the mksquashfs and unsquashfs binaries. The package does NOT conflict
-neither with the squashfs-lzma-tools 4.0-2 package nor with the
-squashfs-lzma-tools4 package (so you can install all of them at the same time).
-
-The packages can be downloaded from
-link:ftp://ftp.de.debian.org/debian/pool/main/s/squashfs-tools/[ftp://ftp.de.debian.org/debian/pool/main/s/squashfs-tools/]
-
-It provides support for the new squashfs file format version 4 and therefore
-requires kernel versions newer than 2.6.28-grml[64].
-
-It does NOT support LZMA compression (dropped with
-link:http://packages.debian.org/changelogs/pool/main/s/squashfs-tools/current/changelog[version
-1:3.3-4] and not yet re-integrated yet, see
-link:http://bugs.debian.org/594595[#594595]). If you need LZMA support please
-use Grml's squashfs-lzma-tools[4] (see sections above) instead.
-
-* Kernels \<=2.6.28-grml[64]: does not work
-* Kernel 2.6.31-grml[64]: works (ZLIB only)
-* Kernel 2.6.33-grml[64]: works (ZLIB only)
-* Kernel 2.6.35-grml[64]: works (ZLIB only)
-* Kernel 2.6.36-grml[64]: works (ZLIB only)
-
-[NOTE]
-Please use squashfs-tools between 4.0-1 and 4.1-1 only if you want to remaster
-Grml releases starting with 2009.10 using the ZLIB compression, please use other
-squashfs packages otherwise instead.
-
-Outdated, JFTR:
-
-Using squashfs-lzma-tools 3.3-1 on the build system
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-squashfs-lzma-tools 3.3-1 from the Grml repository supports kernel
-2.6.26-grml[64] and 2.6.28-grml[64] using both LZMA and ZLIB (-nolzma)
-compression.
-
-The packages can be downloaded from
-link:http://deb.grml.org/pool/main/s/squashfs-lzma/[http://deb.grml.org/pool/main/s/squashfs-lzma/].
-
-[NOTE]
-Please use squashfs-lzma-tools 3.3-1 only if you want to remaster Grml releases
-2008.11 or 2009.05.
-
-Using squashfs-tools 1:3.3-7 on the build system
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-squashfs-tools 1:3.3-7 is available through
-http://grml.org/squashfs/squashfs-tools_3.3-7_i386.deb (for x86) or
-http://grml.org/squashfs/squashfs-tools_3.3-7_amd64.deb (for amd64) [both build
-on and for Debian/etch but working with testing and unstable as well].
-
-Please notice that squashfs-tools 1:3.3-7 does NOT support LZMA compression at
-all (so you won't be able to remaster release 2008.11 and 2009.05 using LZMA for
-example). The -nolzma option of mksquashfs is not available therefore (even
-though grml-live will deactivate it for you automatically anyway). Please use
-squashfs-lzma-tools instead.
-
-* Kernel 2.6.23-grml: does NOT work, please use squashfs-tools 1:3.2r2-9exp1
-                      instead if you still want to use kernel 2.6.23 (not
-		      recommended)
-* Kernel 2.6.26-grml: works (without LZMA compression only of course!)
-* Kernel 2.6.28-grml: works (without LZMA compression only of course!)
-
-Using squashfs-tools 1:3.2r2-9exp1 on the build system
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-squashfs-tools 1:3.2r2-9exp1 is available via the grml-testing repository,
-running:
-
-  # aptitude install squashfs-tools=1:3.2r2-9exp1
-
-or directly via downloading the files
-http://grml.org/squashfs/squashfs-tools_3.2r2-9exp1_i386.deb (for x86) or
-http://grml.org/squashfs/squashfs-tools_3.2r2-9exp1_amd64.deb (for amd64).
-
-Using with ZLIB compression (SQUASHFS_OPTIONS='-nolzma' or -z
-option in grml-live cmdline):
-
-* Kernel 2.6.23-grml: works
-* Kernel 2.6.26-grml: works
-* Kernel 2.6.28-grml: supposed to work (not verified though)
-
-Using with LZMA compression:
-
-* Kernel 2.6.23-grml: works
-* Kernel 2.6.26-grml: does NOT work, please use ZLIB mode instead or switch
-  to Debian package squashfs-lzma-tools 3.3-1 (see section above).
-* Kernel 2.6.28-grml: does NOT work, please use ZLIB mode instead or switch
-  to Debian package squashfs-lzma-tools 3.3-1 (see section above).
-//////////////////////////////////////////////////////////////////////////////////
+Debian/testing and Debian/unstable) to build Grml (based) ISOs featuring kernel
+version 2.6.38-grml[64] or newer.
 
 [[faq]]
 FAQ
@@ -752,21 +500,14 @@ FAQ
 How do I deploy grml-live on a plain Debian installation?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The easiest way to get a running grml-live setup is to install Grml or
-grml-medium using grml2hd (for example inside KVM, Virtualbox, VMware,... if you
-don't want to run it on a physical system). Of course using grml-live on a
-plain, original Debian installation is supported as well. So there we go.
+The easiest way to get a running grml-live setup is to just use Grml.
+Of course using grml-live on a plain, original Debian installation is supported
+as well. So there we go.
 
-What we have: plain, original Debian Lenny (5.0).
+What we have: plain, original Debian squeeze (6.0).
 
-What we want: build a grml-medium ISO based on Debian/squeeze for the amd64
-architecture using grml-live.
-
-[IMPORTANT]
-
-If you encounter any problems while booting the resulting ISO please be aware of
-<<current_state,the 'current state of grml-live with squashfs-tools and kernel'
-section>>.
+What we want: build a Grml ISO based on Debian/wheezy for the amd64 architecture
+using grml-live.
 
 Instructions
 ^^^^^^^^^^^^
@@ -815,26 +556,19 @@ Instructions
   # SQUASHFS_OPTIONS="-comp gzip -b 256k"
   ## want to use a specific squashfs binary?
   # SQUASHFS_BINARY='/usr/bin/mksquashfs'
-  # install local files into the chroot
-  CHROOT_INSTALL="/etc/grml/fai/chroot_install"
+  ## install local files into the chroot
+  # CHROOT_INSTALL="/etc/grml/fai/chroot_install"
   ## adjust if necessary (defaults to /grml/grml-live):
   ## OUTPUT="/srv/grml-live"
-  FAI_DEBOOTSTRAP="squeeze http://cdn.debian.net/debian/"
-  ARCH="i386"
+  FAI_DEBOOTSTRAP="wheezy http://cdn.debian.net/debian/"
+  # ARCH="amd64"
   CLASSES="GRMLBASE,GRML_FULL,AMD64"
-  # PRESERVE_LOGFILE='1'
-  # ZERO_FAI_LOGFILE='1'
-  GRML_LIVE_SOURCES="
-  deb http://deb.grml.org/            grml-stable  main
-  deb http://deb.grml.org/            grml-testing main
-  deb http://cdn.debian.net/debian squeeze main contrib non-free
-  "
   EOF
 
   # just optional(!) - upgrade FAI to latest available version:
   cat >> /etc/apt/sources.list << EOF
   # fai:
-    deb http://fai-project.org/download lenny koeln
+    deb http://fai-project.org/download squeeze koeln
   EOF
 
   # get gpg key of FAI repos and install current FAI version:
@@ -865,56 +599,12 @@ configuration files, scripts and hooks will be taken from your
 I've problems with the build process. How to start debugging?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Check out the logs inside /var/log/fai/... If you think it's a bug in grml-live
-send a copy of your config, logs and the commandline with a short problem
-description to <mika@grml.org>:
-
-  # history | grep grml-live > /etc/grml/grml_live.cmdline
-  # tar zcf grml_live_problem.tar.gz /etc/grml/grml-live.conf \
-            /etc/grml/grml_live.cmdline /etc/grml/grml-buildd.conf \
-            /var/log/fai /etc/grml/fai
-  -> finally mail grml_live_problem.tar.gz to <mika@grml.org>
+Check out the logs inside the directory 'grml_logs' next to your grml_chroot,
+grml_isos,... directories.
 
 If you need help with grml-live or would like to see new features as part of
 grml-live you can get commercial support via
 link:http://grml-solutions.com/[Grml Solutions].
-
-[[lzma-vs-zlib]]
-How much is the difference between LZMA and ZLIB compression?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-ISO size (bs = blocksize):
-
-[width="45%",cols="3,^2,^2"]
-|============================================================
-|ISO                   |LZMA (256kB bs) |ZLIB
-|grml_sid              |666M | 771M
-|grml_squeeze          |659M | 761M
-|grml_lenny            |624M | 723M
-|grml64_sid            |677M | 791M
-|grml64_squeeze        |671M | 785M
-|grml64_lenny          |639M | 745M
-|grml-medium_sid       |208M | 236M
-|grml-medium_squeeze   |206M | 234M
-|grml-medium_lenny     |193M | 220M
-|grml64-medium_sid     |213M | 245M
-|grml64-medium_squeeze |213M | 244M
-|grml64-medium_lenny   |201M | 231M
-|grml-small_sid        |102M | 118M
-|grml-small_squeeze    |101M | 117M
-|grml-small_lenny      |97M  | 112M
-|grml64-small_sid      |103M | 120M
-|grml64-small_squeeze  |103M | 120M
-|grml64-small_lenny    |99M  | 116M
-|============================================================
-
-Build time of grml-medium's squashfs file (depends on your system, though just
-to get the ratio between the different options):
-
-* 10 minutes and 4 seconds with LZMA default blocksize (128k)
-* 7 minutes 27 seconds with LZMA and blocksize 256k
-* 6 minutes and 8 seconds with LZMA blocksize 512k
-* 1 minute and 40 seconds with ZLIB
 
 [[install-local-files]]
 How do I install further files into the chroot/ISO?
@@ -976,13 +666,6 @@ what you are searching for just run:
   rm -rf /etc/grml/fai /etc/grml/grml-live.conf
   dpkg -i --force-confnew --force-confmiss /path/to/grml-live_..._all.deb
 
-[NOTE]
-
-If you don't control your /etc using a version control system (VCS) yet it's a
-good chance to start using it now. Check out
-link:http://michael-prokop.at/blog/2007/03/14/maintain-etc-with-mercurial-on-debian/[http://michael-prokop.at/blog/2007/03/14/maintain-etc-with-mercurial-on-debian/]
-for more details how to maintain /etc using the mercurial VCS.
-
 [[create-a-base-tgz]]
 How do I create a base.tgz for use as NFSROOT?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1029,7 +712,7 @@ Existing base.tgz can be found at http://daily.grml.org/
 
 [[apt-cacher]]
 Set up apt-cacher-ng for use with grml-live
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Make sure /etc/grml/grml-live.local provides according APT_PROXY and
 FAI_DEBOOTSTRAP:
@@ -1042,32 +725,6 @@ FAI_DEBOOTSTRAP:
 
 Make sure apt-cacher-ng is running ('/etc/init.d/apt-cacher-ng restart').
 That's it.  All downloaded files will be cached in /var/cache/apt-cacher-ng then.
-
-[[approx]]
-Set up approx for use with grml-live
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Make sure /etc/grml/grml-live.conf provides according GRML_LIVE_SOURCES and
-FAI_DEBOOTSTRAP:
-
-  # cat /etc/grml/grml-live.conf
-  [...]
-  GRML_LIVE_SOURCES="
-  deb http://localhost:9999/grml            grml-stable  main
-  deb http://localhost:9999/grml            grml-testing main
-  deb http://localhost:9999/debian squeeze  main contrib non-free
-  "
-  FAI_DEBOOTSTRAP="squeeze http://localhost:9999/debian"
-
-Configure approx:
-
-  # cat /etc/approx/approx.conf
-  [...]
-  debian http://ftp.at.debian.org/debian
-  grml   http://deb.grml.org/
-
-Don't forget to restart approx (/etc/init.d/approx restart). That's it.
-All downloaded files will be cached in /var/cache/approx now.
 
 [[revert_manifold]]
 How do I revert the manifold feature from an ISO?
@@ -1144,12 +801,6 @@ like:
   % date -ud @1300450081
   Fri Mar 18 12:08:01 UTC 2011
 
-[[question]]
-I've a question which isn't answered by this document
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Don't hesitate to contact the author: <mika@grml.org>
-
 [[download]]
 Download / install grml-live as a Debian package
 ------------------------------------------------
@@ -1168,20 +819,14 @@ Source
 ------
 
 The source of grml-live is available at
-link:http://git.grml.org/?p=grml-live.git[http://git.grml.org/?p=grml-live.git]
-
-[[todo-list]]
-TODO list
----------
-
-Check out the link:http://git.grml.org/?p=grml-live.git;a=blob;f=TODO;hb=HEAD[TODO file].
+link:https://github.com/grml/grml-live/[https://github.com/grml/grml-live/]
 
 [[bugs]]
 Bugs
 ----
 
 Please report feedback, link:http://grml.org/bugs/[bugreports] and wishes
-link:http://grml.org/contact/[to the grml-team]!
+link:http://grml.org/contact/[to the Grml team]!
 
 [[documentation]]
 Documentation
