@@ -24,7 +24,7 @@
   LC_ALL=C
   [[ $(id -u) != 0 ]] && runas='sudo' # important for /etc
 
-  check4progs findchanged tar || { echo "Sorry, can't continue. Exiting.">&2 ; exit 1 }
+  check4progs tar || { echo "Sorry, can't continue. Exiting.">&2 ; exit 1 }
 
   CONFIG=/etc/grml/saveconfig
   [ -r "$CONFIG" ] && . $CONFIG
@@ -48,6 +48,18 @@ debug(){
   fi
 # setopt xtrace
 # set -x
+}
+
+findchanged() {
+  [ -n "$1" ] || return 1
+
+  if [ -d "$1" ]; then
+    for i in $(cd "$1"; find . -type f 2>/dev/null | sed 's,^\./,,g' | grep -v ' '); do
+      cmp -s "$1/$i" "$2/$i" || echo "$1/$i"
+    done
+  elif [ -e "$1" ]; then
+    cmp -s "$1" "$2" || echo "$1"
+  fi
 }
 
 bailout(){
