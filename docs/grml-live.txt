@@ -54,8 +54,8 @@ Options
 
   -A::
 
-Clean up output directories before attempting the build. Packs the chroot
-into a tar archive, and removes chroot and ISO build directories before exiting.
+Clean up all output directories before running the build process. After finishing,
+clean up the Chroot target and Build target directories.
 
   -a **ARCHITECTURE**::
 

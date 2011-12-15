@@ -24,7 +24,7 @@ fi
 # set -e
 
 # global variables
-GRML_LIVE_VERSION='0.17.0'
+GRML_LIVE_VERSION='0.17.0+autobuild1323909002'
 PN="$(basename $0)"
 CMDLINE="$0 $@"
 ADDONS_LIST_FILE='/boot/isolinux/addons_list.cfg'
@@ -39,7 +39,7 @@ $PN - build process script for generating a (grml based) Linux Live-ISO
 Usage: $PN [options, see as follows]
 
    -a <architecture>       architecture; available values: i386 and amd64
-   -A                      ensure clean build and pack artifacts
+   -A                      clean build directories before and after running
    -b                      build the ISO without updating the chroot via FAI
    -B                      build the ISO without touching the chroot (skips cleanup)
    -c <classe[s]>          classes to be used for building the ISO via FAI
@@ -173,7 +173,7 @@ bailout() {
   umount_all
   [ -n "$1" ] && EXIT="$1" || EXIT="1"
   [ -n "$2" ] && eerror "$2">&2
-  if [ -n "$PACK_ARTIFACTS" ]; then
+  if [ -n "$CLEAN_ARTIFACTS" ]; then
     log "Cleaning up"
     einfo "Cleaning up"
     [ -n "${BUILD_OUTPUT}"  -a -d "${BUILD_OUTPUT}"  ] && rm -r "${BUILD_OUTPUT}"
@@ -189,7 +189,6 @@ bailout() {
     [ -n "${ISO_OUTPUT}"     -a -d "${ISO_OUTPUT}"     ] && chown -R "${CHOWN_USER}:" "${ISO_OUTPUT}"
     [ -n "${LOG_OUTPUT}"     -a -d "${LOG_OUTPUT}"     ] && chown -R "${CHOWN_USER}:" "${LOG_OUTPUT}"
     [ -n "${NETBOOT}"        -a -d "${NETBOOT}"        ] && chown -R "${CHOWN_USER}:" "${NETBOOT}"
-    [ -n "${CHROOT_ARCHIVE}" -a -f "${CHROOT_ARCHIVE}" ] && chown -R "${CHOWN_USER}:" "${CHROOT_ARCHIVE}"
     eend 0
   fi
   log "------------------------------------------------------------------------------"
@@ -293,7 +292,7 @@ copy_addon_file() {
 while getopts "a:C:c:d:D:e:g:i:I:o:r:s:t:U:v:AbBFnNqQuVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
-    A) PACK_ARTIFACTS=1 ;;
+    A) CLEAN_ARTIFACTS=1 ;;
     b) BUILD_ONLY=1 ;;
     B) BUILD_DIRTY=1 ;;
     c) CLASSES="$OPTARG" ;;
@@ -374,7 +373,6 @@ fi
 [ -n "$OUTPUT" ]           || OUTPUT='/grml/grml-live'
 [ -n "$BUILD_OUTPUT" ]     || BUILD_OUTPUT="$OUTPUT/grml_cd"
 [ -n "$CHROOT_OUTPUT" ]    || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
-[ -n "$CHROOT_ARCHIVE" ]   || CHROOT_ARCHIVE="$OUTPUT/$(basename $CHROOT_OUTPUT).tgz"
 [ -n "$ISO_OUTPUT" ]       || ISO_OUTPUT="$OUTPUT/grml_isos"
 [ -n "$LOG_OUTPUT" ]       || LOG_OUTPUT="$OUTPUT/grml_logs"
 [ -n "$REPORTS" ]          || REPORTS="${LOG_OUTPUT}/reports/"
@@ -438,7 +436,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$SQUASHFS_ZLIB" ]       && echo "  Using ZLIB (instead of LZMA/XZ) compression."
    [ -n "$SQUASHFS_OPTIONS" ]    && echo "  Using SQUASHFS_OPTIONS ${SQUASHFS_OPTIONS}"
    [ -n "$VERBOSE" ]             && echo "  Using VERBOSE mode."
-   [ -n "$PACK_ARTIFACTS" ]      && echo "  Will prepare packed artifacts and ensure clean build."
+   [ -n "$CLEAN_ARTIFACTS" ]     && echo "  Will clean output before and after running."
    [ -n "$UPDATE" ]              && echo "  Executing UPDATE instead of fresh installation."
    if [ -n "$BOOTSTRAP_ONLY" ] ; then
      echo "  Bootstrapping only and not building (files for) ISO."
@@ -460,7 +458,7 @@ fi
 # }}}
 
 # clean up before start {{{
-if [ -n "${PACK_ARTIFACTS}" ]; then
+if [ -n "${CLEAN_ARTIFACTS}" ]; then
   echo "Wiping old artifacts"
   [ -n "${CHROOT_OUTPUT}"  -a -d "${CHROOT_OUTPUT}"  ] && rm -r "${CHROOT_OUTPUT}"
   [ -n "${BUILD_OUTPUT}"   -a -d "${BUILD_OUTPUT}"   ] && rm -r "${BUILD_OUTPUT}"
@@ -555,12 +553,6 @@ if [ -n "$EXTRACT_ISO_NAME" ]; then
 fi
 }
 extract_iso
-# }}}
-
-# cleanup CHROOT_ARCHIVE now {{{
-if [ -n "${PACK_ARTIFACTS}" ]; then
-  [ -n "${CHROOT_ARCHIVE}" -a -f "${CHROOT_ARCHIVE}" ] && rm "${CHROOT_ARCHIVE}"
-fi
 # }}}
 
 # on-the-fly configuration {{{
@@ -1406,16 +1398,6 @@ create_netbootpackage() {
 }
 
 create_netbootpackage
-# }}}
-
-# pack artifacts {{{
-if [ -n "$PACK_ARTIFACTS" ]; then
-  log "Packing artifcats"
-  einfo "Packing artifacts"
-  [ -f "${CHROOT_ARCHIVE}" ] && rm -r "${CHROOT_ARCHIVE}"
-  tar -c -a -f ${CHROOT_ARCHIVE} --preserve-permissions -C "$(dirname ${CHROOT_OUTPUT})" "$(basename ${CHROOT_OUTPUT})"
-  eend 0
-fi
 # }}}
 
 # log build information to database if grml-live-db is installed and enabled {{{
