@@ -10,9 +10,10 @@ Linux Live system (CD/ISO)
 Synopsis
 --------
 
-grml-live [-a <architecture>] [-c <classe[s]>] [-C <configfile>] [-g
-<grml_name>] [-i <iso_name> ] [-o <output_directory>] [-r <release_name>] [-s
-<suite>] [-t <template_directory>] [-v <version_number>] [-U <username>] [
+grml-live [-a <architecture>] [-c <classe[s]>] [-C <configfile>] [
+-e <extract_iso_name>] [-g <grml_name>] [-i <iso_name>] [
+-o <output_directory>] [-r <release_name>] [-s <suite>] [
+-t <template_directory>] [-v <version_number>] [-U <username>] [
 -AbBFnNqQuVz]
 
 Description
@@ -131,6 +132,11 @@ without messing with the global configuration under /etc/grml/fai provided by
 grml-live this option provides you the option to use your own configuration
 directory. This directory is what's being referred to as ${GRML_FAI_CONFIG}
 throughout this documentation.
+
+  -e **EXTRACT_ISO_NAME**::
+
+The squashfs inside the specified ISO will be extracted and used as the chroot.
+This option is useful for remastering, in combination with -A and -b or -u.
 
   -F::
 
