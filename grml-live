@@ -23,8 +23,10 @@ fi
 # disable for now since it seems to cause some problems
 # set -e
 
+# The line following this line is patched by debian/rules.
+GRML_LIVE_VERSION='***UNRELEASED***'
+
 # global variables
-GRML_LIVE_VERSION='0.17.0+autobuild1323909002'
 PN="$(basename $0)"
 CMDLINE="$0 $@"
 ADDONS_LIST_FILE='/boot/isolinux/addons_list.cfg'

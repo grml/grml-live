@@ -16,7 +16,7 @@ build: build-stamp
 
 build-stamp:
 	dh_testdir
-	grep -q "GRML_LIVE_VERSION=.${VERSION}" grml-live || \
+	egrep -q "GRML_LIVE_VERSION=.*UNRELEASED" grml-live || \
 			(echo "Wrong version in grml-live" && exit 2)
 	cd docs && $(MAKE) && cd ../
 	touch $@
@@ -46,6 +46,7 @@ grml-live: install
 	dh_installdocs       -p$@ -P$(b)/$@
 	dh_installchangelogs -p$@ -P$(b)/$@
 	dh_install           -p$@ -P$(b)/$@
+	sed -i -e "s/GRML_LIVE_VERSION='\*\*\*UNRELEASED\*\*\*'/GRML_LIVE_VERSION='$(VERSION)'/" $(b)/$@/usr/sbin/grml-live
 	dh_strip             -p$@ -P$(b)/$@
 	dh_compress          -p$@ -P$(b)/$@
 	mkdir -p $(b)/$(@)/usr/share/lintian/overrides/
