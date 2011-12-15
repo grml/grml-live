@@ -7,7 +7,6 @@
  fb1280x1024, fb1024x768 or fb800x600   use framebuffer mode (e.g. notebooks)  
  nofb                                                disable framebuffer mode  
  hd / hd1 / hd2 / hd3 / floppy       boot from (1st/2nd/..) harddisk / floppy  
- failsafe                                use (nearly) no hardware recognition  
  serial                                               activate serial console  
  forensic              do not touch any harddisks during hardware recognition  
  debug [ break=live-bottom ]    get interactive shells during startup process  
