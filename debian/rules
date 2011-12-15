@@ -81,31 +81,11 @@ grml-live-db: install
 	dh_md5sums           -p$@ -P$(b)/$@
 	dh_builddeb          -p$@ -P$(b)/$@
 
-grml-live-buildd: install
-	@echo "--- Building: $@"
-	dh_installdirs       -p$@ -P$(b)/$@
-	dh_link              -p$@ -P$(b)/$@
-	dh_installdocs       -p$@ -P$(b)/$@
-	dh_installchangelogs -p$@ -P$(b)/$@
-	dh_install           -p$@ -P$(b)/$@
-	dh_strip             -p$@ -P$(b)/$@
-	dh_compress          -p$@ -P$(b)/$@
-	mkdir -p $(b)/$(@)/usr/share/lintian/overrides/
-	cp -av debian/overrides.$(@) $(b)/$(@)/usr/share/lintian/overrides/$(@)
-	dh_fixperms          -p$@ -P$(b)/$@
-	dh_makeshlibs        -p$@ -P$(b)/$@ -V
-	dh_installdeb        -p$@ -P$(b)/$@
-	dh_shlibdeps         -p$@ -P$(b)/$@
-	dh_installdebconf    -p$@ -P$(b)/$@
-	dh_gencontrol        -p$@ -P$(b)/$@
-	dh_md5sums           -p$@ -P$(b)/$@
-	dh_builddeb          -p$@ -P$(b)/$@
-
 # Build architecture-dependent files here.
 binary-all: build install
 
 # Build architecture-independent files here.
-binary-indep: build install grml-live grml-live-db grml-live-buildd
+binary-indep: build install grml-live grml-live-db
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install

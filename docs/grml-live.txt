@@ -758,49 +758,6 @@ And finally place the generated tarball in /etc/grml/fai/config/basefiles/ (note
 that it needs to be uppercase letters matching the class names, so: AMD64.tar.gz
 for amd64 and I386.tar.gz for i386).
 
-[[autobuild]]
-How do I set up an autobuild environment?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If you want to set up a system like link:http://daily.grml.org/[daily.grml.org]
-the Debian package grml-live-buildd provides all you need to start. Start with
-figuring out the cron job script /usr/share/grml-live/buildd/cronjob.sh.
-
-If you want to automatically update the grml-live Debian package on your build
-system based on the git tree of grml-live (so you get bleeding edge of
-development which might is interesting for services like daily.grml.org) the
-provided release_helper.sh script provides everything you need. Execute as root:
-
-  echo "deb file:/home/grml-live-git/grml-live.build-area/ ./" >> /etc/apt/sources.list.d/grml-live.list
-  adduser --disabled-login --disabled-password grml-live-git
-
-Execute 'visudo' to update sudo configuration and add the following line:
-
-  grml-live-git ALL=NOPASSWD: /usr/bin/apt-get
-
-Switch to user grml-live-git and configure the rest:
-
-  su - grml-live-git
-  mkdir grml-live.build-area
-  git clone git://git.grml.org/grml-live.git
-  git config --global user.name "Grml-Live Git Autobuild"
-  git config --global user.email "grml-live-git@$(hostname)"
-
-Finally install a cron job (as user grml-live-git) like:
-
-  30 00 * * * cd /home/grml-live-git/grml-live.git/ && env AUTOBUILD=1 scripts/release_helper.sh >/home/grml-live-git/grml-live-build.log
-
-Tip: To find out the build date of the installed grml-live package just execute:
-
-  % apt-cache policy grml-live | grep 'Installed.*autobuild'
-   Installed: 0.13.1~autobuild1300450381
-
-and run "date -ud @$STRING" where $STRING is the number behind the "autobuild",
-like:
-
-  % date -ud @1300450081
-  Fri Mar 18 12:08:01 UTC 2011
-
 [[download]]
 Download / install grml-live as a Debian package
 ------------------------------------------------
