@@ -128,6 +128,7 @@ debootstrap
 febootstrap
 grml-debootstrap
 kexec-tools
+rinse
 
 # iscsi (target) support
 iscsitarget
