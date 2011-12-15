@@ -61,7 +61,6 @@ Usage: $PN [options, see as follows]
    -r <release_name>       release name
    -s <suite>              Debian suite; values: etch, lenny, squeeze, sid
    -t <template_directory> place of the templates
-   -T <tar_name>           unpack chroot tar archive before starting
    -u                      update existing chroot instead of rebuilding it from scratch
    -U <username>           arrange output to be owned by specified username
    -v <version_number>     specify version number of the release
@@ -291,7 +290,7 @@ copy_addon_file() {
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:d:D:e:g:i:I:o:r:s:t:T:U:v:AbBFnNqQuVz" opt; do
+while getopts "a:C:c:d:D:e:g:i:I:o:r:s:t:U:v:AbBFnNqQuVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     A) PACK_ARTIFACTS=1 ;;
@@ -313,7 +312,6 @@ while getopts "a:C:c:d:D:e:g:i:I:o:r:s:t:T:U:v:AbBFnNqQuVz" opt; do
     r) RELEASENAME="$OPTARG" ;;
     s) SUITE="$OPTARG" ;;
     t) TEMPLATE_DIRECTORY="$OPTARG";;
-    T) UNPACK_CHROOT="$(readlink -f $OPTARG)" ;;
     v) VERSION="$OPTARG" ;;
     F) FORCE=1 ;;
     u) UPDATE=1 ;;
@@ -418,7 +416,6 @@ if [ -z "$FORCE" ] ; then
    [ -n "$GRML_FAI_CONFIG" ]     && echo "  Config directory:  $GRML_FAI_CONFIG"
    echo "  main directory:    $OUTPUT"
    [ -n "$EXTRACT_ISO_NAME" ]    && echo "  Extract ISO:       $EXTRACT_ISO_NAME"
-   [ -n "$UNPACK_CHROOT" ]       && echo "  Chroot from:       $UNPACK_CHROOT"
    [ -n "$CHROOT_OUTPUT" ]       && echo "  Chroot target:     $CHROOT_OUTPUT"
    [ -n "$BUILD_OUTPUT" ]        && echo "  Build target:      $BUILD_OUTPUT"
    [ -n "$ISO_OUTPUT" ]          && echo "  ISO target:        $ISO_OUTPUT"
@@ -531,20 +528,6 @@ set | egrep \
   > ${CONFIGDUMP}
 # }}}
 
-# unpack chroot {{{
-if [ -n "${UNPACK_CHROOT}" ]; then
-  log "Unpacking chroot from ${UNPACK_CHROOT}"
-  einfo "Unpacking chroot from ${UNPACK_CHROOT}"
-  [ -d "$CHROOT_OUTPUT" ] || mkdir -p "${CHROOT_OUTPUT}"
-  tar -xf "${UNPACK_CHROOT}" -C "${CHROOT_OUTPUT}/" --strip-components 1 ; RC=$?
-  if [ "$RC" != 0 ] ; then
-    eend 1
-    bailout 1
-  fi
-  eend 0
-fi
-# }}}
-
 # unpack iso/squashfs {{{
 extract_iso() {
 if [ -n "$EXTRACT_ISO_NAME" ]; then
@@ -576,7 +559,6 @@ extract_iso
 
 # cleanup CHROOT_ARCHIVE now {{{
 if [ -n "${PACK_ARTIFACTS}" ]; then
-  # can't do this earlier, as UNPACK_CHROOT might point to CHROOT_ARCHIVE
   [ -n "${CHROOT_ARCHIVE}" -a -f "${CHROOT_ARCHIVE}" ] && rm "${CHROOT_ARCHIVE}"
 fi
 # }}}
