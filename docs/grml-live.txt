@@ -252,12 +252,10 @@ system:
 
 [NOTE]
 
-If you have enough free space inside /dev/shm (being a tmpfs, usually you should
-have >=1GB of RAM) just run "mount -o remount,suid,dev,rw /dev/shm" and use
-/dev/shm as build and output directory - resulting in very fast build process.
-But please be aware of the fact that rebooting your system will result in an
-empty /dev/shm, so please use another directory for $CHROOT_OUTPUT,
-$BUILD_OUTPUT and $ISO_OUTPUT if you plan to create more persistent output. :)
+If you have enough RAM, just run "mount -t tmpfs none /mnt/ramdisk" to get a
+tmpfs ("RAMDISK"), and use /mnt/ramdisk as build and output directory - this
+results in a very fast build process. Note that these files will be gone when
+rebooting.
 
 [[main-features]]
 Main features of grml-live
