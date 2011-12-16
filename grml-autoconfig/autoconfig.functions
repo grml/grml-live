@@ -1155,6 +1155,7 @@ config_mixer () {
 
             for CONTROL in Master PCM ; do
                if amixer -q | grep -q "Simple mixer control '$CONTROL'" ; then
+                  amixer -q set "${CONTROL}" unmute 1>/dev/null 2>&1
                   amixer -q set "${CONTROL}" "${VOL}"%
                   eend $?
                fi
