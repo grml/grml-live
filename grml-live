@@ -883,7 +883,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        if ! [ -d "${BUILD_OUTPUT}/boot/grub" ] ; then
          mkdir -p "${BUILD_OUTPUT}/boot/grub"
        fi
-       cp ${TEMPLATE_DIRECTORY}/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
+       cp -a ${TEMPLATE_DIRECTORY}/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
 
        # copy grub files from target
        cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.mod "${BUILD_OUTPUT}"/boot/grub/

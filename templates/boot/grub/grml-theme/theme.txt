@@ -1,0 +1,44 @@
+title-text: ""
+title-color: "#FFFFFF"
+desktop-color: "black"
+message-color:	"#FFFFFF"
+
++ image {
+  file = "grml-logo.png"
+  left = 45%
+  top = 2%
+}
++ boot_menu {
+		left = 15%
+		width = 70%
+		top = 16%
+		height = 36%
+		item_color = "#FFFFFF"
+		selected_item_color = "orange"
+		item_spacing = 4
+		item_height = 12
+		border_color = "#FFFFFF"
+
+}
+
+
+# Show an informational message.
++ vbox {
+		top = 55%
+		left = 20%
+		+ label {text = "Press ENTER to boot or E to edit menu entry " color = "white" align = "left"}
+		+ label {text = "Press C to enter the Grub commandline" color = "white"}
+}
+
++ progress_bar
+{
+   id = "__timeout__"
+   top = 75%
+   left = 20%
+   text_color = "#FFFFFF"
+   fg_color = "orange"
+   bg_color = #66B
+   border_color = #006
+   text = "@TIMEOUT_NOTIFICATION_LONG@"
+
+}
