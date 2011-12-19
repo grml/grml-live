@@ -24,8 +24,11 @@ OnDesktop Mouse3 :rootMenu
 OnDesktop Mouse4 :nextWorkspace
 OnDesktop Mouse5 :prevWorkspace
 
-Mod1 Tab       :NextWindow
-Mod1 Shift Tab :PrevWindow
+Mod1 Tab  	 :NextWindow
+Mod4 j		 :NextWindow
+
+Mod1 Shift Tab	 :PrevWindow
+Mod4 k	       	 :PrevWindow
 
 Control Right		:NextWorkspace
 Mod1 Shift Right	:NextWorkspace
