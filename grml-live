@@ -1379,14 +1379,12 @@ create_netbootpackage() {
   cp "${CHROOT_OUTPUT}"/boot/initrd.img-* "$WORKING_DIR"/initrd.img
   cp "${CHROOT_OUTPUT}"/usr/lib/syslinux/pxelinux.0 "${WORKING_DIR}/pxelinux.0"
 
+  mkdir -p "${WORKING_DIR}/pxelinux.cfg"
   if [ -r "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" ] ; then
-    mkdir -p "${WORKING_DIR}/pxelinux.cfg/default"
     cp "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" "${WORKING_DIR}/pxelinux.cfg/default"
   else
     ewarn "File ${BUILD_OUTPUT}/boot/isolinux/netboot.cfg not found." ; eend 0
   fi
-
-  mkdir -p "${WORKING_DIR}/pxelinux.cfg"
 
   if tar -C "$OUTPUTDIR" -jcf "${OUTPUT_FILE}" "grml_netboot_package_${GRML_NAME}_${VERSION}" ; then
     sha1sum "${OUTPUT_FILE}" > "${OUTPUT_FILE}.sha1"
