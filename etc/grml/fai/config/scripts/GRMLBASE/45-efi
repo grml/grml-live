@@ -42,10 +42,10 @@ TMP_CONFIG="${TMP_CONFIG##${target}}"
 EFI_IMAGE="${EFI_IMAGE##${target}}"
 
 $ROOTCMD grub-mkimage -O x86_64-efi -o "$GRUB_EFI_IMAGE" --prefix=/boot/grub/ --config="$TMP_CONFIG" \
-  bitmap boot btrfs cat chain cmp configfile cpio echo efi_gop      \
-  efi_uga elf ext2 fat gfxmenu gfxterm gzio help iso9660 jpeg linux \
-  loopback lvm minicmd multiboot normal part_gpt part_msdos png     \
-  probe raid regexp reiserfs search search_fs_file search_fs_uuid   \
+  bitmap boot btrfs cat chain cmp configfile cpio echo efi_gop       \
+  efi_uga elf ext2 fat gfxmenu gfxterm gzio help iso9660 jpeg linux  \
+  loopback lvm minicmd multiboot normal part_gpt part_msdos play png \
+  probe raid regexp reiserfs search search_fs_file search_fs_uuid    \
   search_label squash4 terminal test video videoinfo xfs
 
 if ! [ -r "${target}/${GRUB_EFI_IMAGE}" ] ; then
