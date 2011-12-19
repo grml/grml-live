@@ -30,7 +30,7 @@ OUTPUTDIR="$(mktemp -d)" || exit 1
 WORKING_DIR="${OUTPUTDIR}/grml_netboot_package_${GRML_VERSION}/tftpboot/"
 mkdir -p "$WORKING_DIR" || exit 2
 
-cp "$CHROOT"/boot/vmlinuz-*    "$WORKING_DIR"/linux26
+cp "$CHROOT"/boot/vmlinuz-*    "$WORKING_DIR"/vmlinuz
 cp "$CHROOT"/boot/initrd.img-* "$WORKING_DIR"/initrd.img
 cp "$CHROOT"/usr/lib/syslinux/pxelinux.0 "${WORKING_DIR}/pxelinux.0"
 
@@ -38,7 +38,7 @@ mkdir -p "${WORKING_DIR}/pxelinux.cfg"
 cat > "${WORKING_DIR}/pxelinux.cfg/default" << EOF
 default grml
 label grml
-  kernel linux26
+  kernel vmlinuz
   append initrd=initrd.img root=/dev/nfs rw nfsroot=192.168.0.1:/live/image boot=live apm=power-off quiet nomce noprompt noeject vga=791 
 EOF
 

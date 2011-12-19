@@ -807,7 +807,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        # during build, so check for the file:
        INITRD="$(ls $CHROOT_OUTPUT/boot/initrd* 2>/dev/null| grep -v '.bak$' | sort -r | head -1)"
        if [ -n "$INITRD" ] ; then
-          cp $INITRD "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/initrd.gz
+          cp $INITRD "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/initrd.img
           find $CHROOT_OUTPUT/boot/ -name initrd\*.bak -exec rm {} \;
        else
           log    "Error: No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting"
@@ -817,7 +817,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
        KERNEL_IMAGE="$(ls $CHROOT_OUTPUT/boot/vmlinuz* 2>/dev/null | sort -r | head -1)"
        if [ -n "$KERNEL_IMAGE" ] ; then
-          cp "$KERNEL_IMAGE" "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/linux26
+          cp "$KERNEL_IMAGE" "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/vmlinuz
        else
           log    "Error: No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting"
           eerror "Error: No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
@@ -1375,7 +1375,7 @@ create_netbootpackage() {
 
   mkdir -p "$WORKING_DIR"
 
-  cp "${CHROOT_OUTPUT}"/boot/vmlinuz-*    "$WORKING_DIR"/linux26
+  cp "${CHROOT_OUTPUT}"/boot/vmlinuz-*    "$WORKING_DIR"/vmlinuz
   cp "${CHROOT_OUTPUT}"/boot/initrd.img-* "$WORKING_DIR"/initrd.img
   cp "${CHROOT_OUTPUT}"/usr/lib/syslinux/pxelinux.0 "${WORKING_DIR}/pxelinux.0"
 
