@@ -226,6 +226,11 @@ done
 # if entry is already present ignore it
 stringinfile $device $TMPFILE && bailout 0
 
+if [ "$ID_FS_USAGE" != "filesystem" -a "$ID_FS_TYPE" != "swap" ]; then
+    # blockdevice in question won't be mountable in this case
+    bailout 0
+fi
+
 options=noauto,user,dev,suid,exec
 case $ID_FS_TYPE in
 ntfs)
