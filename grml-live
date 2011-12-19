@@ -951,6 +951,14 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          fi
        done
 
+       for param in ARCH DATE DISTRI_INFO DISTRI_NAME DISTRI_SPLASH GRML_NAME SQUASHFS_NAME \
+           RELEASE_INFO SHORT_NAME VERSION ; do
+           for file in $(find "${BUILD_OUTPUT}" -name "*%$param%*") ; do
+               value="$(eval echo '$'"$param")"
+               mv ${file} ${file/\%${param}\%/$value}
+           done
+       done
+
        # adjust bootsplash accordingly but make sure the string has the according lenght
        SQUASHFS_NAME="$(cut_string 20 "$SQUASHFS_NAME")"
        SQUASHFS_NAME="$(extend_string_end 20 "$SQUASHFS_NAME")"
