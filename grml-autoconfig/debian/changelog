@@ -1,3 +1,11 @@
+grml-autoconfig (0.9.42) grml-testing; urgency=low
+
+  [ Ulrich Dangel ]
+  * [cd25e78] Unmute mixer controls before setting volume
+  * [97400bd] Try to set Front mixer control.
+
+ -- Michael Prokop <mika@grml.org>  Tue, 20 Dec 2011 20:04:35 +0100
+
 grml-autoconfig (0.9.41) grml-testing; urgency=low
 
   * [cb13eea] save-config: include findchanged. Thanks to Charles Hewson
