@@ -929,7 +929,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        # adjust all variables in the templates with the according distribution information
        for file in "${BUILD_OUTPUT}"/boot/isolinux/*.cfg "${BUILD_OUTPUT}"/boot/isolinux/*.msg \
                    "${BUILD_OUTPUT}"/boot/grub/* ; do
-         if [ -r "${file}" ] ; then
+         if [ -r "${file}" ] && [ -f "${file}" ] ; then
            sed -i "s/%ARCH%/$ARCH/g"                    "${file}"
            sed -i "s/%DATE%/$DATE/g"                    "${file}"
            sed -i "s/%DISTRI_INFO%/$DISTRI_INFO/g"      "${file}"
