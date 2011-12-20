@@ -130,7 +130,8 @@ kexec-tools
 rinse
 
 # iscsi (target) support
-iscsitarget
+open-iscsi
+targetcli
 tgt
 
 # ata-over-ethernet
