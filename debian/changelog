@@ -1,3 +1,10 @@
+grml-udev-config (0.0.10) unstable; urgency=low
+
+  [ Christian Hofstaedtler ]
+  * [aeb66be] Fix swap partitions missing from fstab
+
+ -- Michael Prokop <mika@grml.org>  Tue, 20 Dec 2011 20:21:27 +0100
+
 grml-udev-config (0.0.9) unstable; urgency=low
 
   * [f8e3b9c] Add man page for grml-udev-rebuildfstab
