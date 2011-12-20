@@ -95,6 +95,8 @@ checkvalue $CONFIG_HOSTNAME && config_hostname
 
 checkvalue $CONFIG_USERFSTAB && config_userfstab
 
+checkvalue $CONFIG_CONFIGFS && config_configfs
+
 checkvalue $CONFIG_TIME && config_time
 
 checkvalue $CONFIG_KERNEL &&  config_kernel

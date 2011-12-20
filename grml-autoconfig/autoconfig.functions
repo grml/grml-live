@@ -399,6 +399,23 @@ config_userfstab(){
 }
 # }}}
 
+# {{{ mount configfs
+config_configfs() {
+  einfo "Mounting configfs"
+  CONFIGFS_DIR=/sys/kernel/config/
+  modprobe configfs 2>/dev/null 1>&2
+  if ! [  -d "$CONFIGFS_DIR" ] ; then
+    eindent
+    einfo "$CONFIGFS_DIR does not exist, can't mount directory"
+    eend 1
+    eoutdent
+  else
+    mount -t configfs configfs "$CONFIGFS_DIR" 2>/dev/null 1>&2
+    eend $?
+  fi
+}
+# }}}
+
 # {{{ Set clock (Local time is more often used than GMT, so it is default)
 config_time(){
  # don't touch the files if running from harddisk:
