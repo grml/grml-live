@@ -1,3 +1,12 @@
+grml-desktop (0.3.13) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [85ddb6f] Remove deprecated startupinfo
+  * [4a5a058] This patch fixes the incorrect keyboard layout under Xorg.
+  * [f384ac0] Add Mod4+{j,k} to fluxbox shortcuts
+
+ -- Michael Prokop <mika@grml.org>  Tue, 20 Dec 2011 20:13:04 +0100
+
 grml-desktop (0.3.12) unstable; urgency=low
 
   [ Ulrich Dangel ]
