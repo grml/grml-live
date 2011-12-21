@@ -898,17 +898,17 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
           bailout 9
        fi
 
-       [ -d "$BUILD_OUTPUT"/GRML ] || mkdir "$BUILD_OUTPUT"/GRML
-       cp -a ${TEMPLATE_DIRECTORY}/GRML/* "$BUILD_OUTPUT"/GRML/
+       mkdir -p "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/
+       cp -a ${TEMPLATE_DIRECTORY}/GRML/* "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/
 
        # adjust boot splash information:
        RELEASE_INFO="$GRML_NAME $VERSION - Release Codename $RELEASENAME"
        RELEASE_INFO="$(cut_string 68 "$RELEASE_INFO")"
        RELEASE_INFO="$(extend_string_end 68 "$RELEASE_INFO")"
 
-       if [ -r "$BUILD_OUTPUT"/GRML/grml-version ] ; then
-          sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/GRML/grml-version
-          sed -i "s/%DATE%/$DATE/"                                      "$BUILD_OUTPUT"/GRML/grml-version
+       if [ -r "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version ] ; then
+          sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version
+          sed -i "s/%DATE%/$DATE/"                                      "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version
        fi
 
        # make sure the squashfs filename is set accordingly:
@@ -1041,8 +1041,8 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        if ! [ -r "$DPKG_LIST" ] ; then
           ewarn "$DPKG_LIST could not be read, ignoring to store package information on ISO therefore."
        else
-          einfo "Storing package list information as /GRML/${GRML_NAME}-packages.txt on ISO."
-          cp "$DPKG_LIST" "${BUILD_OUTPUT}/GRML/${GRML_NAME}-packages.txt"
+          einfo "Storing package list information as /GRML/${GRML_NAME}/packages.txt on ISO."
+          cp "$DPKG_LIST" "${BUILD_OUTPUT}"/GRML/"${GRML_NAME}"/packages.txt
           eend $?
        fi
 
@@ -1153,7 +1153,7 @@ fi
 
 # create md5sum file:
 if [ -z "$BOOTSTRAP_ONLY" ] ; then
-  ( cd $BUILD_OUTPUT/GRML &&
+  ( cd $BUILD_OUTPUT/GRML/"${GRML_NAME}" &&
   find .. -type f -not -name md5sums -not -name isolinux.bin -exec md5sum {} \; > md5sums )
 fi
 # }}}
