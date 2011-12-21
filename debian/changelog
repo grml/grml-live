@@ -1,3 +1,10 @@
+grml-autoconfig (0.9.43) grml-testing; urgency=low
+
+  [ Ulrich Dangel ]
+  * [f7359bd] Automatically try to mount configfs
+
+ -- Christian Hofstaedtler <ch@grml.org>  Wed, 21 Dec 2011 22:38:54 +0100
+
 grml-autoconfig (0.9.42) grml-testing; urgency=low
 
   [ Ulrich Dangel ]
