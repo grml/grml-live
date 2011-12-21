@@ -543,7 +543,7 @@ if [ -n "$EXTRACT_ISO_NAME" ]; then
     eend 1
     bailout 1
   fi
-  unsquashfs -d "${CHROOT_OUTPUT}" "${mountpoint}"/live/*.squashfs ; rc=$?
+  unsquashfs -d "${CHROOT_OUTPUT}" "${mountpoint}"/live/*/*.squashfs ; rc=$?
   umount "$mountpoint"
   rmdir "$mountpoint"
   if [ "$rc" != 0 ]; then
@@ -1083,7 +1083,7 @@ elif [ -n "$SKIP_MKSQUASHFS" ] ; then
    log   "Skipping stage 'squashfs' as requested via option -q or -N"
    ewarn "Skipping stage 'squashfs' as requested via option -q or -N" ; eend 0
 else
-   [ -d "$BUILD_OUTPUT"/live ] || mkdir "$BUILD_OUTPUT"/live
+   mkdir -p "$BUILD_OUTPUT"/live/"${GRML_NAME}"/
    # make sure we don't leave (even an empty) base.tgz:
    [ -f "$CHROOT_OUTPUT/base.tgz" ] && rm -f "$CHROOT_OUTPUT/base.tgz"
 
@@ -1132,11 +1132,11 @@ else
    [ -n "$SQUASHFS_INFO_MSG" ] && SQUASHFS_INFO_MSG="using options: $SQUASHFS_INFO_MSG"
    einfo "Squashfs build information: running binary $SQUASHFS_BINARY $SQUASHFS_INFO_MSG"
 
-   log "$SQUASHFS_BINARY $CHROOT_OUTPUT/ $BUILD_OUTPUT/live/${GRML_NAME}.squashfs -noappend $SQUASHFS_OPTIONS"
+   log "$SQUASHFS_BINARY $CHROOT_OUTPUT/ $BUILD_OUTPUT/live/${GRML_NAME}/${GRML_NAME}.squashfs -noappend $SQUASHFS_OPTIONS"
 
-   if $SQUASHFS_BINARY $CHROOT_OUTPUT/ $BUILD_OUTPUT/live/"${GRML_NAME}".squashfs \
+   if $SQUASHFS_BINARY $CHROOT_OUTPUT/ $BUILD_OUTPUT/live/"${GRML_NAME}"/"${GRML_NAME}".squashfs \
       -noappend $SQUASHFS_OPTIONS 2>"${SQUASHFS_STDERR}" ; then
-      echo "${GRML_NAME}.squashfs" > $BUILD_OUTPUT/live/filesystem.module
+      echo "${GRML_NAME}.squashfs" > $BUILD_OUTPUT/live/"${GRML_NAME}"/filesystem.module
       log "Finished execution of stage 'squashfs' [$(date)]"
       einfo "Finished execution of stage 'squashfs'" ; eend 0
    else
