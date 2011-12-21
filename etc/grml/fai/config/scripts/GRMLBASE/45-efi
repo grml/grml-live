@@ -21,11 +21,11 @@ if ! [ -r "${target}"/usr/lib/grub/x86_64-efi/moddep.lst ] ; then
   exit 0
 fi
 
-GRUB_EFI_IMAGE="${target}/tmp/grub_efi_image"
+BOOTX64="${target}/boot/bootx64.efi"
+EFI_IMG="${target}/boot/efi.img"
 TMP_CONFIG="${target}/tmp/grub_config_efi"
-EFI_IMAGE="${target}/tmp/efi_image"
 
-rm -f "$GRUB_EFI_IMAGE" "$TMP_CONFIG" "$EFI_IMAGE"
+rm -f "$BOOTX64" "$EFI_IMG" "$TMP_CONFIG"
 
 cat > "$TMP_CONFIG" <<EOF
 search --set -f /conf/bootid.txt root
@@ -37,37 +37,35 @@ else
 fi
 EOF
 
-GRUB_EFI_IMAGE="${GRUB_EFI_IMAGE##${target}}"
+BOOTX64="${BOOTX64##${target}}"
+EFI_IMG="${EFI_IMG##${target}}"
 TMP_CONFIG="${TMP_CONFIG##${target}}"
-EFI_IMAGE="${EFI_IMAGE##${target}}"
 
-$ROOTCMD grub-mkimage -O x86_64-efi -o "$GRUB_EFI_IMAGE" --prefix=/boot/grub/ --config="$TMP_CONFIG" \
+$ROOTCMD grub-mkimage -O x86_64-efi -o "$BOOTX64" --prefix=/boot/grub/ --config="$TMP_CONFIG" \
   bitmap boot btrfs cat chain cmp configfile cpio echo efi_gop       \
   efi_uga elf ext2 fat gfxmenu gfxterm gzio help iso9660 jpeg linux  \
   loopback lvm minicmd multiboot normal part_gpt part_msdos play png \
   probe raid regexp reiserfs search search_fs_file search_fs_uuid    \
   search_label squash4 terminal test video videoinfo xfs
 
-if ! [ -r "${target}/${GRUB_EFI_IMAGE}" ] ; then
+if ! [ -r "${target}/${BOOTX64}" ] ; then
   echo "Can not access grub efi image." >&2
   exit 1
 fi
 
-SIZE=$(du -sk "${target}/${GRUB_EFI_IMAGE}" | awk -F" " '{print $1'})
+SIZE=$(du -sk "${target}/${BOOTX64}" | awk -F" " '{print $1'})
 SIZE=$(((($SIZE / 32 )+2)*32))
 
-dd if=/dev/zero of="${target}/${EFI_IMAGE}" bs=1k count="$SIZE" 2>/dev/null
-$ROOTCMD mkfs.vfat -n GRML "$EFI_IMAGE" >/dev/null
-$ROOTCMD mmd -i "$EFI_IMAGE" ::EFI
-$ROOTCMD mmd -i "$EFI_IMAGE" ::EFI/BOOT
-$ROOTCMD mcopy -i "$EFI_IMAGE" "$GRUB_EFI_IMAGE" ::EFI/BOOT/bootx64.efi >/dev/null
+dd if=/dev/zero of="${target}/${EFI_IMG}" bs=1k count="$SIZE" 2>/dev/null
+$ROOTCMD mkfs.vfat -n GRML "$EFI_IMG" >/dev/null
+$ROOTCMD mmd -i "$EFI_IMG" ::EFI
+$ROOTCMD mmd -i "$EFI_IMG" ::EFI/BOOT
+$ROOTCMD mcopy -i "$EFI_IMG" "$BOOTX64" ::EFI/BOOT/bootx64.efi >/dev/null
 
 rm -f "${target}/${TMP_CONFIG}"
-mv "${target}/${EFI_IMAGE}" "${target}/var/lib/grml_live_efi.img"
-mv "${target}/${GRUB_EFI_IMAGE}" "${target}/var/lib/grml_live_bootx64.efi"
 
-echo "Generated EFI image ${target}/var/lib/grml_live_efi.img"
-echo "Generated bootx64 image ${target}/var/lib/grml_live_bootx64.efi"
+echo "Generated EFI image $BOOTX64"
+echo "Generated bootx64 image $EFI_IMG"
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
