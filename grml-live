@@ -824,6 +824,17 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
           bailout 11
        fi
 
+       # EFI boot files
+       if [ -r "${CHROOT_OUTPUT}/boot/efi.img" -a -r "${CHROOT_OUTPUT}/boot/bootx64.efi" ] ; then
+          einfo "Moving EFI boot files into ISO path."
+          log "Moving EFI boot files into ISO path."
+          RC=$0
+          mv "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
+          mkdir -p "${BUILD_OUTPUT}/efi/boot/" || RC=$?
+          mv "${CHROOT_OUTPUT}/boot/bootx64.efi" "${BUILD_OUTPUT}/efi/boot/bootx64.efi" || RC=$?
+          eend $?
+       fi
+
        [ -n "$TEMPLATE_DIRECTORY" ] || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
        if ! [ -d "${TEMPLATE_DIRECTORY}"/boot ] ; then
           log    "Error: ${TEMPLATE_DIRECTORY}/boot does not exist. Exiting."
@@ -1204,47 +1215,28 @@ else
       bailout
    fi
 
-   case "$ARCH" in
-     amd64)
-       # using -eltorito-alt-boot is limited to xorriso for now
-       case "$MKISOFS" in
-         xorriso*)
-           einfo "Using xorriso for ISO generation." ;  eend 0
-           eindent
+   einfo "Using ${MKISOFS} to build ISO." ;  eend 0
+   case "${ARCH}-${MKISOFS}" in
+     # using -eltorito-alt-boot is limited to xorriso for now
+     amd64-xorriso*)
+       eindent
 
-           if ! dpkg --compare-versions $(dpkg-query -W -f='${Version}\n' xorriso 2>/dev/null) gt-nl 1.1.6-1 ; then
-             log   "Disabling (U)EFI boot support because xorriso version is too old."
-             ewarn "Disabling (U)EFI boot support because xorriso version is too old." ; eend 0
-           else
-             if [ -r "${CHROOT_OUTPUT}/boot/efi.img" ] ; then
-               einfo "Found /boot/efi.img - using for ISO."
-               log   "Found /boot/efi.img - using for ISO."
-               cp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/efi.img"
-               eend $?
-             fi
+       if ! dpkg --compare-versions $(dpkg-query -W -f='${Version}\n' xorriso 2>/dev/null) gt-nl 1.1.6-1 ; then
+         log   "Disabling (U)EFI boot support because xorriso version is too old."
+         ewarn "Disabling (U)EFI boot support because xorriso version is too old." ; eend 0
+       else
+         if [ -r "${BUILD_OUTPUT}"/boot/efi.img ] ; then
+           einfo "Enabling (U)EFI boot."
+           log   "Enabling (U)EFI boot."
+           BOOT_ARGS="$BOOT_ARGS -boot-info-table -eltorito-alt-boot -e boot/efi.img -no-emul-boot"
+           eend $?
+         else
+           log   "Disabling (U)EFI boot support because /boot/efi.img is missing."
+           ewarn "Disabling (U)EFI boot support because /boot/efi.img is missing." ; eend 0
+         fi
+       fi
 
-             if [ -r "${CHROOT_OUTPUT}/boot/bootx64.efi" ] ; then
-               einfo "Found /boot/bootx64.efi - using as /efi/boot/bootx64.efi for ISO."
-               log   "Found /boot/bootx64.efi - using as /efi/boot/bootx64.efi for ISO."
-               mkdir -p "${BUILD_OUTPUT}/efi/boot/"
-               cp "${CHROOT_OUTPUT}/boot/bootx64.efi" "${BUILD_OUTPUT}/efi/boot/bootx64.efi"
-               eend $?
-             fi
-
-             if [ -r "${BUILD_OUTPUT}"/boot/efi.img ] ; then
-               einfo "/boot/efi.img found and amd64 architecture present, extending boot arguments."
-               log   "/boot/efi.img found and amd64 architecture present, extending boot arguments."
-               BOOT_ARGS="$BOOT_ARGS -boot-info-table -eltorito-alt-boot -e boot/efi.img -no-emul-boot"
-               eend $?
-             else
-               log   "Disabling (U)EFI boot support because /boot/efi.img is missing."
-               ewarn "Disabling (U)EFI boot support because /boot/efi.img is missing." ; eend 0
-             fi
-           fi
-
-           eoutdent
-           ;;
-       esac
+       eoutdent
        ;;
    esac
 
