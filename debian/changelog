@@ -1,3 +1,94 @@
+grml-live (0.17.1) unstable; urgency=low
+
+  [ Michael Prokop ]
+  * [dfe1f07] grml-cheatcodes.txt: document vnc bootoptions
+  * [88cfc40] grml-cheatcodes.txt: fix typo
+  * [94cfb7b] generate sha1 checksum file of netboot package
+  * [5bfdcec] Update docs to better match recent development
+  * [8441a6a] GRMLBASE/44-grub: make sure directory /boot/grub exists.
+    Thanks to Thomas Koehler for the bugreport
+
+  [ Ulrich Dangel ]
+  * [9b24866] grml-cheatcodes.txt: Add documentation about nostats bootoption
+  * [b8db7a0] Add graphicoreBitmapFont0-Light.otf to grml-live.
+  * [ccdff8a] Replace old desktop.jpg with new desktop-bg.png
+  * [7c309e0] Update /etc/grml_version in GRMLBASE script instead of grml-live
+  * [79a1183] Update wallpaper in fai scripts
+  * [86f084d] Recommend imagemagick
+  * [445e589] Remove the default quiet boot parameter for a verbose bootup.
+  * [819fc49] Umount /proc/sys/fs/binfmt_misc before umounting /proc.
+  * [8dbae90] Add additional resolution (1600x900) to grub.cfg.
+  * [51e56e2] Replace 1440x1050 with 1400x1050
+  * [d5596b5] Use gfxmode=auto instead of specifying manually resolutions
+  * [6d72f5e] Support template filenames in grml-live.
+  * [a9f099a] Introduce new config files for grub bootloader.
+  * [d501c11] Add basic grml theme to grub
+  * [9512656] Play sound after the grub menu is shown.
+  * [1c3ff78] Try to load regexp in grub.cfg
+  * [e138162] Ensure that the file used for replacing the template parameters is a file.
+  * [9b2a50c] Print a message before loading kernel or initrd in grub
+  * [f61863d] Add trailing whitespace to grub commandline
+  * [6da554d] Add beep to templates/boot/isolinux/vesamenu.cfg
+  * [b18889f] Build grub.img for loading grub from within syslinux
+
+  [ Christian Hofstaedtler ]
+  * [3f2b59d] Stop disabling KMS for radeon
+  * [b89381a] Modernize Windows AutoRun templates
+  * [f009115] Simplify GRML/index.html template
+  * [ea794c5] Match startpage.html design to grml.org site
+  * [9213b27] Tighten replacement operation for SNAPSHOT class
+  * [f6e33fb] Ensure all passed paths are absolute
+  * [a49d935] Internally, rename GRML_LIVE_LOCAL_CONFIG to LOCAL_CONFIG
+  * [c2fac3a] Don't source grml-live.{conf,local} in scripts if not required
+  * [436d892] Use premade LOGDIR var
+  * [352c822] Make username replacement in inittab more robust
+  * [ef51d0c] Expose (selected) config vars to fai scripts
+  * [0a40a21] Make sure USERNAME doesn't leak in from ENV
+  * [6e77809] Merge initramfs scripts
+  * [a4703ee] Fix capitalization of project name in GRML/index.html
+  * [b499e10] Update welcome splash ascii art
+  * [0b584ff] Remove 'failsafe' boot option, which wasn't really failsafe
+  * [24e7e2c] Remove comment about failsafe boot option
+  * [39edd53] Enable fb for "graphical mode" boot option in isolinux
+  * [fad3fb7] Remove grml-live-buildd package
+  * [11baa33] Add -e option to unpack ISOs
+  * [3abf943] Remove -T option
+  * [4161d3c] Change -A option to not build chroot.tar.gz anymore
+  * [ffc122b] Update version in grml-live during Debian package build
+  * [62a1ab3] Don't suggest /dev/shm as a build location
+  * [796f001] Make it clear that squashfs-tools from bpo is fine
+  * [07dc676] Shorten, but don't totally rename kernel and initrd files
+  * [8966263] Install netboot.cfg as pxelinux.cfg/default _file_
+  * [4efbf69] Use sane paths for intermediate EFI files
+  * [1684dab] Move squashfs into flavour-specific path
+  * [ff80c12] Install "GRML" files into GRML/$GRML_NAME/
+  * [8b88fe0] Revert accidental addition of fat to grub2 core.img
+  * [f925961] Trim spaces off of default DISTRI_INFO
+  * [b81f460] Remove unused grub background image
+  * [ec0c871] Optimized all PNGs with "optipng"
+  * [6673903] Rework EFI file copy/moving
+
+
+  Software Changes:
+
+  [ Michael Prokop ]
+  * [4f44cb4] SW: add rinse to GRML_FULL
+  * [fd94537] SW: replace iscsitarget with open-iscsi + targetcli in GRML_FULL
+  * [5f895b3] SW: add python-urwid as depends next to targetcli in GRML_FULL
+  * [e754942] SW: replace version specific linux-image-* packages in GRML_FULL with meta package.
+    Thanks to Christian Hofstaedtler <ch@grml.org> for his kernel packaging work
+
+  [ Ulrich Dangel ]
+  * [30c312b] SW: Add extundelete to GRML_FULL
+
+  [ Christian Hofstaedtler ]
+  * [985f29c] SW: add boot-info-script to GRML_FULL [Closes: issue1004]
+  * [eafbf7e] SW: add vblade, aoetools to GRML_FULL [Closes: issue1092]
+  * [4c6a7a9] SW: add firmware-linux-{free,nonfree} to GRML_FULL
+  * [7765407] SW: remove explicit install of squashfs-lzma-tools
+
+ -- Christian Hofstaedtler <ch@grml.org>  Fri, 23 Dec 2011 00:35:57 +0100
+
 grml-live (0.17.0) unstable; urgency=low
 
   [ Michael Prokop ]
