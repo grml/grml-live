@@ -355,7 +355,7 @@ fi
 [ -n "$BOOT_METHOD" ]             || BOOT_METHOD='isolinux'
 [ -n "$CLASSES" ]                 || CLASSES="GRMLBASE,GRML_FULL,$(echo ${ARCH} | tr 'a-z' 'A-Z')"
 [ -n "$DATE" ]                    || DATE="$(date +%Y-%m-%d)"
-[ -n "$DISTRI_INFO" ]             || DISTRI_INFO='Grml - Live Linux for system administrators   '
+[ -n "$DISTRI_INFO" ]             || DISTRI_INFO='Grml - Live Linux for system administrators'
 [ -n "$DISTRI_NAME" ]             || DISTRI_NAME="grml"
 [ -n "$DISTRI_SPLASH" ]           || DISTRI_SPLASH='grml.png'
 [ -n "$FORCE_ISO_REBUILD" ]       || FORCE_ISO_REBUILD="false"
