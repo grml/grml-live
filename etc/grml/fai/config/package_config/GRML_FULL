@@ -294,10 +294,10 @@ firmware-linux-free
 firmware-linux-nonfree
 
 PACKAGES aptitude I386
-linux-image-3.1.0-2-grml-486
+linux-image-i386-grml
 
 PACKAGES aptitude AMD64
-linux-image-3.1.0-2-grml-amd64
+linux-image-amd64-grml
 
 PACKAGES aptitude AMD64
 ia32-libs
