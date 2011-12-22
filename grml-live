@@ -902,6 +902,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.lst "${BUILD_OUTPUT}"/boot/grub/
        cp -a "${CHROOT_OUTPUT}"/usr/share/grub/ascii.pf2 "${BUILD_OUTPUT}"/boot/grub/
        cp -a "${CHROOT_OUTPUT}"/boot/grub/core.img "${BUILD_OUTPUT}"/boot/grub/
+       cp -a "${CHROOT_OUTPUT}"/boot/grub/grub.img "${BUILD_OUTPUT}"/boot/grub/
 
        if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
           log    "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
