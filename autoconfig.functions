@@ -1166,23 +1166,34 @@ config_mixer () {
 
             if checkbootparam 'micvol' ; then
                MICVOL="$(getbootparam 'micvol' 2>>$DEBUG)"
+               einfo "Setting microphone to ${WHITE}${MICVOL}${NORMAL}."
             else
                MICVOL=0
             fi
 
-            for CONTROL in Master PCM Front ; do
-               if amixer -q | grep -q "Simple mixer control '$CONTROL'" ; then
-                  amixer -q set "${CONTROL}" unmute 1>/dev/null 2>&1
-                  amixer -q set "${CONTROL}" "${VOL}"%
+            CONTROLS=$(amixer -c $card scontrols | awk -F"Simple mixer control " '{print $2}')
+            IFSOLD=${IFS:-}
+            IFS='
+'
+            for CONTROL in ${=CONTROLS} ; do
+               if $(amixer -c $card sget ${CONTROL} | grep -q 'Capabilities:.*pswitch') ; then
+                  amixer -c $card -q set "${CONTROL}" unmute
+               fi
+               if $(amixer -c $card sget ${CONTROL} | grep -q -P 'Capabilities:.*(pvolume| volume)') ; then
+                  amixer -c $card -q set "${CONTROL}" "${VOL}"%
+               fi
+
+               if [ ${MICVOL} -ne 0 ] ; then
+                  if $(amixer -c $card sget ${CONTROL} | grep -q 'Capabilities:.*cswitch') ; then
+                     amixer -c $card -q set "${CONTROL}" unmute
+                  fi
+                  if $(amixer -c $card sget ${CONTROL} | grep -q 'Capabilities:.*cvolume') ; then
+                     amixer -c $card -q set "${CONTROL}" $MICVOL%
+                  fi
                   eend $?
                fi
             done
-
-            if [ ${MICVOL} -ne 0 ] ; then
-               einfo "Setting microphone to ${WHITE}${MICVOL}${NORMAL}."
-               amixer -q set "Mic" $MICVOL &> /dev/null
-               eend $?
-            fi
+            IFS=$IFSOLD
          fi # checkbootparam 'nosound'
          eoutdent
       done
