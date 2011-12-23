@@ -64,24 +64,28 @@ fi
 if [ -f "${target}/boot/x86_64-efi.img" ] ; then
   mv "${target}/boot/x86_64-efi.img" "${target}/${BOOTX64}"
 fi
-if ! [ -r "${target}/${BOOTX64}" ] ; then
-  echo "Can not access grub efi image." >&2
-  exit 1
+
+if ifclass AMD64 ; then
+  if ! [ -r "${target}/${BOOTX64}" ] ; then
+    echo "Can not access grub efi image." >&2
+    exit 1
+  fi
+
+  SIZE=$(du -sk "${target}/${BOOTX64}" | awk -F" " '{print $1'})
+  SIZE=$(((($SIZE / 32 )+2)*32))
+
+  dd if=/dev/zero of="${target}/${EFI_IMG}" bs=1k count="$SIZE" 2>/dev/null
+  $ROOTCMD mkfs.vfat -n GRML "$EFI_IMG" >/dev/null
+  $ROOTCMD mmd -i "$EFI_IMG" ::EFI
+  $ROOTCMD mmd -i "$EFI_IMG" ::EFI/BOOT
+  $ROOTCMD mcopy -i "$EFI_IMG" "$BOOTX64" ::EFI/BOOT/bootx64.efi >/dev/null
+  echo "Generated EFI image $BOOTX64"
+  echo "Generated bootx64 image $EFI_IMG"
 fi
 
-SIZE=$(du -sk "${target}/${BOOTX64}" | awk -F" " '{print $1'})
-SIZE=$(((($SIZE / 32 )+2)*32))
-
-dd if=/dev/zero of="${target}/${EFI_IMG}" bs=1k count="$SIZE" 2>/dev/null
-$ROOTCMD mkfs.vfat -n GRML "$EFI_IMG" >/dev/null
-$ROOTCMD mmd -i "$EFI_IMG" ::EFI
-$ROOTCMD mmd -i "$EFI_IMG" ::EFI/BOOT
-$ROOTCMD mcopy -i "$EFI_IMG" "$BOOTX64" ::EFI/BOOT/bootx64.efi >/dev/null
-
 rm -f "${target}/${TMP_CONFIG}"
+echo "Generated Grub images"
 
-echo "Generated EFI image $BOOTX64"
-echo "Generated bootx64 image $EFI_IMG"
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
