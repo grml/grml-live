@@ -1176,18 +1176,20 @@ config_mixer () {
             IFS='
 '
             for CONTROL in ${=CONTROLS} ; do
-               if $(amixer -c $card sget ${CONTROL} | grep -q 'Capabilities:.*pswitch') ; then
+               if ! echo "${CONTROL}" | grep -q -i "mic" ; then
+               if $(amixer -c $card sget "${CONTROL}" | grep -q 'Capabilities:.*pswitch') ; then
                   amixer -c $card -q set "${CONTROL}" unmute
                fi
-               if $(amixer -c $card sget ${CONTROL} | grep -q -P 'Capabilities:.*(pvolume| volume)') ; then
+               if $(amixer -c $card sget "${CONTROL}" | grep -q -P 'Capabilities:.*(pvolume| volume)') ; then
                   amixer -c $card -q set "${CONTROL}" "${VOL}"%
+               fi
                fi
 
                if [ ${MICVOL} -ne 0 ] ; then
-                  if $(amixer -c $card sget ${CONTROL} | grep -q 'Capabilities:.*cswitch') ; then
+                  if $(amixer -c $card sget "${CONTROL}" | grep -q 'Capabilities:.*cswitch') ; then
                      amixer -c $card -q set "${CONTROL}" unmute
                   fi
-                  if $(amixer -c $card sget ${CONTROL} | grep -q 'Capabilities:.*cvolume') ; then
+                  if $(amixer -c $card sget "${CONTROL}" | grep -q 'Capabilities:.*cvolume') ; then
                      amixer -c $card -q set "${CONTROL}" $MICVOL%
                   fi
                   eend $?
