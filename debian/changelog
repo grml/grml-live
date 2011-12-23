@@ -1,3 +1,10 @@
+grml-live (0.17.2) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [5abbeac] Fix arch issue for 45-grub-images
+
+ -- Michael Prokop <mika@grml.org>  Fri, 23 Dec 2011 02:14:43 +0100
+
 grml-live (0.17.1) unstable; urgency=low
 
   [ Michael Prokop ]
