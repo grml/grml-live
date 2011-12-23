@@ -175,6 +175,7 @@ telnet
 tshark
 tsocks
 vlan
+wireshark
 
 # network transfers
 ca-certificates
