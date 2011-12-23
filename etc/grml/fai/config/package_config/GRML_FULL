@@ -223,6 +223,8 @@ bacula-fd
 bacula-sd
 dirvish
 duplicity
+fsarchiver
+
 
 # serial
 cu
