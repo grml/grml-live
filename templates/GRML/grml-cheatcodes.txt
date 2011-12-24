@@ -184,11 +184,12 @@ grml nostartx                       If using startx as default bootoption the no
                                     automatic startup of X by default.)
 grml vnc=password                   Start VNC server with startup of X.org and sets the password to the specified
                                     one. To automatically start the VNC server use the startx bootoption.
+                                    [Note: Grml 2011.12+ doesn't include a VNC server.]
 grml vnc_connect=host[:port]        Connect to a listening VNC client ("vncviewer -listen" reverse connection).
                                     Can be used to connect from devices behind firewalls as connection is
                                     initiated from the VNC server instead of the VNC client. Has to be
                                     combined with the vnc bootoption.
-                                    [Note: only available since release 2011.12]
+                                    [Note: Grml 2011.12+ doesn't include a VNC client.]
 
 
 Hardware related settings:
