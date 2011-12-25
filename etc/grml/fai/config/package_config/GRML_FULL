@@ -89,6 +89,7 @@ secure-delete
 wipe
 
 # editors
+hexedit
 nano
 vim
 zile
