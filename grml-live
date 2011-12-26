@@ -152,6 +152,7 @@ umount_all() {
    # make sure we don't leave any mounts - FAI doesn't remove them always
    umount $CHROOT_OUTPUT/proc/sys/fs/binfmt_misc 2>/dev/null || /bin/true
    umount $CHROOT_OUTPUT/proc 2>/dev/null || /bin/true
+   umount $CHROOT_OUTPUT/run  2>/dev/null || /bin/true
    umount $CHROOT_OUTPUT/sys  2>/dev/null || /bin/true
    umount $CHROOT_OUTPUT/dev/pts 2>/dev/null || /bin/true
    umount $CHROOT_OUTPUT/dev 2>/dev/null || /bin/true

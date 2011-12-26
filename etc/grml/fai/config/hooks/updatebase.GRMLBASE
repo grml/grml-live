@@ -41,6 +41,11 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
       mount --bind /dev $FAI_ROOT/dev || true
    fi
 
+   if [ -d $FAI_ROOT/run ] ; then
+      mount -t tmpfs tmpfs $FAI_ROOT/run
+      mkdir $FAI_ROOT/run/lock
+   fi
+
    mount -t devpts devpts $FAI_ROOT/dev/pts || true
 
    # skip the task if we want to build a new ISO only,
