@@ -19,6 +19,16 @@ if [ ! -x "$(which convert)" ]; then
   exit 0
 fi
 
+if [ ! -f "$GRML_BG" ]; then
+    echo "Could not find Grml background image, skipping wallpaper"
+    exit 0
+fi
+
+if [ ! -f "$FONTFILE" ]; then
+    echo "Could not find font $FONTFILE, skipping wallpaper"
+    exit 0
+fi
+
 echo "Creating standard wallpaper"
 
 convert "$GRML_BG" -gravity center \
