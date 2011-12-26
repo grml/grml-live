@@ -117,10 +117,6 @@ mount_sys(){
 # {{{ Check if we are running in live mode or from HD
 INSTALLED=""
 [ -e /etc/grml_cd ] || INSTALLED="yes"
-
-# testcd
-TESTCD=""
-checkbootparam 'testcd' >>$DEBUG 2>&1 && TESTCD="yes"
 # }}}
 
 # {{{ source lsb-functions , color handling
@@ -641,18 +637,30 @@ config_fix_passwd(){
 
 # {{{ CD Checker
 config_testcd(){
-if [ -n "$TESTCD" ]; then
+if checkbootparam 'testcd' ; then
    einfo "Checking CD data integrity as requested by '${WHITE}testcd${NORMAL}' boot option."
-   einfo "Reading files and checking against GRML/md5sums, this may take a while..."
-   echo -n "${RED}"
 
-   if [ -n "${LIVECD_PATH}"/GRML ] ; then
-      ( cd "${LIVECD_PATH}"/GRML ; rm -f /tmp/md5sum.log ; md5sum -c md5sums 2>&1 | tee /tmp/md5sum.log ; RC=$? )
-   else
+   ERROR=0
+   FOUND_FILE=0
+
+   rm -f /tmp/md5sum.log
+   for md5 in $(find "${LIVECD_PATH}" -name md5sums) ; do
+      einfo "Checking files against $md5, this may take a while..."
+
+      FOUND_FILE=1
+      ( cd $(dirname "$md5") && md5sum -c $(basename "$md5") ; RC=$?)  |& tee -a /tmp/md5sum.log
+
+      if [ $RC -ne 0 ] ; then
+         ERROR=1
+      fi
+   done
+
+   if [ $FOUND_FILE -eq 0 ] ; then
       echo "${RED} *** Error: Could not find md5sum file.                           ***"
+      return
    fi
 
-   if [ "$RC" = "0" ]; then
+   if [ "$ERROR" -eq 0 ]; then
       einfo "Everything looks OK" ; eend 0
    else
       eerror 'Checksum failed for theses files:' ; eend 1
