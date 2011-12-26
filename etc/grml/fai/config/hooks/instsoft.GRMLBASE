@@ -20,33 +20,10 @@ fi
 if [ "$FAI_ACTION" = "softupdate" ] ; then
    echo "Action $FAI_ACTION of FAI (hooks/instsoft.GRMLBASE) via grml-live running"
 
-   if [ -r /etc/resolv.conf ] ; then
-     case "$(chroot $target readlink -f /etc/resolv.conf)" in
-       /run/*) # resolvconf with /run
-         mkdir -p $target/run/resolvconf
-         cat /etc/resolv.conf >> $target/run/resolvconf/resolv.conf
-         ;;
-       /lib/*) # resolvconf without /run
-         # sanity check to avoid "input file is output file",
-         # see http://bts.grml.org/grml/issue984
-         if ! [ -L $target/etc/resolvconf/run/resolv.conf ] ; then
-           cat /etc/resolv.conf >> $target/etc/resolvconf/run/resolv.conf
-         else
-           echo "Error: /etc/resolvconf/run/resolv.conf in chroot should not be a symlink." >&2
-           echo "       Looks like something is wrong, please fix manually." >&2
-           exit 1
-         fi
-         ;;
-       *) # no resolvconf
-         if ! [ -L $target/etc/resolv.conf ] ; then
-           cat /etc/resolv.conf >> $target/etc/resolv.conf
-         else
-           echo "Error: /etc/resolv.conf in chroot should not be a symlink (resolvconf not installed)." >&2
-           exit 1
-         fi
-         ;;
-     esac
-   fi
+   # /etc/resolv.conf is usually a symlink, pointing out of the chroot.
+   # Make it a file with known contents.
+   rm -f "${target}"/etc/resolv.conf
+   cat /etc/resolv.conf >> "$target"/etc/resolv.conf
 
    if [ -r $target/etc/policy-rc.d.conf ] ; then
       sed -i "s/EXITSTATUS=.*/EXITSTATUS='101'/" $target/etc/policy-rc.d.conf
