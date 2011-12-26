@@ -56,6 +56,10 @@ EOF
       $ROOTCMD apt-get -y install aptitude
    fi
 
+   # Update package lists (so they exist at all), so we actually can
+   # install software.
+   $ROOTCMD apt-get update
+
    # make sure we can upgrade automatically,
    # even with unsigned repos, but only if user wants it
    if [ "${FAI_ALLOW_UNSIGNED:-}" = "1" ] ; then
