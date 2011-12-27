@@ -81,13 +81,13 @@ More details: man grml-live + /usr/share/doc/grml-live/grml-live.html
 
 Please send your bug reports and feedback to the grml-team: http://grml.org/bugs/
 "
+   [ "$(id -u 2>/dev/null)" != 0 ] && echo "Please notice that this script requires root permissions."
 }
 
 # make sure it's possible to get usage information without being
 # root or actually executing the script
 if [ "$1" = '-h' -o "$1" = '--help' ] ; then
    usage
-   [ "$(id -u 2>/dev/null)" != 0 ] && echo "Please notice that this script requires root permissions."
    exit 0
 fi
 # }}}
@@ -292,7 +292,7 @@ copy_addon_file() {
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:d:D:e:g:i:I:o:r:s:t:U:v:AbBFnNqQuVz" opt; do
+while getopts "a:C:c:d:D:e:g:i:I:o:r:s:t:U:v:AbBFhnNqQuVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     A) CLEAN_ARTIFACTS=1 ;;
@@ -304,6 +304,7 @@ while getopts "a:C:c:d:D:e:g:i:I:o:r:s:t:U:v:AbBFnNqQuVz" opt; do
     D) GRML_FAI_CONFIG="$(readlink -f $OPTARG)" ;;
     e) EXTRACT_ISO_NAME="$(readlink -f $OPTARG)" ;;
     g) GRML_NAME="$OPTARG" ;;
+    h) usage ; bailout 0 ;;
     i) ISO_NAME="$OPTARG" ;;
     I) CHROOT_INSTALL="$OPTARG" ;;
     n) SKIP_MKISOFS=1 ;;
