@@ -79,8 +79,6 @@ apt
 apt-dpkg-ref
 apt-file
 aptitude
-apt-listbugs
-apt-listchanges
 aptsh
 apt-show-source
 apt-show-versions
