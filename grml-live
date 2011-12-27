@@ -368,7 +368,7 @@ fi
 [ -n "$NFSROOT_CONF" ]            || NFSROOT_CONF="${GRML_FAI_CONFIG}/make-fai-nfsroot.conf"
 [ -n "$RELEASENAME" ]             || RELEASENAME='grml-live rocks'
 [ -n "$SQUASHFS_EXCLUDES_FILE" ]  || SQUASHFS_EXCLUDES_FILE="${GRML_FAI_CONFIG}/config/grml/squashfs-excludes"
-[ -n "$SUITE" ]                   || SUITE='squeeze'
+[ -n "$SUITE" ]                   || SUITE='testing'
 [ -n "$TEMPLATE_DIRECTORY" ]      || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
 [ -n "$USERNAME" ]                || USERNAME='grml'
 [ -n "$VERSION" ]                 || VERSION='0.0.1'
