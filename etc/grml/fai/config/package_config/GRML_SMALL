@@ -134,3 +134,8 @@ linux-image-3.1.0-2-grml-486
 
 PACKAGES aptitude AMD64
 linux-image-3.1.0-2-grml-amd64
+
+# needed for the bootloader
+grub-efi-amd64-bin
+grub-efi-ia32-bin
+
