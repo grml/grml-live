@@ -130,10 +130,10 @@ zoo
 zsh
 
 PACKAGES aptitude I386
-linux-image-3.1.0-2-grml-486
+linux-image-i386-grml
 
 PACKAGES aptitude AMD64
-linux-image-3.1.0-2-grml-amd64
+linux-image-amd64-grml
 
 # needed for the bootloader
 grub-efi-amd64-bin
