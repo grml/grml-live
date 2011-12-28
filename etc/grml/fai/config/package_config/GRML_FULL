@@ -151,6 +151,7 @@ ethstatus
 ethtool
 firmware-brcm80211
 firmware-iwlwifi
+firmware-qlogic
 firmware-ralink
 firmware-realtek
 ifupdown
