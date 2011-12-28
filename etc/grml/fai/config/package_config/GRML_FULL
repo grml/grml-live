@@ -145,6 +145,7 @@ avahi-daemon
 bind9-host
 bridge-utils
 cdpr
+comgt
 dnsmasq
 ethstatus
 ethtool
