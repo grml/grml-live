@@ -41,15 +41,8 @@ if grep -q 'updatebase.GRMLBASE' ${target}/etc/udev/kernel-upgrade 2>/dev/null ;
   $ROOTCMD rm -f /etc/udev/kernel-upgrade
 fi
 
-echo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
-rm -f $target/var/lib/apt/lists/*Packages \
-      $target/var/lib/apt/lists/*Release \
-      $target/var/lib/apt/lists/*Sources \
-      $target/var/lib/apt/lists/*IndexDiff \
-      $target/var/lib/apt/lists/*.gpg \
-      $target/var/cache/apt-show-versions/* \
-      $target/var/cache/debconf/templates.dat-old \
-      $target/var/cache/apt/*.bin
+echo "Updating package list"
+$ROOTCMD apt-get update
 
 echo "Cleaning apt places"
 $ROOTCMD apt-get check 2>/dev/null
