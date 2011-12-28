@@ -227,6 +227,8 @@ dirvish
 duplicity
 fsarchiver
 
+# compressions for backup/restore
+lzop
 
 # serial
 cu
