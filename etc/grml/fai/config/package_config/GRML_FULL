@@ -155,6 +155,7 @@ firmware-ralink
 firmware-realtek
 ifupdown
 ipcalc
+ipmitool
 iproute
 iptraf
 iputils-arping
