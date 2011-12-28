@@ -12,14 +12,11 @@ set -u
 echo "Removing /usr/share/ssh/blacklist.*"
 rm -f $target/usr/share/ssh/blacklist.DSA-1024 $target/usr/share/ssh/blacklist.RSA-2048
 
-for pkg in info locales; do
-  $ROOTCMD apt-get --purge remove --yes $pkg || true
-done
-
 echo "Cleaning documentation directories"
 if [ -d $target/usr/share/doc/grml-docs ] ; then
   mv $target/usr/share/doc/grml-docs $target/tmp/
 fi
 
+set -x
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
