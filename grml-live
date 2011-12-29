@@ -364,7 +364,7 @@ fi
 [ -n "$GRML_FAI_CONFIG" ]         || GRML_FAI_CONFIG='/etc/grml/fai'
 [ -n "$GRML_NAME" ]               || GRML_NAME='grml'
 [ -n "$HOSTNAME" ]                || HOSTNAME='grml'
-[ -n "$HYBRID_METHOD" ]           || HYBRID_METHOD='manifold'
+[ -n "$HYBRID_METHOD" ]           || HYBRID_METHOD='isohybrid'
 [ -n "$NFSROOT_CONF" ]            || NFSROOT_CONF="${GRML_FAI_CONFIG}/make-fai-nfsroot.conf"
 [ -n "$RELEASENAME" ]             || RELEASENAME='grml-live rocks'
 [ -n "$SQUASHFS_EXCLUDES_FILE" ]  || SQUASHFS_EXCLUDES_FILE="${GRML_FAI_CONFIG}/config/grml/squashfs-excludes"
@@ -1182,8 +1182,7 @@ elif [ "$BOOT_METHOD" = "grub2" ] ; then
    BOOT_ARGS="-no-emul-boot -boot-load-size 4 -b boot/grub/toriboot.bin"
 fi
 
-# Just until http://bts.grml.org/grml/issue945 has been resolved.
-# HYBRID_METHOD defaults to manifold, so make sure the default works OOTB.
+# Work around http://bts.grml.org/grml/issue945
 if [[ $BOOT_METHOD != isolinux && ($HYBRID_METHOD = isohybrid || $HYBRID_METHOD = manifold) ]]; then
   log   "Setting HYBRID_METHOD to grub2 as hybrid mode does not work with isohybrid yet."
   ewarn "Setting HYBRID_METHOD to grub2 as hybrid mode does not work with isohybrid yet."
@@ -1271,54 +1270,61 @@ else
          of="${ISO_OUTPUT}/${ISO_NAME}" 2>/dev/null
 
       # support disabling hybrid ISO image
-      if [ "$HYBRID_METHOD" = "disable" ] ; then\
-         log   "Skipping creation of hybrid ISO file as requested via HYBRID_METHOD=disable"
-         einfo "Skipping creation of hybrid ISO file as requested via HYBRID_METHOD=disable"
-         eend 0
-      elif [ "$HYBRID_METHOD" = "manifold" ] ; then
-         # isoinfo is part of both mkisofs and genisoimage so we're good
-         bootoff=$(isoinfo -l -i "${ISO_OUTPUT}/${ISO_NAME}" | \
-           sed -n '/^.*\[ *\([0-9]*\)[] ].* ISOLINUX.BIN[;1]* *$/s//\1/p')
-         if ! [ -r boot/grub/core.img ] ; then
-           ewarn "boot/grub/core.img not found, not creating manifold boot ISO file"
-         elif [ "${bootoff:-0}" -lt 1 ] ; then
-           ewarn "isolinux.bin not found on the ISO file, disabling manifold boot"
-         else
-           log "Creating hybrid ISO file with manifold method"
-           einfo "Creating hybrid ISO file with manifold method"
-           if [ "$HYBRID_METHOD" = "grub2" ] ; then
-               # 512 bytes: MBR, partition table, load GRUB 2
-               echo 4 63 | mksh /usr/share/grml-live/scripts/bootgrub.mksh -A -M 4:0x96 -g $cyls:16:32
-           else
-              # read only one but 2048-byte sized (scale: << 2) sector
-              echo $bootoff $bootoff | \
-                 mksh /usr/share/grml-live/scripts/bootilnx.mksh -A -M 4:0x96 -g $cyls:16:32 -S 2
-           fi | dd of="${ISO_OUTPUT}/${ISO_NAME}" conv=notrunc 2>/dev/null
-           eend $?
-         fi
-      # use isohybrid as default
-      else
-         if ! which isohybrid >/dev/null 2>&1 ; then
-           bailout 12 "isohybrid binary not found - please install syslinux/syslinux-common"
-         else
-           log   "Creating hybrid ISO file with isohybrid method"
-           einfo "Creating hybrid ISO file with isohybrid method"
-           # Notes for consideration:
-           # "-entry 4 -type 1c"
-           # * using 4 as the partition number is supposed to help with BIOSes
-           #   that only support USB-Zip boot
-           # * using 1c (i.e. hidden FAT32 LBA), instead of the default 0x17
-           #   (hidden NTFS, IIRC), as the partition type is sometimes needed
-           #   to get the BIOS even look at the partition created by isohybrid
-           if isohybrid --help | grep -q -- --uefi ; then
-             einfo "Detected uefi support for isohybrid, enabling."
-             ISOHYBRID_OPTIONS=--uefi
-           fi
+      if [ "$HYBRID_METHOD" = "disable" ] ; then
+        log   "Skipping creation of hybrid ISO file as requested via HYBRID_METHOD=disable"
+        einfo "Skipping creation of hybrid ISO file as requested via HYBRID_METHOD=disable"
+        eend 0
+      elif [ "$HYBRID_METHOD" = "manifold" ] || [ "$HYBRID_METHOD" = "grub2" ] ; then
+        # isoinfo is part of both mkisofs and genisoimage so we're good
+        bootoff=$(isoinfo -l -i "${ISO_OUTPUT}/${ISO_NAME}" | \
+          sed -n '/^.*\[ *\([0-9]*\)[] ].* ISOLINUX.BIN[;1]* *$/s//\1/p')
 
-           log "isohybrid $ISOHYBRID_OPTIONS ${ISO_OUTPUT}/${ISO_NAME}"
-           isohybrid $ISOHYBRID_OPTIONS "${ISO_OUTPUT}/${ISO_NAME}"
-           eend $?
-         fi
+        if ! [ -r boot/grub/core.img ] ; then
+          log   "boot/grub/core.img not found, not creating manifold boot ISO file"
+          ewarn "boot/grub/core.img not found, not creating manifold boot ISO file"
+        elif [ "${bootoff:-0}" -lt 1 ] ; then
+          log   "isolinux.bin not found on the ISO file, disabling manifold boot"
+          ewarn "isolinux.bin not found on the ISO file, disabling manifold boot"
+        else
+          if [ "$HYBRID_METHOD" = "grub2" ] ; then
+            log   "Creating hybrid ISO file with manifold/grub2 method"
+            einfo "Creating hybrid ISO file with manifold/grub2 method"
+            # 512 bytes: MBR, partition table, load GRUB 2
+            echo 4 63 | mksh /usr/share/grml-live/scripts/bootgrub.mksh -A -M 4:0x96 -g $cyls:16:32
+          else
+            log   "Creating hybrid ISO file with manifold method"
+            einfo "Creating hybrid ISO file with manifold method"
+            # read only one but 2048-byte sized (scale: << 2) sector
+            echo $bootoff $bootoff | \
+              mksh /usr/share/grml-live/scripts/bootilnx.mksh -A -M 4:0x96 -g $cyls:16:32 -S 2
+          fi | dd of="${ISO_OUTPUT}/${ISO_NAME}" conv=notrunc 2>/dev/null
+          eend $?
+        fi
+      elif [ "$HYBRID_METHOD" = "isohybrid" ] ; then
+        if ! which isohybrid >/dev/null 2>&1 ; then
+          bailout 12 "isohybrid binary not found - please install syslinux/syslinux-common"
+        else
+          log   "Creating hybrid ISO file with isohybrid method"
+          einfo "Creating hybrid ISO file with isohybrid method"
+          # Notes for consideration:
+          # "-entry 4 -type 1c"
+          # * using 4 as the partition number is supposed to help with BIOSes
+          #   that only support USB-Zip boot
+          # * using 1c (i.e. hidden FAT32 LBA), instead of the default 0x17
+          #   (hidden NTFS, IIRC), as the partition type is sometimes needed
+          #   to get the BIOS even look at the partition created by isohybrid
+          if isohybrid --help | grep -q -- --uefi ; then
+            log   "Detected uefi support for isohybrid, enabling"
+            einfo "Detected uefi support for isohybrid, enabling"
+            ISOHYBRID_OPTIONS=--uefi
+          fi
+
+          log "isohybrid $ISOHYBRID_OPTIONS ${ISO_OUTPUT}/${ISO_NAME}"
+          isohybrid $ISOHYBRID_OPTIONS "${ISO_OUTPUT}/${ISO_NAME}"
+          eend $?
+        fi
+      else
+        bailout 12 "Unknown HYBRID_METHOD [${HYBRID_METHOD}]. Supported values: disable, isohybrid, grub2, manifold"
       fi
 
       # generate md5sum and sha1sum of ISO if we are using class 'RELEASE':
