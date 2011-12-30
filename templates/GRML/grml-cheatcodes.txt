@@ -190,6 +190,10 @@ grml vnc_connect=host[:port]        Connect to a listening VNC client ("vncviewe
                                     combined with the vnc bootoption.
                                     [Note: Grml 2011.12+ doesn't include a VNC client.]
 
+Accessibility related settings:
+--------------------------------
+grml brltty=type,port,table         Parameters for Braille device (e.g.: brltty=al,/dev/ttyS0,text.de.tbl)
+                                    See http://mielke.cc/brltty/guidelines.html for documentation.
 
 Hardware related settings:
 --------------------------
