@@ -27,6 +27,8 @@ grml-scripts
 grml-scripts-core
 grml-tips
 grml-udev-config
+grub-efi-amd64-bin
+grub-efi-ia32-bin
 grub-pc
 hdparm
 hwinfo
