@@ -762,6 +762,14 @@ EOT
 check_partitions >/dev/null 2>&1 # avoid output "check_partitions:3: read-only file system"
 # }}}
 
+# {{{ Start brltty
+config_brltty() {
+  if checkbootparam 'brltty' ; then
+    [ -x /lib/brltty/brltty.sh ] && /lib/brltty/brltty.sh
+  fi
+}
+# }}}
+
 # {{{ Enable DMA for all IDE drives now if not disabled
 # Notice: Already done by linuxrc, but make sure it's done also on harddisk-installed systems
 config_dma(){

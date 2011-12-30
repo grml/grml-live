@@ -52,6 +52,7 @@ CONFIG_BLANKING='yes'         # check for bootoption noblank to disable console 
 CONFIG_CONFIG='yes'           # do we want config unpacking to work?
 CONFIG_CONSOLE='yes'          # activate mgetty when using console=... as bootparam
 CONFIG_CONFIGFS='yes'         # automatically mount configfs
+CONFIG_BRLTTY='yes'           # automatically start brltty if a brltty option is specified in /proc/cmdline
 CONFIG_DEBOOTSTRAP='yes'      # support automatic installation of Debian via grml-deboostrap
 CONFIG_DEBNET='yes'           # search for /etc/network/interfaces on partitions and set up network afterwards
 CONFIG_DEBS='yes'             # check for bootoption debs for installing .debs

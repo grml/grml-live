@@ -122,6 +122,8 @@ checkvalue $CONFIG_TESTCD && config_testcd
 
 checkvalue $CONFIG_MODULES && config_modules
 
+checkvalue $CONFIG_BRLTTY && config_brltty
+
 checkvalue $CONFIG_ACPI && config_acpi
 
 checkvalue $CONFIG_DMA && config_dma
