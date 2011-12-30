@@ -20,9 +20,11 @@ install: build
 	dh_testroot
 	dh_prep
 	dh_installdirs /etc/udev/scripts
+	dh_installdirs /lib/brltty/
 
 	install -m 755 scripts/forensic-mark-readonly debian/grml-udev-config/etc/udev/scripts/forensic-mark-readonly
 	install -m 755 scripts/grml-udev-rebuildfstab debian/grml-udev-config/etc/udev/scripts/
+	install -m 755 scripts/brltty.sh debian/grml-udev-config/lib/brltty/brltty.sh
 
 # Build architecture-dependent files here.
 binary-arch: install
@@ -38,6 +40,7 @@ binary-indep: install
 	dh_installudev --name=grml-forensic     --priority 01
 	dh_installudev --name=grml-external     --priority 60
 	dh_installudev --name=grml-usbdev       --priority 60
+	dh_installudev --name=brltty	        --priority 85
 	dh_installudev --name=grml-dm			--priority 89
 	dh_installudev --name=grml-blockdevices --priority 90
 	dh_installinit --no-start --name=grml-udev
