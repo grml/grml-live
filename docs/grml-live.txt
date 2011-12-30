@@ -503,7 +503,8 @@ The easiest way to get a running grml-live setup is to just use Grml.
 Of course using grml-live on a plain, original Debian installation is supported
 as well. So there we go.
 
-What we have: plain, original Debian squeeze (6.0).
+What we have: plain, original Debian squeeze (6.0) with debian-backports
+enabled. (This is important for squashfs-tools.)
 
 What we want: build a Grml ISO based on Debian/wheezy for the amd64 architecture
 using grml-live.
@@ -523,17 +524,6 @@ Instructions
   # deb-src http://deb.grml.org/ grml-testing main
   EOF
 
-  # adjust apt-pinning (only prefer squashfs stuff from grml):
-  cat >> /etc/apt/preferences << EOF
-  Package: *
-  Pin: origin deb.grml.org
-  Pin-Priority: 1
-
-  Package: squashfs-tools
-  Pin: origin deb.grml.org
-  Pin-Priority: 996
-  EOF
-
   # get keyring for apt:
   apt-get update
   apt-get --allow-unauthenticated install grml-debian-keyring
@@ -541,12 +531,13 @@ Instructions
   # optionally(!) install basefile so we don't have to build basic
   # chroot from scratch, grab from http://daily.grml.org/
   # mkdir -p /etc/grml/fai/config/basefiles/
-  # mv base.tgz /etc/grml/fai/config/basefiles/I386.tar.gz
-  # mv base64.tgz /etc/grml/fai/config/basefiles/AMD64.tar.gz
+  # mv I386.tar.gz /etc/grml/fai/config/basefiles/
+  # mv AMD64.tar.gz /etc/grml/fai/config/basefiles/
 
   # install relevant tools
   # please check out http://grml.org/grml-live/#current_state when encountering problems!
-  apt-get -o APT::Install-Recommends=false install grml-live squashfs-tools
+  apt-get install -t squeeze-backports squashfs-tools
+  apt-get -o APT::Install-Recommends=false install grml-live
 
   # adjust grml-live configuration for our needs:
   cat > /etc/grml/grml-live.local << EOF
