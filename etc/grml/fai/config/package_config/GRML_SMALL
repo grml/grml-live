@@ -134,8 +134,3 @@ linux-image-i386-grml
 
 PACKAGES aptitude AMD64
 linux-image-amd64-grml
-
-# needed for the bootloader
-grub-efi-amd64-bin
-grub-efi-ia32-bin
-
