@@ -535,9 +535,8 @@ Instructions
   # mv AMD64.tar.gz /etc/grml/fai/config/basefiles/
 
   # install relevant tools
-  # please check out http://grml.org/grml-live/#current_state when encountering problems!
   apt-get install -t squeeze-backports squashfs-tools
-  apt-get -o APT::Install-Recommends=false install grml-live
+  apt-get --no-install-recommends install grml-live
 
   # adjust grml-live configuration for our needs:
   cat > /etc/grml/grml-live.local << EOF
