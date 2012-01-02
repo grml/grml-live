@@ -90,7 +90,7 @@ devpts         /dev/pts       devpts noauto,mode=0622                       0   
 /dev/cdrom     /mnt/cdrom     auto   user,noauto,exec,ro                    0      0
 /dev/dvd       /mnt/dvd       auto   user,noauto,exec,ro                    0      0
 # some other examples:
-# /dev/hda1      /Grml         ext3    dev,suid,user,noauto 0  2
+# /dev/sda1      /Grml         ext3    dev,suid,user,noauto 0  2
 # //1.2.3.4/pub  /smb/pub      smbfs   defaults,user,noauto,uid=grml,gid=grml 0 0
 # linux:/pub     /beer         nfs     defaults             0  0
 # tmpfs          /tmp          tmpfs   size=300M            0  0
