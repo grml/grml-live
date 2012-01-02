@@ -67,6 +67,14 @@ if grep -q ' $MOUNTPOINT_PREFIX ' /proc/mounts ; then
    bailout 1
 fi
 
+# default directories {{{
+if [ -d "$MOUNTPOINT_PREFIX" ] ; then
+   [ -d "$MOUNTPOINT_PREFIX/floppy" ] || mkdir "$MOUNTPOINT_PREFIX/floppy"
+   [ -d "$MOUNTPOINT_PREFIX/cdrom" ]  || mkdir "$MOUNTPOINT_PREFIX/cdrom"
+   [ -d "$MOUNTPOINT_PREFIX/test" ]   || mkdir "$MOUNTPOINT_PREFIX/test"
+fi
+# }}}
+
 # make sure we have the $MNTFILE before reading/writing into it
 if [ -z "$NO_AUTO_FILE" ] ; then
    [ -r $MNTFILE ] || touch $MNTFILE
