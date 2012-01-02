@@ -154,12 +154,6 @@ checkvalue $CONFIG_FINDDCSDIR && config_umount_dcsdir
 
 checkvalue $CONFIG_PARTCONF && config_partconf
 
-# device symlinks {{{
-  [ -r /mnt/floppy ] || mkdir /mnt/floppy
-  [ -r /mnt/cdrom ]  || mkdir /mnt/cdrom
-  [ -r /mnt/test ]   || mkdir /mnt/test
-# }}}
-
 checkvalue $CONFIG_MIXER && config_mixer
 
 checkvalue $CONFIG_MODEM && config_modem
