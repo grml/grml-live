@@ -10,8 +10,8 @@ PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 TMP=$(mktemp 2>/dev/null)
 TMPFILE=$(mktemp 2>/dev/null)
 ADDEDBYGRML="# Added by GRML"
-MNTFILE="/mnt/.grml-auto-created_do-not-delete-this-file"
-MOUNTPOINT_PREFIX=/mnt/
+MOUNTPOINT_PREFIX=/mnt
+MNTFILE="$MOUNTPOINT_PREFIX/.grml-auto-created_do-not-delete-this-file"
 
 
 logit() {
@@ -62,8 +62,8 @@ if [ "$CONFIG_FSTAB" = "no" ] ; then
 fi
 
 
-if grep -q ' /mnt ' /proc/mounts ; then
-   logit '/mnt is a mounted directory, exiting.'
+if grep -q ' $MOUNTPOINT_PREFIX ' /proc/mounts ; then
+   logit '$MOUNTPOINT_PREFIX is a mounted directory, exiting.'
    bailout 1
 fi
 
@@ -84,11 +84,10 @@ proc           /proc          proc   rw,nosuid,nodev,noexec                 0   
 none           /proc/bus/usb  usbfs  defaults,noauto                        0      0
 sysfs          /sys           sysfs  rw,nosuid,nodev,noexec                 0      0
 devpts         /dev/pts       devpts noauto,mode=0622                       0      0
-/dev/fd0       /mnt/floppy    auto   user,noauto,exec                       0      0
-/dev/external  /mnt/external  auto   user,noauto,exec,rw,uid=grml,gid=grml  0      0
-/dev/external1 /mnt/external1 auto   user,noauto,exec,rw,uid=grml,gid=grml  0      0
-/dev/cdrom     /mnt/cdrom     auto   user,noauto,exec,ro                    0      0
-/dev/dvd       /mnt/dvd       auto   user,noauto,exec,ro                    0      0
+/dev/external  $MOUNTPOINT_PREFIX/external  auto   user,noauto,exec,rw,uid=grml,gid=grml  0      0
+/dev/external1 $MOUNTPOINT_PREFIX/external1 auto   user,noauto,exec,rw,uid=grml,gid=grml  0      0
+/dev/cdrom     $MOUNTPOINT_PREFIX/cdrom     auto   user,noauto,exec,ro                    0      0
+/dev/dvd       $MOUNTPOINT_PREFIX/dvd       auto   user,noauto,exec,ro                    0      0
 # some other examples:
 # /dev/sda1      /Grml         ext3    dev,suid,user,noauto 0  2
 # //1.2.3.4/pub  /smb/pub      smbfs   defaults,user,noauto,uid=grml,gid=grml 0 0
@@ -170,7 +169,7 @@ get_mount_point() {
     device="$1"
     mountpoint="${device##*/}"
     mountpoint="${mountpoint#*=}"
-    echo /mnt/$mountpoint
+    echo "$MOUNTPOINT_PREFIX/$mountpoint"
 }
 
 append_fstab() {
