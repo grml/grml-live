@@ -1,3 +1,13 @@
+grml-autoconfig (0.9.46) grml-testing; urgency=low
+
+  [ Ulrich Dangel ]
+  * [55cbda4] Refactor config_testcd and support multiple md5sum files
+    [Closes: issue1114]
+  * [6c265c8] Re-add simplified support for brltty.
+  * [3ed0d23] Remove mkdir /mnt/{floppy,cdrom,test} from grml-autoconfig
+
+ -- Michael Prokop <mika@grml.org>  Tue, 03 Jan 2012 16:03:07 +0100
+
 grml-autoconfig (0.9.45) grml-testing; urgency=low
 
   [ Ulrich Dangel ]
