@@ -1392,7 +1392,12 @@ create_netbootpackage() {
   if [ -r "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" ] ; then
     cp "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" "${WORKING_DIR}/pxelinux.cfg/default"
   else
-    ewarn "File ${BUILD_OUTPUT}/boot/isolinux/netboot.cfg not found." ; eend 0
+    log   "File ${BUILD_OUTPUT}/boot/isolinux/netboot.cfg not found."
+    ewarn "File ${BUILD_OUTPUT}/boot/isolinux/netboot.cfg not found."
+    eindent
+    log   "Hint: Are you using custom templates which do not provide netboot.cfg?"
+    ewarn "Hint: Are you using custom templates which do not provide netboot.cfg?" ; eend 0
+    eoutdent
   fi
 
   if tar -C "$OUTPUTDIR" -jcf "${OUTPUT_FILE}" "grml_netboot_package_${GRML_NAME}_${VERSION}" ; then
