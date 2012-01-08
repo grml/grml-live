@@ -1512,6 +1512,17 @@ else
         fi
       fi
       DCSDEVICE=$(blkid -t LABEL=$GRMLCFG | head -1 | awk -F: '{print $1}')
+
+      modprobe 9p 2>/dev/null || true
+      if [ -z "$DCSDEVICE" ] && grep -q 9p /proc/filesystems ; then
+          if grep -q "$GRMLCFG" /sys/bus/virtio/devices/*/mount_tag 2>/dev/null ; then
+            einfo "Found 9p-virtio fs with mount_tag $GRMLCFG"
+            DCSDEVICE="$GRMLCFG"
+            MOUNTOPTIONS="ro,trans=virtio"
+            DCSFS="9p"
+          fi
+      fi
+
       if [ -n "$DCSDEVICE" ]; then
         DCSMP="/mnt/grmlcfg"
       fi
