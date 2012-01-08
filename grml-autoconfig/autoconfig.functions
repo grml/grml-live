@@ -1530,7 +1530,7 @@ else
       else
         [ -d $DCSMP ] || mkdir $DCSMP
         umount $DCSMP >>$DEBUG 2>&1 # make sure it is not mounted
-        mount -o ro -t auto $DCSDEVICE  $DCSMP ; RC="$?"
+        mount -o ${MOUNTOPTIONS:-ro} -t ${DCSFS:-auto} $DCSDEVICE  $DCSMP ; RC="$?"
         if [[ $RC == 0 ]]; then
           einfo "Successfully mounted $DCSDEVICE to $DCSMP (readonly)." ; eend 0
         else
