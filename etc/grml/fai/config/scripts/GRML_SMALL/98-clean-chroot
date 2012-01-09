@@ -17,6 +17,5 @@ if [ -d $target/usr/share/doc/grml-docs ] ; then
   mv $target/usr/share/doc/grml-docs $target/tmp/
 fi
 
-set -x
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
