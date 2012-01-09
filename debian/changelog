@@ -1,3 +1,10 @@
+grml-desktop (0.3.14) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [117436c] Update colorscheme to original tomorrow theme
+
+ -- Michael Prokop <mika@grml.org>  Mon, 09 Jan 2012 16:27:35 +0100
+
 grml-desktop (0.3.13) unstable; urgency=low
 
   [ Ulrich Dangel ]
