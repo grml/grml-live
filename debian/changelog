@@ -1,3 +1,64 @@
+grml-live (0.17.3) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [d85f820] Export environment variables for submenues
+  * [59228b5] Add additinal checks to make sure convert as well as the
+    necessary files are present for creating the wallper
+  * [ce5ae66] Remove small from grml-cheatcodes as it does not work with
+    current versions
+  * [46d7fb8] Add h to getopt list to support -h anywhere in parameter
+    list
+  * [d116da3] Change default SUITE from squeeze to testing
+  * [3930b11] Do not enable tmpfs /tmp as / is backed-up by tmpfs anyway.
+  * [99831ce] Move cleanup of package list cache from GRMLBASE to RELEASE
+  * [f92ebd9] Adjust RELEASE/98-clean-chroot to delete more files
+  * [2fef0e3] Document brltty boot options
+  * Software related changes:
+    - [3f4262c] Add fsarchiver to GRML_FULL
+    - [3c75346] Add hexedit to GRML_FULL [Closes: issue1119]
+    - [5ba215c] Remove apt-listchanges and apt-listbugs from GRML_XL
+    - [e87c5a0] Add lzop to GRML_FULL
+
+  [ Michael Prokop ]
+  * [a50de9f] Use isohybrid as default HYBRID_METHOD
+  * [05a12f5] docs: use --no-install-recommends instead of dpkg option.
+    Thanks to Evgeni Golov for the hint
+  * [17c129d] Provide hint to user if netboot.cfg could not be found
+  * [286b0d2] GRML_SMALL/98-clean-chroot: remove "set -x" not suited for release
+
+  * Software related changes:
+    - [74614d9] add wireshark to GRML_FULL [Closes: issue1115] Thanks to
+      Frank Prochnow <doc42@gmx.net> for the suggestion.
+    - [feb84a9] add comgt to GRML_FULL. Thanks to Csillag Tamas for
+      request on Grml mailing list
+    - [b42c286] add ipmitool to GRML_FULL. Thanks to Csillag Tamas
+      <cstamas@digitus.itk.ppke.hu> for bringing it up on the Grml mailing
+      list
+    - [fb29a09] add firmware-qlogic to GRML_FULL. Thanks to Csillag
+      Tamas <cstamas@digitus.itk.ppke.hu> for bringing it up on the Grml
+      mailing list
+    - [16e7576] enable grub-efi-amd64-bin/grub-efi-ia32-bin in GRMLBASE
+      class [Closes: issue1124]
+    - [533c998] Add IGNORE class blacklisting extundelete
+
+  [ Christian Hofstaedtler ]
+  * [766386e] Cheatcodes: clarify that vnc* doesn't work OOTB
+  * [94ef7f9] Unconditionally reset resolv.conf in chroot
+  * [2203377] Make /run work for softupdate
+  * [895b6b6] Run apt-get update during softupdate
+  * [fcc1672] Build netboot package checksum file with relative paths
+  * [b9d53b2] Update instrunctions for installing on squeeze
+
+  [ Alexander Wirt ]
+  * GRML_SMALL related changes:
+    - [b7f7e5a] Add EFI stuff to GRML_SMALL
+    - [6225bfa] Remove worstest hacks from GRML_SMALL/98-clean-chroot
+    - [5be4ea5] Don't purge locale
+    - [8136c87] Use metapackages for kernel
+    - [5138b63] efi stuff is now in GRMLBASE
+
+ -- Michael Prokop <mika@grml.org>  Mon, 09 Jan 2012 16:41:53 +0100
+
 grml-live (0.17.2) unstable; urgency=low
 
   [ Ulrich Dangel ]
