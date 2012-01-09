@@ -1,3 +1,11 @@
+grml-autoconfig (0.9.47) grml-testing; urgency=low
+
+  [ Ulrich Dangel ]
+  * [78d3706] Flexibilize mount handling for the DCS device.
+  * [122114f] Support 9p-virtio filesystem for mounting the DCS-directory.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 09 Jan 2012 16:23:37 +0100
+
 grml-autoconfig (0.9.46) grml-testing; urgency=low
 
   [ Ulrich Dangel ]
