@@ -1,3 +1,16 @@
+grml-udev-config (0.1.0) unstable; urgency=low
+
+  [ Ulrich Dangel ]
+  * [67c2afb] Add udev rules for braille detection for automated brltty
+    startup.
+  * [b237224] Use sda1 instead of hda1 as example in /etc/fstab
+  * [0039a57] Use MOUNTPOINT_PREFIX instead of hardcoded /mnt path in
+    grml-udev-rebuildfstab
+  * [b7a91dc] Create the standard directories in the rebuildfstab script
+    instead of grml-autoconfig.
+
+ -- Michael Prokop <mika@grml.org>  Mon, 09 Jan 2012 16:34:45 +0100
+
 grml-udev-config (0.0.10) unstable; urgency=low
 
   [ Christian Hofstaedtler ]
