@@ -1,3 +1,17 @@
+grml-live (0.17.4) unstable; urgency=low
+
+  * [f6b5bf3] GRMLBASE/25-locales: fix check for presence of localepurge
+  * [fcd3d3c] Use /media instead of /mnt for default mount paths
+  * Software related changes:
+    - [e2a3724] SW: add firmware-myricom to GRML_FULL
+    - [9a24075] SW: add firmware-netxen to GRML_FULL
+    - [a2131a1] SW: add irssi to GRML_FULL
+    - [28b6310] SW: add libiscsi-bin to GRML_FULL
+    - [549c2d8] SW: add tcptraceroute to GRML_FULL
+    - [f212f4c] SW: add buffer to GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Wed, 11 Jan 2012 18:30:49 +0100
+
 grml-live (0.17.3) unstable; urgency=low
 
   [ Ulrich Dangel ]
