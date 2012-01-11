@@ -1,3 +1,10 @@
+grml-udev-config (0.2.0) unstable; urgency=low
+
+  * [e403a71] Use /media instead of /mnt for default mount paths
+    [Closes: issue1127]
+
+ -- Michael Prokop <mika@grml.org>  Wed, 11 Jan 2012 18:33:15 +0100
+
 grml-udev-config (0.1.0) unstable; urgency=low
 
   [ Ulrich Dangel ]
