@@ -244,6 +244,7 @@ statserial
 # shell
 bash
 binutils
+buffer
 coreutils
 diffutils
 grml-etc-core
