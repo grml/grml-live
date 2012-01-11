@@ -176,6 +176,7 @@ snmp
 socat
 ssh
 tcpdump
+tcptraceroute
 telnet
 tshark
 tsocks
