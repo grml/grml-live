@@ -149,6 +149,7 @@ ethstatus
 ethtool
 firmware-brcm80211
 firmware-iwlwifi
+firmware-myricom
 firmware-qlogic
 firmware-ralink
 firmware-realtek
