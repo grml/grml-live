@@ -38,7 +38,7 @@ fi
 # make sure:
 # localepurge     localepurge/nopurge     multiselect ....
 # is set so localepurge works as expected
-if $ROOTCMD dpkg --list localepurge >/dev/null 2>&1 ; then
+if $ROOTCMD dpkg --list localepurge 2>&1 | grep -q '^ii' ; then
    $ROOTCMD dpkg-reconfigure -f noninteractive localepurge
 fi
 
