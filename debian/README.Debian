@@ -30,7 +30,7 @@ forensic/readonly.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This script triggers the /usr/sbin/rebuildfstab script for updating /etc/fstab
-and /mnt/* when block devices are added or removed from the system.
+and /media/* when block devices are added or removed from the system.
 
 /lib/udev/rules.d/60-grml-external.rules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -47,9 +47,9 @@ compatibility reasons.
 
 This udev rule allows simple access to USB devices like pendrives upon plugging
 them in.  You'll get according symlinks in /dev (prefixed with 'usb-'), entries
-in /etc/fstab (via rebuildfstab) and directories in /mnt according to available
+in /etc/fstab (via rebuildfstab) and directories in /media according to available
 labeled filesystems for free. On removal of the USB device the symlinks and
-usb*-directories in /mnt will automatically vanish.
+usb*-directories in /media will automatically vanish.
 
  -- Michael Prokop <mika@grml.org>  Fri, 13 Nov 2009 12:02:41 +0100
 

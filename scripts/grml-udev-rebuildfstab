@@ -10,7 +10,7 @@ PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 TMP=$(mktemp 2>/dev/null)
 TMPFILE=$(mktemp 2>/dev/null)
 ADDEDBYGRML="# Added by GRML"
-MOUNTPOINT_PREFIX=/mnt
+MOUNTPOINT_PREFIX=/media
 MNTFILE="$MOUNTPOINT_PREFIX/.grml-auto-created_do-not-delete-this-file"
 
 
@@ -92,17 +92,17 @@ proc           /proc          proc   rw,nosuid,nodev,noexec                 0   
 none           /proc/bus/usb  usbfs  defaults,noauto                        0      0
 sysfs          /sys           sysfs  rw,nosuid,nodev,noexec                 0      0
 devpts         /dev/pts       devpts noauto,mode=0622                       0      0
-/dev/external  $MOUNTPOINT_PREFIX/external  auto   user,noauto,exec,rw,uid=grml,gid=grml  0      0
-/dev/external1 $MOUNTPOINT_PREFIX/external1 auto   user,noauto,exec,rw,uid=grml,gid=grml  0      0
-/dev/cdrom     $MOUNTPOINT_PREFIX/cdrom     auto   user,noauto,exec,ro                    0      0
-/dev/dvd       $MOUNTPOINT_PREFIX/dvd       auto   user,noauto,exec,ro                    0      0
+/dev/external  ${MOUNTPOINT_PREFIX}/external  auto   user,noauto,exec,rw,uid=grml,gid=grml  0      0
+/dev/external1 ${MOUNTPOINT_PREFIX}/external1 auto   user,noauto,exec,rw,uid=grml,gid=grml  0      0
+/dev/cdrom     ${MOUNTPOINT_PREFIX}/cdrom     auto   user,noauto,exec,ro                    0      0
+/dev/dvd       ${MOUNTPOINT_PREFIX}/dvd       auto   user,noauto,exec,ro                    0      0
 # some other examples:
 # /dev/sda1      /Grml         ext3    dev,suid,user,noauto 0  2
 # //1.2.3.4/pub  /smb/pub      smbfs   defaults,user,noauto,uid=grml,gid=grml 0 0
 # linux:/pub     /beer         nfs     defaults             0  0
 # tmpfs          /tmp          tmpfs   size=300M            0  0
 # none           /proc/bus/usb usbfs   defaults,nodev,noexec,nosuid,noauto,devgid=1001,devmode=664 0 0
-# 192.168.1.101:/backups /mnt/nfs nfs  defaults,user,wsize=8192,rsize=8192 0 0
+# 192.168.1.101:/backups ${MOUNTPOINT_PREFIX}/nfs nfs  defaults,user,wsize=8192,rsize=8192 0 0
 #
 # Warning! Please do *not* change any lines below because they are auto-generated.
 # If you want to disable rebuildfstab set CONFIG_FSTAB='no' in /etc/grml/autoconfig!
@@ -272,7 +272,7 @@ add|change)
 ;;
 esac
 
-# Clean /mnt/... according to info $MNTFILE
+# Clean $MOUNTPOINT_PREFIX according to info $MNTFILE
 if [ -r "$MNTFILE" ] ; then
    for directory in $(cat $MNTFILE) ; do
      rmdir $directory 2>/dev/null && sed -i "s#$directory##" $MNTFILE
@@ -281,7 +281,7 @@ if [ -r "$MNTFILE" ] ; then
    cat $TMPFILE > $MNTFILE
 fi
 
-# Make sure we have all /mnt/* directories
+# Make sure we have all directories in $MOUNTPOINT_PREFIX
 while read p m f relax; do
   case "$m" in *none*|*proc*|*sys*|'') continue ;; esac
   if ! grep -q "$m" /proc/mounts ; then
