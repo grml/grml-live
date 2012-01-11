@@ -29,9 +29,9 @@ need a lot ot RAM.
 Usage examples
 --------------
 
-To live-remaster the system using the partition mounted on /mnt/sda5 invoke:
+To live-remaster the system using the partition mounted on /media/sda5 invoke:
 
-  # grml-live-remaster /mnt/sda5/grml_remaster_0.1.iso
+  # grml-live-remaster /media/sda5/grml_remaster_0.1.iso
 
 TODO list
 ---------

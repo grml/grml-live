@@ -252,8 +252,8 @@ system:
 
 [NOTE]
 
-If you have enough RAM, just run "mount -t tmpfs none /mnt/ramdisk" to get a
-tmpfs ("RAMDISK"), and use /mnt/ramdisk as build and output directory - this
+If you have enough RAM, just run "mount -t tmpfs none /media/ramdisk" to get a
+tmpfs ("RAMDISK"), and use /media/ramdisk as build and output directory - this
 results in a very fast build process. Note that these files will be gone when
 rebooting.
 
