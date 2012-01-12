@@ -384,14 +384,38 @@ config_hostname(){
 
 # fstabuser (needed when running from harddisk with username != grml {{{
 config_userfstab(){
+  # force load of build-in and local config
   [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig
+  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig.local
+
+  # 1st. try configured fstab user
   if [ -n "$CONFIG_FSTAB_USER" ] ; then
-     fstabuser="$CONFIG_FSTAB_USER"
-  else
-     fstabuser=$(getent passwd 1000 | cut -d: -f1)
+     fstabuser=$(getent passwd $CONFIG_FSTAB_USER | cut -d: -f1)
   fi
-  # if not yet set fall back to default 'grml' user
-  [ -n "$fstabuser" ] || fstabuser='grml'
+
+  # 2nd. use standard user id
+  [ -n "$fstabuser" ] || fstabuser=$(getent passwd 1000 | cut -d: -f1)
+
+  # 3rd. use standard user name
+  [ -n "$fstabuser" ] || fstabuser=$(getent passwd grml | cut -d: -f1)
+
+  # if not yet set fall back to 'root' user, avoid bad /etc/fstab
+  [ -n "$fstabuser" ] || fstabuser='root'
+}
+# }}}
+
+# local_user (needed when running with username != grml {{{
+config_userlocal() {
+
+  # force load of build-in and local config
+  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig
+  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig.local
+
+  # 1st. try id of primary user
+  localuser=$(getent passwd 1000 | cut -d: -f1)
+
+  # 2nd. use name standard user
+  [ -n "$localuser" ] || localuser=$(getent passwd grml | cut -d: -f1)
 }
 # }}}
 
@@ -1017,7 +1041,9 @@ config_ssh(){
 if checkbootparam 'ssh' ; then
    SSH_PASSWD=''
    SSH_PASSWD="$(getbootparam 'ssh' 2>>$DEBUG)"
-   einfo "Bootoption ssh found, trying to set password for user grml."
+   config_userlocal
+   einfo "Bootoption ssh found, trying to set password for user $localuser"
+   [ -z "$localuser" ] && eend 1
    eindent
    if [ -z "$SSH_PASSWD" ] ; then
       if [ -x /usr/bin/apg ] ; then
@@ -1046,19 +1072,19 @@ if checkbootparam 'ssh' ; then
    if [ -n "$SSH_PASSWD" ] ; then
       # chpasswd sucks, seriously.
       if chpasswd --help 2>&1 | grep -q -- '-m,' ; then
-        echo "grml:$SSH_PASSWD" | chpasswd -m
+        echo "$localuser:$SSH_PASSWD" | chpasswd -m
       else
-        echo "grml:$SSH_PASSWD" | chpasswd
+        echo "$localuser:$SSH_PASSWD" | chpasswd
       fi
    fi
 
-   einfo 'Starting secure shell server in background.'
+   einfo "Starting secure shell server in background for user $localuser"
    /etc/init.d/rmnologin start >>$DEBUG 2>>$DEBUG
    /etc/init.d/ssh start >>$DEBUG 2>>$DEBUG &
    eend $?
 
    eindent
-   ewarn 'Warning: please change the password for user grml as soon as possible!'
+   ewarn "Warning: please change the password for user $localuser as soon as possible!"
    eoutdent
 fi
 }
@@ -1066,12 +1092,10 @@ fi
 
 # {{{ autostart of x11vnc
 config_vnc(){
-
-USER=grml # TODO: make it dynamically configurable
 if checkbootparam 'vnc' ; then
    VNC_PASSWD=''
    VNC_PASSWD="$(getbootparam 'vnc' 2>>$DEBUG)"
-   einfo "Bootoption vnc found, trying to set password for user $USER."
+   einfo "Bootoption vnc found, trying to set password for user $localuser."
    eindent
    if [ -z "$VNC_PASSWD" ] ; then
       if [ -x /usr/bin/apg ] ; then
@@ -1107,7 +1131,7 @@ if checkbootparam 'vnc' ; then
          eend 1
       else
          /usr/bin/x11vnc -storepasswd "$VNC_PASSWD" "$VNCDIR"/passwd ; eend $?
-         /bin/chown -R "$USER": "$VNCDIR"
+         /bin/chown -R "$localuser": "$VNCDIR"
       fi
    fi
    if checkbootparam 'vnc_connect' ; then
@@ -1123,13 +1147,15 @@ fi
 }
 # }}}
 
-# {{{ set password for user grml
+# {{{ set password for default user
 config_passwd(){
 if checkbootparam 'passwd' >>$DEBUG 2>&1; then
-  einfo "Bootoption passwd found."
   PASSWD="$(getbootparam 'passwd' 2>>$DEBUG)"
+  config_userlocal
+  einfo "Bootoption passwd found, change password for user '$localuser'."
+  [ -z "$localuser" ] && eend 1
   if [ -n "$PASSWD" ] ; then
-    echo "grml:$PASSWD" | chpasswd -m ; eend $?
+    echo "$localuser:$PASSWD" | chpasswd -m ; eend $?
   else
     eerror "No given password for ssh found. Autostart of SSH will not work." ; eend 1
   fi
@@ -1435,10 +1461,10 @@ if checkbootparam 'startx' && ! echo "$CMDLINE" | grep -q 'startx.*nostartx' ; t
      einfo "Window manager ${WHITE}${WINDOWMANAGER}${NORMAL} found as bootoption." && eend 0
    fi
    einfo "Setting up and invoking grml-x ${WINDOWMANAGER}. Just exit X windows system to get full featured consoles."
-   config_userfstab || fstabuser='grml'
+   config_userlocal
  cat>|/etc/init.d/xstartup<<EOF
 #!/bin/sh
-su $fstabuser -c "/usr/bin/grml-x"
+su $localuser -c "/usr/bin/grml-x"
 EOF
    chmod 755 /etc/init.d/xstartup
 
@@ -2132,11 +2158,8 @@ if [ -r /proc/acpi/battery/BAT0/info ] && grep -q 'OEM info:.*innotek' /proc/acp
       chmod 660 /dev/vboxguest
       eend $?
 
-      if [ -n "$CONFIG_FSTAB_USER" ] ; then
-        fstabuser="$CONFIG_FSTAB_USER"
-      else
-        fstabuser=$(getent passwd 1000 | cut -d: -f1)
-      fi
+      config_userfstab
+
       einfo "Adding $fstabuser to group vboxsf."
       adduser grml vboxsf &>/dev/null
       eend $?
