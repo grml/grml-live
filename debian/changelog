@@ -1,3 +1,11 @@
+grml-autoconfig (0.9.48) grml-testing; urgency=low
+
+  [ Kidelo ]
+  * [9adf167] correct service startup and password management for non-
+    default-user [Closes: issue1133]
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Jan 2012 14:49:25 +0100
+
 grml-autoconfig (0.9.47) grml-testing; urgency=low
 
   [ Ulrich Dangel ]
