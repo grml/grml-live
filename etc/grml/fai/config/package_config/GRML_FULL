@@ -183,6 +183,7 @@ tsocks
 usb-modeswitch
 vlan
 wireshark
+wvdial
 
 # network transfers
 ca-certificates
