@@ -155,6 +155,7 @@ firmware-netxen
 firmware-qlogic
 firmware-ralink
 firmware-realtek
+iftop
 ifupdown
 ipcalc
 ipmitool
