@@ -180,6 +180,7 @@ tcptraceroute
 telnet
 tshark
 tsocks
+usb-modeswitch
 vlan
 wireshark
 
