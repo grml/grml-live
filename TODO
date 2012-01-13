@@ -3,17 +3,11 @@ TODO list for grml-live
 
 Patches, ideas and feedback welcome.
 
-* provide an option to extract a given grml-ISO as basic chroot system for
-  further building actions (might be import for "let’s base our work on the last
-  rc of grml")
-
 * if a stage fails inside grml-live the stage is skipped on next execution → try
   to find a better way how to clean up the stage and re-execute it again
 
 * support something like a directory /etc/grml/fai/chroot_packages to install
   additional Debian packages without the need for a Debian repository
-
-* add support for ppc?
 
 * support multiple kernel versions installed in one single live-system
 
