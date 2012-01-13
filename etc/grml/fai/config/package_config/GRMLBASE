@@ -35,7 +35,7 @@ hwinfo
 initramfs-tools
 kbd
 less
-live-boot-grml
+live-boot-grml live-boot-grml-doc
 lvm2
 mdadm
 nfs-common
