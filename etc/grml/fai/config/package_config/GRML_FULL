@@ -172,6 +172,7 @@ netcat-openbsd
 net-tools
 nmap
 sipcalc
+slurm
 snmp
 socat
 ssh
