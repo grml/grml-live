@@ -19,7 +19,6 @@ diffutils
 dmraid
 dmsetup
 dosfstools
-dselect
 e2fsprogs
 ed
 ethtool
