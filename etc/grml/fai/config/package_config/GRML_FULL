@@ -13,6 +13,7 @@ bsdmainutils
 dbus
 dctrl-tools
 devscripts
+dos2unix
 dstat
 findutils
 htop
