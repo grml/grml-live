@@ -18,6 +18,7 @@ ddrescue
 diffutils
 dmraid
 dmsetup
+dos2unix
 dosfstools
 e2fsprogs
 ed
@@ -80,7 +81,6 @@ tcpd
 tcpdump
 telnet
 tsocks
-tofrodos
 tzdata
 ufsutils
 unp
