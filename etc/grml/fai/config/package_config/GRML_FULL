@@ -9,6 +9,7 @@ grml-terminalserver
 # base os
 apt
 binfmt-support
+bsdmainutils
 devscripts
 dbus
 dstat
