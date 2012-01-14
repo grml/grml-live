@@ -13,7 +13,6 @@ coreutils
 cpio
 cryptsetup
 cu
-dante-client
 dctrl-tools
 ddrescue
 diffutils
@@ -82,6 +81,7 @@ tar
 tcpd
 tcpdump
 telnet
+tsocks
 tofrodos
 tzdata
 ufsutils
