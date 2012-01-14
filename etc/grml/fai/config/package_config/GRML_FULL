@@ -10,8 +10,9 @@ grml-terminalserver
 apt
 binfmt-support
 bsdmainutils
-devscripts
 dbus
+dctrl-tools
+devscripts
 dstat
 findutils
 htop
