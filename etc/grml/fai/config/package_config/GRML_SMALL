@@ -18,6 +18,7 @@ chntpw
 coreutils
 cpio
 cryptsetup
+cu
 dante-client
 dash
 dctrl-tools
