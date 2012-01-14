@@ -171,6 +171,7 @@ iputils-tracepath
 isc-dhcp-client
 iw
 libnss-mdns
+lrzsz
 mtr-tiny
 netbase
 netcat-openbsd
