@@ -40,7 +40,6 @@ kexec-tools
 libnss-myhostname
 lilo
 links
-login
 lrzsz
 lsof
 makedev
