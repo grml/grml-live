@@ -38,6 +38,7 @@ jed-common
 jfsutils
 kexec-tools
 libnss-myhostname
+lftp
 lilo
 links
 lrzsz
@@ -49,7 +50,6 @@ memtester
 mount
 mtools
 mtr-tiny
-ncftp
 netbase
 netcat-openbsd
 net-tools
