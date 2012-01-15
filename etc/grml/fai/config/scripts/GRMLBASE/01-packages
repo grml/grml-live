@@ -15,11 +15,22 @@ if ! [ -r "$target/${PACKAGE_LIST}" ] ; then
    echo "No $target/${PACKAGE_LIST} found, will not run package validation check."
 else
    printf "Validating package list: "
-   if $ROOTCMD dpkg --list $(grep -v '^#' $target/${PACKAGE_LIST} | grep -v -- '-$') >/dev/null 2>$LOGDIR/package_errors.log ; then
-      printf "done - no errors found\n"
-   else
+   TMPFILE=$(mktemp)
+
+   $ROOTCMD dpkg --list $(grep -v '^#' $target/${PACKAGE_LIST} | grep -v -- '-$') 2>&1 | \
+     grep -e '^un' -e 'No packages' > "$TMPFILE" || true
+
+   awk '/^un/ {print $2 " not_installable"}' "$TMPFILE" > "$LOGDIR/package_errors.log"
+   awk '/^No packages found matching/ {print $5 " not_available"}' "$TMPFILE" | \
+     sed 's/\. / /' >> "$LOGDIR/package_errors.log"
+
+   if [ -s "$TMPFILE" ] ; then
       printf "failed (there have been errors, find them at $LOGDIR/package_errors.log)\n"
+   else
+      printf "done - no errors found\n"
    fi
+
+   rm -f "$TMPFILE"
 fi
 
 ## END OF FILE #################################################################
