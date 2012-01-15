@@ -271,6 +271,7 @@ zsh
 # system info/mgmt
 facter
 mcollective
+memtester
 
 # virtualization support
 imvirt
