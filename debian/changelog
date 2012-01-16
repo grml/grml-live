@@ -1,3 +1,54 @@
+grml-live (0.18.0) unstable; urgency=low
+
+  [ Michael Prokop ]
+  * Bugfixes, improvements,...:
+    - [a317c47] grml-cheatcodes: drop deprecated nodhcphostname option
+    - [9dc2a44] persistency feature: do not use persistent=nofiles
+      any longer
+    - [f1d8110] boot templates: add whitespace to end of line of
+      kernel cmdlines
+    - [aff41fa] Remove nowadays unused software-changes-schedule.txt
+    - [20c5aed] Remove resolved/deprecated items from TODO
+    - [4eaa219] Depend on syslinux instead of syslinux-common
+    - [7477e43] Package validation: also detect packages that
+      failed to install
+
+  * Software related changes:
+    - [330d132] add live-boot-grml-doc to GRMLBASE
+    - [5bea535] add usb-modeswitch to GRML_FULL. Thanks to
+      Pawel azhag Sadkowski <azhag@fluxboxpl.org>
+    - [9c06220] add wvdial to GRML_FULL. Thanks to
+      Pawel azhag Sadkowski <azhag@fluxboxpl.org>
+    - [1192a63] add slurm to GRML_FULL
+    - [1182368] add iftop to GRML_FULL
+    - [cf2f89d] add exfat-fuse + exfat-utils to GRML_FULL [Closes: issue1130]
+    - [56d29ab] add bsdmainutils to GRML_FULL
+    - [8d484f6] add dctrl-tools to GRML_FULL
+    - [1e1f094] add ser2net to GRML_FULL
+    - [f9524fc] add lrzsz to GRML_FULL
+    - [77a9490] add dos2unix to GRML_FULL
+    - [b5eca34] add memtester to GRML_FULL
+    - [d54f224] drop extundelete from IGNORE class
+
+  [ Alexander Wirt ]
+  * Software related changes for GRML_SMALL:
+    - [1de34f5] Add cu
+    - [3cd7d12] Remove reptyr
+    - [c765a01] Sync packages with grml-full
+    - [44b56c1] Replace dante-client with tsocks
+    - [0247837] Remove deselect
+    - [0d9a337] Remove login
+    - [5db2b56] Replace ncftp with lftp
+    - [6d77e63] Replace tofrodos with dos2unix
+    - [36c8ddd] Remove jed
+    - [b7e9437] Add locales to grml-live
+
+  [ Brad Cable ]
+  * Software related changes for GRML_XL:
+    - [b4afd8d] Package removal for cleanup and stability
+
+ -- Michael Prokop <mika@grml.org>  Mon, 16 Jan 2012 12:44:37 +0100
+
 grml-live (0.17.4) unstable; urgency=low
 
   * [f6b5bf3] GRMLBASE/25-locales: fix check for presence of localepurge
