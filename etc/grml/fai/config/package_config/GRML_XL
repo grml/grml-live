@@ -25,8 +25,6 @@ grml-quickconfig-standard
 grml-rescueboot
 grml-terminalserver
 grml-x
-heirloom-sh
-ptfinder
 zsh-lovers
 ## }}}
 
@@ -49,7 +47,6 @@ adduser
 aespipe
 aewan
 afflib-tools
-afio
 aggregate
 aiccu
 ajaxterm
@@ -134,7 +131,6 @@ base-passwd
 bash
 bash-builtins
 bash-doc
-bastille
 bb
 bbe
 bc
@@ -188,7 +184,6 @@ cbm
 ccache
 ccal
 cciss-vol-status
-ccrypt
 ccze
 cdbackup
 cdbs
@@ -318,7 +313,6 @@ directvnc
 dirmngr
 dirvish
 disktype
-distcc
 distmp3
 dlint
 dmraid
@@ -371,7 +365,6 @@ ecryptfs-utils
 ed
 edbrowse
 electric-fence
-elfsh
 elinks
 elvis
 elvis-common
@@ -387,10 +380,6 @@ eterm
 etherwake
 ethstatus
 ethtool
-evms
-evms-bootdebug
-evms-cli
-evms-ncurses
 ewf-tools
 exifprobe
 exiftran
@@ -529,10 +518,8 @@ hfsutils
 hgsvn
 hibernate
 hicolor-icon-theme
-honeyd
 hostapd
 hostap-utils
-hotkey-setup
 hotswap-text
 hoz
 hping3
@@ -867,7 +854,6 @@ openipmi
 open-iscsi
 opensc
 openssl
-openvas-client
 open-vm-tools
 openvpn
 orange
@@ -1106,7 +1092,6 @@ sensord
 ser2net
 setcd
 setserial
-sformat
 sg3-utils
 sgml-base
 sgmltools-lite
@@ -1396,7 +1381,6 @@ xnee
 xnest
 xosd-bin
 xpdf
-xpdf-reader
 xprobe
 xresprobe
 xrestop
@@ -1414,7 +1398,6 @@ xtermset
 xtightvncviewer
 xtrace
 xtrlock
-x-ttcidfont-conf
 xtv
 xul-ext-webdeveloper
 xutils
@@ -1434,7 +1417,6 @@ zfs-fuse
 zgv
 zile
 zip
-zoidberg
 zoo
 zsh
 zsh-doc
