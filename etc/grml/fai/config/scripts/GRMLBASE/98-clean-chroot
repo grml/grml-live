@@ -89,7 +89,7 @@ rm -rf --one-file-system $target/etc/sysconfig/* \
        $target/etc/*group- $target/var/spool/postfix/maildrop/* \
        $target/etc/*.old $target/etc/*.original \
        $target/etc/lvm/.cache $target/etc/lvm/cache/.cache \
-       $target/etc/lvm/backup/main $target/tmp/* \
+       $target/etc/lvm/backup/* $target/tmp/* \
        $target/var/tmp/* $target/var/backups/* \
        $target/var/lib/mysql $target/var/log/lilo_log.* $target/core*
 
