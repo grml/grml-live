@@ -94,6 +94,14 @@ rm -rf --one-file-system $target/etc/sysconfig/* \
        $target/var/lib/mysql $target/var/log/lilo_log.* $target/core* \
        $target/etc/blkid.tab
 
+# avoid data leakage into target system
+if ! [ -f "$target/etc/mtab" ]; then
+  echo "/etc/mtab does not exist or is not a regular file, not touching."
+else
+  echo "Removing /etc/mtab"
+  rm -f "$target/etc/mtab"
+fi
+
 # remove only "temporary" or saved files in the given directories
 nuke(){
   for i in $(find "$@" -name \*.gz -o -name \*.bz2 -o -name \*.0 2>/dev/null); do
