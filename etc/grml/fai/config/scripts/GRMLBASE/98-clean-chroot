@@ -41,8 +41,14 @@ if grep -q 'updatebase.GRMLBASE' ${target}/etc/udev/kernel-upgrade 2>/dev/null ;
   $ROOTCMD rm -f /etc/udev/kernel-upgrade
 fi
 
-echo "Updating package list"
-$ROOTCMD apt-get update
+set +u
+if ifclass RELEASE ; then
+set -u
+  echo "Not updating package list as RELEASE class is set."
+else
+  echo "Updating package list"
+  $ROOTCMD apt-get update
+fi
 
 echo "Cleaning apt places"
 $ROOTCMD apt-get check 2>/dev/null
