@@ -656,44 +656,29 @@ what you are searching for just run:
   dpkg -i --force-confnew --force-confmiss /path/to/grml-live_..._all.deb
 
 [[create-a-base-tgz]]
-How do I create a base.tgz for use as NFSROOT?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+How do I create a base.tgz?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-First of all build the chroot system:
+First of all create the chroot using debootstrap:
 
-  mkdir /tmp/nfsroot && cd /tmp/nfsroot
-  debootstrap squeeze /tmp/nfsroot/ http://cdn.debian.net/debian
-  tar zcf base.tgz ./
+  BASECHROOT='/tmp/basefile'
+  debootstrap squeeze "$BASECHROOT" http://cdn.debian.net/debian
+  tar -C "$BASECHROOT" --exclude='var/cache/apt/archives/*.deb' -zcf base.tar.gz ./
 
-Then check out where your NFSROOT is located:
+[TIP]
+By default debootstrap builds a chroot matching the architecture of the running
+host system. If you're using an amd64 system and want to build an i386 base.tgz
+then invoke debootstrap using the '--arch i386' option. Disclaimer: building an
+AMD64 base.tgz won't work if you are using a 32bit kernel system of course.
 
-  # grep '^NFSROOT' /etc/grml/fai/make-fai-nfsroot.conf
-  NFSROOT=/grml/fai/nfsroot
+Then move the base.tar.gz to /etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz.
+Use e.g. I386 as $CLASSNAME for i386 chroots and AMD64 for amd64 chroots.
 
-So as /grml/fai/nfsroot is your NFSROOT place the file under
-/grml/fai/nfsroot/live/filesystem.dir/var/tmp/:
-
-  mv base.tgz /grml/fai/nfsroot/live/filesystem.dir/var/tmp/base.tgz
-
-or even better use /etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz instead.
-Use I386 as $CLASSNAME for i386 builds and AMD64 for amd64 builds.
-
-Now running "grml-live ..." will use this file as main system instead of
-executing debootstrap. Check out the output for the following lines if using
-NFSROOT:
+Now executing grml-live should use this file as base system instead of executing
+debootstrap. Check out the output for something like:
 
   [...]
-  Calling task_extrbase
-  Unpacking Debian base archive
-  Extracting /grml/fai/nfsroot/live/filesystem.dir/var/tmp/base.tgz
-  Calling task_mirror
-  [...]
-
-or if using /etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz for:
-
-  [...]
-  ftar: extracting /etc/grml/fai/config/basefiles///AMD64.tar.gz to
-  /grml-live/grml-live_20071029.22138/grml_chroot//
+  ftar: extracting //etc/grml/fai/config/basefiles///AMD64.tar.gz to /srv/grml64_testing/grml_chroot//
   [...]
 
 [TIP]
