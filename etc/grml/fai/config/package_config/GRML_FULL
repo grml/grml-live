@@ -314,6 +314,7 @@ cpuid
 dmidecode
 irqbalance
 lshw
+numactl
 usbview
 
 # kernels
