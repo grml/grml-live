@@ -1,3 +1,26 @@
+grml-live (0.18.1) unstable; urgency=low
+
+  [ Michael Prokop ]
+  * [3c88b8f] Update lintian override entries to match current package
+    state
+  * [1d7c79c] debian/rules: add build-arch + build-indep to make lintian
+    happy
+  * [a909319] GRMLBASE/98-clean-chroot: get rid of all lvm backup files
+  * [3a6abc0] GRMLBASE/98-clean-chroot: get rid of /etc/blkid.tab
+  * [dde7410] GRMLBASE/98-clean-chroot: do not run apt-get update if
+    RELEASE class is set
+  * [6c567af] docs: simplify and improve base.tgz instructions
+  * Software related changes:
+    - [6bd64f3] SW: add cifs-utils to GRML_FULL
+    - [b6c508e] SW: add smbfs to GRML_FULL
+    - [ff74db7] SW: add numactl to GRML_FULL
+
+  [ Ulrich Dangel ]
+  * [4362c28] SW: Remove grml-rescueboot from GRML_XL as it is not really
+    useful on a live-cd
+
+ -- Michael Prokop <mika@grml.org>  Sun, 29 Jan 2012 14:40:45 +0100
+
 grml-live (0.18.0) unstable; urgency=low
 
   [ Michael Prokop ]
