@@ -1053,7 +1053,7 @@ if checkbootparam 'ssh' ; then
    SSH_PASSWD=''
    SSH_PASSWD="$(getbootparam 'ssh' 2>>$DEBUG)"
    config_userlocal
-   einfo "Bootoption ssh found, trying to set password for user $localuser"
+   einfo "Bootoption ssh found, trying to set password for root and user $localuser"
    [ -z "$localuser" ] && eend 1
    eindent
    if [ -z "$SSH_PASSWD" ] ; then
@@ -1082,11 +1082,12 @@ if checkbootparam 'ssh' ; then
    # finally check if we have a password we can use:
    if [ -n "$SSH_PASSWD" ] ; then
       # chpasswd sucks, seriously.
+      chpass_options=""
       if chpasswd --help 2>&1 | grep -q -- '-m,' ; then
-        echo "$localuser:$SSH_PASSWD" | chpasswd -m
-      else
-        echo "$localuser:$SSH_PASSWD" | chpasswd
+        chpass_options="-m"
       fi
+      echo "$localuser:$SSH_PASSWD" | chpasswd $chpass_options
+      echo "root:$SSH_PASSWD" | chpasswd $chpass_options
    fi
 
    einfo "Starting secure shell server in background for user $localuser"
