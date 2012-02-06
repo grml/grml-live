@@ -156,7 +156,7 @@ grml testcd                         Check CD data integrity and md5sums
 
 Service related settings:
 -------------------------
-grml ssh=password                   Set password for user grml and start ssh-server
+grml ssh=password                   Set password for root & grml user and start ssh-server
 grml startup=script                 Start $script instead of grml-quickconfig on startup
 grml nosyslog                       Do not start syslog daemon
 grml nogpm                          Disable GPM daemon
