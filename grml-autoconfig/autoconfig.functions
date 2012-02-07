@@ -1090,13 +1090,13 @@ if checkbootparam 'ssh' ; then
       echo "root:$SSH_PASSWD" | chpasswd $chpass_options
    fi
 
-   einfo "Starting secure shell server in background for user $localuser"
+   einfo "Starting secure shell server in background for root and user $localuser"
    /etc/init.d/rmnologin start >>$DEBUG 2>>$DEBUG
    /etc/init.d/ssh start >>$DEBUG 2>>$DEBUG &
    eend $?
 
    eindent
-   ewarn "Warning: please change the password for user $localuser as soon as possible!"
+   ewarn "Warning: please change the password for root and user $localuser as soon as possible!"
    eoutdent
 fi
 }
