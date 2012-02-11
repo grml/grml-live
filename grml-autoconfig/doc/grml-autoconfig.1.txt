@@ -172,7 +172,7 @@ Now boot from your new personalized Grml CD using the debs parameter:
 Run your own commands on startup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You know that booting with 'grml service=foobar' executes /etc/init.d/foobar
+You know that booting with 'grml services=foobar' executes /etc/init.d/foobar
 when booting Grml. But you want to setup a more complex network configuration,
 adjust some other stuff and so on on your own? Just write a script named grml.sh
 which does the job and use own of the mentioned bootparams. Let's say you have
