@@ -16,6 +16,7 @@ cu
 dctrl-tools
 ddrescue
 diffutils
+disktype
 dmraid
 dmsetup
 dos2unix

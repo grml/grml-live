@@ -58,6 +58,7 @@ arrayprobe
 bonnie++
 cciss-vol-status
 cryptsetup
+disktype
 dmraid
 dmsetup
 fai-setup-storage
