@@ -162,6 +162,7 @@ firmware-netxen
 firmware-qlogic
 firmware-ralink
 firmware-realtek
+hostapd
 iftop
 ifupdown
 ipcalc
