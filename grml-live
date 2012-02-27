@@ -956,7 +956,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
            sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
            sed -i "s/%VERSION%/$VERSION/g"              "${file}"
 
-           [ -n "$DEFAULT_BOOTOPTIONS" ] && sed -i "s/ boot=live/ boot=live $DEFAULT_BOOTOPTIONS/"  "${file}"
+           [ -n "$DEFAULT_BOOTOPTIONS" ] && sed -i "s; boot=live; boot=live $DEFAULT_BOOTOPTIONS;"  "${file}"
 
            if [ -n "$NO_BOOTID" ] ; then
               sed -i "s/ bootid=%BOOTID%//g" "${file}" # drop bootid bootoption
