@@ -1476,7 +1476,7 @@ if checkbootparam 'startx' && ! echo "$CMDLINE" | grep -q 'startx.*nostartx' ; t
    config_userlocal
  cat>|/etc/init.d/xstartup<<EOF
 #!/bin/sh
-su $localuser -c "/usr/bin/grml-x"
+su $localuser -c "/usr/bin/grml-x ${WINDOWMANAGER}"
 EOF
    chmod 755 /etc/init.d/xstartup
 
