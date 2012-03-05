@@ -899,6 +899,17 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        fi
        cp -a ${TEMPLATE_DIRECTORY}/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
 
+       # generate loopback.cfg config file without depending on grub's regexp module
+       # which isn't available in Debian/squeeze
+       echo "## grub2 loopback configuration" > "${BUILD_OUTPUT}"/boot/grub/loopback.cfg
+       echo "source /boot/grub/header.cfg" >> "${BUILD_OUTPUT}"/boot/grub/loopback.cfg
+       for config in "${BUILD_OUTPUT}"/boot/grub/*_default.cfg "${BUILD_OUTPUT}"/boot/grub/*_options.cfg ; do
+         [ -r "$config" ] || continue
+         echo "source ${config##$BUILD_OUTPUT}" >> "${BUILD_OUTPUT}"/boot/grub/loopback.cfg
+       done
+       echo "source /boot/grub/addons.cfg" >> "${BUILD_OUTPUT}"/boot/grub/loopback.cfg
+       echo "source /boot/grub/footer.cfg" >> "${BUILD_OUTPUT}"/boot/grub/loopback.cfg
+
        # copy grub files from target
        cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.mod "${BUILD_OUTPUT}"/boot/grub/
        cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.o "${BUILD_OUTPUT}"/boot/grub/
