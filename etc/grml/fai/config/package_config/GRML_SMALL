@@ -65,6 +65,7 @@ ppp
 procps
 psmisc
 reiserfsprogs
+rfkill
 rpcbind
 screen
 sed

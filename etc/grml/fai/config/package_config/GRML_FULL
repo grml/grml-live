@@ -181,6 +181,7 @@ netbase
 netcat-openbsd
 net-tools
 nmap
+rfkill
 ser2net
 sipcalc
 slurm
