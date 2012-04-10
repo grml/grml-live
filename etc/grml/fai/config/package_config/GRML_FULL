@@ -176,6 +176,7 @@ isc-dhcp-client
 iw
 libnss-mdns
 lrzsz
+mosh
 mtr-tiny
 netbase
 netcat-openbsd
