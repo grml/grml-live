@@ -1,6 +1,5 @@
 PACKAGES aptitude
 
-grml-feedback
 grml-live
 grml-paste
 grml-quickconfig-standard

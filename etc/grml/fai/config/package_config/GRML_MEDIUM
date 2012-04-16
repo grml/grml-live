@@ -56,7 +56,6 @@ gddrescue
 genext2fs
 grml-debugtools
 grml-desktop
-grml-feedback
 grml-live
 grml-paste
 grml-quickconfig-standard
