@@ -275,6 +275,7 @@ zsh
 
 # system info/mgmt
 facter
+flashrom
 mcollective
 memtester
 
