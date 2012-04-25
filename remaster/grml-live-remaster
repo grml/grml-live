@@ -118,7 +118,7 @@ ${GRML_LIVE_EDITOR} /remaster/msg
 [ -d /remaster/iso ] || mkdir /remaster/iso
 
 for i in /live/image/*; do
-    if [ ! $i == /live/image/live ]; then
+    if [ ! $i = /live/image/live ]; then
        cp -R $i /remaster/iso
     fi
 done
