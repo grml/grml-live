@@ -41,7 +41,20 @@ if ! isgrmlcd ; then
 fi
 
 # make sure we have what we need {{{
-check4progs mkisofs stat || exit 1
+if check4progs mkisofs >/dev/null 2>&1 ; then
+  MKISO=mkisofs
+fi
+
+if check4progs genisoimage >/dev/null 2>&1 ; then
+  MKISO=genisoimage
+fi
+
+if [ -z "$MKISO" ] ; then
+  echo "Error: neither mkisofs nor genisoimage available. Exiting." >&2
+  exit 1
+fi
+
+check4progs stat || exit 1
 
 # allow overriding via environment:
 if [ -z "$MKSQUASHFS" ] ; then
@@ -141,7 +154,7 @@ else
    ISOLINUX_BOOTCAT=boot.cat
 fi
 
-mkisofs -b $ISOLINUX -no-emul-boot -c $ISOLINUX_BOOTCAT \
+$MKISO -b $ISOLINUX -no-emul-boot -c $ISOLINUX_BOOTCAT \
         -boot-info-table -boot-load-size 4 -no-pad \
         -l -r -J -o "$1" /remaster/iso
 # pad for partition table
