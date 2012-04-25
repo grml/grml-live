@@ -68,15 +68,15 @@ fi
 check4root || exit 1
 # }}}
 
-if [ x"$1" == x ]; then
-   echo "$0 - version $VERSION"
-   echo ""
-   echo "Usage: $0 destination.iso"
-   echo "  destination.iso should point to a path that is on a hard disk,"
-   echo "  you might want to mount some swap partitions or swap files"
-   echo "  first, because grml-live-remaster will need a lot ot RAM."
-   echo ""
-   echo "Please report bugs and feature requests: http://grml.org/bugs/"
+if [ -z "$1" ]; then
+   echo "$0 - version $VERSION
+
+Usage: $0 destination.iso
+  destination.iso should point to a path that is on a hard disk,
+  you might want to mount some swap partitions or swap files
+  first, because grml-live-remaster will need a lot ot RAM.
+
+Please report bugs and feature requests: http://grml.org/bugs/" >&2
    exit 1
 fi
 
