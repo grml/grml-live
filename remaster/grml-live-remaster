@@ -58,12 +58,10 @@ check4progs stat || exit 1
 
 # allow overriding via environment:
 if [ -z "$MKSQUASHFS" ] ; then
-  if which mksquashfs-lzma >/dev/null 2>&1 ; then
-    MKSQUASHFS=mksquashfs-lzma
-  elif which mksquashfs >/dev/null 2>&1 ; then
+  if which mksquashfs >/dev/null 2>&1 ; then
     MKSQUASHFS=mksquashfs
   else
-    echo "Error: neither mksquashfs-lzma nor mksquashfs present. Exiting."
+    echo "Error: mksquashfs is not available. Exiting." >&2
     exit 1
   fi
 fi
