@@ -24,6 +24,11 @@ set -e # exit on any error
 VERSION='0.0.2'
 GRML_LIVE_EDITOR=${VISUAL:-${EDITOR:-vi}}
 
+if [ ! -d /etc/grml -o ! -d /live ]; then
+    echo "Error: $0 has to be run from a Grml live session. Exiting."
+    exit 1
+fi
+
 # source core functions {{{
 . /etc/grml/lsb-functions
 . /etc/grml/script-functions
