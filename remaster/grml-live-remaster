@@ -21,18 +21,24 @@ fi
 
 set -e # exit on any error
 
-VERSION='0.0.2'
+VERSION='0.0.3'
 GRML_LIVE_EDITOR=${VISUAL:-${EDITOR:-vi}}
 
-if [ ! -d /etc/grml -o ! -d /live ]; then
-    echo "Error: $0 has to be run from a Grml live session. Exiting."
-    exit 1
+# source core functions {{{
+if ! [ -r /etc/grml/lsb-functions ] || ! [ -r /etc/grml/script-functions ] ; then
+  echo "Error: could not read /etc/grml/lsb-functions and/or /etc/grml/script-functions." >&2
+  echo "Error: $0 can run only in Grml live session. Exiting." >&2
+  exit 1
 fi
 
-# source core functions {{{
 . /etc/grml/lsb-functions
 . /etc/grml/script-functions
 # }}}
+
+if ! isgrmlcd ; then
+  echo "Error: $0 can run only in Grml live session. Exiting." >&2
+  exit 1
+fi
 
 # make sure we have what we need {{{
 check4progs mkisofs stat || exit 1
