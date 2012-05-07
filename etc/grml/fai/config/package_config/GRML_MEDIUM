@@ -185,9 +185,9 @@ brltty
 espeakup
 
 PACKAGES aptitude I386
-linux-image-3.1.0-2-grml-486
+linux-image-i386-grml
 #virtualbox-ose-guest-modules-3.1.0-grml virtualbox-ose-guest-utils virtualbox-ose-guest-x11
 
 PACKAGES aptitude AMD64
-linux-image-3.1.0-2-grml-amd64
+linux-image-amd64-grml
 #virtualbox-ose-guest-modules-3.1.0-grml64 virtualbox-ose-guest-utils virtualbox-ose-guest-x11

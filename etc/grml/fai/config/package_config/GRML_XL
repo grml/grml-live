@@ -1459,9 +1459,9 @@ fnfxd
 pstack
 retty
 
-## current kernel version 3.1.0-grml:
+## current kernel version:
 #iscsitarget-module-3.1.0-grml
-linux-image-3.1.0-2-grml-486
+linux-image-i386-grml
 #ndiswrapper-modules-3.1.0-grml
 #openafs-modules-3.1.0-grml
 #sysprof-module-3.1.0-grml
@@ -1473,9 +1473,9 @@ linux-image-3.1.0-2-grml-486
 ## amd64 specific packages {{{
 PACKAGES aptitude AMD64
 
-## current kernel version 3.1.0-grml64:
+## current kernel version:
 #iscsitarget-module-3.1.0-grml64
-linux-image-3.1.0-2-grml-amd64
+linux-image-amd64-grml
 #ndiswrapper-modules-3.1.0-grml64
 #openafs-modules-3.1.0-grml64
 #sysprof-module-3.1.0-grml64
