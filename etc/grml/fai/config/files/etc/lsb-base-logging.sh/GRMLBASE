@@ -2,6 +2,11 @@
 # ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/20-sudo script, using
 # ${GRML_FAI_CONFIG}/config/files/etc/lsb-base-logging.sh/GRMLBASE
 
+# override output of the status on the left side of the terminal
+# introduced in lsb-base >= 4.1+Debian1
+log_end_msg_pre() { :; }
+log_action_msg_pre() { :; }
+
 if log_use_fancy_output; then
   __LSB_PFX="$($TPUT -S << EOGREEN
   bold
