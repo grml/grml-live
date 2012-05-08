@@ -1,3 +1,50 @@
+grml-live (0.19.0) unstable; urgency=low
+
+  The "progress everywhere" release.
+
+  [ Ulrich Dangel ]
+  * [424e4c8] Update ssh documentation
+  * [f1934c0] Fix purpose comment of
+    /etc/grml/fai/config/scripts/GRMLBASE/48-tmpfs
+
+  [ Michael Prokop ]
+  * Bugfixes and improvement related changes:
+    - [6eb1b1e] Use ";" as separator character when adjusting
+      DEFAULT_BOOTOPTIONS via sed [Closes: issue1165]
+    - [94a9b17] Generate static loopback.cfg configuration without
+      depending on GRUB's regexp module
+    - [f56cc0d] grml-live-remaster: Slightly adjust check for running
+      Grml session
+    - [7419019] grml-live-remaster: Support mkisofs + genisoimage
+    - [5081cf1] grml-live-remaster: Drop deprecated mksquashfs-lzma support
+    - [5e52583] grml-live-remaster: Slightly improve argument check and
+      send error message to stderr
+    - [d74ed63] grml-live-remaster: Fix bashism
+    - [cf1e362] Add a few kB of lines made of # charaters to the end
+      of the main syslinux config file. Thanks to Marco d'Itri
+
+  * Software related changes:
+    - [d91a6d4] Add disktype to GRML_SMALL and GRML_FULL
+    - [dc28a1b] add hostapd to GRML_FULL. Thanks to Matthias Strubel for
+      suggestion
+    - [e06b6cf] Move vlock to GRMLBASE. Thanks to Thomas Arendsen Hein
+      for reporting
+    - [723b823] Add rfkill to GRML_SMALL, GRML_FULL + GRML_XL.
+      Thanks to Alexander Wirt <formorer@grml.org> for the hint
+    - [637a57e] Add mosh to GRML_FULL and GRML_XL
+    - [e1719d6] Remove grml-feedback from GRML_{SMALL,MEDIUM,FULL,XL}
+    - [7d188c0] Add flashrom to GRML_FULL
+    - [3770abe] Replace all references to kernel specific versions
+      with linux-image-{i386,amd64}-grml
+
+  [ Evgeni Golov ]
+  * [27c41d7] check for existence of /etc/grml and /live
+  * [d365bf7] sudoers has to be owned by uid 0
+  * [9f40afc] lsb-base: override output of the status on the left
+    side of the terminal
+
+ -- Michael Prokop <mika@grml.org>  Tue, 08 May 2012 17:38:36 +0200
+
 grml-live (0.18.1) unstable; urgency=low
 
   [ Michael Prokop ]
