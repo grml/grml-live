@@ -1,3 +1,17 @@
+grml-autoconfig (0.9.50) grml-testing; urgency=low
+
+  [ Ulrich Dangel ]
+  * [5afe603] Set root password to specified/generated ssh password.
+  * [7e62141] Fix typo in grml-autoconfig.1.txt - use services instead of
+    service
+  * [b9d3a48] Run grml-x with specified window-manager.
+    Thanks to Wolfgang Scheicher for the bug report.
+
+  [ Michael Prokop ]
+  * [a13eb28] Mention root user in all according ssh messages
+
+ -- Michael Prokop <mika@grml.org>  Wed, 09 May 2012 12:17:20 +0200
+
 grml-autoconfig (0.9.49) grml-testing; urgency=low
 
   [ Ulrich Dangel ]
