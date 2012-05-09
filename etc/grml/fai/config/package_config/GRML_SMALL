@@ -60,7 +60,7 @@ partimage
 passwd
 patch
 ppp
-# pppoeconf
+pppoeconf
 procps
 psmisc
 reiserfsprogs

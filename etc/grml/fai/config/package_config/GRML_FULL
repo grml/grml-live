@@ -49,6 +49,7 @@ strace
 # deploy on remote sites
 openvpn
 ppp
+pppoeconf
 racoon
 
 # disk subsystems support/debugging
