@@ -282,6 +282,7 @@ memtester
 
 # virtualization support
 imvirt
+open-vm-tools
 qemu-kvm
 qemu-utils
 zerofree
