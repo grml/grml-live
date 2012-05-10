@@ -33,6 +33,7 @@ grub-pc
 hdparm
 hwinfo
 initramfs-tools
+iptstate
 kbd
 less
 live-boot-grml live-boot-grml-doc
