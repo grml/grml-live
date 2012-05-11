@@ -169,6 +169,7 @@ ipcalc
 ipmitool
 iproute
 iptraf
+iptstate
 iputils-arping
 iputils-ping
 iputils-tracepath
