@@ -113,6 +113,7 @@ reiserfsprogs
 ufsutils
 xfsdump
 xfsprogs
+xmount
 
 # foreign os support/recovery
 chntpw
