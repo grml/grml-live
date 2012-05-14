@@ -1,3 +1,25 @@
+grml-live (0.19.1) unstable; urgency=low
+
+  [ Michael Prokop ]
+  * [582f3a3] Bump Standards-Version to 3.9.3
+  * Software related changes:
+    - [cb20a89] add pppoeconf to GRML_SMALL and GRML_FULL
+      Thanks to Heinz Ahrens for the wish request
+    - [d81e978] add open-vm-tools to GRML_FULL
+      Thanks to Holger Baust for the suggestion
+    - [851f880] add iptstate to GRML_SMALL and GRML_FULL
+      Thanks to Markus Ulrich
+    - [026a603] add xmount to GRML_FULL
+    - [3ff6f9b] add ewf-tools to GRML_FULL
+
+  [ Evgeni Golov ]
+  * [bf4073e] Switch order of Depends from genisoimage | xorriso to
+    xorriso | genisoimage
+  * [950ef7a] document ethdevice-timeout cheatcode. Thanks to
+    Vincent McIntyre <vincent.mcintyre@csiro.au> [Closes: issue1153]
+
+ -- Michael Prokop <mika@grml.org>  Mon, 14 May 2012 15:58:26 +0200
+
 grml-live (0.19.0) unstable; urgency=low
 
   The "progress everywhere" release.
