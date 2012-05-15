@@ -22,5 +22,14 @@ while [ "$($ROOTCMD deborphan)" != "" ] ; do
   $ROOTCMD apt-get -y --purge remove $($ROOTCMD deborphan)
 done
 
+# make sure we don't have any removed but not-yet-purged packages left,
+# otherwise GRMLBASE/03-get-sources might try to download unavailable
+# packages and will fail doing so
+PURGE_PACKAGES=$($ROOTCMD dpkg --list | awk '/^rc/ {print $2}')
+
+if [ -n "$PURGE_PACKAGES" ] ; then
+  $ROOTCMD dpkg --purge $PURGE_PACKAGES
+fi
+
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
