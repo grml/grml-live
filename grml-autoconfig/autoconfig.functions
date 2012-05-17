@@ -226,10 +226,10 @@ config_language(){
  if [ -x /usr/sbin/grml-setlang ] ; then
    # if bootoption lang is used update /etc/default/locale accordingly
    if [ -n "$BOOT_LANGUAGE" ] ; then
-     checkgrmlsmall && /usr/sbin/grml-setlang "POSIX" || /usr/sbin/grml-setlang "$LANGUAGE"
+     /usr/sbin/grml-setlang "$LANGUAGE"
    # otherwise default to lang=en
    else
-     checkgrmlsmall && /usr/sbin/grml-setlang "POSIX" || /usr/sbin/grml-setlang "en"
+     /usr/sbin/grml-setlang "en"
    fi
  fi
 
@@ -248,12 +248,8 @@ config_language(){
  fi
 
  # export it now, so error messages get translated, too
- if checkgrmlsmall ; then
-    export LANG='C' # grml-small does not provide any further locales
- else
-    [ -r /etc/default/locale ] && . /etc/default/locale
-    export LANG LANGUAGE
- fi
+ [ -r /etc/default/locale ] && . /etc/default/locale
+ export LANG LANGUAGE
 
  # configure keyboard layout, read in already set values first:
  [ -r /etc/sysconfig/keyboard ] && . /etc/sysconfig/keyboard
