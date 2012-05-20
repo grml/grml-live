@@ -37,7 +37,7 @@ ADDITIONAL_MODULES[i386-pc]="biosdisk"
 if ifclass AMD64 ; then
   if [ -r "${target}"/usr/lib/grub/x86_64-efi/moddep.lst ] ; then
     ARCHS+=(x86_64-efi)
-    ADDITIONAL_MODULES[x86_64-efi]="efi_gop efi_uga linux16"
+    ADDITIONAL_MODULES[x86_64-efi]="efi_gop efi_uga"
   else
     echo "/usr/lib/grub/x86_64-efi/moddep.lst could not be found, skipping."
     echo "NOTE: grub-efi-amd64-bin not installed?"
