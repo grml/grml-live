@@ -400,10 +400,6 @@ GRML_FAI_CONFIG=/etc/grml/fai/config - both pointing to a directory shipped by
 grml-live out-of-the-box so you shouldn't have to configure anything in this
 file.
 
-  ${GRML_FAI_CONFIG}/NFSROOT
-
-This file specifies the package list for creating the NFSROOT.
-
   ${GRML_FAI_CONFIG}/config/
 
 The main directory for configuration of FAI/grml-live. More details below.
@@ -471,8 +467,7 @@ temporary files), if you plan to use GRML_FULL you should have at least 4GB of
 total free disk space
 
 * fast network access for retrieving the Debian packages used for creating the
-chroot (check out "local mirror" and "NFSROOT" to workaround this problem as far
-as possible)
+chroot (check out "local mirror" to workaround this problem as far as possible)
 
 For further information see next section.
 
@@ -610,7 +605,7 @@ Can I use my own (local) Debian mirror?
 
 Yes. Set up an according sources.list configuration as class file in
 ${GRML_FAI_CONFIG}/config/files/etc/apt/sources.list.d/ and adjust the variable
-FAI_DEBOOTSTRAP (if not already using NFSROOT's base.tgz) inside
+FAI_DEBOOTSTRAP (if not already using a base.tgz) inside
 /etc/grml/grml-live.conf[.local]. If you're setting up your own class file don't
 forget to include the class name in the class list (grml-live -c ...).
 
