@@ -400,12 +400,6 @@ GRML_FAI_CONFIG=/etc/grml/fai/config - both pointing to a directory shipped by
 grml-live out-of-the-box so you shouldn't have to configure anything in this
 file.
 
-  ${GRML_FAI_CONFIG}/make-fai-nfsroot.conf
-
-This file is used by make-fai-nfsroot(8) only. Usually you don't have to change
-anything inside this file. If you want to modify NFSROOT though you can adjust
-it there.
-
   ${GRML_FAI_CONFIG}/NFSROOT
 
 This file specifies the package list for creating the NFSROOT.
