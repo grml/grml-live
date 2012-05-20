@@ -1,3 +1,14 @@
+grml-autoconfig (0.9.51) grml-testing; urgency=low
+
+  [ Markus Ulrich ]
+  * [836ed24] Remove standard language settings for grml_small
+  * [d94f400] Add a README file for Github
+
+  [ Michael Prokop ]
+  * [3f2bb0b] Bump Standards-Version to 3.9.3.
+
+ -- Michael Prokop <mika@grml.org>  Sun, 20 May 2012 14:37:24 +0200
+
 grml-autoconfig (0.9.50) grml-testing; urgency=low
 
   [ Ulrich Dangel ]
