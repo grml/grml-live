@@ -880,7 +880,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
             copy_addon_file ipxe.lkrn /usr/lib/ipxe addons
             copy_addon_file pci.ids /usr/share/misc addons
             copy_addon_file memtest86+.bin /boot addons
-            for file in memdisk chain.c32 hdt.c32 menu.c32; do
+            for file in memdisk chain.c32 hdt.c32 mboot.c32 menu.c32; do
               copy_addon_file "${file}" /usr/lib/syslinux addons
             done
 
