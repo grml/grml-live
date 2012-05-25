@@ -553,7 +553,20 @@ if [ -n "$EXTRACT_ISO_NAME" ]; then
     eend 1
     bailout 1
   fi
-  unsquashfs -d "${CHROOT_OUTPUT}" "${mountpoint}"/live/*/*.squashfs ; rc=$?
+
+  if ls "${mountpoint}"/live/*/*.squashfs 2>/dev/null | grep -q . ; then # ISOs >=2011.12
+    log "Using ${mountpoint}/live/*/*.squashfs for unsquashfs"
+    unsquashfs -d "${CHROOT_OUTPUT}" "${mountpoint}"/live/*/*.squashfs ; rc=$?
+  elif ls "${mountpoint}"/live/*.squashfs 2>/dev/null | grep -q . ; then # ISOs before 2011.12
+    log "Using ${mountpoint}/live/*.squashfs for unsquashfs"
+    unsquashfs -d "${CHROOT_OUTPUT}" "${mountpoint}"/live/*.squashfs ; rc=$?
+  else
+    log "Error: Could not find any *.squashfs files on the ISO"
+    eerror "Error: Could not find any *.squashfs files on the ISO"
+    eend 1
+    bailout 1
+  fi
+
   umount "$mountpoint"
   rmdir "$mountpoint"
   if [ "$rc" != 0 ]; then
