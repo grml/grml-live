@@ -327,10 +327,6 @@ lshw
 numactl
 usbview
 
-# kernels
-firmware-linux-free
-firmware-linux-nonfree
-
 PACKAGES aptitude I386
 linux-image-i386-grml
 
