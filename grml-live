@@ -157,6 +157,10 @@ umount_all() {
    umount $CHROOT_OUTPUT/dev/pts 2>/dev/null || /bin/true
    umount $CHROOT_OUTPUT/dev 2>/dev/null || /bin/true
 
+   if [ -n "$EXTRACT_ISO_NAME" ] ; then
+     umount "$EXTRACT_ISO_NAME" 2>/dev/null || /bin/true
+   fi
+
    # certain FAI versions sadly leave a ramdisk behind, so better safe than sorry
    if [ -x /usr/lib/fai/mkramdisk ] ; then
      /usr/lib/fai/mkramdisk -u "$(readlink -f ${CHROOT_OUTPUT}/var/lib/dpkg)" >/dev/null 2>&1 || /bin/true
