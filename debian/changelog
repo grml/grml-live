@@ -1,3 +1,25 @@
+grml-live (0.19.2) unstable; urgency=low
+
+  The "happy multitasking" release ←↑↓→
+
+  * [193203a] DEBORPHAN/98-clean-chroot: purge removed packages
+  * [4bc598a] Generate make-fai-nfsroot.conf and nfsroot.conf on-the-fly
+    (Closes: gh #4)
+  * [8cfed16] Generate /etc/grml_live_version after FAI execution + drop
+    /etc/dpkg/dpkg.cfg.d/unsafe-io code
+  * [6dcd837] Drop unused NFSROOT configuration file
+  * [3106869] Use syslinux's mboot.c32 for booting Grub2. Thanks to
+    Jordan Uggla for his valuable bootloader knowledge
+  * [63cf502] umount_all: also get rid of loopback mount of ISO
+  * [a7f99c4] extract ISO feature: make sure *.squashfs files exist +
+    support older ISOs too. Thanks to Charles A. Hewson
+    <cahewson@eskimo.com> for the bugreport
+  * Software related changes:
+    - [80a1a18] SW: add sysstatt to GRML_FULL. Thanks to
+      Michael Renner for reporting
+
+ -- Michael Prokop <mika@grml.org>  Fri, 25 May 2012 16:44:40 +0200
+
 grml-live (0.19.1) unstable; urgency=low
 
   [ Michael Prokop ]
