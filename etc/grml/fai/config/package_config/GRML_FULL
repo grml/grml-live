@@ -161,7 +161,6 @@ firmware-brcm80211
 firmware-iwlwifi
 firmware-myricom
 firmware-netxen
-firmware-qlogic
 firmware-ralink
 firmware-realtek
 hostapd
