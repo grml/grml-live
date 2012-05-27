@@ -125,8 +125,10 @@ grml findiso=/grml_2010.12.iso      Look for the specified ISO file on all disks
                                     as in isofrom=....).
 grml fetch=$IP/filename.squashfs    Download a squashfs image from a given url, copying to ram and booting it.
                                     [Note: releases before 2011.05 didn't support DNS but IP only.]
-grml live-media-path=live           Sets the path to the live filesystem on the medium
-                                    By default, it is set to /live
+grml live-media-path=/live/grml...  Sets the path to the live filesystem on the medium
+                                    By default, it is set to /live/$GRML_FLAVOUR/ (where $GRML_FLAVOUR
+                                    is corresponding to grml64-full, grml32-full, grml64-small,...
+                                    [Note: this option is mandatory since release 2011.12]
 grml nostats                        Don't send any information to the Grml project at startup.
                                     Parameters sent are Grml version, if the cpu supports 64bit,
                                     anonymized boot parameters and boot source (remote or local).
