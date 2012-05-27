@@ -7,7 +7,7 @@
  grml noswraid                       disable search for software RAID devices  
  grml noudev                disable startup of udev (disables module loading)  
  grml services=foo1[,foo2] start specified service(s) [/etc/init.d/name foo1]  
- grml ssh=password     set password for user grml + root and start ssh-server
+ grml ssh=password     set password for user grml + root and start ssh-server  
  grml startx[=windowmanager]                     autostart X.org using grml-x  
  grml swap                                   activate present swap partitions  
  grml testcd                              check CD data integrity and md5sums  
