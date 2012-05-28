@@ -1,3 +1,21 @@
+grml-live (0.19.3) unstable; urgency=low
+
+  The "ready for Grml 2012.05" release \o/
+
+  [ Michael Prokop ]
+  * [33427af] Add whitespace chars to ssh docs on boot splash f5
+  * [0f27814] grml-cheatcodes.txt: update and extend documentation
+    regarding live-media-path
+  * [56dc49c] templates/boot/grub/addons.cfg: insmod linux16 before
+    running linux16 commands. Thanks to Evgeni Golov for the bugreport
+    and the fix
+
+  [ Markus Ulrich ]
+  * [7602518] Extend the infotext about the ssh feature for bootmenu and
+    f5-help at boot prompt
+
+ -- Michael Prokop <mika@grml.org>  Mon, 28 May 2012 17:24:22 +0200
+
 grml-live (0.19.2) unstable; urgency=low
 
   The "happy multitasking" release ←↑↓→
