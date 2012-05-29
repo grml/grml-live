@@ -13,15 +13,6 @@ set -e
 if grep -q "$USERNAME:x:1000" $target/etc/group ; then
    echo "group $USERNAME exists already, skipping"
 else
-  if grep -q 'gsmsms:x:1000' $target/etc/group ; then
-     echo 'Bug #353967 detected, fixing GUID = 1000 setup for you'
-     $ROOTCMD delgroup gsmsms || /bin/true
-     $ROOTCMD deluser gsmsms  || /bin/true
-     $ROOTCMD addgroup --system gsmsms || /bin/true
-     $ROOTCMD adduser --system --ingroup gsmsms \
-                      --no-create-home --home /var/spool/sms gsmsms || /bin/true
-     $ROOTCMD adduser gsmsms dialout || /bin/true
-  fi
   $ROOTCMD addgroup --gid 1000 $USERNAME
 fi
 
