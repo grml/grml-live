@@ -592,7 +592,7 @@ export SUITE # make sure it's available in FAI scripts
 
 # validate whether the specified architecture class matches the
 # architecture (option), otherwise installation of kernel will fail
-if echo $CLASSES | grep -qi i386 ; then
+if echo $CLASSES | grep -qw I386 ; then
    if ! [[ "$ARCH" == "i386" ]] ; then
       log    "Error: You specified the I386 class but are trying to build something else (AMD64?)."
       eerror "Error: You specified the I386 class but are trying to build something else (AMD64?)."
