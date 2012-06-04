@@ -189,7 +189,6 @@ rfkill
 ser2net
 sipcalc
 slurm
-smbfs
 snmp
 socat
 ssh

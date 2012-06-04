@@ -199,6 +199,7 @@ cgdb
 chkrootkit
 chntpw
 chrootuid
+cifs-utils
 clamav
 clamav-base
 clamav-daemon
@@ -1122,7 +1123,6 @@ sm
 smartmontools
 smbc
 smbclient
-smbfs
 smbldap-tools
 smb-nat
 smbnetfs
