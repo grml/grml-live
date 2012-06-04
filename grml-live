@@ -1357,9 +1357,14 @@ else
           #   (hidden NTFS, IIRC), as the partition type is sometimes needed
           #   to get the BIOS even look at the partition created by isohybrid
           if isohybrid --help | grep -q -- --uefi ; then
-            log   "Detected uefi support for isohybrid, enabling"
-            einfo "Detected uefi support for isohybrid, enabling"
-            ISOHYBRID_OPTIONS=--uefi
+            if echo $CLASSES | grep -qw I386 ; then
+              log   "Detected uefi support for isohybrid but 32bit systems do not support it, ignoring."
+              einfo "Detected uefi support for isohybrid but 32bit systems do not support it, ignoring."
+            else
+              log   "Detected uefi support for isohybrid, enabling"
+              einfo "Detected uefi support for isohybrid, enabling"
+              ISOHYBRID_OPTIONS=--uefi
+            fi
           fi
 
           log "isohybrid $ISOHYBRID_OPTIONS ${ISO_OUTPUT}/${ISO_NAME}"
