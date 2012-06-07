@@ -464,7 +464,8 @@ if [ -z "$FORCE" ] ; then
    read a
    if ! [ "$a" = 'y' -o "$a" = 'Y' ] ; then
       CLEAN_ARTIFACTS=0
-      bailout 1 "Exiting as requested."
+      echo "Exiting as requested."
+      exit 0
    fi
    echo
 fi
