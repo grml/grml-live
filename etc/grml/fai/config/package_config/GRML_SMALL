@@ -71,6 +71,7 @@ screen
 sed
 ser2net
 setserial
+slrn
 smartmontools
 statserial
 sudo
