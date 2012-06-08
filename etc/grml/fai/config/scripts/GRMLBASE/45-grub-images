@@ -71,7 +71,7 @@ if ifclass AMD64 ; then
     exit 1
   fi
 
-  SIZE=$(du --apparent-size -sk "${target}/${BOOTX64}" | awk -F" " '{print $1'})
+  SIZE=$(du --apparent-size -sk "${target}/${BOOTX64}" | awk -F" " '{print $1}')
   SIZE=$(((($SIZE / 32 )+2)*32))
 
   dd if=/dev/zero of="${target}/${EFI_IMG}" bs=1k count="$SIZE" 2>/dev/null
