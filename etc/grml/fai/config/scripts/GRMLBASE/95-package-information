@@ -18,7 +18,7 @@ else
    COLUMNS=200 $ROOTCMD dpkg --get-selections > "${LOGDIR}"/dpkg.selections
    # store list of packages sorted by size:
    if [ -x $target/usr/bin/dpkg-query ] ; then
-      $ROOTCMD dpkg-query -W --showformat='${Package}\t${Installed-Size;10}\n' > \
+      $ROOTCMD dpkg-query -W --showformat='${Package}\t${Installed-Size}\n' > \
       "${LOGDIR}"/packages.size
    fi
 fi
