@@ -1,3 +1,30 @@
+grml-live (0.19.4) unstable; urgency=low
+
+  [ Michael Prokop ]
+  * [4c8f1b5] GRMLBASE/21-usersetup: drop deprecated workaround
+    for gsmsms (see #353967)
+  * [dfb358d] GRMLBASE/33-aptsetup: adjust snapshot.debian.org cmdline
+    and enable it for RELEASE class (Closes: issue1083)
+  * [6104812] Ignore --uefi option for isohybrid on 32bit systems
+  * [3f2420b] Architecture sanity check: be more restrictive using a
+    word-regexp grep
+  * [feacdba] Do not bailout (incl. cleanup) but just exit if user wants
+    to quit
+  * [06021ae] GRMLBASE/45-grub-images: calculate real disk size of
+    bootx64.efi. Thanks to Andras Korn for the patch
+  * [2cb9607] GRMLBASE/45-grub-images: put single quotes to
+    appropriate place
+  * [11fd80a] GRMLBASE/95-package-information: drop field width
+    option in dpkg-query command
+  * Software related change:
+    - [f1c4de5] drop smbfs from GRML_FULL + GRML_XL (provided by
+      cifs-utils nowadays)
+
+  [ Csillag Tamas ]
+  * [9102cb3] Do not remove the chroot if the user backs out
+
+ -- Michael Prokop <mika@grml.org>  Tue, 12 Jun 2012 00:29:15 +0200
+
 grml-live (0.19.3) unstable; urgency=low
 
   The "ready for Grml 2012.05" release \o/
