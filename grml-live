@@ -12,6 +12,9 @@
 export LANG=C
 export LC_ALL=C
 
+# avoid leaking into chroots
+unset TMPDIR
+
 # define function getfilesize before "set -e"
 if stat --help >/dev/null 2>&1; then
   getfilesize='stat -c %s'  # GNU stat
