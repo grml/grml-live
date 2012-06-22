@@ -57,6 +57,10 @@ Configuration of myhostname in /etc/postfix/main.cf has been adjusted as well. D
        fi
      fi
 
+     if [ -x /etc/init.d/avahi-daemon ] && pgrep avahi-daemon >/dev/null ; then
+       /etc/init.d/avahi-daemon restart
+     fi
+
      /etc/init.d/hostname.sh
 
      if [ -z "$NONINTERACTIVE" ] ; then
