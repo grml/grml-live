@@ -372,20 +372,21 @@ config_language(){
 
 # {{{ Set hostname
 config_hostname(){
- if checkbootparam 'hostname' ; then
+  if ! checkbootparam 'hostname' ; then
+    return 0
+  fi
+
   HOSTNAME="$(getbootparam 'hostname' 2>>$DEBUG)"
   if [ -z "$HOSTNAME" ] && [ -x /usr/bin/random-hostname ] ; then
-     einfo "Generating random hostname as no hostname was specified."
-     HOSTNAME="$(/usr/bin/random-hostname)"
-     eend $?
+    einfo "Generating random hostname as no hostname was specified."
+    HOSTNAME="$(/usr/bin/random-hostname)"
+    eend $?
   fi
+
   einfo "Setting hostname to $HOSTNAME as requested."
-  grml-hostname $HOSTNAME >>$DEBUG ; RC=$?
-  [ "$RC" = "0" ] && hostname $HOSTNAME
+  grml-hostname $HOSTNAME >>$DEBUG ; eend $RC
   eend $RC
- else
-  hostname --file /etc/hostname
- fi
+fi
 }
 # }}}
 
