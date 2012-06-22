@@ -55,7 +55,6 @@ racoon
 
 # disk subsystems support/debugging
 array-info
-arrayprobe
 bonnie++
 cciss-vol-status
 cryptsetup
