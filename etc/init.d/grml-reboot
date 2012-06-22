@@ -149,7 +149,8 @@ esac
 [ -r /etc/noprompt ] && NOPROMPT=true
 [ -r /etc/noeject ]  && NOPROMPT=true && NOEJECT=true
 
-if [ "$(/usr/bin/imvirt 2>/dev/null)" != "Physical" ] ; then
+VIRT_WHAT=$(/usr/sbin/virt-what 2>/dev/null)
+if [ -n "$VIRT_WHAT" ] ; then
   log_begin_msg "System seems to be a virtual machine, assuming noprompt as default."
   NOPROMPT=true
   log_end_msg 0
