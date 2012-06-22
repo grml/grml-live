@@ -12,9 +12,6 @@ Bugs: mailto:bugs@grml.org
 
 Package: grml-etc
 Architecture: all
-Replaces: automount-knoppix
-Suggests: grml-desktop, grml-docs, grml-x, policyrcd-script-zg2
-Recommends: eterm, python, vim (>= 7.0)
 Depends: ${misc:Depends}, grml-scripts (>= 0.9), grml-etc-core (>= 0.3), virt-what
 Description: ecetera files for the grml system
  This package includes /etc files for the Grml system.
