@@ -82,6 +82,29 @@ check_config() {
     fi
 }
 
+
+generate_ssh_keys() {
+    if ! test -f $RSA1_KEY ; then
+	log_action_msg "Generating SSH1 RSA host key..."
+	$KEYGEN -t rsa1 -f $RSA1_KEY -C '' -N '' || exit 1
+    fi
+
+    if ! test -f $RSA_KEY ; then
+	log_action_msg "Generating SSH2 RSA host key..."
+	$KEYGEN -t rsa -f $RSA_KEY -C '' -N '' || exit 1
+    fi
+
+    if ! test -f $DSA_KEY ; then
+	log_action_msg "Generating SSH2 DSA host key..."
+	$KEYGEN -t dsa -f $DSA_KEY -C '' -N '' || exit 1
+    fi
+
+    if ! test -f "$ECDSA_KEY" && grep -q "$ECDSA_KEY" /etc/ssh/sshd_config ; then
+	log_action_msg "Generating SSH2 ECDSA host key..."
+	$KEYGEN -t ecdsa -f "$ECDSA_KEY" -C '' -N '' || exit 1
+    fi
+}
+
 export PATH="${PATH:+$PATH:}/usr/sbin:/sbin"
 
 case "$1" in
@@ -89,26 +112,7 @@ case "$1" in
 	check_privsep_dir
 	check_for_no_start
 	check_dev_null
-
-	if ! test -f $RSA1_KEY ; then
-	   log_action_msg "Generating SSH1 RSA host key..."
-	   $KEYGEN -t rsa1 -f $RSA1_KEY -C '' -N '' || exit 1
-	fi
-
-	if ! test -f $RSA_KEY ; then
-	   log_action_msg "Generating SSH2 RSA host key..."
-	   $KEYGEN -t rsa -f $RSA_KEY -C '' -N '' || exit 1
-	fi
-
-	if ! test -f $DSA_KEY ; then
-	   log_action_msg "Generating SSH2 DSA host key..."
-	   $KEYGEN -t dsa -f $DSA_KEY -C '' -N '' || exit 1
-	fi
-	if ! test -f "$ECDSA_KEY" && grep -q "$ECDSA_KEY" /etc/ssh/sshd_config ; then
-	   log_action_msg "Generating SSH2 ECDSA host key..."
-	   $KEYGEN -t ecdsa -f "$ECDSA_KEY" -C '' -N '' || exit 1
-	fi
-
+        generate_ssh_keys
 	log_daemon_msg "Starting OpenBSD Secure Shell server" "sshd"
 	if start-stop-daemon --start --quiet --oknodo --pidfile /var/run/sshd.pid --exec /usr/sbin/sshd -- $SSHD_OPTS; then
 	    log_end_msg 0
@@ -128,6 +132,7 @@ case "$1" in
   reload|force-reload)
 	check_for_no_start
 	check_config
+        generate_ssh_keys
 	log_daemon_msg "Reloading OpenBSD Secure Shell server's configuration" "sshd"
 	if start-stop-daemon --stop --signal 1 --quiet --oknodo --pidfile /var/run/sshd.pid --exec /usr/sbin/sshd; then
 	    log_end_msg 0
@@ -139,6 +144,7 @@ case "$1" in
   restart)
 	check_privsep_dir
 	check_config
+        generate_ssh_keys
 	log_daemon_msg "Restarting OpenBSD Secure Shell server" "sshd"
 	start-stop-daemon --stop --quiet --oknodo --retry 30 --pidfile /var/run/sshd.pid
 	check_for_no_start log_end_msg
@@ -153,6 +159,7 @@ case "$1" in
   try-restart)
 	check_privsep_dir
 	check_config
+        generate_ssh_keys
 	log_daemon_msg "Restarting OpenBSD Secure Shell server" "sshd"
 	set +e
 	start-stop-daemon --stop --quiet --retry 30 --pidfile /var/run/sshd.pid
