@@ -26,4 +26,4 @@ done
 exit $GLOBRETVAL
 
 ## END OF FILE #################################################################
-# vim:foldmethod=marker expandtab ai ft=zsh shiftwidth=3
+# vim:foldmethod=marker expandtab ai ft=zsh shiftwidth=2
