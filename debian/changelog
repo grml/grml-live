@@ -1,3 +1,12 @@
+grml-etc (1.4.1) grml-testing; urgency=low
+
+  * [08c6565] ssh init script: support key generation also with restart
+    action. Thanks to Ulrich Dangel for the bugreport [Closes: issue1183]
+  * [258084a] ssh init script: sync with Debian's 1:5.9p1-5 openssh-server
+    package
+
+ -- Michael Prokop <mika@grml.org>  Fri, 22 Jun 2012 23:21:37 +0200
+
 grml-etc (1.4.0) grml-testing; urgency=low
 
   * [8d69288] grml-reboot: use virt-what instead of imvirt for detection
