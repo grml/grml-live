@@ -1,3 +1,14 @@
+grml-etc (1.4.0) grml-testing; urgency=low
+
+  * [8d69288] grml-reboot: use virt-what instead of imvirt for detection
+    of VMs. Thanks to Ulrich Dangel for bugreport and suggestion
+    [Closes: issue1184]
+  * [db30a1c] Debian packaging: drop Suggests, Replaces and Recommends
+    lines
+  * [624ecc3] Bump Standards-Version to 3.9.3.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 22 Jun 2012 23:06:04 +0200
+
 grml-etc (1.3.5) grml-testing; urgency=low
 
   [ Ulrich Dangel ]
