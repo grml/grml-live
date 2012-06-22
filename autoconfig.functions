@@ -1101,6 +1101,7 @@ fi
 # {{{ autostart of x11vnc
 config_vnc(){
 if checkbootparam 'vnc' ; then
+   config_userlocal
    VNC_PASSWD=''
    VNC_PASSWD="$(getbootparam 'vnc' 2>>$DEBUG)"
    einfo "Bootoption vnc found, trying to set password for user $localuser."
@@ -1115,7 +1116,7 @@ if checkbootparam 'vnc' ; then
       elif [ -x /usr/bin/hexdump ] ; then
          VNC_PASSWD="$(dd if=/dev/urandom bs=14 count=1 2>/dev/null | hexdump | awk '{print $3 $4}')"
       elif [ -n "$RANDOM" ] ; then
-         VNC_PASSWD="${USER}${RANDOM}"
+         VNC_PASSWD="${localuser}${RANDOM}"
       else
          VNC_PASSWD=''
          eerror "Empty passphrase and neither pwgen nor hexdump nor \$RANDOM found. Skipping."
@@ -1131,7 +1132,7 @@ if checkbootparam 'vnc' ; then
    # finally check if we have a password we can use:
    if [ -n "$VNC_PASSWD" ] ; then
 
-      VNCDIR="/home/${USER}/.vnc"
+      VNCDIR="/home/${localuser}/.vnc"
       [ -d "$VNCDIR" ] || mkdir "$VNCDIR"
 
       if [ ! -x /usr/bin/x11vnc ] ; then
@@ -1147,7 +1148,7 @@ if checkbootparam 'vnc' ; then
       VNC_CONNECT="$(getbootparam 'vnc_connect' 2>>$DEBUG)"
       einfo "Bootoption vnc_connect found, will start vnc with connect to $VNC_CONNECT."
       #store the options in a file
-      VNCDIR="/home/${USER}/.vnc"
+      VNCDIR="/home/${localuser}/.vnc"
       [ -d "$VNCDIR" ] || mkdir "$VNCDIR"
       echo " --connect $VNC_CONNECT " >> $VNCDIR/options
    fi
