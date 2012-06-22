@@ -1,3 +1,10 @@
+grml-autoconfig (0.9.52) grml-testing; urgency=low
+
+  [ Dominik Schips ]
+  * [00cfb15] Fix to set VNC password for correct user [Closes: issue1187]
+
+ -- Michael Prokop <mika@grml.org>  Fri, 22 Jun 2012 19:23:15 +0200
+
 grml-autoconfig (0.9.51) grml-testing; urgency=low
 
   [ Markus Ulrich ]
