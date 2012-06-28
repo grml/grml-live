@@ -1,3 +1,11 @@
+grml-autoconfig (0.9.53) grml-testing; urgency=low
+
+  * [47ab27a] No longer execute hostname command if hostname option
+    is not present
+  * [fc58987] vim modelines: set shiftwidth to 2
+
+ -- Michael Prokop <mika@grml.org>  Thu, 28 Jun 2012 17:32:06 +0200
+
 grml-autoconfig (0.9.52) grml-testing; urgency=low
 
   [ Dominik Schips ]
