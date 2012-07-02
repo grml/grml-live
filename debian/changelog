@@ -1,3 +1,22 @@
+grml-live (0.19.5) unstable; urgency=low
+
+  The "Stockholm" release
+
+  * [4e027c7] Unset TMPDIR to avoid leaking the variable into chroot
+    scripts
+  * [0533a72] Replace cdn.debian.net with http.debian.net
+  * [2fa5b80] templates/GRML/README.txt: update to match current
+    development
+  * Software related changes:
+    - [05ff8cd] drop arrayprobe from GRML_FULL + GRML_XL
+    - [40f7c44] add firmware-bnx2 + firmware-bnx2x to GRML_SMALL and
+      GRML_FULL
+    - [e0dc6c6] add epdfview to GRML_FULL. Thanks to Evgeni Golov,
+      Alexander Wirt and Markus Ulrich raising this issue
+      [Closes: issue1189]
+
+ -- Michael Prokop <mika@grml.org>  Mon, 02 Jul 2012 15:24:21 +0200
+
 grml-live (0.19.4) unstable; urgency=low
 
   [ Michael Prokop ]
