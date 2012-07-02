@@ -1,6 +1,6 @@
-# official debian repository (mirror selected via geo-ip):
-  deb     http://cdn.debian.net/debian/ sid main contrib non-free
-  deb-src http://cdn.debian.net/debian/ sid main contrib non-free
+# official debian repository:
+  deb     http://http.debian.net/debian/ sid main contrib non-free
+  deb-src http://http.debian.net/debian/ sid main contrib non-free
 
 # official debian repository:
 #  deb     http://ftp.debian.org/debian/ sid main contrib non-free
