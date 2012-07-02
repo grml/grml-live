@@ -384,9 +384,8 @@ config_hostname(){
   fi
 
   einfo "Setting hostname to $HOSTNAME as requested."
-  grml-hostname $HOSTNAME >>$DEBUG ; eend $RC
-  eend $RC
-fi
+  grml-hostname $HOSTNAME >>$DEBUG
+  eend $?
 }
 # }}}
 
