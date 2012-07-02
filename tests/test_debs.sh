@@ -15,7 +15,7 @@ dpkg() {
 }
 
 test_debs() {
-    . ../autoconfig.functions
+    . ../autoconfig.functions || exit 1
     CMDLINE='debs'
     INSTALLED=''
 
