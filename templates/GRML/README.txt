@@ -1,14 +1,11 @@
-Security considerations for grml
+Security considerations for Grml
 ================================
 
-1.) There is no automatic start of external accessible services in Live-CD
-    mode. (sshd is started by default on harddisk installations though.)
+1.) There are no default passwords. All accounts are locked by default.
+    Even local logins are not possible by default (unless you set a password
+    or create new user accounts as root).
 
-2.) There are no default passwords. All accounts are locked by default.
-    Even local logins are not possible (unless you set a password or create
-    new user accounts as root).
-
-3.) Therefore, all local interactive processes are started by init without
+2.) Therefore, all local interactive processes are started by init without
     authorization.
     Programs that only work for root are usually started using sudo without
     password. This has the advantage of making faults caused by defective
@@ -17,11 +14,5 @@ Security considerations for grml
     grml user should never be allowed for external logins (in the case
     that sshd or similar servers are being launched).
 
-4.) You can create valid passwords using "sudo passwd [username]" from the
+3.) You can create valid passwords using "sudo passwd [username]" from the
     shell, individually.
-
-GRML squashfs file
-==================
-
-The GRML squashfs file has been moved from /GRML/GRML to
-/live/grml.squashfs due to the use of live-initramfs.
