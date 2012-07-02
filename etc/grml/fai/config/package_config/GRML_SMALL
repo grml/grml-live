@@ -25,6 +25,8 @@ e2fsprogs
 ed
 ethtool
 findutils
+firmware-bnx2
+firmware-bnx2x
 grml-paste
 grml-quickconfig-standard
 htop
