@@ -301,6 +301,7 @@ w3m
 wget
 
 # X
+epdfview
 fluxbox
 grml-desktop
 grml-x
