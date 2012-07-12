@@ -11,7 +11,7 @@ set -e
 # use snapshot.debian.org based on build date for release
 if ifclass RELEASE ; then
   set -u
-  perl -pi -e 'BEGIN { $d="'$(date +%Y%m%d)'"; } s#^(\s+)(deb.* )(.*://http.debian.net.*?)\s+(\w+)\s+(.*)$#$1$2http://snapshot.debian.org/archive/debian/$d/ $4 $5#' \
+  perl -pi -e 'BEGIN { $d="'$(date +%Y%m%d)'"; } s#^(\s+)(deb.* )(.*://cdn.*?)\s+(\w+)\s+(.*)$#$1$2http://snapshot.debian.org/archive/debian/$d/ $4 $5#' \
     "${target}/etc/apt/sources.list.d/debian.list"
 
 fi
