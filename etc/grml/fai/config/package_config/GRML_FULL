@@ -184,6 +184,7 @@ mosh
 mtr-tiny
 netbase
 netcat-openbsd
+netsniff-ng
 net-tools
 nmap
 rfkill
