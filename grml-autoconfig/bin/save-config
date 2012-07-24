@@ -14,17 +14,27 @@
 # }}}
 
 # set variables  {{{
-
-  # old linuxrc version:
-  [ -d /cdrom ]      && OLDLAYOUT=1 || OLDLAYOUT=''
-  # new initramfs layout:
-  [ -d /live/image ] && NEWLAYOUT=1 || NEWLAYOUT=''
-
   LANG=C
   LC_ALL=C
-  [[ $(id -u) != 0 ]] && runas='sudo' # important for /etc
+  [[ $UID != 0 ]] && runas='sudo' # important for /etc
 
-  check4progs tar || { echo "Sorry, can't continue. Exiting.">&2 ; exit 1 }
+  if [ -d /live/overlay ] ; then
+    CHANGE_DIR='/live/overlay'
+  elif [ -d /live/image ] ; then # old version
+    CHANGE_DIR='/live/image'
+  else
+    echo "Error: no overlay directories found (neither /live/overlay nor /live/image)." >&2
+    bailout; exit 1
+  fi
+
+  if [ -d /live/rofs ] ; then
+    ORIG_DIR="$(find /live/rofs/ -maxdepth 1 -name \*.squashfs | head -1)"
+  else # old version
+    ORIG_DIR="/GRML"
+  fi
+
+  check4progs mutt &>/dev/null || echo "Warning, mutt not available for mail handling.">&2
+  check4progs tar || { echo "Sorry, can't continue. Exiting.">&2 ; bailout ; exit 1 }
 
   CONFIG=/etc/grml/saveconfig
   [ -r "$CONFIG" ] && . $CONFIG
@@ -35,8 +45,8 @@
   GRML_VERSION=$(awk '{print $1}' /etc/grml_version 2>/dev/null || print "not a grml system")
   KERNEL=$(uname -a)
 
-  TMPDIR=/tmp
-  MAILFILE="$TMPDIR/mail.txt"
+  TMPDIR='/tmp'
+  MAILFILE="${TMPDIR}/mail.txt"
 
   [ -n "$FILELIST" ] || FILELIST=$(mktemp $TMPDIR/filelist.XXXXXX)
 # }}}
@@ -50,24 +60,22 @@ debug(){
 # set -x
 }
 
-findchanged() {
-  [ -n "$1" ] || return 1
-
-  if [ -d "$1" ]; then
-    for i in $(cd "$1"; find . -type f 2>/dev/null | sed 's,^\./,,g' | grep -v ' '); do
-      cmp -s "$1/$i" "$2/$i" || echo "$1/$i"
-    done
-  elif [ -e "$1" ]; then
-    cmp -s "$1" "$2" || echo "$1"
-  fi
-}
-
 bailout(){
   rm -f "$FILELIST"
   rm -f "$MAILFILE"
 }
 
 trap bailout 1 2 3 15
+
+findchanged() {
+  if [ -d "$1" ]; then
+    for i in `(cd "$1"; find . -type f 2>/dev/null | sed 's,^\./,,g' | grep -v ' ' )`; do
+      cmp -s "$1/$i" "$2/$i" || echo "$1/$i"
+    done
+  elif [ -e "$1" ]; then
+    cmp -s "$1" "$2" || echo "$1"
+  fi
+}
 # }}}
 
 # usage information {{{
@@ -133,9 +141,9 @@ save_grmlhome(){
 save_etc(){
   debug "save etc"
   if [ -n "$NEWLAYOUT" ] ; then
-     $runas find /live/cow/etc -type f -o -type l | sed -e 's#/live/cow## ; /etc$/d' >> $FILELIST
+     $runas find "${CHANGE_DIR}/etc" | sed -e "s#${CHANGE_DIR}## ; /etc$/d" >> $FILELIST
   else
-     $runas findchanged /etc /GRML/etc >> $FILELIST
+     $runas findchanged /etc "${ORIG_DIR}/etc" >> $FILELIST
   fi
 }
 
@@ -146,20 +154,24 @@ save_configdir(){
      ls $HOME/config/.* >> $FILELIST 2>/dev/null
   fi
 }
+# }}}
 
 # create configuration file {{{
 create_config(){
   if ! [ -r "$FILELIST" ]; then
-     echo "Sorry, filelist $FILELIST could not be read." >&2
-     echo "Error when generating $FILENAME." >&2
-     exit 1
+    echo "Filelist $FILELIST could not be read." >&2
+    echo "Error when generating $FILENAME." >&2
+    bailout ; exit 1
   else
-     # GNU tar sucks so much, really. Avoid the "file changed as we read it":
-     tar cf /dev/null /etc 2>/dev/null
-     # now really execute the according tar command:
-     BZIP2=-9 $runas tar -T - -cpPjf "$FILENAME" <"$FILELIST" && \
-     echo "Successfully stored configuration in file $FILENAME"   || \
-     echo "Error when generating $FILENAME." >&2
+    # GNU tar sucks so much, really. Avoid the "file changed as we read it":
+    tar cf /dev/null /etc
+    # now really execute the according tar command:
+    if BZIP2=-9 $runas tar -T - -cpPjf "$FILENAME" <"$FILELIST" ; then
+      echo "Successfully stored configuration in file $FILENAME"
+    else
+      echo "Error when generating $FILENAME." >&2
+      bailout ; exit 1
+    fi
   fi
 }
 # }}}
@@ -215,7 +227,7 @@ parse_options()
    fi
 
    if [[ "$o_mail" != "" ]]; then
-      check4progs mutt || { echo "Sorry, mutt not available for sending mail. Exiting.">&2 ; exit 1 ; }
+      check4progs mutt || { echo "Sorry, mutt not available for sending mail. Exiting.">&2 ; exit 1 }
       recipient=$o_mail[2]
       debug "send mail to $recipient"
       echo "Created on $DATE on host $HOSTNAME running grml $GRML_VERSION" > $MAILFILE
@@ -225,36 +237,34 @@ parse_options()
 parse_options $*
 # }}}
 
+# execution wrapper {{{
 runit(){
    if [[ $SAVE_HOME == "yes" ]]; then
      debug "running save_home"
      save_home
      SETSAVE=1
    fi
-
    if [[ $SAVE_GRMLHOME == "yes" ]]; then
      debug "running save_grmlhome"
      save_grmlhome
      SETSAVE=1
    fi
-
    if [[ $SAVE_ETC == "yes" ]] ; then
      debug "running save_etc"
      save_etc
      SETSAVE=1
    fi
-
    if [[ $SAVE_CONFIGDIR == "yes" ]] ; then
      debug "running save_configdir"
      save_configdir
      SETSAVE=1
    fi
-
    if [ -z $SETSAVE ] ; then
-     echo "Sorry, you did not select any configuration which should be saved. Exiting.">&2
-     exit 1
+     echo "Sorry, you did not select any configuration which should be saved. Exiting."
+     bailout ; exit 1
    fi
 }
+# }}}
 
 # now run it
   runit
