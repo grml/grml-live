@@ -1,3 +1,10 @@
+grml-autoconfig (0.9.55) grml-testing; urgency=low
+
+  * [b429b30] save-config: Adjust for working with current Grml versions
+    [Testing: issue1188]
+
+ -- Michael Prokop <mika@grml.org>  Tue, 24 Jul 2012 12:45:06 +0200
+
 grml-autoconfig (0.9.54) grml-testing; urgency=low
 
   * [e984a87] tests/test_debs.sh: verify that autoconfig.functions
