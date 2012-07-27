@@ -333,7 +333,7 @@ while getopts "a:C:c:d:D:e:g:i:I:o:r:s:t:U:v:AbBFhnNqQuVz" opt; do
     U) CHOWN_USER="$OPTARG" ;;
     V) VERBOSE="-v" ;;
     z) SQUASHFS_ZLIB=1 ;;
-    ?) echo "invalid option -$OPTARG" >&2; bailout 1 ;;
+    ?) echo "invalid option -$OPTARG" >&2; usage; bailout 1 ;;
   esac
 done
 shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
