@@ -337,6 +337,11 @@ while getopts "a:C:c:d:D:e:g:i:I:o:r:s:t:U:v:AbBFhnNqQuVz" opt; do
   esac
 done
 shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
+
+if [ -n "$1" ] ; then
+  echo "Error: unknown argument '$1' in options. Exiting to avoid possible data loss." >&2
+  bailout 1
+fi
 # }}}
 
 # read local (non-packaged) configuration {{{
