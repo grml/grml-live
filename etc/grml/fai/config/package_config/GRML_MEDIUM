@@ -50,7 +50,7 @@ firmware-iwlwifi
 firmware-ralink
 firmware-realtek
 fluxbox
-fuse-utils
+fuse
 gddrescue
 genext2fs
 grml-debugtools

@@ -206,7 +206,7 @@ wvdial
 
 # network transfers
 ca-certificates
-fuse-utils
+fuse
 lftp
 nfs-kernel-server
 partimage
