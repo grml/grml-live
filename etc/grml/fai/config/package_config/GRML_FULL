@@ -194,6 +194,7 @@ slurm
 snmp
 socat
 ssh
+ssmping
 tcpdump
 tcptraceroute
 telnet
