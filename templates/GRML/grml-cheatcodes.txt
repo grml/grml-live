@@ -63,7 +63,7 @@ grml file=foobar.tbz                Use specified file as name for configuration
                                     instead of the default one (config.tbz)
 grml extract=/etc                   Extract only /etc from configuration archive,
                                     use it in combination with myconfig or netconfig
-grml persistent                     Enable persistency feature, more details available at
+grml persistence                    Enable persistency feature, more details available at
                                     http://wiki.grml.org/doku.php?id=persistency
 grml hostname=...                   Set hostname to given argument
 grml hostname                       Set a random hostname
