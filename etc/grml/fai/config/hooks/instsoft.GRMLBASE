@@ -48,6 +48,13 @@ EOF
      $ROOTCMD ln -s /bin/true /usr/sbin/update-grub
    fi
 
+   # work around a bug which causes openvz to freeze when grub-probe is invoked
+   if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/grub-probe' ; then
+     echo "Diverting grub-probe executable"
+     $ROOTCMD dpkg-divert --rename --add /usr/sbin/grub-probe
+     $ROOTCMD ln -s /bin/true /usr/sbin/grub-probe
+   fi
+
   # newer aptitude versions won't remove essential packages using
   # 'aptitude -f -y install file-rc' anymore, therefore force it:
   $ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc
@@ -82,6 +89,21 @@ fi
 
 # no softupdate but fresh installation
 echo "Action $FAI_ACTION of FAI (hooks/instsoft.GRMLBASE) via grml-live running"
+
+# work around /etc/kernel/postinst.d/zz-update-grub failing
+# inside openvz environment, see #597084
+if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/update-grub' ; then
+  echo "Diverting update-grub executable"
+  $ROOTCMD dpkg-divert --rename --add /usr/sbin/update-grub
+  $ROOTCMD ln -s /bin/true /usr/sbin/update-grub
+fi
+
+# work around a bug which causes openvz to freeze when grub-probe is invoked
+if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/grub-probe' ; then
+  echo "Diverting grub-probe executable"
+  $ROOTCMD dpkg-divert --rename --add /usr/sbin/grub-probe
+  $ROOTCMD ln -s /bin/true /usr/sbin/grub-probe
+fi
 
 # make sure we have file-rc available before package_config/GRML* is being executed {{{
 # the apt-get update might return an error if there's for example

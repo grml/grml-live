@@ -35,6 +35,14 @@ if $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/update-grub' ; then
   $ROOTCMD dpkg-divert --rename --remove /usr/sbin/update-grub
 fi
 
+# revert dpkg-divert of hooks/instsoft.GRMLBASE, which is
+# used to work around a grub-probe<->openvz bug
+if $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/grub-probe' ; then
+  echo "Undoing dpkg-divert of grub-probe executable"
+  $ROOTCMD rm -f /usr/sbin/grub-probe
+  $ROOTCMD dpkg-divert --rename --remove /usr/sbin/grub-probe
+fi
+
 # revert udev workaround of hooks/updatebase.GRMLBASE
 if grep -q 'updatebase.GRMLBASE' ${target}/etc/udev/kernel-upgrade 2>/dev/null ; then
   echo "Removing /etc/udev/kernel-upgrade created by updatebase.GRMLBASE"
