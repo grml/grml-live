@@ -1,3 +1,24 @@
+grml-live (0.19.6) unstable; urgency=low
+
+  The "jenkins-debian-glue" release
+
+  * [59296d8] Revert "Replace cdn.debian.net with http.debian.net"
+    until #685192 ("apt: redirection handling changes in 0.9.4 may break
+    aptitude") has been resolved
+  * [1584694] Display usage information if any unknown cmdline option is
+    used
+  * [644f7bd] Do not accept any command line arguments we can't handle
+
+  * Software related changes:
+    - [b888dd3] SW: add netsniff-ng to GRML_FULL [Closes: issue1197]
+    - [4e4a05a] SW: drop ddrescue from GRML_MEDIUM and GRML_SMALL (removed
+      from Debian, see #677101)
+    - [7dd680b] SW: add gddrescue to GRML_SMALL
+    - [15918cd] SW: replace fuse-utils with fuse
+    - [5c1e272] SW: add ssmping to GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Mon, 27 Aug 2012 15:32:12 +0200
+
 grml-live (0.19.5) unstable; urgency=low
 
   The "Stockholm" release
