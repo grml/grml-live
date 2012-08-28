@@ -119,11 +119,6 @@ fi
 $ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc
 # }}}
 
-# get rid of insserv:
-if $ROOTCMD dpkg --list insserv 2>/dev/null | grep -q '^ii' ; then
-   $ROOTCMD apt-get -y --purge remove insserv
-fi
-
 # we definitely don't want to fail running fai dirinstall just
 # because of some well known bugs:
 [ -d $target/etc/apt/apt.conf.d ] || mkdir $target/etc/apt/apt.conf.d
