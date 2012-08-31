@@ -339,7 +339,3 @@ linux-image-i386-grml
 
 PACKAGES aptitude AMD64
 linux-image-amd64-grml
-
-PACKAGES aptitude AMD64
-ia32-libs
-
