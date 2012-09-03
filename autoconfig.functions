@@ -2149,7 +2149,7 @@ fi # checkbootparam "BOOT_IMAGE=debian2hd
 config_virtualbox_shared_folders() {
 if [ -r /proc/acpi/battery/BAT0/info ] && grep -q 'OEM info:.*innotek' /proc/acpi/battery/BAT0/info ; then
   einfo "VirtualBox detected, trying to set up Shared Folders."
-  if ! modprobe -l | grep -q vboxsf.ko ; then
+  if ! modinfo vboxsf &>/dev/null ; then
     ewarn "vboxsf driver not present, not setting up VirtualBox Shared Folders."
     eend 0
   elif ! [ -x /usr/sbin/VBoxService ] ; then
