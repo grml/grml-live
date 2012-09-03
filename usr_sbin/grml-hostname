@@ -37,6 +37,20 @@ else
   retval=0
 fi
 
+# stupid + simplified checking for valid hostname (according to RFC 952)
+VALIDATE=$(echo "$NEW_HOSTNAME" | tr --delete '[:alnum:]-')
+if [ -n "$VALIDATE" ] ; then
+  if [ -z "$NONINTERACTIVE" ] ; then
+    dialog --title "${PN}" \
+      --msgbox "Error: invalid characters specified in hostname: '$VALIDATE' can not be used inside hostnames." \
+      0 0
+    exec "$0"
+  else
+    echo "Error: invalid characters specified in hostname: '$VALIDATE' can not be used inside hostnames." >&2
+    exit 1
+  fi
+fi
+
 case $retval in
   0)
      echo "$NEW_HOSTNAME" > /etc/hostname
