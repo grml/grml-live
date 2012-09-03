@@ -130,6 +130,23 @@ INSTALLED=""
 [ -e /etc/grml_cd ] || INSTALLED="yes"
 # }}}
 
+# {{{ provide information about virtual environments
+VIRTUAL=false # assume physical system by default
+KVM=false
+VIRTUALBOX=false
+VMWARE=false
+
+if vmware-detect &>/dev/null; then
+  VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware'
+elif [ "$(virt-what 2>/dev/null)" = "kvm" ] || \
+   [ "$(imvirt 2>/dev/null)" = "KVM" ] ; then
+  VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM'
+elif [ "$(virt-what 2>/dev/null)" = "virtualbox" ] || \
+   [ "$(imvirt 2>/dev/null)" = "VirtualBox" ] ; then
+  VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox'
+fi
+# }}}
+
 # {{{ source lsb-functions , color handling
 if checkbootparam 'nocolor'; then
   RC_NOCOLOR=yes
@@ -483,20 +500,24 @@ config_time(){
 
 # {{{ print kernel info
 config_kernel(){
-  vmware-detect &>/dev/null && VMWARE="inside ${WHITE}VMware/Qemu${NORMAL}"
-  [ -d /proc/xen ] && VMWARE='' # vmware-detect returns '0' when running with a Xen-enabled kernel
-  einfo "Running Linux Kernel $KERNEL $VMWARE" ; eend 0
-  if [ -r /proc/cpuinfo ] ; then
-     if egrep -q '^flags.*(vmx|svm)' /proc/cpuinfo ; then
-       eindent
-       einfo 'CPU(s) featuring virtualization technology detected' ; eend 0
-       eoutdent
-     fi
+  if $VIRTUAL ; then
+    einfo "Running Linux Kernel $KERNEL $VMWARE" ; eend 0
+  else
+    einfo "Running Linux Kernel $KERNEL inside $VIRTUAL_ENV" ; eend 0
   fi
+
+  if [ -r /proc/cpuinfo ] ; then
+    if egrep -q '^flags.*(vmx|svm)' /proc/cpuinfo ; then
+      eindent
+      einfo 'CPU(s) featuring virtualization technology detected' ; eend 0
+      eoutdent
+    fi
+  fi
+
   if [ -d /proc/xen ] ; then
-     eindent
-     einfo 'Running kernel featuring support for Xen detected' ; eend 0
-     eoutdent
+    eindent
+    einfo 'Running kernel featuring support for Xen detected' ; eend 0
+    eoutdent
   fi
 }
 # }}}
@@ -989,7 +1010,7 @@ else
 fi
 
 # no cpufreq setup inside VirtualBox
-if [ -r /proc/acpi/battery/BAT0/info ] && grep -q 'OEM info:.*innotek' /proc/acpi/battery/BAT0/info ; then
+if $VIRTUALBOX ; then
    einfo 'Virtual Box detected, skipping cpufreq setup.' ; eend 0
    return 0
 fi
@@ -2147,7 +2168,7 @@ fi # checkbootparam "BOOT_IMAGE=debian2hd
 # }}}
 
 config_virtualbox_shared_folders() {
-if [ -r /proc/acpi/battery/BAT0/info ] && grep -q 'OEM info:.*innotek' /proc/acpi/battery/BAT0/info ; then
+if $VIRTUALBOX ; then
   einfo "VirtualBox detected, trying to set up Shared Folders."
   if ! modinfo vboxsf &>/dev/null ; then
     ewarn "vboxsf driver not present, not setting up VirtualBox Shared Folders."
