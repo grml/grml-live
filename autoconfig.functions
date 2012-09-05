@@ -690,40 +690,44 @@ config_fix_passwd(){
 # {{{ CD Checker
 config_testcd(){
 if checkbootparam 'testcd' ; then
-   einfo "Checking CD data integrity as requested by '${WHITE}testcd${NORMAL}' boot option."
+  einfo "Checking CD data integrity as requested by '${WHITE}testcd${NORMAL}' boot option."
+  eindent
 
-   ERROR=0
-   FOUND_FILE=0
+  local ERROR=true
+  local FOUND_FILE=false
+  local logfile='/tmp/md5sum.log'
 
-   rm -f /tmp/md5sum.log
-   for md5 in $(find "${LIVECD_PATH}" -name md5sums) ; do
-      einfo "Checking files against $md5, this may take a while..."
+  rm -f "$logfile"
 
-      FOUND_FILE=1
-      ( cd $(dirname "$md5") && md5sum -c $(basename "$md5") ; RC=$?)  |& tee -a /tmp/md5sum.log
+  for md5 in $(find "${LIVECD_PATH}" -name md5sums) ; do
+    einfo "Checking files against $md5, this may take a while..."
 
-      if [ $RC -ne 0 ] ; then
-         ERROR=1
-      fi
-   done
+    FOUND_FILE=true
+    OLD_PWD=$(pwd)
+    cd $(dirname "$md5")
+    md5sum -c $(basename "$md5") |& tee -a "${logfile}"
+    if [ $pipestatus[1] -eq 0 ] ; then
+      ERROR=false
+    fi
+    cd "${OLD_PWD}"
+  done
 
-   if [ $FOUND_FILE -eq 0 ] ; then
-      echo "${RED} *** Error: Could not find md5sum file.                           ***"
-      return
-   fi
+  if ! $FOUND_FILE ; then
+    eerror 'Error: Could not find md5sum file' ; eend 1
+    return
+  fi
 
-   if [ "$ERROR" -eq 0 ]; then
-      einfo "Everything looks OK" ; eend 0
-   else
-      eerror 'Checksum failed for theses files:' ; eend 1
-      egrep -v '(^md5sum:|OK$)' /tmp/md5sum.log
-      eerror 'Data on the grml medium is possibly incomplete/damaged or...'
-      eerror '... RAM of your computer is broken.' ; eend 1
-      einfon "Hit return to continue, or press the reset button to quit."
-     read a
-   fi
+  if ! $ERROR ; then
+    einfo "Everything looks OK" ; eend 0
+  else
+    eerror 'Checksum failed for theses files:' ; eend 1
+    egrep -v '(^md5sum:|OK$)' "${logfile}"
+    eerror 'Data on the medium is possibly incomplete/damaged or RAM of your system is broken.' ; eend 1
+    einfon "Hit return to continue, or press the power button to shut down system."
+    read a
+  fi
 
-   eend 0
+  eoutdent
 fi
 }
 # }}}
