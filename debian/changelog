@@ -1,3 +1,10 @@
+grml-autoconfig (0.9.57) grml-testing; urgency=low
+
+  * [a0b548a] Fix return code handling of config_testcd() + slightly
+    refactor code
+
+ -- Michael Prokop <mika@grml.org>  Wed, 05 Sep 2012 12:42:23 +0200
+
 grml-autoconfig (0.9.56) grml-testing; urgency=low
 
   * [ac91105] Replace 'modprobe -l' command with modinfo(8) command line.
