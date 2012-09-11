@@ -1,3 +1,15 @@
+grml-live (0.19.7) unstable; urgency=low
+
+  * [c92e94e] dpkg-divert grub-probe binary to avoid problems in OpenVZ
+    environments
+  * [a694752] Drop insserv removal from instsoft.GRMLBASE hook script
+  * [c551747] Store md5sum of all files being available in build output
+    directory
+  * Software related changes:
+    - [b3947fe] drop ia32-libs from GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Tue, 11 Sep 2012 15:11:13 +0200
+
 grml-live (0.19.6) unstable; urgency=low
 
   The "jenkins-debian-glue" release
