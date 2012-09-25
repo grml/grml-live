@@ -1121,6 +1121,22 @@ if checkbootparam 'ssh' ; then
    eoutdent
 fi
 }
+
+# }}}
+
+# {{{ display hostkeys of SSH server
+config_display_ssh_fingerprints() {
+  if ! find /etc/ssh/ -name ssh_host_\*_key >/dev/null 2>&1 ; then
+    return 0 # no SSH host keys present
+  fi
+
+  einfo "SSH key fingerprints:"
+  for file in /etc/ssh/ssh_host_*_key ; do
+    einfon
+    ssh-keygen -l -f $file
+  done | column -t
+  eend $?
+}
 # }}}
 
 # {{{ autostart of x11vnc
@@ -1473,6 +1489,7 @@ config_stats() {
  fi
 }
 # }}}
+
 # {{{ fix/workaround for unionfs
 fix_unionfs(){
   if [ -z "$INSTALLED" ]; then
