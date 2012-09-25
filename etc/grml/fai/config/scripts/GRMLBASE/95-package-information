@@ -21,6 +21,23 @@ else
       $ROOTCMD dpkg-query -W --showformat='${Package}\t${Installed-Size}\n' > \
       "${LOGDIR}"/packages.size
    fi
+   # store a list of non-free packages and their licenses
+   if $ROOTCMD test -x /usr/bin/aptitude ; then
+      echo "The following packages from the Debian non-free section are included in this release" \
+         > "${LOGDIR}"/nonfree-licenses.txt
+      echo >> "${LOGDIR}"/nonfree-licenses.txt
+      for pkg in `$ROOTCMD aptitude search '~i ~snon-free' -F '%p'` ; do
+         echo "Package: ${pkg}" >> "${LOGDIR}"/nonfree-licenses.txt
+         echo "========================================================================" \
+            >> "${LOGDIR}"/nonfree-licenses.txt
+         if $ROOTCMD test -r "/usr/share/doc/${pkg}/copyright" ; then
+            $ROOTCMD cat "/usr/share/doc/${pkg}/copyright" >> "${LOGDIR}"/nonfree-licenses.txt
+         else
+            echo "${pkg} does not provide a copyright file" >> "${LOGDIR}"/nonfree-licenses.txt
+         fi
+         echo >> "${LOGDIR}"/nonfree-licenses.txt
+      done
+   fi
 fi
 
 ## END OF FILE #################################################################
