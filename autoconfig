@@ -57,6 +57,7 @@ CONFIG_DEBOOTSTRAP='yes'      # support automatic installation of Debian via grm
 CONFIG_DEBNET='yes'           # search for /etc/network/interfaces on partitions and set up network afterwards
 CONFIG_DEBS='yes'             # check for bootoption debs for installing .debs
 CONFIG_DEBUG='yes'            # activate start of shells during startup at several stages
+CONFIG_DISPLAY_SSH_FINGERPRINTS='yes' # display SSH server key fingerprints
 CONFIG_DISTCC='yes'           # activate and setup distcc through bootparam distcc=$NETWORK,$INTERFACE
 CONFIG_DISTRI='yes'           # support some customization via bootoption distri
 CONFIG_DMA='yes'              # Enable DMA for all IDE drives
