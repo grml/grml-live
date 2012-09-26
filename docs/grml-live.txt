@@ -205,9 +205,9 @@ Specify name of the release.
 
 Specify the Debian suite you want to use for your live-system.  Defaults to
 "squeeze" (being current Debian/stable). Supported values are: etch, lenny,
-squeeze, sid. Debian "squeeze" requires a recent base.tgz
-(${GRML_FAI_CONFIG}/config/basefiles/$CLASSNAME.tar.gz) or a recent version of
-debootstrap.
+squeeze, wheezy, sid. Please be aware that recent Debian suites might require a
+recent base.tgz (${GRML_FAI_CONFIG}/config/basefiles/$CLASSNAME.tar.gz) or a
+recent version of debootstrap.
 
   -t **TEMPLATE_DIRECTORY**::
 
