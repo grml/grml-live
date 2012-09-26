@@ -30,6 +30,7 @@ gddrescue
 grml-paste
 grml-quickconfig-standard
 htop
+ifenslave-2.6
 ifupdown
 imvirt
 iproute
@@ -39,8 +40,8 @@ isc-dhcp-client
 iw
 jfsutils
 kexec-tools
-libnss-myhostname
 lftp
+libnss-myhostname
 lilo
 links
 lrzsz

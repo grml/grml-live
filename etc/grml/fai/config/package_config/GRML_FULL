@@ -166,6 +166,7 @@ firmware-qlogic
 firmware-ralink
 firmware-realtek
 hostapd
+ifenslave-2.6
 iftop
 ifupdown
 ipcalc
