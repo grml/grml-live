@@ -1570,6 +1570,7 @@ DCSMP="/mnt/grml"
 GRMLCFG="$(getbootparam 'autoconfig' 2>>$DEBUG)"
 [ -n "$GRMLCFG" ] || GRMLCFG="GRMLCFG"
 if checkbootparam 'noautoconfig' || checkbootparam 'forensic' ; then
+  DCSDIR="/live/image" # set default so it works for "scripts" boot option as expected
   ewarn "Skipping running automount of device(s) labeled $GRMLCFG as requested." ; eend 0
 else
   if [ -z "$INSTALLED" ] ; then
