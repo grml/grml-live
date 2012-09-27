@@ -1703,7 +1703,7 @@ if checkbootparam 'scripts' || [ "$DCSMP" = "/mnt/grmlcfg" ]; then
        sh -c $SCRIPTS
      elif [ -d "$SCRIPTS" ]; then
        einfo "Bootparameter scripts found. Trying to execute from directory ${SCRIPTS}:"
-       run-parts $SCRIPTS
+       run-parts --regex '.*' $SCRIPTS
      else
        einfo "Bootparameter scripts found. Trying to execute ${SCRIPTS}:"
        sh -c $SCRIPTS
