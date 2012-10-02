@@ -1126,7 +1126,7 @@ fi
 
 # {{{ display hostkeys of SSH server
 config_display_ssh_fingerprints() {
-  if ! find /etc/ssh/ -name ssh_host_\*_key >/dev/null 2>&1 ; then
+  if ! ls /etc/ssh/ssh_host_\*_key >/dev/null 2>&1 ; then
     return 0 # no SSH host keys present
   fi
 
