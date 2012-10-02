@@ -1,3 +1,12 @@
+grml-autoconfig (0.9.59) grml-testing; urgency=low
+
+  * [ba59a33] Drop unused aumix from Recommends
+  * [1dc85ae] config_display_ssh_fingerprints: adjust check for present
+    host keys
+  * [d34871f] Bump Standards-Version to 3.9.4
+
+ -- Michael Prokop <mika@grml.org>  Tue, 02 Oct 2012 10:00:36 +0200
+
 grml-autoconfig (0.9.58) grml-testing; urgency=low
 
   * [12e47ae] Display SSH server key fingerprints. Thanks to Peter
