@@ -148,9 +148,8 @@ fi
 # source main configuration file:
 LIVE_CONF=/etc/grml/grml-live.conf
 if ! [ -r "$LIVE_CONF" ] ; then
-  log "Configuration file $LIVE_CONF can not be read, ignoring"
+  ewarn "Configuration file $LIVE_CONF can not be read, ignoring"
 else
-  log   "Sourcing configuration file $LIVE_CONF"
   einfo "Sourcing configuration file $LIVE_CONF"
   . $LIVE_CONF
   eend $?
