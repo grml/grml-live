@@ -1,3 +1,13 @@
+grml-udev-config (0.3.0) unstable; urgency=low
+
+  * [cc5cfdb] Do not set mount options for NTFS partitions to "ro" any
+    longer
+  * [213795f] NTFS-3g/FAT: don't use umask=000 but dmask=000,fmask=111
+    instead
+  * [a3f9853] Bump Standards-Version to 3.9.4
+
+ -- Michael Prokop <mika@grml.org>  Tue, 09 Oct 2012 19:00:09 +0200
+
 grml-udev-config (0.2.0) unstable; urgency=low
 
   * [e403a71] Use /media instead of /mnt for default mount paths
