@@ -241,10 +241,10 @@ fi
 options=noauto,user,dev,suid,exec
 case $ID_FS_TYPE in
 ntfs)
-        options=$options,umask=000
+        options=$options,dmask=000,fmask=111
         ;;
 vfat|msdos)
-        options=$options,umask=000
+        options=$options,dmask=000,fmask=111
         ;;
 ufs)
         options=$options,ro
