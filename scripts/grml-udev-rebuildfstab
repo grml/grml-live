@@ -241,7 +241,7 @@ fi
 options=noauto,user,dev,suid,exec
 case $ID_FS_TYPE in
 ntfs)
-        options=$options,ro,umask=000
+        options=$options,umask=000
         ;;
 vfat|msdos)
         options=$options,umask=000
