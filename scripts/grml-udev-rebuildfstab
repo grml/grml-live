@@ -53,10 +53,6 @@ if grep -q " nofstab" /proc/cmdline ; then
    bailout 0
 fi
 
-grep -q 'nolabel' /proc/cmdline && NOLABEL='TRUE' || LABEL='TRUE'
-
-
-
 if [ "$CONFIG_FSTAB" = "no" ] ; then
     bailout 0
 fi
@@ -65,6 +61,26 @@ fi
 if grep -q ' $MOUNTPOINT_PREFIX ' /proc/mounts ; then
    logit '$MOUNTPOINT_PREFIX is a mounted directory, exiting.'
    bailout 1
+fi
+
+LABEL=true # by default use labels
+
+if [ -r /etc/grml/rebuildfstab.conf ] ; then
+  logit 'Reading /etc/grml/rebuildfstab.conf'
+  . /etc/grml/rebuildfstab.conf
+
+  if [ "$LABEL" = "false" ] ; then
+    logit 'Disabling LABEL=... in /etc/fstab as requested via LABEL=false'
+  fi
+fi
+
+# support overriding via boot option
+if grep -q ' nolabel' /proc/cmdline ; then
+  LABEL=false
+fi
+
+if grep -q ' label' /proc/cmdline ; then
+  LABEL=true
 fi
 
 # default directories {{{
@@ -145,7 +161,7 @@ iso9660)
 break;
 ;;
 *)
-if [ -n "$LABEL" ]  && [ -n "$ID_FS_LABEL_ENC" ] ; then
+if "$LABEL" && [ -n "$ID_FS_LABEL_ENC" ] ; then
   # see check_for_label() in scanpartitions for details
   case $ID_FS_LABEL_ENC in
     *\x*)
