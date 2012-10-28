@@ -1,3 +1,12 @@
+grml-udev-config (0.3.1) unstable; urgency=low
+
+  * [ba3c9a1] grml-udev-rebuildfstab: support diabling labels via
+    /etc/grml/rebuildfstab.conf
+  * [5d4fd63] grml-udev-rebuildfstab: write label name into comment when
+    label feature is disabled
+
+ -- Michael Prokop <mika@grml.org>  Sun, 28 Oct 2012 12:28:59 +0100
+
 grml-udev-config (0.3.0) unstable; urgency=low
 
   * [cc5cfdb] Do not set mount options for NTFS partitions to "ro" any
