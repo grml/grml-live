@@ -1,3 +1,14 @@
+grml-desktop (0.4.0) unstable; urgency=low
+
+  [ Frank Terbeck ]
+  * [9d29286] To NOT terminate the X server when shift-backspace is
+    pressed
+
+  [ Michael Prokop ]
+  * [4146a6f] Bump Standards-Version to 3.9.4
+
+ -- Michael Prokop <mika@grml.org>  Sun, 28 Oct 2012 12:46:27 +0100
+
 grml-desktop (0.3.14) unstable; urgency=low
 
   [ Ulrich Dangel ]
