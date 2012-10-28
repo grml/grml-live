@@ -165,7 +165,7 @@ if "$LABEL" && [ -n "$ID_FS_LABEL_ENC" ] ; then
   # see check_for_label() in scanpartitions for details
   case $ID_FS_LABEL_ENC in
     *\x*)
-      addinfo=" # special char in label ($ID_FS_LABEL_ENC) not supported"
+      logit "special char in label ($ID_FS_LABEL_ENC) not supported, skipping label for $DEVNAME"
       break ;;
     *)
       echo "LABEL=$ID_FS_LABEL_ENC"
@@ -276,12 +276,20 @@ ntfs|vfat|msdos)
         ;;
 esac
 
+# when we don't use labels then write the label information into the comment
+if ! "$LABEL" && [ -n "$ID_FS_LABEL_ENC" ] ; then
+  addinfo="# LABEL=$ID_FS_LABEL_ENC"
+  devinfo=""
+else # otherwise (when using labels) write the device name into the comment
+  devinfo="# $DEVNAME"
+fi
+
 case $ACTION in
 add|change)
 (
     flock -x 200
     echo "$ADDEDBYGRML $DEVNAME" >> /etc/fstab
-    echo "$device $mountpoint $ID_FS_TYPE $options 0 0 $addinfo # $DEVNAME" >> /etc/fstab
+    echo "$device $mountpoint $ID_FS_TYPE $options 0 0 ${addinfo}${devinfo}" >> /etc/fstab
 ) 200>/var/run/rebuildfstab.lock
 
 
