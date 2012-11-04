@@ -42,9 +42,9 @@ if [ -z "$CMDLINE" ]; then
   [ -d /live/image/bootparams/ ] && CMDLINE="$CMDLINE $(cat /live/image/bootparams/* | tr '\n' ' ')"
   modprobe 9p 2>/dev/null || true
   if grep -q 9p /proc/filesystems ; then
-      local TAG="grml-parameters"
+      TAG="grml-parameters"
       if grep -q "$TAG" /sys/bus/virtio/devices/*/mount_tag 2>/dev/null ; then
-          local MOUNTDIR="$(mktemp -d)"
+          MOUNTDIR="$(mktemp -d)"
           mount -t 9p -o trans=virtio,ro "$TAG" "$MOUNTDIR"
           CMDLINE="$CMDLINE $(cat "$MOUNTDIR"/* 2>/dev/null | tr '\n' ' ')"
           umount "$MOUNTDIR"
