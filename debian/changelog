@@ -1,3 +1,9 @@
+grml-autoconfig (0.9.60) grml-testing; urgency=low
+
+  * [ad36d36] CMDLINE handling: do not use 'local' outside a function
+
+ -- Michael Prokop <mika@grml.org>  Sun, 04 Nov 2012 12:14:55 +0100
+
 grml-autoconfig (0.9.59) grml-testing; urgency=low
 
   * [ba59a33] Drop unused aumix from Recommends
