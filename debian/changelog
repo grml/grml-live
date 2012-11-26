@@ -1,3 +1,24 @@
+grml-live (0.19.8) unstable; urgency=low
+
+  [ Michael Prokop ]
+  * [a67febf] New persistency mode is used via boot option "persistence"
+    instead of "persistent"
+  * [2897f72] persistency boot option: mention full-ov + custom-ov in help
+    text
+  * [fb6d430] docs: update list of supported Debian suites
+  * [9c4a691] Source /etc/grml/grml-live.conf only if it can be read.
+    Thanks to Evgeni Golov for reporting
+  * [2723ba9] drop log call when trying to source /etc/grml/grml-live.conf
+  * Software related changes:
+    - [b343411] add ifenslave-2.6 to GRML_FULL and GRML_SMALL
+    - [ca66f69] add uuid-runtime to GRMLBASE [Closes: issue1218]
+      Thanks to Raoul <raoul@bhatia.at> for the feature request
+
+  [ Evgeni Golov ]
+  * [64025b9] create a list of non-free packages and their licenses
+
+ -- Michael Prokop <mika@grml.org>  Mon, 26 Nov 2012 15:09:38 +0100
+
 grml-live (0.19.7) unstable; urgency=low
 
   * [c92e94e] dpkg-divert grub-probe binary to avoid problems in OpenVZ
