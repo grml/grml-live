@@ -48,6 +48,7 @@ rsyslog
 strace
 udev
 usbutils
+uuid-runtime
 vlock
 wireless-tools
 wpasupplicant
