@@ -6,6 +6,13 @@
 # License:       This file is licensed under the GPL v2.
 # Latest change: Sam Mai 27 14:43:56 CEST 2006 [mika]
 ################################################################################
+### BEGIN INIT INFO
+# Provides:          grml-misc
+# Required-Start:    $all
+# Required-Stop:
+# Default-Start:     S 2 3 4 5
+# Default-Stop:
+### END INIT INFO
 
 if grep -q nocolor /proc/cmdline ; then
    RC_NOCOLOR=yes

@@ -6,6 +6,13 @@
 # License:       This file is licensed under the GPL v2.
 # Latest change: Don Jul 20 09:53:31 CEST 2006 [mika]
 ################################################################################
+### BEGIN INIT INFO
+# Provides:          firewall
+# Required-Start:    $remote_fs $network
+# Required-Stop:     $remote_fs $network
+# Default-Start:     S 2 3 4 5
+# Default-Stop:
+### END INIT INFO
 
   LANG=C
   LC_ALL=C

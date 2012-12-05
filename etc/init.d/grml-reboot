@@ -5,6 +5,13 @@
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
 ################################################################################
+### BEGIN INIT INFO
+# Provides:          grml-reboot
+# Required-Start:
+# Required-Stop:
+# Default-Start:
+# Default-Stop:
+### END INIT INFO
 
 export PATH=/sbin:/bin:/usr/bin:/usr/sbin
 

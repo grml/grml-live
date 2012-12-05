@@ -6,6 +6,13 @@
 # License:       This file is licensed under the GPL v2.
 # Latest change: Don Sep 28 16:36:03 CEST 2006 [mika]
 ################################################################################
+### BEGIN INIT INFO
+# Provides:          grml-home
+# Required-Start:    $all
+# Required-Stop:
+# Default-Start:     S 2 3 4 5
+# Default-Stop:
+### END INIT INFO
 
 # user with UID 1000
 fstabuser=$(getent passwd 1000 | cut -d: -f1)
