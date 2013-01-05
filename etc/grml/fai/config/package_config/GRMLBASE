@@ -52,3 +52,25 @@ uuid-runtime
 vlock
 wireless-tools
 wpasupplicant
+
+# firmware packages
+atmel-firmware
+bluez-firmware
+firmware-atheros
+firmware-bnx2
+firmware-bnx2x
+firmware-brcm80211
+firmware-intelwimax
+firmware-ipw2x00
+firmware-iwlwifi
+firmware-libertas
+firmware-linux
+firmware-linux-free
+firmware-linux-nonfree
+firmware-myricom
+firmware-netxen
+firmware-qlogic
+firmware-ralink
+firmware-realtek
+libertas-firmware
+zd1211-firmware

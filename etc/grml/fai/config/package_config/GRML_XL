@@ -1425,20 +1425,12 @@ zzuf
 
 ## non-free {{{
 agrep
-atmel-firmware
-bluez-firmware
-firmware-brcm80211
-firmware-iwlwifi
-firmware-qlogic
-firmware-ralink
-firmware-realtek
 iozone3
 lha
 manpages-posix
 netperf
 python-profiler
 unrar
-zd1211-firmware
 ## }}}
 
 ## kernel-version dependent packages {{{

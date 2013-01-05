@@ -156,15 +156,6 @@ comgt
 dnsmasq
 ethstatus
 ethtool
-firmware-bnx2
-firmware-bnx2x
-firmware-brcm80211
-firmware-iwlwifi
-firmware-myricom
-firmware-netxen
-firmware-qlogic
-firmware-ralink
-firmware-realtek
 hostapd
 ifenslave-2.6
 iftop
@@ -330,10 +321,6 @@ irqbalance
 lshw
 numactl
 usbview
-
-# kernels
-firmware-linux-free
-firmware-linux-nonfree
 
 PACKAGES aptitude I386
 linux-image-i386-grml

@@ -45,10 +45,6 @@ ed
 eterm
 ethtool
 findutils
-firmware-brcm80211
-firmware-iwlwifi
-firmware-ralink
-firmware-realtek
 fluxbox
 fuse
 gddrescue
