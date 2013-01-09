@@ -500,10 +500,10 @@ config_time(){
 
 # {{{ print kernel info
 config_kernel(){
-  if $VIRTUAL ; then
-    einfo "Running Linux Kernel $KERNEL $VMWARE" ; eend 0
-  else
+  if $VIRTUAL && [ -n "$VIRTUAL_ENV" ] ; then
     einfo "Running Linux Kernel $KERNEL inside $VIRTUAL_ENV" ; eend 0
+  else
+    einfo "Running Linux Kernel $KERNEL" ; eend 0
   fi
 
   if [ -r /proc/cpuinfo ] ; then
