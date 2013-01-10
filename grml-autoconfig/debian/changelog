@@ -1,3 +1,9 @@
+grml-autoconfig (0.10.1) grml-testing; urgency=low
+
+  * [ec19b33] Further adaptions regarding new /lib/live directory
+
+ -- Michael Prokop <mika@grml.org>  Thu, 10 Jan 2013 13:46:47 +0100
+
 grml-autoconfig (0.10.0) grml-testing; urgency=low
 
   * [f816094] Fix displaying information about virtual environment
