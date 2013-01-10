@@ -15,8 +15,10 @@ umask 022
 
 # old linuxrc version:
 [ -d /cdrom ]      && export LIVECD_PATH=/cdrom
-# new initramfs layout:
+# initramfs layout until around December 2012:
 [ -d /live/image ] && export LIVECD_PATH=/live/image
+# initramfs layout since around December 2012:
+[ -d /lib/live/mount/medium ] && export LIVECD_PATH=/lib/live/mount/medium
 
 # Ignore these signals in non-interactive mode: INT, TERM, SEGV
 [ -z "$PS1" ] && trap "" 2 3 11
@@ -38,8 +40,7 @@ if [ -z "$CMDLINE" ]; then
   # if CMDLINE was set from the outside, we're debugging.
   # otherwise, take CMDLINE from Kernel and config files.
   CMDLINE="$(cat /proc/cmdline)"
-  [ -d /cdrom/bootparams/ ]      && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/* | tr '\n' ' ')"
-  [ -d /live/image/bootparams/ ] && CMDLINE="$CMDLINE $(cat /live/image/bootparams/* | tr '\n' ' ')"
+  [ -d ${LIVECD_PATH}/bootparams/ ] && CMDLINE="$CMDLINE $(cat ${LIVECD_PATH}/bootparams/* | tr '\n' ' ')"
   modprobe 9p 2>/dev/null || true
   if grep -q 9p /proc/filesystems ; then
       TAG="grml-parameters"
@@ -1570,7 +1571,7 @@ DCSMP="/mnt/grml"
 GRMLCFG="$(getbootparam 'autoconfig' 2>>$DEBUG)"
 [ -n "$GRMLCFG" ] || GRMLCFG="GRMLCFG"
 if checkbootparam 'noautoconfig' || checkbootparam 'forensic' ; then
-  DCSDIR="/live/image" # set default so it works for "scripts" boot option as expected
+  DCSDIR="${LIVECD_PATH}" # set default so it works for "scripts" boot option as expected
   ewarn "Skipping running automount of device(s) labeled $GRMLCFG as requested." ; eend 0
 else
   if [ -z "$INSTALLED" ] ; then
@@ -1609,7 +1610,7 @@ else
 
     # if not specified/present then assume default:
     if [ -z "$DCSDEVICE" ]; then
-      DCSDIR="/live/image"
+      DCSDIR="${LIVECD_PATH}"
     else
       eindent
       einfo "debs, config, scripts are read from $DCSDEVICE." ; eend 0
@@ -1632,7 +1633,7 @@ else
   fi
 fi
 
-if [ -n "$DCSDIR" -a "$DCSDIR" != "/live/image" ] ; then
+if [ -n "$DCSDIR" -a "$DCSDIR" != "${LIVECD_PATH}" ] ; then
   einfo "Debs, config, scripts (if present) will be read from $DCSDIR." ; eend 0
 elif checkbootparam 'debs' || checkbootparam 'config' || checkbootparam 'scripts'; then
   einfo "Debs, config, scripts will be read from the live image directly." ; eend 0
@@ -2082,7 +2083,7 @@ config_tohd()
 
      if mount -o rw "$TARGET" "$MOUNTDIR" ; then
         einfo "Copyring live system to $TARGET - this might take a while"
-        rsync -a --progress /live/image/live $MOUNTDIR
+        rsync -a --progress ${LIVECD_PATH}/live $MOUNTDIR
         sync
         umount "$MOUNTDIR"
         eend $?
