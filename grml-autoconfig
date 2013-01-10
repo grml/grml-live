@@ -59,7 +59,7 @@ checkvalue $CONFIG_DEBUG && config_debug
 # update /etc/mtab if running in live-initramfs mode:
 if [ -z "$INSTALLED" -a -e /live/cow ] ; then
    if ! grep -q rootfs /etc/mtab ; then
-      for i in rootfs "none /sys sysfs" proc /live/image /live/cow /lib/init/rw /dev/shm /dev/pts ; do
+      for i in rootfs "none /sys sysfs" proc ${LIVECD_PATH} /live/cow /lib/init/rw /dev/shm /dev/pts ; do
           grep $i /proc/mounts | grep -v /dev/.static >> /etc/mtab
       done
    fi
@@ -203,8 +203,7 @@ if [ -n "$BOOTDEBUG" ] ; then
    # set only if not already set
    if [ -z "$CMDLINE" ] ; then
      CMDLINE="$(cat /proc/cmdline)"
-     [ -d /cdrom/bootparams/ ] && CMDLINE="$CMDLINE $(cat /cdrom/bootparams/*)"
-     [ -d /live/image/bootparams/ ] && CMDLINE="$CMDLINE $(cat /live/image/bootparams/*)"
+     [ -d ${LIVECD_PATH}/bootparams/ ] && CMDLINE="$CMDLINE $(cat ${LIVECD_PATH}/bootparams/*)"
    fi
    einfo "Bootoption debug detected. Printing kernel command line:"
    echo "$CMDLINE"

@@ -18,12 +18,14 @@
   LC_ALL=C
   [[ $UID != 0 ]] && runas='sudo' # important for /etc
 
-  if [ -d /live/overlay ] ; then
+  if [ -d /lib/live/mount/overlay ] ; then # since around December 2012
+    CHANGE_DIR='/lib/live/mount/overlay'
+  if [ -d /live/overlay ] ; then  # until around December 2012
     CHANGE_DIR='/live/overlay'
   elif [ -d /live/image ] ; then # old version
     CHANGE_DIR='/live/image'
   else
-    echo "Error: no overlay directories found (neither /live/overlay nor /live/image)." >&2
+    echo "Error: no overlay directories found (like /lib/live/mount/overlay or /live/overlay)." >&2
     bailout; exit 1
   fi
 

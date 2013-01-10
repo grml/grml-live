@@ -149,7 +149,7 @@ Permanently adjust boot parameters
 As you probably know you can adjust boot parameters on the bootprompt.  You want
 to set some boot parameters permanently? That's possible via adding a directory
 named 'bootparams' to the Grml ISO which has to be located at the root-directory
-/bootparams/ (note: the directory is known as /live/image/bootparams/ on a
+/bootparams/ (note: the directory is known as /lib/live/mount/medium/bootparams/ on a
 _running_ Grml system then). Place a textfile inside the directory containing
 the boot parameters which should be appended to default ones (this corresponds
 to booting without any special parameters).
