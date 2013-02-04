@@ -1,3 +1,15 @@
+grml-live (0.20.0) unstable; urgency=low
+
+  [ Alexander Wirt ]
+  * Software related changes:
+  * [8c816bf] Move firmware packages to GRMLBASE
+
+  [ Michael Prokop ]
+  * Software related changes:
+  * [2a20d6e] drop firmware-ipw2x00 from GRMLBASE
+
+ -- Michael Prokop <mika@grml.org>  Mon, 04 Feb 2013 13:39:04 +0100
+
 grml-live (0.19.9) unstable; urgency=low
 
   * [c080bdb] Bump Standards-Version to 3.9.4
