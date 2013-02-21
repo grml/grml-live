@@ -1585,9 +1585,9 @@ else
       eindent
       # We do need the following fix so floppy disk is available to blkid in any case :-/
       if [ -r /dev/fd0 ] ; then
-        einfo "Floppy device detected. Trying to access floppy disk."
+        einfo "Floppy device detected. Trying to access floppy disk (this might take a few seconds)."
         if timeout 4 dd if=/dev/fd0 of=/dev/null bs=512 count=1 >>$DEBUG 2>&1 ; then
-           blkid /dev/fd0 >>$DEBUG 2>&1
+           timeout 4 blkid /dev/fd0 >>$DEBUG 2>&1
         fi
       fi
       DCSDEVICE=$(blkid -t LABEL=$GRMLCFG | head -1 | awk -F: '{print $1}')
