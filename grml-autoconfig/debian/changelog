@@ -1,3 +1,10 @@
+grml-autoconfig (0.10.2) grml-testing; urgency=low
+
+  * [a152691] Run blkid under timeout command as well when accessing
+    floppy device. Thanks to Florian Apolloner for bugreport and testing
+
+ -- Michael Prokop <mika@grml.org>  Thu, 21 Feb 2013 11:01:55 +0100
+
 grml-autoconfig (0.10.1) grml-testing; urgency=low
 
   * [ec19b33] Further adaptions regarding new /lib/live directory
