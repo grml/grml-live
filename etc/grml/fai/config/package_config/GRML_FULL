@@ -104,6 +104,7 @@ dosfstools
 e2fsprogs
 exfat-fuse
 exfat-utils
+genisoimage
 hfsprogs
 hfsutils
 jfsutils
