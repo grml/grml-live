@@ -17,6 +17,6 @@
  hdt                                             boot Hardware Detection Tool  
                                                                                
  A list with all supported boot options can be found on the CD at              
- /live/image/GRML/grml-cheatcodes.txt                                          
+ /lib/live/mount/medium/GRML/*/grml-cheatcodes.txt                             
                                                                                
 1f
