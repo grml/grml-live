@@ -1,3 +1,16 @@
+grml-live (0.20.1) unstable; urgency=low
+
+  * [7bd13c0] Adopt grml-live-remaster for live-boot's new
+    /lib/live/mount/medium/
+  * [1d82b15] isolinux boot splashes: adjust path to grml-cheatcodes.txt
+  * [d9029ce] grml-cheatcodes: adjust live image path for new live-boot
+    default
+  * Software related changes:
+    - [4687ed3] add genisoimage to GRML_FULL. Thanks to Charles A.
+      Hewson <cahewson@eskimo.com> for the bug report
+
+ -- Michael Prokop <mika@grml.org>  Tue, 26 Feb 2013 12:14:34 +0100
+
 grml-live (0.20.0) unstable; urgency=low
 
   [ Alexander Wirt ]
