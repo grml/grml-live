@@ -21,6 +21,14 @@ fi
 
 set -e # exit on any error
 
+if [ -d /live/image/boot/ ] ; then # until Grml versions <=2012.XX
+  LIVE_PATH_MAIN='/live/image'
+  LIVE_PATH_BOOT='/live/image/boot/'
+else # for Grml versions >=2013.XX
+  LIVE_PATH_MAIN='/lib/live/mount/medium/'
+  LIVE_PATH_BOOT='/lib/live/mount/medium/boot/'
+fi
+
 VERSION='0.0.3'
 GRML_LIVE_EDITOR=${VISUAL:-${EDITOR:-vi}}
 
@@ -86,14 +94,12 @@ if [ ! -d /remaster ]; then
    echo "#:# edit the following two lines to change the boot message" \
            >/remaster/msg
    echo "#:#" >>/remaster/msg
-   if [ -r /live/image/boot/isolinux/boot.msg ] ; then
-      sed 1,2d /live/image/boot/isolinux/boot.msg >>/remaster/msg
-   else
-      sed 1,2d /live/image/boot.msg >>/remaster/msg
+   if [ -r ${LIVE_PATH_BOOT}/isolinux/boot.msg ] ; then
+     sed 1,2d ${LIVE_PATH_BOOT}/isolinux/boot.msg >>/remaster/msg
    fi
 fi
 
-SQUASHFS_FILE="$(find /live/image/live -name \*.squashfs | head -1)"
+SQUASHFS_FILE="$(find ${LIVE_PATH_MAIN}/live -name \*.squashfs | head -1)"
 if ! grep -q "/remaster/cdrom squashfs" /proc/mounts ;  then
    mount -t squashfs "$SQUASHFS_FILE" /remaster/cdrom -o ro,loop
 fi
@@ -117,8 +123,8 @@ ${GRML_LIVE_EDITOR} /remaster/msg
 
 [ -d /remaster/iso ] || mkdir /remaster/iso
 
-for i in /live/image/*; do
-    if [ ! $i = /live/image/live ]; then
+for i in ${LIVE_PATH_MAIN}/*; do
+    if [ ! $i = ${LIVE_PATH_MAIN}/live ]; then
        cp -R $i /remaster/iso
     fi
 done
@@ -128,10 +134,10 @@ if [ -r /remaster/iso/boot/isolinux/boot.msg ] ; then
 fi
 
 # make sure we support usb sticks as well:
-if [ -d /live/image/boot/isolinux ] ; then
-   BOOTSTUFF=/live/image/boot/isolinux
+if [ -d ${LIVE_PATH_BOOT}/isolinux ] ; then
+   BOOTSTUFF=${LIVE_PATH_BOOT}/isolinux
 else
-   BOOTSTUFF=/live/image
+   BOOTSTUFF=${LIVE_PATH_MAIN}
 fi
 
 [ -d /remaster/iso/boot/isolinux ] || mkdir -p /remaster/iso/boot/isolinux
