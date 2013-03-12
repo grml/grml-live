@@ -88,15 +88,18 @@ Please report bugs and feature requests: http://grml.org/bugs/" >&2
    exit 1
 fi
 
-if [ ! -d /remaster ]; then
-   mkdir -p /remaster/chroot /remaster/tmp /remaster/cdrom
-   mount -t tmpfs tmpfs /remaster/tmp
-   echo "#:# edit the following two lines to change the boot message" \
-           >/remaster/msg
-   echo "#:#" >>/remaster/msg
-   if [ -r ${LIVE_PATH_BOOT}/isolinux/boot.msg ] ; then
-     sed 1,2d ${LIVE_PATH_BOOT}/isolinux/boot.msg >>/remaster/msg
-   fi
+if [ ! -r /remaster ]; then
+  echo "Please create /remaster (e.g. link it to a harddrive)." >&2
+  echo "Exiting to avoid running out of space on the live system." >&2
+  exit 1
+fi
+
+mkdir -p /remaster/chroot /remaster/tmp /remaster/cdrom
+mount -t tmpfs tmpfs /remaster/tmp
+echo "#:# edit the following two lines to change the boot message" >/remaster/msg
+echo "#:#" >>/remaster/msg
+if [ -r ${LIVE_PATH_BOOT}/isolinux/boot.msg ] ; then
+  sed 1,2d ${LIVE_PATH_BOOT}/isolinux/boot.msg >>/remaster/msg
 fi
 
 SQUASHFS_FILE="$(find ${LIVE_PATH_MAIN}/live -name \*.squashfs | head -1)"
@@ -108,14 +111,14 @@ if ! grep -q "aufs /remaster/chroot" /proc/mounts ; then
    mount -t aufs aufs /remaster/chroot -o br:/remaster/tmp=rw:/remaster/cdrom=rr
 fi
 
-for i in dev proc root sys tmp; do
+for i in run dev dev/pts proc root sys tmp; do
     mount --bind /$i /remaster/chroot/$i
 done
 
 echo "Now edit the contents of the live CD in this chrooted shell:"
 chroot /remaster/chroot
 
-for i in dev proc root sys tmp; do
+for i in run dev/pts dev proc root sys tmp; do
         umount /remaster/chroot/$i
 done
 
@@ -146,8 +149,11 @@ sed 3,4d "${BOOTSTUFF}"/boot.msg \
         >/remaster/iso/boot/isolinux/boot.msg
 sed 1,2d /remaster/msg >>/remaster/iso/boot/isolinux/boot.msg
 
-mkdir /remaster/iso/live
-$MKSQUASHFS /remaster/chroot /remaster/iso/live/"$(basename $SQUASHFS_FILE)"
+SQUASHFS_FQNAME=/remaster/iso/${SQUASHFS_FILE##$LIVE_PATH_MAIN}
+mkdir -p $(dirname $SQUASHFS_FQNAME)
+# the next line is necessary for grml2usb to work on the destination image
+echo $(basename $SQUASHFS_FQNAME) > $(dirname $SQUASHFS_FQNAME)/filesystem.module
+$MKSQUASHFS /remaster/chroot $SQUASHFS_FQNAME
 umount /remaster/chroot /remaster/cdrom
 
 if [ -f /remaster/iso/boot/isolinux/isolinux.bin ] ; then
