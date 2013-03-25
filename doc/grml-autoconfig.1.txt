@@ -98,12 +98,8 @@ reboot using the following commandline on bootprompt:
 
   grml netconfig=server.tld/path/to/config.tbz
 
-You don't have network access but own a floppy drive? Copy the file to a floppy
-disk and boot with:
-
-  grml myconfig=/dev/fd0
-
-Floppy is to small or to slow? Ok, let's use a usb device:
+You don't have network access but own a USB device? Copy the file to a USB
+device and boot with something like:
 
   grml myconfig=/dev/sda1
 
@@ -117,17 +113,13 @@ the following command as user root:
   save-config -etc
 
 Now you should have a file named config.tbz containing your configuration files.
-If you want to use it with a floppy disk copy the file to a floppy and boot via
-using the following command on bootprompt:
-
-  grml myconfig=/dev/fd0
-
-Floppy is to small or to slow? Ok, let's use a usb device:
+If you want to use it with a USB device copy the file to it and boot via
+using the following command on boot prompt:
 
   grml myconfig=/dev/sda1
 
 You do have an existing harddisk installation and want to use its configuration?
-Let's say the debian system is located in /dev/sda2. You want to use the
+Let's say the Debian system is located in /dev/sda2. You want to use the
 directory /etc/network. This directory is activated by default in
 /etc/grml/partconf so we don't have to do any further work.  We just need to
 activate it via using the following commandline on bootprompt:
@@ -181,10 +173,10 @@ on bootprompt:
 
   grml myconfig=/dev/sda1
 
-Or even better: create a floppy disk with label GRMLCFG running:
+Or even better: create a device with label GRMLCFG running (adjust /dev/sdX1
+according to your needs):
 
-  fdformat /dev/fd0   # format the floppy disk if not done already
-  mkfs.ext2 -L GRMLCFG /dev/fd0   # now create ext2 filesystem with label GRMLCFG on it:
+  mkfs.ext3 -L GRMLCFG /dev/sdX1  # warning: this destroys all data from /dev/sdX1
 
 TIP: several filesystems provide the possibility to provide a label.  For
 example FAT provides this through: 'mkfs.vfat -n GRMLCFG /dev/sda1' (attention:
@@ -192,11 +184,11 @@ this will destroy data on /dev/sda1 of course!). Take a look at the
 documentation/manpage of the filesystem you want to use.
 
 Now place your configuration archive (see save-config and the other usage
-scenarios) and the script grml.sh on the floppy disk. Now you can boot your
-system without specifying any bootparameters on bootprompt because devices
-labeled with GRMLCFG are mounted readonly and used by default. If you did not
-label your device you can use the device anyway using 'grml myconfig=/dev/ice'
-on the bootprompt.
+scenarios) and the script grml.sh on the device. Now you can boot your system
+without specifying any bootparameters on bootprompt because devices labeled with
+GRMLCFG are mounted readonly and used by default. If you did not label your
+device you can use the device anyway using 'grml myconfig=/dev/sdX' (adjust
+/dev/sdX) on the bootprompt.
 
 Debug remote systems
 ~~~~~~~~~~~~~~~~~~~~
@@ -215,8 +207,8 @@ copies files defined in /etc/grml/partconf from /dev/sda2 to the Grml system. As
 /dev/sda2 will be taken.
 
 Or you use a standard Grml medium and have grml read IP address, netmask and
-default gateway from another medium like a floppy or an USB stick. Take a look
-at the script saveconfig and the boot parameter myconfig.
+default gateway from another medium like a USB stick. Take a look at the script
+saveconfig and the boot parameter myconfig.
 
 Or you put a grml.iso file on your hard disk (maybe in /boot/grml) or on an USB
 stick, use grub to boot from there and place debs, configuration scripts or Grml
