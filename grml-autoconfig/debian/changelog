@@ -1,3 +1,10 @@
+grml-autoconfig (0.10.3) grml-testing; urgency=low
+
+  * [c69610b] save-config: fix syntax error [Closes: issue1247]
+    Thanks to Falko Mach
+
+ -- Michael Prokop <mika@grml.org>  Mon, 25 Mar 2013 10:12:07 +0100
+
 grml-autoconfig (0.10.2) grml-testing; urgency=low
 
   * [a152691] Run blkid under timeout command as well when accessing
