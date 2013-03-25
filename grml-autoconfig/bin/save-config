@@ -20,7 +20,7 @@
 
   if [ -d /lib/live/mount/overlay ] ; then # since around December 2012
     CHANGE_DIR='/lib/live/mount/overlay'
-  if [ -d /live/overlay ] ; then  # until around December 2012
+  elif [ -d /live/overlay ] ; then  # until around December 2012
     CHANGE_DIR='/live/overlay'
   elif [ -d /live/image ] ; then # old version
     CHANGE_DIR='/live/image'
