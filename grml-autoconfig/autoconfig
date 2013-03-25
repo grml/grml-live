@@ -79,7 +79,7 @@ CONFIG_MIXER='yes'            # set audio volumes [only in live-cd mode relevant
 CONFIG_MODEM='yes'            # check for AC'97 Modem Controller modem
 CONFIG_MODULES='yes'          # load modules specified in /etc/grml/modules
 CONFIG_MOUSE='yes'            # show mouse information (expert-mode)
-CONFIG_MYCONFIG='yes'         # check if we want the config floppy
+CONFIG_MYCONFIG='yes'         # check if we want the GRMLCFG device
 CONFIG_MYPATH='yes'           # provide setting additional paths via bootoption mypath
 CONFIG_NETCONFIG='yes'        # download configuration archive provided by bootoption netconfig=...
 CONFIG_NETSCRIPT='yes'        # download and run script/executable provided by bootoption netscript=...

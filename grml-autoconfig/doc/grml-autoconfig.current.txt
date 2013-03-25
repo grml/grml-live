@@ -34,7 +34,6 @@ myconfig::
    device. Usage examples:
 
   myconfig=/dev/sda1                        => read DCS from usb-device
-  myconfig=/dev/fd0                         => read DCS from floppy-disk
 
 autoconfig::
 
