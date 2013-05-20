@@ -79,7 +79,7 @@ if [ -f "${target}/boot/x86_64-efi.img" ] ; then
 fi
 
 if ifclass AMD64 ; then
-/ if ! [ -r "${target}/${BOOTX64}" ] ; then
+  if ! [ -r "${target}/${BOOTX64}" ] ; then
     echo "Can not access grub efi image." >&2
     exit 1
   fi
