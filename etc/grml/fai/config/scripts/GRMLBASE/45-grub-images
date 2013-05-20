@@ -44,6 +44,18 @@ if ifclass AMD64 ; then
   fi
 fi
 
+# until grub 1.99-27.1 it's called raid, starting with
+# grub version 2.00-14 the raid.mod module no longer exists
+if [ -r "${target}"/usr/lib/grub/i386-pc/raid.mod ] ; then
+  echo "Using raid module as file raid.mod is present"
+  ADDITIONAL_MODULES[raid]="raid"
+elif [ -r "${target}"/usr/lib/grub/i386-pc/diskfilter.mod ] ; then
+  echo "Using diskfilter and related modules as file diskfilter.mod is present"
+  ADDITIONAL_MODULES[raid]="diskfilter mdraid09 mdraid09_be mdraid1x raid5rec raid6rec"
+else
+  echo "Warning: no according raid module in grub directory found."
+fi
+
 BOOTX64="${BOOTX64##${target}}"
 EFI_IMG="${EFI_IMG##${target}}"
 TMP_CONFIG="${TMP_CONFIG##${target}}"
@@ -54,7 +66,8 @@ $ROOTCMD grub-mkimage -O $arch -o /boot/$arch.img --prefix=/boot/grub/ --config=
   fat gfxmenu gfxterm gzio help iso9660 jpeg linux loopback lvm    \
   memdisk minicmd multiboot normal part_gpt part_msdos play png    \
   probe raid regexp reiserfs search search_fs_file search_fs_uuid  \
-  search_label squash4 terminal test video videoinfo xfs ${ADDITIONAL_MODULES[$arch]}
+  search_label squash4 terminal test video videoinfo xfs \
+  ${ADDITIONAL_MODULES[raid]} ${ADDITIONAL_MODULES[$arch]}
 done
 
 if [ -f "${target}/boot/i386-pc.img" ] ; then
