@@ -65,8 +65,8 @@ $ROOTCMD grub-mkimage -O $arch -o /boot/$arch.img --prefix=/boot/grub/ --config=
   bitmap boot btrfs cat chain cmp configfile cpio echo elf ext2    \
   fat gfxmenu gfxterm gzio help iso9660 jpeg linux loopback lvm    \
   memdisk minicmd multiboot normal part_gpt part_msdos play png    \
-  probe raid regexp reiserfs search search_fs_file search_fs_uuid  \
-  search_label squash4 terminal test video videoinfo xfs \
+  probe regexp reiserfs search search_fs_file search_fs_uuid       \
+  search_label squash4 terminal test video videoinfo xfs           \
   ${ADDITIONAL_MODULES[raid]} ${ADDITIONAL_MODULES[$arch]}
 done
 
@@ -79,7 +79,7 @@ if [ -f "${target}/boot/x86_64-efi.img" ] ; then
 fi
 
 if ifclass AMD64 ; then
-  if ! [ -r "${target}/${BOOTX64}" ] ; then
+/ if ! [ -r "${target}/${BOOTX64}" ] ; then
     echo "Can not access grub efi image." >&2
     exit 1
   fi
