@@ -1,3 +1,15 @@
+grml-live (0.20.2) unstable; urgency=low
+
+  * [8a6187d] grml-live-remaster: check for /remaster before using it,
+    mount-bind /run and /dev/pts, create filesystem.module
+    [Closes: issue1241] Thanks to Moritz Molle for the initial patch
+  * [be66030] GRMLBASE/45-grub-images: adapt script for renamed raid.mod
+    file. Thanks to Jordan Uggla for the feedback
+  * [4e4fc89] GRMLBASE/45-grub-images: drop raid.mod from static module
+    list
+
+ -- Michael Prokop <mika@grml.org>  Mon, 20 May 2013 23:45:15 +0200
+
 grml-live (0.20.1) unstable; urgency=low
 
   * [7bd13c0] Adopt grml-live-remaster for live-boot's new
