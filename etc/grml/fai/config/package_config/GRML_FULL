@@ -21,7 +21,6 @@ localepurge
 locales
 lsb-release
 lsof
-makedev
 mount
 multitail
 ntp
