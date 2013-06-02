@@ -477,7 +477,7 @@ config_time(){
     [ -z "$KTZ" ] && [ -r /etc/timezone ] && KTZ=$(cat /etc/timezone)
     if [ ! -f "/usr/share/zoneinfo/$KTZ" ] ; then
        ewarn "Warning: unknown timezone $KTZ" ; eend 1
-       KTZ="Europe/Vienna"
+       KTZ="UTC"
        ewarn "Falling back to timezone $KTZ" ; eend 0
     fi
 

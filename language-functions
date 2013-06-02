@@ -343,7 +343,7 @@ case "$LANGUAGE" in
                 KDEKEYBOARD="dvorak,us,de"
                 CHARSET="utf8"
                 KDEKEYBOARDS="dvorak,us,de,fr"
-                TZ="Europe/Vienna"
+                TZ="UTC"
                 ;;
         dvorak-iso)
                 # Dvorak layout (ISO)
@@ -355,7 +355,7 @@ case "$LANGUAGE" in
                 KDEKEYBOARD="dvorak,us,de"
                 CHARSET="iso8859-15"
                 KDEKEYBOARDS="dvorak,us,de,fr"
-                TZ="Europe/Vienna"
+                TZ="UTC"
                 ;;
         en-iso)
                 # English in Austria [see us + uk for american and english version!]
@@ -368,7 +368,7 @@ case "$LANGUAGE" in
                 KDEKEYBOARD="us"
                 CHARSET="iso8859-15"
                 KDEKEYBOARDS="de,fr"
-                TZ="Europe/Vienna"
+                TZ="UTC"
                 ;;
         en|en-utf8)
                 # English in Austria [see us + uk for american and english version!] (UTF8)
@@ -381,7 +381,7 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 # Additional KDE Keyboards
                 KDEKEYBOARDS="de,fr"
-                TZ="Europe/Vienna"
+                TZ="UTC"
                 ;;
         el-iso)
                 # Greek version
@@ -941,7 +941,7 @@ case "$LANGUAGE" in
                 KDEKEYBOARD="us"
                 CHARSET="utf8"
                 KDEKEYBOARDS="de,fr"
-                TZ="Europe/Vienna"
+                TZ="UTC"
                 ;;
 esac
 
