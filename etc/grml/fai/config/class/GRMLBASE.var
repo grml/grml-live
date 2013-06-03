@@ -8,7 +8,7 @@ KEYMAP=us-latin1
 
 # Set UTC=yes if your system clock is set to UTC (GMT) and UTC=no if not.
 UTC=no
-TIMEZONE=Europe/Vienna
+TIMEZONE=UTC
 
 # root password for the new installed linux system; md5 and crypt are possible
 ROOTPW='x'
