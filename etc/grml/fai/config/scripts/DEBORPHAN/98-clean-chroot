@@ -15,10 +15,12 @@ if ! [ -x $target/usr/bin/deborphan ] ; then
 fi
 
 # remove all packages not necessary anymore:
+echo "Executing apt-get -y --purge autoremove"
 $ROOTCMD apt-get -y --purge autoremove
 
 # remove packages until deborphan does not find anymore:
 while [ "$($ROOTCMD deborphan)" != "" ] ; do
+  echo "Executing deborphan"
   $ROOTCMD apt-get -y --purge remove $($ROOTCMD deborphan)
 done
 
@@ -28,6 +30,7 @@ done
 PURGE_PACKAGES=$($ROOTCMD dpkg --list | awk '/^rc/ {print $2}')
 
 if [ -n "$PURGE_PACKAGES" ] ; then
+  echo "Getting rid of packages which have been removed but not yet purged: $PURGE_PACKAGES"
   $ROOTCMD dpkg --purge $PURGE_PACKAGES
 fi
 
