@@ -14,6 +14,12 @@ if ! [ -x $target/usr/bin/deborphan ] ; then
   exit 0
 fi
 
+# avoid file-rc being considered for removal by deborphan
+if [ -d $target/usr/share/file-rc -a -x $target/usr/bin/deborphan ] ; then
+  echo "Adding file-rc to keep-list of deborphan to avoid accidental removal"
+  $ROOTCMD deborphan --add-keep file-rc || /bin/true
+fi
+
 # remove all packages not necessary anymore:
 $ROOTCMD apt-get -y --purge autoremove
 
