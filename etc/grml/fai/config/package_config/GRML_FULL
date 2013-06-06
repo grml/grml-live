@@ -296,7 +296,6 @@ w3m
 wget
 
 # X
-epdfview
 fluxbox
 grml-desktop
 grml-x
@@ -304,6 +303,7 @@ xauth
 xcursor-themes
 xfonts-75dpi
 xfonts-base
+xpdf
 xserver-xorg
 xserver-xorg-core
 xserver-xorg-input-all
