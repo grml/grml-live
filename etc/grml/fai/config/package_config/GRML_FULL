@@ -130,7 +130,6 @@ whois
 cdebootstrap
 crosshurd
 debootstrap
-febootstrap
 grml-debootstrap
 kexec-tools
 rinse
