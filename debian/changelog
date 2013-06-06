@@ -1,3 +1,22 @@
+grml-live (0.21.0) unstable; urgency=low
+
+  The "veɪˈkeɪʃən" release
+
+  [ Michael Prokop ]
+  * [99d7926] Use UTC as default TIMEZONE
+  * [2633dd3] DEBORPHAN/98-clean-chroot: be more verbose about
+    executed steps
+
+  * Software related changes:
+    - [de23db4] Drop makedev from all GRML_* classes
+    - [e00aa4e] Replace epdfview with xpdf in GRML_FULL
+    - [a1c6e72] Drop febootstrap from GRML_FULL
+
+  [ Ulrich Dangel ]
+  * [1f86521] SW: Add puppet to GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Fri, 07 Jun 2013 00:44:55 +0200
+
 grml-live (0.20.2) unstable; urgency=low
 
   * [8a6187d] grml-live-remaster: check for /remaster before using it,
