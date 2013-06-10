@@ -110,6 +110,28 @@ checkgrmlsmall(){
   grep -q small /etc/grml_version 2>>$DEBUG && return 0 || return 1
 }
 
+# if no password is set return a random password
+set_passwd() {
+  [ -n "$PASSWD" ] && return 0
+
+  if [ -x /usr/bin/apg ] ; then
+    PASSWD="$(apg -M NL -a 0 -m 8 -x 12 -n 1)"
+  elif [ -x /usr/bin/gpw ] ; then
+    PASSWD="$(gpw 1)"
+  elif [ -x /usr/bin/pwgen ] ; then
+    PASSWD="$(pwgen -1 8)"
+  elif [ -x /usr/bin/hexdump ] ; then
+    PASSWD="$(dd if=/dev/urandom bs=14 count=1 2>/dev/null | hexdump | awk '{print $3 $4}')"
+  elif [ -n "$RANDOM" ] ; then
+    PASSWD="grml${RANDOM}"
+  else
+    PASSWD=''
+    eerror "Empty passphrase and neither apg, gpw, pwgen, hexdump nor \$RANDOM available. Skipping."
+    eend 1
+    return 1
+  fi
+}
+
 ### }}}
 
 # {{{ filesystems (proc, pts, sys) and fixes
@@ -1072,44 +1094,31 @@ fi
 # {{{ autostart of ssh
 config_ssh(){
 if checkbootparam 'ssh' ; then
-   SSH_PASSWD=''
-   SSH_PASSWD="$(getbootparam 'ssh' 2>>$DEBUG)"
+   local PASSWD
+   PASSWD="$(getbootparam 'ssh' 2>>$DEBUG)"
+
    config_userlocal
    einfo "Bootoption ssh found, trying to set password for root and user $localuser"
    [ -z "$localuser" ] && eend 1
-   eindent
-   if [ -z "$SSH_PASSWD" ] ; then
-      if [ -x /usr/bin/apg ] ; then
-         SSH_PASSWD="$(apg -M NL -a 0 -m 8 -x 12 -n 1)"
-      elif [ -x /usr/bin/gpw ] ; then
-         SSH_PASSWD="$(gpw 1)"
-      elif [ -x /usr/bin/pwgen ] ; then
-         SSH_PASSWD="$(pwgen -1 8)"
-      elif [ -x /usr/bin/hexdump ] ; then
-         SSH_PASSWD="$(dd if=/dev/urandom bs=14 count=1 2>/dev/null | hexdump | awk '{print $3 $4}')"
-      elif [ -n "$RANDOM" ] ; then
-         SSH_PASSWD="grml${RANDOM}"
-      else
-         SSH_PASSWD=''
-         eerror "Empty passphrase and neither pwgen nor hexdump nor \$RANDOM found. Skipping."
-         eend 1
-      fi
 
-      if [ -n "$SSH_PASSWD" ] ; then
-         ewarn "No given password for ssh found. Using random password: $SSH_PASSWD" ; eend 0
-      fi
+   eindent
+   if [ -z "$PASSWD" ] ; then
+     set_passwd && ewarn "No given password for found. Using random password: $PASSWD" && eend 0
    fi
    eoutdent
 
-   # finally check if we have a password we can use:
-   if [ -n "$SSH_PASSWD" ] ; then
-      # chpasswd sucks, seriously.
+   if [ -n "$PASSWD" ] ; then
       chpass_options=""
       if chpasswd --help 2>&1 | grep -q -- '-m,' ; then
         chpass_options="-m"
       fi
-      echo "$localuser:$SSH_PASSWD" | chpasswd $chpass_options
-      echo "root:$SSH_PASSWD" | chpasswd $chpass_options
+
+      echo "$localuser:$PASSWD" | chpasswd $chpass_options
+      echo "root:$PASSWD" | chpasswd $chpass_options
+
+      eindent
+      ewarn "Warning: please change the password for root and user $localuser as soon as possible!"
+      eoutdent
    fi
 
    einfo "Starting secure shell server in background for root and user $localuser"
@@ -1117,9 +1126,6 @@ if checkbootparam 'ssh' ; then
    /etc/init.d/ssh start >>$DEBUG 2>>$DEBUG &
    eend $?
 
-   eindent
-   ewarn "Warning: please change the password for root and user $localuser as soon as possible!"
-   eoutdent
 fi
 }
 
@@ -1198,21 +1204,63 @@ fi
 }
 # }}}
 
-# {{{ set password for default user
+# {{{ set password for root and default user
 config_passwd(){
 if checkbootparam 'passwd' >>$DEBUG 2>&1; then
+  local PASSWD
   PASSWD="$(getbootparam 'passwd' 2>>$DEBUG)"
+
   config_userlocal
-  einfo "Bootoption passwd found, change password for user '$localuser'."
+  einfo "Bootoption passwd found, trying to set password for root and user $localuser"
   [ -z "$localuser" ] && eend 1
-  if [ -n "$PASSWD" ] ; then
-    echo "$localuser:$PASSWD" | chpasswd -m ; eend $?
-  else
-    eerror "No given password for ssh found. Autostart of SSH will not work." ; eend 1
-  fi
+
   eindent
-    ewarn "Warning: please change the password for user grml set via bootparameter as soon as possible!"
+  if [ -z "$PASSWD" ] ; then
+    set_passwd && ewarn "No given password for found. Using random password: $PASSWD" && eend 0
+  fi
   eoutdent
+
+  if [ -n "$PASSWD" ] ; then
+    chpass_options=""
+    if chpasswd --help 2>&1 | grep -q -- '-m,' ; then
+      chpass_options="-m"
+    fi
+
+    echo "$localuser:$PASSWD" | chpasswd $chpass_options
+    echo "root:$PASSWD" | chpasswd $chpass_options
+
+    eindent
+    ewarn "Warning: please change the password for root and user $localuser as soon as possible!"
+    eoutdent
+  fi
+
+fi
+
+if checkbootparam 'encpasswd' >>$DEBUG 2>&1; then
+  local PASSWD
+  PASSWD="$(getbootparam 'encpasswd' 2>>$DEBUG)"
+
+  if [ -z "$PASSWD" ] ; then
+    eerror "No hashed password found, can not set password."
+    eend 1
+    return
+  fi
+
+  config_userlocal
+  einfo "Bootoption encpasswd found, trying to set hashed password for root and user $localuser"
+  [ -z "$localuser" ] && eend 1
+
+  if [ -n "$PASSWD" ] ; then
+    chpass_options="-e"
+
+    echo "$localuser:$PASSWD" | chpasswd $chpass_options
+    echo "root:$PASSWD" | chpasswd $chpass_options
+
+    eindent
+    ewarn "Warning: please change the password for root and user $localuser as soon as possible!"
+    eoutdent
+  fi
+
 fi
 }
 # }}}
