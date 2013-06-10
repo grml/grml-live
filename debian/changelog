@@ -1,3 +1,13 @@
+grml-autoconfig (0.11.0) grml-testing; urgency=low
+
+  * [b7fabf8] Drop all floppy related code and documentation
+  * [41dd94d] Set UTC as default time zone [Closes: issue1261]
+  * [eb16ae7] support new boot option encpasswd to provide hashed
+    password, refactor passwd/ssh code accordingly. Thanks to Peter
+    Palfrader for the idea
+
+ -- Michael Prokop <mika@grml.org>  Mon, 10 Jun 2013 16:39:41 +0200
+
 grml-autoconfig (0.10.3) grml-testing; urgency=low
 
   * [c69610b] save-config: fix syntax error [Closes: issue1247]
