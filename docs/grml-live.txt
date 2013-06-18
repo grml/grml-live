@@ -651,7 +651,7 @@ How do I create a base.tgz?
 First of all create the chroot using debootstrap:
 
   BASECHROOT='/tmp/basefile'
-  debootstrap squeeze "$BASECHROOT" http://cdn.debian.net/debian
+  debootstrap wheezy "$BASECHROOT" http://http.debian.net/debian
   tar -C "$BASECHROOT" --exclude='var/cache/apt/archives/*.deb' -zcf base.tar.gz ./
 
 [TIP]
