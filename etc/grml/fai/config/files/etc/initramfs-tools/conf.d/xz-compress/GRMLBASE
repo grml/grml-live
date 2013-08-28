@@ -1,5 +1,5 @@
 # This file is installed by grml-live in 10-build-initramfs.
-# It's purpose is to use XZ compression when building initramfs.
+# Its purpose is to use XZ compression when building initramfs.
 
 # this is a workaround to pass custom options to the xz compression
 xz() {

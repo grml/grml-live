@@ -52,6 +52,7 @@ uuid-runtime
 vlock
 wireless-tools
 wpasupplicant
+xz-utils
 
 # firmware packages
 atmel-firmware
