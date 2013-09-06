@@ -42,9 +42,9 @@ lftp
 libnss-myhostname
 lilo
 links
+locales
 lrzsz
 lsof
-locales
 mawk
 mbr
 memtester
@@ -56,6 +56,7 @@ netcat-openbsd
 net-tools
 ntpdate
 # nvi -> see #490361
+nwipe
 parted
 partimage
 passwd
