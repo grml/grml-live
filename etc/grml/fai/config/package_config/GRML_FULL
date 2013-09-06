@@ -243,6 +243,7 @@ bacula-common
 bacula-console
 bacula-fd
 bacula-sd
+clonezilla
 dirvish
 duplicity
 fsarchiver
