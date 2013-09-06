@@ -86,6 +86,7 @@ parted
 syslinux
 
 # disk wiping
+nwipe
 secure-delete
 wipe
 
