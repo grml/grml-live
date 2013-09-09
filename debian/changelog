@@ -1,3 +1,12 @@
+grml-live (0.21.3) unstable; urgency=low
+
+  * Software related changes:
+    - [1f4f495] add nwipe to GRML_FULL
+    - [6c246ac] add nwipe to GRML_SMALL
+    - [8496764] add clonezilla to GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Mon, 09 Sep 2013 23:45:43 +0200
+
 grml-live (0.21.2) unstable; urgency=low
 
   The "oho, she's crawling!" release
