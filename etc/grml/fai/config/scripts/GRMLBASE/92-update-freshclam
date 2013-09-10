@@ -11,6 +11,12 @@ if ifclass NO_ONLINE ; then
   exit 0
 fi
 
+if ! ifclass FRESHCLAM ; then
+  echo "Ignoring script 92-update-freshclam as FRESHCLAM is NOT set."
+  echo "Executing freshclam increases the ISO for ~70MB, not considering as default."
+  exit 0
+fi
+
 set -u
 
 bailout() {

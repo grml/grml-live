@@ -318,6 +318,10 @@ selected. The following classes are predefined:
 
 * DEBORPHAN: get rid of all packages listed in output of deborphan
 
+* FRESHCLAM: execute freshclam (if it's present) to update clamav definitions
+(increases resulting ISO size ~70MB). By default it's skipped to avoid bigger
+ISO size.
+
 * GRMLBASE: the main class responsible for getting a minimal subset of what's
 defining a Grml system. Important parts of the buildprocess are specified in
 this class as well, so unless you have a really good reason you should always
