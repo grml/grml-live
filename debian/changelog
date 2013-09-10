@@ -1,3 +1,9 @@
+grml-live (0.21.4) unstable; urgency=low
+
+  * [d04892a] Execute freshclam only if class FRESHCLAM is set
+
+ -- Michael Prokop <mika@grml.org>  Tue, 10 Sep 2013 13:24:54 +0200
+
 grml-live (0.21.3) unstable; urgency=low
 
   * Software related changes:
