@@ -1435,7 +1435,7 @@ create_netbootpackage() {
 
   mkdir -p "$NETBOOT"
 
-  if ! [ -r "${CHROOT}/usr/lib/syslinux/pxelinux.0" ] ; then
+  if ! [ -r "${CHROOT_OUTPUT}/usr/lib/syslinux/pxelinux.0" ] ; then
     ewarn "File /usr/lib/syslinux/pxelinux.0 not found in build chroot." ; eend 0
     eindent
     einfo "Install syslinux[-common] package in chroot to get a netboot package."
