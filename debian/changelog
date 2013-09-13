@@ -1,3 +1,13 @@
+grml-live (0.21.5) unstable; urgency=low
+
+  * [6e49238] scripts/generate_netboot_package.sh: add closing brace to
+    error message
+  * [1876480] Fix check for presence of pxelinux.0 file
+  * [3c4e3e3] Drop trailing dot in 'Boot from next boot device' Thanks to
+    Andreas Gredler for noticing
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Sep 2013 12:58:48 +0200
+
 grml-live (0.21.4) unstable; urgency=low
 
   * [d04892a] Execute freshclam only if class FRESHCLAM is set
