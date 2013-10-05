@@ -156,9 +156,16 @@ grml log                            Log error messages while booting to /tmp/grm
                                     and /var/log/boot
 grml testcd                         Check CD data integrity and md5sums
 
+Security / login related settings:
+----------------------------------
+
+grml ssh=password                   Set password for root & grml user and start ssh-server
+grml passwd=...                     Set password for root & grml user
+grml encpasswd=....                 Set specified hash as password for root & grml user, use e.g.
+                                    'mkpasswd -H md5' to generate such a hash (available in Grml >=2013.09)
+
 Service related settings:
 -------------------------
-grml ssh=password                   Set password for root & grml user and start ssh-server
 grml startup=script                 Start $script instead of grml-quickconfig on startup
 grml nosyslog                       Do not start syslog daemon
 grml nogpm                          Disable GPM daemon
@@ -190,7 +197,7 @@ grml vnc_connect=host[:port]        Connect to a listening VNC client ("vncviewe
                                     [Note: Grml 2011.12+ doesn't include a VNC client.]
 
 Accessibility related settings:
---------------------------------
+-------------------------------
 grml brltty=type,port,table         Parameters for Braille device (e.g.: brltty=al,/dev/ttyS0,text.de.tbl)
                                     See http://mielke.cc/brltty/guidelines.html for documentation.
 
