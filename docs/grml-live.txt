@@ -203,11 +203,12 @@ Specify name of the release.
 
   -s **SUITE**::
 
-Specify the Debian suite you want to use for your live-system.  Defaults to
-"squeeze" (being current Debian/stable). Supported values are: etch, lenny,
-squeeze, wheezy, sid. Please be aware that recent Debian suites might require a
-recent base.tgz (${GRML_FAI_CONFIG}/config/basefiles/$CLASSNAME.tar.gz) or a
-recent version of debootstrap.
+Specify the Debian suite you want to use for your live-system. If unset defaults
+to "testing". Supported values are: stable, testing, unstable (or their
+corresponding release names like "wheezy"). Please be aware that recent Debian
+suites might require a recent base.tgz
+(${GRML_FAI_CONFIG}/config/basefiles/$CLASSNAME.tar.gz) or a recent version of
+debootstrap.
 
   -t **TEMPLATE_DIRECTORY**::
 
@@ -481,8 +482,8 @@ Current state of grml-live with squashfs-tools and kernel
 ---------------------------------------------------------
 
 Use squashfs-tools >=4.2-1 (available from Grml repositories as well as from
-Debian/testing and Debian/unstable) to build Grml (based) ISOs featuring kernel
-version 2.6.38-grml[64] or newer.
+Debian) to build Grml (based) ISOs featuring kernel version 2.6.38-grml[64] or
+newer.
 
 [[faq]]
 FAQ
@@ -496,8 +497,7 @@ The easiest way to get a running grml-live setup is to just use Grml.
 Of course using grml-live on a plain, original Debian installation is supported
 as well. So there we go.
 
-What we have: plain, original Debian squeeze (6.0) with debian-backports
-enabled. (This is important for squashfs-tools.)
+What we have: plain, original Debian wheezy (7.x).
 
 What we want: build a Grml ISO based on Debian/wheezy for the amd64 architecture
 using grml-live.
@@ -528,7 +528,6 @@ Instructions
   # mv AMD64.tar.gz /etc/grml/fai/config/basefiles/
 
   # install relevant tools
-  apt-get install -t squeeze-backports squashfs-tools
   apt-get --no-install-recommends install grml-live
 
   # adjust grml-live configuration for our needs:
@@ -542,19 +541,19 @@ Instructions
   # CHROOT_INSTALL="/etc/grml/fai/chroot_install"
   ## adjust if necessary (defaults to /grml/grml-live):
   ## OUTPUT="/srv/grml-live"
-  FAI_DEBOOTSTRAP="wheezy http://cdn.debian.net/debian/"
+  FAI_DEBOOTSTRAP="wheezy http://http.debian.net/debian/"
   # ARCH="amd64"
   CLASSES="GRMLBASE,GRML_FULL,AMD64"
   EOF
 
   # just optional(!) - upgrade FAI to latest available version:
-  cat >> /etc/apt/sources.list << EOF
-  # fai:
-    deb http://fai-project.org/download squeeze koeln
+  cat >> /etc/apt/sources.list.d/fai.list << EOF
+  deb     http://jenkins.grml.org/debian fai main
+  deb-src http://jenkins.grml.org/debian fai main
   EOF
 
   # get gpg key of FAI repos and install current FAI version:
-  gpg -a --recv-keys AB9B66FD; gpg -a --export AB9B66FD | apt-key add -
+  wget -O - http://jenkins.grml.org/debian/C525F56752D4A654.asc | sudo apt-key add -
   apt-get update
   apt-get install fai-client fai-server fai-doc
 
@@ -688,7 +687,7 @@ FAI_DEBOOTSTRAP:
   [...]
   APT_PROXY="http://localhost:3142/"
   [...]
-  FAI_DEBOOTSTRAP="squeeze http://localhost:3142/cdn.debian.net/debian squeeze main contrib non-free"
+  FAI_DEBOOTSTRAP="wheezy http://localhost:3142/http.debian.net/debian wheezy main contrib non-free"
 
 Make sure apt-cacher-ng is running ('/etc/init.d/apt-cacher-ng restart').
 That's it.  All downloaded files will be cached in /var/cache/apt-cacher-ng then.
@@ -715,7 +714,7 @@ How do I create a base tar.gz (I386.tar.gz or AMD64.tar.gz)
 Execute the following commands (requires root):
 
   ARCH='amd64' # replace with i386 if necessary
-  SUITE='squeeze' # using the current stable release should always work
+  SUITE='wheezy' # using the current stable release should always work
   debootstrap --arch "$ARCH" --exclude=info,tasksel,tasksel-data "$SUITE" "$ARCH" http://debian.netcologne.de/debian
   cd "$ARCH"
   rm var/cache/apt/archives/*.deb
