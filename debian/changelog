@@ -1,3 +1,15 @@
+grml-live (0.21.6) unstable; urgency=low
+
+  * [7858f90] grml-cheatcodes.txt: document passwd and encpasswd boot
+    options
+  * [8e04e2c] Update list of supported Debian suites/releases and related
+    docs
+  * Software related changes:
+    - [4ed2dcf] Add tcplay to GRML_FULL [Closes: issue1282]
+      Thanks to Raoul for the suggestion
+
+ -- Michael Prokop <mika@grml.org>  Thu, 07 Nov 2013 10:18:57 +0100
+
 grml-live (0.21.5) unstable; urgency=low
 
   * [6e49238] scripts/generate_netboot_package.sh: add closing brace to
