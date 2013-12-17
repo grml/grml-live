@@ -15,6 +15,7 @@ rm -f $target/var/lib/apt/lists/*Packages \
       $target/var/lib/apt/lists/*Release \
       $target/var/lib/apt/lists/*Sources \
       $target/var/lib/apt/lists/*Index* \
+      $target/var/lib/apt/lists/*Translation* \
       $target/var/lib/apt/lists/*.gpg \
       $target/var/cache/apt-show-versions/* \
       $target/var/cache/debconf/*.dat-old \
