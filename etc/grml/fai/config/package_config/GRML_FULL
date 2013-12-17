@@ -246,6 +246,7 @@ bacula-fd
 bacula-sd
 clonezilla
 dirvish
+dump
 duplicity
 fsarchiver
 
