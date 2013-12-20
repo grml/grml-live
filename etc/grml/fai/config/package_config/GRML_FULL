@@ -71,6 +71,7 @@ lvm2
 mdadm
 mpt-status
 multipath-tools
+nocache
 scsitools
 sdparm
 sg3-utils
