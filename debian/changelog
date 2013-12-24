@@ -1,3 +1,18 @@
+grml-live (0.22.0) unstable; urgency=low
+
+  The "happy xmas" release
+
+  * [308d87b] Switch from cdn.debian.net to http.debian.net
+  * [7721458] Bump Standards-Version to 3.9.5
+  * [7b90d41] RELEASE/98-clean-chroot: remove
+    /var/lib/apt/lists/*Translation* files
+  * [12ae9f0] GRMLBASE/98-clean-chroot: do not execute apt-get update
+  * Software related changes:
+    - [0ef21d2] add dump to GRML_FULL [Closes: issue1288]
+    - [a6d3e35] add nocache to GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Tue, 24 Dec 2013 13:13:04 +0100
+
 grml-live (0.21.6) unstable; urgency=low
 
   * [7858f90] grml-cheatcodes.txt: document passwd and encpasswd boot
