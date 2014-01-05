@@ -1,5 +1,5 @@
 PACKAGES aptitude
 
 # needed for linux-image-amd64-grml
-linux-base/squeeze-backports
-initramfs-tools/squeeze-backports
+linux-base/wheezy-backports
+initramfs-tools/wheezy-backports
