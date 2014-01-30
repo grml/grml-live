@@ -34,9 +34,9 @@ fcopy -v /etc/inittab
 sed -i "s/\$USERNAME\$/${USERNAME}/" $target/etc/inittab
 
 # provide Grml's bootlocal init scripts
-fcopy -v /etc/init.d/bootlocal.first
-fcopy -v /etc/init.d/bootlocal.middle
-fcopy -v /etc/init.d/bootlocal.last
+fcopy -v -mroot,root,0755 /etc/init.d/bootlocal.first
+fcopy -v -mroot,root,0755 /etc/init.d/bootlocal.middle
+fcopy -v -mroot,root,0755 /etc/init.d/bootlocal.last
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
