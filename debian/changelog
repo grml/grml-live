@@ -1,3 +1,15 @@
+grml-live (0.22.1) unstable; urgency=medium
+
+  * [adbf302] Update DEBIAN_STABLE for wheezy as current stable release
+  * [e5bc692] grml-live.conf: adjust SUITE comment for new defaults
+  * [bfb132d] grml-live.conf: adjust debootstrap cmdline for Debian/wheezy
+  * [04e6319] zsh completion: update list of Debian suites
+  * [c2110d3] Remove DEBIAN_STABLE file regarding wheezy-backports. Thanks
+    to Andras Korn
+  * [89a4ade] Force bootlocal* files to be executables
+
+ -- Michael Prokop <mika@grml.org>  Mon, 03 Feb 2014 16:21:15 +0100
+
 grml-live (0.22.0) unstable; urgency=low
 
   The "happy xmas" release
