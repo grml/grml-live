@@ -1317,6 +1317,9 @@ config_mixer () {
             IFS='
 '
             for CONTROL in ${=CONTROLS} ; do
+               # such devices can not be controlled with amixer ... unmute
+               [[ "$CONTROL" == *Console* ]] && continue
+
                if ! echo "${CONTROL}" | grep -q -i "mic" ; then
                    if amixer -c $card sget "${CONTROL}" | grep -q 'Capabilities:.*pswitch' ; then
                       amixer -c $card -q set "${CONTROL}" unmute
