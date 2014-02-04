@@ -1,3 +1,9 @@
+grml-autoconfig (0.11.3) grml-testing; urgency=medium
+
+  * [b067eaa] config_mixer: ignore "Console" devices for amixer
+
+ -- Michael Prokop <mika@grml.org>  Tue, 04 Feb 2014 13:53:08 +0100
+
 grml-autoconfig (0.11.2) grml-testing; urgency=medium
 
   * [74288c3] Report result of scripts execution
