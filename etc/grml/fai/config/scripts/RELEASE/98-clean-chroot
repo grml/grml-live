@@ -21,6 +21,9 @@ rm -f $target/var/lib/apt/lists/*Packages \
       $target/var/cache/debconf/*.dat-old \
       $target/var/cache/apt/*.bin
 
+echo "Removing /var/lib/aptitude/pkgstates.old"
+rm -f "${target}/var/lib/aptitude/pkgstates.old"
+
 # Remove all FAI logs from chroot via grml-live later then
 echo "Setting up /etc/grml_fai_release for grml-live"
 touch $target/etc/grml_fai_release
