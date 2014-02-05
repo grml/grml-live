@@ -206,8 +206,8 @@ case "$LANGUAGE" in
                 COUNTRY="ch"
                 LANG="de_CH.UTF-8"
                 KEYTABLE="sg-latin1"
-                XKEYBOARD="de_CH"
-                KDEKEYBOARD="de_CH"
+                XKEYBOARD="ch"
+                KDEKEYBOARD="ch"
                 CHARSET="utf8"
                 # Additional KDE Keyboards
                 KDEKEYBOARDS="de,us,fr"
