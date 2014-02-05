@@ -1,3 +1,9 @@
+grml-autoconfig (0.11.4) grml-testing; urgency=medium
+
+  * [ff5bb8f] Fix keyboard entries for lang=ch
+
+ -- Michael Prokop <mika@grml.org>  Wed, 05 Feb 2014 13:10:13 +0100
+
 grml-autoconfig (0.11.3) grml-testing; urgency=medium
 
   * [b067eaa] config_mixer: ignore "Console" devices for amixer
