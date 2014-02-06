@@ -211,7 +211,7 @@ grml dmraid=on                      Automatically enable any present dmraid devi
 grml dmraid=off                     Actively try to stop any present dmraid devices.
 grml nolvm                          Disable scanning for Logical Volumes (LVM)
 grml lvm                            Automatically activate Logival Volumes (LVM) during boot
-grml readonly                       Make sure all harddisk devices (/dev/hd* /dev/sd*) are forced to read-only mode
+grml read-only                      Make sure all harddisk devices (/dev/hd* /dev/sd*) are forced to read-only mode
 grml ethdevice=...                  Use specified network device for network boot instead of default (eth0)
 grml ethdevice-timeout=...          Use specified network configuration timeout instead of default (15sec)
 grml xmodule=ati|fbdev|i810|mga     Use specified X.org-Module (1)
