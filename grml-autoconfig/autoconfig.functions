@@ -1721,7 +1721,7 @@ if checkbootparam 'debs' ; then
      # backwards compatibility: if no path is given get debs from debs/
      DEBS="debs/$DEBS"
    fi
-   einfo "Tring to install debian package(s) ${DEBS}"
+   einfo "Trying to install Debian package(s) ${DEBS}"
    DEBS="$(eval echo ${DCSDIR}/$DEBS)"
    dpkg -i $DEBS ; eend $?
 fi
