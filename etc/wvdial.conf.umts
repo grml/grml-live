@@ -150,4 +150,11 @@ Carrier Check = No
 Phone = *99#
 Stupid Mode = 1
 
+# AT&T USA
+[Dialer att]
+Modem = /dev/ttyACM0
+Init3 = AT+CGDCONT=1,"IP","wap.cingular"
+Stupid Mode = 1
+Phone = *99#
+
 ## END OF FILE ##################################################################
