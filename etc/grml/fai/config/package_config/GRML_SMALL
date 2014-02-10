@@ -28,7 +28,7 @@ gddrescue
 grml-paste
 grml-quickconfig-standard
 htop
-ifenslave-2.6
+ifenslave
 ifupdown
 imvirt
 iproute

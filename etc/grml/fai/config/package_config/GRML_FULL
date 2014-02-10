@@ -159,7 +159,7 @@ dnsmasq
 ethstatus
 ethtool
 hostapd
-ifenslave-2.6
+ifenslave
 iftop
 ifupdown
 ipcalc
