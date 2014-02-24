@@ -2265,8 +2265,37 @@ if $VIRTUALBOX ; then
       eend $?
 
       einfo "Starting VBoxService."
-      VBoxService >/dev/null &
+      VBoxService >/dev/null
       eend $?
+
+      local vbox_automation='/media/sf_automation'
+      if checkbootparam 'vbautomation'; then
+        vbox_automation="$(getbootparam 'vbautomation' 2>>$DEBUG)"
+      fi
+
+      local distri="$(getbootparam 'distri' 2>>$DEBUG)"
+      [ -n "$distri" ] || distri='grml'
+
+      if [ -d "${vbox_automation}" ] ; then
+        einfo "Found shared folders automation directory $vbox_automation"
+        eend 0
+
+        eindent
+        if checkbootparam 'novbautomation' ; then
+          einfo "Bootoption novbautomation found. Disabling automation script execution."
+          eend 0
+        else
+          if ! [ -x "${vbox_automation}/${distri}" ] ; then
+            ewarn "Couldn't find an automation script named ${vbox_automation}/${distri}"
+            eend 1
+          else
+            einfo "Executing '${vbox_automation}/${distri}' now:"
+            "${vbox_automation}/${distri}"
+            eend $?
+          fi
+        fi
+        eoutdent
+      fi
 
     eoutdent
   fi
