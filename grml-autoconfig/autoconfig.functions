@@ -2268,33 +2268,58 @@ if $VIRTUALBOX ; then
       VBoxService >/dev/null
       eend $?
 
-      local vbox_automation='/media/sf_automation'
+      local vbautomation='automation'
       if checkbootparam 'vbautomation'; then
-        vbox_automation="$(getbootparam 'vbautomation' 2>>$DEBUG)"
+        vbautomation="$(getbootparam 'vbautomation' 2>>$DEBUG)"
       fi
 
-      local distri="$(getbootparam 'distri' 2>>$DEBUG)"
-      [ -n "$distri" ] || distri='grml'
-
-      if [ -d "${vbox_automation}" ] ; then
-        einfo "Found shared folders automation directory $vbox_automation"
+      if ! VBoxControl sharedfolder list | egrep -q "^[0-9]+ - ${vbautomation}$" ; then
+        ewarn "No automount shared folder '$vbautomation' available"
+        eend 0
+      else
+        einfo "Found automount shared folder '$vbautomation'"
         eend 0
 
+        local distri="$(getbootparam 'distri' 2>>$DEBUG)"
+        [ -n "$distri" ] || distri='grml'
+
+        local vbox_auto_sf="/media/sf_${vbautomation}"
+
+        sleep 1 # ugly but necessary
+
+        counter=10
         eindent
-        if checkbootparam 'novbautomation' ; then
-          einfo "Bootoption novbautomation found. Disabling automation script execution."
+        while ! [ -d "${vbox_auto_sf}" ] && [[ "$counter" != 0 ]]; do
+          einfo "Waiting another second to retry access to ${vbox_auto_sf}"
+          sleep 1
+          counter=$(( counter-1 ))
           eend 0
-        else
-          if ! [ -x "${vbox_automation}/${distri}" ] ; then
-            ewarn "Couldn't find an automation script named ${vbox_automation}/${distri}"
-            eend 1
-          else
-            einfo "Executing '${vbox_automation}/${distri}' now:"
-            "${vbox_automation}/${distri}"
-            eend $?
-          fi
-        fi
+        done
         eoutdent
+
+        if ! [ -d "${vbox_auto_sf}" ] ; then
+          eerror "Giving up trying to access folder ${vbox_auto_sf} which doesn't seem to exist"
+          eend 1
+        else
+          einfo "Found shared folders automation directory $vbox_auto_sf"
+          eend 0
+
+          eindent
+          if checkbootparam 'novbautomation' ; then
+            einfo "Bootoption novbautomation found. Disabling automation script execution."
+            eend 0
+          else
+            if ! [ -x "${vbox_auto_sf}/${distri}" ] ; then
+              ewarn "Couldn't find an automation script named ${vbox_auto_sf}/${distri}"
+              eend 1
+            else
+              einfo "Executing '${vbox_auto_sf}/${distri}' now:"
+              "${vbox_auto_sf}/${distri}"
+              eend $?
+            fi
+          fi
+          eoutdent
+        fi
       fi
 
     eoutdent
