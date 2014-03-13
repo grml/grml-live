@@ -696,6 +696,12 @@ else
                   -u "$HOSTNAME" "$FAI_ACTION" "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE
       RC="$PIPESTATUS" # notice: bash-only
 
+      if [ "$RC" != 0 ] ; then
+         log    "Error: critical error while executing fai [exit code ${RC}]. Exiting."
+         eerror "Error: critical error while executing fai [exit code ${RC}]. Exiting." ; eend 1
+         bailout 1
+      fi
+
       # provide inform fai about the ISO we build, needs to be provided
       # *after* FAI stage, otherwise FAI skips the debootstrap stage if
       # there is not BASEFILE (as it checks for presence of /etc) :(
@@ -704,12 +710,6 @@ else
       [ -n "$SUITE" ] && echo "SUITE=$SUITE" >> "$CHROOT_OUTPUT/etc/grml_live_version"
 
       FORCE_ISO_REBUILD=true
-
-      if [ "$RC" != 0 ] ; then
-         log    "Error: critical error while executing fai [exit code ${RC}]. Exiting."
-         eerror "Error: critical error while executing fai [exit code ${RC}]. Exiting." ; eend 1
-         bailout 1
-      fi
 
       # move fai logs into grml_logs directory
       mkdir -p "$LOG_OUTPUT"/fai/
