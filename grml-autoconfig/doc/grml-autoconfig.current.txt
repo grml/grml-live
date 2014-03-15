@@ -18,7 +18,7 @@ GRMLCFG the proper label can be set via the autoconfig boot parameter
 (autoconfig=SOMELABEL, for example).
 
 Without any additional boot parameters, the GCA at DCSDIR/config.tbz is
-automatically unpacked and DCSDIR/scrips/grml.sh is automatically executed on
+automatically unpacked and DCSDIR/scripts/grml.sh is automatically executed on
 system startup. The 'noautoconfig' boot parameter disables this automatic
 behavior.
 
@@ -136,8 +136,8 @@ debnet::
 noautoconfig::
 
     Deactivate automounting. By default the scripts try to mount a device with
-    label 'GRMLCFG'. If you specify the noautoconfig bootparam this automounting
-    will be deactivated.
+    label 'GRMLCFG'. If you specify the noautoconfig boot parameter this
+    automounting will be deactivated.
 
   noautoconfig            => disables auto mounting of label 'GRMLCFG'
 
