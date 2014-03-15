@@ -1737,11 +1737,6 @@ if checkbootparam 'scripts' || [ "$DCSMP" = "/mnt/grmlcfg" ]; then
      # backwards compatibility: if no path is given get scripts from scripts/
      SCRIPTS="scripts/$SCRIPTS"
    fi
-   if [ "$DCSMP" = "/mnt/grmlcfg" ]; then
-     # we are executing from a GRMLCFG labeled fs
-     # kick everything we have done before and start over
-     SCRIPTS="$(cd ${DCSDIR}; /bin/ls -1d [Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
-   fi
    if [ -n "$SCRIPTS" ]; then
      SCRIPTS="${DCSDIR}/$SCRIPTS"
      if [ "$DCSMP" = "/mnt/grmlcfg" ]; then
