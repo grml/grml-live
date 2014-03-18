@@ -1,0 +1,12 @@
+# This file was deployed via grml-live's
+# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/39-modprobe script, using
+# ${GRML_FAI_CONFIG}/config/files/etc/modprobe.d/vmwgfx.conf/GRMLBASE
+#
+# Filename:      /etc/modprobe.d/vmwgfx.conf
+# Purpose:       Enable vmwgfx fbdev for the drm driver for the VMware SVGA device
+# Authors:       grml-team (grml.org),
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+options vmwgfx enable_fbdev=1
