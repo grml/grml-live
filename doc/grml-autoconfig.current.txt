@@ -1,7 +1,7 @@
 Behavior in current Grml versions
 ---------------------------------
 
-This section applies to all Grml versions newer than release 2009.05.
+This section applies to all Grml versions newer than release 2013.02.
 
 The central concept of grml-autoconfig is the DCS directory which holds debs,
 configuration and scripts which are used during system startup.
@@ -9,13 +9,14 @@ configuration and scripts which are used during system startup.
 Determination of DCS directory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The DCS directory defaults to the root directory of the GRML live image. If a
-file system labeled GRMLCFG is found, the DCS directory is the root directory of
-that file system. Alternatively, the myconfig boot parameter can be used to
-directly specify a device which is then taken as DCS directory
-(myconfig=/dev/sda1, for example). If your device is labeled different to
-GRMLCFG the proper label can be set via the autoconfig boot parameter
-(autoconfig=SOMELABEL, for example).
+The DCS directory defaults to the root directory of the GRML live image
+(Note: the directory is known as /lib/live/mount/medium/ on a _running_
+Grml system then!). If a file system labeled GRMLCFG is found, the DCS
+directory is the root directory of that file system. Alternatively, the
+myconfig boot parameter can be used to directly specify a device which
+is then taken as DCS directory (myconfig=/dev/sda1, for example). If
+your device is labeled different to GRMLCFG the proper label can be set
+via the autoconfig boot parameter (autoconfig=SOMELABEL, for example).
 
 Without any additional boot parameters, the GCA at DCSDIR/config.tbz is
 automatically unpacked and DCSDIR/scripts/grml.sh is automatically executed on
@@ -145,13 +146,14 @@ noautoconfig::
 Permanently adjust boot parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As you probably know you can adjust boot parameters on the bootprompt.  You want
-to set some boot parameters permanently? That's possible via adding a directory
-named 'bootparams' to the Grml ISO which has to be located at the root-directory
-/bootparams/ (note: the directory is known as /lib/live/mount/medium/bootparams/ on a
-_running_ Grml system then). Place a textfile inside the directory containing
-the boot parameters which should be appended to default ones (this corresponds
-to booting without any special parameters).
+As you probably know you can adjust boot parameters on the bootprompt.
+You want to set some boot parameters permanently? That's possible via
+adding a directory named 'bootparams' to the Grml ISO which has to be
+located at the root-directory /bootparams/ (Note: the directory is known
+as /lib/live/mount/medium/bootparams/ on a _running_ Grml system then!).
+Place a textfile inside the directory containing the boot parameters
+which should be appended to default ones (this corresponds to booting
+without any special parameters).
 
   mkdir bootparams
   echo lang=de > bootparams/my_bootparams
