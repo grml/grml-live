@@ -12,7 +12,10 @@ Bugs: mailto:bugs@grml.org
 
 Package: grml-etc
 Architecture: all
-Depends: ${misc:Depends}, grml-scripts (>= 0.9), grml-etc-core (>= 0.3), virt-what
+Depends: grml-etc-core (>= 0.3),
+         grml-scripts (>= 0.9),
+         virt-what,
+         ${misc:Depends}
 Description: etcetera files for the Grml system
  This package includes /etc files for the Grml system.
  Whereas the grml-etc-core package is limited to some
