@@ -3,7 +3,7 @@ Section: grml
 Priority: optional
 Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends: debhelper (>= 5)
-Standards-Version: 3.9.4
+Standards-Version: 3.9.5
 Build-Depends-Indep: asciidoc, docbook-xsl, xsltproc, shunit2, zsh
 Homepage: http://git.grml.org/?p=grml-autoconfig.git
 Vcs-git: git://git.grml.org/grml-autoconfig.git
