@@ -1,3 +1,22 @@
+grml-live (0.23.0) unstable; urgency=medium
+
+  * [8bdfb54] 98-clean-chroot: get rid of /var/lib/aptitude/pkgstates.old
+    in RELEASE class
+  * [0442e2a] 33-aptsetup: adopt snapshot.debian.org code for
+    http.debian.net
+  * [e4b0667] Rename "readonly" boot option to "read-only", renamed in
+    live-boot
+  * [3ffdf59] Move return code check of FAI-run before wrinting to /etc of
+    live system
+  * [c5ba433] Enable fbdev for vmwgfx kernel driver [Testing: issue1280]
+    Thanks to Andreas Gredler <jimmy@grml.org>
+  * Software related changes:
+    - [6a5659b] SW: replace transitional package ifenslave-2.6 with
+      ifenslave
+    - [1d7acdc] SW: remove ufsutils from GRML_{SMALL,MEDIUM,FULL,XL}
+
+ -- Michael Prokop <mika@grml.org>  Thu, 20 Mar 2014 16:23:41 +0100
+
 grml-live (0.22.1) unstable; urgency=medium
 
   * [adbf302] Update DEBIAN_STABLE for wheezy as current stable release
