@@ -1,3 +1,19 @@
+grml-autoconfig (0.13.0) grml-testing; urgency=medium
+
+  [ Andreas "Jimmy" Gredler ]
+  * [bedd7c2] Drop .sp workaround, fix some typos in manpages and remove
+    duplicated text
+  * [11074bc] Drop code related to scripts handling on DCSDIR, breaking it
+    for GRMLCFG labeled devices
+  * [b9ded18] Added some extra information about DCS directory on a live
+    medium
+
+  [ Michael Prokop ]
+  * [ae749b5] Bump Standards-Version to 3.9.5
+  * [da0eb41] Run wrap-and-sort -a on debian directory
+
+ -- Michael Prokop <mika@grml.org>  Thu, 20 Mar 2014 16:12:28 +0100
+
 grml-autoconfig (0.12.1) grml-testing; urgency=medium
 
   * [cf7b0ee] vbautomation takes shared folder name without prefix +
