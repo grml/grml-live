@@ -1,3 +1,15 @@
+grml-etc (1.5.1) grml-testing; urgency=medium
+
+  [ Andreas "Jimmy" Gredler ]
+  * [4ab8559] Fixed typo and replace "grml" with "Grml" in debian/control,
+    added wvdial config for AT&T USA
+
+  [ Michael Prokop ]
+  * [4888c37] Bump Standards-Version to 3.9.5
+  * [023f90f] Run wrap-and-sort -a on debian directory
+
+ -- Michael Prokop <mika@grml.org>  Thu, 20 Mar 2014 16:26:05 +0100
+
 grml-etc (1.5.0) grml-testing; urgency=low
 
   * [0a50b8a] Adapt grml-reboot init script for new live-boot live
