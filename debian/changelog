@@ -1,3 +1,11 @@
+grml-live (0.23.1) unstable; urgency=medium
+
+  * [c701eef] Rework script which checks for uninstallable packages
+  * Software related changes:
+    - [35e2f8f] drop recover, abandoned upstream
+
+ -- Michael Prokop <mika@grml.org>  Fri, 21 Mar 2014 10:43:46 +0100
+
 grml-live (0.23.0) unstable; urgency=medium
 
   * [8bdfb54] 98-clean-chroot: get rid of /var/lib/aptitude/pkgstates.old
