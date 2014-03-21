@@ -12,25 +12,36 @@ set -e
 PACKAGE_LIST=/var/log/install_packages.list
 
 if ! [ -r "$target/${PACKAGE_LIST}" ] ; then
-   echo "No $target/${PACKAGE_LIST} found, will not run package validation check."
+  echo "No $target/${PACKAGE_LIST} found, will not run package validation check."
 else
-   printf "Validating package list: "
-   TMPFILE=$(mktemp)
+  printf "Validating package list: "
 
-   $ROOTCMD dpkg --list $(grep -v '^#' $target/${PACKAGE_LIST} | grep -v -- '-$') 2>&1 | \
-     grep -e '^un' -e 'No packages' > "$TMPFILE" || true
+  TMPSTDOUT=$(mktemp)
+  TMPSTDERR=$(mktemp)
 
-   awk '/^un/ {print $2 " not_installable"}' "$TMPFILE" > "$LOGDIR/package_errors.log"
-   awk '/^No packages found matching/ {print $5 " not_available"}' "$TMPFILE" | \
-     sed 's/\. / /' >> "$LOGDIR/package_errors.log"
+  # 1) catch packages that aren't in state 'ii' (marked for installation
+  # and successfully instead) on stdout
+  # 2) catch error messages like 'dpkg-query: no packages found matching $package"
+  # for packages unknown to dpkg on stderr
+  # NOTE: 'grep -v -- '-$' ignores packages in FAI's package list that are
+  # marked for removal
+  $ROOTCMD dpkg --list $(grep -v '^#' $target/${PACKAGE_LIST} | grep -v -- '-$') 2>"$TMPSTDERR" | \
+    grep -e '^[urph][ncufhWt]' > "$TMPSTDOUT" || true
 
-   if [ -s "$TMPFILE" ] ; then
-      printf "failed (there have been errors, find them at $LOGDIR/package_errors.log)\n"
-   else
-      printf "done - no errors found\n"
-   fi
+  # extract packages from stdout
+  awk '/^un/ {print $2 " not_installable"}' "$TMPSTDOUT" > "$LOGDIR/package_errors.log"
 
-   rm -f "$TMPFILE"
+  # extract packages from stderr
+  grep 'packages found matching' "$TMPSTDERR" | \
+    sed 's/dpkg-query: [Nn]o packages found matching \(.*\)/\1 not_installable/' >> "$LOGDIR/package_errors.log"
+
+  if [ -s "$LOGDIR/package_errors.log" ] ; then
+    printf "failed (there have been errors, find them at $LOGDIR/package_errors.log)\n"
+  else
+    printf "done - no errors found\n"
+  fi
+
+  rm -f "$TMPSTDOUT" "$TMPSTDERR"
 fi
 
 ## END OF FILE #################################################################
