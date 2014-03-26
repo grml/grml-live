@@ -958,7 +958,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        echo "source /boot/grub/footer.cfg" >> "${BUILD_OUTPUT}"/boot/grub/loopback.cfg
 
        # copy grub files from target
-       mkdir -p ${BUILD_OUTPUT}"/boot/grub/i386-pc/
+       mkdir -p "${BUILD_OUTPUT}"/boot/grub/i386-pc/
        cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.mod "${BUILD_OUTPUT}"/boot/grub/i386-pc/
        cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.o "${BUILD_OUTPUT}"/boot/grub/i386-pc/
        cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.lst "${BUILD_OUTPUT}"/boot/grub/i386-pc/
