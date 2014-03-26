@@ -1,12 +1,12 @@
-docs/grml-live.8            usr/share/man/man8/
 docs/grml-live-remaster.8   usr/share/man/man8/
+docs/grml-live.8            usr/share/man/man8/
 etc/grml                    etc
 examples                    usr/share/doc/grml-live/
+fonts                       usr/share/grml-live/
 grml-live                   usr/sbin/
 remaster/grml-live-remaster usr/sbin/
-fonts                       usr/share/grml-live/
 scripts                     usr/share/grml-live/
+templates/GRML              usr/share/grml-live/templates/
 templates/boot/grub         usr/share/grml-live/templates/boot/
 templates/boot/isolinux     usr/share/grml-live/templates/boot/
-templates/GRML              usr/share/grml-live/templates/
 templates/windows           usr/share/grml-live/templates/

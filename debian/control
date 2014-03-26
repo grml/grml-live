@@ -3,7 +3,9 @@ Section: grml
 Priority: extra
 Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends: debhelper (>= 5)
-Build-Depends-Indep: asciidoc, xsltproc, docbook-xsl
+Build-Depends-Indep: asciidoc,
+                     docbook-xsl,
+                     xsltproc
 Standards-Version: 3.9.5
 Homepage: http://grml.org/grml-live/
 Vcs-git: git://git.grml.org/grml-live.git
@@ -13,9 +15,26 @@ Bugs: mailto:bugs@grml.org
 
 Package: grml-live
 Architecture: all
-Depends: ${misc:Depends}, bc, bzip2, fai-client (>= 3.4.0), fai-server (>= 3.4.0), xorriso | genisoimage, mksh, moreutils, squashfs-tools (>= 1:4.2-0~bpo60), pciutils, memtest86+, syslinux
-Recommends: grml-live-db, ia32-libs, ipxe, grub-pc-bin, imagemagick
-Suggests: fai-doc, grml-live-addons, grml-live-compat
+Depends: bc,
+         bzip2,
+         fai-client (>= 3.4.0),
+         fai-server (>= 3.4.0),
+         memtest86+,
+         mksh,
+         moreutils,
+         pciutils,
+         squashfs-tools (>= 1:4.2-0~bpo60),
+         syslinux,
+         xorriso | genisoimage,
+         ${misc:Depends}
+Recommends: grml-live-db,
+            grub-pc-bin,
+            ia32-libs,
+            imagemagick,
+            ipxe
+Suggests: fai-doc,
+          grml-live-addons,
+          grml-live-compat
 Description: build system for creating a Grml (based) Linux live system
  This package provides the build system for creating a Debian /
  Grml based Linux live system (also known as live cd). It is
@@ -23,7 +42,12 @@ Description: build system for creating a Grml (based) Linux live system
 
 Package: grml-live-db
 Architecture: all
-Depends: ${misc:Depends}, grml-live, libdbd-sqlite3-perl, libdbi-perl, libtimedate-perl, sqlite3
+Depends: grml-live,
+         libdbd-sqlite3-perl,
+         libdbi-perl,
+         libtimedate-perl,
+         sqlite3,
+         ${misc:Depends}
 Recommends: perl-doc
 Description: log package build information of grml-live to database
  This package provides a database layer for storing build
