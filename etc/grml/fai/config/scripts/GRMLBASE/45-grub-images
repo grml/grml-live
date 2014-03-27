@@ -16,13 +16,11 @@ TMP_CONFIG="${target}/tmp/grub_config_efi"
 rm -f "$BOOTX64" "$EFI_IMG" "$TMP_CONFIG"
 
 cat > "$TMP_CONFIG" <<EOF
-search --set -f /conf/bootid.txt root
-if [ -e /boot/grub/grub.cfg ]; then
- set prefix=(\$root)/boot/grub
- configfile /boot/grub/grub.cfg
-else
- echo "E: Could not find root device!"
-fi
+search.file /conf/bootid.txt root
+set prefix=(\$root)/boot/grub
+insmod normal
+normal
+echo "E: Could not find root device!"
 EOF
 
 BOOTX64="${BOOTX64##${target}}"
@@ -44,30 +42,14 @@ if ifclass AMD64 ; then
   fi
 fi
 
-# until grub 1.99-27.1 it's called raid, starting with
-# grub version 2.00-14 the raid.mod module no longer exists
-if [ -r "${target}"/usr/lib/grub/i386-pc/raid.mod ] ; then
-  echo "Using raid module as file raid.mod is present"
-  ADDITIONAL_MODULES[raid]="raid"
-elif [ -r "${target}"/usr/lib/grub/i386-pc/diskfilter.mod ] ; then
-  echo "Using diskfilter and related modules as file diskfilter.mod is present"
-  ADDITIONAL_MODULES[raid]="diskfilter mdraid09 mdraid09_be mdraid1x raid5rec raid6rec"
-else
-  echo "Warning: no according raid module in grub directory found."
-fi
-
 BOOTX64="${BOOTX64##${target}}"
 EFI_IMG="${EFI_IMG##${target}}"
 TMP_CONFIG="${TMP_CONFIG##${target}}"
 
 for arch in ${ARCHS[@]} ; do
 $ROOTCMD grub-mkimage -O $arch -o /boot/$arch.img --prefix=/boot/grub/ --config="$TMP_CONFIG" \
-  bitmap boot btrfs cat chain cmp configfile cpio echo elf ext2    \
-  fat gfxmenu gfxterm gzio help iso9660 jpeg linux loopback lvm    \
-  memdisk minicmd multiboot normal part_gpt part_msdos play png    \
-  probe regexp reiserfs search search_fs_file search_fs_uuid       \
-  search_label squash4 terminal test video videoinfo xfs           \
-  ${ADDITIONAL_MODULES[raid]} ${ADDITIONAL_MODULES[$arch]}
+  echo iso9660 part_msdos search_fs_file test \
+  ${ADDITIONAL_MODULES[$arch]}
 done
 
 if [ -f "${target}/boot/i386-pc.img" ] ; then

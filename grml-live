@@ -966,6 +966,10 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        cp -a "${CHROOT_OUTPUT}"/boot/grub/core.img "${BUILD_OUTPUT}"/boot/grub/
        cp -a "${CHROOT_OUTPUT}"/boot/grub/grub.img "${BUILD_OUTPUT}"/boot/grub/
 
+       # copy modules for UEFI grub
+       mkdir -p "${BUILD_OUTPUT}"/boot/grub/x86_64-efi/
+       cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/x86_64-efi/*.{mod,lst} "${BUILD_OUTPUT}"/boot/grub/x86_64-efi/
+
        if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
           log    "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
           eerror "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting." ; eend 1
