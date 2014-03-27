@@ -205,6 +205,13 @@ EOF
   $ROOTCMD ln -s /etc/resolvconf/run/resolv.conf /etc/resolv.conf
 fi
 
+# make sure we don't leak any mdadm configurations
+# that are present on the build system to the live system
+if [ -f "${target}/etc/mdadm/mdadm.conf" ] ; then
+  echo "Found /etc/mdadm/mdadm.conf, getting rid of any possible enabled ARRAY settings."
+  sed -i '/^ARRAY/d' "${target}/etc/mdadm/mdadm.conf"
+fi
+
 if ! $ROOTCMD test -x /usr/bin/updatedb ; then
   echo "Warning: updatedb not installed"
 else
