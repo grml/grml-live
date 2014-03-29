@@ -1,3 +1,33 @@
+grml-live (0.23.2) unstable; urgency=medium
+
+  [ Evgeni Golov ]
+  * [e44c3b3] name the correct, non-deprecated, persistence label first
+
+  [ Michael Prokop ]
+  * [4a12fc7] Install grub modules into /boot/grub/i386-pc [Testing:
+    issue1297] Thanks to Michael Schierl
+  * [6905754] Fix syntax error in "${BUILD_OUTPUT}"/boot/grub/i386-pc/
+    creation
+  * [4df3e2f] Add bzip2 to depends, used for netboot package generation.
+    Thanks to Michael Schierl for the bugreport
+  * [d1e7709] Run wrap-and-sort -a on debian directory
+  * [7a9a250] Remove /etc/resolvconf/resolv.conf.d/original during
+    cleanup. Thanks to Evgeni Golov for the pointer
+  * [462afb6] Make sure to not leak any mdadm configurations from the
+    build system. Thanks to Evgeni Golov for the pointer
+  * Software related changes:
+    * [b586e55] drop libertas-firmware from GRMLBASE. Thanks to Axel
+      Beckert <abe@deuxchevaux.org>
+    * [2601da4] replace lynx with lynx-cur. Thanks to Axel Beckert
+      <abe@deuxchevaux.org>
+
+  [ Michael Schierl ]
+  * [fc89ac0] Add warning for running grml-live from git
+  * [d3e8ff2] Make the GRUB images modular
+  * [10201fb] Work around regression in GRUB 2.00-22
+
+ -- Michael Prokop <mika@grml.org>  Sat, 29 Mar 2014 17:17:18 +0100
+
 grml-live (0.23.1) unstable; urgency=medium
 
   * [c701eef] Rework script which checks for uninstallable packages
