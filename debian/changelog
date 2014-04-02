@@ -1,3 +1,10 @@
+grml-udev-config (0.3.2) unstable; urgency=medium
+
+  * [a6b78e9] forensic-mark-readonly: check only for boot option read-only
+  * [43c24a3] Bump Standards-Version to 3.9.5
+
+ -- Michael Prokop <mika@grml.org>  Wed, 02 Apr 2014 11:42:47 +0200
+
 grml-udev-config (0.3.1) unstable; urgency=low
 
   * [ba3c9a1] grml-udev-rebuildfstab: support diabling labels via
