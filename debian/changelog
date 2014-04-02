@@ -1,3 +1,9 @@
+grml-autoconfig (0.13.1) grml-testing; urgency=medium
+
+  * [332eaae] Drop checks for "forensic" boot option
+
+ -- Michael Prokop <mika@grml.org>  Wed, 02 Apr 2014 11:45:59 +0200
+
 grml-autoconfig (0.13.0) grml-testing; urgency=medium
 
   [ Andreas "Jimmy" Gredler ]
