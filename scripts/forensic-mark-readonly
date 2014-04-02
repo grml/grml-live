@@ -1,6 +1,6 @@
 #!/bin/sh
 # Filename:      forensic-mark-readonly
-# Purpose:       force device to readonly mode when booting with bootoption forensic/readonly
+# Purpose:       force block devices to read-only mode when booting with boot option read-only
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
@@ -24,8 +24,8 @@ is_ro() {
     [ "$(blockdev --getro $1)" = "1" ] && return 0 || return 1
 }
 
-# check for forensic/readonly bootoption
-if grep -qe forensic -qe readonly /proc/cmdline ; then
+# check for read-only bootoption
+if grep -q read-only /proc/cmdline ; then
  # we get $DEVNAME via udev's environment
  if [ -n "$DEVNAME" ] ; then
     NAME=$(base $DEVNAME)
