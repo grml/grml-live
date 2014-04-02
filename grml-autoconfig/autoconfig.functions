@@ -1621,7 +1621,7 @@ DCSMP="/mnt/grml"
 # autoconfig, see issue673
 GRMLCFG="$(getbootparam 'autoconfig' 2>>$DEBUG)"
 [ -n "$GRMLCFG" ] || GRMLCFG="GRMLCFG"
-if checkbootparam 'noautoconfig' || checkbootparam 'forensic' ; then
+if checkbootparam 'noautoconfig' ; then
   DCSDIR="${LIVECD_PATH}" # set default so it works for "scripts" boot option as expected
   ewarn "Skipping running automount of device(s) labeled $GRMLCFG as requested." ; eend 0
 else
@@ -1918,9 +1918,8 @@ fi
 config_swraid(){
   [ -n "$INSTALLED" ] && return 0
 
-  # notice: checkbootparam "forensic" is just for users who don't know how to really use the bootoption
   if checkbootparam 'noraid'   || checkbootparam 'noswraid' || \
-     checkbootparam 'forensic' || checkbootparam 'raid=noautodetect' ; then
+     checkbootparam 'raid=noautodetect' ; then
      ewarn "Skipping SW-RAID code as requested on boot commandline." ; eend 0
   else
     [ -e /proc/mdstat ] || modprobe md_mod
