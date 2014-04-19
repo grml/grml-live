@@ -18,6 +18,7 @@ RSA1_KEY=/etc/ssh/ssh_host_key
 RSA_KEY=/etc/ssh/ssh_host_rsa_key
 DSA_KEY=/etc/ssh/ssh_host_dsa_key
 ECDSA_KEY=/etc/ssh/ssh_host_ecdsa_key
+ED25519_KEY=/etc/ssh/ssh_host_ed25519_key
 
 set -e
 
@@ -41,6 +42,12 @@ fi
 # Are we running from init?
 run_by_init() {
     ([ "$previous" ] && [ "$runlevel" ]) || [ "$runlevel" = S ]
+}
+
+check_for_upstart() {
+    if init_is_upstart; then
+	exit $1
+    fi
 }
 
 check_for_no_start() {
@@ -103,12 +110,18 @@ generate_ssh_keys() {
 	log_action_msg "Generating SSH2 ECDSA host key..."
 	$KEYGEN -t ecdsa -f "$ECDSA_KEY" -C '' -N '' || exit 1
     fi
+
+    if ! test -f "$ED25519_KEY" && grep -q "$ED25519_KEY" /etc/ssh/sshd_config ; then
+	log_action_msg "Generating SSH2 ED25519 host key..."
+	$KEYGEN -t ed25519 -f "$ED25519_KEY" -C '' -N '' || exit 1
+    fi
 }
 
 export PATH="${PATH:+$PATH:}/usr/sbin:/sbin"
 
 case "$1" in
   start)
+	check_for_upstart 1
 	check_privsep_dir
 	check_for_no_start
 	check_dev_null
@@ -121,6 +134,7 @@ case "$1" in
 	fi
 	;;
   stop)
+	check_for_upstart 0
 	log_daemon_msg "Stopping OpenBSD Secure Shell server" "sshd" || true
 	if start-stop-daemon --stop --quiet --oknodo --pidfile /var/run/sshd.pid; then
 	    log_end_msg 0 || true
@@ -130,6 +144,7 @@ case "$1" in
 	;;
 
   reload|force-reload)
+	check_for_upstart 1
 	check_for_no_start
 	check_config
         generate_ssh_keys
@@ -142,6 +157,7 @@ case "$1" in
 	;;
 
   restart)
+	check_for_upstart 1
 	check_privsep_dir
 	check_config
         generate_ssh_keys
@@ -157,6 +173,7 @@ case "$1" in
 	;;
 
   try-restart)
+	check_for_upstart 1
 	check_privsep_dir
 	check_config
         generate_ssh_keys
@@ -188,6 +205,7 @@ case "$1" in
 	;;
 
   status)
+	check_for_upstart 1
 	status_of_proc -p /var/run/sshd.pid /usr/sbin/sshd sshd && exit 0 || exit $?
 	;;
 
