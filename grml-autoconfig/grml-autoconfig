@@ -121,8 +121,6 @@ checkvalue $CONFIG_BRLTTY && config_brltty
 
 checkvalue $CONFIG_ACPI && config_acpi
 
-checkvalue $CONFIG_DMA && config_dma
-
 checkvalue $CONFIG_FSTAB && config_fstab
 
 checkvalue $CONFIG_MOUSE && config_mouse

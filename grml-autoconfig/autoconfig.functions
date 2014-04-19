@@ -821,52 +821,11 @@ fi
 }
 # }}}
 
-# {{{ Collect partitions from /proc/partitions first for enabling DMA
-check_partitions(){
-partitions=""
-IDEDISKS=""
-while read major minor blocks partition relax; do
-  partition="${partition##*/}"
-  [ -z "$partition" -o ! -e "/dev/$partition" ] && continue
-  case "$partition" in
-    hd?) IDEDISKS="$IDEDISKS $partition";;                # IDE  Harddisk, entire disk
-    sd?) ;;                                               # SCSI Harddisk, entire disk
-#    [hs]d*) partitions="$partitions /dev/$partition";;    # IDE or SCSI disk partition
-    [hs]d*|ub*) partitions="$partitions /dev/$partition";;    # IDE, USB or SCSI disk partition
-  esac
-done <<EOT
-$(awk 'BEGIN{old="__start"}{if($0==old){exit}else{old=$0;if($4&&$4!="name"){print $0}}}' /proc/partitions)
-EOT
-}
-check_partitions >/dev/null 2>&1 # avoid output "check_partitions:3: read-only file system"
-# }}}
-
 # {{{ Start brltty
 config_brltty() {
   if checkbootparam 'brltty' ; then
     [ -x /lib/brltty/brltty.sh ] && /lib/brltty/brltty.sh
   fi
-}
-# }}}
-
-# {{{ Enable DMA for all IDE drives now if not disabled
-# Notice: Already done by linuxrc, but make sure it's done also on harddisk-installed systems
-config_dma(){
-if checkbootparam 'nodma'; then
-  ewarn "Skipping DMA accelleration as requested on boot commandline." ; eend 0
-else
-  for d in $(cd /proc/ide 2>>$DEBUG && echo hd[a-z]); do
-    if test -d /proc/ide/$d; then
-      if egrep -q 'using_dma[ \t]+0' /proc/ide/$d/settings 2>>$DEBUG; then
-        MODEL="$(cat /proc/ide/$d/model 2>>$DEBUG)"
-        test -z "$MODEL" && MODEL="[GENERIC IDE DEVICE]"
-        einfo "Enabling DMA acceleration for: ${WHITE}$d        ${YELLOW}[${MODEL}]${NORMAL}"
-        echo "using_dma:1" >/proc/ide/$d/settings
-        eend 0
-      fi
-    fi
-  done
-fi
 }
 # }}}
 
@@ -2231,6 +2190,7 @@ fi # checkbootparam "BOOT_IMAGE=debian2hd
 }
 # }}}
 
+# {{{ virtualbox shared folders
 config_virtualbox_shared_folders() {
 if $VIRTUALBOX ; then
   einfo "VirtualBox detected, trying to set up Shared Folders."
@@ -2320,6 +2280,7 @@ if $VIRTUALBOX ; then
   fi
 fi
 }
+# }}}
 
 # {{{ Support customization
 config_distri(){
