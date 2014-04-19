@@ -1,3 +1,10 @@
+grml-etc (1.5.2) grml-testing; urgency=medium
+
+  * [7343ad4] ssh init script: sync with Debian + generate ed25519 key
+    [Closes: issue1303]
+
+ -- Michael Prokop <mika@grml.org>  Sat, 19 Apr 2014 15:38:32 +0200
+
 grml-etc (1.5.1) grml-testing; urgency=medium
 
   [ Andreas "Jimmy" Gredler ]
