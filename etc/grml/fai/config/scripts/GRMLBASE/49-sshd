@@ -1,0 +1,29 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/49-sshd
+# Purpose:       adjust sshd configuration file
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+if ! [ -r "${target}/etc/ssh/sshd_config" ] ; then
+  echo "File /etc/ssh/sshd_config doesn't exist, skipping execution of script."
+  exit 0
+fi
+
+# make sure root login works, it's set to "without-password" since openssh-server v1:6.6p1-1
+sed -i "s/^\(PermitRootLogin without-password\)/# \1 # disabled via grml-live\nPermitRootLogin yes/" "${target}/etc/ssh/sshd_config"
+
+# speedup if DNS is broken/unavailable
+if grep -q '^UseDNS' "${target}/etc/ssh/sshd_config" ; then
+  sed -i "s/^\(UseDNS yes\)/# \1 # disabled via grml-live\nUseDNS no/" "${target}/etc/ssh/sshd_config"
+else
+  echo "# Added via grml-live script:" >> "${target}/etc/ssh/sshd_config"
+  echo "UseDNS no" >> "${target}/etc/ssh/sshd_config"
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
