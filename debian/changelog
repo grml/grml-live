@@ -1,3 +1,14 @@
+grml-live (0.23.3) unstable; urgency=medium
+
+  * [61d5ddd] Drop "forensic" boot option from Forensic Mode boot menu
+  * [8f28ef2] debconf: enable permit-root-login for openssh-server package
+  * [0ad0e81] Provide GRMLBASE script 49-sshd to adjust sshd configuration
+    [Closes: issue1304]
+  * Software related changes:
+    - [908cad4] replace zd1211-firmware with firmware-zd1211
+
+ -- Michael Prokop <mika@grml.org>  Sat, 19 Apr 2014 22:40:29 +0200
+
 grml-live (0.23.2) unstable; urgency=medium
 
   [ Evgeni Golov ]
