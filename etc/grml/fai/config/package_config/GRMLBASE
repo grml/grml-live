@@ -72,4 +72,4 @@ firmware-netxen
 firmware-qlogic
 firmware-ralink
 firmware-realtek
-zd1211-firmware
+firmware-zd1211
