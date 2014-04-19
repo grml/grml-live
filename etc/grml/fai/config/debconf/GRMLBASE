@@ -1,9 +1,10 @@
 locales locales/default_environment_locale select en_US.UTF-8
 locales locales/locales_to_be_generated multiselect en_US.UTF-8 UTF-8
+openssh-server openssh-server/permit-root-login boolean true
 passwd passwd/shadow boolean true
 portmap portmap/loopback boolean false
 wvdial wvdial/wvdialconf boolean false
+x11-common x11-common/xwrapper/actual_allowed_users string anybody
+x11-common x11-common/xwrapper/allowed_users select Anybody
 xserver-xorg shared/default-x-server select xserver-xorg
 xserver-xorg xserver-xorg/config/monitor/identifier select Standardbildschirm
-x11-common x11-common/xwrapper/allowed_users select Anybody
-x11-common x11-common/xwrapper/actual_allowed_users string anybody
