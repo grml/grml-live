@@ -1,3 +1,10 @@
+grml-autoconfig (0.13.2) grml-testing; urgency=medium
+
+  * [4612d93] Code cleanup, drop config_dma + check_partitions
+    [Closes: issue1305]
+
+ -- Michael Prokop <mika@grml.org>  Sat, 19 Apr 2014 23:27:04 +0200
+
 grml-autoconfig (0.13.1) grml-testing; urgency=medium
 
   * [332eaae] Drop checks for "forensic" boot option
