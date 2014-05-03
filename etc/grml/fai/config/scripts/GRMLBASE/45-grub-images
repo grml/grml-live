@@ -49,6 +49,7 @@ TMP_CONFIG="${TMP_CONFIG##${target}}"
 for arch in ${ARCHS[@]} ; do
 $ROOTCMD grub-mkimage -O $arch -o /boot/$arch.img --prefix=/boot/grub/ --config="$TMP_CONFIG" \
   echo iso9660 part_msdos search_fs_file test \
+  fat ext2 reiserfs xfs btrfs squash4 part_gpt lvm \
   ${ADDITIONAL_MODULES[$arch]}
 done
 
