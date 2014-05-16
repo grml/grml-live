@@ -162,6 +162,7 @@ ifenslave
 iftop
 ifupdown
 ipcalc
+iperf
 ipmitool
 iproute
 iptraf
