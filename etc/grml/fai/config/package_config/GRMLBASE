@@ -33,6 +33,7 @@ grub-pc
 hdparm
 hwinfo
 initramfs-tools
+isolinux
 kbd
 less
 live-boot-grml live-boot-grml-doc
@@ -42,10 +43,12 @@ nfs-common
 openssh-client
 openssh-server
 pciutils
+pxelinux
 resolvconf
 rsync
 rsyslog
 strace
+syslinux
 udev
 usbutils
 uuid-runtime

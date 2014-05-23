@@ -137,7 +137,6 @@ sshfs
 statserial
 sudo
 symlinks
-syslinux
 sysvinit
 sysvinit-utils
 tar

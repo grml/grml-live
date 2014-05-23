@@ -84,7 +84,6 @@ gparted
 lilo
 mbr
 parted
-syslinux
 
 # disk wiping
 nwipe

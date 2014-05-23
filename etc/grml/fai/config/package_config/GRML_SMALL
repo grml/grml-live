@@ -75,7 +75,6 @@ setserial
 smartmontools
 statserial
 sudo
-syslinux
 sysvinit
 sysvinit-utils
 tar
