@@ -892,9 +892,16 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
           bailout 8
        fi
 
+       # since syslinux v3:6.03~pre1+dfsg-4 there's a split between
+       # isolinux and syslinux files :(
+       if [ -d "${CHROOT_OUTPUT}/usr/lib/ISOLINUX" ] ; then
+         syslinux_dir=/usr/lib/ISOLINUX
+       else
+         syslinux_dir=/usr/lib/syslinux
+       fi
        # copy _required_ isolinux files
        for file in ifcpu64.c32 isolinux.bin vesamenu.c32; do
-         copy_addon_file "${file}" /usr/lib/syslinux isolinux
+         copy_addon_file "${file}" "${syslinux_dir}" isolinux
        done
 
        # *always* copy files to output directory so the variables
@@ -913,8 +920,16 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
             copy_addon_file ipxe.lkrn /usr/lib/ipxe addons
             copy_addon_file pci.ids /usr/share/misc addons
             copy_addon_file memtest86+.bin /boot addons
+
+            # since syslinux(-common) v3:6.03~pre1+dfsg-4 the files are in a
+            # different directory :(
+            if [ -d "${CHROOT_OUTPUT}/usr/lib/syslinux/modules/bios/" ] ; then
+              syslinux_modules_dir=/usr/lib/syslinux/modules/bios/
+            else
+              syslinux_modules_dir=/usr/lib/syslinux
+            fi
             for file in memdisk chain.c32 hdt.c32 mboot.c32 menu.c32; do
-              copy_addon_file "${file}" /usr/lib/syslinux addons
+              copy_addon_file "${file}" "${syslinux_modules_dir}" addons
             done
 
             # make memtest filename FAT16/8.3 compatible
@@ -1440,10 +1455,18 @@ create_netbootpackage() {
 
   mkdir -p "$NETBOOT"
 
-  if ! [ -r "${CHROOT_OUTPUT}/usr/lib/syslinux/pxelinux.0" ] ; then
-    ewarn "File /usr/lib/syslinux/pxelinux.0 not found in build chroot." ; eend 0
+  # since syslinux v3:6.03~pre1+dfsg-4 the pxelinux.0 has been split into a
+  # separate pxelinux package
+  if [ -d "${CHROOT_OUTPUT}/usr/lib/PXELINUX/" ] ; then
+    local pxelinux_dir=/usr/lib/PXELINUX
+  else
+    local pxelinux_dir=/usr/lib/syslinux
+  fi
+
+  if ! [ -r "${CHROOT_OUTPUT}/${pxelinux_dir}/pxelinux.0" ] ; then
+    ewarn "File ${pxelinux_dir}/pxelinux.0 not found in build chroot." ; eend 0
     eindent
-    einfo "Install syslinux[-common] package in chroot to get a netboot package."
+    einfo "Install syslinux[-common]/pxelinux package in chroot to get a netboot package."
     eoutdent
     return 0
   fi
@@ -1455,7 +1478,7 @@ create_netbootpackage() {
 
   cp "${CHROOT_OUTPUT}"/boot/vmlinuz-*    "$WORKING_DIR"/vmlinuz
   cp "${CHROOT_OUTPUT}"/boot/initrd.img-* "$WORKING_DIR"/initrd.img
-  cp "${CHROOT_OUTPUT}"/usr/lib/syslinux/pxelinux.0 "${WORKING_DIR}/pxelinux.0"
+  cp "${CHROOT_OUTPUT}/${pxelinux_dir}/pxelinux.0" "${WORKING_DIR}/pxelinux.0"
 
   mkdir -p "${WORKING_DIR}/pxelinux.cfg"
   if [ -r "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" ] ; then
