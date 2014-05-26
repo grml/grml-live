@@ -892,17 +892,19 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
           bailout 8
        fi
 
-       # since syslinux v3:6.03~pre1+dfsg-4 there's a split between
-       # isolinux and syslinux files :(
-       if [ -d "${CHROOT_OUTPUT}/usr/lib/ISOLINUX" ] ; then
-         syslinux_dir=/usr/lib/ISOLINUX
-       else
-         syslinux_dir=/usr/lib/syslinux
-       fi
        # copy _required_ isolinux files
-       for file in ifcpu64.c32 isolinux.bin vesamenu.c32; do
-         copy_addon_file "${file}" "${syslinux_dir}" isolinux
-       done
+       if [ -d "${CHROOT_OUTPUT}/usr/lib/ISOLINUX" ] ; then
+         copy_addon_file isolinux.bin /usr/lib/ISOLINUX isolinux
+         copy_addon_file ifcpu64.c32  /usr/lib/syslinux/modules/bios/ isolinux
+         copy_addon_file ldlinux.c32  /usr/lib/syslinux/modules/bios/ isolinux
+         copy_addon_file libcom32.c32 /usr/lib/syslinux/modules/bios/ isolinux
+         copy_addon_file libutil.c32  /usr/lib/syslinux/modules/bios/ isolinux
+         copy_addon_file vesamenu.c32 /usr/lib/syslinux/modules/bios/ isolinux
+       else # syslinux versions <= 3:4.05+dfsg-6+deb8u1
+         copy_addon_file isolinux.bin /usr/lib/syslinux isolinux
+         copy_addon_file ifcpu64.c32  /usr/lib/syslinux isolinux
+         copy_addon_file vesamenu.c32 /usr/lib/syslinux isolinux
+       fi
 
        # *always* copy files to output directory so the variables
        # get adjusted according to the build.
