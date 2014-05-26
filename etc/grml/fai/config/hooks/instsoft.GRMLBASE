@@ -74,6 +74,10 @@ EOF
      APTITUDE_OPTS="${APTITUDE_OPTS:-} --allow-untrusted"
    fi
 
+   # make sure we don't fail when configuration files changed
+   APTGET_OPTS="${APTGET_OPTS:-} -o DPkg::Options::=--force-confdef -o DPkg::Options::=--force-confmiss -o DPkg::Options::=--force-confnew"
+   APTITUDE_OPTS="${APTITUDE_OPTS:-} -o DPkg::Options::=--force-confdef -o DPkg::Options::=--force-confmiss -o DPkg::Options::=--force-confnew"
+
    if $ROOTCMD test -x /usr/bin/aptitude ; then
       if $ROOTCMD aptitude --help | grep -q safe-upgrade ; then
          APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD aptitude -y $APTITUDE_OPTS safe-upgrade
