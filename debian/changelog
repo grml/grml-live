@@ -1,3 +1,19 @@
+grml-live (0.24.0) unstable; urgency=medium
+
+  [ Michael Schierl ]
+  * [8d91fa8] Add more filesystems to modular GRUB2 [related to issue1306]
+
+  [ Michael Prokop ]
+  * [932cf88] Adjust syslinux directories for syslinux v3:6.03~pre1+dfsg-4
+  * [412c0be] Do not fail in upgrade mode (-u) when configuration files
+    have been modified
+  * [7fe3cdb] Further updates for syslinux v3:6.03~pre1+dfsg-4 support
+  * Software related changes:
+    - [00c1f19] add iperf to GRML_FULL
+    - [9f0a996] move syslinux into GRMLBASE class, add pxelinux + isolinux
+
+ -- Michael Prokop <mika@grml.org>  Mon, 26 May 2014 12:08:40 +0200
+
 grml-live (0.23.3) unstable; urgency=medium
 
   * [61d5ddd] Drop "forensic" boot option from Forensic Mode boot menu
