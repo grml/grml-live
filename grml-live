@@ -147,7 +147,7 @@ else
 fi
 
 # source main configuration file:
-LIVE_CONF=/etc/grml/grml-live.conf
+[ -z "$LIVE_CONF" ] && LIVE_CONF='/etc/grml/grml-live.conf'
 if ! [ -r "$LIVE_CONF" ] ; then
   ewarn "Configuration file $LIVE_CONF can not be read, ignoring"
 else
