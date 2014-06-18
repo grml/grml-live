@@ -6,6 +6,10 @@
   deb     http://security.debian.org/ wheezy/updates main contrib
   deb-src http://security.debian.org/ wheezy/updates main contrib
 
+# backports:
+  deb     http://http.debian.net/debian wheezy-backports main
+  deb-src http://http.debian.net/debian wheezy-backports main
+
 # official debian repository:
 #  deb     http://ftp.debian.org/debian/ wheezy main contrib non-free
 #  deb-src http://ftp.debian.org/debian/ wheezy main contrib non-free
