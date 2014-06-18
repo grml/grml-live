@@ -913,7 +913,11 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        # get adjusted according to the build.
        cp ${TEMPLATE_DIRECTORY}/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
 
+       mkdir -p "${BUILD_OUTPUT}/boot/grub"
+       cp -a ${TEMPLATE_DIRECTORY}/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
+
        if [ -n "$NO_ADDONS" ] ; then
+          rm -f "$BUILD_OUTPUT"/boot/grub/addons.cfg
           log   "Skipping installation of boot addons as requested via \$NO_ADDONS."
           einfo "Skipping installation of boot addons as requested via \$NO_ADDONS."; eend 0
        else
@@ -961,11 +965,6 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
           fi # no "$TEMPLATE_DIRECTORY"/boot/addons
        fi # NO_ADDONS
 
-       if ! [ -d "${BUILD_OUTPUT}/boot/grub" ] ; then
-         mkdir -p "${BUILD_OUTPUT}/boot/grub"
-       fi
-       cp -a ${TEMPLATE_DIRECTORY}/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
-
        # generate loopback.cfg config file without depending on grub's regexp module
        # which isn't available in Debian/squeeze
        echo "## grub2 loopback configuration" > "${BUILD_OUTPUT}"/boot/grub/loopback.cfg
@@ -974,7 +973,9 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          [ -r "$config" ] || continue
          echo "source ${config##$BUILD_OUTPUT}" >> "${BUILD_OUTPUT}"/boot/grub/loopback.cfg
        done
-       echo "source /boot/grub/addons.cfg" >> "${BUILD_OUTPUT}"/boot/grub/loopback.cfg
+       if [ -z "$NO_ADDONS" ] ; then
+         echo "source /boot/grub/addons.cfg" >> "${BUILD_OUTPUT}"/boot/grub/loopback.cfg
+       fi
        echo "source /boot/grub/footer.cfg" >> "${BUILD_OUTPUT}"/boot/grub/loopback.cfg
 
        # copy grub files from target
@@ -1086,7 +1087,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
           done
 
           echo "include options.cfg"     >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-          if [ ! -n "$NO_ADDONS" ] ; then
+          if [ -z "$NO_ADDONS" ] ; then
             echo "include addons.cfg"    >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
           fi
           echo "include isoprompt.cfg"   >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
@@ -1104,7 +1105,9 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          else
             log "including ${DISTRI_NAME}.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
             echo "include ${DISTRI_NAME}.cfg" > "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-            [ -n "$NO_ADDONS" ] || echo "include addons.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+            if [ -z "$NO_ADDONS" ] ; then
+              echo "include addons.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+            fi
           fi
        fi
 
