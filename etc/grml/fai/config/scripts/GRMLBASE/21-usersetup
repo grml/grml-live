@@ -55,7 +55,7 @@ add_user_to_group voice
 sed -i 's/^root::/root:*:/'            $target/etc/shadow
 sed -i "s/^$USERNAME:!:/$USERNAME:*:/" $target/etc/shadow
 
-if [ -r $target/bin/zsh ] ; then
+if $ROOTCMD [ -r /bin/zsh ] ; then
    $ROOTCMD chsh -s /bin/zsh root
    $ROOTCMD chsh -s /bin/zsh $USERNAME
 fi
