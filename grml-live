@@ -746,6 +746,11 @@ else
          grep 'FAILED with exit code' $CHECKLOG/shell.log >> $LOGFILE && ERROR=6
       fi
 
+      if [ -r "$CHECKLOG/fai.log" ] ; then
+        grep 'updatebase.*FAILED with exit code' "$CHECKLOG/fai.log" >> "$LOGFILE" && ERROR=7
+        grep 'instsoft.*FAILED with exit code'   "$CHECKLOG/fai.log" >> "$LOGFILE" && ERROR=8
+      fi
+
       if [ -n "$ERROR" ] ; then
          log    "Error: there was a critical error [${ERROR}] during execution of stage 'fai dirinstall' [$(date)]"
          eerror "Error: there was a critical error during execution of stage 'fai dirinstall'"
