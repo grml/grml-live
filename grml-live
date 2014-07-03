@@ -65,6 +65,7 @@ Usage: $PN [options, see as follows]
    -Q                      skip netboot package build
    -r <release_name>       release name
    -s <suite>              Debian suite/release, like: stable, testing, unstable
+   -S <script_directory>   place of scripts (defaults to /usr/share/grml-live/scripts)
    -t <template_directory> place of the templates
    -u                      update existing chroot instead of rebuilding it from scratch
    -U <username>           arrange output to be owned by specified username
@@ -310,7 +311,7 @@ copy_addon_file() {
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:d:D:e:g:i:I:o:r:s:t:U:v:AbBFhnNqQuVz" opt; do
+while getopts "a:C:c:d:D:e:g:i:I:o:r:s:S:t:U:v:AbBFhnNqQuVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     A) CLEAN_ARTIFACTS=1 ;;
@@ -332,6 +333,7 @@ while getopts "a:C:c:d:D:e:g:i:I:o:r:s:t:U:v:AbBFhnNqQuVz" opt; do
     Q) SKIP_NETBOOT=1 ;;
     r) RELEASENAME="$OPTARG" ;;
     s) SUITE="$OPTARG" ;;
+    S) SCRIPTS_DIRECTORY="$OPTARG";;
     t) TEMPLATE_DIRECTORY="$OPTARG";;
     v) VERSION="$OPTARG" ;;
     F) FORCE=1 ;;
@@ -392,6 +394,7 @@ fi
 [ -n "$SQUASHFS_EXCLUDES_FILE" ]  || SQUASHFS_EXCLUDES_FILE="${GRML_FAI_CONFIG}/config/grml/squashfs-excludes"
 [ -n "$SUITE" ]                   || SUITE='testing'
 [ -n "$TEMPLATE_DIRECTORY" ]      || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
+[ -n "$SCRIPTS_DIRECTORY" ]       || SCRIPTS_DIRECTORY='/usr/share/grml-live/scripts'
 [ -n "$USERNAME" ]                || USERNAME='grml'
 [ -n "$VERSION" ]                 || VERSION='0.0.1'
 
@@ -1329,7 +1332,7 @@ else
          # make a 2048-byte bootsector for El Torito
          dd if=/dev/zero of=boot/grub/toriboot.bin bs=512 count=4 2>/dev/null
          # those are in 2048-byte sectors, so 1 16 matches 4 63 below
-         echo 1 16 | mksh /usr/share/grml-live/scripts/bootgrub.mksh -B 11 | \
+         echo 1 16 | mksh "${SCRIPTS_DIRECTORY}/bootgrub.mksh" -B 11 | \
             dd of=boot/grub/toriboot.bin conv=notrunc 2>/dev/null
       fi
       log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS -o ${ISO_OUTPUT}/${ISO_NAME} ."
@@ -1371,13 +1374,13 @@ else
             log   "Creating hybrid ISO file with manifold/grub2 method"
             einfo "Creating hybrid ISO file with manifold/grub2 method"
             # 512 bytes: MBR, partition table, load GRUB 2
-            echo 4 63 | mksh /usr/share/grml-live/scripts/bootgrub.mksh -A -M 4:0x96 -g $cyls:16:32
+            echo 4 63 | mksh "${SCRIPTS_DIRECTORY}/bootgrub.mksh" -A -M 4:0x96 -g $cyls:16:32
           else
             log   "Creating hybrid ISO file with manifold method"
             einfo "Creating hybrid ISO file with manifold method"
             # read only one but 2048-byte sized (scale: << 2) sector
             echo $bootoff $bootoff | \
-              mksh /usr/share/grml-live/scripts/bootilnx.mksh -A -M 4:0x96 -g $cyls:16:32 -S 2
+              mksh ${SCRIPTS_DIRECTORY}/bootilnx.mksh -A -M 4:0x96 -g $cyls:16:32 -S 2
           fi | dd of="${ISO_OUTPUT}/${ISO_NAME}" conv=notrunc 2>/dev/null
           eend $?
         fi
