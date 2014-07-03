@@ -1,3 +1,11 @@
+grml-live (0.25.1) unstable; urgency=medium
+
+  * [862dda1] updatebase.GRMLBASE: execute fcopy with -i flag to ignore
+    non-matching files
+  * [1610e49] Check for failed updatebase and instsoft hook executions
+
+ -- Michael Prokop <mika@grml.org>  Thu, 03 Jul 2014 16:16:32 +0200
+
 grml-live (0.25.0) unstable; urgency=medium
 
   [ Michael Prokop ]
