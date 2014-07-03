@@ -1,3 +1,24 @@
+grml-live (0.25.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [e8a4c1d] Add falls positive privacy-breach-generic to lintian
+    overrides
+  * [184eabc] 21-usersetup: check for existing /bin/zsh inside the chroot.
+    Thanks to Krisztian VASAS <iron@ironiq.hu> for reporting the problem
+  * [1290fba] New cmdline option -S + env variable SCRIPTS_DIRECTORY to
+    set script directory. Thanks to Krisztian VASAS <iron@ironiq.hu> for
+    the initial patch
+
+  [ Elias Probst ]
+  * [14ee437] Add 'rsync' to dependencies
+
+  [ Krisztian VASAS ]
+  * [1ebce30] Possibility to give LIVE_CONF as env. variable
+  * [df45a26] Don't use addons in GRUB if NO_ADDONS is set
+  * [62dae38] Fixes to be able to build Grml based on Debian Wheezy
+
+ -- Michael Prokop <mika@grml.org>  Thu, 03 Jul 2014 13:15:21 +0200
+
 grml-live (0.24.0) unstable; urgency=medium
 
   [ Michael Schierl ]
