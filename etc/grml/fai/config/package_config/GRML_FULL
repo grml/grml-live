@@ -275,6 +275,7 @@ tmux
 zsh
 
 # system info/mgmt
+augeas-tools
 facter
 flashrom
 mcollective
