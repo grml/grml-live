@@ -63,7 +63,6 @@ dmsetup
 fai-setup-storage
 fio
 gdisk
-gptsync
 hdparm
 iotop
 lsscsi
