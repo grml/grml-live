@@ -1,3 +1,15 @@
+grml-live (0.26.0) unstable; urgency=medium
+
+  * Software related changes:
+    - [1d15a21] add augeas-tools
+    - [afefe0a] drop gptsync (orphaned and broken)
+  * [038aa8e] isohybrid binary moved to syslinux-utils, update Recommends
+    + error msg
+  * [09c4993] Do our best to make sure aptitude is installed in chroot
+  * [1ed2df6] Update lintian overrides for modified lintian message
+
+ -- Michael Prokop <mika@grml.org>  Wed, 17 Sep 2014 22:54:12 +0200
+
 grml-live (0.25.1) unstable; urgency=medium
 
   * [862dda1] updatebase.GRMLBASE: execute fcopy with -i flag to ignore
