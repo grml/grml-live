@@ -1394,7 +1394,7 @@ else
         fi
       elif [ "$HYBRID_METHOD" = "isohybrid" ] ; then
         if ! which isohybrid >/dev/null 2>&1 ; then
-          bailout 12 "isohybrid binary not found - please install syslinux/syslinux-common"
+          bailout 12 "isohybrid binary not found - please install syslinux/syslinux-common/syslinux-utils"
         else
           log   "Creating hybrid ISO file with isohybrid method"
           einfo "Creating hybrid ISO file with isohybrid method"
