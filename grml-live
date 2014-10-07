@@ -942,9 +942,11 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
             else
               syslinux_modules_dir=/usr/lib/syslinux
             fi
-            for file in memdisk chain.c32 hdt.c32 mboot.c32 menu.c32; do
+            for file in chain.c32 hdt.c32 mboot.c32 menu.c32; do
               copy_addon_file "${file}" "${syslinux_modules_dir}" addons
             done
+
+            copy_addon_file memdisk /usr/lib/syslinux addons
 
             # make memtest filename FAT16/8.3 compatible
             mv "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" \
