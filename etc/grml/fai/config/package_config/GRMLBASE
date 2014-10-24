@@ -48,7 +48,7 @@ resolvconf
 rsync
 rsyslog
 strace
-syslinux
+syslinux syslinux-common
 udev
 usbutils
 uuid-runtime
