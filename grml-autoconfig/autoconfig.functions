@@ -1425,7 +1425,13 @@ get_remote_file() {
        --read-timeout=10 ${SOURCE} -O ${TARGET} && return 0 || return 1
   }
   einfo "Trying to get ${WHITE}${TARGET}${NORMAL}"
-  counter=10
+
+  if checkbootparam 'getfile.retries' ; then
+    local counter="$(getbootparam 'getfile.retries' 2>>$DEBUG)"
+  else
+    local counter=10
+  fi
+
   while ! getconfig && [[ "$counter" != 0 ]] ; do
     echo -n "Sleeping for 1 second and trying to get config again... "
     counter=$(( counter-1 ))
