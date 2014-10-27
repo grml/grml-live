@@ -256,12 +256,12 @@ debian2hd <options>                 ... whereas valid options for debian2hd are:
   target=       target partition/directory of the new Debian system, e.g.: target=/dev/sda1
   grub=         where to install grub to, e.g.: grub=/dev/sda
   release=      specify release of new Debian system (default is stable), e.g.: release=sid
-  mirror=       specify mirror for apt-get/aptitude, e,g.: mirror=http://http.debian.net/debian
+  mirror=       specify mirror for apt-get/aptitude, e,g.: mirror=http://ftp.debian.org/debian
   password=     set passwort of user root without prompting for it, e.g.: password=AiTh5ahn
 
   Usage example for automatic installation:
 
-    debian2hd target=/dev/sda1 grub=/dev/sda mirror=http://http.debian.net/debian password=foobar
+    debian2hd target=/dev/sda1 grub=/dev/sda mirror=http://ftp.debian.org/debian password=foobar
 
   See http://grml.org/grml-debootstrap/ for more information.
 

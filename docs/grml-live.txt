@@ -541,7 +541,7 @@ Instructions
   # CHROOT_INSTALL="/etc/grml/fai/chroot_install"
   ## adjust if necessary (defaults to /grml/grml-live):
   ## OUTPUT="/srv/grml-live"
-  FAI_DEBOOTSTRAP="wheezy http://http.debian.net/debian/"
+  FAI_DEBOOTSTRAP="wheezy http://ftp.debian.org/debian/"
   # ARCH="amd64"
   CLASSES="GRMLBASE,GRML_FULL,AMD64"
   EOF
@@ -654,7 +654,7 @@ How do I create a base.tgz?
 First of all create the chroot using debootstrap:
 
   BASECHROOT='/tmp/basefile'
-  debootstrap wheezy "$BASECHROOT" http://http.debian.net/debian
+  debootstrap wheezy "$BASECHROOT" http://ftp.debian.org/debian
   tar -C "$BASECHROOT" --exclude='var/cache/apt/archives/*.deb' -zcf base.tar.gz ./
 
 [TIP]
@@ -687,7 +687,7 @@ FAI_DEBOOTSTRAP:
   [...]
   APT_PROXY="http://localhost:3142/"
   [...]
-  FAI_DEBOOTSTRAP="wheezy http://localhost:3142/http.debian.net/debian wheezy main contrib non-free"
+  FAI_DEBOOTSTRAP="wheezy http://localhost:3142/ftp.debian.org/debian wheezy main contrib non-free"
 
 Make sure apt-cacher-ng is running ('/etc/init.d/apt-cacher-ng restart').
 That's it.  All downloaded files will be cached in /var/cache/apt-cacher-ng then.
