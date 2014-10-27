@@ -1,3 +1,11 @@
+grml-autoconfig (0.13.3) grml-testing; urgency=medium
+
+  * [ed9c622] Bump Standards-Version to 3.9.6
+  * [ab84b05] Support getfile.retries=... boot option. Thanks to Christian
+    Hofstaedtler for reviewing
+
+ -- Michael Prokop <mika@grml.org>  Tue, 28 Oct 2014 00:46:03 +0100
+
 grml-autoconfig (0.13.2) grml-testing; urgency=medium
 
   * [4612d93] Code cleanup, drop config_dma + check_partitions
