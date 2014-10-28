@@ -1,3 +1,21 @@
+grml-live (0.26.1) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [57c1cbd] Fix path for memdisk binary when building with recent
+    syslinux[-common] versions
+  * [96dd50b] Switch from http.debian.net to ftp.debian.org
+  * [51fbcc7] Make sure apt caches are up2date before trying to install
+    aptitude
+  * [0d862c6] Bump Standards-Version to 3.9.6
+  * Software related changes:
+    - [0f1a3e2] add syslinux-common to GRMLBASE
+
+  [ Evgeni Golov ]
+  * [58a3389] set CRYPTSETUP=y when calling update-initramfs. Thanks to
+    Charles A. Hewson <cahewson@eskimo.com>
+
+ -- Michael Prokop <mika@grml.org>  Tue, 28 Oct 2014 10:55:16 +0100
+
 grml-live (0.26.0) unstable; urgency=medium
 
   * Software related changes:
