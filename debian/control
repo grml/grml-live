@@ -12,7 +12,10 @@ Bugs: mailto:bugs@grml.org
 
 Package: grml-udev-config
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, udev, zsh
+Depends: udev,
+         zsh,
+         ${misc:Depends},
+         ${shlibs:Depends}
 Conflicts: udev (= 0.141-1grml.04)
 Description: custom udev configurations for the Grml live system
  Udev specific configurations for the Grml live system.
