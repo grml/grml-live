@@ -1,3 +1,14 @@
+grml-udev-config (0.4.0) unstable; urgency=medium
+
+  * [0efeaea] Bump Standards-Version to 3.9.6
+  * [35613d4] Run wrap-and-sort -a on debian/
+  * [be7f20b] Work around "udev >=208-6 without systemd" bug with loopback
+    device, causing serious boot delay. Thanks to Evgeni Golov, Marco
+    d'Itri, Christian Hofstaedtler and Ulrich Dangel for debugging
+    assistance
+
+ -- Michael Prokop <mika@grml.org>  Wed, 29 Oct 2014 00:48:55 +0100
+
 grml-udev-config (0.3.2) unstable; urgency=medium
 
   * [a6b78e9] forensic-mark-readonly: check only for boot option read-only
