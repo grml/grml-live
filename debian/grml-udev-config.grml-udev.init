@@ -81,6 +81,13 @@ case "$1" in
           printf 'Warning: /etc/grml/autoconfig.functions could not be read.\n'>&2
         fi
 
+        # ugly workaround to get udev >=208-6 without systemd working
+        # without long delay during udev startup :( more details at
+        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=754987
+        if cat /sys/class/net/lo/operstate 2>/dev/null | grep -q 'down' ; then
+          ip link set dev lo up
+        fi
+
         # support bootoption noudev and inform user how to skip
         # execution of udev (being bootoption noudev)
         if ! grep -q noudev /proc/cmdline ; then
