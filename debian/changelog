@@ -1,3 +1,10 @@
+grml-udev-config (0.4.1) unstable; urgency=medium
+
+  * [7632e7f] Revert "Work around "udev >=208-6 without systemd" bug with
+    loopback device, causing serious boot delay"
+
+ -- Michael Prokop <mika@grml.org>  Fri, 31 Oct 2014 10:24:11 +0100
+
 grml-udev-config (0.4.0) unstable; urgency=medium
 
   * [0efeaea] Bump Standards-Version to 3.9.6
