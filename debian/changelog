@@ -1,3 +1,11 @@
+grml-live (0.26.2) unstable; urgency=medium
+
+  [ Evgeni Golov ]
+  * [bce4532] also set cirrus.modeset=0 for the nomodeset options
+  * [624ae81] grml-cheatcodes: document cirrus.modeset=0
+
+ -- Michael Prokop <mika@grml.org>  Thu, 06 Nov 2014 00:50:49 +0100
+
 grml-live (0.26.1) unstable; urgency=medium
 
   [ Michael Prokop ]
