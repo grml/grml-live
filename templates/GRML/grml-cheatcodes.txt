@@ -243,6 +243,7 @@ grml vga=ask                        Display menu for framebuffer mode
 grml radeon.modeset=0  nomodeset    Disable Kernel Mode Setting (KMS) for Radeon driver.
 grml i915.modeset=0    nomodeset    Disable Kernel Mode Setting (KMS) for Intel driver.
 grml nouveau.modeset=0 nomodeset    Disable Kernel Mode Setting (KMS) for Nouveau driver.
+grml cirrus.modeset=0  nomodeset    Disable Kernel Mode Setting (KMS) for Cirrus driver.
 
 Installation related settings:
 ------------------------------
