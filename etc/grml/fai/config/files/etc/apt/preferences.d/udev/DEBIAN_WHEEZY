@@ -1,0 +1,6 @@
+// This file is installed by grml-live.
+//
+// Install udev from Wheezy instead of deb.grml.org
+Package: udev
+Pin: release n=wheezy
+Pin-Priority: 999
