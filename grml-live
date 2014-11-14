@@ -906,6 +906,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
          copy_addon_file ifcpu64.c32  /usr/lib/syslinux/modules/bios/ isolinux
          copy_addon_file ldlinux.c32  /usr/lib/syslinux/modules/bios/ isolinux
          copy_addon_file libcom32.c32 /usr/lib/syslinux/modules/bios/ isolinux
+         copy_addon_file libgpl.c32   /usr/lib/syslinux/modules/bios/ isolinux
          copy_addon_file libmenu.c32  /usr/lib/syslinux/modules/bios/ isolinux
          copy_addon_file libutil.c32  /usr/lib/syslinux/modules/bios/ isolinux
          copy_addon_file vesamenu.c32 /usr/lib/syslinux/modules/bios/ isolinux
