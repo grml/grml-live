@@ -1,3 +1,11 @@
+grml-live (0.26.4) unstable; urgency=medium
+
+  * [1c745f0] Add libmenu.c32 to isolinux directory
+  * [438804c] No longer include MirOS BSD in isolinux/syslinux boot menu
+  * [50857d8] Also include libgpl.c32 in isolinux directory
+
+ -- Michael Prokop <mika@grml.org>  Fri, 14 Nov 2014 12:51:46 +0100
+
 grml-live (0.26.3) unstable; urgency=medium
 
   [ Evgeni Golov ]
