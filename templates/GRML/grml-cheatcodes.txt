@@ -22,7 +22,6 @@ forensic                            Do not touch any harddisks during hardware r
 serial                              Activate ttyS0 and start a getty
 grub                                Boot Grub bootloader (special all-in-one-image)
 dos                                 Boot FreeDOS
-bsd                                 Boot MirOS BSD
 hdt                                 Boot Hardware Detection Tool (from syslinux project)
 
 Further documentation regarding the boot process can be found at:

@@ -13,8 +13,8 @@
  grml2ram     copy medium to RAM and run from there (see F5 for alternatives)  
  grub                                    boot GRand Unified Bootloader (GRUB)  
  dos                                                         boot FreeDOS 1.0  
- bsd                                                           boot MirOS BSD  
  hdt                                             boot Hardware Detection Tool  
+                                                                               
                                                                                
  A list with all supported boot options can be found on the CD at              
  /lib/live/mount/medium/GRML/*/grml-cheatcodes.txt                             
