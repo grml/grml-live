@@ -44,7 +44,7 @@ udev_exec() {
 # test whether udev is enabled in init's configuration
 udev_active() {
   # file-rc:
-  if [ -r /etc/runlevel.conf ] && egrep -q '^[0-9]+.*-.*-.*\/etc\/init.d\/ydev$' /etc/runlevel.conf ; then
+  if [ -r /etc/runlevel.conf ] && egrep -q '^[0-9]+.*-.*-.*\/etc\/init.d\/udev$' /etc/runlevel.conf ; then
     return 0
   fi
 
