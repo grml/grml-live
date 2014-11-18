@@ -1,3 +1,11 @@
+grml-udev-config (0.4.2) unstable; urgency=medium
+
+  * [cf81315] Fix check for presence of udev initscript in
+    /etc/runlevel.conf [Closes: issue1322] Thanks to Christian
+    Hofstaedtler for reporting this issue
+
+ -- Michael Prokop <mika@grml.org>  Tue, 18 Nov 2014 12:55:54 +0100
+
 grml-udev-config (0.4.1) unstable; urgency=medium
 
   * [7632e7f] Revert "Work around "udev >=208-6 without systemd" bug with
