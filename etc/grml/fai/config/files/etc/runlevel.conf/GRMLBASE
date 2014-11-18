@@ -19,7 +19,6 @@
 01	-	S		/etc/init.d/bootlocal.first
 02	-	S		/etc/init.d/mountkernfs.sh
 02	-	S		/etc/init.d/hostname.sh
-03	-	S		/etc/init.d/mtab.sh
 04	-	S		/etc/init.d/grml-udev
 05	-	S		/etc/init.d/mountdevsubfs.sh
 18	-	S		/etc/init.d/ifupdown-clean
