@@ -125,7 +125,7 @@ mtools
 # generic tools
 cpp
 whois
-wodim
+xorriso
 
 # install linux
 cdebootstrap
