@@ -1,3 +1,14 @@
+grml-live (0.26.5) unstable; urgency=medium
+
+  * [b9012b6] Drop deprecated mtab.sh script from runlevel.conf
+    [Closes: issue1321] Thanks to Christian Hofstaedtler for reporting
+  * Software related changes:
+    - [aab3330] add wodim to GRML_FULL [Closes: issue1324]
+    - [f3ab027] replace wodim with xorriso [Closes: issue1233]
+      Thanks to Alexander Wirt for pointing out that wodim is outdated
+
+ -- Michael Prokop <mika@grml.org>  Tue, 18 Nov 2014 13:07:07 +0100
+
 grml-live (0.26.4) unstable; urgency=medium
 
   * [1c745f0] Add libmenu.c32 to isolinux directory
