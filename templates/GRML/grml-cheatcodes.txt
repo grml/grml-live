@@ -243,6 +243,7 @@ grml radeon.modeset=0  nomodeset    Disable Kernel Mode Setting (KMS) for Radeon
 grml i915.modeset=0    nomodeset    Disable Kernel Mode Setting (KMS) for Intel driver.
 grml nouveau.modeset=0 nomodeset    Disable Kernel Mode Setting (KMS) for Nouveau driver.
 grml cirrus.modeset=0  nomodeset    Disable Kernel Mode Setting (KMS) for Cirrus driver.
+grml mgag200.modeset=0 nomodeset    Disable Kernel Mode Setting (KMS) for MGAG200 driver.
 
 Installation related settings:
 ------------------------------
