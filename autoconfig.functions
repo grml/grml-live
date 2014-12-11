@@ -1028,22 +1028,22 @@ if [ -x /etc/init.d/loadcpufreq ] ; then
       fi
    fi
 
-   rm -f $LOADCPUFREQ
+   rm -f "$LOADCPUFREQ"
 
    if [ -z "$SKIP_CPU_GOVERNOR" ] ; then
-     if grep -vq ondemand /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors; then
-       einfo "Loading cpufreq_ondemand"
-       modprobe cpufreq_ondemand
-       eend $?
+     if [ -r /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors ] ; then
+       if ! grep -q ondemand /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors ; then
+         einfo "Ondemand governor not available for CPU(s), not modifying governor configuration"
+       else
+         einfo "Setting ondemand governor"
+         RC=0
+         for file in $(find /sys/devices/system/cpu/ -name scaling_governor 2>/dev/null) ; do
+           echo ondemand > $file || RC=1
+         done
+         eend $RC
+       fi
      fi
-
-     einfo "Setting ondemand governor"
-     RC=0
-     for file in $(find /sys/devices/system/cpu/ -name scaling_governor 2>/dev/null) ; do
-       echo ondemand > $file || RC=1
-     done
-     eend $RC
-   fi # cpu-governor
+   fi
 
    eoutdent
 fi
