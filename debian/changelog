@@ -1,3 +1,9 @@
+grml-autoconfig (0.14.0) grml-testing; urgency=medium
+
+  * [03d4320] config_cpu: set ondemand governor only if available
+
+ -- Michael Prokop <mika@grml.org>  Thu, 11 Dec 2014 18:04:25 +0100
+
 grml-autoconfig (0.13.3) grml-testing; urgency=medium
 
   * [ed9c622] Bump Standards-Version to 3.9.6
