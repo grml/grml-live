@@ -175,10 +175,11 @@ libnss-mdns
 lrzsz
 mosh
 mtr-tiny
+net-tools
 netbase
 netcat-openbsd
+nethogs
 netsniff-ng
-net-tools
 nmap
 rfkill
 ser2net
