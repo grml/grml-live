@@ -1497,6 +1497,10 @@ create_netbootpackage() {
   cp "${CHROOT_OUTPUT}"/boot/initrd.img-* "$WORKING_DIR"/initrd.img
   cp "${CHROOT_OUTPUT}/${pxelinux_dir}/pxelinux.0" "${WORKING_DIR}/pxelinux.0"
 
+  if [ -r "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/ldlinux.c32 ] ; then
+    cp "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/ldlinux.c32 "${WORKING_DIR}"/
+  fi
+
   mkdir -p "${WORKING_DIR}/pxelinux.cfg"
   if [ -r "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" ] ; then
     cp "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" "${WORKING_DIR}/pxelinux.cfg/default"
