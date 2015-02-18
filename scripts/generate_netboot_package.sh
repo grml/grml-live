@@ -34,6 +34,10 @@ cp "$CHROOT"/boot/vmlinuz-*    "$WORKING_DIR"/vmlinuz
 cp "$CHROOT"/boot/initrd.img-* "$WORKING_DIR"/initrd.img
 cp "$CHROOT"/usr/lib/syslinux/pxelinux.0 "${WORKING_DIR}/pxelinux.0"
 
+if [ -r "$CHROOT"/usr/lib/syslinux/modules/bios/ldlinux.c32 ] ; then
+  cp "$CHROOT"/usr/lib/syslinux/modules/bios/ldlinux.c32 "${WORKING_DIR}"/
+fi
+
 mkdir -p "${WORKING_DIR}/pxelinux.cfg"
 cat > "${WORKING_DIR}/pxelinux.cfg/default" << EOF
 default grml
