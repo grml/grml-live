@@ -82,6 +82,7 @@ grub-pc-bin
 gparted
 lilo
 mbr
+partclone
 parted
 
 # disk wiping
