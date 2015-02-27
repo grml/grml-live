@@ -1,3 +1,23 @@
+grml-live (0.26.6) unstable; urgency=medium
+
+  * [ae3f3ea] Do not enable modesetting for mgag200 driver
+    [Closes: issue1334]
+  * [b057685] Add mgag200.modeset=0 to boot options for disabled
+    framebuffer/KMS
+  * [ded6100] Include ldlinux.c32 in netboot package. Thanks to murb for
+    the bug report on IRC, thanks to chtaube for the bugreport in the BTS.
+    [Closes: issue1340]
+  * [9cef53c] Include ldlinux.c32 in netboot package also via grml-live
+    itself
+  * [ec5ba42] Copy all *.c32 syslinux files to make sure dependencies
+    aren't missing
+  * Software related changes:
+    - [f2341e2] add nethogs to GRML_FULL
+    - [93a09a7] add partclone to GRML_FULL [Closes: issue1341]
+      Thanks to gerd for the bug report
+
+ -- Michael Prokop <mika@grml.org>  Fri, 27 Feb 2015 14:04:42 +0100
+
 grml-live (0.26.5) unstable; urgency=medium
 
   * [b9012b6] Drop deprecated mtab.sh script from runlevel.conf
