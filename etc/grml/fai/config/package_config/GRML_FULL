@@ -195,6 +195,7 @@ tcptraceroute
 telnet
 tshark
 tsocks
+uml-utilities
 usb-modeswitch
 vlan
 wireshark
