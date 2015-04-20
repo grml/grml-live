@@ -197,4 +197,6 @@ nedit*XmText.background:            white
 nedit*XmTextField.background:       white
 nedit*XmList.background:            white
 
+#include ".Xresources.local"
+
 !# END OF FILE #################################################################
