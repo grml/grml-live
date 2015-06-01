@@ -23,9 +23,13 @@ fi
 
 echo "Updating smartmontool drivedb"
 if [ -n "$TIMEOUT" ] ; then
-   $ROOTCMD timeout $TIMEOUT update-smart-drivedb
+   if ! $ROOTCMD timeout $TIMEOUT update-smart-drivedb ; then
+     echo "Warning: failed to update smartmontool drivedb, ignoring failure"
+   fi
 else
-   $ROOTCMD update-smart-drivedb
+   if ! $ROOTCMD update-smart-drivedb ; then
+     echo "Warning: failed to update smartmontool drivedb, ignoring failure"
+   fi
 fi
 
 ## END OF FILE #################################################################
