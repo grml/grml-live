@@ -1,3 +1,15 @@
+grml-live (0.26.7) unstable; urgency=medium
+
+  * Software related changes:
+    - [46560db] add uml-utilities to GRML_FULL [Closes: issue1344]
+    - [ed11f13] add bats to GRML_FULL
+  * [ddc3eda] New script 94-update-smart-drivedb to update smartmontools'
+    drive database
+  * [1f91be9] 94-update-smart-drivedb: do not fail on update-smart-drivedb
+    errors
+
+ -- Michael Prokop <mika@grml.org>  Sat, 06 Jun 2015 01:41:40 +0200
+
 grml-live (0.26.6) unstable; urgency=medium
 
   * [ae3f3ea] Do not enable modesetting for mgag200 driver
