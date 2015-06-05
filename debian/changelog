@@ -1,3 +1,13 @@
+grml-desktop (0.4.1) unstable; urgency=medium
+
+  [ Thiago Perrotta ]
+  * [d4a2c5b] include .Xresources.local on .Xresources
+
+  [ Michael Prokop ]
+  * [3048137] Bump Standards-Version to 3.9.6
+
+ -- Michael Prokop <mika@grml.org>  Sat, 06 Jun 2015 01:55:30 +0200
+
 grml-desktop (0.4.0) unstable; urgency=low
 
   [ Frank Terbeck ]
