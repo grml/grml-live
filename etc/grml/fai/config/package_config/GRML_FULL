@@ -329,6 +329,9 @@ lshw
 numactl
 usbview
 
+# testing
+bats
+
 PACKAGES aptitude I386
 linux-image-i386-grml
 
