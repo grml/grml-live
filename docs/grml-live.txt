@@ -205,7 +205,7 @@ Specify name of the release.
 
 Specify the Debian suite you want to use for your live-system. If unset defaults
 to "testing". Supported values are: stable, testing, unstable (or their
-corresponding release names like "wheezy"). Please be aware that recent Debian
+corresponding release names like "jessie"). Please be aware that recent Debian
 suites might require a recent base.tgz
 (${GRML_FAI_CONFIG}/config/basefiles/$CLASSNAME.tar.gz) or a recent version of
 debootstrap.
@@ -497,9 +497,9 @@ The easiest way to get a running grml-live setup is to just use Grml.
 Of course using grml-live on a plain, original Debian installation is supported
 as well. So there we go.
 
-What we have: plain, original Debian wheezy (7.x).
+What we have: plain, original Debian jessie (8.x).
 
-What we want: build a Grml ISO based on Debian/wheezy for the amd64 architecture
+What we want: build a Grml ISO based on Debian/jessie for the amd64 architecture
 using grml-live.
 
 Instructions
@@ -541,7 +541,7 @@ Instructions
   # CHROOT_INSTALL="/etc/grml/fai/chroot_install"
   ## adjust if necessary (defaults to /grml/grml-live):
   ## OUTPUT="/srv/grml-live"
-  FAI_DEBOOTSTRAP="wheezy http://ftp.debian.org/debian/"
+  FAI_DEBOOTSTRAP="jessie http://ftp.debian.org/debian/"
   # ARCH="amd64"
   CLASSES="GRMLBASE,GRML_FULL,AMD64"
   EOF
@@ -654,7 +654,7 @@ How do I create a base.tgz?
 First of all create the chroot using debootstrap:
 
   BASECHROOT='/tmp/basefile'
-  debootstrap wheezy "$BASECHROOT" http://ftp.debian.org/debian
+  debootstrap jessie "$BASECHROOT" http://ftp.debian.org/debian
   tar -C "$BASECHROOT" --exclude='var/cache/apt/archives/*.deb' -zcf base.tar.gz ./
 
 [TIP]
@@ -687,7 +687,7 @@ FAI_DEBOOTSTRAP:
   [...]
   APT_PROXY="http://localhost:3142/"
   [...]
-  FAI_DEBOOTSTRAP="wheezy http://localhost:3142/ftp.debian.org/debian wheezy main contrib non-free"
+  FAI_DEBOOTSTRAP="jessie http://localhost:3142/ftp.debian.org/debian jessie main contrib non-free"
 
 Make sure apt-cacher-ng is running ('/etc/init.d/apt-cacher-ng restart').
 That's it.  All downloaded files will be cached in /var/cache/apt-cacher-ng then.
@@ -714,7 +714,7 @@ How do I create a base tar.gz (I386.tar.gz or AMD64.tar.gz)
 Execute the following commands (requires root):
 
   ARCH='amd64' # replace with i386 if necessary
-  SUITE='wheezy' # using the current stable release should always work
+  SUITE='jessie' # using the current stable release should always work
   debootstrap --arch "$ARCH" --exclude=info,tasksel,tasksel-data "$SUITE" "$ARCH" http://debian.netcologne.de/debian
   cd "$ARCH"
   rm var/cache/apt/archives/*.deb

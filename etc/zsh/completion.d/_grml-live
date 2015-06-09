@@ -47,7 +47,7 @@ _grmllive_suites() { #{{{
   local -a suites
 
   suites=(
-    stable testing unstable wheezy jessie sid
+    stable testing unstable wheezy jessie stretch sid
   )
   _wanted list expl 'Debian suite' compadd ${expl} -- ${suites}
 }
