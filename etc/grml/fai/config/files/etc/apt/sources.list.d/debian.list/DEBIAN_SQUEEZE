@@ -7,8 +7,8 @@
   deb-src http://security.debian.org/ squeeze/updates main contrib
 
 # backports:
-  deb     http://backports.debian.org/debian-backports squeeze-backports main
-  deb-src http://backports.debian.org/debian-backports squeeze-backports main
+  deb     http://backports.debian.org/debian-backports squeeze-backports main contrib non-free
+  deb-src http://backports.debian.org/debian-backports squeeze-backports main contrib non-free
 
 # official debian repository:
 #  deb     http://ftp.debian.org/debian/ squeeze main contrib non-free
