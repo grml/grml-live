@@ -809,7 +809,7 @@ else
 <testsuite name="grml-live-missing-packages" tests="${package_count}" time="1" failures="${package_errors}" errors="${package_errors}" skipped="0" assertions="0">
 EOF
 
-  for package in $(awk '{print $1}' "${CHECKLOG}/package_errors.log") ; do
+  for package in $(awk '{print $1}' "${CHECKLOG}/package_errors.log" | sed 's;/;\\/;') ; do
     failure_reason="$(awk "/$package/ {print \$2}" "${CHECKLOG}/package_errors.log")"
     cat >> "${REPORT_MISSING_PACKAGES}" << EOF
   <testcase name="test_missing_packages_${package}" time="0" assertions="0">
