@@ -903,7 +903,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        # copy _required_ isolinux files
        if [ -d "${CHROOT_OUTPUT}/usr/lib/ISOLINUX" ] ; then
          copy_addon_file isolinux.bin /usr/lib/ISOLINUX isolinux
-         for file in /usr/lib/syslinux/modules/bios/*.c32 ; do
+         for file in ${CHROOT_OUTPUT}/usr/lib/syslinux/modules/bios/*.c32 ; do
            copy_addon_file "$(basename "$file")"  /usr/lib/syslinux/modules/bios/ isolinux
          done
        else # syslinux versions <= 3:4.05+dfsg-6+deb8u1
