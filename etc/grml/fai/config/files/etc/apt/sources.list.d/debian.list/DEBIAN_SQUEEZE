@@ -1,4 +1,4 @@
-# official debian repository (mirror selected via geo-ip):
+# official debian repository:
   deb     http://ftp.debian.org/debian/ squeeze main contrib non-free
   deb-src http://ftp.debian.org/debian/ squeeze main contrib non-free
 
@@ -9,15 +9,3 @@
 # backports:
   deb     http://backports.debian.org/debian-backports squeeze-backports main contrib non-free
   deb-src http://backports.debian.org/debian-backports squeeze-backports main contrib non-free
-
-# official debian repository:
-#  deb     http://ftp.debian.org/debian/ squeeze main contrib non-free
-#  deb-src http://ftp.debian.org/debian/ squeeze main contrib non-free
-
-# official debian DE repository:
-#  deb     http://ftp.de.debian.org/debian/ squeeze main contrib non-free
-#  deb-src http://ftp.de.debian.org/debian/ squeeze main contrib non-free
-
-# official debian AT repository:
-#  deb     http://ftp.at.debian.org/debian/ squeeze main contrib non-free
-#  deb-src http://ftp.at.debian.org/debian/ squeeze main contrib non-free
