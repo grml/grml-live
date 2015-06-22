@@ -1,3 +1,21 @@
+grml-live (0.26.8) unstable; urgency=medium
+
+  The "happy bugfixing ☻" release
+
+  * [c3d079c] DEBIAN_STABLE: backports should point to jessie nowadays
+  * [e44be99] Replace references to wheezy with jessie + add stretch to
+    zsh completion
+  * [f50c895] Fix check for sylinux *.c32 files
+  * [29dc84a] Make package error check safe for "/" inside the package
+    string
+  * [fac5a9f] sources.list configs: enable contrib/non-free for backports
+  * [7cf0d67] 33-aptsetup: improve perl regex to work with backports and
+    perl 5.14
+  * [f793321] sources.list: fix comments and drop unused entries
+  * [f6abf3c] Provide sources.list setup for DEBIAN_JESSIE
+
+ -- Michael Prokop <mika@grml.org>  Mon, 22 Jun 2015 18:13:52 +0200
+
 grml-live (0.26.7) unstable; urgency=medium
 
   * Software related changes:
