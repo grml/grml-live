@@ -331,6 +331,7 @@ usbview
 
 # testing
 bats
+stress
 
 PACKAGES aptitude I386
 linux-image-i386-grml
