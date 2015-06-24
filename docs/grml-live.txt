@@ -285,7 +285,7 @@ The main and base class provided by grml-live is named GRMLBASE. It's strongly
 recommended to **always** use the class GRMLBASE when building an ISO using
 grml-live, as well as the architecture dependent class which provides the kernel
 (being 'I386' for x86_32 and 'AMD64' for x86_64) and a GRML_* class (like
-GRML_SMALL, GRML_MEDIUM or GRML_FULL). The following files and directories are
+GRML_SMALL or GRML_FULL). The following files and directories are
 relevant for class GRMLBASE by default:
 
   ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/
@@ -329,16 +329,10 @@ this class as well, so unless you have a really good reason you should always
 use this class.
 
 * GRML_FULL: full featured Grml, also known as the "normal", full grml as
-introduced in December 2011 (~350MB ISO size).
+introduced in December 2011 (~460MB ISO size).
 
-* GRML_MEDIUM: medium sized Grml version, used to be known as grml-medium
-until December 2011 (~220MB ISO size).
-
-* GRML_SMALL: minimum sized Grml version, known as grml-small (~110MB ISO
+* GRML_SMALL: minimum sized Grml version, known as grml-small (~230MB ISO
 size).
-
-* GRML_XL: large size Grml version, used to be known as "full grml" until
-December 2011 (~700MB ISO size).
 
 * LATEX: LaTeX(-related) packages like auctex, texlive,...
 (which used to be shipped by grml before the LaTeX removal)
