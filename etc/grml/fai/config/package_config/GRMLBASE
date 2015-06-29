@@ -1,5 +1,6 @@
 PACKAGES aptitude
 
+apt-transport-https
 aufs-tools
 busybox
 bzip2
