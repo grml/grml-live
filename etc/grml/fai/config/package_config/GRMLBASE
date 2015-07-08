@@ -44,6 +44,7 @@ nfs-common
 openssh-client
 openssh-server
 pciutils
+physlock
 pxelinux
 resolvconf
 rsync
@@ -53,7 +54,6 @@ syslinux syslinux-common
 udev
 usbutils
 uuid-runtime
-vlock
 wireless-tools
 wpasupplicant
 xz-utils
