@@ -718,6 +718,30 @@ And finally place the generated tarball in /etc/grml/fai/config/basefiles/ (note
 that it needs to be uppercase letters matching the class names, so: AMD64.tar.gz
 for amd64 and I386.tar.gz for i386).
 
+[[localrepos]]
+How to use your own local repository
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Let's assume you have Debian package(s) in your filesystem inside
+`/home/foobar/local-packages` and want to include that in your grml-live build.
+Make sure to create an according sources.list configuration file, e.g. using
+your own class name `CUSTOM`:
+
+  # cat > /etc/grml/fai/config/files/etc/apt/sources.list.d/local-packages.list/CUSTOM << EOF
+  deb file:///home/foobar/local-packages ./
+  EOF
+
+Add the according MIRROR_DIRECTORY configuration to your grml-live configuration:
+
+  # echo "MIRROR_DIRECTORY='/home/foobar/packages'" >> /etc/grml/grml-live.local
+
+Make sure the local directory looks like a mirror:
+
+  % cd /home/foobar/packages && /usr/bin/dpkg-scanpackages . /dev/null > ./Packages
+
+Finally invoke grml-live with your class name (`CUSTOM` in this example) added
+to the list of classes (see grml-live option `-c`).
+
 [[download]]
 Download / install grml-live as a Debian package
 ------------------------------------------------
