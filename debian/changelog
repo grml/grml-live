@@ -1,3 +1,17 @@
+grml-live (0.27.1) unstable; urgency=medium
+
+  [ Evgeni Golov ]
+  * [94aafe9] drop full-ov, custom-ov, live-rw and home-rw from the
+    helptext
+
+  [ Michael Prokop ]
+  * [9561b4b] Drop misplaced MIRROR_DIRECTORY from grml-live.conf
+  * [25317da] docs: How to use your own local repository
+  * [3003b74] Fix wrong filename for chain.c32 in isolinux.cfg. Thanks to
+    Gregor Zattler <telegraph@gmx.net> for the bug report
+
+ -- Michael Prokop <mika@grml.org>  Wed, 21 Oct 2015 23:21:55 +0200
+
 grml-live (0.27.0) unstable; urgency=medium
 
   * Software related changes:
