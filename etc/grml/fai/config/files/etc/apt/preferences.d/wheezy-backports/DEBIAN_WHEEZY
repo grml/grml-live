@@ -1,6 +1,4 @@
-// This file is installed by grml-live.
-//
-// Allow overriding initramfs-tools from backports
+Explanation: this file was installed by grml-live to allow overriding initramfs-tools from backports
 Package: initramfs-tools
 Pin: release a=wheezy-backports
 Pin-Priority: 997
