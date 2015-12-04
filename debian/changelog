@@ -1,3 +1,10 @@
+grml-live (0.27.2) unstable; urgency=medium
+
+  * [54e1498] Fix apt >=1.1 regression in apt-preferences handling
+  * [5cc5ed0] Do not fail source retrieval step with apt >=1.1
+
+ -- Michael Prokop <mika@grml.org>  Fri, 04 Dec 2015 22:53:29 +0100
+
 grml-live (0.27.1) unstable; urgency=medium
 
   [ Evgeni Golov ]
