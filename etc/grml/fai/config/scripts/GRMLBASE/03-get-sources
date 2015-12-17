@@ -22,6 +22,8 @@ bailout() {
   rm -f "$PACKAGE_LIST"
 }
 
+$ROOTCMD apt-get update
+
 $ROOTCMD dpkg-query -W -f='${Package}\n' > "${PACKAGE_LIST}"
 
 if ! [ -r "${PACKAGE_LIST}" ] ; then
