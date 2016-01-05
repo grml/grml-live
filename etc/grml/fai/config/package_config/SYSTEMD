@@ -1,0 +1,7 @@
+PACKAGES aptitude
+
+network-manager
+
+# network-manager-openvpn
+# network-manager-pptp
+# network-manager-vpnc

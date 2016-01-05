@@ -6,6 +6,11 @@
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
+FILE_RC=false
+if ifclass FILE_RC ; then
+  FILE_RC=true
+fi
+
 set -u
 set -e
 
@@ -59,13 +64,16 @@ EOF
    # install software.
    $ROOTCMD apt-get update
 
+  if $FILE_RC ; then
+    echo "Installing file-rc as FILE_RC class is enabled."
+    # newer aptitude versions won't remove essential packages using
+    # 'aptitude -f -y install file-rc' anymore, therefore force it:
+    $ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc systemd-sysv-
+  fi
+
    if ! $ROOTCMD test -x /usr/bin/aptitude ; then
       $ROOTCMD apt-get -y install aptitude
    fi
-
-   # newer aptitude versions won't remove essential packages using
-   # 'aptitude -f -y install file-rc' anymore, therefore force it:
-   $ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc systemd-sysv-
 
    # make sure we can upgrade automatically,
    # even with unsigned repos, but only if user wants it
@@ -118,9 +126,12 @@ if ! $ROOTCMD apt-get update ; then
    echo "Warning: there was an error executing apt-get update, continuing anyway." >&2
 fi
 
-# newer aptitude versions won't remove essential packages using
-# 'aptitude -f -y install file-rc' anymore, therefore force it via:
-$ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc systemd-sysv-
+if $FILE_RC ; then
+  echo "Installing file-rc as FILE_RC class is enabled."
+  # newer aptitude versions won't remove essential packages using
+  # 'aptitude -f -y install file-rc' anymore, therefore force it via:
+  $ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc systemd-sysv-
+fi
 # }}}
 
 # we definitely don't want to fail running fai dirinstall just

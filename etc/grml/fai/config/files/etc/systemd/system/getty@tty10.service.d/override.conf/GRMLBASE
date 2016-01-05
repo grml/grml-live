@@ -1,0 +1,4 @@
+[Service]
+Type=idle
+ExecStart=
+ExecStart=-/sbin/agetty --noclear %I 38400 linux

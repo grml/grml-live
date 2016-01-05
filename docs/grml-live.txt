@@ -335,6 +335,14 @@ selected. The following classes are predefined:
 
 * DEBORPHAN: get rid of all packages listed in output of deborphan
 
+* FILE_RC: instead of using systemd as init system use file-rc instead. file-rc
+was the init system used by Grml until and including stable release 2014.11,
+starting with beginning of 2016 Grml switched to systemd instead. If you want to
+build a live system in the old style using file-rc instead of systemd then enable
+this class. Please notice that support for file-rc is no longer being actively
+maintained (the Grml team happily accepts patches though) and file-rc (upstream
+wise) might disappear too.
+
 * FRESHCLAM: execute freshclam (if it's present) to update clamav definitions
 (increases resulting ISO size ~70MB). By default it's skipped to avoid bigger
 ISO size.
