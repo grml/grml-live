@@ -491,9 +491,8 @@ For further information see next section.
 Current state of grml-live with squashfs-tools and kernel
 ---------------------------------------------------------
 
-Use squashfs-tools >=4.2-1 (available from Grml repositories as well as from
-Debian) to build Grml (based) ISOs featuring kernel version 2.6.38-grml[64] or
-newer.
+Use squashfs-tools >=4.2-1 to build Grml (based) ISOs featuring kernel version
+2.6.38-grml[64] or newer.
 
 [[faq]]
 FAQ
