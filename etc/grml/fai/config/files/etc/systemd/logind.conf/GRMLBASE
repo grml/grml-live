@@ -1,0 +1,25 @@
+# See logind.conf(5) for details
+
+# This file was deployed via grml-live's
+# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/15-initsetup, using
+# ${GRML_FAI_CONFIG}/config/files/etc/systemd/logind.conf/GRMLBASE
+
+[Login]
+NAutoVTs=12
+#ReserveVT=6
+#KillUserProcesses=no
+#KillOnlyUsers=
+#KillExcludeUsers=root
+#InhibitDelayMaxSec=5
+#HandlePowerKey=poweroff
+#HandleSuspendKey=suspend
+#HandleHibernateKey=hibernate
+#HandleLidSwitch=suspend
+#PowerKeyIgnoreInhibited=no
+#SuspendKeyIgnoreInhibited=no
+#HibernateKeyIgnoreInhibited=no
+#LidSwitchIgnoreInhibited=yes
+#IdleAction=ignore
+#IdleActionSec=30min
+#RuntimeDirectorySize=10%
+#RemoveIPC=yes

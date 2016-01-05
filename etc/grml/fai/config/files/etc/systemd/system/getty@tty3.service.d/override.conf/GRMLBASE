@@ -1,0 +1,4 @@
+[Service]
+Type=idle
+ExecStart=
+ExecStart=-/sbin/grml-runtty /dev/tty3 /usr/share/grml-scripts/run-screen root

@@ -1,0 +1,14 @@
+## This is the systemd service for grml-autoconfig
+
+[Unit]
+Description=grml-autoconfig configures the live system during the boot process (late userspace).
+Documentation=man:grml-autoconfig
+Before=basic.target udev.service
+DefaultDependencies=no
+ConditionPathExists=/etc/init.d/grml-autoconfig
+ConditionKernelCommandLine=grml-autoconfig
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/etc/init.d/grml-autoconfig start
