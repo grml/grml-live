@@ -69,6 +69,17 @@ fi
 # install all apt related files
 fcopy -i -B -v -r /etc/apt
 
+# install packages from a repository of a specific date
+if [ -n "${WAYBACK_DATE:-}" ] ; then
+  echo "Wayback date '$WAYBACK_DATE' identified, enabling for snapshot.debian.org usage."
+
+  perl -pi -e "s#^(\s+)(deb.* )(.*://ftp.debian.org.*?)\s+([a-z-]+)\s+(.*)\$#\$1\$2http://snapshot.debian.org/archive/debian/$WAYBACK_DATE/ \$4 \$5#" \
+    "${target}/etc/apt/sources.list.d/debian.list"
+
+  perl -pi -e "s#^(\s+)(deb.* )(.*://security.debian.org.*?)\s+([a-z-/]+)\s+(.*)\$#\$1\$2http://snapshot.debian.org/archive/debian-security/$WAYBACK_DATE/ \$4 \$5#" \
+    "${target}/etc/apt/sources.list.d/debian.list"
+fi
+
 # install Grml gpg key:
 $ROOTCMD apt-key add /etc/apt/grml.key
 

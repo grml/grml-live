@@ -71,6 +71,8 @@ Usage: $PN [options, see as follows]
    -U <username>           arrange output to be owned by specified username
    -v <version_number>     specify version number of the release
    -V                      increase verbosity in the build process
+   -w <date>               wayback machine, build system using Debian archives
+                           from specified date
    -z                      use ZLIB instead of LZMA/XZ compression
 
 Usage examples:
@@ -311,7 +313,7 @@ copy_addon_file() {
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:d:D:e:g:i:I:o:r:s:S:t:U:v:AbBFhnNqQuVz" opt; do
+while getopts "a:C:c:d:D:e:g:i:I:o:r:s:S:t:U:v:w:AbBFhnNqQuVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     A) CLEAN_ARTIFACTS=1 ;;
@@ -340,6 +342,7 @@ while getopts "a:C:c:d:D:e:g:i:I:o:r:s:S:t:U:v:AbBFhnNqQuVz" opt; do
     u) UPDATE=1 ;;
     U) CHOWN_USER="$OPTARG" ;;
     V) VERBOSE="-v" ;;
+    w) export WAYBACK_DATE="$OPTARG" ;;
     z) SQUASHFS_ZLIB=1 ;;
     ?) echo "invalid option -$OPTARG" >&2; usage; bailout 1 ;;
   esac
@@ -693,7 +696,7 @@ else
       mount --bind "${OUTPUT}/grml_sources/" "${CHROOT_OUTPUT}/grml-live/sources/"
 
       log "Executed FAI command line:"
-      log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY GRML_LIVE_CONFIG=$CONFIGDUMP fai $VERBOSE -C $GRML_FAI_CONFIG -s file:///$GRML_FAI_CONFIG/config -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
+      log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY GRML_LIVE_CONFIG=$CONFIGDUMP WAYBACK_DATE=$WAYBACK_DATE fai $VERBOSE -C $GRML_FAI_CONFIG -s file:///$GRML_FAI_CONFIG/config -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
       BUILD_ONLY="$BUILD_ONLY" BOOTSTRAP_ONLY="$BOOTSTRAP_ONLY" GRML_LIVE_CONFIG="$CONFIGDUMP" fai $VERBOSE \
                   -C "$GRML_FAI_CONFIG" -s "file:///$GRML_FAI_CONFIG/config" -c"$CLASSES" \
                   -u "$HOSTNAME" "$FAI_ACTION" "$CHROOT_OUTPUT" $FAI_ARGS | tee -a $LOGFILE

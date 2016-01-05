@@ -14,7 +14,7 @@ grml-live [-a <architecture>] [-c <classe[s]>] [-C <configfile>] [
 -e <extract_iso_name>] [-g <grml_name>] [-i <iso_name>] [
 -o <output_directory>] [-r <release_name>] [-s <suite>] [
 -t <template_directory>] [-v <version_number>] [-U <username>] [
--AbBFnNqQuVz]
+-w <date>] [-AbBFnNqQuVz]
 
 Description
 -----------
@@ -231,6 +231,22 @@ Specify version number of the release.
   -V::
 
 Increase verbosity in the build process.
+
+  -w **DATE**::
+
+The wayback machine. Build the system using Debian archives from the specified
+date.  Valid date formats are yyyymmddThhmmssZ or simply yyyymmdd.  To learn
+which snapshots exist, i.e. which date strings are valid, simply browse the
+lists on http://snapshot.debian.org/.  If there is no import at the exact time
+you specified you will get the latest available timestamp which is before the
+time you specified.
+This option is useful especially for release and debugging builds - for example
+if you know that the Debian archive was in a good state on a specific date but
+you want to build it on another day in the future, where the archive might not
+be as needed anymore. Please be aware that this is restricted to the plain
+Debian repositories only, as referred to in /etc/apt/sources.list.d/debian.list
+(so neither the Grml repositories nor any further custom ones are affected by
+the wayback machine).
 
   -z::
 
