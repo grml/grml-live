@@ -6,37 +6,112 @@
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
+FILE_RC=false
+if ifclass FILE_RC ; then
+  FILE_RC=true
+fi
+
 set -u
 set -e
 . "$GRML_LIVE_CONFIG"
 
-if ! [ -r $target/etc/runlevel.conf ] ; then
-   echo 'Warning: /etc/runlevel.conf does not exist...'
-   echo '... assuming we do not have file-rc, skipping 15-initsetup'
-   exit 0
-fi
+systemd_setup() {
+  fcopy -i -B -v -r /etc/systemd
 
-# keep a backup of the original runlevel.conf file for reference
-if [ -r $target/etc/runlevel.conf.original ] ; then
-  # make sure to store old backup files if they differ as well
-  if ! cmp $target/etc/runlevel.conf $target/etc/runlevel.conf.original >/dev/null ; then
-    cp $target/etc/runlevel.conf.original $target/etc/runlevel.conf.original."$(date +%Y%m%d_%k:%M:%S)"
+  echo "Enabling user '$USERNAME' for autologin"
+  sed -i "s/\$USERNAME/$USERNAME/" "$target"/etc/systemd/system/getty@tty*.service.d/override.conf
+
+  # enable TTY logins
+  local service
+  for file in "${target}"/etc/systemd/system/getty@tty*.service.d ; do
+    service=$(basename "$file" .d)
+    $ROOTCMD systemctl enable "$service" || echo "failed to enable $service"
+  done
+  unset service
+
+  # FIXME - ssh-keygen isn't executed yet before ssh-bootoption + ssh services
+  $ROOTCMD systemctl enable ssh-bootoption.service || echo "failed to enable ssh-bootoption.service"
+  $ROOTCMD systemctl enable ssh-keygen.service     || echo "failed to enable ssh-keygen.service"
+
+  # fails on overlayfs with
+  # "Failed to unmount transient /etc/machine-id file in our private namespace: Invalid argument"
+  $ROOTCMD systemctl mask systemd-machine-id-commit.service || echo "failed to mask $systemd-machine-id-commit.service"
+
+  # disable unwanted services
+  local service
+  for service in \
+    cron.service \
+    lvm2-lvmetad.service \
+    lvm2-lvmetad.socket \
+    lvm2-lvmpolld.socket \
+    lvm2-monitor.service \
+    mdadm-raid.service \
+    smartd.service \
+    ssh.service \
+    swap.target \
+    systemd-timesyncd.service \
+    uuidd.service
+  do
+    $ROOTCMD systemctl disable ${service} || echo "failed to disable $service"
+  done
+  unset service
+
+  # TODO ->
+
+  # * *proper* integration for grml-autoconfig
+      $ROOTCMD systemctl enable grml-autoconfig.service || echo "failed to enable grml-autoconfig.service"
+      ln -sf /etc/systemd/system/grml-autoconfig.service "${target}"/etc/systemd/system/multi-user.target.wants/grml-autoconfig.service
+
+  # * avoid startup of any LSB scripts; NOTE: jessie doesn't support that
+  #   system-generators approach yet, only >=stretch
+      mkdir -p "${target}"/etc/systemd/system-generators/
+      ln -sf /dev/null "${target}"/etc/systemd/system-generators/systemd-sysv-generator
+  #   -> revert /etc/systemd/system-generators/systemd-sysv-generator && systemctl daemon-reload during *bootup*
+  #      + possibly move this into startup so it's always executed on bootup, even with persistency enabled
+  #      where the change towards systemd-sysv-generator might persist across
+  #      reboots -> LSB scripts executed on reboots
+
+  # * run 'systemctl enable debug-shell.service' via initramfs/init script if
+  #   debug/failsafe or something like that is present in /proc/cmdline and also set
+  #   "systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M"
+      $ROOTCMD systemctl enable debug-shell.service || true
+}
+
+file_rc_setup() {
+  if ! [ -r "${target}"/etc/runlevel.conf ] ; then
+     echo 'Warning: /etc/runlevel.conf does not exist...'
+     echo '... assuming we do not have file-rc, skipping 15-initsetup'
+     exit 0
   fi
+
+  # keep a backup of the original runlevel.conf file for reference
+  if [ -r "${target}"/etc/runlevel.conf.original ] ; then
+    # make sure to store old backup files if they differ as well
+    if ! cmp "${target}"/etc/runlevel.conf "${target}"/etc/runlevel.conf.original >/dev/null ; then
+      cp "${target}"/etc/runlevel.conf.original "${target}/etc/runlevel.conf.original.$(date +%Y%m%d_%k:%M:%S)"
+    fi
+  fi
+
+  cp "${target}"/etc/runlevel.conf "${target}"/etc/runlevel.conf.original
+
+  # provide Grml's default file-rc configuration
+  fcopy -v /etc/runlevel.conf
+
+  # provide Grml's inittab configuration
+  fcopy -v /etc/inittab
+  sed -i "s/\$USERNAME\$/${USERNAME}/" "${target}"/etc/inittab
+
+  # provide Grml's bootlocal init scripts
+  fcopy -v -mroot,root,0755 /etc/init.d/bootlocal.first
+  fcopy -v -mroot,root,0755 /etc/init.d/bootlocal.middle
+  fcopy -v -mroot,root,0755 /etc/init.d/bootlocal.last
+}
+
+if $FILE_RC ; then
+  file_rc_setup
+else
+  systemd_setup
 fi
-
-cp $target/etc/runlevel.conf $target/etc/runlevel.conf.original
-
-# provide Grml's default file-rc configuration
-fcopy -v /etc/runlevel.conf
-
-# provide Grml's inittab configuration
-fcopy -v /etc/inittab
-sed -i "s/\$USERNAME\$/${USERNAME}/" $target/etc/inittab
-
-# provide Grml's bootlocal init scripts
-fcopy -v -mroot,root,0755 /etc/init.d/bootlocal.first
-fcopy -v -mroot,root,0755 /etc/init.d/bootlocal.middle
-fcopy -v -mroot,root,0755 /etc/init.d/bootlocal.last
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

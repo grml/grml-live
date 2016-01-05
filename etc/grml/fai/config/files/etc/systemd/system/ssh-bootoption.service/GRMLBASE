@@ -1,0 +1,20 @@
+# This file was deployed via grml-live's
+# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/15-initsetup, using
+# ${GRML_FAI_CONFIG}/config/files/etc/systemd/system/ssh-bootoption.service/GRMLBASE
+
+[Unit]
+Description=OpenBSD Secure Shell server
+After=ssh-keygen network.target auditd.service
+ConditionKernelCommandLine=ssh
+ConditionPathExists=!/etc/ssh/sshd_not_to_be_run
+
+[Service]
+EnvironmentFile=-/etc/default/ssh
+ExecStart=/usr/sbin/sshd -D $SSHD_OPTS
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+Alias=sshd.service

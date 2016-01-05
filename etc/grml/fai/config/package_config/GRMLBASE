@@ -8,7 +8,6 @@ deborphan
 dmidecode
 eject
 file
-file-rc
 gpm
 grml2hd
 grml2hd-utils
@@ -39,7 +38,6 @@ less
 live-boot-grml live-boot-grml-doc
 lvm2
 mdadm
-multitail
 nfs-common
 openssh-client
 openssh-server
