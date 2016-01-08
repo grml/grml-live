@@ -634,7 +634,11 @@ fi
 
 # generate nfsroot configuration for FAI on the fly
 if [ -z "$FAI_DEBOOTSTRAP" ] ; then
-  FAI_DEBOOTSTRAP="$SUITE http://ftp.debian.org/debian"
+  if [ -n "$WAYBACK_DATE" ] ; then
+    FAI_DEBOOTSTRAP="$SUITE http://snapshot.debian.org/archive/debian/$WAYBACK_DATE/"
+  else
+    FAI_DEBOOTSTRAP="$SUITE http://ftp.debian.org/debian"
+  fi
 fi
 
 if [ -z "$FAI_DEBOOTSTRAP_OPTS" ] ; then
