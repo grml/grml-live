@@ -14,7 +14,6 @@
 
 # Configurable options:
 KEYGEN=/usr/bin/ssh-keygen
-RSA1_KEY=/etc/ssh/ssh_host_key
 RSA_KEY=/etc/ssh/ssh_host_rsa_key
 DSA_KEY=/etc/ssh/ssh_host_dsa_key
 ECDSA_KEY=/etc/ssh/ssh_host_ecdsa_key
@@ -91,11 +90,6 @@ check_config() {
 
 
 generate_ssh_keys() {
-    if ! test -f $RSA1_KEY ; then
-	log_action_msg "Generating SSH1 RSA host key..."
-	$KEYGEN -t rsa1 -f $RSA1_KEY -C '' -N '' || exit 1
-    fi
-
     if ! test -f $RSA_KEY ; then
 	log_action_msg "Generating SSH2 RSA host key..."
 	$KEYGEN -t rsa -f $RSA_KEY -C '' -N '' || exit 1
