@@ -54,6 +54,7 @@ binary-arch: build install
 binary-indep: build install
 	dh_testdir
 	dh_testroot
+	dh_install
 	dh_installchangelogs
 	dh_installdocs doc/grml-autoconfig.1.html doc/grml-autoconfig.8.html \
 			doc/restore-config.1.html doc/save-config.1.html
