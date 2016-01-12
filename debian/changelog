@@ -1,3 +1,11 @@
+grml-etc (1.6.0) grml-testing; urgency=medium
+
+  * [697b566] No longer generate RSA1 SSH hostkey [Closes: issue2158]
+    Thanks to Andras Korn for the bugreport
+  * [1cb2de5] Bump Standards-Version to 3.9.6
+
+ -- Michael Prokop <mika@grml.org>  Tue, 12 Jan 2016 10:57:10 +0100
+
 grml-etc (1.5.2) grml-testing; urgency=medium
 
   * [7343ad4] ssh init script: sync with Debian + generate ed25519 key
