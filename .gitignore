@@ -1,2 +1,4 @@
 etc/grml/fai/config/basefiles
 etc/grml/fai/config/config
+etc/grml/fai/make-fai-nfsroot.conf
+etc/grml/fai/nfsroot.conf
