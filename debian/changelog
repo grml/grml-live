@@ -1,3 +1,10 @@
+grml-etc (1.6.1) grml-testing; urgency=medium
+
+  * [182dd2d] No longer ship /etc/skel/.kshrc [Closes: issue2160]
+  * [680b144] Bump Standards-Version to 3.9.7
+
+ -- Michael Prokop <mika@grml.org>  Thu, 04 Feb 2016 11:08:54 +0100
+
 grml-etc (1.6.0) grml-testing; urgency=medium
 
   * [697b566] No longer generate RSA1 SSH hostkey [Closes: issue2158]
