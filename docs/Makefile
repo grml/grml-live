@@ -4,6 +4,13 @@ doc: doc_man doc_html
 
 doc_html: html-stamp
 
+icons:
+	mkdir -p images/icons
+	cp /usr/share/asciidoc/icons/caution.png	images/icons/
+	cp /usr/share/asciidoc/icons/important.png	images/icons/
+	cp /usr/share/asciidoc/icons/note.png		images/icons/
+	cp /usr/share/asciidoc/icons/tip.png		images/icons/
+
 html-stamp: grml-live.txt grml-live-remaster.txt grml-live-db.txt
 	asciidoc -b xhtml11 -a icons -a toc -a numbered grml-live.txt
 	asciidoc -b xhtml11 -a icons grml-live-remaster.txt
@@ -33,12 +40,16 @@ pdf-stamp:
 	a2x --icons -a toc -a toclevels=3 -a docinfo -f pdf grml-live.txt
 	touch pdf-stamp
 
-online: doc_html doc_epub doc_pdf
-	scp grml-live.html grml:/var/www/grml/grml-live/index.html
-	scp grml-live.pdf  grml:/var/www/grml/grml-live/
-	scp grml-live.epub grml:/var/www/grml/grml-live/
+online: icons doc_html doc_epub doc_pdf
+	# this is assume that a checkout of grml.org.git is available
+	# next to grml-live.git as "grml.org"
+	test -d ../../grml.org/grml-live || exit 1
+	cp grml-live.html	../../grml.org/grml-live/index.html
+	cp grml-live.pdf	../../grml.org/grml-live/
+	cp grml-live.epub	../../grml.org/grml-live/
 
 clean:
+	rm -rf images/icons
 	rm -f grml-live-remaster.html grml-live-remaster.xml grml-live-remaster.8
 	rm -f grml-live.html grml-live.xml grml-live.8 grml-live.epub grml-live.pdf
 	rm -f grml-live-db.html grml-live-db.xml grml-live-db.8
