@@ -656,35 +656,6 @@ what you are searching for just run:
   rm -rf /etc/grml/fai /etc/grml/grml-live.conf
   dpkg -i --force-confnew --force-confmiss /path/to/grml-live_..._all.deb
 
-[[create-a-base-tgz]]
-How do I create a base.tgz?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-First of all create the chroot using debootstrap:
-
-  BASECHROOT='/tmp/basefile'
-  debootstrap jessie "$BASECHROOT" http://ftp.debian.org/debian
-  tar -C "$BASECHROOT" --exclude='var/cache/apt/archives/*.deb' -zcf base.tar.gz ./
-
-[TIP]
-By default debootstrap builds a chroot matching the architecture of the running
-host system. If you're using an amd64 system and want to build an i386 base.tgz
-then invoke debootstrap using the '--arch i386' option. Disclaimer: building an
-AMD64 base.tgz won't work if you are using a 32bit kernel system of course.
-
-Then move the base.tar.gz to /etc/grml/fai/config/basefiles/$CLASSNAME.tar.gz.
-Use e.g. I386 as $CLASSNAME for i386 chroots and AMD64 for amd64 chroots.
-
-Now executing grml-live should use this file as base system instead of executing
-debootstrap. Check out the output for something like:
-
-  [...]
-  ftar: extracting //etc/grml/fai/config/basefiles///AMD64.tar.gz to /srv/grml64_testing/grml_chroot//
-  [...]
-
-[TIP]
-Existing base.tgz can be found at http://daily.grml.org/
-
 [[apt-cacher]]
 Set up apt-cacher-ng for use with grml-live
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -716,29 +687,47 @@ syslinux) then just execute:
 
   % isohybrid grml.iso
 
-[[basetgz]]
+[[create-a-base-tgz]]
 How do I create a base tar.gz (I386.tar.gz or AMD64.tar.gz)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[[basetgz]]
 
-Execute the following commands (requires root):
+First of all create the chroot using debootstrap (requires root):
 
-  ARCH='amd64' # replace with i386 if necessary
-  SUITE='jessie' # using the current stable release should always work
-  debootstrap --arch "$ARCH" --exclude=info,tasksel,tasksel-data "$SUITE" "$ARCH" http://debian.netcologne.de/debian
-  cd "$ARCH"
-  rm var/cache/apt/archives/*.deb
-  tar zcf ../"${ARCH}".tar.gz *
+  BASECHROOT='/tmp/basefile'  # path where the chroot gets generated
+  SUITE='jessie'              # using the current stable release should always work
+  debootstrap --exclude=info,tasksel,tasksel-data "$SUITE" "$BASECHROOT" http://ftp.debian.org/debian
+  tar -C "$BASECHROOT" --exclude='var/cache/apt/archives/*.deb' -zcf "${SUITE}".tar.gz ./
 
-And finally place the generated tarball in /etc/grml/fai/config/basefiles/ (note
-that it needs to be uppercase letters matching the class names, so: AMD64.tar.gz
-for amd64 and I386.tar.gz for i386).
+[TIP]
+By default debootstrap builds a chroot matching the architecture of the running
+host system. If you're using an amd64 system and want to build an i386 base.tgz
+then invoke debootstrap using the '--arch i386' option. Disclaimer: building an
+AMD64 base.tgz won't work if you are using a 32bit kernel system of course.
+
+Finally place the generated tarball in /etc/grml/fai/config/basefiles/ (note
+that it needs to be uppercase letters matching the class names, so: e.g.
+AMD64.tar.gz for amd64 and I386.tar.gz for i386).
+
+Then executing grml-live should use this file as base system instead of executing
+debootstrap. Check out the output for something like:
+
+  [...]
+  ftar: extracting //etc/grml/fai/config/basefiles///AMD64.tar.gz to /srv/grml64_testing/grml_chroot//
+  [...]
 
 [[localrepos]]
 How to use your own local repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Let's assume you have Debian package(s) in your filesystem inside
-`/home/foobar/local-packages` and want to include that in your grml-live build.
+`/home/foobar/local-packages` and want to provide them to your grml-live build.
+This can be achieved either 1) through a bind mount (using the MIRROR_DIRECTORY
+configuration) or 2) by serving a repository via HTTP.
+
+Serving via bind mount / MIRROR_DIRECTORY
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Make sure to create an according sources.list configuration file, e.g. using
 your own class name `CUSTOM`:
 
@@ -752,23 +741,67 @@ Add the according MIRROR_DIRECTORY configuration to your grml-live configuration
 
 Make sure the local directory looks like a mirror:
 
-  % cd /home/foobar/packages && /usr/bin/dpkg-scanpackages . /dev/null > ./Packages
+  % cd /home/foobar/packages
+  % dpkg-scanpackages . /dev/null | gzip > Packages.gz
 
 Finally invoke grml-live with your class name (`CUSTOM` in this example) added
-to the list of classes (see grml-live option `-c`).
+to the list of classes on the command line (see grml-live option `-c`).
+
+Serving a repository via HTTP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Make sure to create an according sources.list configuration file, e.g. using
+your own class name `CUSTOM`:
+
+  # cat > /etc/grml/fai/config/files/etc/apt/sources.list.d/local-packages.list/CUSTOM << EOF
+  deb http://127.0.0.1:8000/ ./
+  EOF
+
+Make sure the local directory is served via HTTP on the according IP address and
+port. For the `http://127.0.0.1:8000/` example from above it should be enough to
+just invoke:
+
+  % cd /home/foobar/packages
+  % dpkg-scanpackages . /dev/null | gzip > Packages.gz
+  % python -m SimpleHTTPServer 8000
+
+[TIP]
+Of course you can also use a real Debian repository setup using tools like
+reprepro(1) and/or using a real web server, though for quick debugging sessions
+python's SimpleHTTPServer in combination with dpkg-scanpackages from package
+dpkg-dev is a simple and easy approach.
+
+Finally invoke grml-live with your class name (`CUSTOM` in this example) added
+to the list of classes on the command line (see grml-live option `-c`).
 
 [[download]]
 Download / install grml-live as a Debian package
 ------------------------------------------------
 
-Debian packages are available through the grml-repository at
-link:http://deb.grml.org/pool/main/g/grml-live/[deb.grml.org].  If you want to
-build a Debian package on your own (using for example a specific version or the
-current development tree), just execute:
+Stable Debian packages are available through the grml-repository at
+link:http://deb.grml.org/pool/main/g/grml-live/[deb.grml.org] and the latest
+Git commits are available as Debian packages from
+link:http://jenkins.grml.org/job/grml-live-binaries/[jenkins.grml.org].
+If you want to build a Debian package on your own (using for example a specific
+version or the current development tree), just execute:
 
   git clone git://git.grml.org/grml-live
   cd grml-live
   debuild -us -uc
+
+[[run-from-git]]
+Run grml-live directly from git
+-------------------------------
+
+In case you want to run grml-live directly from the git repository checkout
+(after making sure all dependencies are installed), you should set
+`GRML_FAI_CONFIG` so that a) it finds the according FAI configuration files and
+b) does not use the config files of an possibly installed `grml-live` package.
+Usage example:
+
+    # export GRML_FAI_CONFIG=$(pwd)/etc/grml/fai
+    # export SCRIPTS_DIRECTORY=$(pwd)/scripts
+    # ./grml-live -s sid -a amd64 -c GRMLBASE,GRML_FULL,AMD64
 
 [[source]]
 Source

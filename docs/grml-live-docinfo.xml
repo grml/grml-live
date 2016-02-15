@@ -15,6 +15,15 @@ Revision file for grml-live
 <revhistory>
 
   <revision>
+    <revnumber>0.27.2</revnumber>
+    <date>2016-02-15</date>
+    <authorinitials>MP</authorinitials>
+    <revremark>Unify duplicated base.tgz documentation, add instructinos how to run grml-live directly from git,
+    provide FAQ entry how to serve a local repository via HTTP.</revremark>
+
+  </revision>
+
+  <revision>
     <revnumber>0.1</revnumber>
     <date>2010-09-01</date>
     <authorinitials>MP</authorinitials>
