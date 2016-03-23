@@ -59,13 +59,16 @@ EOF
    # install software.
    $ROOTCMD apt-get update
 
+  if $FILE_RC ; then
+    echo "Installing file-rc as FILE_RC class is enabled."
+    # newer aptitude versions won't remove essential packages using
+    # 'aptitude -f -y install file-rc' anymore, therefore force it:
+    $ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc
+  fi
+
    if ! $ROOTCMD test -x /usr/bin/aptitude ; then
       $ROOTCMD apt-get -y install aptitude
    fi
-
-   # newer aptitude versions won't remove essential packages using
-   # 'aptitude -f -y install file-rc' anymore, therefore force it:
-   $ROOTCMD aptitude -o Aptitude::ProblemResolver::Keep-All-Tier=60000 -f -y install file-rc
 
    # make sure we can upgrade automatically,
    # even with unsigned repos, but only if user wants it
