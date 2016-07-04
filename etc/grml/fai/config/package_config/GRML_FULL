@@ -232,6 +232,7 @@ subversion
 # recovery
 afflib-tools
 autopsy
+binwalk
 dcfldd
 ewf-tools
 extundelete
