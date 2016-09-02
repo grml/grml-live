@@ -172,6 +172,7 @@ iputils-tracepath
 isc-dhcp-client
 iw
 libnss-mdns
+libteam-utils
 lrzsz
 mosh
 mtr-tiny
