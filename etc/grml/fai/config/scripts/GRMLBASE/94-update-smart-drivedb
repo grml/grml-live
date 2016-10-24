@@ -17,7 +17,7 @@ set -e
 [ -x $target/usr/bin/timeout ] && TIMEOUT="10" || TIMEOUT=""
 
 if ! [ -x ${target}/usr/sbin/update-smart-drivedb ] ; then
-  echo "Warning: smartmontools not installed"
+  echo "NOTE: update-smart-drivedb not present (possibly smartmontools >=6.4+svn4214-1 present)"
   exit 0
 fi
 
