@@ -70,6 +70,7 @@ mdadm
 mpt-status
 multipath-tools
 nocache
+nvme-cli
 scsitools
 sdparm
 sg3-utils
