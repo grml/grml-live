@@ -227,24 +227,6 @@ fi
 }
 # }}}
 
-# {{{ set firmware timeout via bootparam
-config_fwtimeout(){
- if checkbootparam 'fwtimeout' ; then
-   TIMEOUT="$(getbootparam 'fwtimeout' 2>>$DEBUG)"
-   einfo "Bootoption fwtimeout found. (Re)Loading firmware_class module."
-   rmmod firmware_class >>$DEBUG 2>&1
-   modprobe firmware_class ; eend $?
- fi
- if [ -z "$TIMEOUT" ] ; then
-   TIMEOUT="100" # linux kernel default: 10
- fi
- if [ -f /sys/class/firmware/timeout ] ; then
-   einfo "Setting timeout for firmware loading to ${TIMEOUT}."
-   echo $TIMEOUT > /sys/class/firmware/timeout ; eend $?
- fi
-}
-# }}}
-
 ### {{{ language configuration / localization
 config_language(){
 
@@ -466,23 +448,6 @@ config_userlocal() {
 }
 # }}}
 
-# {{{ mount configfs
-config_configfs() {
-  einfo "Mounting configfs"
-  CONFIGFS_DIR=/sys/kernel/config/
-  modprobe configfs 2>/dev/null 1>&2
-  if ! [  -d "$CONFIGFS_DIR" ] ; then
-    eindent
-    einfo "$CONFIGFS_DIR does not exist, can't mount directory"
-    eend 1
-    eoutdent
-  else
-    mount -t configfs configfs "$CONFIGFS_DIR" 2>/dev/null 1>&2
-    eend $?
-  fi
-}
-# }}}
-
 # {{{ Set clock (Local time is more often used than GMT, so it is default)
 config_time(){
  # don't touch the files if running from harddisk:
@@ -545,23 +510,6 @@ config_kernel(){
 }
 # }}}
 
-# {{{ ld.so.cache + depmod
-config_ld_mod(){
-if [ -n "$INSTALLED" ]; then
- if ! [ -r /etc/grml.first.boot ] ; then
-  einfo "Running from HD for the first time, regenerate ld.so.cache and modules.dep:"
-  eindent
-# Regenerate ld.so.cache and module dependencies on HD
-    einfo "Running ldconfig" ; ldconfig  ; eend $?
-    einfo "Running depmod"   ; depmod -a ; eend $?
-    touch /etc/grml.first.boot
-    eend 0
-  eoutdent
- fi
-fi
-}
-# }}}
-
 # {{{ timezone
 config_timezone(){
  # don't touch the files if running from harddisk:
@@ -585,63 +533,6 @@ config_timezone(){
        fi
     fi
  fi
-}
-# }}}
-
-# small computer / nearly no ram {{{
-config_small(){
-
-RAM=$(/usr/bin/gawk '/MemTotal/{print $2}' /proc/meminfo)
-# MEM=$(/usr/bin/gawk 'BEGIN{m=0};/MemFree|Cached|SwapFree/{m+=$2};END{print m}' /proc/meminfo)
-eindent
-
-if checkbootparam 'small'; then
-  einfo "Information: ${RAM} kB of RAM available." ; eend 0
-  einfo "Bootoption small detected. Activating small system."
-  if [ -r /etc/inittab.small ] ; then
-    mv /etc/inittab /etc/inittab.normal
-    mv /etc/inittab.small /etc/inittab
-  else
-    sed -i 's/^9/#&/' /etc/inittab
-    sed -i 's/^10/#&/' /etc/inittab
-    sed -i 's/^11/#&/' /etc/inittab
-    sed -i 's/^12/#&/' /etc/inittab
-  fi
-  /sbin/telinit q ; eend $?
-else
-  if checkgrmlsmall ; then
-    if [[ $RAM -lt 25000 ]] ; then
-      ewarn "Information: ${RAM} kB of RAM available." ; eend 1
-      ewarn "At least 32MB of RAM should be available for grml-small." ; eend 1
-      ewarn "Use the bootoption small to save some more MB of memory usage." ; eend 0
-      ewarn "Dropping you into a rescue shell. To continue booting exit the shell." ; eend 0
-      /bin/zsh --login
-    else
-      einfo "Information: ${RAM} kB of RAM available." ; eend 0
-    fi
-  else
-    if [[ $RAM -lt 58000 ]] ; then
-      ewarn "Information: ${RAM} kB of RAM available." ; eend 1
-      ewarn "At least 64MB of RAM should be available for grml." ; eend 1
-      ewarn "Use the bootoption small to save some more MB of memory usage." ; eend 0
-      ewarn "Dropping you into a rescue shell. To continue booting exit the shell." ; eend 0
-      /bin/zsh --login
-    else
-      einfo "Information: ${RAM} kB of RAM available." ; eend 0
-    fi
-  fi
-fi
-eoutdent
-}
-# }}}
-
-# skip startup of w3m {{{
-config_fast(){
-if checkbootparam 'fast'; then
-  ewarn "Bootoption fast detected. Skipping startup of grml-quickconfig."
-    sed -i '/1:/s#/usr/share/grml-scripts/run-welcome#/bin/zsh#' /etc/inittab
-  /sbin/telinit q ; eend $?
-fi
 }
 # }}}
 
@@ -698,15 +589,6 @@ if checkbootparam 'console'; then
   fi
   eend $?
 fi
-}
-# }}}
-
-# {{{ copy passwd-lockfile to ramdisk (fix unionfs-behaviour)
-# otherwise we will get: passwd: Authentication token lock busy
-config_fix_passwd(){
- if [ -z "$INSTALLED" ] ; then
-  touch /etc/.pwd.lock
- fi
 }
 # }}}
 
@@ -939,43 +821,6 @@ if [ -z "$INSTALLED" ] ; then
 EOT
    fi # -n $partitions
 fi # -z $INSTALLED
-}
-# }}}
-
-# {{{ Mouse
-config_mouse(){
-if [ -n "$MOUSE_DEVICE" ] ; then
-  einfo "Detecting mouse: ${MOUSE_FULLNAME} at ${MOUSE_DEVICE}" ; eend $?
-fi
-}
-# }}}
-
-# {{{ IPv6 configuration
-# Load IPv6 kernel module and print IP adresses
-config_ipv6(){
-if checkbootparam 'ipv6'; then
-  einfo "Enabling IPv6 as requested on boot commandline (sleeping for 2 seconds)"
-  modprobe ipv6
-  # we probably need some time until stateless autoconfiguration has happened
-  sleep 2
-  NETDEVICES="$(awk -F: '/eth.:|tr.:|wlan.:/{print $1}' /proc/net/dev 2>>$DEBUG)"
-  for DEVICE in `echo "$NETDEVICES"`; do
-    eindent
-      einfo "$DEVICE:"
-      ADDRESSES="$(ifconfig $DEVICE | awk '/.*inet6 addr:.*/{print $3}')"
-      COUNT="$(ifconfig $DEVICE | awk '/.*inet6 addr:.*/{ sum += 1};END {print sum }')"
-      eindent
-        for ADDR in `echo "$ADDRESSES"` ; do
-            einfo "$ADDR"
-        done
-        if [ "$COUNT" -eq "0" ] ; then
-           einfo "(none)" ; eend 1
-        fi
-      eoutdent
-    eoutdent
-  done
-  eend 0
-fi
 }
 # }}}
 
@@ -1306,54 +1151,7 @@ config_mixer () {
 }
 # }}}
 
-# {{{ modem detection
-config_modem(){
-if checkbootparam 'nomodem'; then
-  ewarn "Skipping check for AC97 modem controller as requested on boot commandline." ; eend 0
-else
-  if [ -x /etc/init.d/sl-modem-daemon ] ; then
-     if lspci | grep Intel | grep -q "AC'97 Modem Controller" ; then
-        einfo "AC97 modem controller detected. Start it running 'Start sl-modem-daemon'."
-        eend 0
-     fi
-  fi
-fi
-}
-# }}}
-
-# {{{ wondershaper
-config_wondershaper(){
- if checkbootparam 'wondershaper' ; then
-    WONDER="$(getbootparam 'wondershaper' 2>>$DEBUG)"
-    CMD=wondershaper
-    DEVICE=""
-    DOWNSTREAM=""
-    UPSTREAM=""
-    if [ -n "$WONDER" ]; then
-      # Extra options
-      DEVICE="${WONDER%%,*}"
-      R="${WONDER#*,}"
-      if [ -n "$R" -a "$R" != "$WONDER" ]; then
-        WONDER="$R"
-        DOWNSTREAM="${WONDER%%,*}"
-        R="${WONDER#*,}"
-        if [ -n "$R" -a "$R" != "$WONDER" ]; then
-          WONDER="$R"
-          UPSTREAM="${WONDER%%,*}"
-          R="${WONDER#*,}"
-        fi
-      fi
-    fi
-    [ -n "$DEVICE" ]     && CMD="$CMD $DEVICE"
-    [ -n "$DOWNSTREAM" ] && CMD="$CMD $DOWNSTREAM"
-    [ -n "$UPSTREAM" ]   && CMD="$CMD $UPSTREAM"
-    einfo "Starting wondershaper (${CMD}) in background."
-    ( sh -c $CMD & ) && eend 0
- fi
-}
-# }}}
-
-# {{{ syslog-ng
+# {{{ syslog service
 config_syslog(){
  if checkbootparam 'nosyslog'; then
     ewarn "Not starting syslog daemon as requested on boot commandline." ; eend 0
@@ -1504,14 +1302,6 @@ config_stats() {
 
    get_remote_file "$URI" "/dev/null"  >/dev/null 2>&1 &!
  fi
-}
-# }}}
-
-# {{{ fix/workaround for unionfs
-fix_unionfs(){
-  if [ -z "$INSTALLED" ]; then
-   touch /var/cache/apt/*cache.bin
-  fi
 }
 # }}}
 
@@ -1773,112 +1563,6 @@ fi
 }
 # }}}
 
-# {{{ distcc
-config_distcc(){
-if checkbootparam 'distcc' ; then
- OPTIONS="$(getbootparam 'distcc' 2>>$DEBUG)"
- if [ -n "$OPTIONS" ]; then
-    NET=""
-    INTERFACE=""
-    if [ -n "$OPTIONS" ]; then
-      NET="${OPTIONS%%,*}"
-      R="${OPTIONS#*,}"
-      if [ -n "$R" -a "$R" != "$OPTIONS" ]; then
-        OPTIONS="$R"
-        INTERFACE="${OPTIONS%%,*}"
-        R="${OPTIONS#*,}"
-      fi
-    fi
- fi
- CONFIG=/etc/default/distcc
- sed -i "s#^STARTDISTCC=.*#STARTDISTCC=YES#"  $CONFIG
- sed -i "s#^ALLOWEDNETS=.*#ALLOWEDNETS=$NET#" $CONFIG
-
- if [ -n "$INTERFACE" ] ; then
-   IP=$(LANG=C ifconfig $INTERFACE | gawk -F: /"inet addr"/'{print $2}' | gawk '{print $1}')
-
-   counter=10
-   while [ -z "$IP" ] && [[ "$counter" != 0 ]] ; do
-     counter=$(( counter-1 ))
-     ewarn "No ip address for $INTERFACE found. Sleeping for 3 seconds. $counter tries left."
-     sleep 3
-     IP=$(LANG=C ifconfig $INTERFACE | gawk -F: /"inet addr"/'{print $2}' | gawk '{print $1}')
-   done
- fi
-
- if [ -n "$IP" ] ; then
-   sed -i "s#^LISTENER=.*#LISTENER=$IP#"      $CONFIG
-
-   einfo "Bootoption distcc found. Preparing setup for distcc daemon."
-   eindent
-    id distccd >/dev/null 2>&1 || \
-    (
-      einfo "Creating distcc user" ; \
-      adduser --quiet --system --ingroup nogroup --home / --no-create-home distccd ; eend $?
-    )
-
-    einfo "Starting distcc for network ${NET}, listening on ${IP}."
-   /etc/init.d/distcc start >/dev/null ; eend $?
-   eoutdent
- else
-   eerror "No ip address for $INTERFACE found. distcc can not be used without it." ; eend 1
- fi
-fi
-
-if checkbootparam 'gcc'; then
- GCC="$(getbootparam 'gcc' 2>>$DEBUG)"
- eindent
- einfo "Pointing /usr/bin/gcc to /usr/bin/gcc-${GCC}."
- eoutdent
- rm -f /usr/bin/gcc
- ln -s /usr/bin/gcc-${GCC} /usr/bin/gcc ; eend $?
-fi
-
-if checkbootparam 'gpp'; then
- GPP="$(getbootparam 'gpp' 2>>$DEBUG)"
- eindent
-  einfo "Pointing /usr/bin/g++ to /usr/bin/g++-${GPP}."
-  if [ -x /usr/bin/g++-${GPP} ] ; then
-     rm -f /usr/bin/g++
-     ln -s /usr/bin/g++-${GPP} /usr/bin/g++ ; eend $?
-  fi
-  einfo "Pointing /usr/bin/cpp to /usr/bin/cpp-${GPP}."
-  if [ -x /usr/bin/cpp-${GPP} ] ; then
-     rm -f /usr/bin/cpp
-     ln -s /usr/bin/cpp-${GPP} /usr/bin/cpp ; eend $?
-  fi
- eoutdent
-fi
-
-}
-# }}}
-
-# {{{ load modules
-# Notice: use it only on live-cd system, if running from harddisk please
-# add modules to /etc/modules and activate /etc/init.d/module-init-tools
-# in /etc/runlevel.conf
-config_modules(){
-MODULES_FILE=/etc/grml/modules
-if checkbootparam 'nomodules' ; then
-  ewarn "Skipping loading of modules defined in ${MODULES_FILE} as requested." ; eend 0
-elif [ -z "$INSTALLED" ]; then
- if [ -r $MODULES_FILE ] ; then
-  einfo "Loading modules specified in ${MODULES_FILE}:"
-  eindent
-  grep '^[^#]' $MODULES_FILE | \
-  while read module args; do
-    [ "$module" ] || continue
-      einfo "${module}"
-      modprobe $module $args ; eend $?
-  done
-  eoutdent
- else
-  ewarn "File $MODULES_FILE does not exist. Skipping loading of specific modules." ; eend 1
- fi
-fi
-}
-# }}}
-
 # {{{ SW-RAID
 config_swraid(){
   [ -n "$INSTALLED" ] && return 0
@@ -2060,47 +1744,6 @@ if checkbootparam 'noblank' ; then
   einfo "Bootoption noblank found. Disabling monitor blanking."
   setterm -blank 0 ; eend $?
 fi
-}
-# }}}
-
-# {{{ tohd= bootoption
-config_tohd()
-{
-  if checkbootparam 'tohd' ; then
-     local TARGET="$(getbootparam 'tohd' 2>>$DEBUG)"
-     if [ -z "$TARGET" ] ; then
-        eerror "Error: tohd specified without any partition, can not continue." ; eend 1
-        eerror "Please use something like tohd=/dev/sda9." ; eend 1
-        return 1
-     fi
-
-     if ! [ -b "$TARGET" ] ; then
-        eerror "Error: $TARGET is not a valid block device, sorry." ; eend 1
-        return 1
-     fi
-
-     if grep -q $TARGET /proc/mounts ; then
-        eerror "$TARGET already mounted, skipping execution of tohd therefore."
-        eend 1
-        return 1
-     fi
-
-     local MOUNTDIR=$(mktemp -d)
-
-     if mount -o rw "$TARGET" "$MOUNTDIR" ; then
-        einfo "Copyring live system to $TARGET - this might take a while"
-        rsync -a --progress ${LIVECD_PATH}/live $MOUNTDIR
-        sync
-        umount "$MOUNTDIR"
-        eend $?
-        einfo "Booting with \"grml bootfrom=$TARGET\" should work now." ; eend 0
-     else
-        eerror "Error when trying to mount $TARGET, sorry."; eend 1
-        return 1
-     fi
-
-     rmdir "$MOUNTDIR"
-  fi
 }
 # }}}
 
