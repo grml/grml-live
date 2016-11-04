@@ -84,25 +84,13 @@ checkvalue $CONFIG_LANGUAGE && config_language
 
 checkvalue $CONFIG_LOG && config_log
 
-checkvalue $CONFIG_FWTIMEOUT && config_fwtimeout
-
-checkvalue $CONFIG_FIX_PASSWD && config_fix_passwd
-
 checkvalue $CONFIG_HOSTNAME && config_hostname
-
-checkvalue $CONFIG_CONFIGFS && config_configfs
 
 checkvalue $CONFIG_TIME && config_time
 
 checkvalue $CONFIG_KERNEL &&  config_kernel
 
-checkvalue $CONFIG_SMALL && config_small
-
-checkvalue $CONFIG_LD_MOD && config_ld_mod
-
 checkvalue $CONFIG_TIMEZONE && config_timezone
-
-checkvalue $CONFIG_FAST && config_fast
 
 checkvalue $CONFIG_SWRAID && config_swraid
 
@@ -115,15 +103,11 @@ echo "0" > /proc/sys/kernel/printk
 
 checkvalue $CONFIG_TESTCD && config_testcd
 
-checkvalue $CONFIG_MODULES && config_modules
-
 checkvalue $CONFIG_BRLTTY && config_brltty
 
 checkvalue $CONFIG_ACPI && config_acpi
 
 checkvalue $CONFIG_FSTAB && config_fstab
-
-checkvalue $CONFIG_MOUSE && config_mouse
 
 checkvalue $CONFIG_CPU && config_cpu
 
@@ -149,12 +133,6 @@ checkvalue $CONFIG_PARTCONF && config_partconf
 
 checkvalue $CONFIG_MIXER && config_mixer
 
-checkvalue $CONFIG_MODEM && config_modem
-
-checkvalue $CONFIG_WONDERSHAPER && config_wondershaper
-
-checkvalue $CONFIG_GPM && config_gpm
-
 checkvalue $CONFIG_SERVICES && config_services
 
 checkvalue $CONFIG_DEBNET && config_debnet
@@ -165,25 +143,17 @@ checkvalue $CONFIG_NETCONFIG && config_netconfig
 
 checkvalue $CONFIG_NETSCRIPT && config_netscript
 
-checkvalue $CONFIG_NETIPV6 && config_ipv6
-
 checkvalue $CONFIG_STATS && config_stats
 
 checkvalue $CONFIG_CONSOLE && config_console
-
-checkvalue $CONFIG_FIX_UNIONFS && fix_unionfs
 
 checkvalue $CONFIG_VIRTUALBOX_SHARED_FOLDERS && config_virtualbox_shared_folders
 
 checkvalue $CONFIG_MYPATH && config_mypath
 
-checkvalue $CONFIG_DISTCC && config_distcc
-
 checkvalue $CONFIG_DISTRI && config_distri
 
 checkvalue $CONFIG_BLANKING && config_blanking
-
-checkvalue $CONFIG_TOHD && config_tohd
 
 checkvalue $CONFIG_DEBOOTSTRAP && config_debootstrap
 
