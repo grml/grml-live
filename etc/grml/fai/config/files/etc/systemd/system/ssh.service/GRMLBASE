@@ -1,0 +1,24 @@
+# This file was deployed via grml-live's
+# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/15-initsetup, using
+# ${GRML_FAI_CONFIG}/config/files/etc/systemd/system/ssh.service/GRMLBASE
+
+[Unit]
+Description=OpenBSD Secure Shell server
+After=network.target auditd.service
+ConditionPathExists=!/etc/ssh/sshd_not_to_be_run
+
+[Service]
+EnvironmentFile=-/etc/default/ssh
+ExecStartPre=-/bin/sh -c "[ ! -f /etc/ssh/ssh_host_rsa_key ]      && /usr/bin/ssh-keygen -t rsa     -f /etc/ssh/ssh_host_rsa_key     -C '' -N ''"
+ExecStartPre=-/bin/sh -c "[ ! -f /etc/ssh/ssh_host_dsa_key ]      && /usr/bin/ssh-keygen -t dsa     -f /etc/ssh/ssh_host_dsa_key     -C '' -N ''"
+ExecStartPre=-/bin/sh -c "[ ! -f /etc/ssh/ssh_host_ecdsa_key ]    && /usr/bin/ssh-keygen -t ecdsa   -f /etc/ssh/ssh_host_ecdsa_key   -C '' -N ''"
+ExecStartPre=-/bin/sh -c "[ ! -f /etc/ssh/ssh_host_ed25519_key ]  && /usr/bin/ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -C '' -N ''"
+ExecStart=/usr/sbin/sshd -D $SSHD_OPTS
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+Alias=sshd.service
+
