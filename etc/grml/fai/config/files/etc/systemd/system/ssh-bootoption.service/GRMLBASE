@@ -4,7 +4,7 @@
 
 [Unit]
 Description=OpenBSD Secure Shell server
-After=ssh-keygen network.target auditd.service
+After=network.target auditd.service
 ConditionKernelCommandLine=ssh
 ConditionPathExists=!/etc/ssh/sshd_not_to_be_run
 
@@ -17,4 +17,3 @@ Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
-Alias=sshd.service
