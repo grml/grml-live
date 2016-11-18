@@ -4,6 +4,7 @@ apt-transport-https
 busybox
 bzip2
 console-data
+dbus
 deborphan
 dmidecode
 eject
