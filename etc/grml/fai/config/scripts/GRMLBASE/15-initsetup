@@ -16,7 +16,7 @@ set -e
 . "$GRML_LIVE_CONFIG"
 
 systemd_setup() {
-  fcopy -i -B -v -r /etc/systemd
+  fcopy -M -i -B -v -r /etc/systemd
 
   echo "Enabling user '$USERNAME' for autologin"
   sed -i "s/\$USERNAME/$USERNAME/" "$target"/etc/systemd/system/getty@tty*.service.d/override.conf
