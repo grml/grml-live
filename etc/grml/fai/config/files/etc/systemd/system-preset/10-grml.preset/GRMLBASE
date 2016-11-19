@@ -1,0 +1,17 @@
+# enable TTY logins
+enable getty@tty*.service.d
+
+# disable unwanted services
+disable cron.service
+disable lvm2-lvmetad.service
+disable lvm2-lvmetad.socket
+disable lvm2-lvmpolld.socket
+disable lvm2-monitor.service
+disable mdadm-raid.service
+disable smartd.service
+disable ssh.service
+disable swap.target
+disable systemd-timesyncd.service
+disable wpa_supplicant.service
+disable wpa_supplicant@.service
+disable uuidd.service
