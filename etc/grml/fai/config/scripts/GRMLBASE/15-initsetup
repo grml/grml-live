@@ -16,14 +16,6 @@ systemd_setup() {
   echo "Enabling user '$USERNAME' for autologin"
   sed -i "s/\$USERNAME/$USERNAME/" "$target"/etc/systemd/system/getty@tty*.service.d/override.conf
 
-  # enable TTY logins
-  local service
-  for file in "${target}"/etc/systemd/system/getty@tty*.service.d ; do
-    service=$(basename "$file" .d)
-    $ROOTCMD systemctl enable "$service" || echo "failed to enable $service"
-  done
-  unset service
-
   # FIXME - ssh-keygen isn't executed yet before ssh-bootoption + ssh services
   $ROOTCMD systemctl enable ssh-bootoption.service || echo "failed to enable ssh-bootoption.service"
   $ROOTCMD systemctl enable ssh-keygen.service     || echo "failed to enable ssh-keygen.service"
@@ -31,25 +23,6 @@ systemd_setup() {
   # fails on overlayfs with
   # "Failed to unmount transient /etc/machine-id file in our private namespace: Invalid argument"
   $ROOTCMD systemctl mask systemd-machine-id-commit.service || echo "failed to mask $systemd-machine-id-commit.service"
-
-  # disable unwanted services
-  local service
-  for service in \
-    cron.service \
-    lvm2-lvmetad.service \
-    lvm2-lvmetad.socket \
-    lvm2-lvmpolld.socket \
-    lvm2-monitor.service \
-    mdadm-raid.service \
-    smartd.service \
-    ssh.service \
-    swap.target \
-    systemd-timesyncd.service \
-    uuidd.service
-  do
-    $ROOTCMD systemctl disable ${service} || echo "failed to disable $service"
-  done
-  unset service
 
   # TODO ->
 
