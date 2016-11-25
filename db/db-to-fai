@@ -39,7 +39,7 @@ else
 
    # write fai header and package information to stdout:
    echo "# package list of build $BUILD_ID from database $DB:"
-   echo "PACKAGES aptitude"
+   echo "PACKAGES install"
    awk -F\| '{print $1"="$2}' "$TMPFILE"
 fi
 

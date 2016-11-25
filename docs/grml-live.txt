@@ -635,7 +635,7 @@ How do I add additional Debian package(s) to my CD/ISO?
 Just create a new class (using the package_config directory):
 
   # cat > /etc/grml/fai/config/package_config/MIKA << EOF
-  PACKAGES aptitude
+  PACKAGES install
 
   vim
   another_name_of_a_debian_package

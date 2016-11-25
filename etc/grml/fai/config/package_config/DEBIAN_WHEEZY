@@ -1,4 +1,4 @@
-PACKAGES aptitude
+PACKAGES install
 
 zd1211-firmware
 ifenslave-2.6

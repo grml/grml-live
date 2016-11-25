@@ -1,4 +1,4 @@
-PACKAGES aptitude
+PACKAGES install
 
 grml-live
 grml-paste
@@ -335,8 +335,8 @@ usbview
 bats
 stress
 
-PACKAGES aptitude I386
+PACKAGES install I386
 linux-image-i386-grml
 
-PACKAGES aptitude AMD64
+PACKAGES install AMD64
 linux-image-amd64-grml
