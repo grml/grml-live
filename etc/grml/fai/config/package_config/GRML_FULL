@@ -30,7 +30,6 @@ procps
 psmisc
 sudo
 sysstat
-sysvinit
 sysvinit-utils
 tzdata
 util-linux
