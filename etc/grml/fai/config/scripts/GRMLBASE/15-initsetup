@@ -39,11 +39,6 @@ systemd_setup() {
   #      + possibly move this into startup so it's always executed on bootup, even with persistency enabled
   #      where the change towards systemd-sysv-generator might persist across
   #      reboots -> LSB scripts executed on reboots
-
-  # * run 'systemctl enable debug-shell.service' via initramfs/init script if
-  #   debug/failsafe or something like that is present in /proc/cmdline and also set
-  #   "systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M"
-  #    $ROOTCMD systemctl enable debug-shell.service || true
 }
 
 file_rc_setup() {
