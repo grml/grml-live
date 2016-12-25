@@ -21,19 +21,15 @@ systemd_setup() {
   echo "Enabling user '$USERNAME' for autologin"
   sed -i "s/\$USERNAME/$USERNAME/" "$target"/etc/systemd/system/getty@tty*.service.d/override.conf
 
-  # FIXME - ssh-keygen isn't executed yet before ssh-bootoption + ssh services
-  $ROOTCMD systemctl enable ssh-bootoption.service || echo "failed to enable ssh-bootoption.service"
-  $ROOTCMD systemctl enable ssh-keygen.service     || echo "failed to enable ssh-keygen.service"
+  # FIXME - ssh-bootoption is currently broken
+  # $ROOTCMD systemctl enable ssh-bootoption.service || echo "failed to enable ssh-bootoption.service"
 
   # fails on overlayfs with
   # "Failed to unmount transient /etc/machine-id file in our private namespace: Invalid argument"
   $ROOTCMD systemctl mask systemd-machine-id-commit.service || echo "failed to mask $systemd-machine-id-commit.service"
+  $ROOTCMD systemctl preset-all
 
   # TODO ->
-
-  # * *proper* integration for grml-autoconfig
-      $ROOTCMD systemctl enable grml-autoconfig.service || echo "failed to enable grml-autoconfig.service"
-      ln -sf /etc/systemd/system/grml-autoconfig.service "${target}"/etc/systemd/system/multi-user.target.wants/grml-autoconfig.service
 
   # * avoid startup of any LSB scripts; NOTE: jessie doesn't support that
   #   system-generators approach yet, only >=stretch
@@ -47,7 +43,7 @@ systemd_setup() {
   # * run 'systemctl enable debug-shell.service' via initramfs/init script if
   #   debug/failsafe or something like that is present in /proc/cmdline and also set
   #   "systemd.log_level=debug systemd.log_target=kmsg log_buf_len=1M"
-      $ROOTCMD systemctl enable debug-shell.service || true
+  #    $ROOTCMD systemctl enable debug-shell.service || true
 }
 
 file_rc_setup() {
