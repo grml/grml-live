@@ -75,7 +75,7 @@ Configuration of myhostname in /etc/postfix/main.cf has been adjusted as well. D
        /etc/init.d/avahi-daemon restart
      fi
 
-     /etc/init.d/hostname.sh
+     hostname "$NEW_HOSTNAME"
 
      if [ -z "$NONINTERACTIVE" ] ; then
         dialog --stdout --title "${PN}" --msgbox "Setting hostname to $NEW_HOSTNAME was successful.$POSTFIX" 0 0
