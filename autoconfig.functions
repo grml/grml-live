@@ -23,6 +23,12 @@ umask 022
 # Ignore these signals in non-interactive mode: INT, TERM, SEGV
 [ -z "$PS1" ] && trap "" 2 3 11
 
+if [[ "$(realpath "$(cat /proc/1/cmdline)")" == "/lib/systemd/systemd" ]] ; then
+  SYSTEMD=true
+else
+  SYSTEMD=false
+fi
+
 # zsh stuff
 iszsh(){
 if [ -n "$ZSH_VERSION" ] ; then
@@ -703,6 +709,7 @@ else
   fi
   if ! pgrep acpid >/dev/null ; then
     einfo "Starting acpi daemon."
+    $SYSTEMD && systemctl start acpid.socket
     /etc/init.d/acpid start >>$DEBUG 2>&1 ; eend $?
   else
     ewarn "acpi daemon already running."
