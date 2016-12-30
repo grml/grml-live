@@ -454,11 +454,21 @@ config_time(){
  if [ -z "$INSTALLED" ]; then
     # The default hardware clock timezone is stated as representing local time.
     UTC="--localtime"
-    grep -q "^UTC=" /etc/default/rcS || echo "UTC=no" >> /etc/default/rcS
-    checkbootparam 'utc'       >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=yes|" /etc/default/rcS
-    checkbootparam 'gmt'       >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=yes|" /etc/default/rcS
-    checkbootparam 'localtime' >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=no|"  /etc/default/rcS
-    grep -q -i "^UTC=yes" /etc/default/rcS && UTC="-u"
+
+    if [ -f /etc/default/rcS ] ; then
+      grep -q "^UTC=" /etc/default/rcS || echo "UTC=no" >> /etc/default/rcS
+      checkbootparam 'utc'       >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=yes|" /etc/default/rcS
+      checkbootparam 'gmt'       >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=yes|" /etc/default/rcS
+      checkbootparam 'localtime' >>$DEBUG 2>&1 && sed -i "s|^UTC=.*$|UTC=no|"  /etc/default/rcS
+      grep -q -i "^UTC=yes" /etc/default/rcS && UTC="-u"
+    # recent initscripts package versions don't ship /etc/default/rcS anymore, instead rely on /etc/adjtime
+    elif [ -f /etc/adjtime ] ; then
+      checkbootparam 'utc'       >>$DEBUG 2>&1 && sed -i "s/^LOCAL/UTC/" /etc/adjtime
+      checkbootparam 'gmt'       >>$DEBUG 2>&1 && sed -i "s/^LOCAL/UTC/" /etc/adjtime
+      checkbootparam 'localtime' >>$DEBUG 2>&1 && sed -i "s/^UTC$/LOCAL/" /etc/adjtime
+      grep -q "^UTC$" /etc/adjtime && UTC="-u"
+    fi
+
     # hwclock uses the TZ variable
     KTZ="$(getbootparam 'tz' 2>>$DEBUG)"
     [ -z "$KTZ" ] && [ -r /etc/timezone ] && KTZ=$(cat /etc/timezone)
