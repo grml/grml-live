@@ -5,5 +5,7 @@ enable getty@.service
 enable grml-autoconfig.service
 enable debug-shell.service
 enable resolvconf.service
+enable rsyslog.socket
+enable rsyslog.service
 
 disable *
