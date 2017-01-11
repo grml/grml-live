@@ -48,6 +48,7 @@ add_user_to_group tape
 add_user_to_group tty
 add_user_to_group usb
 add_user_to_group users
+add_user_to_group vboxsf
 add_user_to_group video
 add_user_to_group vlock
 add_user_to_group voice
