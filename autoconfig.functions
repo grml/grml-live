@@ -23,7 +23,7 @@ umask 022
 # Ignore these signals in non-interactive mode: INT, TERM, SEGV
 [ -z "$PS1" ] && trap "" 2 3 11
 
-if [[ "$(realpath "$(cat /proc/1/cmdline)")" == "/lib/systemd/systemd" ]] ; then
+if [ "$(cat /proc/1/comm 2>/dev/null)" = "systemd" ] ; then
   SYSTEMD=true
 else
   SYSTEMD=false
