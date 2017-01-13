@@ -1,3 +1,21 @@
+grml-autoconfig (0.15.0) grml-testing; urgency=medium
+
+  * [0fb27ba] Drop deprecated features
+  * [21b7f0e] Initial systemd support
+  * [62f3f8f] /etc/default/rcS no longer exists in recent initscripts
+    versions
+  * [9dec7ad] Enable acpid.socket if we're running under systemd
+  * [348b546] Introduce service_wrapper to avoid direct /etc/init.d calls
+  * [14ce31b] Rely on /proc/1/comm to identify running systemd
+  * [e0dbcab] Source /etc/grml_nocolors with nocolor boot option
+  * [95f4501] Drop grml_nocolors + grml_colors magic, instead rely on lsb-
+    functions
+  * [25fdf7a] Bump Standards-Version to 3.9.8
+  * [f9661f9] Bump debian/compat to 9
+  * [d12fdae] Build-Depend on debhlper >= 9
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Jan 2017 14:42:28 +0100
+
 grml-autoconfig (0.14.0) grml-testing; urgency=medium
 
   * [03d4320] config_cpu: set ondemand governor only if available
