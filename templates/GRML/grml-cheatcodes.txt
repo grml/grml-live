@@ -151,6 +151,7 @@ grml debug=1                        Get shells during process of booting, using 
                                     display shell code being executed in initramfs.
 grml debug=noscreen                 Get shells during process of booting, verbose, but without using GNU screen
 grml nocolor                        Disable colorized output while booting
+                                    Also set SYSTEMD_COLORS=0 to disable colors in systemd output
 grml log                            Log error messages while booting to /tmp/grml.log.`date +%Y%m%d`"
                                     and /var/log/boot
 grml testcd                         Check CD data integrity and md5sums
