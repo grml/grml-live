@@ -194,13 +194,10 @@ fi
 
 # {{{ source lsb-functions , color handling
 if checkbootparam 'nocolor'; then
-  RC_NOCOLOR=yes
   . /etc/grml/lsb-functions
-  . /etc/grml_nocolors
   einfo "Disabling colors in bootsequence as requested on commandline." ; eend 0
 else
   . /etc/grml/lsb-functions
-  . /etc/grml_colors
 fi
 # }}}
 
