@@ -1,3 +1,87 @@
+grml-live (0.28.0) unstable; urgency=medium
+
+  The "hello worl^Wsystemd" release
+
+  [ Michael Prokop ]
+  * Software related changes:
+    - [939390e] move multitail from GRML_FULL to GRMLBASE
+    - [15d53d4] add binwalk to GRML_FULL
+    - [c135742] drop aufs-tools from GRMLBASE
+    - [4548553] add libteam-utils
+    - [f74dd50] update list of firmware package in GRMLBASE
+    - [a6f8b43] drop firmware-ipw2x00 (license issues)
+    - [96b25c3] add nvme-cli to GRML_FULL
+    - [ebf5726] add dbus to GRMLBASE
+    - [04fba36] drop disabled 'nvi' package from GRML_SMALL class
+    - [5a02583] drop sysvinit from GRML_SMALL + GRML_FULL
+
+  * Systemd related changes:
+    - [1aec739] Systemd support, providing backwards compatibility
+      via FILE_RC class [Closes: issue1015]
+    - [db954a2] Switch UTC setting from /etc/default/rcS to /etc/adjtime.
+      Thanks to Darshaka Pathirana
+    - [58742dd] Drop deprecated GRMLBASE/48-tmpfs file, use default
+      /tmp handling
+    - [bb2bf50] Update FILE_RC + systemd classes for aptitude->apt switch
+    - [c553193] Skip resolvconf magic when using systemd
+    - [b70f723] Enable rsyslog socket + service via systemd preset
+    - [486a40c] grml-cheatcodes.txt: document SYSTEMD_COLORS=0 usage
+
+  * New feature "wayback machine":
+    - [7380bbc] Provide wayback machine via "-w <date>"
+    - [4aa8458] Use "[check-valid-until=no]" in wayback option
+    - [1601f8b] Support wayback option also in bootstrapping
+      the initial chroot
+
+  * Misc bugfix/improvement/docs related changes:
+      - [e83b8fe] 03-get-sources: ensure that apt information is
+        available + up2date
+      - [16c1c71] Add .gitignore to ignore files from
+        etc/grml/fai/config/basefiles
+      - [83d621a] docs: don't mention Grml/Debian repositories for
+        squashfs-tools any longer
+      - [e9da330] Add etc/grml/fai/config/config to .gitignore
+      - [ae7acfb] Ensure that we can build up2date epub + pdf files
+      - [5c8e5c9] docs: provide instructions how to run from git, use
+        local repos + unify base.tgz docs
+      - [06ef02f] Add new Grml repository signing key 4096R/21E0CA38EA2EA4AB
+        to GRMLBASE's /etc/apt/grml.key
+      - [465346b] hooks/instsoft.GRMLBASE: ensure package list is up2date
+        before trying to install file-rc/aptitude
+      - [4585f1e] hooks/instsoft.GRMLBASE: ensure aptitude is available
+        before invoking it
+      - [1631a89] scripts/GRMLBASE/94-update-smart-drivedb: switch warning
+        into note since update-smart-drivedb is deprecated
+      - [b17040d] GRMLBASE/44-grub: explicitly set grub-mkimage's prefix
+        path. Thanks to Darshaka Pathirana
+      - [3ac646b] templates: use net.ifnames=0 by default
+      - [8075b3f] instsoft.GRMLBASE: ensure that file-rc can be installed
+      - [121b348] Switch from aptitude to apt-get as package manager in
+        package list
+      - [c850f58] GRMLBASE/21-usersetup: add grml user to vboxsf group
+      - [178765a] Add etc/grml/fai/make-fai-nfsroot.conf +
+        etc/grml/fai/nfsroot.conf to .gitignore
+      - [c970c21] README: explicitly mention the templates option as well
+      - [0a07df7] Bump Standards-Version to 3.9.8
+      - [8ee391b] Bump debian/compat to 9
+      - [f37bf4e] Bump Build-Depends to debhelper v9 or newer
+
+  [ Andreas "Jimmy" Gredler ]
+  * [7fce04b] Added support for netboot.xyz
+  * Software related changes:
+    - [d9fb7da] Add syslinux-utils to GRMLBASE
+
+  [ Carsten Hey ]
+  * [45f0dab] isolinux.cfg template: fix typo in a comment
+
+  [ Darshaka Pathirana ]
+  * [5b0d160] Fix failing systemd ssh.service
+  * [6e61fc1] Enable and disable services by using systemd.presets
+  * [867af6c] Set user, group and mode for /etc/systemd
+  * [55a97d8] Use systemd.preset to disable all unneeded services
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Jan 2017 16:16:00 +0100
+
 grml-live (0.27.2) unstable; urgency=medium
 
   * [54e1498] Fix apt >=1.1 regression in apt-preferences handling
