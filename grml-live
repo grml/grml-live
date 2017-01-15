@@ -1440,6 +1440,10 @@ else
              touch -r ${ISO_NAME} ${ISO_NAME}.md5
              sha1sum ${ISO_NAME} > ${ISO_NAME}.sha1 && \
              touch -r ${ISO_NAME} ${ISO_NAME}.sha1
+             sha256sum ${ISO_NAME} ${ISO_NAME}.sha256 && \
+             touch -r ${ISO_NAME} ${ISO_NAME}.sha256
+             sha512sum ${ISO_NAME} ${ISO_NAME}.sha512 && \
+             touch -r ${ISO_NAME} ${ISO_NAME}.sha512
            fi
          )
          ;;
@@ -1520,6 +1524,8 @@ create_netbootpackage() {
     (
       cd $(dirname "${OUTPUT_FILE}")
       sha1sum $(basename "${OUTPUT_FILE}") > "${OUTPUT_FILE}.sha1"
+      sha256sum $(basename "${OUTPUT_FILE}") > "${OUTPUT_FILE}.sha256"
+      sha512sum $(basename "${OUTPUT_FILE}") > "${OUTPUT_FILE}.sha512"
     )
     einfo "Generated netboot package ${OUTPUT_FILE}" ; eend 0
     rm -rf "${OUTPUTDIR}"
