@@ -93,6 +93,7 @@ wipe
 hexedit
 nano
 vim
+vim-gtk
 zile
 
 # filesystem support
