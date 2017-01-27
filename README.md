@@ -17,10 +17,11 @@ Further information is available from http://grml.org/grml-live/
 
 In case you want to run grml-live directly from the checkout
 (after making sure all dependencies are installed), you should
-set `GRML_FAI_CONFIG`, the `SCRIPTS_DIRECTORY` and the templates
-option so that it does not use the config files of an installed
-`grml-live` package:
+set `GRML_FAI_CONFIG`, the `SCRIPTS_DIRECTORY`, the `LIVE_CONF`
+and the templates option so that it does not use the config files
+of an installed `grml-live` package:
 
     # export GRML_FAI_CONFIG=$(pwd)/etc/grml/fai
     # export SCRIPTS_DIRECTORY=$(pwd)/scripts
+    # export LIVE_CONF=$(pwd)/etc/grml/grml-live.conf
     # ./grml-live -s sid -a amd64 -c GRMLBASE,GRML_FULL,AMD64 -t $(pwd)/templates/
