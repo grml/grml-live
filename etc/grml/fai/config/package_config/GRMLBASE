@@ -79,3 +79,8 @@ firmware-qlogic
 firmware-realtek
 firmware-ti-connectivity
 firmware-zd1211
+
+libpam-systemd
+
+PACKAGES install FILE_RC
+libpam-systemd-
