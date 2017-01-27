@@ -1,3 +1,29 @@
+grml-live (0.28.1) unstable; urgency=medium
+
+  [ brian m. carlson ]
+  * [fd166a5] Add SHA-256 and SHA-512 hashes
+
+  [ Darshaka Pathirana ]
+  * [895467c] Change systemd default target to multi-user.target
+  * [50bdb40] Use ssh-keygen -A to generate host keys
+  * [48dd3c8] Enable General Purpose Mouse interface (gpm) with systemd
+
+  [ Michael Prokop ]
+  * Documentation related changes:
+    - [07dd8b1] document LIVE_CONF usage. Thanks to Eric Keller for bug report
+    - [01fa9e0] clarify usage of GRMLBASE regarding kernel package selection
+    - [6c2fffe] update ISO sizes + disk space requirements
+  * Software related changes:
+    - [8d1192c] add libpam-systemd to GRMLBASE, except for FILE_RC installs
+    - [7d42047] add man-db to GRML_FULL
+    - [837cb4a] add vim-gtk to GRML_FULL [Closes: issue1325]
+  * Cleanups:
+    - [712b0db] Drop deprecated ia32-libs package from Recommends
+    - [d82e1cc] Drop grml-live-compat from Suggests, update code + comments
+      accordingly
+
+ -- Michael Prokop <mika@grml.org>  Fri, 27 Jan 2017 16:25:03 +0100
+
 grml-live (0.28.0) unstable; urgency=medium
 
   The "hello worl^Wsystemd" release
