@@ -84,12 +84,10 @@ really know that you do not want to update the chroot.
 
 Specify the CLASSES to be used for building the ISO via FAI.  By default only
 the classes GRMLBASE, GRML_FULL and I386/AMD64 (depending on system
-architecture) are assumed, resulting in a base system of about 350MB
-total ISO size. If using a non-I386 system (like AMD64) you should specify the
-appropriate architecture as well. Additionally you can specify a class providing
-a grml-kernel (see <<classes,the 'CLASSES' section in this document>> for
-details about available classes).  So instead of GRML_FULL you can also use
-GRML_SMALL and GRML_FULL.
+architecture) are assumed.  Additionally you can specify a class providing a
+(grml-)kernel (see <<classes,the 'CLASSES' section in this document>> for
+details about available classes). So instead of GRML_FULL you can also use e.g.
+GRML_SMALL.
 
 [IMPORTANT]
 All class names should be written in uppercase letters. Do not use a dash, use
@@ -359,9 +357,9 @@ package you want to use (and don't forget to include your CLASS in the arguments
 of grml-live's -c... command line option).
 
 * GRML_FULL: full featured Grml, also known as the "normal", full grml as
-introduced in December 2011 (~460MB ISO size).
+introduced in December 2011 (~600MB ISO size).
 
-* GRML_SMALL: minimum sized Grml version, known as grml-small (~230MB ISO
+* GRML_SMALL: minimum sized Grml version, known as grml-small (~300MB ISO
 size).
 
 * LATEX: LaTeX(-related) packages like auctex, texlive,...
@@ -489,11 +487,11 @@ please send us a bug report then). Check out <<deploy-on-debian,How do I deploy
 grml-live on a plain Debian installation>> for details how to set up grml-live
 on a plain, original Debian system.
 
-* enough free disk space; at least 800MB are required for a minimal grml-live
-run (\~400MB for the chroot [$CHROOT_OUTPUT], \~150MB for the build target
-[$BUILD_OUTPUT] and \~150MB for the resulting ISO [$ISO_OUTPUT] plus some
-temporary files), if you plan to use GRML_FULL you should have at least 4GB of
-total free disk space
+* enough free disk space; at least 1.5GB are required for a minimal grml-live
+run (\~850MB for the chroot [$CHROOT_OUTPUT], \~300MB for the build target
+[$BUILD_OUTPUT], \~30MB for the netboot files and \~300MB for the resulting ISO
+[$ISO_OUTPUT] plus some temporary files), if you plan to use GRML_FULL you
+should have at least 4GB of total free disk space
 
 * fast network access for retrieving the Debian packages used for creating the
 chroot (check out "local mirror" to workaround this problem as far as possible)
