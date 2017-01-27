@@ -24,6 +24,7 @@ systemd_setup() {
   $ROOTCMD systemctl mask systemd-machine-id-commit.service || echo "failed to mask $systemd-machine-id-commit.service"
   $ROOTCMD systemctl preset-all
 
+  $ROOTCMD systemctl set-default multi-user.target
   # TODO ->
 
   # * avoid startup of any LSB scripts; NOTE: jessie doesn't support that
