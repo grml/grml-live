@@ -334,6 +334,9 @@ usbview
 bats
 stress
 
+# docs
+man-db
+
 PACKAGES install I386
 linux-image-i386-grml
 
