@@ -34,8 +34,7 @@ Recommends: grml-live-db,
             ipxe,
             syslinux-utils
 Suggests: fai-doc,
-          grml-live-addons,
-          grml-live-compat
+          grml-live-addons
 Description: build system for creating a Grml (based) Linux live system
  This package provides the build system for creating a Debian /
  Grml based Linux live system (also known as live cd). It is

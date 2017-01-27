@@ -279,12 +279,12 @@ extend_string_end() {
 # This is because:
 #   * We assume that the chroot always has a "good" version of
 #     the file. Also it makes sources handling easier.
-#   * On unstable, we Recommend the Debian packages containing
+#   * On unstable, we recommend the Debian packages containing
 #     these files. The user can override them by putting his
 #     "better" version into the chroot.
-#   * On stable, the Debian packages are probably not available,
-#     or outdated, so we look in TEMPLATE_DIRECTORY/compat first, where
-#     our grml-live-compat package installs current file versions.
+#   * With older releases the Debian packages are probably
+#     not available, so we look in TEMPLATE_DIRECTORY/compat,
+#     where a (custom) package might install current file versions.
 copy_addon_file() {
   DEST="${BUILD_OUTPUT}/boot/$3"
   if [ ! -d "${DEST}/" ]; then
@@ -296,7 +296,7 @@ copy_addon_file() {
     return $?
   fi
   if [ -e "${TEMPLATE_DIRECTORY}/compat/$3/$1" ]; then
-    log   "Copying $1 from grml-live-compat"
+    log   "Copying $1 from ${TEMPLATE_DIRECTORY}/compat"
     cp "${TEMPLATE_DIRECTORY}/compat/$3/$1" "${DEST}/"
     return $?
   fi
@@ -935,7 +935,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
             log   "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)"
             ewarn "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)" ; eend 0
           else
-            # copy addons from system packages or grml-live-compat
+            # copy addons from system packages or grml-live-addons
             copy_addon_file ipxe.lkrn /usr/lib/ipxe addons
             copy_addon_file pci.ids /usr/share/misc addons
             copy_addon_file memtest86+.bin /boot addons
