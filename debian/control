@@ -30,7 +30,6 @@ Depends: bc,
          ${misc:Depends}
 Recommends: grml-live-db,
             grub-pc-bin,
-            ia32-libs,
             imagemagick,
             ipxe,
             syslinux-utils
