@@ -1440,9 +1440,9 @@ else
              touch -r ${ISO_NAME} ${ISO_NAME}.md5
              sha1sum ${ISO_NAME} > ${ISO_NAME}.sha1 && \
              touch -r ${ISO_NAME} ${ISO_NAME}.sha1
-             sha256sum ${ISO_NAME} ${ISO_NAME}.sha256 && \
+             sha256sum ${ISO_NAME} > ${ISO_NAME}.sha256 && \
              touch -r ${ISO_NAME} ${ISO_NAME}.sha256
-             sha512sum ${ISO_NAME} ${ISO_NAME}.sha512 && \
+             sha512sum ${ISO_NAME} > ${ISO_NAME}.sha512 && \
              touch -r ${ISO_NAME} ${ISO_NAME}.sha512
            fi
          )
