@@ -1,3 +1,23 @@
+grml-live (0.29.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * Software related changes:
+    - [678f11e] ship acpid on file-rc systems only, systemd provides
+      logind
+    - [ec12218] add qemu-system-x86 as underlying dependency for qemu-kvm
+    - [5f9f936] replace transitional package iceweasel with firefox-esr
+  * [890427a] Provide sources.list file for DEBIAN_STRETCH class to be
+    able to use "-s stretch" as grml-live command line
+  * [3566d01] Generate /etc/issue with Grml release information
+  * [f2ebfa6] Create /home/$USERNAME in RELEASE class with up2date files
+    from /etc/skel
+  * [fda69fd] Fix generation of SHA-256 and SHA-512 hashes
+
+  [ Darshaka Pathirana ]
+  * [d55873e] Provide new grml-boot.target. Thanks to Felipe Sateler
+
+ -- Michael Prokop <mika@grml.org>  Fri, 24 Feb 2017 14:01:17 +0100
+
 grml-live (0.28.1) unstable; urgency=medium
 
   [ brian m. carlson ]
