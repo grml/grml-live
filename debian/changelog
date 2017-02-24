@@ -1,3 +1,13 @@
+grml-etc (1.6.2) grml-testing; urgency=medium
+
+  * [7f4e9f6] Bump Standards-Version to 3.9.8
+  * [8f80078] Use https for Homepage + Vcs-Browser entries
+  * [a655086] Bump debian/compat to 9
+  * [dce6145] Update debian/overrides + add debian/source/lintian-
+    overrides
+
+ -- Michael Prokop <mika@grml.org>  Fri, 24 Feb 2017 13:45:49 +0100
+
 grml-etc (1.6.1) grml-testing; urgency=medium
 
   * [182dd2d] No longer ship /etc/skel/.kshrc [Closes: issue2160]
