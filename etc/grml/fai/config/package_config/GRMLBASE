@@ -84,3 +84,4 @@ libpam-systemd
 
 PACKAGES install FILE_RC
 libpam-systemd-
+acpid

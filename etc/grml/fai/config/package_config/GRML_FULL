@@ -320,7 +320,6 @@ xterm
 
 # x86 hardware support
 acpi
-acpid
 acpi-support
 cmospwd
 cpufrequtils
