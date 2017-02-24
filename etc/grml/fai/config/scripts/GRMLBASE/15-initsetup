@@ -24,17 +24,7 @@ systemd_setup() {
   $ROOTCMD systemctl mask systemd-machine-id-commit.service || echo "failed to mask $systemd-machine-id-commit.service"
   $ROOTCMD systemctl preset-all
 
-  $ROOTCMD systemctl set-default multi-user.target
-  # TODO ->
-
-  # * avoid startup of any LSB scripts; NOTE: jessie doesn't support that
-  #   system-generators approach yet, only >=stretch
-      mkdir -p "${target}"/etc/systemd/system-generators/
-      ln -sf /dev/null "${target}"/etc/systemd/system-generators/systemd-sysv-generator
-  #   -> revert /etc/systemd/system-generators/systemd-sysv-generator && systemctl daemon-reload during *bootup*
-  #      + possibly move this into startup so it's always executed on bootup, even with persistency enabled
-  #      where the change towards systemd-sysv-generator might persist across
-  #      reboots -> LSB scripts executed on reboots
+  $ROOTCMD systemctl set-default grml-boot.target
 }
 
 file_rc_setup() {

@@ -16,4 +16,4 @@ KillMode=process
 Restart=on-failure
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=grml-boot.target
