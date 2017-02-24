@@ -1,4 +1,10 @@
-grml-etc: file-in-etc-rc.d-marked-as-conffile /etc/rcS.d/important_notice
+grml-etc: file-in-etc-rc.d-marked-as-conffile etc/rcS.d/important_notice
+grml-etc: init.d-script-depends-on-all-virtual-facility etc/init.d/grml-home required-start
+grml-etc: init.d-script-depends-on-all-virtual-facility etc/init.d/grml-misc required-start
+grml-etc: init.d-script-does-not-implement-optional-option etc/init.d/grml-halt status
+grml-etc: init.d-script-does-not-implement-optional-option etc/init.d/grml-home status
+grml-etc: init.d-script-does-not-implement-optional-option etc/init.d/grml-misc status
+grml-etc: init.d-script-does-not-implement-optional-option etc/init.d/grml-reboot status
 grml-etc: init.d-script-does-not-implement-required-option etc/init.d/firewall force-reload
 grml-etc: init.d-script-does-not-implement-required-option etc/init.d/grml-halt force-reload
 grml-etc: init.d-script-does-not-implement-required-option etc/init.d/grml-halt restart
@@ -13,12 +19,19 @@ grml-etc: init.d-script-does-not-implement-required-option etc/init.d/grml-misc 
 grml-etc: init.d-script-does-not-implement-required-option etc/init.d/grml-reboot force-reload
 grml-etc: init.d-script-does-not-implement-required-option etc/init.d/grml-reboot restart
 grml-etc: init.d-script-does-not-implement-required-option etc/init.d/grml-reboot start
+grml-etc: init.d-script-does-not-provide-itself etc/init.d/grml-halt
 grml-etc: init.d-script-does-not-provide-itself etc/init.d/ssh
-grml-etc: init.d-script-missing-lsb-section etc/init.d/firewall
-grml-etc: init.d-script-missing-lsb-section etc/init.d/grml-halt
-grml-etc: init.d-script-missing-lsb-section etc/init.d/grml-home
-grml-etc: init.d-script-missing-lsb-section etc/init.d/grml-misc
-grml-etc: init.d-script-missing-lsb-section etc/init.d/grml-reboot
+grml-etc: init.d-script-does-not-source-init-functions etc/init.d/firewall
+grml-etc: init.d-script-does-not-source-init-functions etc/init.d/grml-halt
+grml-etc: init.d-script-does-not-source-init-functions etc/init.d/grml-home
+grml-etc: init.d-script-does-not-source-init-functions etc/init.d/grml-misc
+grml-etc: init.d-script-does-not-source-init-functions etc/init.d/grml-reboot
+grml-etc: init.d-script-missing-lsb-short-description etc/init.d/firewall
+grml-etc: init.d-script-missing-lsb-short-description etc/init.d/grml-halt
+grml-etc: init.d-script-missing-lsb-short-description etc/init.d/grml-home
+grml-etc: init.d-script-missing-lsb-short-description etc/init.d/grml-misc
+grml-etc: init.d-script-missing-lsb-short-description etc/init.d/grml-reboot
+grml-etc: init.d-script-needs-depends-on-lsb-base etc/init.d/ssh (line 35)
 grml-etc: package-installs-into-etc-rc.d etc/rc0.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc1.d/important_notice
 grml-etc: package-installs-into-etc-rc.d etc/rc2.d/important_notice
@@ -35,4 +48,7 @@ grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d etc/init.d/grml-mi
 grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d etc/init.d/grml-reboot
 grml-etc: script-in-etc-init.d-not-registered-via-update-rc.d etc/init.d/ssh
 grml-etc: script-not-executable etc/resolv.conf.template
+grml-etc: systemd-no-service-for-init-rcS-script firewall
+grml-etc: systemd-no-service-for-init-rcS-script grml-home
+grml-etc: systemd-no-service-for-init-rcS-script grml-misc
 grml-etc: unknown-section grml
