@@ -12,5 +12,9 @@ set -e
 
 echo "Setting /etc/grml_version to $GRML_NAME $VERSION Release Codename $RELEASENAME [$DATE]"
 echo "$GRML_NAME $VERSION Release Codename $RELEASENAME [$DATE]" > $target/etc/grml_version
-chmod 644 $target/etc/grml_version
+chmod 644 "${target}/etc/grml_version"
+
+echo "Setting /etc/issue to $GRML_NAME $VERSION"
+printf "%s %s %s %s\n\n" "$GRML_NAME" "$VERSION" '\n' '\l' > "${target}/etc/issue"
+chmod 644 "${target}/etc/issue"
 
