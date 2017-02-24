@@ -12,4 +12,4 @@ StandardOutput=tty
 StandardError=journal+console
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=grml-boot.target
