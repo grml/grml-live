@@ -291,6 +291,7 @@ puppet
 imvirt
 open-vm-tools
 qemu-kvm
+qemu-system-x86
 qemu-utils
 zerofree
 
