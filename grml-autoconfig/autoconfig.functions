@@ -697,21 +697,26 @@ fi
 
 # {{{ ACPI
 config_acpi(){
-if checkbootparam 'noacpi'; then
-  ewarn "ACPI: Not loading modules as requested by boot option \"noacpi\"." ; eend 0
-elif checkbootparam 'nogrmlacpi' ; then
-  ewarn "ACPI: Not loading modules as requested by boot option \"nogrmlacpi\"." ; eend 0
-elif [ ! -d /proc/acpi ] ; then
-  ewarn "ACPI: Kernel support not present." ; eend 0
-else
-  einfo "ACPI: Loading modules (disable with boot option noacpi / nogrmlacpi): "
-  eindent
-  found=""
-  for a in /lib/modules/$KERNEL/kernel/drivers/acpi/*; do
-    basename="${a##*/}"
-    basename="${basename%%.*}"
-    case "$basename" in *_acpi)
-     egrep -qi "${basename%%_acpi}" /proc/acpi/dsdt 2>>$DEBUG || continue ;;
+  if $SYSTEMD ; then
+    echo "systemd detected, no acpi(d) stuff needed." >>"$DEBUG"
+    return
+  fi
+
+  if checkbootparam 'noacpi'; then
+    ewarn "ACPI: Not loading modules as requested by boot option \"noacpi\"." ; eend 0
+  elif checkbootparam 'nogrmlacpi' ; then
+    ewarn "ACPI: Not loading modules as requested by boot option \"nogrmlacpi\"." ; eend 0
+  elif [ ! -d /proc/acpi ] ; then
+    ewarn "ACPI: Kernel support not present." ; eend 0
+  else
+    einfo "ACPI: Loading modules (disable with boot option noacpi / nogrmlacpi): "
+    eindent
+    found=""
+    for a in /lib/modules/$KERNEL/kernel/drivers/acpi/*; do
+      basename="${a##*/}"
+      basename="${basename%%.*}"
+      case "$basename" in *_acpi)
+        egrep -qi "${basename%%_acpi}" /proc/acpi/dsdt 2>>$DEBUG || continue ;;
     esac
     modprobe $basename >>$DEBUG 2>&1 && found="yes"
     local BASE="$BASE $basename"
