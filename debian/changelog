@@ -1,3 +1,13 @@
+grml-autoconfig (0.15.1) grml-testing; urgency=medium
+
+  * [2b9d1d5] No longer depend on acpid, skip acpi(d) specific stuff
+    under systemd
+  * [4e0362b] Use https for Homepage + Vcs-Browser entries
+  * [b812f4b] systemd/grml-autoconfig.service: switch to
+    WantedBy=grml-boot.target
+
+ -- Michael Prokop <mika@grml.org>  Fri, 24 Feb 2017 13:44:27 +0100
+
 grml-autoconfig (0.15.0) grml-testing; urgency=medium
 
   * [0fb27ba] Drop deprecated features
