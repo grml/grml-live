@@ -297,7 +297,7 @@ zerofree
 
 # web
 curl
-iceweasel
+firefox-esr
 irssi
 links2
 lynx-cur
