@@ -8,7 +8,7 @@
 
 set -u
 set -e
-
+. "$GRML_LIVE_CONFIG"
 
 echo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
 rm -f $target/var/lib/apt/lists/*Packages \
@@ -32,9 +32,13 @@ echo "Removing all files inside /root"
 rm -rf $target/root
 mkdir -m 0755 $target/root
 
-echo "Removing all files inside /home/grml"
-rm -rf $target/home/grml
-mkdir -m 0755 $target/home/grml
+echo "Removing all files inside /home/${USERNAME}"
+rm -rf "${target}/home/${USERNAME}"
+mkdir -m 0755 "${target}/home/${USERNAME}"
+$ROOTCMD chown "${USERNAME}:${USERNAME}" "/home/${USERNAME}"
+
+echo "Syncing /home/${USERNAME}/ with data from /etc/skel/:"
+$ROOTCMD su -s /bin/sh "${USERNAME}" -c "rsync -Hav /etc/skel/ /home/${USERNAME}/"
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
