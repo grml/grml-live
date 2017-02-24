@@ -20,8 +20,7 @@ Architecture: all
 Conflicts: grml-etc (<= 0.4-7),
            grml-saveconfig
 Replaces: grml-saveconfig
-Depends: acpid,
-         beep,
+Depends: beep,
          console-terminus,
          gawk,
          gpm,
