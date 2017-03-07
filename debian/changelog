@@ -1,3 +1,12 @@
+grml-live (0.29.1) unstable; urgency=medium
+
+  * [46b3c13] Add default user (grml) to "disk" group
+  * [a28b0fd] If locales-all package is installed skip locales generation
+  * [08d2105] docs: fix typo (ot->to)
+  * [38a5a50] debian/rules: replace deprecated dh_clean -k with dh_prep
+
+ -- Michael Prokop <mika@grml.org>  Tue, 07 Mar 2017 17:18:13 +0100
+
 grml-live (0.29.0) unstable; urgency=medium
 
   [ Michael Prokop ]
