@@ -24,7 +24,7 @@ Options
 
 destination.iso should point to a path that is on a hard disk, you might want to
 mount some swap partitions or swap files first, because grml-live-remaster will
-need a lot ot RAM.
+need a lot of RAM.
 
 Usage examples
 --------------
