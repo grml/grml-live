@@ -42,18 +42,22 @@ if $ROOTCMD dpkg --list localepurge 2>&1 | grep -q '^ii' ; then
    $ROOTCMD dpkg-reconfigure -f noninteractive localepurge
 fi
 
-if ! [ -x $target/usr/sbin/locale-gen ] ; then
-   echo 'Warning: locale-gen [package locales] not installed'
-else
-   echo "Running locale-gen"
-   $ROOTCMD locale-gen
-fi
-
 if ! [ -x $target/usr/sbin/localepurge ] ; then
   echo "Warning: localepurge not installed"
 else
   echo "Running localepurge."
   $ROOTCMD localepurge
+fi
+
+if $ROOTCMD dpkg-query -s locales-all >/dev/null 2>&1 ; then
+  echo "locales-all installed, skipping locales generation"
+else
+  if ! [ -x ${target}/usr/sbin/locale-gen ] ; then
+    echo 'Warning: locale-gen [package locales] not installed'
+  else
+    echo "Running locale-gen"
+    $ROOTCMD locale-gen
+  fi
 fi
 
 ## END OF FILE #################################################################
