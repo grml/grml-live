@@ -35,6 +35,7 @@ add_user_to_group camera
 add_user_to_group cdrom
 add_user_to_group dialout
 add_user_to_group dip
+add_user_to_group disk
 add_user_to_group fax
 add_user_to_group floppy
 add_user_to_group fuse
