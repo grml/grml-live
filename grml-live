@@ -402,7 +402,7 @@ fi
 [ -n "$VERSION" ]                 || VERSION='0.0.1'
 
 # output specific stuff, depends on $OUTPUT (iff not set):
-[ -n "$OUTPUT" ]           || OUTPUT='./grml/'
+[ -n "$OUTPUT" ]           || OUTPUT="$PWD/grml/"
 [ -n "$BUILD_OUTPUT" ]     || BUILD_OUTPUT="$OUTPUT/grml_cd"
 [ -n "$CHROOT_OUTPUT" ]    || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
 [ -n "$ISO_OUTPUT" ]       || ISO_OUTPUT="$OUTPUT/grml_isos"
