@@ -254,7 +254,7 @@ Use ZLIB instead of LZMA/XZ compression in mksquashfs part of the build process.
 Usage examples
 --------------
 
-To get a Debian-stable and Grml-based Live-CD using /grml/grml-live
+To get a Debian-stable and Grml-based Live-CD using ./grml
 as build and output directory just run:
 
   # grml-live
@@ -560,7 +560,7 @@ Instructions
   # SQUASHFS_BINARY='/usr/bin/mksquashfs'
   ## install local files into the chroot
   # CHROOT_INSTALL="/etc/grml/fai/chroot_install"
-  ## adjust if necessary (defaults to /grml/grml-live):
+  ## adjust if necessary (defaults to ./grml/):
   ## OUTPUT="/srv/grml-live"
   FAI_DEBOOTSTRAP="jessie http://ftp.debian.org/debian/"
   # ARCH="amd64"
