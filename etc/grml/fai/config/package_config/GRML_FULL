@@ -286,6 +286,7 @@ flashrom
 mcollective
 memtester
 puppet
+stressant
 
 # virtualization support
 imvirt
