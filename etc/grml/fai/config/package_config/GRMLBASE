@@ -81,7 +81,9 @@ firmware-ti-connectivity
 firmware-zd1211
 
 libpam-systemd
+systemd-container
 
 PACKAGES install FILE_RC
 libpam-systemd-
+systemd-container-
 acpid
