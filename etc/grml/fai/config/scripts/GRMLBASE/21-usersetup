@@ -40,8 +40,9 @@ add_user_to_group fax
 add_user_to_group floppy
 add_user_to_group fuse
 add_user_to_group games
-add_user_to_group nvram
+add_user_to_group input
 add_user_to_group netdev
+add_user_to_group nvram
 add_user_to_group plugdev
 add_user_to_group scanner
 add_user_to_group sudo
