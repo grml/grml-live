@@ -540,6 +540,27 @@ config_kernel(){
 }
 # }}}
 
+# {{{ secure boot
+config_secureboot(){
+  if [ -x /usr/bin/mokutil ] ; then
+    local secstate=$(mokutil --sb-state 2>/dev/null) # "SecureBoot enabled"
+    if [ -n "$secstate" ] ; then
+      einfo "SecureBoot is enabled" ; eend 0
+    else
+      ewarn "SecureBoot not detected" ; eend 0
+    fi
+  else
+    if modprobe efivars &>/dev/null ; then
+      if od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data 2>/dev/null | grep -q 1 ; then
+        einfo "SecureBoot is enabled" ; eend 0
+      else
+        ewarn "SecureBoot not detected" ; eend 0
+      fi
+    fi
+  fi
+}
+# }}}
+
 # {{{ timezone
 config_timezone(){
  # don't touch the files if running from harddisk:

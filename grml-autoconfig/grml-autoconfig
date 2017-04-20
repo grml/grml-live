@@ -90,6 +90,8 @@ checkvalue $CONFIG_TIME && config_time
 
 checkvalue $CONFIG_KERNEL &&  config_kernel
 
+checkvalue $CONFIG_SECUREBOOT && config_secureboot
+
 checkvalue $CONFIG_TIMEZONE && config_timezone
 
 checkvalue $CONFIG_SWRAID && config_swraid
