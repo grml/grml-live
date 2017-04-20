@@ -75,6 +75,7 @@ CONFIG_NETSCRIPT='yes'        # download and run script/executable provided by b
 CONFIG_PARTCONF='yes'         # do we want partconf to work?
 CONFIG_PASSWD='yes'           # set password via bootparam passwd
 CONFIG_SCRIPTS='yes'          # execute scripts from the scripts option
+CONFIG_SECUREBOOT='yes'       # display information about secure boot
 CONFIG_SERVICES='yes'         # check for services to run, provided via bootparam
 CONFIG_STATS='yes'            # Report stats to stats server
 CONFIG_SSH='yes'              # check for bootparam ssh
