@@ -133,6 +133,8 @@ checkvalue $CONFIG_PARTCONF && config_partconf
 
 checkvalue $CONFIG_MIXER && config_mixer
 
+checkvalue $CONFIG_GPM && config_gpm
+
 checkvalue $CONFIG_SERVICES && config_services
 
 checkvalue $CONFIG_DEBNET && config_debnet
