@@ -165,7 +165,7 @@ ipcalc
 iperf
 ipmitool
 iproute
-iptraf
+iptraf-ng
 iptstate
 iputils-arping
 iputils-ping
