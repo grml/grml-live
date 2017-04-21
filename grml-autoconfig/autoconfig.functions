@@ -1644,7 +1644,11 @@ config_swraid(){
 
        if ! checkbootparam 'swraid' ; then
           eindent
-          einfo "Just run 'Start mdadm-raid' to assemble md arrays or boot using 'swraid' as bootoption for autostart."
+          if $SYSTEMD ; then
+            einfo "Just run 'Start mdmonitor' to assemble md arrays or boot using 'swraid' as bootoption for autostart."
+          else
+            einfo "Just run 'Start mdadm-raid' to assemble md arrays or boot using 'swraid' as bootoption for autostart."
+          fi
           eoutdent
        else
           einfo "Bootoption swraid found. Searching for software RAID arrays:"
@@ -1771,11 +1775,19 @@ config_lvm(){
        if lvdisplay 2>&1 | grep -v 'No volume groups found' >/dev/null 2>&1 ; then
           einfo "You seem to have logical volumes (LVM) on your system."
           eindent
-          einfo "Just run 'Start lvm2' to activate them or boot using 'lvm' as bootoption for autostart."
+          if $SYSTEMD ; then
+            einfo "Just run 'Start lvm2-lvmetad' to activate them or boot using 'lvm' as bootoption for autostart."
+          else
+            einfo "Just run 'Start lvm2' to activate them or boot using 'lvm' as bootoption for autostart."
+          fi
           eend 0
           if checkbootparam 'lvm' ; then
              einfo "Bootoption LVM found. Searching for logical volumes:"
-             service_wrapper lvm2 start ; eend $?
+             if $SYSTEMD ; then
+               service_wrapper lvm2-lvmetad start ; eend $?
+             else
+               service_wrapper lvm2 start ; eend $?
+             fi
           fi
           eoutdent
        fi
