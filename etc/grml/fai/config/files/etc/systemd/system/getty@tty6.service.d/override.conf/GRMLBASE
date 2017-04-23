@@ -1,4 +1,4 @@
 [Service]
 Type=idle
 ExecStart=
-ExecStart=-/sbin/grml-runtty /dev/tty6 /bin/zsh $USERNAME
+ExecStart=-/bin/zsh --login -c "[ ! -e /var/run/grml_startx.started ] && (touch /var/run/grml_startx.started && /sbin/grml-runtty /dev/tty6 /etc/init.d/startx root; chvt 1) || /sbin/grml-runtty /dev/tty6 /bin/zsh $USERNAME" >/dev/tty6 2>&1 < /dev/tty6
