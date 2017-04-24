@@ -1358,10 +1358,6 @@ config_stats() {
 # {{{ start X window system via grml-x
 config_x_startup(){
 
-  if $SYSTEMD ; then
-    ewarn "The startx boot option isn't yet supported via systemd, sorry." ; eend 0
-    return
-  fi
 
 # make sure we start X only if startx is used *before* a nostartx option
 # so it's possible to disable automatic X startup using nostart
@@ -1376,17 +1372,28 @@ if checkbootparam 'startx' && ! echo "$CMDLINE" | grep -q 'startx.*nostartx' ; t
    fi
    einfo "Setting up and invoking grml-x ${WINDOWMANAGER}. Just exit X windows system to get full featured consoles."
    config_userlocal
- cat>|/etc/init.d/xstartup<<EOF
+   if $SYSTEMD ; then
+     cat>|/etc/init.d/startx<<EOF
 #!/bin/sh
-su $localuser -c "/usr/bin/grml-x ${WINDOWMANAGER}"
+chgrp tty ${TTY}
+chmod g=rw ${TTY}
+sudo -u "${localuser}" /usr/bin/grml-x "${WINDOWMANAGER}"
 EOF
-   chmod 755 /etc/init.d/xstartup
+     chmod 755 /etc/init.d/startx
+     chvt 6
+     return
+   fi
+   cat>|/etc/init.d/startx<<EOF
+#!/bin/sh
+su "${localuser}" -c "/usr/bin/grml-x ${WINDOWMANAGER}"
+EOF
+   chmod 755 /etc/init.d/startx
 
-   # adjust inittab for xstartup
+   # adjust inittab for startx
    if grep -q '^6:' /etc/inittab ; then
-      sed -i 's|^6:.*|6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>\&1 </dev/tty6|' /etc/inittab
+      sed -i 's|^6:.*|6:2345:respawn:/bin/zsh --login -c "/etc/init.d/startx ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>\&1 </dev/tty6|' /etc/inittab
    else # just append tty6 to inittab if no definition is present:
-      echo '6:2345:respawn:/bin/zsh --login -c "/etc/init.d/xstartup ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>&1 < /dev/tty6' >> /etc/inittab
+      echo '6:2345:respawn:/bin/zsh --login -c "/etc/init.d/startx ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>&1 < /dev/tty6' >> /etc/inittab
    fi
 
    /sbin/telinit q ; eend $?
