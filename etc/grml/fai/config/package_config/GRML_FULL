@@ -340,6 +340,8 @@ man-db
 
 PACKAGES install I386
 linux-image-i386-grml
+linux-cpupower
 
 PACKAGES install AMD64
 linux-image-amd64-grml
+linux-cpupower
