@@ -88,7 +88,7 @@ Control Mod1 a  :ArrangeWindows
 
 # keymappings for programs
 Control Mod1 l :ExecCommand xlock
-Control Mod1 f :ExecCommand iceweasel
+Control Mod1 f :ExecCommand firefox
 
 # screenshot
 Control Shift s :ExecCommand import -window root `date +shot-%Y-%m-%d-%H%M%S.jpg`

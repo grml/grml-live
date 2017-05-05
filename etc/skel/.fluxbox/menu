@@ -1,6 +1,6 @@
 [begin] (Fluxbox) {} <>
     [exec] (xterm) {x-terminal-emulator} <>
-    [exec] (Iceweasel / Firefox) {iceweasel} <>
+    [exec] (Firefox) {firefox} <>
     [exec] (Run ...) {fbrun} <>
     [exec] (configure network) {sudo x-terminal-emulator -T "grml-network" -e /usr/sbin/grml-network} <>
     [exec] (configure and run terminalserver) {grml-exec-wrapper -p grml-terminalserver sudo x-terminal-emulator -T "grml-terminalserver" -e /usr/sbin/grml-terminalserver} <>
