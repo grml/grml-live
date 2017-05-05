@@ -1375,9 +1375,9 @@ if checkbootparam 'startx' && ! echo "$CMDLINE" | grep -q 'startx.*nostartx' ; t
    if $SYSTEMD ; then
      cat>|/etc/init.d/startx<<EOF
 #!/bin/sh
-chgrp tty ${TTY}
-chmod g=rw ${TTY}
-sudo -u "${localuser}" /usr/bin/grml-x "${WINDOWMANAGER}"
+chgrp tty \${TTY}
+chmod g=rw \${TTY}
+sudo -u "${localuser}" /usr/bin/grml-x ${WINDOWMANAGER}
 EOF
      chmod 755 /etc/init.d/startx
      chvt 6
