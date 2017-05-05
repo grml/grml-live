@@ -1,2 +1,0 @@
-# workaround for an iceweasel bug regarding the forward/back button
-gtk-fallback-icon-theme="moblin"
