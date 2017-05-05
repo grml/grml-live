@@ -1,3 +1,14 @@
+grml-autoconfig (0.15.3) grml-testing; urgency=medium
+
+  [ Michael Prokop ]
+  * [ce5210b] Adjust mdadm-raid + lvm2 messages and service handling for
+    usage with systemd
+
+  [ Darshaka Pathirana ]
+  * [bbf127d] Make startx boot option work with systemd
+
+ -- Michael Prokop <mika@grml.org>  Fri, 05 May 2017 10:51:10 +0200
+
 grml-autoconfig (0.15.2) grml-testing; urgency=medium
 
   * [4dca801] Re-enable GPM service startup
