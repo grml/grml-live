@@ -12,7 +12,7 @@ Bugs: mailto:bugs@grml.org
 
 Package: grml-desktop
 Architecture: all
-Depends: grml-scripts (>= 1.1.18), moblin-icon-theme, hsetroot, ${misc:Depends}
+Depends: grml-scripts (>= 1.1.18), moblin-icon-theme, ${misc:Depends}
 Recommends: fluxbox
 Description: configuration files for the X desktop at grml
  This package provides several configuration files for
