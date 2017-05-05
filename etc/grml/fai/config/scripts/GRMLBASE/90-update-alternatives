@@ -45,6 +45,11 @@ if $ROOTCMD update-alternatives --list x-www-browser 2>/dev/null | grep -q '/ice
   $ROOTCMD update-alternatives --set x-www-browser /usr/bin/iceweasel
 fi
 
+if $ROOTCMD update-alternatives --list x-www-browser 2>/dev/null | grep -q '/firefox-esr' ; then
+  echo "Setting firefox-esr as x-www-browser using update-alternatives."
+  $ROOTCMD update-alternatives --set x-www-browser /usr/bin/firefox-esr
+fi
+
 if $ROOTCMD update-alternatives --list www-browser 2>/dev/null | grep -q '/w3m' ; then
   echo "Setting w3m as www-browser using update-alternatives."
   $ROOTCMD update-alternatives --set www-browser /usr/bin/w3m
