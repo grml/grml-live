@@ -14,7 +14,6 @@ Package: grml-desktop
 Architecture: all
 Depends: grml-scripts (>= 1.1.18), moblin-icon-theme, hsetroot, ${misc:Depends}
 Recommends: fluxbox
-Suggests: idesk, fvwm | fvwm2 | fvwm-crystal, awesome, pekwm
 Description: configuration files for the X desktop at grml
  This package provides several configuration files for
  different tools and window managers used at Grml. The
