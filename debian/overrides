@@ -77,4 +77,3 @@ grml-desktop: file-in-etc-not-marked-as-conffile etc/skel/.idesktop/icons/l33t_T
 grml-desktop: file-in-etc-not-marked-as-conffile etc/skel/.idesktop/icons/l33t_TXT_vim.png
 grml-desktop: file-in-etc-not-marked-as-conffile etc/skel/.idesktop/icons/l33t_UNK_ethereal.png
 grml-desktop: file-in-etc-not-marked-as-conffile etc/skel/.idesktop/icons/l33t_UNK_rox.png
-grml-desktop: executable-not-elf-or-script etc/skel/.gkrellm2/themes/Modern/gkrellmrc
