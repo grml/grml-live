@@ -1,3 +1,24 @@
+grml-live (0.29.2) unstable; urgency=medium
+
+  [ Antoine Beaupré ]
+  * [7beda7d] Output to "./grml" in current working directory instead of
+    /grml/grml-live
+  * [f7be6a2] fixup build broken by 7beda7d
+
+  [ Michael Prokop ]
+  * [990478a] SW: include systemd-container in GRMLBASE
+  * [f2c7804] GRMLBASE/21-usersetup: add grml user to 'input' group.
+    Thanks to Laurent Bigonville for the hint
+  * [4236ea4] SW: replace transitional package iptraf with iptraf-ng
+  * [8120950] deborphan: add qemu-kvm to list of packages which are never
+    to be reported
+  * [42089ed] SW: add linux-cpupower to GRML_FULL
+
+  [ Darshaka Pathirana ]
+  * [4a7d133] Make startx boot option work with systemd
+
+ -- Michael Prokop <mika@grml.org>  Fri, 05 May 2017 10:54:59 +0200
+
 grml-live (0.29.1) unstable; urgency=medium
 
   * [46b3c13] Add default user (grml) to "disk" group
