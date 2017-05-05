@@ -1,3 +1,25 @@
+grml-desktop (0.5.0) unstable; urgency=medium
+
+  [ Darshaka Pathirana ]
+  * [eb98a4c] Replace iceweasel with firefox
+  * [b008773] Remove workaround for an old iceweasel bug
+
+  [ Michael Prokop ]
+  * [3031693] Bump Standards-Version to 3.9.8
+  * [5d20b1a] Bump debian/compat to 9
+  * [86b59c3] Drop Conflicts on grml-etc <= 1.3.4, no longer relevant
+  * [8e35166] Drop all packages from Suggests, no longer needed nor
+    supported
+  * [6321791] Drop hsetroot from Depends, seems to be no longer relevant
+  * [b6ad3bf] debian/rules: replace deprecated dh_clean -k with dh_prep
+  * [bac6e50] Add debian/source/format
+  * [fb3f8ff] Switch Homepage + Vcs-Browser headers to https version
+  * [fc5a59e] Drop deprecated lintian overrides for
+    etc/skel/.gkrellm2/themes/Modern/gkrellmrc
+  * [4e371ef] debian/rules: provide build-arch + build-indep targets
+
+ -- Michael Prokop <mika@grml.org>  Fri, 05 May 2017 16:22:55 +0200
+
 grml-desktop (0.4.1) unstable; urgency=medium
 
   [ Thiago Perrotta ]
