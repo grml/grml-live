@@ -1,3 +1,13 @@
+grml-autoconfig (0.15.5) grml-testing; urgency=medium
+
+  * [910ef17] Replace dependency on console-terminus with console-setup +
+    console-setup-linux
+  * [df30782] Ensure that grml-autoconfig service is running before tty1
+    is enabled. Thanks to Darshaka Pathirana <dpat@syn-net.org>
+  * [b535b48] Do not run sysv specific serial console setup under systemd
+
+ -- Michael Prokop <mika@grml.org>  Fri, 12 May 2017 20:58:09 +0200
+
 grml-autoconfig (0.15.4) grml-testing; urgency=medium
 
   [ Darshaka Pathirana ]
