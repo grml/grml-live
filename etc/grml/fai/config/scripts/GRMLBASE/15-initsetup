@@ -16,14 +16,7 @@ systemd_setup() {
   echo "Enabling user '$USERNAME' for autologin"
   sed -i "s/\$USERNAME/$USERNAME/" "$target"/etc/systemd/system/getty@tty*.service.d/override.conf
 
-  # FIXME - ssh-bootoption is currently broken
-  # $ROOTCMD systemctl enable ssh-bootoption.service || echo "failed to enable ssh-bootoption.service"
-
-  # fails on overlayfs with
-  # "Failed to unmount transient /etc/machine-id file in our private namespace: Invalid argument"
-  $ROOTCMD systemctl mask systemd-machine-id-commit.service || echo "failed to mask $systemd-machine-id-commit.service"
   $ROOTCMD systemctl preset-all
-
   $ROOTCMD systemctl set-default grml-boot.target
 }
 
