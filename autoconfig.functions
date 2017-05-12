@@ -590,6 +590,11 @@ config_timezone(){
 # activate serial console {{{
 config_console(){
 if checkbootparam 'console'; then
+  # this hack is no longer necessary with systemd
+  if $SYSTEMD ; then
+    return
+  fi
+
   local line
   local ws
   ws='	 '
