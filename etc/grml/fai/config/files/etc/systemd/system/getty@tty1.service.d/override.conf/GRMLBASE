@@ -4,3 +4,6 @@ ExecStart=
 ExecStart=-/sbin/grml-runtty /dev/tty1 /usr/share/grml-scripts/run-welcome root
 # ExecStart=-/sbin/agetty --autologin $USERNAME --noclear %I 38400 linux
 TTYVTDisallocate=no
+
+[Unit]
+After=grml-autoconfig.service
