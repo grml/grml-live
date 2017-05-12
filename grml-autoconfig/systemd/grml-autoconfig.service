@@ -2,7 +2,7 @@
 
 [Unit]
 Description=Grml boot option support
-Before=getty.target
+Before=getty@tty1.service
 After=rc-local.service
 
 [Service]
