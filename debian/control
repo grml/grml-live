@@ -21,7 +21,8 @@ Conflicts: grml-etc (<= 0.4-7),
            grml-saveconfig
 Replaces: grml-saveconfig
 Depends: beep,
-         console-terminus,
+         console-setup,
+         console-setup-linux,
          gawk,
          gpm,
          grml-etc-core (>= 0.1-3),
