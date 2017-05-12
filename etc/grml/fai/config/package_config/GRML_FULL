@@ -317,6 +317,7 @@ xserver-xorg
 xserver-xorg-core
 xserver-xorg-input-all
 xserver-xorg-video-all
+xserver-xorg-video-intel
 xterm
 
 # x86 hardware support
