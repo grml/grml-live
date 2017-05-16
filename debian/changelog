@@ -1,3 +1,17 @@
+grml-live (0.29.4) unstable; urgency=medium
+
+  * Software related changes:
+    - [e71ef8c] add lsscsi to GRML_SMALL. Thanks to András Korn
+  * [52b5306] GRMLBASE/49-sshd: ensure that login as root via password
+    works again
+  * [2c2f282] No longer mask systemd-machine-id-commit.service
+  * [d6e3163] Delete /lib/udev/rules.d/69-lvm-metad.rules to avoid
+    automatic LVM scanning
+  * [7ca3b49] Ensure that tty1 console is starting *after* grml-autoconfig
+    execution. Thanks to Darshaka Pathirana <dpat@syn-net.org>
+
+ -- Michael Prokop <mika@grml.org>  Tue, 16 May 2017 14:48:38 +0200
+
 grml-live (0.29.3) unstable; urgency=medium
 
   [ Darshaka Pathirana ]
