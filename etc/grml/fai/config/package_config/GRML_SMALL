@@ -11,6 +11,7 @@ buffer
 chntpw
 coreutils
 cpio
+cpufrequtils
 cryptsetup
 cu
 dctrl-tools
