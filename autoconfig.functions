@@ -1137,83 +1137,83 @@ fi
 
 # {{{ Sound
 config_mixer () {
-   if ! [ -x /usr/bin/amixer ] ; then
-      eerror "amixer binary not available. Can not set sound volumes therefore."
-      eend 1
-   else
-      if ! [ -r /proc/asound/cards ] ; then
-         ewarn "No soundcard present, skipping mixer settings therefore."
-         eend 0
-         return
+  if ! [ -x /usr/bin/amixer ] ; then
+    logger -t grml-autoconfig "amixer binary not available"
+    return
+  fi
+
+  if ! [ -r /proc/asound/cards ] ; then
+    ewarn "No soundcard present, skipping mixer settings therefore."
+    eend 0
+    return
+  fi
+
+  for card in $(cat /proc/asound/cards| grep -e '^\s*[0-9]' | awk '{print $1}') ; do
+    einfo "Configuring soundcard \"$(awk -F\[ '/^ *'$card' \[/{ FS=" "; $0=$2; print $1}' < /proc/asound/cards)\""
+    eindent
+
+    if checkbootparam 'vol' ; then
+      VOL="$(getbootparam 'vol' 2>>$DEBUG)"
+      if [ -z "$VOL" ] ; then
+        eerror "Bootoption vol found but no volume level/parameter given. Using defaults (75%)."
+        VOL='75'
+        eend 1
+      fi
+    else
+      VOL='75'
+    fi
+
+    if checkbootparam 'nosound' ; then
+      einfo "Muting sound devices on request."
+      ERROR=$(amixer -q set Master mute)
+      RC=$?
+      if [ -n "$ERROR" ] ; then
+        eindent
+        eerror "Problem muting sound devices: $ERROR"
+        eoutdent
+      fi
+      eend $RC
+    elif [ -z "$INSTALLED" ] ; then
+      einfo "Setting mixer volumes to level ${WHITE}${VOL}${NORMAL}."
+
+      if checkbootparam 'micvol' ; then
+        MICVOL="$(getbootparam 'micvol' 2>>$DEBUG)"
+        einfo "Setting microphone to ${WHITE}${MICVOL}${NORMAL}."
+      else
+        MICVOL=0
       fi
 
-      for card in $(cat /proc/asound/cards| grep -e '^\s*[0-9]' | awk '{print $1}') ; do
-         einfo "Configuring soundcard \"$(awk -F\[ '/^ *'$card' \[/{ FS=" "; $0=$2; print $1}' < /proc/asound/cards)\""
-         eindent
+      CONTROLS=$(amixer -c $card scontrols | awk -F"Simple mixer control " '{print $2}')
+      IFSOLD=${IFS:-}
+      IFS='
+      '
+      for CONTROL in ${=CONTROLS} ; do
+        # such devices can not be controlled with amixer ... unmute
+        [[ "$CONTROL" == *Console* ]] && continue
 
-         if checkbootparam 'vol' ; then
-            VOL="$(getbootparam 'vol' 2>>$DEBUG)"
-            if [ -z "$VOL" ] ; then
-               eerror "Bootoption vol found but no volume level/parameter given. Using defaults (75%)."
-               VOL='75'
-               eend 1
-            fi
-         else
-            VOL='75'
-         fi
+        if ! echo "${CONTROL}" | grep -q -i "mic" ; then
+          if amixer -c $card sget "${CONTROL}" | grep -q 'Capabilities:.*pswitch' ; then
+            amixer -c $card -q set "${CONTROL}" unmute
+          fi
+          if amixer -c $card sget "${CONTROL}" | grep -q -P 'Capabilities:.*(pvolume| volume)' ; then
+            amixer -c $card -q set "${CONTROL}" "${VOL}"%
+          fi
+        fi
 
-         if checkbootparam 'nosound' ; then
-            einfo "Muting sound devices on request."
-            ERROR=$(amixer -q set Master mute)
-            RC=$?
-            if [ -n "$ERROR" ] ; then
-               eindent
-               eerror "Problem muting sound devices: $ERROR"
-               eoutdent
-            fi
-            eend $RC
-         elif [ -z "$INSTALLED" ] ; then
-            einfo "Setting mixer volumes to level ${WHITE}${VOL}${NORMAL}."
-
-            if checkbootparam 'micvol' ; then
-               MICVOL="$(getbootparam 'micvol' 2>>$DEBUG)"
-               einfo "Setting microphone to ${WHITE}${MICVOL}${NORMAL}."
-            else
-               MICVOL=0
-            fi
-
-            CONTROLS=$(amixer -c $card scontrols | awk -F"Simple mixer control " '{print $2}')
-            IFSOLD=${IFS:-}
-            IFS='
-'
-            for CONTROL in ${=CONTROLS} ; do
-               # such devices can not be controlled with amixer ... unmute
-               [[ "$CONTROL" == *Console* ]] && continue
-
-               if ! echo "${CONTROL}" | grep -q -i "mic" ; then
-                   if amixer -c $card sget "${CONTROL}" | grep -q 'Capabilities:.*pswitch' ; then
-                      amixer -c $card -q set "${CONTROL}" unmute
-                   fi
-                   if amixer -c $card sget "${CONTROL}" | grep -q -P 'Capabilities:.*(pvolume| volume)' ; then
-                      amixer -c $card -q set "${CONTROL}" "${VOL}"%
-                   fi
-               fi
-
-               if [ ${MICVOL} -ne 0 ] ; then
-                  if amixer -c $card sget "${CONTROL}" | grep -q 'Capabilities:.*cswitch' ; then
-                     amixer -c $card -q set "${CONTROL}" unmute
-                  fi
-                  if amixer -c $card sget "${CONTROL}" | grep -q 'Capabilities:.*cvolume' ; then
-                     amixer -c $card -q set "${CONTROL}" $MICVOL%
-                  fi
-                  eend $?
-               fi
-            done
-            IFS=$IFSOLD
-         fi # checkbootparam 'nosound'
-         eoutdent
+        if [ ${MICVOL} -ne 0 ] ; then
+          if amixer -c $card sget "${CONTROL}" | grep -q 'Capabilities:.*cswitch' ; then
+            amixer -c $card -q set "${CONTROL}" unmute
+          fi
+          if amixer -c $card sget "${CONTROL}" | grep -q 'Capabilities:.*cvolume' ; then
+            amixer -c $card -q set "${CONTROL}" $MICVOL%
+          fi
+          eend $?
+        fi
       done
-   fi
+      IFS=$IFSOLD
+    fi # checkbootparam 'nosound'
+    eoutdent
+  done
 }
 # }}}
 
