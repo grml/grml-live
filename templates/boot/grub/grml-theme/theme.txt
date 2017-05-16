@@ -1,6 +1,6 @@
 title-text: ""
 title-color: "#FFFFFF"
-desktop-color: "black"
+desktop-image: "black.png"
 message-color:	"#FFFFFF"
 
 + image {
