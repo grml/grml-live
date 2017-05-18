@@ -1,0 +1,21 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/55-aoetools
+# Purpose:       adjust aoetools configuration
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+if ! [ -r "${target}/usr/lib/modules-load.d/aoetools.conf" ] ; then
+  echo "File /usr/lib/modules-load.d/aoetools.conf doesn't exist, skipping execution of script."
+  exit 0
+fi
+
+echo "Removing /usr/lib/modules-load.d/aoetools.conf to avoid automatic aoe discovery"
+rm -f "${target}/usr/lib/modules-load.d/aoetools.conf"
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
