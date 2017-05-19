@@ -46,6 +46,7 @@ pciutils
 physlock
 pxelinux
 resolvconf
+rng-tools
 rsync
 rsyslog
 strace
