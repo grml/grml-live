@@ -180,6 +180,7 @@ if grep -q 'boot=live' /proc/cmdline 2>/dev/null ; then
      echo
    fi
    log_grml_begin_msg "Searching for GRML file, this might take a few seconds..."
+   echo
 fi
 ## }}}
 
