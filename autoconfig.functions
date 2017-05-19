@@ -201,36 +201,6 @@ else
 fi
 # }}}
 
-# {{{ debug
-config_debug(){
- checkbootparam 'debug'            && BOOTDEBUG="yes"
- checkbootparam "BOOT_IMAGE=debug" && BOOTDEBUG="yes"
-
- rundebugshell(){
-  if [ -n "$BOOTDEBUG" ]; then
-     einfo "Starting intermediate shell stage $stage as requested by \"debug\" option."
-     if [ grep -q "debug=noscreen" "$CMDLINE" ] ; then
-        einfo "Notice that the shell does not provide job handling: ctrl-z, bg and fg won't work!"
-        einfo "Just exit the shell to continue boot process..."
-        /bin/zsh
-     else
-        eindent
-        if [ -r /etc/grml/screenrc ] ; then
-           einfo "Starting GNU screen to be able to use a full featured shell environment."
-           einfo "Just exit the shells (and therefore screen) to continue boot process..."
-           /bin/zsh -c "screen -c /etc/grml/screenrc"
-        else
-           einfo "Notice that the shell does not provide job handling: ctrl-z, bg and fg won't work!"
-           einfo "Just exit the shell to continue boot process..."
-           /bin/zsh
-        fi
-        eoutdent
-     fi
-  fi
- }
-}
-# }}}
-
 # {{{ log
 config_log(){
 if checkbootparam 'log' || checkbootparam 'debug' ; then
@@ -1986,7 +1956,6 @@ config_distri(){
 if checkbootparam 'distri'; then
   DISTRI="$(getbootparam 'distri' 2>>$DEBUG)"
   if [ -r "${LIVECD_PATH}"/desktop/"$DISTRI".jpg ] ; then
-     [ -n "$BOOTDEBUG" ] && einfo "Debug: bootoption distri found and file ${LIVECD_PATH}/desktop/${DISTRI} present" && eend 0
      # make sure the desktop.jpg file is not a symlink, so copying does not file then
      [ -L /usr/share/grml/desktop.jpg ] && rm /usr/share/grml/desktop.jpg
      cp "${LIVECD_PATH}"/desktop/"$DISTRI".jpg /usr/share/grml/desktop.jpg

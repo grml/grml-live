@@ -54,23 +54,10 @@ mount_sys
 # }}}
 
 # {{{ main grml-autoconfig
-checkvalue $CONFIG_DEBUG && config_debug
-
 # make sure symlink /etc/mtab exists, this is usually handled by
 # /etc/init.d/checkroot.sh but we don't execute this script on the live system
 if [ -z "$INSTALLED" ] ; then
   ln -sf /proc/mounts /etc/mtab
-fi
-
-stage=5
-rundebugshell
-
-if [ -z "$BOOTDEBUG" ] ; then
-   einfo "Setting kernel ring buffer to level 2."
-   echo "2" > /proc/sys/kernel/printk ; eend $?
-else
-   einfo "Setting kernel ring buffer to level 6. Adjust manually via running dmesg -n \$VALUE."
-   echo "6" > /proc/sys/kernel/printk ; eend $?
 fi
 
 checkvalue $CONFIG_SYSLOG && config_syslog
@@ -99,9 +86,6 @@ checkvalue $CONFIG_SWRAID && config_swraid
 checkvalue $CONFIG_DMRAID && config_dmraid
 
 checkvalue $CONFIG_LVM && config_lvm
-
-# No kernel messages while probing modules
-echo "0" > /proc/sys/kernel/printk
 
 checkvalue $CONFIG_TESTCD && config_testcd
 
@@ -160,21 +144,6 @@ checkvalue $CONFIG_BLANKING && config_blanking
 checkvalue $CONFIG_DEBOOTSTRAP && config_debootstrap
 
 checkvalue $CONFIG_XSTARTUP && config_x_startup
-# }}}
-
-# {{{ debug
-stage=6
-rundebugshell
-
-if [ -n "$BOOTDEBUG" ] ; then
-   # set only if not already set
-   if [ -z "$CMDLINE" ] ; then
-     CMDLINE="$(cat /proc/cmdline)"
-     [ -d ${LIVECD_PATH}/bootparams/ ] && CMDLINE="$CMDLINE $(cat ${LIVECD_PATH}/bootparams/*)"
-   fi
-   einfo "Bootoption debug detected. Printing kernel command line:"
-   echo "$CMDLINE"
-fi
 # }}}
 
 # {{{ Re-enable signals
