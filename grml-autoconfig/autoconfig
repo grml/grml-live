@@ -55,7 +55,6 @@ CONFIG_BRLTTY='yes'           # automatically start brltty if a brltty option is
 CONFIG_DEBOOTSTRAP='yes'      # support automatic installation of Debian via grml-deboostrap
 CONFIG_DEBNET='yes'           # search for /etc/network/interfaces on partitions and set up network afterwards
 CONFIG_DEBS='yes'             # check for bootoption debs for installing .debs
-CONFIG_DEBUG='yes'            # activate start of shells during startup at several stages
 CONFIG_DISPLAY_SSH_FINGERPRINTS='yes' # display SSH server key fingerprints
 CONFIG_DISTRI='yes'           # support some customization via bootoption distri
 CONFIG_DMRAID='yes'           # support for dmraid
