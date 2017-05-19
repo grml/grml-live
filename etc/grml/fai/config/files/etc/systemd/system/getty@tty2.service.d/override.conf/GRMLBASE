@@ -1,3 +1,5 @@
+# This file was deployed via grml-live.
+
 [Service]
 Type=idle
 ExecStart=

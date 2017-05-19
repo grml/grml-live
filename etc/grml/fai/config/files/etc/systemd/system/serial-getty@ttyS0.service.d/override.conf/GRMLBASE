@@ -1,4 +1,4 @@
-# This file is shipped via grml-live.
+# This file was deployed via grml-live.
 
 [Service]
 ExecStart=

@@ -1,6 +1,4 @@
-# This file was deployed via grml-live's
-# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/15-initsetup, using
-# ${GRML_FAI_CONFIG}/config/files/etc/systemd/system/ssh.service/GRMLBASE
+# This file was deployed via grml-live.
 
 [Unit]
 Description=OpenBSD Secure Shell server

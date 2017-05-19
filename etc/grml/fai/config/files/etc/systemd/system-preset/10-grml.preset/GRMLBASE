@@ -1,3 +1,5 @@
+# This file was deployed via grml-live.
+
 # enable TTY logins
 enable getty@.service
 

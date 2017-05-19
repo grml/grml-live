@@ -1,3 +1,5 @@
+# This file was deployed via grml-live.
+
 [Unit]
 Description=Grml Live System
 Documentation=man:systemd.special(7)
