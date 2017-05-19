@@ -147,8 +147,6 @@ checkvalue $CONFIG_NETCONFIG && config_netconfig
 
 checkvalue $CONFIG_NETSCRIPT && config_netscript
 
-checkvalue $CONFIG_STATS && config_stats
-
 checkvalue $CONFIG_CONSOLE && config_console
 
 checkvalue $CONFIG_VIRTUALBOX_SHARED_FOLDERS && config_virtualbox_shared_folders

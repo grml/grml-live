@@ -77,7 +77,6 @@ CONFIG_PASSWD='yes'           # set password via bootparam passwd
 CONFIG_SCRIPTS='yes'          # execute scripts from the scripts option
 CONFIG_SECUREBOOT='yes'       # display information about secure boot
 CONFIG_SERVICES='yes'         # check for services to run, provided via bootparam
-CONFIG_STATS='yes'            # Report stats to stats server
 CONFIG_SSH='yes'              # check for bootparam ssh
 CONFIG_SWRAID='yes'           # check for software raid devices [only in live-mode]
 CONFIG_TESTCD='yes'           # CD checker
