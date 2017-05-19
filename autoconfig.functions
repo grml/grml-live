@@ -1331,35 +1331,6 @@ config_netscript() {
 }
 # }}}
 
-# {{{ stats
-config_stats() {
- if ! checkbootparam 'nostats' ; then
-   BASE_URL="http://stats.grml.org/report/"
-   ACTION_NAME=Boot
-
-   HOST_ID=$(cat /proc/sys/kernel/random/boot_id)
-
-   grep -q " lm " /proc/cpuinfo && HAS_64BIT="1" || HAS_64BIT="0"
-   DATE_STRING=$(date +'h=%H&m=%M&s=%S')
-   [ -e /etc/grml_version ] && VERSION=$(cat /etc/grml_version) || \
-     VERSION=$(lsb_release -d | awk -F: '{gsub(/^[ \t]+/, "", $2); print $2}')
-
-   PARAMS="$( echo "$CMDLINE" | sed -e 's/=[^ ]*/=x/g' | tr " " "\n"|sort|tr "\n" " " )"
-
-   echo "$CMDLINE" | grep -q -e "fetch" -e "nfsroot" && BOOT="remote"
-   [ -z "$BOOT" ] && BOOT="local"
-
-   ADDITIONAL_PARAMS=""
-   ( [ -n "$COLUMNS" ] && [ -n "$LINES" ] ) && \
-     ADDITIONAL_PARAMS="$ADDITIONAL_PARAMS&res=$((COLUMNS * 8))x$((LINES * 16))"
-
-   URI='$BASE_URL?action=${ACTION_NAME}\&$DATE_STRING\&unique_id=${HOST_ID}\&support_64bit=$HAS_64BIT\&version=$VERSION\&bootup=$BOOT\&params=$PARAMS$ADDITIONAL_PARAMS'
-
-   get_remote_file "$URI" "/dev/null"  >/dev/null 2>&1 &!
- fi
-}
-# }}}
-
 # {{{ start X window system via grml-x
 config_x_startup(){
 
