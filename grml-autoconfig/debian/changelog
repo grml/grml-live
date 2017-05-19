@@ -1,3 +1,13 @@
+grml-autoconfig (0.15.6) grml-testing; urgency=medium
+
+  * [1043bc0] Don't complain about missing amixer binary on tty
+  * [176568c] Don't warn if SecureBoot is not enabled, instead only inform
+    about current state
+  * [6abd4a1] Drop deprecated and unsupported CONFIG_WELCOME configuration
+  * [7138a24] Drop config_stats
+
+ -- Michael Prokop <mika@grml.org>  Fri, 19 May 2017 15:07:49 +0200
+
 grml-autoconfig (0.15.5) grml-testing; urgency=medium
 
   * [910ef17] Replace dependency on console-terminus with console-setup +
