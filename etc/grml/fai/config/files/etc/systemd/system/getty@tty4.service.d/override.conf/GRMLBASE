@@ -2,5 +2,13 @@
 
 [Service]
 Type=idle
+Restart=always
+StandardInput=tty
+StandardOutput=tty
+TTYPath=/dev/tty4
+User=$USERNAME
 ExecStart=
-ExecStart=-/sbin/grml-runtty /dev/tty4 /usr/share/grml-scripts/run-screen $USERNAME
+ExecStart=-/usr/share/grml-scripts/run-screen
+
+[Unit]
+Description=screen ($USERNAME) on tty4

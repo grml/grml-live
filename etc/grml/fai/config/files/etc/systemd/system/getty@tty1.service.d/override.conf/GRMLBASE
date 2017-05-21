@@ -1,11 +1,15 @@
 # This file was deployed via grml-live.
 
 [Service]
-Type=idle
-ExecStart=
-ExecStart=-/sbin/grml-runtty /dev/tty1 /usr/share/grml-scripts/run-welcome root
-# ExecStart=-/sbin/agetty --autologin $USERNAME --noclear %I 38400 linux
+Type=simple
+Restart=always
+StandardInput=tty
+StandardOutput=tty
+TTYPath=/dev/tty1
 TTYVTDisallocate=no
+ExecStart=
+ExecStart=-/usr/share/grml-scripts/run-welcome
 
 [Unit]
+Description=grml-quickconfig on tty1
 After=grml-autoconfig.service
