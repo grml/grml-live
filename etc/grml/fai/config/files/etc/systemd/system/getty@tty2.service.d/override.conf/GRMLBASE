@@ -2,5 +2,12 @@
 
 [Service]
 Type=idle
+Restart=always
+StandardInput=tty
+StandardOutput=tty
+TTYPath=/dev/tty2
 ExecStart=
-ExecStart=-/sbin/grml-runtty /dev/tty2 /usr/share/grml-scripts/run-screen root
+ExecStart=-/usr/share/grml-scripts/run-screen
+
+[Unit]
+Description=screen on tty2
