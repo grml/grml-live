@@ -892,8 +892,7 @@ else
       eindent
         SKIP_CPU_GOVERNOR=1
         oldIFS="$IFS"
-        IFS="
-"
+        IFS=$'\n'
          for line in $(grep FATAL "$LOADCPUFREQ" | sed 's/.*FATAL: //; s/ (.*)//') ; do
              eerror "$line" ; eend $RC
          done
@@ -1155,8 +1154,7 @@ config_mixer () {
 
       CONTROLS=$(amixer -c $card scontrols | awk -F"Simple mixer control " '{print $2}')
       IFSOLD=${IFS:-}
-      IFS='
-      '
+      IFS=$'\n'
       for CONTROL in ${=CONTROLS} ; do
         # such devices can not be controlled with amixer ... unmute
         [[ "$CONTROL" == *Console* ]] && continue
@@ -1600,8 +1598,7 @@ config_swraid(){
           einfo "Bootoption swraid found. Searching for software RAID arrays:"
           eindent
            IFSOLD=${IFS:-}
-           IFS='
-'
+           IFS=$'\n'
            for line in $(mdadm --assemble --scan --auto=yes --symlink=no 2>&1) ; do
                case $line in
                  *'No arrays found'*)
@@ -1622,8 +1619,7 @@ config_swraid(){
                ewarn "No active arrays found" ; eend 0
             else
                IFSOLD=${IFS:-}
-               IFS='
-'
+               IFS=$'\n'
                for line in $(grep '^md[0-9]' /proc/mdstat) ; do
                    einfo "active arrays: $line" ; eend 0
                done
@@ -1657,8 +1653,7 @@ config_dmraid(){
     [ -n "$1" ] || return 1
 
     IFSOLD=${IFS:-}
-    IFS='
-'
+    IFS=$'\n'
     eindent
 
     for line in $(dmraid $1 ; echo errcode:$?); do
