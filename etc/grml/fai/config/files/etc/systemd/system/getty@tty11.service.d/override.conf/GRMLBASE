@@ -2,5 +2,12 @@
 
 [Service]
 Type=idle
+Restart=always
+StandardInput=tty
+StandardOutput=tty
+TTYPath=/dev/tty11
 ExecStart=
-ExecStart=-/sbin/grml-runtty /dev/tty11 /usr/bin/htop root
+ExecStart=-/usr/bin/htop
+
+[Unit]
+Description=htop on tty11

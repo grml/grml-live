@@ -2,5 +2,12 @@
 
 [Service]
 Type=idle
+Restart=always
+StandardInput=tty
+StandardOutput=tty
+TTYPath=/dev/tty12
 ExecStart=
-ExecStart=-/sbin/grml-runtty /dev/tty12 /usr/share/grml-scripts/run-journalctl root
+ExecStart=-/usr/share/grml-scripts/run-journalctl
+
+[Unit]
+Description=journalctl on tty12
