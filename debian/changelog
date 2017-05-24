@@ -1,3 +1,33 @@
+grml-live (0.29.5) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [8a09c98] GRUB theme: replace desktop-color with desktop-image. Thanks
+    to Michael Schierl <schierlm@gmx.de>
+  * [08877a5] Enable autologin for user root on serial console ttyS0
+  * [fad6e2c] Disable automatic 'ATA over Ethernet discovery' Thanks to
+    Felipe Sateler + Darshaka Pathirana for help in coming up with a
+    solution
+  * [3a31f02] Enable systemd specific debug boot options in debugging mode
+  * [a56dcf4] Provide consistent header information for all /etc/systemd/
+    files that are deployed via grml-live
+  * [fcb31f4] Switch from grml-runtty to agetty also on tty11 + tty12
+  * Software related changes:
+    - [d039e20] add cpufrequtils to GRML_SMALL
+    - [8dd4995] add rng-tools to GRMLBASE [Closes: issue1336]
+    - [d3bb619] add haveged to GRMLBASE [Closes: issue1336]
+
+  [ Darshaka Pathirana ]
+  * [5fbe7ab] TTY6/VT6 should start a shell if bootoption startx is not
+    given
+  * [da778b9] Switch from grml-runtty to agetty
+  * [48143b6] Get rid of grml-runtty
+  * [6871972] Run zsh when starting screen
+
+  [ Thomas Stewart ]
+  * [afdf6b6] Warn in initramfs if there is <256MM memory
+
+ -- Michael Prokop <mika@grml.org>  Wed, 24 May 2017 14:32:15 +0200
+
 grml-live (0.29.4) unstable; urgency=medium
 
   * Software related changes:
