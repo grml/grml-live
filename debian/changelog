@@ -1,3 +1,14 @@
+grml-desktop (0.5.1) unstable; urgency=medium
+
+  [ Darshaka Pathirana ]
+  * [01642da] Start grml-x via .zprofile
+
+  [ Michael Prokop ]
+  * [50fd23f] zprofile: ensure code is executed only on Grml as a live-
+    system
+
+ -- Michael Prokop <mika@grml.org>  Wed, 24 May 2017 09:03:44 +0200
+
 grml-desktop (0.5.0) unstable; urgency=medium
 
   [ Darshaka Pathirana ]
