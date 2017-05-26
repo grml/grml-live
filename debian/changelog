@@ -1,3 +1,10 @@
+grml-live (0.29.6) unstable; urgency=medium
+
+  * [78b2757] Delete /usr/lib/udev/rules.d/64-md-raid-assembly.rules to
+    avoid automatic mdadm scanning
+
+ -- Michael Prokop <mika@grml.org>  Fri, 26 May 2017 23:38:30 +0200
+
 grml-live (0.29.5) unstable; urgency=medium
 
   [ Michael Prokop ]
