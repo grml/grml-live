@@ -1589,7 +1589,7 @@ config_swraid(){
        if ! checkbootparam 'swraid' ; then
           eindent
           if $SYSTEMD ; then
-            einfo "Just run 'Start mdmonitor' to assemble md arrays or boot using 'swraid' as bootoption for autostart."
+            einfo "Just run 'mdadm --assemble --scan' to assemble md arrays or boot using 'swraid' as bootoption for autostart."
           else
             einfo "Just run 'Start mdadm-raid' to assemble md arrays or boot using 'swraid' as bootoption for autostart."
           fi
@@ -1599,7 +1599,7 @@ config_swraid(){
           eindent
            IFSOLD=${IFS:-}
            IFS=$'\n'
-           for line in $(mdadm --assemble --scan --auto=yes --symlink=no 2>&1) ; do
+           for line in $(mdadm --assemble --scan 2>&1) ; do
                case $line in
                  *'No arrays found'*)
                    ewarn "$line" ; eend 0
