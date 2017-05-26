@@ -1,3 +1,12 @@
+grml-autoconfig (0.15.8) grml-testing; urgency=medium
+
+  * [5086a8b] Update instructions for manual mdadm start, drop --auto=yes
+    --symlink=no from swraid
+  * [20365dd] Update instructions for manual LVM start + fix LVM detection
+    for lvm boot option
+
+ -- Michael Prokop <mika@grml.org>  Fri, 26 May 2017 23:38:24 +0200
+
 grml-autoconfig (0.15.7) grml-testing; urgency=medium
 
   [ Michael Prokop ]
