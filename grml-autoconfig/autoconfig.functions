@@ -1717,15 +1717,17 @@ config_lvm(){
           einfo "You seem to have logical volumes (LVM) on your system."
           eindent
           if $SYSTEMD ; then
-            einfo "Just run 'Start lvm2-lvmetad' to activate them or boot using 'lvm' as bootoption for autostart."
+            einfo "Just run 'Start lvm2-pvscan@name' to activate LV or VG 'name' or boot using 'lvm' as bootoption for autostart."
           else
             einfo "Just run 'Start lvm2' to activate them or boot using 'lvm' as bootoption for autostart."
           fi
           eend 0
           if checkbootparam 'lvm' ; then
-             einfo "Bootoption LVM found. Searching for logical volumes:"
+             einfo "Bootoption LVM found. Searching for logical volumes and enabling them:"
              if $SYSTEMD ; then
-               service_wrapper lvm2-lvmetad start ; eend $?
+               service_wrapper lvm2-lvmetad start
+               vgchange -ay
+               eend $?
              else
                service_wrapper lvm2 start ; eend $?
              fi
