@@ -1317,6 +1317,10 @@ if checkbootparam 'startx' && ! echo "$CMDLINE" | grep -q 'startx.*nostartx' ; t
    einfo "Setting up and invoking grml-x ${WINDOWMANAGER}. Just exit X windows system to get full featured consoles."
    config_userlocal
    if $SYSTEMD ; then
+     if [ -n "$WINDOWMANAGER" ] ; then
+       mkdir -p /var/run/grml-x/
+       echo "$WINDOWMANAGER" > /var/run/grml-x/window-manager
+     fi
      chvt 7
      return
    fi
