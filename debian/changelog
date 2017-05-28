@@ -1,3 +1,10 @@
+grml-desktop (0.5.2) unstable; urgency=medium
+
+  * [0f3191e] startx: use /var/run/grml-x/window-manager for selection of
+    specific window manager
+
+ -- Michael Prokop <mika@grml.org>  Sun, 28 May 2017 19:54:59 +0200
+
 grml-desktop (0.5.1) unstable; urgency=medium
 
   [ Darshaka Pathirana ]
