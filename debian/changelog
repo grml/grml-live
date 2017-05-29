@@ -1,3 +1,9 @@
+grml-live (0.29.7) unstable; urgency=medium
+
+  * [b0b0bc5] Get rid of /etc/network/if-up.d/aoe-discover
+
+ -- Michael Prokop <mika@grml.org>  Mon, 29 May 2017 19:27:11 +0200
+
 grml-live (0.29.6) unstable; urgency=medium
 
   * [78b2757] Delete /usr/lib/udev/rules.d/64-md-raid-assembly.rules to
