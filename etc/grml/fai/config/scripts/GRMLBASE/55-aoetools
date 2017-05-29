@@ -6,16 +6,15 @@
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
-set -u
-set -e
+set -eu
 
-if ! [ -r "${target}/usr/lib/modules-load.d/aoetools.conf" ] ; then
-  echo "File /usr/lib/modules-load.d/aoetools.conf doesn't exist, skipping execution of script."
-  exit 0
-fi
-
+# see https://github.com/grml/grml/issues/32
 echo "Removing /usr/lib/modules-load.d/aoetools.conf to avoid automatic aoe discovery"
 rm -f "${target}/usr/lib/modules-load.d/aoetools.conf"
+
+# see https://github.com/grml/grml/issues/47
+echo "Removing /etc/network/if-up.d/aoe-discover to avoid network startup failures"
+rm -f "${target}/etc/network/if-up.d/aoe-discover"
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
