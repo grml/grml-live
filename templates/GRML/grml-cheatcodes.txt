@@ -128,10 +128,6 @@ grml live-media-path=/live/grml...  Sets the path to the live filesystem on the 
                                     By default, it is set to /live/$GRML_FLAVOUR/ (where $GRML_FLAVOUR
                                     is corresponding to grml64-full, grml32-full, grml64-small,...
                                     [Note: this option is mandatory since release 2011.12]
-grml nostats                        Don't send any information to the Grml project at startup.
-                                    Parameters sent are Grml version, if the cpu supports 64bit,
-                                    anonymized boot parameters and boot source (remote or local).
-                                    [Note: only available since release 2011.12]
 grml module=grml                    Instead of using the default "$name.module" another file can
                                     be specified without the extension ".module"; it should be placed
                                     on "/live" directory of the live medium
