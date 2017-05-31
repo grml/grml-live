@@ -1,10 +1,11 @@
       CHEATCODES AND HINTS FOR GRML
 ==============================================================================
 
-These options work from the (isolinux/grub) bootprompt of Grml based (live) systems.
+Isolinux bootprompt options:
+----------------------------
 
-The following kernel options are available (do NOT use them as 'grml $OPTION',
-use them as '$OPTION'!):
+These options work from the isolinux bootprompt of Grml based (live) systems.
+(Do NOT use them as 'grml $OPTION', use them as '$OPTION'!):
 
 grml                                Use default settings (same as just pressing return)
 grml2ram                            Copy Grml's squashfs file to RAM and
