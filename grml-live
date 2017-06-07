@@ -1431,7 +1431,7 @@ else
         bailout 12 "Unknown HYBRID_METHOD [${HYBRID_METHOD}]. Supported values: disable, isohybrid, grub2, manifold"
       fi
 
-      # generate md5sum and sha1sum of ISO if we are using class 'RELEASE':
+      # generate ISO checksums if we are using class 'RELEASE':
       case $CLASSES in *RELEASE*)
          [ "$RC" = 0 ] && \
          (
