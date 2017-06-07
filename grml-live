@@ -891,13 +891,23 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
        # EFI boot files
        if [ -r "${CHROOT_OUTPUT}/boot/efi.img" -a -r "${CHROOT_OUTPUT}/boot/bootx64.efi" ] ; then
-          einfo "Moving EFI boot files into ISO path."
-          log "Moving EFI boot files into ISO path."
-          RC=$0
-          mv "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
-          mkdir -p "${BUILD_OUTPUT}/efi/boot/" || RC=$?
-          mv "${CHROOT_OUTPUT}/boot/bootx64.efi" "${BUILD_OUTPUT}/efi/boot/bootx64.efi" || RC=$?
-          eend $?
+         einfo "Moving 64-bit EFI boot files into ISO path."
+         log "Moving 64-bit EFI boot files into ISO path."
+         RC=$0
+         mv "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
+         mkdir -p "${BUILD_OUTPUT}/efi/boot/" || RC=$?
+         mv "${CHROOT_OUTPUT}/boot/bootx64.efi" "${BUILD_OUTPUT}/efi/boot/bootx64.efi" || RC=$?
+         eend $?
+       elif [ -r "${CHROOT_OUTPUT}/boot/efi.img" -a -r "${CHROOT_OUTPUT}/boot/bootia32.efi" ] ; then
+         einfo "Moving 32-bit EFI boot files into ISO path."
+         log "Moving 32-bit EFI boot files into ISO path."
+         RC=$0
+         mv "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
+         mkdir -p "${BUILD_OUTPUT}/efi/boot/" || RC=$?
+         mv "${CHROOT_OUTPUT}/boot/bootia32.efi" "${BUILD_OUTPUT}/efi/boot/bootia32.efi" || RC=$?
+         eend $?
+       else
+         ewarn "No EFI boot files found, skipping." ; eend 0
        fi
 
        [ -n "$TEMPLATE_DIRECTORY" ] || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
@@ -999,9 +1009,13 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
        cp -a "${CHROOT_OUTPUT}"/boot/grub/core.img "${BUILD_OUTPUT}"/boot/grub/
        cp -a "${CHROOT_OUTPUT}"/boot/grub/grub.img "${BUILD_OUTPUT}"/boot/grub/
 
-       # copy modules for UEFI grub
+       # copy modules for UEFI grub, 64-bit
        mkdir -p "${BUILD_OUTPUT}"/boot/grub/x86_64-efi/
        cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/x86_64-efi/*.{mod,lst} "${BUILD_OUTPUT}"/boot/grub/x86_64-efi/
+
+       # copy modules for UEFI grub, 32-bit
+       mkdir -p "${BUILD_OUTPUT}"/boot/grub/i386-efi/
+       cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/i386-efi/*.{mod,lst} "${BUILD_OUTPUT}"/boot/grub/i386-efi/
 
        if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
           log    "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
@@ -1277,6 +1291,9 @@ fi
 
 if [ "$BOOT_METHOD" = "isolinux" ] ; then
    BOOT_ARGS="-no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat"
+   if [ "$HYBRID_METHOD" = "isohybrid" ] ; then
+     EFI_ARGS="-isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin -eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
+   fi
 elif [ "$BOOT_METHOD" = "grub2" ] ; then
    BOOT_ARGS="-no-emul-boot -boot-load-size 4 -b boot/grub/toriboot.bin"
 fi
@@ -1350,9 +1367,9 @@ else
          echo 1 16 | mksh "${SCRIPTS_DIRECTORY}/bootgrub.mksh" -B 11 | \
             dd of=boot/grub/toriboot.bin conv=notrunc 2>/dev/null
       fi
-      log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS -o ${ISO_OUTPUT}/${ISO_NAME} ."
+      log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS $EFI_ARGS -no-pad -o ${ISO_OUTPUT}/${ISO_NAME} ."
       $MKISOFS -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
-              -l -r -J $BOOT_ARGS -no-pad \
+              -l -r -J $BOOT_ARGS $EFI_ARGS -no-pad \
               -o "${ISO_OUTPUT}/${ISO_NAME}" . ; RC=$?
       # both of these need core.img there, so it’s easier to write it here
       if [ "$BOOT_METHOD" = "grub2" ] || [ "$HYBRID_METHOD" = "grub2" ]; then
@@ -1400,33 +1417,7 @@ else
           eend $?
         fi
       elif [ "$HYBRID_METHOD" = "isohybrid" ] ; then
-        if ! which isohybrid >/dev/null 2>&1 ; then
-          bailout 12 "isohybrid binary not found - please install syslinux/syslinux-common/syslinux-utils"
-        else
-          log   "Creating hybrid ISO file with isohybrid method"
-          einfo "Creating hybrid ISO file with isohybrid method"
-          # Notes for consideration:
-          # "-entry 4 -type 1c"
-          # * using 4 as the partition number is supposed to help with BIOSes
-          #   that only support USB-Zip boot
-          # * using 1c (i.e. hidden FAT32 LBA), instead of the default 0x17
-          #   (hidden NTFS, IIRC), as the partition type is sometimes needed
-          #   to get the BIOS even look at the partition created by isohybrid
-          if isohybrid --help | grep -q -- --uefi ; then
-            if echo $CLASSES | grep -qw I386 ; then
-              log   "Detected uefi support for isohybrid but 32bit systems do not support it, ignoring."
-              einfo "Detected uefi support for isohybrid but 32bit systems do not support it, ignoring."
-            else
-              log   "Detected uefi support for isohybrid, enabling"
-              einfo "Detected uefi support for isohybrid, enabling"
-              ISOHYBRID_OPTIONS=--uefi
-            fi
-          fi
-
-          log "isohybrid $ISOHYBRID_OPTIONS ${ISO_OUTPUT}/${ISO_NAME}"
-          isohybrid $ISOHYBRID_OPTIONS "${ISO_OUTPUT}/${ISO_NAME}"
-          eend $?
-        fi
+        : # nothing to do, handled via $MKISOFS $EFI_ARGS already
       else
         bailout 12 "Unknown HYBRID_METHOD [${HYBRID_METHOD}]. Supported values: disable, isohybrid, grub2, manifold"
       fi

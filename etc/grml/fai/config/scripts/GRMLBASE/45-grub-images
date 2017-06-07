@@ -7,9 +7,11 @@
 ################################################################################
 
 set -e
+set -u
 
 
 BOOTX64="${target}/boot/bootx64.efi"
+BOOTX32="${target}/boot/bootia32.efi"
 EFI_IMG="${target}/boot/efi.img"
 TMP_CONFIG="${target}/tmp/grub_config_efi"
 
@@ -24,6 +26,7 @@ echo "E: Could not find root device!"
 EOF
 
 BOOTX64="${BOOTX64##${target}}"
+BOOTX32="${BOOTX32##${target}}"
 EFI_IMG="${EFI_IMG##${target}}"
 TMP_CONFIG="${TMP_CONFIG##${target}}"
 
@@ -40,17 +43,21 @@ if ifclass AMD64 ; then
     echo "/usr/lib/grub/x86_64-efi/moddep.lst could not be found, skipping."
     echo "NOTE: grub-efi-amd64-bin not installed?"
   fi
+elif ifclass I386 ; then
+  if [ -r "${target}"/usr/lib/grub/i386-efi/moddep.lst ] ; then
+    ARCHS+=(i386-efi)
+    ADDITIONAL_MODULES[i386-efi]="efi_gop efi_uga"
+  else
+    echo "/usr/lib/grub/i386-efi/moddep.lst could not be found, skipping."
+    echo "NOTE: grub-efi-ia32 not installed?"
+  fi
 fi
 
-BOOTX64="${BOOTX64##${target}}"
-EFI_IMG="${EFI_IMG##${target}}"
-TMP_CONFIG="${TMP_CONFIG##${target}}"
-
 for arch in ${ARCHS[@]} ; do
-$ROOTCMD grub-mkimage -O $arch -o /boot/$arch.img --prefix=/boot/grub/ --config="$TMP_CONFIG" \
-  echo iso9660 part_msdos search_fs_file test \
-  fat ext2 reiserfs xfs btrfs squash4 part_gpt lvm \
-  ${ADDITIONAL_MODULES[$arch]}
+  $ROOTCMD grub-mkimage -O $arch -o /boot/$arch.img --prefix=/boot/grub/ --config="$TMP_CONFIG" \
+    echo iso9660 part_msdos search_fs_file test \
+    fat ext2 reiserfs xfs btrfs squash4 part_gpt lvm \
+    ${ADDITIONAL_MODULES[$arch]}
 done
 
 if [ -f "${target}/boot/i386-pc.img" ] ; then
@@ -61,27 +68,40 @@ if [ -f "${target}/boot/x86_64-efi.img" ] ; then
   mv "${target}/boot/x86_64-efi.img" "${target}/${BOOTX64}"
 fi
 
+if [ -f "${target}/boot/i386-efi.img" ] ; then
+  mv "${target}/boot/i386-efi.img" "${target}/${BOOTX32}"
+fi
+
 if ifclass AMD64 ; then
   if ! [ -r "${target}/${BOOTX64}" ] ; then
-    echo "Can not access grub efi image." >&2
+    echo "Can not access grub efi image ${BOOTX64}." >&2
     exit 1
   fi
 
-  SIZE=$(du --apparent-size -sk "${target}/${BOOTX64}" | awk -F" " '{print $1}')
-  SIZE=$(((($SIZE / 32 )+2)*32))
-
-  dd if=/dev/zero of="${target}/${EFI_IMG}" bs=1k count="$SIZE" 2>/dev/null
+  dd if=/dev/zero of="${target}/${EFI_IMG}" bs=4M count=1 2>/dev/null
   $ROOTCMD mkfs.vfat -n GRML "$EFI_IMG" >/dev/null
   $ROOTCMD mmd -i "$EFI_IMG" ::EFI
   $ROOTCMD mmd -i "$EFI_IMG" ::EFI/BOOT
   $ROOTCMD mcopy -i "$EFI_IMG" "$BOOTX64" ::EFI/BOOT/bootx64.efi >/dev/null
-  echo "Generated EFI image $BOOTX64"
-  echo "Generated bootx64 image $EFI_IMG"
+  echo "Generated 64-bit EFI image $BOOTX64"
+elif ifclass I386 ; then
+  if ! [ -r "${target}/${BOOTX32}" ] ; then
+    echo "Can not access grub efi image ${BOOTX32}." >&2
+    exit 1
+  fi
+
+  dd if=/dev/zero of="${target}/${EFI_IMG}" bs=4M count=1 2>/dev/null
+  $ROOTCMD mkfs.vfat -n GRML "$EFI_IMG" >/dev/null
+  $ROOTCMD mmd -i "$EFI_IMG" ::EFI
+  $ROOTCMD mmd -i "$EFI_IMG" ::EFI/BOOT
+  $ROOTCMD mcopy -i "$EFI_IMG" "$BOOTX32" ::EFI/BOOT/bootia32.efi >/dev/null
+  echo "Generated 32-bit EFI image $BOOTX32"
 fi
+
+echo "Generated EFI image $EFI_IMG"
 
 rm -f "${target}/${TMP_CONFIG}"
 echo "Generated Grub images"
-
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
