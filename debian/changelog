@@ -1,3 +1,28 @@
+grml-live (0.30.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [5bb2f98] Update comment regarding checksum generation
+  * [6725bfa] Support EFI on 32-bit systems, increase EFI image size +
+    switch from isohybrid to xorriso/isohybrid combination
+  * Software-related changes:
+    - [9e520d4] add lm-sensors to GRML_FULL. Thanks to Grégoire Sutre
+      for the suggestion
+    - [3a96b44] drop packages from GRML_FULL that are already part of
+      GRMLBASE
+    - [b489a40] no longer ship grml2hd* packages via GRMLBASE
+    - [b6fbb79] drop tcpd from GRML_SMALL, not shipped on GRML_FULL.
+      Thanks to Darshaka Pathirana <dpat@syn-net.org>
+    - [82a78a4] add ed to GRML_FULL since it's also shipped on
+      GRML_SMALL. Thanks to Darshaka Pathirana <dpat@syn-net.org>
+
+  [ Darshaka Pathirana ]
+  * [dde7709] templates: remove bootoption nostats
+  * [061fdcd] Update cheatcodes documentation to clarify isolinux
+    vs GRUB situation
+  * [d618834] templates: fix isolinux boot option label for grub
+
+ -- Michael Prokop <mika@grml.org>  Fri, 09 Jun 2017 22:51:01 +0200
+
 grml-live (0.29.7) unstable; urgency=medium
 
   * [b0b0bc5] Get rid of /etc/network/if-up.d/aoe-discover
