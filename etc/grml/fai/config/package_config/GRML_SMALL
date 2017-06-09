@@ -1,97 +1,133 @@
 PACKAGES install
 
+# grml
+grml-paste
+grml-quickconfig-standard
+
+# base os
 apt
-atftp
-attr
-bash
-binutils
-bridge-utils
 bsdmainutils
-buffer
-chntpw
-coreutils
-cpio
-cpufrequtils
-cryptsetup
-cu
 dctrl-tools
-diffutils
+dos2unix
+ed # missing in full
+findutils
+htop
+libnss-myhostname
+locales
+lsof
+mount
+ntpdate
+passwd
+procps
+psmisc
+sudo
+sysvinit-utils
+tcpd # missing in full
+tzdata
+util-linux
+
+# deploy on remote sites
+ppp
+pppoeconf
+
+# disk subsystems support/debugging
+cryptsetup
 disktype
 dmraid
 dmsetup
-dos2unix
+lsscsi
+smartmontools
+
+# disk partitioning/boot
+mbr
+parted
+
+# disk wiping
+nwipe
+wipe
+
+# filesystem support
+attr
 dosfstools
 e2fsprogs
-ed
+jfsutils
+reiserfsprogs
+xfsprogs
+
+# foreign os support/recovery
+chntpw
+mtools
+
+# install linux
+kexec-tools
+
+# networking
+atftp
+bridge-utils
 ethtool
-findutils
-gddrescue
-grml-paste
-grml-quickconfig-standard
-htop
 ifenslave
 ifupdown
-imvirt
 iproute
 iptstate
 iputils-ping
 isc-dhcp-client
 iw
-jfsutils
-kexec-tools
-lftp
-libnss-myhostname
-lilo
-links
-locales
 lrzsz
-lsof
-lsscsi
-mawk
-mbr
-memtester
-mount
-mtools
 mtr-tiny
+net-tools
 netbase
 netcat-openbsd
-net-tools
-ntpdate
-nwipe
-parted
-partimage
-passwd
-patch
-ppp
-pppoeconf
-procps
-psmisc
-reiserfsprogs
 rfkill
-rpcbind
-screen
-sed
 ser2net
-setserial
-smartmontools
-statserial
-sudo
-sysvinit-utils
-tar
-tcpd
 tcpdump
 telnet
 tsocks
-tzdata
+vlan
+
+# network transfers
+lftp
+partimage
+rpcbind
+
+# packers/unpackers
+cpio
+tar
 unp
 unzip
-util-linux
-vlan
-wget
-wipe
-xfsprogs
 zip
+
+# recovery
+gddrescue
+
+# serial
+cu
+setserial
+statserial
+
+# shell
+bash
+binutils
+buffer
+coreutils
+diffutils
+grml-etc-core # was added on merge
+mawk
+screen
+sed
 zsh
+
+# system info/mgmt
+memtester
+
+# virtualization support
+imvirt
+
+# web
+links
+wget
+
+# x86 hardware support
+cpufrequtils
 
 PACKAGES install I386
 linux-image-i386-grml
