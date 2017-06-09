@@ -78,7 +78,6 @@ statserial
 sudo
 sysvinit-utils
 tar
-tcpd
 tcpdump
 telnet
 tsocks
