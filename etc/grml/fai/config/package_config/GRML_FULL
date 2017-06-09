@@ -85,6 +85,7 @@ secure-delete
 wipe
 
 # editors
+ed
 hexedit
 nano
 vim
