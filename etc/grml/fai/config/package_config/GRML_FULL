@@ -327,6 +327,7 @@ cpufrequtils
 cpuid
 dmidecode
 irqbalance
+lm-sensors
 lshw
 numactl
 usbview
