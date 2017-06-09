@@ -9,7 +9,6 @@ grml-terminalserver
 apt
 binfmt-support
 bsdmainutils
-dbus
 dctrl-tools
 devscripts
 dos2unix
@@ -42,7 +41,6 @@ alsa-utils
 
 # broken userland debugging
 ltrace
-strace
 
 # deploy on remote sites
 openvpn
@@ -61,11 +59,8 @@ dmsetup
 fai-setup-storage
 fio
 gdisk
-hdparm
 iotop
 lsscsi
-lvm2
-mdadm
 mpt-status
 multipath-tools
 nocache
@@ -132,7 +127,6 @@ xorriso
 cdebootstrap
 crosshurd
 debootstrap
-grml-debootstrap
 kexec-tools
 rinse
 
@@ -269,7 +263,6 @@ binutils
 buffer
 coreutils
 diffutils
-grml-etc-core
 mawk
 mc
 patch
@@ -325,7 +318,6 @@ acpi-support
 cmospwd
 cpufrequtils
 cpuid
-dmidecode
 irqbalance
 lm-sensors
 lshw
