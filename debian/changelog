@@ -1,3 +1,14 @@
+grml-live (0.30.1) unstable; urgency=medium
+
+  [ Antoine Beaupré ]
+  * Software related changes:
+    - [0063d2f] SW: add stressant package to GRML_FULL
+
+  [ Michael Prokop ]
+  * [4cd6571] Bump Standards-Version to 4.0.1
+
+ -- Michael Prokop <mika@grml.org>  Thu, 17 Aug 2017 15:08:27 +0200
+
 grml-live (0.30.0) unstable; urgency=medium
 
   [ Michael Prokop ]
