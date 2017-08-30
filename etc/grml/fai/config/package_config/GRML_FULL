@@ -172,12 +172,14 @@ libteam-utils
 lrzsz
 mosh
 mtr-tiny
+ndisc6
 net-tools
 netbase
 netcat-openbsd
 nethogs
 netsniff-ng
 nmap
+rdnssd
 rfkill
 ser2net
 sipcalc

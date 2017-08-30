@@ -54,6 +54,7 @@ memtester
 mount
 mtools
 mtr-tiny
+ndisc6
 netbase
 netcat-openbsd
 net-tools
@@ -67,6 +68,7 @@ ppp
 pppoeconf
 procps
 psmisc
+rdnssd
 reiserfsprogs
 rfkill
 rpcbind
