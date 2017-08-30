@@ -202,7 +202,7 @@ Specify name of the release.
 
 Specify the Debian suite you want to use for your live-system. If unset defaults
 to "testing". Supported values are: stable, testing, unstable (or their
-corresponding release names like "jessie"). Please be aware that recent Debian
+corresponding release names like "stretch"). Please be aware that recent Debian
 suites might require a recent base.tgz
 (${GRML_FAI_CONFIG}/config/basefiles/$CLASSNAME.tar.gz) or a recent version of
 debootstrap.
@@ -517,9 +517,9 @@ The easiest way to get a running grml-live setup is to just use Grml.
 Of course using grml-live on a plain, original Debian installation is supported
 as well. So there we go.
 
-What we have: plain, original Debian jessie (8.x).
+What we have: plain, original Debian stretch (9.x).
 
-What we want: build a Grml ISO based on Debian/jessie for the amd64 architecture
+What we want: build a Grml ISO based on Debian/stretch for the amd64 architecture
 using grml-live.
 
 Instructions
@@ -561,7 +561,7 @@ Instructions
   # CHROOT_INSTALL="/etc/grml/fai/chroot_install"
   ## adjust if necessary (defaults to ./grml/):
   ## OUTPUT="/srv/grml-live"
-  FAI_DEBOOTSTRAP="jessie http://ftp.debian.org/debian/"
+  FAI_DEBOOTSTRAP="stretch http://ftp.debian.org/debian/"
   # ARCH="amd64"
   CLASSES="GRMLBASE,GRML_FULL,AMD64"
   EOF
@@ -678,7 +678,7 @@ FAI_DEBOOTSTRAP:
   [...]
   APT_PROXY="http://localhost:3142/"
   [...]
-  FAI_DEBOOTSTRAP="jessie http://localhost:3142/ftp.debian.org/debian jessie main contrib non-free"
+  FAI_DEBOOTSTRAP="stretch http://localhost:3142/ftp.debian.org/debian stretch main contrib non-free"
 
 Make sure apt-cacher-ng is running ('/etc/init.d/apt-cacher-ng restart').
 That's it.  All downloaded files will be cached in /var/cache/apt-cacher-ng then.
@@ -706,7 +706,7 @@ How do I create a base tar.gz (I386.tar.gz or AMD64.tar.gz)
 First of all create the chroot using debootstrap (requires root):
 
   BASECHROOT='/tmp/basefile'  # path where the chroot gets generated
-  SUITE='jessie'              # using the current stable release should always work
+  SUITE='stretch'              # using the current stable release should always work
   debootstrap --exclude=info,tasksel,tasksel-data "$SUITE" "$BASECHROOT" http://ftp.debian.org/debian
   tar -C "$BASECHROOT" --exclude='var/cache/apt/archives/*.deb' -zcf "${SUITE}".tar.gz ./
 
