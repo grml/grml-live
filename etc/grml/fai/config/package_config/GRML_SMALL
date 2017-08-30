@@ -25,6 +25,7 @@ e2fsprogs
 ed
 ethtool
 findutils
+fsarchiver
 gddrescue
 grml-paste
 grml-quickconfig-standard
