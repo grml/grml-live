@@ -1,0 +1,7 @@
+# official debian repository:
+  deb     http://ftp.debian.org/debian/ buster main contrib non-free
+  deb-src http://ftp.debian.org/debian/ buster main contrib non-free
+
+# security updates:
+  deb     http://security.debian.org/ buster/updates main contrib
+  deb-src http://security.debian.org/ buster/updates main contrib
