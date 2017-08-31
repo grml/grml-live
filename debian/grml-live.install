@@ -6,7 +6,9 @@ fonts                       usr/share/grml-live/
 grml-live                   usr/sbin/
 remaster/grml-live-remaster usr/sbin/
 scripts                     usr/share/grml-live/
+templates/EFI               usr/share/grml-live/templates/
 templates/GRML              usr/share/grml-live/templates/
 templates/boot/grub         usr/share/grml-live/templates/boot/
 templates/boot/isolinux     usr/share/grml-live/templates/boot/
+templates/secureboot        usr/share/grml-live/templates/
 templates/windows           usr/share/grml-live/templates/
