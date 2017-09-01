@@ -512,6 +512,14 @@ config_kernel(){
 
 # {{{ secure boot
 config_secureboot(){
+  # systemd does this for us, but if we are not running under systemd then mokutil
+  # doesn't work as needed as it relies on /sys/firmware/efi/efivars (while
+  # /sys/firmware/efi/vars would exist)
+  if ! $SYSTEMD ; then
+    modprobe efivars
+    mount -t efivars efivarfs /sys/firmware/efi/efivars
+  fi
+
   if [ -x /usr/bin/mokutil ] ; then
     local secstate=$(mokutil --sb-state 2>/dev/null) # "SecureBoot enabled"
     if [ -n "$secstate" ] ; then
