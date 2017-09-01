@@ -1,3 +1,11 @@
+grml-autoconfig (0.16.0) grml-testing; urgency=medium
+
+  * [71e0695] Make sure mokutil reports actual Secure Boot status even if
+    not running under systemd
+  * [bbd1224] Bump Standards-Version to 4.0.1
+
+ -- Michael Prokop <mika@grml.org>  Fri, 01 Sep 2017 17:51:56 +0200
+
 grml-autoconfig (0.15.9) grml-testing; urgency=medium
 
   * [eedf0cb] startx: share selected window manager via /var/run/grml-x
