@@ -7,6 +7,7 @@ bash
 binutils
 bridge-utils
 bsdmainutils
+btrfs-progs
 buffer
 chntpw
 coreutils
