@@ -1,3 +1,33 @@
+grml-live (0.31.0) unstable; urgency=medium
+
+  The "¡hola!, Secure Boot" release
+
+  * [0fbd7ed] No longer ship mkdebmirror example script
+  * Software related changes:
+    - [570d1b6] add fsarchiver to GRML_SMALL. Thanks to Marcos Mello for
+      the suggestion
+    - [88d2f6d] add ndisc6 + rdnssd to GRML_SMALL and GRML_FULL. Thanks
+      to Marc Haber for the suggestion
+    - [ad58f50] add whois to GRML_SMALL. Thanks to Marc Haber for the
+      suggestion
+    - [c965d94] add btrfs-progs to GRML_SMALL
+  * [40b0557] Provide workaround for systemd's systemctl failures on
+    jessie
+  * [9accc79] Provide jessie support for systemd + recent kernel packages
+  * [9612f61] Drop support for Debian wheezy
+  * [8c054a5] Add support for Debian buster (AKA Debian v10 and current
+    Detian testing)
+  * [dc6cf5e] Use stretch instead of jessie for current defaults in docs +
+    grml-live config file
+  * [332ae52] Secure Boot support. Thanks to Michael Schierl
+    <schierlm@gmx.de> for help regarding the Secure Boot setup
+  * [4b8bb30] Secure Boot GRUB template: be more dynamic + don't overwrite
+    with empty variable
+  * [54f1911] scripts/generate_netboot_package.sh: use net.ifnames=0 as
+    default boot option
+
+ -- Michael Prokop <mika@grml.org>  Thu, 07 Sep 2017 09:28:47 +0200
+
 grml-live (0.30.1) unstable; urgency=medium
 
   [ Antoine Beaupré ]
