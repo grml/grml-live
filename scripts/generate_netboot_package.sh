@@ -43,7 +43,7 @@ cat > "${WORKING_DIR}/pxelinux.cfg/default" << EOF
 default grml
 label grml
   kernel vmlinuz
-  append initrd=initrd.img root=/dev/nfs rw nfsroot=192.168.0.1:/live/image boot=live apm=power-off quiet nomce noprompt noeject vga=791 
+  append initrd=initrd.img root=/dev/nfs rw nfsroot=192.168.0.1:/live/image boot=live apm=power-off quiet nomce noprompt noeject vga=791 net.ifnames=0 
 EOF
 
 if tar -C "$OUTPUTDIR" -acf "${OUTPUT_FILE}" "grml_netboot_package_${GRML_VERSION}" ; then
