@@ -1,3 +1,10 @@
+grml-autoconfig (0.16.1) grml-testing; urgency=medium
+
+  * [5e3222d] For access to efivars filesystem it needs to be of type
+    efivarfs
+
+ -- Michael Prokop <mika@grml.org>  Thu, 07 Sep 2017 14:30:05 +0200
+
 grml-autoconfig (0.16.0) grml-testing; urgency=medium
 
   * [71e0695] Make sure mokutil reports actual Secure Boot status even if
