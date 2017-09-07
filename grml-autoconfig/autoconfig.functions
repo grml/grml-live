@@ -517,7 +517,7 @@ config_secureboot(){
   # /sys/firmware/efi/vars would exist)
   if ! $SYSTEMD ; then
     modprobe efivars
-    mount -t efivars efivarfs /sys/firmware/efi/efivars
+    mount -t efivarfs efivarfs /sys/firmware/efi/efivars
   fi
 
   if [ -x /usr/bin/mokutil ] ; then
