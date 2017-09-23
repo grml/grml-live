@@ -3,7 +3,7 @@
 70 Grml configuration options                                                    
  ==========================                                                    
                                                                                
-  myconfig=/dev/ice    -> search for config.tbz and grml.sh on specifed device 
+  myconfig=/dev/ice   -> search for config.tbz and grml.sh on specified device 
   extract=/directory   -> extract only provided directory of config archive    
   netconfig=server.tld/path/to/config.tbz -> download specified archive and    
                                              extract it                        

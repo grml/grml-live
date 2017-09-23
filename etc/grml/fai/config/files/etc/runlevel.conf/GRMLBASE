@@ -11,7 +11,7 @@
 # save-config mechanism, as init takes place (and reads the file
 # /etc/runlevel.conf) before restore-config can be executed at all.
 # If you want to customize the Grml boot sequence please either
-# remaster the Grml ISO or (much simplier) just add your personal
+# remaster the Grml ISO or (much simpler) just add your personal
 # stuff to the /etc/init.d/bootlocal.* scripts!
 ############################################################################
 # Format:

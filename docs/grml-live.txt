@@ -451,7 +451,7 @@ installation process.
 Directory with lists of software packages to be installed or removed.  The
 different classes describe what should find its way to your ISO.  When running
 "grml-live -c GRMLBASE,GRML_SMALL,AMD64 ..." only the configuration of GRMLBASE,
-GRML_SMALL and and AMD64 will be taken. If you use 'grml-live -c
+GRML_SMALL and AMD64 will be taken. If you use 'grml-live -c
 GRMLBASE,GRML_SMALL,AMD64,FOOBAR ...' then the files of GRMLBASE, GRML_SMALL,
 AMD64 **plus** the files from FOOBAR will be taken. So just create a new class to
 adjust the package selection according to your needs.  Please notice that the
