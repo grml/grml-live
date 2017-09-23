@@ -68,7 +68,7 @@ einfo "Starting firewall."
   $IPTABLES -A INPUT -s 0.0.0.0 -d 255.255.255.255 -j DROP
 
 # AUTH server: Reject ident probes with a tcp reset.
-# This may be usefull for a broken mailhost that won't accept the
+# This may be useful for a broken mailhost that won't accept the
 # mails if you just drop its ident probe.
 # $IPTABLES -A INPUT -i $IFACE -p tcp --dport 113 -j REJECT --reject-with tcp-reset
 
