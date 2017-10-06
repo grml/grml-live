@@ -1,3 +1,12 @@
+grml-autoconfig (0.17.0) grml-testing; urgency=medium
+
+  * [5ee166c] Add x11vnc to Recommends
+  * [2b4bfb7] Never start systemd services in background. Thanks to Leo
+    Bergolth for the bugreport
+  * [8f1b13c] Bump Standards-Version to 4.1.1
+
+ -- Michael Prokop <mika@grml.org>  Fri, 06 Oct 2017 13:46:03 +0200
+
 grml-autoconfig (0.16.1) grml-testing; urgency=medium
 
   * [5e3222d] For access to efivars filesystem it needs to be of type
