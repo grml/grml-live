@@ -40,7 +40,8 @@ Recommends: acpi-support,
             grml-debootstrap (>= 0.7),
             hwinfo,
             locales,
-            mdadm
+            mdadm,
+            x11vnc
 Description: main bootup process of a Grml (based) system
  grml-autoconfig is the main part of the bootup process of the
  grml system. This includes the hardware recognition system and
