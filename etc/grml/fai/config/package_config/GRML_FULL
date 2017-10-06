@@ -305,6 +305,7 @@ wget
 fluxbox
 grml-desktop
 grml-x
+x11vnc
 xauth
 xcursor-themes
 xfonts-75dpi
