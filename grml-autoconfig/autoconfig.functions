@@ -31,17 +31,22 @@ fi
 
 service_wrapper() {
   if [ "$#" -lt 2 ] ; then
-    echo "Usage: service_wrapper <service> <action>" >&2
+    echo "Usage: service_wrapper <service> <action> [background]" >&2
     return 1
   fi
 
   local service="$1"
   local action="$2"
+  local background="$3"
 
   if $SYSTEMD ; then
     systemctl "$action" "$service"
   else
-    /etc/init.d/"$service" "$action"
+    if [ "${background:-}" = "background" ] ; then
+      /etc/init.d/"$service" "$action" &
+    else
+      /etc/init.d/"$service" "$action"
+    fi
   fi
 }
 
@@ -970,7 +975,7 @@ if checkbootparam 'ssh' ; then
 
    einfo "Starting secure shell server in background for root and user $localuser"
    service_wrapper rmnologin start >>$DEBUG 2>>$DEBUG
-   service_wrapper ssh start >>$DEBUG 2>>$DEBUG &
+   service_wrapper ssh start background >>$DEBUG 2>>$DEBUG
    eend $?
 
 fi
@@ -1199,7 +1204,7 @@ config_syslog(){
     ewarn "Not starting syslog daemon as requested on boot commandline." ; eend 0
  else
     einfo "Starting rsyslog in background."
-    service_wrapper rsyslog start >>$DEBUG &
+    service_wrapper rsyslog start >>$DEBUG
     eend 0
  fi
 }
@@ -1214,8 +1219,7 @@ config_gpm(){
       eerror "No mouse found - not starting GPM." ; eend 1
     else
       einfo "Starting gpm in background."
-      service_wrapper gpm start >>$DEBUG &
-      # ( while [ ! -e /dev/psaux ]; do sleep 5; done; /etc/init.d/gpm start >>$DEBUG ) &
+      service_wrapper gpm start background >>$DEBUG
       eend 0
     fi
   fi
@@ -1236,7 +1240,7 @@ config_services(){
         service_wrapper "${service}" start >>$DEBUG
       else
         einfo "Starting service ${service} in background."
-        service_wrapper "${service}" start >>$DEBUG &
+        service_wrapper "${service}" start background >>$DEBUG
       fi
     done
     eend $?
