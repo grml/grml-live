@@ -41,6 +41,7 @@ isc-dhcp-client
 iw
 jfsutils
 kexec-tools
+ldnsutils
 lftp
 libnss-myhostname
 lilo
