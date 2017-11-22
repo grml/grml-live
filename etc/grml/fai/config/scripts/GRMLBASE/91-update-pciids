@@ -33,8 +33,8 @@ bailout() {
 
 [ -x $target/usr/bin/timeout ] && TIMEOUT="10" || TIMEOUT=""
 
-if ! [ -x $target/usr/bin/update-pciids ] ; then
-  echo "Warning: update-pciids not installed"
+if ! [ -x "${target}/usr/sbin/update-pciids" ] && ! [ -x "${target}/usr/bin/update-pciids" ] ; then
+  echo "Warning: update-pciids not installed (neither /usr/sbin/update-pciids nor /usr/bin/update-pciids exists"
   exit 0
 fi
 
