@@ -16,8 +16,8 @@ set -e
 
 [ -x $target/usr/bin/timeout ] && TIMEOUT="10" || TIMEOUT=""
 
-if ! [ -x $target/usr/bin/update-usbids ] ; then
-  echo "Warning: update-usbids not installed"
+if ! [ -x "${target}/usr/sbin/update-usbids" ] && ! [ -x "${target}/usr/bin/update-usbids" ] ; then
+  echo "Warning: update-usbids not installed (neither /usr/sbin/update-usbids nor /usr/bin/update-usbids exists)"
   exit 0
 fi
 
