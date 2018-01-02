@@ -8,8 +8,8 @@ After=rc-local.service
 [Service]
 ExecStart=/etc/init.d/grml-autoconfig
 Type=oneshot
+StandardInput=tty
 StandardOutput=tty
-StandardError=journal+console
 
 [Install]
 WantedBy=grml-boot.target
