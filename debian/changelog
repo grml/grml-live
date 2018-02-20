@@ -1,3 +1,23 @@
+grml-live (0.31.1) unstable; urgency=medium
+
+  * [81d68fd] Fix a bunch of typos
+  * Software related changes:
+    - [7c6e289] add x11vnc to GRML_FULL to properly support vnc boot
+      option. Thanks to luke2261git for the bugreport
+    - [38c0449] add ldnsutils to GRML_SMALL
+  * [d473b06] Generate empty /lib/udev/rules.d/69-lvm-metad.rules instead
+    of removing the file
+  * [66b3d05] GRMLBASE/52-mdadm: fix path for 64-md-raid-assembly.rules
+  * [3ddb937] GRMLBASE/91-update-pciids: test for new update-pciids
+    location in /usr/sbin
+  * [1b8b36a] GRMLBASE/93-update-usbids: test for new update-usbids
+    location in /usr/sbin
+  * [e23b03b] ssh service: set RuntimeDirectory=sshd to work with recent
+    openssh versions. Thanks to Darshaka Pathirana <dpat@grml.org> for
+    feedback
+
+ -- Michael Prokop <mika@grml.org>  Tue, 20 Feb 2018 17:57:24 +0100
+
 grml-live (0.31.0) unstable; urgency=medium
 
   The "¡hola!, Secure Boot" release
