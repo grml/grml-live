@@ -80,11 +80,5 @@ if [ -n "${WAYBACK_DATE:-}" ] ; then
     "${target}/etc/apt/sources.list.d/debian.list"
 fi
 
-if ! $ROOTCMD test -x /usr/bin/aptitude ; then
-  echo "aptitude binary is not available, installing to make sure further FAI actions continue to work"
-  $ROOTCMD apt-get update
-  $ROOTCMD apt-get -y install aptitude
-fi
-
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
