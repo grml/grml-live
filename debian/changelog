@@ -1,3 +1,17 @@
+grml-live (0.31.2) unstable; urgency=medium
+
+  * [3900f5d] GRMLBASE/98-clean-chroot: execute resolvconf workarounds
+    also for systemd. Thanks to András Korn
+  * Software related changes:
+    - [01295b2] drop apt-transport-https from GRMLBASE
+    - [e02aee4] replace iproute with iproute2
+  * [1a823a1] Replace /etc/apt/grml.key with /etc/apt/trusted.gpg.d/grml-
+    archive-keyring.gpg. Thanks to Antoine Beaupré <anarcat@debian.org>
+    for a related PR against grml-debian-keyring
+  * [56d4377] updatebase.GRMLBASE: no longer install aptitude
+
+ -- Michael Prokop <mika@grml.org>  Fri, 27 Apr 2018 11:52:54 +0200
+
 grml-live (0.31.1) unstable; urgency=medium
 
   * [81d68fd] Fix a bunch of typos
