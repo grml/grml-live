@@ -159,7 +159,7 @@ ifupdown
 ipcalc
 iperf
 ipmitool
-iproute
+iproute2
 iptraf-ng
 iptstate
 iputils-arping

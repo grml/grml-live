@@ -34,7 +34,7 @@ htop
 ifenslave
 ifupdown
 imvirt
-iproute
+iproute2
 iptstate
 iputils-ping
 isc-dhcp-client
