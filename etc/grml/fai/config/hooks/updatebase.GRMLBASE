@@ -80,9 +80,6 @@ if [ -n "${WAYBACK_DATE:-}" ] ; then
     "${target}/etc/apt/sources.list.d/debian.list"
 fi
 
-# install Grml gpg key:
-$ROOTCMD apt-key add /etc/apt/grml.key
-
 if ! $ROOTCMD test -x /usr/bin/aptitude ; then
   echo "aptitude binary is not available, installing to make sure further FAI actions continue to work"
   $ROOTCMD apt-get update
