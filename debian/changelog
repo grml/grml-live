@@ -1,3 +1,11 @@
+grml-autoconfig (0.17.2) grml-testing; urgency=medium
+
+  * [5b6b38a] Improve VM detection when running inside recent versions of
+    VirtualBox. Thanks to Martin Besser for the bugreport and providing
+    the relevant output
+
+ -- Michael Prokop <mika@grml.org>  Fri, 11 May 2018 09:13:56 +0200
+
 grml-autoconfig (0.17.1) grml-testing; urgency=medium
 
   [ Marcos Mello ]
