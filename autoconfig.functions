@@ -188,11 +188,15 @@ VMWARE=false
 
 if vmware-detect &>/dev/null; then
   VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware'
-elif [ "$(virt-what 2>/dev/null)" = "kvm" ] || \
-   [ "$(imvirt 2>/dev/null)" = "KVM" ] ; then
+fi
+
+if virt-what 2>/dev/null | grep -q 'kvm' || \
+  [ "$(imvirt 2>/dev/null)" = "KVM" ] ; then
   VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM'
-elif [ "$(virt-what 2>/dev/null)" = "virtualbox" ] || \
-   [ "$(imvirt 2>/dev/null)" = "VirtualBox" ] ; then
+fi
+
+if virt-what 2>/dev/null | grep -q 'virtualbox' || \
+  [ "$(imvirt 2>/dev/null)" = "VirtualBox" ] ; then
   VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox'
 fi
 # }}}
