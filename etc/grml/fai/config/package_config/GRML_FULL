@@ -250,6 +250,7 @@ dirvish
 dump
 duplicity
 fsarchiver
+restic
 
 # compressions for backup/restore
 lzop
