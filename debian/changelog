@@ -1,3 +1,22 @@
+grml-live (0.31.3) unstable; urgency=medium
+
+  [ Marcos Mello ]
+  * [3234a4f] Do not handle lid switch
+
+  [ Markus Lindberg ]
+  * [9074f05] Use stretch-backports instead of jessie-backports for stable
+
+  [ Michael Prokop ]
+  * Software related changes:
+    - [27c4635] add restic
+  * [2414a38] Bump Standards-Version to 4.1.4
+
+  [ Marc Haber ]
+  * [780493c] add placeholder and explanation inviting local patches to
+    isolinux.cfg
+
+ -- Michael Prokop <mika@grml.org>  Fri, 25 May 2018 13:58:57 +0200
+
 grml-live (0.31.2) unstable; urgency=medium
 
   * [3900f5d] GRMLBASE/98-clean-chroot: execute resolvconf workarounds
