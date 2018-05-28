@@ -1,7 +1,7 @@
 grml-live: executable-not-elf-or-script usr/share/grml-live/templates/windows/autostart/autorun.inf
 grml-live: extra-license-file usr/share/grml-live/templates/GRML/LICENSE.txt
 grml-live: font-in-non-font-package usr/share/grml-live/fonts/graphicoreBitmapFont0-Light.otf
-grml-live: privacy-breach-generic usr/share/grml-live/templates/GRML/index.html (http://grml.org/)
+grml-live: privacy-breach-generic usr/share/grml-live/templates/GRML/index.html (https://grml.org/)
 grml-live: script-not-executable usr/share/grml-live/scripts/bootgrub.mksh
 grml-live: script-not-executable usr/share/grml-live/scripts/bootilnx.mksh
 grml-live: unknown-section grml

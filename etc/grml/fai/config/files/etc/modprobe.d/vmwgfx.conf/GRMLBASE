@@ -5,7 +5,7 @@
 # Filename:      /etc/modprobe.d/vmwgfx.conf
 # Purpose:       Enable vmwgfx fbdev for the drm driver for the VMware SVGA device
 # Authors:       grml-team (grml.org),
-# Bug-Reports:   see http://grml.org/bugs/
+# Bug-Reports:   see https://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 

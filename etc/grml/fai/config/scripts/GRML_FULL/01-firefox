@@ -2,7 +2,7 @@
 # Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRML_FULL/01-firefox
 # Purpose:       set startpage of Firefox and further configuration defaults
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
-# Bug-Reports:   see http://grml.org/bugs/
+# Bug-Reports:   see https://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 

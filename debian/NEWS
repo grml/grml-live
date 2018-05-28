@@ -101,12 +101,12 @@ grml-live (0.9.4) unstable; urgency=low
   squashfs-tools and kernel" in the grml-live docs, being
   shipped with this package as manpage grml-live(8) and
   /usr/share/doc/grml-live/grml-live.html and being available
-  online at http://grml.org/grml-live/#current_state as well.
+  online at https://grml.org/grml-live/#current_state as well.
 
   grml migrated from Mercurial (hg) to Git as version control
   system. If you are interested in using very recent grml-live
   versions from our VCS please make sure to check out the docs.
-  http://git.grml.org/?p=grml-live.git
+  https://git.grml.org/?p=grml-live.git
 
  -- Michael Prokop <mika@grml.org>  Tue, 30 Sep 2008 13:12:07 +0200
 
@@ -126,7 +126,7 @@ grml-live (0.9) unstable; urgency=low
   squashfs-tools and kernel" in the grml-live docs, being
   shipped with this package as manpage grml-live(8) and
   /usr/share/doc/grml-live/grml-live.html and being available
-  online at http://grml.org/grml-live/#current_state as well.
+  online at https://grml.org/grml-live/#current_state as well.
 
  -- Michael Prokop <mika@grml.org>  Fri, 22 Aug 2008 08:32:44 +0200
 

@@ -5,7 +5,7 @@
 # Filename:      /etc/modprobe.d/modesetting.conf
 # Purpose:       Disable cirrus modesetting due to https://bugs.debian.org/768157
 # Authors:       grml-team (grml.org),
-# Bug-Reports:   see http://grml.org/bugs/
+# Bug-Reports:   see https://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 

@@ -6,7 +6,7 @@
 # Purpose:       Enable partitions for loop devices per default in Grml
 # Authors:       grml-team (grml.org),
 #                (c) Ulrich Dangel <mru@grml.org>
-# Bug-Reports:   see http://grml.org/bugs/
+# Bug-Reports:   see https://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 

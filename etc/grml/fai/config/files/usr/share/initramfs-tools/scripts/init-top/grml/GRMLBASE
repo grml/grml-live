@@ -8,7 +8,7 @@
 # Purpose:       Early boot progress handler
 # Authors:       grml-team (grml.org),
 #                (c) Michael Prokop <mika@grml.org>
-# Bug-Reports:   see http://grml.org/bugs/
+# Bug-Reports:   see https://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
@@ -146,7 +146,7 @@ ${YELLOW} | |  _ | / /|     || |
 ${YELLOW} | |_| ||  / | | | || |
 ${YELLOW}  \____||_|  |_|_|_||_|
 
-${WHITE}Grml Live Linux - http://grml.org/${NORMAL}"
+${WHITE}Grml Live Linux - https://grml.org/${NORMAL}"
 fi
 
 echo ""

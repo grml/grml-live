@@ -2,7 +2,7 @@
 # Filename:      repodiff.pl
 # Purpose:       compare the available packages from two different repositories
 # Authors:       grml-team (grml.org), (c) Alexander Wirt <formorer@grml.org>
-# Bug-Reports:   see http://grml.org/bugs/
+# Bug-Reports:   see https://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 # Notice: adjust $c_file[12] according to your needs, by default the script

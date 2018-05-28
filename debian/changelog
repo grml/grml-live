@@ -2792,7 +2792,7 @@ grml-live (0.9.21) unstable; urgency=low
       operating on it.
     - buildd: drop GRML_LIVE_ARCH but instead use default architecture
       if not specified.
-    - Set UTC=no by default. See http://bts.grml.org/grml/issue708 for
+    - Set UTC=no by default. See https://bts.grml.org/grml/issue708 for
       details. Credits to Ulrich Zehl for debugging. [Closes: issue708]
     - Improve check for architecture which should be build: if not specified
       assume a safe default and check this one.
@@ -3826,7 +3826,7 @@ grml-live (0.0.7) unstable; urgency=low
     be used manually only if you realy know what you are doing.
     Notice: if something fails inside building the base chroot/
     debootstrap system we can't do anything via grml-live for you
-    right now. Instead grab the base.tgz from http://daily.grml.org/
+    right now. Instead grab the base.tgz from https://daily.grml.org/
   * Add /usr/share/grml-live/scripts/repodiff.pl (by formorer, thx!)
     for comparing two repositories.
   * Replaced /etc/grml/fai/files/etc/apt/preferences

@@ -2,7 +2,7 @@
 # Filename:      scripts/release_helper.sh
 # Purpose:       helper script to build grml-live Debian packages
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
-# Bug-Reports:   see http://grml.org/bugs/
+# Bug-Reports:   see https://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
@@ -39,7 +39,7 @@ if [ -n "${AUTOBUILD:-}" ] ; then
 grml-live (${GRML_LIVE_VERSION}+autobuild${UNIXTIME}) UNRELEASED; urgency=low
 
   * Automatically built package based on the state of
-    git repository at http://git.grml.org/?p=grml-live.git
+    git repository at https://git.grml.org/?p=grml-live.git
     on $DATE ->
 
     $(git log --format=oneline -1)

@@ -10,7 +10,7 @@ third-party programs included on this CD. Check
 of each software package carefully for more information.
 
 Information regarding the sources of this ISO can be found at
-http://sources.grml.org/
+https://sources.grml.org/
 ==================================================================
 
 		    GNU GENERAL PUBLIC LICENSE

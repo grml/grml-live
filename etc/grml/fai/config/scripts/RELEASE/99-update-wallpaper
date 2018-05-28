@@ -2,7 +2,7 @@
 # Filename:      ${GRML_FAI_CONFIG}/config/scripts/RELEASE/99-update-wallpaper
 # Purpose:       Update the grml wallpaper
 # Authors:       grml-team (grml.org)
-# Bug-Reports:   see http://grml.org/bugs/
+# Bug-Reports:   see https://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 

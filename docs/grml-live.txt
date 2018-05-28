@@ -542,7 +542,7 @@ Instructions
   apt-get --allow-unauthenticated install grml-debian-keyring
 
   # optionally(!) install basefile so we don't have to build basic
-  # chroot from scratch, grab from http://daily.grml.org/
+  # chroot from scratch, grab from https://daily.grml.org/
   # mkdir -p /etc/grml/fai/config/basefiles/
   # mv I386.tar.gz /etc/grml/fai/config/basefiles/
   # mv AMD64.tar.gz /etc/grml/fai/config/basefiles/
@@ -825,19 +825,19 @@ link:https://github.com/grml/grml-live/[https://github.com/grml/grml-live/]
 Bugs
 ----
 
-Please report feedback, link:http://grml.org/bugs/[bugreports] and wishes
-link:http://grml.org/contact/[to the Grml team]!
+Please report feedback, link:https://grml.org/bugs/[bugreports] and wishes
+link:https://grml.org/contact/[to the Grml team]!
 
 [[documentation]]
 Documentation
 -------------
 
 The most recent grml-live documentation is available online at
-http://grml.org/grml-live/ and for offline reading also available
+https://grml.org/grml-live/ and for offline reading also available
 in different formats:
 
-* http://grml.org/grml-live/grml-live.epub
-* http://grml.org/grml-live/grml-live.pdf
+* https://grml.org/grml-live/grml-live.epub
+* https://grml.org/grml-live/grml-live.pdf
 
 [[authors]]
 Authors

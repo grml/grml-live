@@ -4,7 +4,7 @@
 # Filename:      startpage.html
 # Purpose:       information page on Grml
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
-# Bug-Reports:   see http://grml.org/bugs/
+# Bug-Reports:   see https://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
 ################################################################################
 -->
@@ -48,13 +48,13 @@ pressing 'H' brings you to the help of w3m.  Press 'Q' for exiting w3m, links
 and xlinks2.</p>
 
 <p><strong>Note:</strong> If you find bugs, please <a
-href="http://grml.org/bugs/">report them</a>!  Thank you for helping
+href="https://grml.org/bugs/">report them</a>!  Thank you for helping
 us to improve Grml!</p>
 
 <h2>Overview</h2>
 
 <p>Find the package list of installed software at <a
-  href="http://grml.org/files/">grml.org/files/</a>.</p>
+  href="https://grml.org/files/">grml.org/files/</a>.</p>
 
 <h2>Quickstart</h2>
 
@@ -65,16 +65,16 @@ us to improve Grml!</p>
 
 <h2>Online resources</h2>
 
-<p>Subscribe to <a href="http://grml.org/mailinglist/">the Grml mailinglist</a> and join #grml on irc.freenode.net!</p>
+<p>Subscribe to <a href="https://grml.org/mailinglist/">the Grml mailinglist</a> and join #grml on irc.freenode.net!</p>
 
 <ul>
-  <li><a href="http://grml.org/">grml.org</a></li>
-  <li><a href="http://grml.org/news/">news @ grml.org</a></li>
-  <li><a href="http://grml.org/faq/">faq @ grml.org</a></li>
-  <li><a href="http://grml.org/docs/">docs @ grml.org</a></li>
-  <li><a href="http://grml.org/bugs/">bugs @ grml.org</a></li>
-  <li><a href="http://grml.org/zsh/">zsh @ grml.org</a></li>
-  <li><a href="http://grml.org/contact/">contact the grml-team</a></li>
+  <li><a href="https://grml.org/">grml.org</a></li>
+  <li><a href="https://grml.org/news/">news @ grml.org</a></li>
+  <li><a href="https://grml.org/faq/">faq @ grml.org</a></li>
+  <li><a href="https://grml.org/docs/">docs @ grml.org</a></li>
+  <li><a href="https://grml.org/bugs/">bugs @ grml.org</a></li>
+  <li><a href="https://grml.org/zsh/">zsh @ grml.org</a></li>
+  <li><a href="https://grml.org/contact/">contact the grml-team</a></li>
   <li><a href="http://www.tldp.org/">Linux Documentation Project</a></li>
 </ul>
 
@@ -83,12 +83,12 @@ us to improve Grml!</p>
 <p>Have fun with Grml!</p>
 </div>
 <div class="copyright">
-&copy; Copyright 2004++ by the <a href="http://grml.org/team/">grml-team</a>.
+&copy; Copyright 2004++ by the <a href="https://grml.org/team/">grml-team</a>.
 </div>
 
 <!-- Piwik --> 
 <script type="text/javascript">
-var pkBaseURL = (("https:" == document.location.protocol) ? "https://stats.grml.org/piwik/" : "http://stats.grml.org/piwik/");
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://stats.grml.org/piwik/" : "https://stats.grml.org/piwik/");
 document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
 </script><script type="text/javascript">
 try {
@@ -96,7 +96,7 @@ var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 5);
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
-</script><noscript><p><img src="http://stats.grml.org/piwik/piwik.php?idsite=5" style="border:0" alt="" /></p></noscript>
+</script><noscript><p><img src="https://stats.grml.org/piwik/piwik.php?idsite=5" style="border:0" alt="" /></p></noscript>
 <!-- End Piwik Tracking Code -->
 </div>
 </body>

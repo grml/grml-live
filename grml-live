@@ -4,7 +4,7 @@
 # Authors:       grml-team (grml.org),
 #                (c) Michael Prokop <mika@grml.org>,
 #                (c) Thorsten Glaser <tg@mirbsd.org>
-# Bug-Reports:   see http://grml.org/bugs/
+# Bug-Reports:   see https://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
@@ -83,9 +83,9 @@ Usage examples:
     $PN -c GRMLBASE,GRML_FULL,AMD64 -s stable -V -r 'grml-ftw'
 
 More details: man grml-live + /usr/share/doc/grml-live/grml-live.html
-              http://grml.org/grml-live/
+              https://grml.org/grml-live/
 
-Please send your bug reports and feedback to the grml-team: http://grml.org/bugs/
+Please send your bug reports and feedback to the grml-team: https://grml.org/bugs/
 "
    [ "$(id -u 2>/dev/null)" != 0 ] && echo "Please notice that this script requires root permissions."
 }
@@ -1390,7 +1390,7 @@ elif [ "$BOOT_METHOD" = "grub2" ] ; then
    BOOT_ARGS="-no-emul-boot -boot-load-size 4 -b boot/grub/toriboot.bin"
 fi
 
-# Work around http://bts.grml.org/grml/issue945
+# Work around https://bts.grml.org/grml/issue945
 if [[ $BOOT_METHOD != isolinux && ($HYBRID_METHOD = isohybrid || $HYBRID_METHOD = manifold) ]]; then
   log   "Setting HYBRID_METHOD to grub2 as hybrid mode does not work with isohybrid yet."
   ewarn "Setting HYBRID_METHOD to grub2 as hybrid mode does not work with isohybrid yet."

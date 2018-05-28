@@ -41,8 +41,8 @@ grml-live-remaster lacks LOTS of error checking code and needs a lot of love.
 Bugs
 ----
 
-Please report feedback, link:http://grml.org/bugs/[bugreports] and wishes
-link:http://grml.org/contact/[to the grml-team]!
+Please report feedback, link:https://grml.org/bugs/[bugreports] and wishes
+link:https://grml.org/contact/[to the grml-team]!
 
 Authors
 -------
