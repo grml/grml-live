@@ -1,3 +1,16 @@
+grml-live (0.32.0) unstable; urgency=medium
+
+  [ Paul Menzel ]
+  * [bc4f026] templates/EFI: use files from Ubuntu 18.04
+
+  [ Michael Prokop ]
+  * [c35a30b] Update GRUB test for Secure Boot support
+  * Software related changes:
+    - [cd5737e] add thin-provisioning-tools to GRML_FULL.
+      Thanks to James Tocknell
+
+ -- Michael Prokop <mika@grml.org>  Fri, 01 Jun 2018 16:15:58 +0200
+
 grml-live (0.31.3) unstable; urgency=medium
 
   [ Marcos Mello ]
