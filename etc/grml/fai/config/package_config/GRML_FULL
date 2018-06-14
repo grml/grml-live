@@ -96,6 +96,7 @@ zile
 acl
 attr
 btrfs-tools
+dislocker
 dosfstools
 e2fsprogs
 exfat-fuse
