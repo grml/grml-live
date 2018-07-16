@@ -95,6 +95,7 @@ zile
 # filesystem support
 acl
 attr
+bcache-tools
 btrfs-tools
 dislocker
 dosfstools
