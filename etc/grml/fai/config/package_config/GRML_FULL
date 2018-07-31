@@ -36,7 +36,6 @@ util-linux
 # basic accessibility
 brltty
 espeakup
-alsa-base
 alsa-utils
 
 # broken userland debugging
