@@ -96,7 +96,7 @@ zile
 acl
 attr
 bcache-tools
-btrfs-tools
+btrfs-progs
 dislocker
 dosfstools
 e2fsprogs
