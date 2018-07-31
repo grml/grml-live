@@ -25,9 +25,5 @@ if [ -r $target/usr/lib/libstdc++-libc6.2-2.so.3 -a -x $target/usr/bin/deborphan
    $ROOTCMD deborphan --add-keep libstdc++2.10-glibc2.2 || /bin/true
 fi
 
-if [ -r "$target"/usr/bin/kvm -a -x "$target"/usr/bin/deborphan ] ; then
-   $ROOTCMD deborphan --add-keep qemu-kvm || /bin/true
-fi
-
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

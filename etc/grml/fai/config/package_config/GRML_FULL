@@ -291,7 +291,6 @@ stressant
 imvirt
 open-vm-tools
 qemu-guest-agent
-qemu-kvm
 qemu-system-x86
 qemu-utils
 zerofree
