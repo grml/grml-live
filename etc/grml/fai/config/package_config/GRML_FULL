@@ -136,7 +136,7 @@ rinse
 # iscsi (target) support
 libiscsi-bin
 open-iscsi
-targetcli python-urwid
+targetcli-fb
 tgt
 
 # ata-over-ethernet
