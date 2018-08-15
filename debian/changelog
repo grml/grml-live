@@ -1,3 +1,22 @@
+grml-live (0.32.1) unstable; urgency=medium
+
+  * Software related changes:
+    - [14fe0c7] add qemu-guest-agent to GRML_FULL
+    - [8078724] add dislocker to GRML_FULL. Thanks to f0
+    - [d1dd031] add bcache-tools to GRML_FULL
+    - [1a76a8f] replace btrfs-tools (transitional package) with
+      btrfs-progs in GRML_FULL
+    - [18d72e0] replace lynx-cur (transitional package) with lynx in
+      GRML_FULL
+    - [cafb5e7] drop alsa-base (no longer existing) from GRML_FULL
+    - [b9087a1] replace targetcli + python-urwid with targetcli-fb in
+      GRML_FULL
+    - [8edb3d4] Drop qemu-kvm (qemu-system-x86 being its replacement)
+      from GRML_FULL
+  * [21be832] jessie-backports: use usb-modeswitch from jessie-backports
+
+ -- Michael Prokop <mika@grml.org>  Wed, 15 Aug 2018 11:20:46 +0200
+
 grml-live (0.32.0) unstable; urgency=medium
 
   [ Paul Menzel ]
