@@ -1,5 +1,5 @@
 Explanation: this file was installed by grml-live to allow installation of systemd/udev (required for systemd-container) from backports
-Package: systemd libsystemd0 libpam-systemd libapparmor1 ifupdown systemd-sysv udev libudev1
+Package: systemd libsystemd0 libpam-systemd libapparmor1 ifupdown systemd-sysv udev libudev1 usb-modeswitch
 Pin: release a=jessie-backports
 Pin-Priority: 997
 
