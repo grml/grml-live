@@ -525,8 +525,9 @@ config_secureboot(){
   # doesn't work as needed as it relies on /sys/firmware/efi/efivars (while
   # /sys/firmware/efi/vars would exist)
   if ! $SYSTEMD ; then
-    modprobe efivars
-    mount -t efivarfs efivarfs /sys/firmware/efi/efivars
+    if modprobe efivars &>/dev/null ; then
+      mount -t efivarfs efivarfs /sys/firmware/efi/efivars
+    fi
   fi
 
   if [ -x /usr/bin/mokutil ] ; then
