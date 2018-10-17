@@ -1,3 +1,14 @@
+grml-live (0.32.2) unstable; urgency=medium
+
+  [ Paul Menzel ]
+  * [c0b4d40] templates/EFI: Use newer grubx64 from Ubuntu
+
+  [ Michael Prokop ]
+  * [eaa7b56] EFI/BOOT/README: document file usage
+  * [8c2668b] EFI/BOOT: bring back files from Ubuntu 18.04
+
+ -- Michael Prokop <mika@grml.org>  Wed, 17 Oct 2018 17:23:51 +0200
+
 grml-live (0.32.1) unstable; urgency=medium
 
   * Software related changes:
