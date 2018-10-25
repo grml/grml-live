@@ -318,20 +318,6 @@ config_language(){
 
  [ -r /etc/sysconfig/keyboard ] && . /etc/sysconfig/keyboard
 
- # activate unicode console if running within utf8 environment
- if [ -r /etc/default/locale ] ; then
-    if grep -q "LANG=.*UTF" /etc/default/locale ; then
-       einfo "Setting up unicode environment."
-       unicode_start >>$DEBUG 2>&1 ; eend $?
-    fi
- fi
-
- # Set default keyboard before interactive setup
- if [ -n "$KEYTABLE" ] ; then
-    einfo "Running loadkeys for ${WHITE}${KEYTABLE}${NORMAL} in background"
-    loadkeys -q $KEYTABLE &
-    eend $?
- fi
 
  # we have to set up all consoles, therefore loop it over all ttys:
  NUM_CONSOLES=$(fgconsole --next-available 2>/dev/null)
@@ -384,6 +370,21 @@ config_language(){
           [ "$CUR_CONSOLE" != "serial" ] && chvt $CUR_CONSOLE
        fi
        eend $RC
+    fi
+ fi
+
+ # Set default keyboard before interactive setup
+ if [ -n "$KEYTABLE" ] ; then
+    einfo "Running loadkeys for ${WHITE}${KEYTABLE}${NORMAL} in background"
+    loadkeys -q $KEYTABLE &
+    eend $?
+ fi
+
+ # activate unicode console if running within utf8 environment
+ if [ -r /etc/default/locale ] ; then
+    if grep -q "LANG=.*UTF" /etc/default/locale ; then
+       einfo "Setting up unicode environment."
+       unicode_start ; eend $?
     fi
  fi
 
