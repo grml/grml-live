@@ -29,7 +29,7 @@ Depends: bc,
          rsync,
          squashfs-tools (>= 1:4.2-0~bpo60),
          syslinux,
-         xorriso | genisoimage,
+         xorriso,
          ${misc:Depends}
 Recommends: grml-live-db,
             grub-pc-bin,
