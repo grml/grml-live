@@ -27,9 +27,9 @@ hdt                                 Boot Hardware Detection Tool (from syslinux 
 
 Further documentation regarding the boot process can be found at:
 * http://git.grml.org/?p=live-initramfs-grml.git;a=blob_plain;f=manpages/live-initramfs.en.7.txt;hb=HEAD
-* http://git.grml.org/?p=live-boot-grml.git;a=blob;f=manpages/en/live-boot.7;hb=HEAD
-* http://git.debian.org/?p=kernel/initramfs-tools.git;a=blob_plain;f=initramfs-tools.8;hb=HEAD
-* http://www.kernel.org/doc/Documentation/kernel-parameters.txt
+* https://manpages.debian.org/live-boot-doc/live-boot.7.en.html
+* https://manpages.debian.org/initramfs-tools-core/initramfs-tools.8.en.html
+* https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
 
 The following boot options can be combined.
 Notice: not all of them are available on all the Grml flavours.
