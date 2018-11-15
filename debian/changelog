@@ -1,3 +1,16 @@
+grml-live (0.32.3) unstable; urgency=medium
+
+  [ Darshaka Pathirana ]
+  * [f426365] Update broken links. Thanks to David Prévot
+    <taffit@debian.org> for the report
+  * [3c0d23b] Remove genisoimage from dependencies
+
+  [ Michael Prokop ]
+  * [3dbb47c] Bump Standards-Version to 4.2.1
+  * [ea5050d] Switch Homepage + Vcs-Browser headers from http to https
+
+ -- Michael Prokop <mika@grml.org>  Thu, 15 Nov 2018 10:14:51 +0100
+
 grml-live (0.32.2) unstable; urgency=medium
 
   [ Paul Menzel ]
