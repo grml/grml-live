@@ -1011,6 +1011,26 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       eend $?
     fi
 
+    # every recent Grml ISO ships a /conf/bootid.txt, though GRUB might find
+    # the /conf/bootid.txt of a different (Grml) ISO than the one that's
+    # supposed to be running, so within scripts/GRMLBASE/45-grub-images
+    # we generate a random filename, stored inside /boot/grub/bootfile.txt,
+    # which we place on the resulting ISO here
+    if [ -r "${CHROOT_OUTPUT}"/boot/grub/bootfile.txt ] ; then
+      mkdir -p "${BUILD_OUTPUT}"/conf
+      rm -f "${BUILD_OUTPUT}"/conf/bootfile*  # ensure we don't leave any old(er) files behind
+
+      einfo "Generating "${BUILD_OUTPUT}"/conf/bootfile* files"
+      log   "Generating "${BUILD_OUTPUT}"/conf/bootfile* files"
+
+      # save information about the random filename inside /conf/bootfile.txt
+      echo "/conf/bootfile_$(cat "${CHROOT_OUTPUT}"/boot/grub/bootfile.txt)" > \
+        "${BUILD_OUTPUT}"/conf/bootfile.txt
+      echo "# This file is relevant for GRUB boot with the Grml ISO." > \
+        "${BUILD_OUTPUT}"/conf/bootfile_"$(cat "${CHROOT_OUTPUT}"/boot/grub/bootfile.txt)"
+      eend $?
+    fi
+
     grub_setup
 
     # EFI boot files

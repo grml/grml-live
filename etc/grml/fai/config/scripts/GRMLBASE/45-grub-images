@@ -11,12 +11,17 @@ set -u
 
 TMP_CONFIG="/tmp/grub_config_efi"
 
+# this allows us to find this specific Grml ISO,
+# even if there are multiple Grml ISOs present
+bootfile="${GRML_NAME}_$(TZ=UTC date +%s)"
+echo "$bootfile" > "${target}/"boot/grub/bootfile.txt
+
 cat > "${target}/${TMP_CONFIG}" <<EOF
-search.file /conf/bootid.txt root
+search.file /conf/bootfile_$bootfile root
 set prefix=(\$root)/boot/grub
 insmod normal
 normal
-echo "E: Could not find root device!"
+echo "E: Could not find root device (for /conf/bootfile_$bootfile)!"
 EOF
 
 ARCHS=(i386-pc)
