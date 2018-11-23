@@ -330,6 +330,9 @@ adjust_boot_files() {
       sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/g"    "${file}"
       sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
       sed -i "s/%VERSION%/$VERSION/g"              "${file}"
+      if [ -n "${BOOT_FILE}" ] ; then
+        sed -i "s;%BOOT_FILE%;$BOOT_FILE;g"        "${file}"
+      fi
 
       [ -n "$DEFAULT_BOOTOPTIONS" ] && sed -i "s; boot=live; boot=live $DEFAULT_BOOTOPTIONS;"  "${file}"
 
@@ -1023,11 +1026,10 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       einfo "Generating "${BUILD_OUTPUT}"/conf/bootfile* files"
       log   "Generating "${BUILD_OUTPUT}"/conf/bootfile* files"
 
+      BOOT_FILE="/conf/bootfile_$(cat "${CHROOT_OUTPUT}"/boot/grub/bootfile.txt)"
+      echo "# This file is relevant for GRUB boot with the Grml ISO." > "${BUILD_OUTPUT}/${BOOT_FILE}"
       # save information about the random filename inside /conf/bootfile.txt
-      echo "/conf/bootfile_$(cat "${CHROOT_OUTPUT}"/boot/grub/bootfile.txt)" > \
-        "${BUILD_OUTPUT}"/conf/bootfile.txt
-      echo "# This file is relevant for GRUB boot with the Grml ISO." > \
-        "${BUILD_OUTPUT}"/conf/bootfile_"$(cat "${CHROOT_OUTPUT}"/boot/grub/bootfile.txt)"
+      echo "${BOOT_FILE}" > "${BUILD_OUTPUT}"/conf/bootfile.txt
       eend $?
     fi
 
