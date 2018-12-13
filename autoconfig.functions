@@ -890,62 +890,6 @@ if [[ $(grep -c processor /proc/cpuinfo) -gt 1 ]] ; then
 else
    einfo "Found CPU: `awk -F: '/^processor/{printf " Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG` " ; eend 0
 fi
-
-# no cpufreq setup inside VirtualBox
-if $VIRTUALBOX ; then
-   einfo 'Virtual Box detected, skipping cpufreq setup.' ; eend 0
-   return 0
-fi
-
-if ! [ -x /etc/init.d/loadcpufreq ] ; then
-  ewarn "loadcpufreq init script not available, ignoring cpu frequency scaling."
-  eend 0
-  return 0
-else
-   einfo "Trying to set up cpu frequency scaling:"
-   eindent
-   SKIP_CPU_GOVERNOR=''
-   LOADCPUFREQ=$(mktemp)
-   /etc/init.d/loadcpufreq start >"$LOADCPUFREQ" 2>&1 ; RC=$?
-   if grep -q FATAL "$LOADCPUFREQ" ; then
-      eindent
-        SKIP_CPU_GOVERNOR=1
-        oldIFS="$IFS"
-        IFS=$'\n'
-         for line in $(grep FATAL "$LOADCPUFREQ" | sed 's/.*FATAL: //; s/ (.*)//') ; do
-             eerror "$line" ; eend $RC
-         done
-         IFS="$oldIFS"
-      eoutdent
-   elif grep -q done "$LOADCPUFREQ" ; then
-      MODULE=$(grep done "$LOADCPUFREQ" | sed 's/.*done (\(.*\))./\1/')
-      if [ -n "$MODULE" -a "$MODULE" != none ]; then
-         einfo "Loading cpufreq kernel module $MODULE" ; eend 0
-      else
-         SKIP_CPU_GOVERNOR=1
-         ewarn "Could not find an appropriate kernel module for cpu frequency scaling." ; eend 1
-      fi
-   fi
-
-   rm -f "$LOADCPUFREQ"
-
-   if [ -z "$SKIP_CPU_GOVERNOR" ] ; then
-     if [ -r /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors ] ; then
-       if ! grep -q ondemand /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors ; then
-         einfo "Ondemand governor not available for CPU(s), not modifying governor configuration"
-       else
-         einfo "Setting ondemand governor"
-         RC=0
-         for file in $(find /sys/devices/system/cpu/ -name scaling_governor 2>/dev/null) ; do
-           echo ondemand > $file || RC=1
-         done
-         eend $RC
-       fi
-     fi
-   fi
-
-   eoutdent
-fi
 }
 # }}}
 
