@@ -1,3 +1,18 @@
+grml-live (0.33.0) unstable; urgency=medium
+
+  * [642e1b3] Ensure GRUB finds the running ISO
+  * [05a5a70] GRUB: drop `insmod vbe`
+  * [e995aca] Support BOOT_FILE variable for usage within secureboot
+    templates
+  * [f5455fb] Drop symlink etc/grml/fai/config/config
+  * [421ba62] Rework debian/, following current best practices
+  * Software related changes:
+    - [61b77ff] drop deprecated cpufrequtils (+ drop
+      scripts/GRMLBASE/36-cpufrequtils) Thanks to Michael Biebl
+      for the pointer
+
+ -- Michael Prokop <mika@grml.org>  Thu, 13 Dec 2018 12:37:14 +0100
+
 grml-live (0.32.3) unstable; urgency=medium
 
   [ Darshaka Pathirana ]
