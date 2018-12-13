@@ -4,7 +4,7 @@ Upstream-Contact: Michael Prokop <mika@grml.org>
 Source: https://github.com/grml/grml-live/
 
 Files: *
-Copyright: 2007-2017 Michael Prokop <mika@grml.org>
+Copyright: 2007-2018 Michael Prokop <mika@grml.org>
 License: GPL-2+
 
 Files: fonts/graphicoreBitmapFont0-Light.otf
@@ -26,10 +26,6 @@ Copyright: 2012 Red Hat, Inc
            2009-2012 Intel Corporation
 Comment: /usr/lib/shim/shimx64.efi.signed from http://de.archive.ubuntu.com/ubuntu/pool/main/s/shim-signed/shim-signed_1.32~17.04.1+0.9+1474479173.6c180c6-1ubuntu1_amd64.deb
 License: BSD-2-Clause
-
-License: GPL-2
- On Debian systems the full text of the GNU General Public License can be
- found in the `/usr/share/common-licenses/GPL-2' file.
 
 License: GPL-2+
  On Debian systems the full text of the GNU General Public License can be

@@ -1,8 +1,8 @@
 Source: grml-live
 Section: grml
-Priority: extra
+Priority: optional
 Maintainer: Michael Prokop <mika@grml.org>
-Build-Depends: debhelper (>= 9)
+Build-Depends: debhelper (>= 10)
 Build-Depends-Indep: asciidoc,
                      docbook-xsl,
                      xsltproc

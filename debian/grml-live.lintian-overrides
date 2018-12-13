@@ -1,0 +1,11 @@
+grml-live: bugs-field-does-not-refer-to-debian-infrastructure mailto:bugs@grml.org
+grml-live: executable-not-elf-or-script usr/share/grml-live/templates/windows/autostart/autorun.inf
+grml-live: extra-license-file usr/share/grml-live/templates/GRML/LICENSE.txt
+grml-live: font-in-non-font-package usr/share/grml-live/fonts/graphicoreBitmapFont0-Light.otf
+grml-live: font-outside-font-dir usr/share/grml-live/fonts/graphicoreBitmapFont0-Light.otf
+grml-live: privacy-breach-generic usr/share/grml-live/templates/GRML/index.html [<link rel="home" href="http://grml.org/" title="grml.org" />] (http://grml.org/)
+grml-live: script-not-executable usr/share/grml-live/scripts/bootgrub.mksh
+grml-live: script-not-executable usr/share/grml-live/scripts/bootilnx.mksh
+grml-live: unknown-section grml
+grml-live: uses-dpkg-database-directly etc/grml/fai/config/scripts/GRMLBASE/98-clean-chroot
+grml-live: uses-dpkg-database-directly usr/sbin/grml-live

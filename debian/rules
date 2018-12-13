@@ -1,96 +1,28 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
-# Sample debian/rules that uses debhelper.
-# This file was originally written by Joey Hess and Craig Small.
-# As a special exception, when this file is copied by dh-make into a
-# dh-make output file, you may use that output file without restriction.
-# This special exception was added by Craig Small in version 0.37 of dh-make.
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-b=$(CURDIR)/debian/build
-VERSION:=$(shell dpkg-parsechangelog | awk '/Version: / { print $$2 }')
+include /usr/share/dpkg/pkg-info.mk
 
-build: build-arch build-indep
+%:
+	dh $@
 
-build-arch: build-stamp
+override_dh_binary:
+	dh_binary
 
-build-indep: build-stamp
-
-build-stamp:
-	dh_testdir
+override_dh_install:
 	egrep -q "GRML_LIVE_VERSION=.*UNRELEASED" grml-live || \
 			(echo "Wrong version in grml-live" && exit 2)
+	# build docs
 	cd docs && $(MAKE) && cd ../
-	touch $@
+	# adjust version number inside grml-live executable
+	sed -i -e "s/GRML_LIVE_VERSION='\*\*\*UNRELEASED\*\*\*'/GRML_LIVE_VERSION='$(DEB_VERSION)'/" grml-live
+	find . -name grml-live.8
+	dh_install
 
-clean:
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp
-
-	# Add here commands to clean up after the build process.
-	cd docs && $(MAKE) clean && cd ../
-
-	dh_clean
-	# clean up the stuff dh_clean leaves behind
-	-rm -rf debian/build
-
-install: build
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdirs
-
-grml-live: install
-	@echo "--- Building: $@"
-	dh_installdirs       -p$@ -P$(b)/$@
-	dh_link              -p$@ -P$(b)/$@
-	dh_installdocs       -p$@ -P$(b)/$@
-	dh_installchangelogs -p$@ -P$(b)/$@
-	dh_install           -p$@ -P$(b)/$@
-	sed -i -e "s/GRML_LIVE_VERSION='\*\*\*UNRELEASED\*\*\*'/GRML_LIVE_VERSION='$(VERSION)'/" $(b)/$@/usr/sbin/grml-live
-	dh_strip             -p$@ -P$(b)/$@
-	dh_compress          -p$@ -P$(b)/$@
-	mkdir -p $(b)/$(@)/usr/share/lintian/overrides/
-	cp -av debian/overrides.$(@) $(b)/$(@)/usr/share/lintian/overrides/$(@)
-	dh_fixperms          -p$@ -P$(b)/$@
+override_dh_fixperms:
+	dh_fixperms
 	# make sure they are executable:
-	chmod 755 $(b)/$(@)/etc/grml/fai/config/hooks/*
-	dh_makeshlibs        -p$@ -P$(b)/$@ -V
-	dh_installdeb        -p$@ -P$(b)/$@
-	dh_shlibdeps         -p$@ -P$(b)/$@
-	dh_installdebconf    -p$@ -P$(b)/$@
-	dh_gencontrol        -p$@ -P$(b)/$@
-	dh_md5sums           -p$@ -P$(b)/$@
-	dh_builddeb          -p$@ -P$(b)/$@
-
-grml-live-db: install
-	@echo "--- Building: $@"
-	dh_installdirs       -p$@ -P$(b)/$@
-	dh_link              -p$@ -P$(b)/$@
-	dh_installdocs       -p$@ -P$(b)/$@
-	dh_installchangelogs -p$@ -P$(b)/$@
-	dh_install           -p$@ -P$(b)/$@
-	dh_strip             -p$@ -P$(b)/$@
-	dh_compress          -p$@ -P$(b)/$@
-	mkdir -p $(b)/$(@)/usr/share/lintian/overrides/
-	cp -av debian/overrides.$(@) $(b)/$(@)/usr/share/lintian/overrides/$(@)
-	dh_fixperms          -p$@ -P$(b)/$@
-	dh_makeshlibs        -p$@ -P$(b)/$@ -V
-	dh_installdeb        -p$@ -P$(b)/$@
-	dh_shlibdeps         -p$@ -P$(b)/$@
-	dh_installdebconf    -p$@ -P$(b)/$@
-	dh_gencontrol        -p$@ -P$(b)/$@
-	dh_md5sums           -p$@ -P$(b)/$@
-	dh_builddeb          -p$@ -P$(b)/$@
-
-# Build architecture-dependent files here.
-binary-all: build install
-
-# Build architecture-independent files here.
-binary-indep: build install grml-live grml-live-db
-
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install
+	chmod 755 debian/grml-live/etc/grml/fai/config/hooks/*
