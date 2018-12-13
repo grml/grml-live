@@ -324,7 +324,6 @@ xterm
 acpi
 acpi-support
 cmospwd
-cpufrequtils
 cpuid
 irqbalance
 lm-sensors
