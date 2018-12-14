@@ -1,3 +1,16 @@
+grml-live (0.33.1) unstable; urgency=medium
+
+  [ Darshaka Pathirana ]
+  * [7f304b5] Update cheatcodes to clarify hardware clock and timezone
+    defaults
+
+  [ Michael Prokop ]
+  * [65ee43c] grml-cheatcodes.txt: don't mention "gmt" boot option, "utc"
+    should be used
+  * [9d4f2c5] Disable Secure Boot support by default
+
+ -- Michael Prokop <mika@grml.org>  Fri, 14 Dec 2018 12:21:07 +0100
+
 grml-live (0.33.0) unstable; urgency=medium
 
   * [642e1b3] Ensure GRUB finds the running ISO
