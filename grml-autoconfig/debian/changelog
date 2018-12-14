@@ -1,3 +1,13 @@
+grml-autoconfig (0.18.0) grml-testing; urgency=medium
+
+  * [7da150b] Drop deprecated loadcpufreq/cpufrequtils, no longer
+    relevant. Thanks to Michael Biebl for the pointer
+  * [c779fd0] Ensure haveged is running before ssh service is invoked
+  * [b70487a] brltty: start brltty service instead of invoking
+    /lib/brltty/brltty.sh
+
+ -- Michael Prokop <mika@grml.org>  Fri, 14 Dec 2018 11:27:46 +0100
+
 grml-autoconfig (0.17.4) grml-testing; urgency=medium
 
   * [c820a66] Fix unicode font issue under systemd by ensuring proper
