@@ -40,7 +40,7 @@ Regional settings:
 grml lang=at|de|cn|da|es|fr|it      Specify language ($LANG, $LC_ALL, $LANGUAGE - utf8) + keyboard
 grml lang=nl|pl|ru|sk|tr|tw|us      Specify language ($LANG, $LC_ALL, $LANGUAGE - utf8) + keyboard
 grml lang=$LANG-iso                 Activate $LANG (use like in lines above) with iso-mode instead of utf8
-grml utc|gmt                        Hardware Clock is set to Coordinated Universal Time (UTC)
+grml utc                            Hardware Clock is set to Coordinated Universal Time (UTC)
 grml localtime                      Hardware Clock is set to local time (LOCAL), this is the default
 grml tz=Europe/Vienna               Use specified timezone for TZ, defaults to TZ=UTC
 grml keyboard=us xkeyboard=us       Use different keyboard layout (text-console/X)
