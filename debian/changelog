@@ -1,3 +1,11 @@
+grml-live (0.33.2) unstable; urgency=medium
+
+  [ Darshaka Pathirana ]
+  * [efd2447] Enable serial-getty with root autologin on every given
+    device. Thanks to @MichaelEischer for the bug report
+
+ -- Michael Prokop <mika@grml.org>  Fri, 14 Dec 2018 14:00:05 +0100
+
 grml-live (0.33.1) unstable; urgency=medium
 
   [ Darshaka Pathirana ]
