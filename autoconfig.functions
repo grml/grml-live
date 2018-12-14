@@ -757,7 +757,8 @@ fi
 # {{{ Start brltty
 config_brltty() {
   if checkbootparam 'brltty' ; then
-    [ -x /lib/brltty/brltty.sh ] && /lib/brltty/brltty.sh
+    einfo "Starting brltty service as requested on boot commandline."
+    service_wrapper brltty start ; eend $?
   fi
 }
 # }}}
