@@ -1,2 +1,3 @@
 rm_conffile /etc/grml/fai/config/files/etc/apt/grml.key/GRMLBASE 0.32.3~
 rm_conffile /etc/grml/fai/config/scripts/GRMLBASE/36-cpufrequtils 0.33.0~
+rm_conffile /etc/grml/fai/config/files/etc/systemd/system/serial-getty@ttyS0.service.d/override.conf/GRMLBASE 0.33.2~
