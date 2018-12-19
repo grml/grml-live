@@ -1,3 +1,16 @@
+grml-live (0.33.3) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [f6af226] Drop 'bootchart' from grml-cheatcodes.txt and isolinux
+    labels. Thanks to Darshaka Pathirana for spotting
+  * [18da1ac] Ensure to properly remove deprecated serial-
+    getty@ttyS0.service.d override file
+
+  [ Paul Menzel ]
+  * [ba14525] README.md: Use HTTPS URLs
+
+ -- Michael Prokop <mika@grml.org>  Wed, 19 Dec 2018 10:40:49 +0100
+
 grml-live (0.33.2) unstable; urgency=medium
 
   [ Darshaka Pathirana ]
