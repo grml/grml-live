@@ -3,7 +3,7 @@
 [Unit]
 Description=Grml Live System
 Documentation=man:systemd.special(7)
-Requires=getty.target systemd-user-sessions.service systemd-logind.service basic.target
+Requires=getty.target systemd-user-sessions.service systemd-logind.service basic.target console-setup.service
 Conflicts=rescue.service rescue.target
 After=rescue.service rescue.target
 AllowIsolate=yes

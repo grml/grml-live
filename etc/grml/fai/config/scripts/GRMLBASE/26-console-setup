@@ -1,0 +1,20 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/26-console-setup
+# Purpose:       console-setup (utf8) configuration of the live system
+# Authors:       grml-team (grml.org), (c) Darshaka Pathirana <dpat@syn-net.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+if $ROOTCMD dpkg --list console-setup 2>&1 | grep -q '^ii' ; then
+  if [ -e $target/etc/default/console-setup ]; then
+    $ROOTCMD sed -i -e "s|^ *ACTIVE_CONSOLES=.*|ACTIVE_CONSOLES=\"/dev/tty\{1..12\}\"|" /etc/default/console-setup
+    $ROOTCMD sed -i -e "s|^ *CHARMAP=.*|CHARMAP=\"UTF-8\"|" /etc/default/console-setup
+  fi
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

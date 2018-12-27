@@ -4,6 +4,7 @@
 enable getty@.service
 
 # enable grml-specific services
+enable console-setup.service
 enable gpm.service
 enable grml-autoconfig.service
 enable debug-shell.service
