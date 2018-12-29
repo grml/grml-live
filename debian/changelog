@@ -1,3 +1,11 @@
+grml-live (0.33.4) unstable; urgency=medium
+
+  * [3a05497] Set up Unicode/UTF8 and console fonts via console-setup.
+    Thanks to Michael Schierl (@schierlm) + @qlplq for feedback and
+    Darshaka Pathirana for debugging this and providing a preliminary PR
+
+ -- Michael Prokop <mika@grml.org>  Sat, 29 Dec 2018 16:22:25 +0100
+
 grml-live (0.33.3) unstable; urgency=medium
 
   [ Michael Prokop ]
