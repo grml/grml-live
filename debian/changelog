@@ -1,3 +1,10 @@
+grml-desktop (0.6.0) unstable; urgency=medium
+
+  * [bb946bf] /etc/skel/.xinitrc.d/grml_keyboard: support
+    /etc/default/keyboard usage
+
+ -- Michael Prokop <mika@grml.org>  Sat, 29 Dec 2018 17:11:41 +0100
+
 grml-desktop (0.5.2) unstable; urgency=medium
 
   * [0f3191e] startx: use /var/run/grml-x/window-manager for selection of
