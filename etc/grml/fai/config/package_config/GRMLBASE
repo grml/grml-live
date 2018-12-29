@@ -3,6 +3,7 @@ PACKAGES install
 busybox
 bzip2
 console-data
+console-setup
 dbus
 deborphan
 dmidecode
