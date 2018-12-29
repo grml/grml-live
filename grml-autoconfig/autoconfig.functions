@@ -229,166 +229,190 @@ fi
 ### {{{ language configuration / localization
 config_language(){
 
- einfo "Activating language settings:"
- eindent
+  einfo "Activating language settings:"
+  eindent
 
- # people can specify $LANGUAGE and $CONSOLEFONT in a config file
- [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig
+  # people can specify $LANGUAGE and $CONSOLEFONT in a config file
+  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig
 
- # check for bootoption which overrides config from /etc/grml/autoconfig
- BOOT_LANGUAGE="$(getbootparam 'lang' 2>>$DEBUG)"
- [ -n "$BOOT_LANGUAGE" ] && LANGUAGE="$BOOT_LANGUAGE"
+  # check for bootoption which overrides config from /etc/grml/autoconfig
+  BOOT_LANGUAGE="$(getbootparam 'lang' 2>>$DEBUG)"
+  [ -n "$BOOT_LANGUAGE" ] && LANGUAGE="$BOOT_LANGUAGE"
 
- # set default to 'en' in live-cd mode iff $LANGUAGE is not set yet
- if [ -z "$INSTALLED" ] ; then
+  # set default to 'en' in live-cd mode iff $LANGUAGE is not set yet
+  if [ -z "$INSTALLED" ] ; then
     [ -n "$LANGUAGE" ] || LANGUAGE='en'
- fi
+  fi
 
- if [ -x /usr/sbin/grml-setlang ] ; then
-   # if bootoption lang is used update /etc/default/locale accordingly
-   if [ -n "$BOOT_LANGUAGE" ] ; then
-     /usr/sbin/grml-setlang "$LANGUAGE"
-   # otherwise default to lang=en
-   else
-     /usr/sbin/grml-setlang "en"
-   fi
- fi
-
- # set console font
- if [ -z "$CONSOLEFONT" ] ; then
-    if ! checkbootparam 'nodefaultfont' >>$DEBUG 2>&1 ; then
-       if [ -r /usr/share/consolefonts/Uni3-Terminus16.psf.gz ] ; then
-          CONSOLEFONT='Uni3-Terminus16'
-       else
-          ewarn "/usr/share/consolefonts/Uni3-Terminus16.psf.gz not available. Please upgrade package console-terminus." ; eend 1
-       fi
-       if ! hasfb ; then
-          CONSOLEFONT='Lat15-Terminus16'
-       fi
+  if [ -x /usr/sbin/grml-setlang ] ; then
+    # if bootoption lang is used update /etc/default/locale accordingly
+    if [ -n "$BOOT_LANGUAGE" ] ; then
+      /usr/sbin/grml-setlang "$LANGUAGE"
+      # otherwise default to lang=en
+    else
+      /usr/sbin/grml-setlang "en"
     fi
- fi
+  fi
 
- # export it now, so error messages get translated, too
- [ -r /etc/default/locale ] && . /etc/default/locale
- export LANG LANGUAGE
+  if ! $SYSTEMD ; then
+    # set console font
+    if [ -z "$CONSOLEFONT" ] ; then
+      if ! checkbootparam 'nodefaultfont' >>$DEBUG 2>&1 ; then
+        if [ -r /usr/share/consolefonts/Uni3-Terminus16.psf.gz ] ; then
+          CONSOLEFONT='Uni3-Terminus16'
+        else
+          ewarn "/usr/share/consolefonts/Uni3-Terminus16.psf.gz not available. Please upgrade package console-terminus." ; eend 1
+        fi
+        if ! hasfb ; then
+          CONSOLEFONT='Lat15-Terminus16'
+        fi
+      fi
+    fi
+  fi # not running systemd
 
- # configure keyboard layout, read in already set values first:
- [ -r /etc/sysconfig/keyboard ] && . /etc/sysconfig/keyboard
+  # export it now, so error messages get translated, too
+  [ -r /etc/default/locale ] && . /etc/default/locale
+  export LANG LANGUAGE
 
- # now allow keyboard override by boot commandline for later use:
- KKEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
- [ -n "$KKEYBOARD" ] && KEYTABLE="$KKEYBOARD"
- # notce: de/at is a bad choice, so take de-latin1-nodeadkeys instead:
- [[ "$KKEYBOARD" == 'de' ]] && KEYTABLE=de-latin1-nodeadkeys
- [[ "$KKEYBOARD" == 'at' ]] && KEYTABLE=de-latin1-nodeadkeys
+  if $SYSTEMD ; then
+    local KEYBOARD
+    KEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
+    [ -n "$KEYBOARD" ] || KEYBOARD="$LANGUAGE"
+    # "symbols/en" doesn't exist, so rewrite to "us"
+    [[ "$KEYBOARD" == 'en' ]] && KEYBOARD="us"
 
- # modify /etc/sysconfig/keyboard only in live-cd mode:
- if [ -z "$INSTALLED" ] ; then
+    if [ -r /etc/default/keyboard ] ; then
+      sed -i "s/^XKBLAYOUT=.*/XKBLAYOUT=\"$KEYBOARD\"/" /etc/default/keyboard
 
-   local LANGUAGE="$BOOT_LANGUAGE"
-   . /etc/grml/language-functions
-   # allow setting xkeyboard explicitly different than console keyboard
-   KXKEYBOARD="$(getbootparam 'xkeyboard' 2>>$DEBUG)"
-   if [ -n "$KXKEYBOARD" ]; then
-      XKEYBOARD="$KXKEYBOARD"
-      KDEKEYBOARD="$KXKEYBOARD"
-   elif [ -n "$KKEYBOARD" ]; then
-      XKEYBOARD="$KKEYBOARD"
-      KDEKEYBOARD="$KKEYBOARD"
-   fi
+      case "$KEYBOARD" in
+	de|at)
+	  sed -i "s/^XKBVARIANT=.*/XKBVARIANT=\"nodeadkeys\"/" /etc/default/keyboard
+	  ;;
+      esac
 
-   # duplicate of previous code to make sure /etc/grml/language-functions
-   # does not overwrite our values....
-   # now allow keyboard override by boot commandline for later use:
-   KKEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
-   [ -n "$KKEYBOARD" ] && KEYTABLE="$KKEYBOARD"
-   # notce: de/at is a bad choice, so take de-latin1-nodeadkeys instead:
-   [[ "$KKEYBOARD" == 'de' ]] && KEYTABLE=de-latin1-nodeadkeys
-   [[ "$KKEYBOARD" == 'at' ]] && KEYTABLE=de-latin1-nodeadkeys
+    fi
+    service_wrapper console-setup restart >>$DEBUG 2>&1 ; eend $?
+  else # not running systemd, keeing for backwards compatibility:
+    # configure keyboard layout, read in already set values first:
+    [ -r /etc/sysconfig/keyboard ] && . /etc/sysconfig/keyboard
 
-   # write keyboard related variables to file for later use
-   [ -d /etc/sysconfig ] || mkdir /etc/sysconfig
-   if ! [ -e /etc/sysconfig/keyboard ] ; then
-      echo "KEYTABLE=\"$KEYTABLE\""          > /etc/sysconfig/keyboard
-      echo "XKEYBOARD=\"$XKEYBOARD\""       >> /etc/sysconfig/keyboard
-      echo "KDEKEYBOARD=\"$KDEKEYBOARD\""   >> /etc/sysconfig/keyboard
-      echo "KDEKEYBOARDS=\"$KDEKEYBOARDS\"" >> /etc/sysconfig/keyboard
-   fi
- fi
+    # now allow keyboard override by boot commandline for later use:
+    KKEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
+    [ -n "$KKEYBOARD" ] && KEYTABLE="$KKEYBOARD"
+    # notce: de/at is a bad choice, so take de-latin1-nodeadkeys instead:
+    [[ "$KKEYBOARD" == 'de' ]] && KEYTABLE=de-latin1-nodeadkeys
+    [[ "$KKEYBOARD" == 'at' ]] && KEYTABLE=de-latin1-nodeadkeys
 
- [ -r /etc/sysconfig/keyboard ] && . /etc/sysconfig/keyboard
+    # modify /etc/sysconfig/keyboard only in live-cd mode:
+    if [ -z "$INSTALLED" ] ; then
+
+      local LANGUAGE="$BOOT_LANGUAGE"
+      . /etc/grml/language-functions
+      # allow setting xkeyboard explicitly different than console keyboard
+      KXKEYBOARD="$(getbootparam 'xkeyboard' 2>>$DEBUG)"
+      if [ -n "$KXKEYBOARD" ]; then
+        XKEYBOARD="$KXKEYBOARD"
+        KDEKEYBOARD="$KXKEYBOARD"
+      elif [ -n "$KKEYBOARD" ]; then
+        XKEYBOARD="$KKEYBOARD"
+        KDEKEYBOARD="$KKEYBOARD"
+      fi
+
+      # duplicate of previous code to make sure /etc/grml/language-functions
+      # does not overwrite our values....
+      # now allow keyboard override by boot commandline for later use:
+      KKEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
+      [ -n "$KKEYBOARD" ] && KEYTABLE="$KKEYBOARD"
+      # notce: de/at is a bad choice, so take de-latin1-nodeadkeys instead:
+      [[ "$KKEYBOARD" == 'de' ]] && KEYTABLE=de-latin1-nodeadkeys
+      [[ "$KKEYBOARD" == 'at' ]] && KEYTABLE=de-latin1-nodeadkeys
+
+      # write keyboard related variables to file for later use
+      [ -d /etc/sysconfig ] || mkdir /etc/sysconfig
+      if ! [ -e /etc/sysconfig/keyboard ] ; then
+        echo "KEYTABLE=\"$KEYTABLE\""          > /etc/sysconfig/keyboard
+        echo "XKEYBOARD=\"$XKEYBOARD\""       >> /etc/sysconfig/keyboard
+        echo "KDEKEYBOARD=\"$KDEKEYBOARD\""   >> /etc/sysconfig/keyboard
+        echo "KDEKEYBOARDS=\"$KDEKEYBOARDS\"" >> /etc/sysconfig/keyboard
+      fi
+    fi
+
+    [ -r /etc/sysconfig/keyboard ] && . /etc/sysconfig/keyboard
+  fi
 
 
- # we have to set up all consoles, therefore loop it over all ttys:
- NUM_CONSOLES=$(fgconsole --next-available 2>/dev/null)
- if [ -n "$NUM_CONSOLES" ] ; then
-    NUM_CONSOLES=$(expr ${NUM_CONSOLES} - 1)
-    [ ${NUM_CONSOLES} -eq 1 ] && NUM_CONSOLES=6
- fi
- CUR_CONSOLE=$(fgconsole 2>/dev/null)
+  if ! $SYSTEMD ; then
+    # we have to set up all consoles, therefore loop it over all ttys:
+    NUM_CONSOLES=$(fgconsole --next-available 2>/dev/null)
+    if [ -n "$NUM_CONSOLES" ] ; then
+      NUM_CONSOLES=$(expr ${NUM_CONSOLES} - 1)
+      [ ${NUM_CONSOLES} -eq 1 ] && NUM_CONSOLES=6
+    fi
+    CUR_CONSOLE=$(fgconsole 2>/dev/null)
 
- if [ -x "$(which setfont)" ] ; then
-    use_setfont=true
- elif [ -x "$(which consolechars)" ] ; then
-    use_consolechars=true
- else
-    eerror "Neither setfont nor consolechars tool present, can not set font."
-    eend 1
-    return 1
- fi
+    if [ -x "$(which setfont)" ] ; then
+      use_setfont=true
+    elif [ -x "$(which consolechars)" ] ; then
+      use_consolechars=true
+    else
+      eerror "Neither setfont nor consolechars tool present, can not set font."
+      eend 1
+      return 1
+    fi
 
- if [ -n "$CHARMAP" ] ; then
-    einfo "Setting font to ${CHARMAP}"
-    RC=0
-    for vc in $(seq 0 ${NUM_CONSOLES}) ; do
+    if [ -n "$CHARMAP" ] ; then
+      einfo "Setting font to ${CHARMAP}"
+      RC=0
+      for vc in $(seq 0 ${NUM_CONSOLES}) ; do
         if $use_setfont ; then
           setfont -C /dev/tty${vc} $CHARMAP ; RC=$?
         elif $use_consolechars ; then
           consolechars --tty=/dev/tty${vc} -m ${CHARMAP} ; RC=$?
         fi
-    done
-    if [ -n "$CUR_CONSOLE" ] ; then
-       [ "$CUR_CONSOLE" != "serial" ] && chvt $CUR_CONSOLE
+      done
+      if [ -n "$CUR_CONSOLE" ] ; then
+        [ "$CUR_CONSOLE" != "serial" ] && chvt $CUR_CONSOLE
+      fi
+      eend $RC
     fi
-    eend $RC
- fi
 
- if checkbootparam 'noconsolefont' ; then
-    ewarn "Skipping setting console font as requested on boot commandline." ; eend 0
- else
-    if [ -n "$CONSOLEFONT" ] ; then
-       einfo "Setting font to ${CONSOLEFONT}"
-       RC=0
-       for vc in $(seq 0 ${NUM_CONSOLES}) ; do
-           if $use_setfont ; then
-             setfont -C /dev/tty${vc} ${CONSOLEFONT} ; RC=$?
-           elif $use_consolechars ; then
-             consolechars --tty=/dev/tty${vc} -f ${CONSOLEFONT} ; RC=$?
-           fi
-       done
-       if [ -n "$CUR_CONSOLE" ] ; then
+    if checkbootparam 'noconsolefont' ; then
+      ewarn "Skipping setting console font as requested on boot commandline." ; eend 0
+    else
+      if [ -n "$CONSOLEFONT" ] ; then
+        einfo "Setting font to ${CONSOLEFONT}"
+        RC=0
+        for vc in $(seq 0 ${NUM_CONSOLES}) ; do
+          if $use_setfont ; then
+            setfont -C /dev/tty${vc} ${CONSOLEFONT} ; RC=$?
+          elif $use_consolechars ; then
+            consolechars --tty=/dev/tty${vc} -f ${CONSOLEFONT} ; RC=$?
+          fi
+        done
+        if [ -n "$CUR_CONSOLE" ] ; then
           [ "$CUR_CONSOLE" != "serial" ] && chvt $CUR_CONSOLE
-       fi
-       eend $RC
+        fi
+        eend $RC
+      fi
     fi
- fi
 
- # Set default keyboard before interactive setup
- if [ -n "$KEYTABLE" ] ; then
-    einfo "Running loadkeys for ${WHITE}${KEYTABLE}${NORMAL} in background"
-    loadkeys -q $KEYTABLE &
-    eend $?
- fi
-
- # activate unicode console if running within utf8 environment
- if [ -r /etc/default/locale ] ; then
-    if grep -q "LANG=.*UTF" /etc/default/locale ; then
-       einfo "Setting up unicode environment."
-       unicode_start ; eend $?
+    # Set default keyboard before interactive setup
+    if [ -n "$KEYTABLE" ] ; then
+      einfo "Running loadkeys for ${WHITE}${KEYTABLE}${NORMAL} in background"
+      loadkeys -q $KEYTABLE &
+      eend $?
     fi
- fi
 
- eoutdent
+    # activate unicode console if running within utf8 environment
+    if [ -r /etc/default/locale ] ; then
+      if grep -q "LANG=.*UTF" /etc/default/locale ; then
+        einfo "Setting up unicode environment."
+        unicode_start ; eend $?
+      fi
+    fi
+  fi # not running systemd
+
+  eoutdent
 }
 # }}}
 
