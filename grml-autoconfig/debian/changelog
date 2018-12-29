@@ -1,3 +1,10 @@
+grml-autoconfig (0.18.1) grml-testing; urgency=medium
+
+  * [fc67c18] config_language: rely on console-setup for keyboard + font
+    handling. Thanks to Darshaka Pathirana for debugging this
+
+ -- Michael Prokop <mika@grml.org>  Sat, 29 Dec 2018 16:22:04 +0100
+
 grml-autoconfig (0.18.0) grml-testing; urgency=medium
 
   * [7da150b] Drop deprecated loadcpufreq/cpufrequtils, no longer
