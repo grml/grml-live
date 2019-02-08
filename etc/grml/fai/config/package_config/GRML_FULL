@@ -153,6 +153,7 @@ cdpr
 cifs-utils
 comgt
 dnsmasq
+dnsutils
 ethstatus
 ethtool
 hostapd
