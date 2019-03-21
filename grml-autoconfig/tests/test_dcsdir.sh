@@ -5,7 +5,7 @@ test_finddcsdir() {
     CMDLINE=''
     INSTALLED=''
 
-    EXPECTED_PATH='/lib/live/mount/medium'
+    EXPECTED_PATH='/run/live/medium'
 
     config_finddcsdir &>/dev/null
 

@@ -112,7 +112,7 @@ Now create a directory named debs and place foobar.deb in it:
 
   mkdir debs/ && cp foobar.deb debs/
 
-Notice: This directory will be located in /lib/live/mount/medium after burning the second
+Notice: This directory will be located in /run/live/medium after burning the second
 session.
 
 Now create the second session containing this directory:

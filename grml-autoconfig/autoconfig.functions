@@ -13,12 +13,10 @@ KERNEL="$(uname -r)"
 ARCH="$(uname -m)"
 umask 022
 
-# old linuxrc version:
-[ -d /cdrom ]      && export LIVECD_PATH=/cdrom
-# initramfs layout until around December 2012:
-[ -d /live/image ] && export LIVECD_PATH=/live/image
-# initramfs layout since around December 2012:
-[ -d /lib/live/mount/medium ] && export LIVECD_PATH=/lib/live/mount/medium
+# initramfs layout since December 2012, backwards compatibility:
+[ -d /lib/live/mount/medium ] && export LIVECD_PATH='/lib/live/mount/medium'
+# initramfs layout since December 2018:
+[ -d /run/live/medium ] && export LIVECD_PATH='/run/live/medium'
 
 # Ignore these signals in non-interactive mode: INT, TERM, SEGV
 [ -z "$PS1" ] && trap "" 2 3 11
