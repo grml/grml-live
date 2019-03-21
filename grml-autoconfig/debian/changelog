@@ -1,3 +1,16 @@
+grml-autoconfig (0.19.0) grml-testing; urgency=medium
+
+  * [b451f8e] Switch default mount point from /lib/live/mount/medium to
+    /run/live/medium
+  * [ebdc8af] Drop deprecated doc/grml-autoconfig.200905.txt
+  * [6f7266f] Bump Standards-Version to 4.3.0
+  * [7c8c7eb] Bump debian/compat to 10 and adjust Build-Depends on
+    debhelper accordingly
+  * [8fb8266] Disable shunit2 tests, failing in current Debian/unstable
+    environments
+
+ -- Michael Prokop <mika@grml.org>  Thu, 21 Mar 2019 16:31:27 +0100
+
 grml-autoconfig (0.18.1) grml-testing; urgency=medium
 
   * [fc67c18] config_language: rely on console-setup for keyboard + font
