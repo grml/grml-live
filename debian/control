@@ -6,7 +6,6 @@ Build-Depends: debhelper (>= 10~)
 Standards-Version: 4.3.0
 Build-Depends-Indep: asciidoc,
                      docbook-xsl,
-                     shunit2,
                      xsltproc,
                      zsh
 Homepage: https://git.grml.org/?p=grml-autoconfig.git
