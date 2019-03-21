@@ -1,3 +1,13 @@
+grml-etc (1.7.0) grml-testing; urgency=medium
+
+  * [1e5a531] grml-reboot: switch default mount point from
+    /lib/live/mount/medium to /run/live/medium
+  * [93842af] Bump Standards-Version to 4.3.0
+  * [bb90a1d] Bump debian/compat to 10 and adjust Build-Depends on
+    debhelper accordingly
+
+ -- Michael Prokop <mika@grml.org>  Thu, 21 Mar 2019 12:21:38 +0100
+
 grml-etc (1.6.3) grml-testing; urgency=medium
 
   * [208ac83] Fix typo (s/usefull/useful/)
