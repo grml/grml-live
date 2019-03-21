@@ -43,18 +43,13 @@ grep -qe 'toram' -qe '2ram' -qe 'usb' -qe 'serial' \
 
 # detect cdrom device
 if ! $INSTALLED ; then
-   # live-boot layout since December 2012:
-   if [ -d /lib/live/mount/medium ] ; then
-     CDROM="$(awk '/ \/lib\/live\/mount\/medium /{print $1;exit 0;}' /proc/mounts)"
-     MOUNTPATH="/lib/live/mount/medium"
-   # live-boot layout until December 2012:
-   elif [ -d /live/image ] ; then
-     CDROM="$(awk '/ \/live\/image /{print $1;exit 0;}' /proc/mounts)"
-     MOUNTPATH="/live/image"
-   else # old layout:
-     CDROM="$(awk '/ \/cdrom /{print $1;exit 0;}' /proc/mounts)"
-     MOUNTPATH="/cdrom"
-   fi
+  if [ -d /run/live/medium ] ; then # live-boot layout since Dec 2018
+    CDROM="$(awk '/ \/run\/live\/medium /{print $1;exit 0;}' /proc/mounts)"
+    MOUNTPATH="/run/live/medium"
+  elif [ -d /lib/live/mount/medium ] ; then # live-boot layout between 2012 and Dec 2018
+    CDROM="$(awk '/ \/lib\/live\/mount\/medium /{print $1;exit 0;}' /proc/mounts)"
+    MOUNTPATH="/lib/live/mount/medium"
+  fi
 
    # try to remove only removable devices
    DEVICE=""
@@ -214,7 +209,7 @@ $INSTALLED && mount -n -o remount,ro / 2>/dev/null
 # Prompt for removal of live system device
 if ! $INSTALLED && ! $NOPROMPT ; then
    # do not prompt for removal when running in grml2ram mode:
-   if ! mount | grep -qe 'on /cdrom' -qe 'on /live/image' -qe 'on /lib/live/mount/medium' ; then
+   if ! mount | grep -qe 'on /run/live/medium' -qe 'on /lib/live/mount/medium' ; then
       echo "Live System not mounted, nothing to eject therefore."
    else
       [ -d "$MOUNTPATH" ] && umount -l "$MOUNTPATH"
