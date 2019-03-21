@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 10)
 Build-Depends-Indep: asciidoc,
                      docbook-xsl,
                      xsltproc
-Standards-Version: 4.2.1
+Standards-Version: 4.3.0
 Homepage: https://grml.org/grml-live/
 Vcs-git: git://git.grml.org/grml-live.git
 Vcs-Browser: https://git.grml.org/?p=grml-live.git
