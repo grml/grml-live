@@ -3,7 +3,7 @@ Section: grml
 Priority: optional
 Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends: debhelper (>= 8)
-Standards-Version: 4.1.4
+Standards-Version: 4.3.0
 Homepage: https://git.grml.org/?p=grml-etc.git
 Vcs-git: git://git.grml.org/grml-etc.git
 Vcs-Browser: https://git.grml.org/?p=grml-etc.git
