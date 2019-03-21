@@ -17,6 +17,6 @@
                                                                                
                                                                                
  A list with all supported boot options can be found on the CD at              
- /lib/live/mount/medium/GRML/*/grml-cheatcodes.txt                             
+ /run/live/medium/grml/*/grml-cheatcodes.txt                                   
                                                                                
 1f

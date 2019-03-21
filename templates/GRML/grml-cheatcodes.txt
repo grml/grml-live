@@ -108,7 +108,7 @@ grml tohd=/dev/sda1                 Copy Grml's squashfs file to harddisk partit
                                     use via "grml bootfrom=/dev/sda1"
 grml bootfrom=/dev/sda1             Use the squashfs file from directory 'live' of the specified device
                                     Setup can be done booting 'grml tohd=/dev/sda1' or
-                                    running 'rsync -a --progress /lib/live/mount/medium/live /media/sda1/'
+                                    running 'rsync -a --progress /run/live/medium/live /media/sda1/'
 grml bootfrom=removable             Restrict search for the live media to removable type only.
 grml bootfrom=removable-usb         Restrict search for the live media to usb mass storage only.
 grml isofrom=/dev/sda1/grml.iso     Use specified ISO image for booting

@@ -16,6 +16,6 @@
                                                     to RAM and run from there  
  grml vga=ask  / vga=791            prompt for framebuffer menu / set options  
                                                                                
- Supported boot options: /lib/live/mount/medium/GRML/*/grml-cheatcodes.txt     
+ Supported boot options: /run/live/medium/grml/*/grml-cheatcodes.txt           
                                                                                
 1f
