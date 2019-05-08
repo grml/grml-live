@@ -812,6 +812,7 @@ Usage example:
 
     # export GRML_FAI_CONFIG=$(pwd)/etc/grml/fai
     # export SCRIPTS_DIRECTORY=$(pwd)/scripts
+    # export TEMPLATE_DIRECTORY=$(pwd)/templates
     # ./grml-live -s sid -a amd64 -c GRMLBASE,GRML_FULL,AMD64
 
 [[source]]
