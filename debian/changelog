@@ -1,3 +1,14 @@
+grml-live (0.34.1) unstable; urgency=medium
+
+  * [8352df0] Provide workaround for FAI bug, leaving /run/udev behind
+    (see #928981)
+  * [3e832a3] Sources list setup for security: switch from testing/updates
+    to testing-security
+  * Software related changes:
+    - [ef82eb5] drop lilo from GRML_SMALL and GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Thu, 11 Jul 2019 17:32:27 +0200
+
 grml-live (0.34.0) unstable; urgency=medium
 
   * [70a5830] Switch default mount point from /lib/live/mount/medium to
