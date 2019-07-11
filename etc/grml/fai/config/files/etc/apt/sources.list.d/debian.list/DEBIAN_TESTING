@@ -3,5 +3,5 @@
   deb-src http://ftp.debian.org/debian/ testing main contrib non-free
 
 # security updates:
-  deb     http://security.debian.org/ testing/updates main contrib
-  deb-src http://security.debian.org/ testing/updates main contrib
+  deb     http://security.debian.org/ testing-security main contrib
+  deb-src http://security.debian.org/ testing-security main contrib
