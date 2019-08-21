@@ -24,4 +24,5 @@ of an installed `grml-live` package:
     # export GRML_FAI_CONFIG=$(pwd)/etc/grml/fai
     # export SCRIPTS_DIRECTORY=$(pwd)/scripts
     # export LIVE_CONF=$(pwd)/etc/grml/grml-live.conf
-    # ./grml-live -s sid -a amd64 -c GRMLBASE,GRML_FULL,AMD64 -t $(pwd)/templates/
+    # export TEMPLATE_DIRECTORY=$(pwd)/templates
+    # ./grml-live -s sid -a amd64 -c GRMLBASE,GRML_FULL,AMD64
