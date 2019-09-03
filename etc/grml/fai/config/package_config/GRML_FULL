@@ -46,7 +46,6 @@ ltrace
 openvpn
 ppp
 pppoeconf
-racoon
 
 # disk subsystems support/debugging
 array-info
