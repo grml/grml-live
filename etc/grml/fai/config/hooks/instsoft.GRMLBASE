@@ -60,9 +60,11 @@ EOF
      $ROOTCMD ln -s /bin/true /usr/sbin/grub-probe
    fi
 
-   # Update package lists (so they exist at all), so we actually can
-   # install software.
-   $ROOTCMD apt-get update
+   # Update package lists (so they exist at all), so we can install
+   # software; if /var/lib/dpkg/available is empty, it was was probably
+   # cleaned by GRMLBASE/98-clean-chroot, so we need to rebuild it
+   # anyway
+   $ROOTCMD /usr/lib/dpkg/methods/apt/update /var/lib/dpkg/ apt apt
 
   if $FILE_RC ; then
     echo "Installing file-rc as FILE_RC class is enabled."
