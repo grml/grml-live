@@ -1,3 +1,20 @@
+grml-live (0.34.2) unstable; urgency=medium
+
+  [ Jay Lawrence ]
+  * [0913784] Need to set templates directory as well when running from
+    git
+
+  [ Michael Prokop ]
+  * [43f024e] README: set TEMPLATE_DIRECTORY instead of using -t cmdline
+    option
+  * [ef74e87] Rebuild /var/lib/dpkg/available to install not-yet-installed
+    packages in update runs
+  * Software related changes:
+    - [16f6d5c] add efibootmgr to GRMLBASE
+    - [77f1028] drop racoon from GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Thu, 26 Sep 2019 16:07:22 +0200
+
 grml-live (0.34.1) unstable; urgency=medium
 
   * [8352df0] Provide workaround for FAI bug, leaving /run/udev behind
