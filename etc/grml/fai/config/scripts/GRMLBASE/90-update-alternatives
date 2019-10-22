@@ -9,20 +9,32 @@
 set -u
 set -e
 
-if $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q vim.gtk ; then
+# starting with vim v2:8.1.2136-1 it uses /usr/libexec/vim for the vim.* binaries
+if $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q /usr/libexec/vim ; then
+  VIM_PATH=/usr/libexec/vim
+else # for backwards compatibility
+  VIM_PATH=/usr/bin
+fi
+
+if $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q 'vim.gtk3' ; then
+  echo "Setting vim.gtk3 as editor using update-alternatives."
+  $ROOTCMD update-alternatives --set editor "${VIM_PATH}"/vim.gtk3
+  $ROOTCMD update-alternatives --set vi     "${VIM_PATH}"/vim.gtk3
+  $ROOTCMD update-alternatives --set vim    "${VIM_PATH}"/vim.gtk3
+elif $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q 'vim.gtk$' ; then
   echo "Setting vim.gtk as editor using update-alternatives."
-  $ROOTCMD update-alternatives --set editor /usr/bin/vim.gtk
-  $ROOTCMD update-alternatives --set vi     /usr/bin/vim.gtk
-  $ROOTCMD update-alternatives --set vim    /usr/bin/vim.gtk
-elif $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q vim.basic ; then
+  $ROOTCMD update-alternatives --set editor "${VIM_PATH}"/vim.gtk
+  $ROOTCMD update-alternatives --set vi     "${VIM_PATH}"/vim.gtk
+  $ROOTCMD update-alternatives --set vim    "${VIM_PATH}"/vim.gtk
+elif $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q 'vim.basic' ; then
   echo "Setting vim.basic as editor using update-alternatives."
-  $ROOTCMD update-alternatives --set editor /usr/bin/vim.basic
-  $ROOTCMD update-alternatives --set vi     /usr/bin/vim.basic
-  $ROOTCMD update-alternatives --set vim    /usr/bin/vim.basic
-elif $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q vim.tiny ; then
+  $ROOTCMD update-alternatives --set editor "${VIM_PATH}"/vim.basic
+  $ROOTCMD update-alternatives --set vi     "${VIM_PATH}"/vim.basic
+  $ROOTCMD update-alternatives --set vim    "${VIM_PATH}"/vim.basic
+elif $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q 'vim.tiny' ; then
   echo "Setting vim.tiny as editor using update-alternatives."
-  $ROOTCMD update-alternatives --set editor /usr/bin/vim.tiny
-  $ROOTCMD update-alternatives --set vi     /usr/bin/vim.tiny
+  $ROOTCMD update-alternatives --set editor "${VIM_PATH}"/vim.tiny
+  $ROOTCMD update-alternatives --set vi     "${VIM_PATH}"/vim.tiny
 else
   echo "Warning: No vim binary suitable for update-alternatives found."
 fi
