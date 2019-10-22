@@ -87,7 +87,7 @@ ed
 hexedit
 nano
 vim
-vim-gtk
+vim-gtk3
 zile
 
 # filesystem support
