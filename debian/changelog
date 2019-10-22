@@ -1,3 +1,11 @@
+grml-live (0.34.3) unstable; urgency=medium
+
+  * [0e8474f] GRMLBASE/90-update-alternatives: support vim >=2:8.1.2136-1
+  * Software related changes:
+    - [7a7269f] replace vim-gtk with vim-gtk3
+
+ -- Michael Prokop <mika@grml.org>  Tue, 22 Oct 2019 15:53:10 +0200
+
 grml-live (0.34.2) unstable; urgency=medium
 
   [ Jay Lawrence ]
