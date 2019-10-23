@@ -40,6 +40,7 @@ isc-dhcp-client
 iw
 jfsutils
 kexec-tools
+kpartx
 ldnsutils
 lftp
 libnss-myhostname

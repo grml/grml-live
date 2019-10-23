@@ -71,8 +71,9 @@ smartmontools
 
 # disk partitioning/boot
 boot-info-script
-grub-pc-bin
 gparted
+grub-pc-bin
+kpartx
 mbr
 partclone
 parted
