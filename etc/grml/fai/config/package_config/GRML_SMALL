@@ -69,6 +69,7 @@ ppp
 pppoeconf
 procps
 psmisc
+qemu-guest-agent
 rdnssd
 reiserfsprogs
 rfkill
