@@ -348,12 +348,11 @@ ISO size.
 defining a Grml system. Important parts of the buildprocess are specified in
 this class as well, so unless you have a really good reason you should always
 use this class. Please be aware that using *just* the GRMLBASE class won't be
-enough, because the kernel packages (e.g. linux-image-i386-grml +
-linux-image-amd64-grml) are chosen in further GRML_* classes (to provide maximum
-flexibility with kernel selection). If you don't want to use the existing
-GRML_FULL or GRML_SMALL classes, define your own CLASS file choosing the kernel
-package you want to use (and don't forget to include your CLASS in the arguments
-of grml-live's -c... command line option).
+enough, because the kernel packages (e.g. linux-image-*) are chosen in further
+GRML_* classes (to provide maximum flexibility with kernel selection). If you
+don't want to use the existing GRML_FULL or GRML_SMALL classes, define your own
+CLASS file choosing the kernel package you want to use (and don't forget to
+include your CLASS in the arguments of grml-live's -c... command line option).
 
 * GRML_FULL: full featured Grml, also known as the "normal", full grml as
 introduced in December 2011 (~600MB ISO size).
