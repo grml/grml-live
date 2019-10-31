@@ -248,6 +248,7 @@ bacula-common
 bacula-console
 bacula-fd
 bacula-sd
+borgbackup
 clonezilla
 dirvish
 dump
