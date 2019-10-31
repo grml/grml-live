@@ -33,6 +33,7 @@ htop
 ifenslave
 ifupdown
 imvirt
+iperf3
 iproute2
 iptstate
 iputils-ping

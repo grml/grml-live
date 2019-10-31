@@ -161,6 +161,7 @@ iftop
 ifupdown
 ipcalc
 iperf
+iperf3
 ipmitool
 iproute2
 iptraf-ng
