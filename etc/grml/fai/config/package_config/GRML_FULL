@@ -259,6 +259,7 @@ restic
 
 # compressions for backup/restore
 lzop
+zstd
 
 # serial
 cu
