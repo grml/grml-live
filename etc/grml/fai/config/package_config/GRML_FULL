@@ -31,6 +31,7 @@ psmisc
 sudo
 sysstat
 sysvinit-utils
+tree
 tzdata
 util-linux
 
