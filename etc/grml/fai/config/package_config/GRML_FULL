@@ -63,6 +63,7 @@ iotop
 lsscsi
 mpt-status
 multipath-tools
+ncdu
 nocache
 nvme-cli
 scsitools
