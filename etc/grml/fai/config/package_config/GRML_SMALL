@@ -86,6 +86,7 @@ sysvinit-utils
 tar
 tcpdump
 telnet
+tree
 tsocks
 tzdata
 unp
