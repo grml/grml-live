@@ -1,3 +1,27 @@
+grml-live (0.34.4) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * Software related changes:
+    - [5832602] add kpartx to GRML_SMALL + GRML_FULL
+    - [bd2cf42] add qemu-guest-agent to GRML_SMALL
+    - [6fb7bd5] add borgbackup to GRML_FULL
+    - [4ad251e] use Debian kernel packages instead of our custom Grml
+      ones
+    - [c4105ae] add iperf3 to GRML_SMALL and GRML_FULL. Thanks to Marc
+      Haber for the suggestion
+    - [572d466] replace fuse with fuse3
+    - [2dc56cc] add zstd to GRML_FULL
+    - [adf8778] add tree to GRML_SMALL
+    - [1e64daf] add ncdu to GRML_SMALL
+
+  [ Felix Neumärker ]
+  * Software related changes:
+    - [4622daf] add tree to GRML_FULL
+    - [45480fb] add ncdu to GRML_FULL
+    - [5709350] cryptsetup-initramfs (fix persistence-encryption)
+
+ -- Michael Prokop <mika@grml.org>  Tue, 03 Dec 2019 16:34:36 +0100
+
 grml-live (0.34.3) unstable; urgency=medium
 
   * [0e8474f] GRMLBASE/90-update-alternatives: support vim >=2:8.1.2136-1
