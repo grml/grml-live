@@ -113,6 +113,9 @@ zero(){
   done
 }
 
+echo "Removing possible leftovers from update-pciids runs"
+rm -f "${target}"/wget-log*
+
 echo "Cleaning log and cache directories"
 nuke ${target}/var/log       ${target}/var/cache
 zero ${target}/var/account/pacct \
