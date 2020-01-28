@@ -185,6 +185,7 @@ netcat-openbsd
 nethogs
 netsniff-ng
 nmap
+radvd
 rdnssd
 rfkill
 ser2net
