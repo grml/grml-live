@@ -3,7 +3,7 @@
 
 # this is a workaround to pass custom options to the xz compression
 xz() {
-    command xz -8 --check=crc32
+    command xz --check=crc32
 }
 
 # enable XZ compression, reducing initramfs size from ~17MB to ~12MB
