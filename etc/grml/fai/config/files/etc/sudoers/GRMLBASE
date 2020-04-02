@@ -20,6 +20,9 @@ root    ALL=(ALL) ALL
 # WARNING: Never allow external access to the $USERNAME user!!!
 $USERNAME    ALL=NOPASSWD: ALL
 
+# Path used for every command run from sudo
+Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
 # allow editing of files with editor:
 # $USERNAME ALL=NOPASSWD: sudoedit
 
