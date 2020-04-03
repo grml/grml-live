@@ -1,0 +1,28 @@
+# cloud-init configuration for Grml live system.
+#
+# This file was deployed via grml-live's
+# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/51-cloud-init script, using
+# ${GRML_FAI_CONFIG}/config/files/etc/cloud/cloud.cfg.d/42_grml.cfg/GRMLBASE
+
+system_info:
+   # This will affect which distro class gets used
+   distro: debian
+   # Default user name + that default users groups (if added/used)
+   default_user:
+     name: grml
+     lock_passwd: True
+     gecos: Grml
+     groups: [adm, audio, cdrom, dialout, dip, floppy, netdev, plugdev, sudo, video]
+     sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+     shell: /bin/zsh
+   # Other config here will be given to the distro class and/or path classes
+   paths:
+      cloud_dir: /var/lib/cloud/
+      templates_dir: /etc/cloud/templates/
+      upstart_dir: /etc/init/
+   package_mirrors:
+     - arches: [default]
+       failsafe:
+         primary: http://deb.debian.org/debian
+         security: http://security.debian.org/
+   ssh_svcname: ssh
