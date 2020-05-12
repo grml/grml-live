@@ -1,3 +1,35 @@
+grml-live (0.35.0) unstable; urgency=medium
+
+  * Fixes:
+    - [e5e4578] GRMLBASE/98-clean-chroot: get rid of /wget-log* files
+    - [acf12d4] GRMLBASE/98-clean-chroot: fix resolvconf symlink
+      handling + get rid of resolvconf workarounds
+    - [ef6dc82] DEBIAN_STABLE: use buster-backports instead of
+      stretch-backports
+    - [31cd53a] scripts/GRMLBASE/50-lvm: unconditionally clear
+      69-lvm-metad.rules file. Thanks to Dr. András Korn
+    - [2ece298] initramfs xz-compress: use default xz compression level.
+      Thanks to Dr. András Korn
+    - [e1e107a] GRMLBASE/80-initramfs: no longer set CRYPTSETUP=y
+    - [c557940] sudoers: set Defaults secure_path to have sane
+      default settings
+
+  * New features:
+    - [3fc930d] Initial cloud-init support
+
+  * Debian packaging:
+    - [914ab11] Bump Standards-Version to 4.5.0
+    - [b47433a] Bump Debian compat version to 12, using
+      debhelper-compat approach
+    - [0edda67] Execute 'wrap-and-sort -a -t -s' on debian/
+
+  * Software related changes:
+    - [422c49b] SW: add radvd
+    - [fbb0edd] SW: drop hfsprogs from GRML_FULL
+    - [95f7765] SW: add cloud-init to GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Tue, 12 May 2020 16:34:01 +0200
+
 grml-live (0.34.4) unstable; urgency=medium
 
   [ Michael Prokop ]
