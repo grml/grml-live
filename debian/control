@@ -2,10 +2,12 @@ Source: grml-live
 Section: grml
 Priority: optional
 Maintainer: Michael Prokop <mika@grml.org>
-Build-Depends: debhelper-compat (= 12),
-Build-Depends-Indep: asciidoc,
-                     docbook-xsl,
-                     xsltproc
+Build-Depends:
+ debhelper-compat (= 12),
+Build-Depends-Indep:
+ asciidoc,
+ docbook-xsl,
+ xsltproc,
 Standards-Version: 4.5.0
 Homepage: https://grml.org/grml-live/
 Vcs-git: git://git.grml.org/grml-live.git
@@ -15,29 +17,32 @@ Bugs: mailto:bugs@grml.org
 
 Package: grml-live
 Architecture: all
-Depends: bc,
-         bzip2,
-         dosfstools,
-         fai-client (>= 3.4.0),
-         fai-server (>= 3.4.0),
-         isolinux (>= 3:6.03+dfsg-5+deb8u1~),
-         memtest86+,
-         mksh,
-         moreutils,
-         mtools,
-         pciutils,
-         rsync,
-         squashfs-tools (>= 1:4.2-0~bpo60),
-         syslinux,
-         xorriso,
-         ${misc:Depends}
-Recommends: grml-live-db,
-            grub-pc-bin,
-            imagemagick,
-            ipxe,
-            syslinux-utils
-Suggests: fai-doc,
-          grml-live-addons
+Depends:
+ bc,
+ bzip2,
+ dosfstools,
+ fai-client (>= 3.4.0),
+ fai-server (>= 3.4.0),
+ isolinux (>= 3:6.03+dfsg-5+deb8u1~),
+ memtest86+,
+ mksh,
+ moreutils,
+ mtools,
+ pciutils,
+ rsync,
+ squashfs-tools (>= 1:4.2-0~bpo60),
+ syslinux,
+ xorriso,
+ ${misc:Depends},
+Recommends:
+ grml-live-db,
+ grub-pc-bin,
+ imagemagick,
+ ipxe,
+ syslinux-utils,
+Suggests:
+ fai-doc,
+ grml-live-addons,
 Description: build system for creating a Grml (based) Linux live system
  This package provides the build system for creating a Debian /
  Grml based Linux live system (also known as live cd). It is
@@ -45,13 +50,15 @@ Description: build system for creating a Grml (based) Linux live system
 
 Package: grml-live-db
 Architecture: all
-Depends: grml-live,
-         libdbd-sqlite3-perl,
-         libdbi-perl,
-         libtimedate-perl,
-         sqlite3,
-         ${misc:Depends}
-Recommends: perl-doc
+Depends:
+ grml-live,
+ libdbd-sqlite3-perl,
+ libdbi-perl,
+ libtimedate-perl,
+ sqlite3,
+ ${misc:Depends},
+Recommends:
+ perl-doc,
 Description: log package build information of grml-live to database
  This package provides a database layer for storing build
  information about grml-live builds in a sqlite3 database.
