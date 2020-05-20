@@ -1,3 +1,26 @@
+grml-live (0.35.1) unstable; urgency=medium
+
+  * Fixes:
+    - [ba45725] deborphan: add workaround for transitional package dnsutils
+    - [3140b83] deborphan: drop deprecated packages
+    - [f37fcf9] Move scripts/GRMLBASE/40-deborphan towards DEBORPHAN class
+      as file 10-whitelist
+    - [87be754] DEBORPHAN/10-whitelist: highlight when dnsutils gets added
+      to whitelist
+    - [cd7c095] DEBORPHAN/10-whitelist: provide workaround for Debian bug
+      #929273
+    - [cb6179f] DEBORPHAN/10-whitelist: rework fix for broken keep file
+      handling of deborphan
+
+  * Documentation:
+    - [856efb5] docs: update ISO sizes and disk requirements, we no
+      longer provide support for file-rc
+
+  * Software related changes:
+    - [bda859c] add fdisk to GRMLBASE
+
+ -- Michael Prokop <mika@grml.org>  Wed, 20 May 2020 17:13:24 +0200
+
 grml-live (0.35.0) unstable; urgency=medium
 
   * Fixes:
