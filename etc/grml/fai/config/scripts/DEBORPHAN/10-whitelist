@@ -13,7 +13,9 @@ set -e
 # bind9-dnsutils package is available in all our supported Debian releases
 if [[ -r "${target}/usr/share/doc/dnsutils" ]] && [ -x "${target}/usr/bin/deborphan" ] ; then
   echo "Adding dnsutils to deborphan whitelist"
-  $ROOTCMD deborphan --add-keep dnsutils || /bin/true
+  # workaround for https://bugs.debian.org/929273 ("fseek on /var/lib/deborphan/keep: Invalid argument")
+  $ROOTCMD touch /var/lib/deborphan/keep
+  $ROOTCMD deborphan --add-keep dnsutils
 fi
 
 ## END OF FILE #################################################################
