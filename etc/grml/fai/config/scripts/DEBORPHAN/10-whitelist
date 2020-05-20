@@ -12,6 +12,7 @@ set -e
 # workaround for dnsutils transitional package, we can drop this as soon as the
 # bind9-dnsutils package is available in all our supported Debian releases
 if [[ -r "${target}/usr/share/doc/dnsutils" ]] && [ -x "${target}/usr/bin/deborphan" ] ; then
+  echo "Adding dnsutils to deborphan whitelist"
   $ROOTCMD deborphan --add-keep dnsutils || /bin/true
 fi
 
