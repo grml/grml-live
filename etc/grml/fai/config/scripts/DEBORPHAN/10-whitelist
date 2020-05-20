@@ -14,8 +14,13 @@ set -e
 if [[ -r "${target}/usr/share/doc/dnsutils" ]] && [ -x "${target}/usr/bin/deborphan" ] ; then
   echo "Adding dnsutils to deborphan whitelist"
   # workaround for https://bugs.debian.org/929273 ("fseek on /var/lib/deborphan/keep: Invalid argument")
-  $ROOTCMD touch /var/lib/deborphan/keep
-  $ROOTCMD deborphan --add-keep dnsutils
+  if ! [ -f "${target}"/var/lib/deborphan/keep ] ; then
+    printf 'dnsutils\n' > "${target}"/var/lib/deborphan/keep
+  elif grep -q '^dnsutils$' "${target}"/var/lib/deborphan/keep ; then
+    : # entry already present, avoid duplicates
+  else
+    printf 'dnsutils\n' >> "${target}"/var/lib/deborphan/keep
+  fi
 fi
 
 ## END OF FILE #################################################################
