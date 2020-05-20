@@ -9,22 +9,6 @@
 set -u
 set -e
 
-if [ -r $target/lib/shadowfs/liblogfs.so -a -x $target/usr/bin/deborphan ] ; then
-   $ROOTCMD deborphan --add-keep shadowfs || /bin/true
-fi
-
-if [ -r $target/usr/bin/bsdtar -a -x $target/usr/bin/deborphan ] ; then
-   $ROOTCMD deborphan --add-keep bsdtar || /bin/true
-fi
-
-if [ -r $target/usr/bin/ewfinfo -a -x $target/usr/bin/deborphan ] ; then
-   $ROOTCMD deborphan --add-keep libewf1 || /bin/true
-fi
-
-if [ -r $target/usr/lib/libstdc++-libc6.2-2.so.3 -a -x $target/usr/bin/deborphan ] ; then
-   $ROOTCMD deborphan --add-keep libstdc++2.10-glibc2.2 || /bin/true
-fi
-
 # workaround for dnsutils transitional package, drop as soon as bind9-dnsutils
 # is available in all supported releases
 if [[ -r "${target}/usr/share/doc/dnsutils" ]] && [ -x "${target}/usr/bin/deborphan" ] ; then
