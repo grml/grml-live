@@ -10,6 +10,7 @@ deborphan
 dmidecode
 efibootmgr
 eject
+fdisk
 file
 gpm
 grml2usb
