@@ -336,9 +336,8 @@ selected. The following classes are predefined:
 was the init system used by Grml until and including stable release 2014.11,
 starting with beginning of 2016 Grml switched to systemd instead. If you want to
 build a live system in the old style using file-rc instead of systemd then enable
-this class. Please notice that support for file-rc is no longer being actively
-maintained (the Grml team happily accepts patches though) and file-rc (upstream
-wise) might disappear too.
+this class. Please notice that the Grml team no longer provides support for it
+though.
 
 * FRESHCLAM: execute freshclam (if it's present) to update clamav definitions
 (increases resulting ISO size ~70MB). By default it's skipped to avoid bigger
@@ -355,9 +354,9 @@ CLASS file choosing the kernel package you want to use (and don't forget to
 include your CLASS in the arguments of grml-live's -c... command line option).
 
 * GRML_FULL: full featured Grml, also known as the "normal", full grml as
-introduced in December 2011 (~600MB ISO size).
+introduced in December 2011 (~750 ISO size).
 
-* GRML_SMALL: minimum sized Grml version, known as grml-small (~300MB ISO
+* GRML_SMALL: minimum sized Grml version, known as grml-small (~360MB ISO
 size).
 
 * LATEX: LaTeX(-related) packages like auctex, texlive,...
@@ -485,9 +484,9 @@ please send us a bug report then). Check out <<deploy-on-debian,How do I deploy
 grml-live on a plain Debian installation>> for details how to set up grml-live
 on a plain, original Debian system.
 
-* enough free disk space; at least 1.5GB are required for a minimal grml-live
-run (\~850MB for the chroot [$CHROOT_OUTPUT], \~300MB for the build target
-[$BUILD_OUTPUT], \~30MB for the netboot files and \~300MB for the resulting ISO
+* enough free disk space; at least ~2GB are required for a minimal grml-live
+run (\~1GB for the chroot [$CHROOT_OUTPUT], \~400MB for the build target
+[$BUILD_OUTPUT], \~35MB for the netboot files and \~350MB for the resulting ISO
 [$ISO_OUTPUT] plus some temporary files), if you plan to use GRML_FULL you
 should have at least 4GB of total free disk space
 
