@@ -147,6 +147,7 @@ vblade
 # networking
 atftp
 avahi-daemon
+avahi-utils
 bind9-host
 bridge-utils
 cdpr
