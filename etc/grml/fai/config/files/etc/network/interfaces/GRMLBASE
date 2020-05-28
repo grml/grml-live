@@ -5,3 +5,5 @@
 # The loopback interface
 auto lo
 iface lo inet loopback
+
+source /etc/network/interfaces.d/*
