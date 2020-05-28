@@ -1,3 +1,13 @@
+grml-live (0.35.2) unstable; urgency=medium
+
+  * Software related changes:
+    - [1ec1cfe] add avahi-utils to GRML_FULL
+  * Features:
+    - [a28b1c2] etc/network/interfaces/GRMLBASE: support
+      /etc/network/interfaces.d/* in /e/n/i (for cloud-init support)
+
+ -- Michael Prokop <mika@grml.org>  Thu, 28 May 2020 17:34:05 +0200
+
 grml-live (0.35.1) unstable; urgency=medium
 
   * Fixes:
