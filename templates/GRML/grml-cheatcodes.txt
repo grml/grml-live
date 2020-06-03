@@ -15,6 +15,7 @@ fb1280x1024                         Use fixed framebuffer graphics (1)
 fb1024x768                          Use fixed framebuffer graphics (2) [notice: Grml's default]
 fb800x600                           Use fixed framebuffer graphics (3)
 nofb                                Disable framebuffer
+legacynet                           Use Legacy Network Interface Names
 floppy                              Boot from floppydisk
 hd / hd1 / hd2 / hd3                Boot from (local) primary / secondary /... harddisk
 debug                               Get shells during process of booting for debugging

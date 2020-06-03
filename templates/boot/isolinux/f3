@@ -5,6 +5,7 @@
  grml   [options, list via F4-F10]                          boot Grml default  
  memtest                                     memtest86+ (memory test program)  
  fb1280x1024, fb1024x768 or fb800x600   use framebuffer mode (e.g. notebooks)  
+ legacynet                                 use legacy network interface names  
  nofb                                                disable framebuffer mode  
  hd / hd1 / hd2 / hd3 / floppy       boot from (1st/2nd/..) harddisk / floppy  
  serial                                               activate serial console  
@@ -14,7 +15,6 @@
  grub                                    boot GRand Unified Bootloader (GRUB)  
  dos                                                         boot FreeDOS 1.0  
  hdt                                             boot Hardware Detection Tool  
-                                                                               
                                                                                
  A list with all supported boot options can be found on the CD at              
  /run/live/medium/grml/*/grml-cheatcodes.txt                                   
