@@ -1,6 +1,6 @@
 ==================================================================
-The grml software collection and all included programs that are
-authored by the grml-team, are subject to the terms and conditions
+The Grml software collection and all included programs that are
+authored by the Grml team, are subject to the terms and conditions
 of the GNU GENERAL PUBLIC LICENSE Version 2 or any later version,
 as quoted herein.
 
@@ -8,9 +8,6 @@ Please note that this license does NOT automatically apply to
 third-party programs included on this CD. Check
 /usr/share/doc/*/copyright* and other supplied license files
 of each software package carefully for more information.
-
-Information regarding the sources of this ISO can be found at
-http://sources.grml.org/
 ==================================================================
 
 		    GNU GENERAL PUBLIC LICENSE
