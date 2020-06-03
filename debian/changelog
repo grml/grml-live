@@ -1,3 +1,15 @@
+grml-live (0.35.3) unstable; urgency=medium
+
+  * Software related changes:
+    - [cb7d1f2] add wireguard to GRML_FULL
+  * Fixes:
+    - [6b2e23d] GRMLBASE/98-clean-chroot: avoid warning messages
+      with resolvconf <1.80
+    - [397c7e7] Use debootstrap with --no-merged-usr by default
+    - [b4b524c] No longer refer to sources.grml.org
+
+ -- Michael Prokop <mika@grml.org>  Wed, 03 Jun 2020 16:47:04 +0200
+
 grml-live (0.35.2) unstable; urgency=medium
 
   * Software related changes:
