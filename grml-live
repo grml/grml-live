@@ -579,7 +579,8 @@ if [ -n "$CONFIG" ] ; then
    fi
 fi
 
-start_seconds=$(cut -d . -f 1 /proc/uptime)
+SECONDS=unknown
+start_seconds="$(date +%s)"
 log "------------------------------------------------------------------------------"
 log "Starting grml-live [${GRML_LIVE_VERSION}] run on $(date)"
 log "Using local config file: $LOCAL_CONFIG"
@@ -1692,7 +1693,10 @@ fi
 # }}}
 
 # finalize {{{
-[ -n "$start_seconds" ] && SECONDS="$[$(cut -d . -f 1 /proc/uptime)-$start_seconds]" || SECONDS="unknown"
+if [ -n "${start_seconds}" ] ; then
+  end_seconds="$(date +%s)"
+  SECONDS="$(( end_seconds - start_seconds ))"
+fi
 log "Successfully finished execution of $PN [$(date) - running ${SECONDS} seconds]"
 
 dpkg_to_db # make sure we catch the last log line as well, therefore execute between log + einfo
