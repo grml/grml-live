@@ -1,3 +1,14 @@
+grml-live (0.35.4) unstable; urgency=medium
+
+  [ Darshaka Pathirana ]
+  * [d56d6fa] Add boot option pnet (Predictable Network Interface Names)
+
+  [ Michael Prokop ]
+  * [950b6bb] Adjust layout of "Predictable Network Interface Names" boot
+    option
+
+ -- Michael Prokop <mika@grml.org>  Fri, 05 Jun 2020 13:34:01 +0200
+
 grml-live (0.35.3) unstable; urgency=medium
 
   * Software related changes:
