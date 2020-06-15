@@ -199,6 +199,7 @@ ssmping
 tcpdump
 tcptraceroute
 telnet
+tmate
 tshark
 tsocks
 uml-utilities

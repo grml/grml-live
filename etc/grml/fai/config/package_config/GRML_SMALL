@@ -87,6 +87,7 @@ sysvinit-utils
 tar
 tcpdump
 telnet
+tmate
 tree
 tsocks
 tzdata
