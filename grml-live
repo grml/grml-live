@@ -493,6 +493,7 @@ if [ -z "$FORCE" ] ; then
    [ -n "$ARCH" ]                && echo "  Architecture:      $ARCH"
    [ -n "$BOOT_METHOD" ]         && echo "  Boot method:       $BOOT_METHOD"
    [ -n "$HYBRID_METHOD" ]       && echo "  Hybrid method:     $HYBRID_METHOD"
+   [ -n "$SECURE_BOOT" ]         && echo "  Secure Boot:       $SECURE_BOOT"
    [ -n "$TEMPLATE_DIRECTORY" ]  && echo "  Template files:    $TEMPLATE_DIRECTORY"
    [ -n "$CHROOT_INSTALL" ]      && echo "  Install files from directory to chroot:  $CHROOT_INSTALL"
    [ -n "$BOOTID" ]              && echo "  Boot identifier:   $BOOTID"
@@ -918,32 +919,58 @@ grub_setup() {
       log   "Generated 64-bit EFI image $BOOTX64"
       einfo "Generated 64-bit EFI image $BOOTX64" ; eend 0
     else
-      log   "Secure Boot is enabled [mode: $SECURE_BOOT]"
-      einfo "Secure Boot is enabled [mode: $SECURE_BOOT]" ; eend 0
+      case "${SECURE_BOOT}" in
+        disable*)
+          log   "Secure Boot is disabled [mode: ${SECURE_BOOT}]"
+          einfo "Secure Boot is disabled [mode: ${SECURE_BOOT}]" ; eend 0
+          ;;
+        debian|ubuntu)
+          log   "Secure Boot is enabled [mode: ${SECURE_BOOT}]"
+          einfo "Secure Boot is enabled [mode: ${SECURE_BOOT}]" ; eend 0
 
-      if [ "${SECURE_BOOT}" = "ubuntu" ] ; then
-        local GRUBCFG_TEMPLATE="${TEMPLATE_DIRECTORY}/secureboot/grub.cfg"
-        local GRUBCFG_TMP=$(mktemp)
+          local GRUBCFG_TEMPLATE="${TEMPLATE_DIRECTORY}/secureboot/grub.cfg"
+          local GRUBCFG_TMP=$(mktemp)
 
-        if ! [ -r "${GRUBCFG_TEMPLATE}" ] ; then
-          log    "Secure Boot template for GRUB [${GRUBCFG_TEMPLATE}] not found."
-          eerror "Secure Boot template for GRUB [${GRUBCFG_TEMPLATE}] not found." ; eend 1
-          bailout 54
-        fi
+          if ! [ -r "${GRUBCFG_TEMPLATE}" ] ; then
+            log    "Secure Boot template for GRUB [${GRUBCFG_TEMPLATE}] not found."
+            eerror "Secure Boot template for GRUB [${GRUBCFG_TEMPLATE}] not found." ; eend 1
+            bailout 54
+          fi
 
-        cp "${GRUBCFG_TEMPLATE}" "${GRUBCFG_TMP}"
-        adjust_boot_files "${GRUBCFG_TMP}"
+          cp "${GRUBCFG_TEMPLATE}" "${GRUBCFG_TMP}"
+          adjust_boot_files "${GRUBCFG_TMP}"
 
-        mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::EFI/ubuntu || bailout 55
-        mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${GRUBCFG_TMP}" ::EFI/ubuntu/grub.cfg || bailout 56
-        rm "${GRUBCFG_TMP}"
+          mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::boot      || bailout 55
+          mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::boot/grub || bailout 55
+          mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${GRUBCFG_TMP}" ::boot/grub/grub.cfg || bailout 56
 
-        mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${TEMPLATE_DIRECTORY}"/EFI/BOOT/grubx64.efi.signed ::EFI/BOOT/grubx64.efi >/dev/null || bailout 57
-        mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${TEMPLATE_DIRECTORY}"/EFI/BOOT/shimx64.efi.signed ::EFI/BOOT/bootx64.efi >/dev/null || bailout 58
+          rm "${GRUBCFG_TMP}"
 
-        log   "Generated 64-bit Secure Boot (ubuntu) EFI image ${CHROOT_OUTPUT}/${EFI_IMG}"
-        einfo "Generated 64-bit Secure Boot (ubuntu) EFI image ${CHROOT_OUTPUT}/${EFI_IMG}" ; eend 0
-      fi
+          if [ -r "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed" ] ; then
+            mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed" ::EFI/BOOT/grubx64.efi >/dev/null || bailout 57
+          else
+            log    "Secure Boot GRUB binary '${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed' not found."
+            eerror "Secure Boot GRUB binary '${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed' not found." ; eend 1
+            bailout 57
+          fi
+
+          if [ -r "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed" ] ; then
+            mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed" ::EFI/BOOT/bootx64.efi >/dev/null || bailout 58
+          else
+            log    "Secure Boot GRUB binary '${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed' not found."
+            eerror "Secure Boot GRUB binary '${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed' not found." ; eend 1
+            bailout 57
+          fi
+
+          log   "Generated 64-bit Secure Boot (${SECURE_BOOT}) EFI image ${CHROOT_OUTPUT}/${EFI_IMG}"
+          einfo "Generated 64-bit Secure Boot (${SECURE_BOOT}) EFI image ${CHROOT_OUTPUT}/${EFI_IMG}" ; eend 0
+          ;;
+        *)
+          log   "Secure Boot method '${SECURE_BOOT}' is unsupported."
+          error "Secure Boot method '${SECURE_BOOT}' is unsupported." ; eend 1
+          bailout 59
+          ;;
+      esac
     fi
   fi
 
@@ -1190,8 +1217,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
     # adjust all variables in the templates with the according distribution information
     adjust_boot_files "${BUILD_OUTPUT}"/boot/isolinux/*.cfg \
       "${BUILD_OUTPUT}"/boot/isolinux/*.msg \
-      "${BUILD_OUTPUT}"/boot/grub/* \
-      "${BUILD_OUTPUT}"/boot/ubuntu/*
+      "${BUILD_OUTPUT}"/boot/grub/*
 
     for param in ARCH DATE DISTRI_INFO DISTRI_NAME DISTRI_SPLASH GRML_NAME SQUASHFS_NAME \
       RELEASE_INFO SHORT_NAME VERSION ; do

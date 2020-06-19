@@ -1,4 +1,4 @@
-# This is the default GRUB theme of Grml
+# This is the theme to be used in Secure Boot mode
 
 title-text: ""
 title-color: "#FFFFFF"
@@ -27,7 +27,9 @@ message-color:  "#FFFFFF"
 + vbox {
   top = 55%
   left = 20%
-  + label {text = "Press ENTER to boot or E to edit menu entry " color = "white" align = "left"}
+  + label {text = "Running in Secure Boot mode" color = "white" align = "left"}
+  + label {text = ""}
+  + label {text = "Press ENTER to boot or E to edit menu entry " color = "white"}
   + label {text = "Press C to enter the Grub commandline" color = "white"}
 }
 

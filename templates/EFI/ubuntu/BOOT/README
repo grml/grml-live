@@ -1,6 +1,6 @@
 # ubuntu approach:
 shimx64.efi.signed = /usr/lib/shim/shimx64.efi.signed                   from http://de.archive.ubuntu.com/ubuntu/pool/main/s/shim-signed/shim-signed_1.34.9+13-0ubuntu2_amd64.deb
-grubx64.efi.signed = /usr/lib/grub/x86_64-efi-signed/grubx64.efi.signed from http://de.archive.ubuntu.com/ubuntu/pool/main/g/grub2-signed/grub-efi-amd64-signed_1.93+2.02-2ubuntu8_amd64.deb
+grubx64.efi.signed = /usr/lib/grub/x86_64-efi-signed/gcdx64.efi.signed  from http://de.archive.ubuntu.com/ubuntu/pool/main/g/grub2-signed/grub-efi-amd64-signed_1.93+2.02-2ubuntu8_amd64.deb
 # NOTE:
 # shimx64.efi.signed ends up as /EFI/BOOT/bootx64.efi inside [grml_cd]/boot/efi.img, and
 # grubx64.efi.signed ends up as /EFI/BOOT/grubx64.efi inside [grml_cd]/boot/efi.img, whereas
