@@ -1713,12 +1713,18 @@ config_lvm(){
           fi
           eend 0
           if checkbootparam 'lvm' ; then
-             einfo "Bootoption LVM found. Searching for logical volumes and enabling them:"
              if $SYSTEMD ; then
-               service_wrapper lvm2-lvmetad start
-               vgchange -ay
-               eend $?
+               einfo "Bootoption LVM found, enabling related services."
+               if [ -r /etc/init.d/lvm2-lvmetad ] ; then
+                 service_wrapper lvm2-lvmetad start ; eend $?
+               fi
+               if [ -r /etc/init.d/lvm2-lvmpolld ] ; then
+                 service_wrapper lvm2-lvmpolld start ; eend $?
+               fi
+               einfo "Searching for logical volumes and enabling them:"
+               vgchange -ay ; eend $?
              else
+               einfo "Bootoption LVM found. Searching for logical volumes and enabling them:"
                service_wrapper lvm2 start ; eend $?
              fi
           fi
