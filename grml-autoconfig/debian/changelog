@@ -1,3 +1,10 @@
+grml-autoconfig (0.19.1) grml-testing; urgency=medium
+
+  * [86279cd] lvm: start lvm2-lvmetad only if present + support
+    lvm2-lvmpolld
+
+ -- Michael Prokop <mika@grml.org>  Tue, 23 Jun 2020 13:04:50 +0200
+
 grml-autoconfig (0.19.0) grml-testing; urgency=medium
 
   * [b451f8e] Switch default mount point from /lib/live/mount/medium to
