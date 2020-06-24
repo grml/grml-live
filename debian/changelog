@@ -1,3 +1,16 @@
+grml-live (0.36.0) unstable; urgency=medium
+
+  * Fixes:
+    - [8772657] Do not depend on /proc for calculating runtime
+  * Software related changes:
+    - [6542652] add tmate to GRML_SMALL + GRML_FULL
+    - [4b6fd81] add qrencode to GRML_SMALL and GRML_FULL
+  * Features:
+    - [518eb39] Refresh Secure Boot support, supporting new
+      'debian' method. Thanks to Jordan Uggla for feedback
+
+ -- Michael Prokop <mika@grml.org>  Wed, 24 Jun 2020 11:34:03 +0200
+
 grml-live (0.35.4) unstable; urgency=medium
 
   [ Darshaka Pathirana ]
