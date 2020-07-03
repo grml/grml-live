@@ -1882,7 +1882,7 @@ if $VIRTUALBOX ; then
         vbautomation="$(getbootparam 'vbautomation' 2>>$DEBUG)"
       fi
 
-      if ! VBoxControl sharedfolder list | egrep -q "^[0-9]+ - ${vbautomation}$" ; then
+      if ! VBoxControl sharedfolder list | egrep -q "^[0-9]+ - ${vbautomation}\s*" ; then
         ewarn "No automount shared folder '$vbautomation' available"
         eend 0
       else
