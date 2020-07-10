@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends:
  debhelper (>= 7),
-Standards-Version: 3.9.6
+Standards-Version: 4.5.0
 Homepage: https://git.grml.org/?p=grml-udev-config.git
 Vcs-git: git://git.grml.org/grml-udev-config.git
 Vcs-Browser: https://git.grml.org/?p=grml-udev-config.git
