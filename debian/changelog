@@ -1,3 +1,20 @@
+grml-udev-config (0.5.0) unstable; urgency=medium
+
+  * [4f65928] grml-udev-config.grml-forensic: also react to block device
+    *changes*
+  * [31e81f4] scripts/forensic-mark-readonly: support standalone usage and
+    configuration file usage
+  * [47cd5ef] debian: use https URLs
+  * [0c599ee] debian: wrap-and-sort
+  * [efdfa3e] debian: Bump Standards-Version to 4.5.0
+  * [be20003] debian: refresh debian packaging to use current best
+    practices
+  * [10957df] Drop grml-udev init script (no longer used/relevant)
+  * [d4907e9] Update debian/README.Debian to reflect current state
+  * [8fe226c] debian: drop conflict on outdated udev package
+
+ -- Michael Prokop <mika@grml.org>  Fri, 10 Jul 2020 10:36:52 +0200
+
 grml-udev-config (0.4.2) unstable; urgency=medium
 
   * [cf81315] Fix check for presence of udev initscript in
