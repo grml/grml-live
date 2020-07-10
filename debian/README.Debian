@@ -1,36 +1,11 @@
-grml-udev-config for Debian
----------------------------
-
-Notes regarding installation
-============================
-
-Please notice that this package does NOT activate its init script itself on
-installation. The udev rules are enabled automatically but if you want to use
-the bootoptions noudev and blacklist you have to enable the provided init script
-manually (unless you are using just the Grml *live* system of course where the
-according toolchains do that for you).
-
-So if you want to enable the grml-udev initscript manually on your system
-execute the following commands to replace the /etc/init.d/udev script with
-/etc/init.d/grml-udev:
-
- update-rc.d -f udev remove
- update-rc.d grml-udev start 03 S .
-
-Documentation of provided rules
-===============================
+grml-udev-config for Debian - Documentation of provided rules
+-------------------------------------------------------------
 
 /lib/udev/rules.d/01-grml-forensic.rules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Mark new block devices as readonly when booting with bootoption
-forensic/readonly.
-
-/lib/udev/rules.d/60-grml-blockdevices.rules
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This script triggers the /usr/sbin/rebuildfstab script for updating /etc/fstab
-and /media/* when block devices are added or removed from the system.
+Mark new block devices as readonly when booting with kernel command line
+option read-only (boot menu entry forensic/readonly).
 
 /lib/udev/rules.d/60-grml-external.rules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -51,5 +26,20 @@ in /etc/fstab (via rebuildfstab) and directories in /media according to availabl
 labeled filesystems for free. On removal of the USB device the symlinks and
 usb*-directories in /media will automatically vanish.
 
- -- Michael Prokop <mika@grml.org>  Fri, 13 Nov 2009 12:02:41 +0100
+/lib/udev/rules.d/85-brltty.rules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Automatically start brltty if a supported USB device gets attached.
+
+/lib/udev/rules.d/89-grml-dm.rules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Add watch option for dm devices to get change notification if device changes.
+
+/lib/udev/rules.d/90-grml-blockdevices.rules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This script triggers the /usr/sbin/rebuildfstab script for updating /etc/fstab
+and /media/* when block devices are added or removed from the system.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Nov 2009 12:02:41 +0100
