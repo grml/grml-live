@@ -1,3 +1,0 @@
-grml-udev-config: init.d-script-does-not-implement-required-option /etc/init.d/grml-udev stop
-grml-udev-config: init.d-script-does-not-implement-required-option /etc/init.d/grml-udev restart
-grml-udev-config: init.d-script-does-not-implement-required-option /etc/init.d/grml-udev force-reload
