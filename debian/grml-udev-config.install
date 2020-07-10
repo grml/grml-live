@@ -1,0 +1,3 @@
+scripts/forensic-mark-readonly /etc/udev/scripts/
+scripts/grml-udev-rebuildfstab /etc/udev/scripts/
+scripts/brltty.sh /lib/brltty/

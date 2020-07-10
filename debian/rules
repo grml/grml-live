@@ -1,63 +1,17 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 
-#export DH_VERBOSE=1
+# Uncomment this to turn on verbose mode.
+# export DH_VERBOSE=1
 
-build: build-stamp
+%:
+	dh $@
 
-build-stamp:
-	dh_testdir
-	touch $@
-
-clean:
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp
-	dh_clean
-
-install: build
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdirs /etc/udev/scripts
-	dh_installdirs /lib/brltty/
-
-	install -m 755 scripts/forensic-mark-readonly debian/grml-udev-config/etc/udev/scripts/forensic-mark-readonly
-	install -m 755 scripts/grml-udev-rebuildfstab debian/grml-udev-config/etc/udev/scripts/
-	install -m 755 scripts/brltty.sh debian/grml-udev-config/lib/brltty/brltty.sh
-
-# Build architecture-dependent files here.
-binary-arch: install
-# We have nothing to do by default.
-
-# Build architecture-independent files here.
-binary-indep: install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs
-	dh_installdocs
-	dh_installexamples
+override_dh_install:
+	dh_install
 	dh_installudev --name=grml-forensic     --priority 01
 	dh_installudev --name=grml-external     --priority 60
 	dh_installudev --name=grml-usbdev       --priority 60
 	dh_installudev --name=brltty	        --priority 85
-	dh_installudev --name=grml-dm			--priority 89
+	dh_installudev --name=grml-dm		--priority 89
 	dh_installudev --name=grml-blockdevices --priority 90
-	dh_installinit --no-start --name=grml-udev
-	# do *NOT* automatically install it, see README.Debian
-	# --update-rcd-params='start 03 S .'
-	dh_installman
-	dh_link
-	dh_strip
-	dh_compress
-	mkdir -p debian/grml-udev-config/usr/share/lintian/overrides/
-	cp -av debian/overrides debian/grml-udev-config/usr/share/lintian/overrides/grml-udev-config
-	dh_fixperms
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install
