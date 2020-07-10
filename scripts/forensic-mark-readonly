@@ -6,57 +6,93 @@
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
+# check for read-only bootoption
+if ! grep -q read-only /proc/cmdline ; then
+  exit 0
+fi
+
+# see linux source -> Documentation/admin-guide/sysfs-rules.rst
 get_blockdev_dir() {
-    for dir in /sys/subsystem/block/ /sys/class/block/ /sys/block/ ; do
-        [ -d "$dir" ] && echo "$dir" && return
-    done
+  for dir in /sys/subsystem/block/ /sys/class/block/ /sys/block/ ; do
+    [ -d "${dir}" ] && echo "${dir}" && return
+  done
 }
 
 base() {
-    echo ${1##*/}
+  echo "${1##*/}"
 }
 
 dir() {
-    echo ${1%/*}
+  echo "${1%/*}"
 }
 
 is_ro() {
-    [ "$(blockdev --getro $1)" = "1" ] && return 0 || return 1
+  [ "$(blockdev --getro "$1")" = "1" ] && return 0 || return 1
 }
 
-# check for read-only bootoption
-if grep -q read-only /proc/cmdline ; then
- # we get $DEVNAME via udev's environment
- if [ -n "$DEVNAME" ] ; then
-    NAME=$(base $DEVNAME)
-    SYS_DIR=$(get_blockdev_dir)
+if [ -z "${1:-}" ] ; then
+  echo "Error: usage: <$0> <blockdevice>" >&2
+  exit 1
+fi
 
-    if [ -n "$SYS_DIR" ] && [ -n "$NAME" ] ; then
-        DEVICE=$SYS_DIR/*/$NAME
-        if [ -d $DEVICE ] ; then
-            PARENT=$(dir $DEVICE)
-            PARENT=$(base $PARENT)
-            PARENT="/dev/$PARENT"
-        fi
-    fi
+# accept /dev/foo from command line but also just "foo" from udev
+case "$1" in
+  /dev/*)
+    BLOCK_DEVICE="$1"
+    ;;
+  *)
+    BLOCK_DEVICE="/dev/$1"
+    ;;
+esac
 
-   if is_ro "$DEVNAME" ; then
-     logger "forensic mode: device $DEVNAME already set to read-only mode, nothing to do"
-   elif [ -n "$PARENT" ] && ! is_ro "$PARENT" ; then
-     logger "forensic mode: parent device $PARENT is set read-write, not modifying"
-     logger "forensic mode: use blockdev --setro $DEVNAME to set it manually"
-   else
-     logger "forensic mode: setting $DEVNAME [$ID_SERIAL] to read-only"
+SYS_DIR="$(get_blockdev_dir)"
 
-     if blockdev --setro "$DEVNAME" ; then
-       logger "|-> done; execute 'blockdev --setrw $DEVNAME' to unlock"
-     else
-       logger "|-> error while executing blockdev: $(blockdev --setro $DEVNAME 2>&1)"
-     fi
+# support configuration file
+if [ -r /etc/grml/forensic.conf ] ; then
+  READONLY_MODE=""
+  READONLY_IGNORE=""
 
-   fi
+  . /etc/grml/forensic.conf
 
- fi
+  if [ "${READONLY_MODE:-}" = "disable" ] ; then
+    logger -t forensic-mark-readonly "not setting '${BLOCK_DEVICE}' to read-only as disabled via config"
+    exit 0
+  fi
+
+  if [ -n "${READONLY_IGNORE:-}" ] ; then
+    case ${READONLY_IGNORE:-} in
+      "${BLOCK_DEVICE}")
+        logger -t forensic-mark-readonly "not setting '${BLOCK_DEVICE}' to read-only as present in ignore list"
+        exit 0
+        ;;
+    esac
+  fi
+fi
+
+base_device=$(base "${BLOCK_DEVICE}")
+if [ -n "${SYS_DIR}" ] && [ -n "${base_device}" ] ; then
+  tmp_parent="${SYS_DIR}/*/${base_device}"
+  if [ -d "${tmp_parent}" ] ; then
+    parent_device=$(dir "${tmp_parent}")
+    parent_device=$(base "${parent_device}")
+    parent_device="/dev/${parent_device}"
+  fi
+  unset tmp_parent
+fi
+
+if is_ro "${BLOCK_DEVICE}" ; then
+  logger -t forensic-mark-readonly "device ${BLOCK_DEVICE} already set to read-only mode, nothing to do"
+elif [ -n "${parent_device}" ] && ! is_ro "${parent_device}" ; then
+  logger -t forensic-mark-readonly "parent device ${parent_device} is set read-write, not modifying"
+  logger -t forensic-mark-readonly "use blockdev --setro ${BLOCK_DEVICE} to set it manually"
+else
+  logger -t forensic-mark-readonly "setting ${BLOCK_DEVICE} [${ID_SERIAL}] to read-only"
+
+  if blockdev --setro "${BLOCK_DEVICE}" ; then
+    logger -t forensic-mark-readonly "|-> done; execute 'blockdev --setrw ${BLOCK_DEVICE}' to unlock"
+  else
+    logger -t forensic-mark-readonly "|-> error while executing blockdev: $(blockdev --setro "${BLOCK_DEVICE}" 2>&1)"
+  fi
 fi
 
 ## END OF FILE #################################################################
