@@ -1132,6 +1132,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
         # copy addons from system packages or grml-live-addons
         copy_addon_file ipxe.lkrn /usr/lib/ipxe addons
+        copy_addon_file ipxe.efi /usr/lib/ipxe addons
         copy_addon_file pci.ids /usr/share/misc addons
         copy_addon_file memtest86+.bin /boot addons
 
