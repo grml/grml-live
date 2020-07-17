@@ -1127,6 +1127,9 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
         log   "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)"
         ewarn "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)" ; eend 0
       else
+        log   "Installing boot addons."
+        einfo "Installing boot addons."
+
         # copy addons from system packages or grml-live-addons
         copy_addon_file ipxe.lkrn /usr/lib/ipxe addons
         copy_addon_file pci.ids /usr/share/misc addons
@@ -1144,6 +1147,8 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
         done
 
         copy_addon_file memdisk /usr/lib/syslinux addons
+
+        eend 0
 
         # make memtest filename FAT16/8.3 compatible
         mv "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" \
