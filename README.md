@@ -25,4 +25,5 @@ of an installed `grml-live` package:
     # export SCRIPTS_DIRECTORY=$(pwd)/scripts
     # export LIVE_CONF=$(pwd)/etc/grml/grml-live.conf
     # export TEMPLATE_DIRECTORY=$(pwd)/templates
+    # ln -s ../../../grml-live-grml/templates/boot/addons templates/boot/  # optional
     # ./grml-live -s sid -a amd64 -c GRMLBASE,GRML_FULL,AMD64

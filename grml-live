@@ -1123,7 +1123,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       log   "Skipping installation of boot addons as requested via \$NO_ADDONS."
       einfo "Skipping installation of boot addons as requested via \$NO_ADDONS."; eend 0
     else
-      if ! [ -d "$TEMPLATE_DIRECTORY"/boot/addons ] ; then
+      if ! [ -r "$TEMPLATE_DIRECTORY"/boot/addons ] ; then
         log   "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)"
         ewarn "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)" ; eend 0
       else
