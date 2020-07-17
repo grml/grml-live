@@ -1666,6 +1666,53 @@ create_netbootpackage() {
     eoutdent
   fi
 
+  # don't include shim + grubnetx64 + grub files in i386 netboot packages,
+  # as those don't make much sense there
+  if [ "$ARCH" = amd64 ] ; then
+    if ! [ -r "${BUILD_OUTPUT}/boot/grub/netboot.cfg" ] ; then
+      log   "File ${BUILD_OUTPUT}/boot/grub/netboot.cfg not found."
+      ewarn "File ${BUILD_OUTPUT}/boot/grub/netboot.cfg not found."
+      eindent
+      log   "Hint: Are you using custom templates which do not provide grub.cfg?"
+      ewarn "Hint: Are you using custom templates which do not provide grub.cfg?" ; eend 0
+      eoutdent
+    else
+      cp "${BUILD_OUTPUT}/boot/grub/netboot.cfg" "${WORKING_DIR}/grub.cfg"
+      adjust_boot_files "${WORKING_DIR}/grub.cfg"
+
+      if [ -r "${CHROOT_OUTPUT}"/usr/lib/shim/shimx64.efi.signed ] ; then
+        log "Installing ${CHROOT_OUTPUT}/usr/lib/shim/shimx64.efi.signed as shim.efi in netboot package"
+        cp "${CHROOT_OUTPUT}"/usr/lib/shim/shimx64.efi.signed "${WORKING_DIR}"/shim.efi
+      elif [ -r "${CHROOT_OUTPUT}"/usr/lib/shim/shimx64.efi ] ; then
+        log "Installing ${CHROOT_OUTPUT}/usr/lib/shim/shimx64.efi as shim.efi in netboot package"
+        cp "${CHROOT_OUTPUT}"/usr/lib/shim/shimx64.efi "${WORKING_DIR}"/shim.efi
+      else
+        log   "No shimx64.efi for usage with PXE boot found (shim-signed not present?)"
+        ewarn "No shimx64.efi for usage with PXE boot found (shim-signed not present?)" ; eend 0
+      fi
+
+      if [ -r /usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed ] ; then
+        log "Installing /usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed as grubx64.efi in netboot package"
+        cp /usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed "${WORKING_DIR}"/grubx64.efi
+      elif [ -r /usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi ] ; then
+        log "Installing /usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi as grubx64.efi in netboot package"
+        cp /usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi "${WORKING_DIR}"/grubx64.efi
+      else
+        log   "No grubnetx64.efi for usage with PXE boot found (grub-efi-amd64-signed not present?)"
+        ewarn "No grubnetx64.efi for usage with PXE boot found (grub-efi-amd64-signed not present?)." ; eend 0
+      fi
+
+      if [ -r "${CHROOT_OUTPUT}"/usr/share/grub/unicode.pf2 ] ; then
+        log "Installing ${CHROOT_OUTPUT}/usr/share/grub/unicode.pf2 as grub/fonts/unicode.pf2 in netboot package"
+        mkdir -p "${WORKING_DIR}"/grub/fonts/
+        cp "${CHROOT_OUTPUT}"/usr/share/grub/unicode.pf2 "${WORKING_DIR}"/grub/fonts/
+      else
+        log   "No unicode.pf2 for usage with PXE boot found (grub-common not present?)"
+        ewarn "No unicode.pf2 for usage with PXE boot found (grub-common not present?)" ; eend 0
+      fi
+    fi
+  fi
+
   if tar -C "$OUTPUTDIR" -jcf "${OUTPUT_FILE}" "grml_netboot_package_${GRML_NAME}_${VERSION}" ; then
     (
       cd $(dirname "${OUTPUT_FILE}")
