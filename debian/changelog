@@ -1,3 +1,25 @@
+grml-live (0.37.0) unstable; urgency=medium
+
+  * Fixes:
+    - [b090c76] scripts/GRMLBASE/52-mdadm: unconditionally clear
+      64-md-raid-assembly.rules
+    - [5c3e795] Store logfiles also when FAI's dirinstall fails
+    - [67df700] GRUB: don't display BIOS only addons when running
+      in EFI mode
+    - [bf7faea] /e/n/i: move sourcing of /etc/network/interfaces.d/
+      to begin of file
+  * Features:
+    - [7430221] Support usage of boot/addons via symlink to
+      corresponding git repository
+    - [f625781] Be more verbose about boot addons installation
+    - [257dba7] Support EFI capable ipxe.efi boot addon
+    - [871fc96] Provide setup files for EFI boot in netboot package
+  * Software related changes:
+    - [f814855] SW: add grub-efi-amd64-signed + shim-signed to
+      GRML_FULL (AMD64 only)
+
+ -- Michael Prokop <mika@grml.org>  Sat, 18 Jul 2020 22:02:21 +0200
+
 grml-live (0.36.0) unstable; urgency=medium
 
   * Fixes:
