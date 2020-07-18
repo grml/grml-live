@@ -357,3 +357,7 @@ linux-cpupower
 PACKAGES install AMD64
 linux-image-amd64
 linux-cpupower
+
+# EFI PXE boot support in grml-terminalserver
+grub-efi-amd64-signed
+shim-signed
