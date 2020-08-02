@@ -132,6 +132,7 @@ cdebootstrap
 crosshurd
 debootstrap
 kexec-tools
+mmdebstrap
 rinse
 
 # iscsi (target) support

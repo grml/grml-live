@@ -53,6 +53,7 @@ lsscsi
 mawk
 mbr
 memtester
+mmdebstrap
 mount
 mtools
 mtr-tiny
