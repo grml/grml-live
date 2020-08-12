@@ -23,5 +23,21 @@ if [[ -r "${target}/usr/share/doc/dnsutils" ]] && [ -x "${target}/usr/bin/deborp
   fi
 fi
 
+# workaround for bsdmainutils transitional package, we can drop this as soon as the
+# bsdextrautils + ncal packages are available in all our supported Debian releases
+# (FTR: the transitional bsdmainutils package currently depends on
+# bsdextrautils bsdutils calendar debianutils ncal)
+if [[ -r "${target}/usr/share/doc/bsdmainutils" ]] && [ -x "${target}/usr/bin/deborphan" ] ; then
+  echo "Adding bsdmainutils to deborphan whitelist"
+  # workaround for https://bugs.debian.org/929273 ("fseek on /var/lib/deborphan/keep: Invalid argument")
+  if ! [ -f "${target}"/var/lib/deborphan/keep ] ; then
+    printf 'bsdmainutils\n' > "${target}"/var/lib/deborphan/keep
+  elif grep -q '^bsdmainutils$' "${target}"/var/lib/deborphan/keep ; then
+    : # entry already present, avoid duplicates
+  else
+    printf 'bsdmainutils\n' >> "${target}"/var/lib/deborphan/keep
+  fi
+fi
+
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
