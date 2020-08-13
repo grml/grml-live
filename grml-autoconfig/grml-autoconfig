@@ -135,6 +135,8 @@ checkvalue $CONFIG_CONSOLE && config_console
 
 checkvalue $CONFIG_VIRTUALBOX_SHARED_FOLDERS && config_virtualbox_shared_folders
 
+checkvalue $CONFIG_VIRTUALBOX_SETUP && config_virtualbox_setup
+
 checkvalue $CONFIG_MYPATH && config_mypath
 
 checkvalue $CONFIG_DISTRI && config_distri
