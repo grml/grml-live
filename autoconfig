@@ -82,6 +82,7 @@ CONFIG_TESTCD='yes'           # CD checker
 CONFIG_TIME='yes'             # set clock, check for bootparam utc/gmt [only in live-mode]
 CONFIG_TIMEZONE='yes'         # get bootparam 'tz' and set it as /etc/localtime [only in live-mode]
 CONFIG_VIRTUALBOX_SHARED_FOLDERS='yes' # set up shared folders in VirtualBox environment
+CONFIG_VIRTUALBOX_SETUP='yes' # set up VirtuaBox service (iff present)
 CONFIG_VNC='yes'              # check for bootparam vnc
 CONFIG_XSTARTUP='yes'         # start X window system via grml-x [only in live-mode]
 

@@ -1847,16 +1847,22 @@ fi # checkbootparam "BOOT_IMAGE=debian2hd
 
 # {{{ virtualbox shared folders
 config_virtualbox_shared_folders() {
-if $VIRTUALBOX ; then
-  einfo "VirtualBox detected, trying to set up Shared Folders."
-  if ! modinfo vboxsf &>/dev/null ; then
-    ewarn "vboxsf driver not present, not setting up VirtualBox Shared Folders."
-    eend 0
-  elif ! [ -x /usr/sbin/VBoxService ] ; then
-    ewarn "virtualbox-guest-utils not installed, not setting up VirtualBox Shared Folders."
-    eend 0
+  if ! $VIRTUALBOX ; then
+    return
+  fi
+
+  if checkbootparam 'novboxsf' ; then
+    ewarn "Skipping VirtualBox Shared Folders setup as requested on boot commandline." ; eend 0
   else
-    eindent
+    einfo "VirtualBox detected, trying to set up Shared Folders."
+    if ! modinfo vboxsf &>/dev/null ; then
+      ewarn "vboxsf driver not present, not setting up VirtualBox Shared Folders."
+      eend 0
+    elif ! [ -x /usr/sbin/VBoxService ] ; then
+      ewarn "virtualbox-guest-utils not installed, not setting up VirtualBox Shared Folders."
+      eend 0
+    else
+      eindent
 
       einfo "Loading vboxsf driver."
       lsmod | grep -q vboxsf || modprobe vboxsf
@@ -1869,8 +1875,8 @@ if $VIRTUALBOX ; then
 
       config_userfstab
 
-      einfo "Adding $fstabuser to group vboxsf."
-      adduser grml vboxsf &>/dev/null
+      einfo "Adding user ${fstabuser:-grml} to group vboxsf."
+      adduser "${fstabuser:-grml}" vboxsf >>"${DEBUG}" 2>&1
       eend $?
 
       einfo "Starting VBoxService."
@@ -1931,9 +1937,29 @@ if $VIRTUALBOX ; then
         fi
       fi
 
-    eoutdent
+      eoutdent
+    fi
   fi
-fi
+}
+# }}}
+
+# {{{ VirtualBox application
+config_virtualbox_setup() {
+  if checkbootparam 'novbox' ; then
+    ewarn "Skipping VirtualBox setup as requested on boot commandline." ; eend 0
+    return
+  fi
+
+  if [ -x /usr/bin/VBox ] ; then
+    einfo "VirtualBox service detected, trying to set up."
+    service_wrapper vboxdrv restart >>"${DEBUG}" 2>&1 ; eend $?
+
+    config_userfstab
+
+    einfo "Adding user ${fstabuser:-grml} to group vboxusers."
+    adduser "${fstabuser:-grml}" vboxusers >>"${DEBUG}" 2>&1
+    eend $?
+  fi
 }
 # }}}
 
