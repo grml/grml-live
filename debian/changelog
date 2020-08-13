@@ -1,3 +1,9 @@
+grml-autoconfig (0.19.3) grml-testing; urgency=medium
+
+  * [5e4c03e] Improve VirtualBox shared folders + support vboxdrv service
+
+ -- Michael Prokop <mika@grml.org>  Thu, 13 Aug 2020 09:57:03 +0200
+
 grml-autoconfig (0.19.2) grml-testing; urgency=medium
 
   * [289b3ef] VirtualBox shared folders: adjust check for detecting shared
