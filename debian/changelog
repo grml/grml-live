@@ -1,3 +1,15 @@
+grml-live (0.37.1) unstable; urgency=medium
+
+  * Fixes:
+    - [0867199] Secure Boot: update grubx64.efi.signed to fix BootHole issue
+    - [780b71c] Add bsdmainutils to DEBORPHAN whitelist
+    - [ddb26a3] Update lintian-overrides for new EFI boot files
+  * Software related changes:
+    - [771fa1a] add mmdebstrap to GRML_FULL + GRML_SMALL.
+      Thanks to Helmut Grohne for the suggestion
+
+ -- Michael Prokop <mika@grml.org>  Tue, 25 Aug 2020 11:49:26 +0200
+
 grml-live (0.37.0) unstable; urgency=medium
 
   * Fixes:
