@@ -13,7 +13,7 @@ fi
 
 # see linux source -> Documentation/admin-guide/sysfs-rules.rst
 get_blockdev_dir() {
-  for dir in /sys/subsystem/block/ /sys/class/block/ /sys/block/ ; do
+  for dir in /sys/subsystem/block /sys/class/block /sys/block ; do
     [ -d "${dir}" ] && echo "${dir}" && return
   done
 }
@@ -47,6 +47,17 @@ esac
 
 SYS_DIR="$(get_blockdev_dir)"
 
+base_device=$(base "${BLOCK_DEVICE}")
+if [ -n "${SYS_DIR}" ] && [ -n "${base_device}" ] ; then
+  tmp_parent="$(readlink -f "${SYS_DIR}"/*/"${base_device}")"
+  if [ -d "${tmp_parent}" ] ; then
+    parent_device=$(dir "${tmp_parent}")
+    parent_device=$(base "${parent_device}")
+    parent_device="/dev/${parent_device}"
+  fi
+  unset tmp_parent
+fi
+
 # support configuration file
 if [ -r /etc/grml/forensic.conf ] ; then
   READONLY_MODE=""
@@ -60,24 +71,15 @@ if [ -r /etc/grml/forensic.conf ] ; then
   fi
 
   if [ -n "${READONLY_IGNORE:-}" ] ; then
-    case ${READONLY_IGNORE:-} in
-      "${BLOCK_DEVICE}")
+    if printf "%s\n" "${READONLY_IGNORE:-}" | grep -qw "${parent_device}" ; then
+      if [ -n "${parent_device:-}" ] ; then
+        logger -t forensic-mark-readonly "not setting '${BLOCK_DEVICE}' (parent device: '${parent_device}') to read-only as present in ignore list"
+      else
         logger -t forensic-mark-readonly "not setting '${BLOCK_DEVICE}' to read-only as present in ignore list"
-        exit 0
-        ;;
-    esac
+      fi
+      exit 0
+    fi
   fi
-fi
-
-base_device=$(base "${BLOCK_DEVICE}")
-if [ -n "${SYS_DIR}" ] && [ -n "${base_device}" ] ; then
-  tmp_parent="${SYS_DIR}/*/${base_device}"
-  if [ -d "${tmp_parent}" ] ; then
-    parent_device=$(dir "${tmp_parent}")
-    parent_device=$(base "${parent_device}")
-    parent_device="/dev/${parent_device}"
-  fi
-  unset tmp_parent
 fi
 
 if is_ro "${BLOCK_DEVICE}" ; then
