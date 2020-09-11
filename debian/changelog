@@ -1,3 +1,10 @@
+grml-udev-config (0.5.1) unstable; urgency=medium
+
+  * [4513316] scripts/forensic-mark-readonly: fix parent device handling +
+    their usage via READONLY_IGNORE
+
+ -- Michael Prokop <mika@grml.org>  Fri, 11 Sep 2020 23:00:48 +0200
+
 grml-udev-config (0.5.0) unstable; urgency=medium
 
   * [4f65928] grml-udev-config.grml-forensic: also react to block device
