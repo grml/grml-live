@@ -1,3 +1,10 @@
+grml-autoconfig (0.19.4) grml-testing; urgency=medium
+
+  * [14203cc] Do not run VirtualBox setup under enabled Secure Boot to
+    avoid errors and startup delays. Thanks to Ralf Moll for the bugreport
+
+ -- Michael Prokop <mika@grml.org>  Tue, 15 Sep 2020 21:19:05 +0200
+
 grml-autoconfig (0.19.3) grml-testing; urgency=medium
 
   * [5e4c03e] Improve VirtualBox shared folders + support vboxdrv service
