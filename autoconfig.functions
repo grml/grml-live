@@ -543,7 +543,8 @@ config_kernel(){
 # }}}
 
 # {{{ secure boot
-config_secureboot(){
+# helper function to check whether we're running under (enabled) Secure Boot
+running_under_secureboot() {
   # systemd does this for us, but if we are not running under systemd then mokutil
   # doesn't work as needed as it relies on /sys/firmware/efi/efivars (while
   # /sys/firmware/efi/vars would exist)
@@ -556,18 +557,26 @@ config_secureboot(){
   if [ -x /usr/bin/mokutil ] ; then
     local secstate=$(mokutil --sb-state 2>/dev/null) # "SecureBoot enabled"
     if [ -n "$secstate" ] ; then
-      einfo "SecureBoot is enabled" ; eend 0
+      return 0
     else
-      einfo "SecureBoot not detected" ; eend 0
+      return 1
     fi
   else
     if modprobe efivars &>/dev/null ; then
       if od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data 2>/dev/null | grep -q 1 ; then
-        einfo "SecureBoot is enabled" ; eend 0
+        return 0
       else
-        einfo "SecureBoot not detected" ; eend 0
+        return 1
       fi
     fi
+  fi
+}
+
+config_secureboot(){
+  if running_under_secureboot ; then
+      einfo "SecureBoot is enabled" ; eend 0
+  else
+      einfo "SecureBoot not detected" ; eend 0
   fi
 }
 # }}}
@@ -1950,16 +1959,23 @@ config_virtualbox_setup() {
     return
   fi
 
-  if [ -x /usr/bin/VBox ] ; then
-    einfo "VirtualBox service detected, trying to set up."
-    service_wrapper vboxdrv restart >>"${DEBUG}" 2>&1 ; eend $?
-
-    config_userfstab
-
-    einfo "Adding user ${fstabuser:-grml} to group vboxusers."
-    adduser "${fstabuser:-grml}" vboxusers >>"${DEBUG}" 2>&1
-    eend $?
+  if ! [ -x /usr/bin/VBox ] ; then
+    return
   fi
+
+  if running_under_secureboot ; then
+    ewarn "VirtualBox service can not be started as running under enabled Secure Boot." ; eend 0
+    return
+  fi
+
+  einfo "VirtualBox service detected, trying to set up."
+  service_wrapper vboxdrv restart >>"${DEBUG}" 2>&1 ; eend $?
+
+  config_userfstab
+
+  einfo "Adding user ${fstabuser:-grml} to group vboxusers."
+  adduser "${fstabuser:-grml}" vboxusers >>"${DEBUG}" 2>&1
+  eend $?
 }
 # }}}
 
