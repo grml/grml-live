@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# This file is installed by grml-live in 10-build-initramfs.
+# This file is installed by grml-live in 80-initramfs.
 # It's purpose is to shut up so called "cosmetic warnings"
 # introduced in udev 168-1.
 
