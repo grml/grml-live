@@ -1,3 +1,4 @@
+grml-live/
 run/*
-var/run/*
 var/lock/*
+var/run/*

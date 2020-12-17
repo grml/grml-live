@@ -12,6 +12,9 @@ set -e
 fcopy -v /etc/initramfs-tools/hooks/000-udev-shutup
 fcopy -v /etc/initramfs-tools/conf.d/xz-compress
 
+# used for grml-live's netboot package
+fcopy -i -B -v -r /etc/grml-netboot
+
 if ! [ -f $target/usr/share/initramfs-tools/scripts/live ] ; then
   echo "Error: live-boot/-initramfs does not seem to be present, can not create initramfs. Exiting.">&2
   exit 1
@@ -20,8 +23,19 @@ fi
 echo "Rebuilding initramfs"
 
 for initrd in "$(basename $target/boot/vmlinuz-*)" ; do
-    if ! $ROOTCMD update-initramfs -k "${initrd##vmlinuz-}" -c ; then
-        echo "Creating fresh initramfs did not work, trying update instead:"
-        $ROOTCMD update-initramfs -k "${initrd##vmlinuz-}" -u
-    fi
+  if ! $ROOTCMD update-initramfs -k "${initrd##vmlinuz-}" -c ; then
+    echo "Creating fresh initramfs did not work, trying update instead:"
+    $ROOTCMD update-initramfs -k "${initrd##vmlinuz-}" -u
+  fi
+
+  # write it to /grml-live/, as we ignore that directory via
+  # /etc/grml/fai/config/grml/squashfs-excludes, to
+  # not include the file into the ISO itself, but have
+  # it available for netboot package usage
+  if [ -d "${target}"/etc/grml-netboot ] ; then
+    echo "Creating netboot initrd file (/grml-live/netboot.initrd)"
+    $ROOTCMD mkinitramfs -d /etc/grml-netboot -o /grml-live/netboot.initrd -k "${initrd##vmlinuz-}"
+  else
+    echo "Warning: /etc/grml-netboot doesn't exist, skipping netboot initrd generation."
+  fi
 done

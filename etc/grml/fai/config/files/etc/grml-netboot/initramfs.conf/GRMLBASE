@@ -1,0 +1,10 @@
+# This file is installed by grml-live in 80-initramfs.
+# Its purpose is an initramfs configuration file, used by grml-live
+# to generate the initramfs file for the netboot package.
+BUSYBOX=auto
+COMPRESS=xz
+DEVICE=
+KEYMAP=n
+MODULES=netboot
+NFSROOT=auto
+RUNSIZE=10%

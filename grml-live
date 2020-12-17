@@ -1646,8 +1646,14 @@ create_netbootpackage() {
 
   mkdir -p "$WORKING_DIR"
 
+  if [ -r ${CHROOT_OUTPUT}/grml-live/netboot.initrd ] ; then
+    cp "${CHROOT_OUTPUT}"/grml-live/netboot.initrd "$WORKING_DIR"/initrd.img
+  else
+    eerror "Could not find netboot.initrd in ${CHROOT_OUTPUT}, make sure config/scripts/GRMLBASE/80-initramfs was executed." ; eend 1
+    bailout 22
+  fi
+
   cp "${CHROOT_OUTPUT}"/boot/vmlinuz-*    "$WORKING_DIR"/vmlinuz
-  cp "${CHROOT_OUTPUT}"/boot/initrd.img-* "$WORKING_DIR"/initrd.img
   cp "${CHROOT_OUTPUT}/${pxelinux_dir}/pxelinux.0" "${WORKING_DIR}/pxelinux.0"
 
   if [ -r "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/ldlinux.c32 ] ; then
