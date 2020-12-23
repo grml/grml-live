@@ -1691,12 +1691,12 @@ create_netbootpackage() {
         ewarn "No shimx64.efi for usage with PXE boot found (shim-signed not present?)" ; eend 0
       fi
 
-      if [ -r /usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed ] ; then
-        log "Installing /usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed as grubx64.efi in netboot package"
-        cp /usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed "${WORKING_DIR}"/grubx64.efi
-      elif [ -r /usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi ] ; then
-        log "Installing /usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi as grubx64.efi in netboot package"
-        cp /usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi "${WORKING_DIR}"/grubx64.efi
+      if [ -r "${CHROOT_OUTPUT}"/usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed ] ; then
+        log "Installing ${CHROOT_OUTPUT}/usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed as grubx64.efi in netboot package"
+        cp "${CHROOT_OUTPUT}"/usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed "${WORKING_DIR}"/grubx64.efi
+      elif [ -r "${CHROOT_OUTPUT}"/usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi ] ; then
+        log "Installing ${CHROOT_OUTPUT}/usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi as grubx64.efi in netboot package"
+        cp "${CHROOT_OUTPUT}"/usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi "${WORKING_DIR}"/grubx64.efi
       else
         log   "No grubnetx64.efi for usage with PXE boot found (grub-efi-amd64-signed not present?)"
         ewarn "No grubnetx64.efi for usage with PXE boot found (grub-efi-amd64-signed not present?)." ; eend 0
