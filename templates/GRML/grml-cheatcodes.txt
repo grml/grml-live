@@ -189,6 +189,9 @@ grml vnc_connect=host[:port]        Connect to a listening VNC client ("vncviewe
                                     initiated from the VNC server instead of the VNC client. Has to be
                                     combined with the vnc bootoption.
                                     [Note: Grml 2011.12+ doesn't include a VNC client.]
+grml getfile.retries=$NUM           Retry the download of the files specified in the netconfig=... +
+                                    netscript=... options up to $NUM times 
+
 
 Accessibility related settings:
 -------------------------------
