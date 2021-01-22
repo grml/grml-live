@@ -171,10 +171,6 @@ grml services={postfix,mysql,...}   Start service(s) which have an init-script (
 grml welcome                        Welcome message via soundoutput
 grml noeject                        Do NOT eject CD after halt/reboot
 grml noprompt                       Do NOT prompt to remove the CD when halting/rebooting the system
-grml distcc=$NETWORK,$INTERFACE     Activate distcc-daemon to listen on specified network
-                                    and interface, usage example:
-                                    distcc=192.168.0.1/24,eth0
-grml gcc=3.4 gpp=3.4                Link /usr/bin/gcc, /usr/bin/cpp and /usr/bin/c++ to specified version
 grml startx{=windowmanager}         Start X window system automatically
                                     Default window manager (if not provided): wm-ng (wrapper around fluxbox)
 grml nostartx                       If using startx as default bootoption the nostartx *disables* automatic
@@ -214,22 +210,15 @@ grml ethdevice-timeout=...          Use specified network configuration timeout 
 grml xmodule=ati|fbdev|i810|mga     Use specified X.org-Module (1)
 grml xmodule=nv|radeon|savage|s3    Use specified X.org-Module (2)
 grml xmodule=radeon|svga|i810       Use specified X.org-Module (3)
-grml no{acpi,agp,cpu,dhcp}          Skip parts of HW-detection (1)
-grml no{dma,fstab,modem}            Skip parts of HW-detection (2)
-grml no{pcmcia,scsi,swap,usb}       Skip parts of HW-detection (3)
+grml no{acpi,cpu,dhcp,fstab,swap}   Skip parts of HW-detection
 grml blacklist=modulename[,module2] Completely disable loading of specified module(s) via
                                     blacklisting through udev's /etc/modprobe.d/grml
-grml fwtimeout=50                   Set firmware timeout via /sys/class/firmware/timeout to specified value
 grml nosound                        Mute sound devices (notice: this does not deactivate loading of sound drivers!)
 grml vol=number                     Set mixer volumes to level $number
 grml micvol=number                  Set mixer volume of microphone to level $number (default: 0)
-grml pnpbios=off                    No PnP Bios initialization
 grml acpi=off                       Disable ACPI Bios completely
-grml nofirewire                     Disable initialization of firewire devices in booting sequence
 grml pci=irqmask=0x0e98             Try this, if PS/2 mouse doesn't work *)
 grml pci=bios                       Workaround for bad PCI controllers
-grml ide2=0x180 nopcmcia            Boot from PCMCIA-CD-ROM (some notebooks)
-grml mem=128M                       Specify Memory size in MByte
 grml libata.force=[ID:]VAL          Force configurations for libata.
                                     Usage example: grml libata.force=1:pio4
                                     to force pio4 mode on device "ata1:00:"
@@ -282,12 +271,6 @@ error if you have DMA enabled. Also, please read the grml-FAQ.
 the "no-" options as shown in the table above, like in
    grml noagp noapic acpi=off nodma
 to skip some critical parts of the autodetection system.
-
-*) Some boards (especially those with E-ISA slots) apparently don't pass
-the proper memory size to the linux-kernel. It may cause the message
-"Panic: cannot mount root file system" and the system hangs. Use "grml
-mem=128M" to solve that problem if your system has 128MByte memory for
-example (caution: you MUST use a capital "M" here).
 
 *) The "myconfig=/dev/partition" option allows you to reconfigure the
 system after autoconfiguration by running a bourne shell script called
