@@ -1,3 +1,14 @@
+grml-live (0.37.2) unstable; urgency=medium
+
+  [ Michael Lass ]
+  * [ea72028] GRUB: remove erroneous quotes around kernelopts
+
+  [ Michael Prokop ]
+  * [87bef6e] initramfs-tools: use upstream's xz handling to support
+    multithreading
+
+ -- Michael Prokop <mika@grml.org>  Fri, 22 Jan 2021 12:01:15 +0100
+
 grml-live (0.37.1) unstable; urgency=medium
 
   * Fixes:
