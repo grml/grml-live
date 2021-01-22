@@ -1,10 +1,5 @@
-# This file is installed by grml-live in 10-build-initramfs.
+# This file is installed by grml-live in 80-initramfs.
 # Its purpose is to use XZ compression when building initramfs.
 
-# this is a workaround to pass custom options to the xz compression
-xz() {
-    command xz --check=crc32
-}
-
-# enable XZ compression, reducing initramfs size from ~17MB to ~12MB
-compress=xz
+# enable XZ compression, reducing initramfs size from ~50MB to ~33M
+COMPRESS=xz
