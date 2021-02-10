@@ -1,3 +1,10 @@
+grml-desktop (0.7.0) unstable; urgency=medium
+
+  * [4593a0b] Drop deprecated dependency on moblin-icon-theme
+  * [69e4307] debian: run wrap-and-sort -tasb
+
+ -- Michael Prokop <mika@grml.org>  Wed, 10 Feb 2021 19:18:45 +0100
+
 grml-desktop (0.6.0) unstable; urgency=medium
 
   * [bb946bf] /etc/skel/.xinitrc.d/grml_keyboard: support
