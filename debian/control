@@ -2,7 +2,8 @@ Source: grml-desktop
 Section: grml
 Priority: extra
 Maintainer: Michael Prokop <mika@grml.org>
-Build-Depends: debhelper (>= 5)
+Build-Depends:
+ debhelper (>= 5),
 Standards-Version: 3.9.8
 Homepage: https://git.grml.org/?p=grml-desktop.git
 Vcs-git: git://git.grml.org/grml-desktop.git
@@ -12,8 +13,11 @@ Bugs: mailto:bugs@grml.org
 
 Package: grml-desktop
 Architecture: all
-Depends: grml-scripts (>= 1.1.18), ${misc:Depends}
-Recommends: fluxbox
+Depends:
+ grml-scripts (>= 1.1.18),
+ ${misc:Depends},
+Recommends:
+ fluxbox,
 Description: configuration files for the X desktop at grml
  This package provides several configuration files for
  different tools and window managers used at Grml. The
