@@ -111,10 +111,17 @@ grml bootfrom=/dev/sda1             Use the squashfs file from directory 'live' 
                                     running 'rsync -a --progress /run/live/medium/live /media/sda1/'
 grml bootfrom=removable             Restrict search for the live media to removable type only.
 grml bootfrom=removable-usb         Restrict search for the live media to usb mass storage only.
-grml isofrom=/dev/sda1/grml.iso     Use specified ISO image for booting
-                                    Useful when booting as a rescue system from harddisk - just boot
-                                    the according grml kernel and initrd using the bootoptions
-                                    "boot=live isofrom=/dev/sda1/grml.iso"
+grml isofrom=[fs:][/device]/grml.iso  Use specified ISO image for booting.
+                                    Useful when booting as a rescue system from a different device.
+                                    If you want to load the image from a device different from the root device
+                                    specified through the bootloader, prefix its device path to the path, like
+                                    in "/dev/sda1/grml.iso".
+                                    Internally, the initrd will mount the given device, automatically detecting
+                                    the file system.
+                                    If needed, prefix the file system separated with a colon character to
+                                    override the automatic detection, like in "reiserfs:/dev/sda1/grml.iso".
+                                    As an example, boot the according grml kernel and initrd using the
+                                    bootoptions "boot=live isofrom=btrfs:/dev/vda40/path/to/grml.iso"
                                     Notice: "fromiso" does the same as "isofrom", it's just there
                                     to prevent any typing errors
 grml findiso=/grml_2010.12.iso      Look for the specified ISO file on all disks where it usually
