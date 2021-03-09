@@ -18,8 +18,8 @@ for kernel in ${target}/boot/vmlinuz-* ; do
   kernelversion=${kernel##$target}
   kernelversion=${kernelversion##/boot/vmlinuz-}
 
-  echo "Updating modules.dep for kernel $kernelversion"
-  $ROOTCMD depmod -ae -F /boot/System.map-"$kernelversion" "$kernelversion"
+  echo "Updating modules.dep for kernel ${kernelversion}"
+  $ROOTCMD depmod -a "${kernelversion}"
 done
 
 ## END OF FILE #################################################################
