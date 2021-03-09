@@ -7,22 +7,22 @@ Isolinux bootprompt options:
 These options work from the isolinux bootprompt of Grml based (live) systems.
 (Do NOT use them as 'grml $OPTION', use them as '$OPTION'!):
 
-grml                                Use default settings (same as just pressing return)
-grml2ram                            Copy Grml's squashfs file to RAM and
-                                    run from there (compare with 'grml toram')
-memtest                             Run Memtest86+ instead of Linux
-fb1280x1024                         Use fixed framebuffer graphics (1)
-fb1024x768                          Use fixed framebuffer graphics (2) [notice: Grml's default]
-fb800x600                           Use fixed framebuffer graphics (3)
-nofb                                Disable framebuffer
-floppy                              Boot from floppydisk
-hd / hd1 / hd2 / hd3                Boot from (local) primary / secondary /... harddisk
-debug                               Get shells during process of booting for debugging
-forensic                            Do not touch any harddisks during hardware recognition
-serial                              Activate ttyS0 and start a getty
-grub                                Boot Grub bootloader (special all-in-one-image)
-dos                                 Boot FreeDOS
-hdt                                 Boot Hardware Detection Tool (from syslinux project)
+grml                                  Use default settings (same as just pressing return)
+grml2ram                              Copy Grml's squashfs file to RAM and
+                                      run from there (compare with 'grml toram')
+memtest                               Run Memtest86+ instead of Linux
+fb1280x1024                           Use fixed framebuffer graphics (1)
+fb1024x768                            Use fixed framebuffer graphics (2) [notice: Grml's default]
+fb800x600                             Use fixed framebuffer graphics (3)
+nofb                                  Disable framebuffer
+floppy                                Boot from floppydisk
+hd / hd1 / hd2 / hd3                  Boot from (local) primary / secondary /... harddisk
+debug                                 Get shells during process of booting for debugging
+forensic                              Do not touch any harddisks during hardware recognition
+serial                                Activate ttyS0 and start a getty
+grub                                  Boot Grub bootloader (special all-in-one-image)
+dos                                   Boot FreeDOS
+hdt                                   Boot Hardware Detection Tool (from syslinux project)
 
 Further documentation regarding the boot process can be found at:
 * http://git.grml.org/?p=live-initramfs-grml.git;a=blob_plain;f=manpages/live-initramfs.en.7.txt;hb=HEAD
@@ -36,201 +36,208 @@ For example the X window system is not part of grml-small.
 
 Regional settings:
 ------------------
-grml lang=at|de|cn|da|es|fr|it      Specify language ($LANG, $LC_ALL, $LANGUAGE - utf8) + keyboard
-grml lang=nl|pl|ru|sk|tr|tw|us      Specify language ($LANG, $LC_ALL, $LANGUAGE - utf8) + keyboard
-grml utc                            Hardware Clock is set to Coordinated Universal Time (UTC)
-grml localtime                      Hardware Clock is set to local time (LOCAL), this is the default
-grml tz=Europe/Vienna               Use specified timezone for TZ, defaults to TZ=UTC
-grml keyboard=us                    Use different keyboard layout
+grml lang=at|de|cn|da|es|fr|it        Specify language ($LANG, $LC_ALL, $LANGUAGE - utf8) + keyboard
+grml lang=nl|pl|ru|sk|tr|tw|us        Specify language ($LANG, $LC_ALL, $LANGUAGE - utf8) + keyboard
+grml utc                              Hardware Clock is set to Coordinated Universal Time (UTC)
+grml localtime                        Hardware Clock is set to local time (LOCAL), this is the default
+grml tz=Europe/Vienna                 Use specified timezone for TZ, defaults to TZ=UTC
+grml keyboard=us                      Use different keyboard layout
 
 Configuration settings:
 -----------------------
-grml myconfig=/dev/fd0              Set the DCS dir (debs, config, scripts) to the root of this device
-                                    DCS dir defaults to the live image or a device labeled GRMLCFG
-                                    If a file /config.tbz exists, it is extracted from there.
-                                    /dev/fd0  for floppy disk
-                                    /dev/sda1 for USB-stick/first SCSI-device
-grml autoconfig=SOMELABEL           Set the DCS dir to the root of the device labeled with SOMELABEL.
-                                    If undefined search for a device labeled with GRMLCFG.
-grml netconfig=server/config.tbz    Download file and extract configuration archive
-grml netscript=server/file          Download and execute file
-grml partconf=/dev/sda2             Copy files specified in /etc/grml/partconf from /dev/sda2
-                                    to booting grml system
-grml file=foobar.tbz                Use specified file as name for configuration archive
-                                    instead of the default one (config.tbz)
-grml extract=/etc                   Extract only /etc from configuration archive,
-                                    use it in combination with myconfig or netconfig
-grml persistence                    Enable persistency feature, more details available at
-                                    http://wiki.grml.org/doku.php?id=persistency
-grml hostname=...                   Set hostname to given argument
-grml hostname                       Set a random hostname
-                                    [Note: only available with releases newer than 2010.04]
-grml nonetworking                   Do not create/overwrite /etc/network/interface during startup
-grml distri=...                     Set distribution name to given argument. If a jpg file named like the
-                                    given distri name can be found in directory desktop on the ISO
-                                    (/cdrom/desktop/"$DISTRI") it will be taken as wallpaper for grml
-grml debnet                         Search through local partitions for file /etc/network/interfaces,
-                                    copy /etc/network to local system and restart networking then
-grml dns=8.8.8.8,8.8.4.4            Set DNS resolvers during boot and for live system.
-grml ip=...                         Standard Linux kernel ip= boot option. Arguments:
-                                    clientip:nfsserverip:gwip:netmask:hostname:device:autoconf
-                                    Valid values for autoconf: off, on, dhcp, bootp, rarp, both.
-                                    Almost everything is optional. Most common form: ip=dhcp
-grml mypath=...                     Add specified option into $PATH of Zsh
-                                    For example when using "grml mypath=/foobar" then /foobar
-                                    will be added to the end of $PATH inside Zsh
-grml debs                           Install all Debian packages from the "debs" directory of your DCS
-                                    directory (see myconfig=, typically the root of your ISO image).
-grml debs=path-name-wildcard        Install Debian packages from DCS directory (see myconfig=,
-                                    typically the root of your ISO image). If path does not contain a
-                                    "/" the package(s) will be installed from directory "debs" of the
-                                    DCS directory instead.  The "path-name-wildcard" can contain
-                                    wildcards (e.g. debs=rat* will install a packages starting with "rat"
-                                    from directory debs/).
-grml scripts=path-name              Execute script (defaulting to grml.sh) inside DCS dir. Path names
-                                    allowed. If path-name points to a directory, all scripts found in
-                                    the directory are executed.
-grml config=path-name               Unpack archive that path-name points to
-grml noautoconfig                   Disable searching for device labeled GRMLCFG
-grml nobeep                         Disable welcome chime, sounded before grml-quickconfig starts.
+grml myconfig=/dev/fd0                Set the DCS dir (debs, config, scripts) to the root of this device
+                                      DCS dir defaults to the live image or a device labeled GRMLCFG
+                                      If a file /config.tbz exists, it is extracted from there.
+                                      /dev/fd0  for floppy disk
+                                      /dev/sda1 for USB-stick/first SCSI-device
+grml autoconfig=SOMELABEL             Set the DCS dir to the root of the device labeled with SOMELABEL.
+                                      If undefined search for a device labeled with GRMLCFG.
+grml netconfig=server/config.tbz      Download file and extract configuration archive
+grml netscript=server/file            Download and execute file
+grml partconf=/dev/sda2               Copy files specified in /etc/grml/partconf from /dev/sda2
+                                      to booting grml system
+grml file=foobar.tbz                  Use specified file as name for configuration archive
+                                      instead of the default one (config.tbz)
+grml extract=/etc                     Extract only /etc from configuration archive,
+                                      use it in combination with myconfig or netconfig
+grml persistence                      Enable persistency feature, more details available at
+                                      http://wiki.grml.org/doku.php?id=persistency
+grml hostname=...                     Set hostname to given argument
+grml hostname                         Set a random hostname
+                                      [Note: only available with releases newer than 2010.04]
+grml nonetworking                     Do not create/overwrite /etc/network/interface during startup
+grml distri=...                       Set distribution name to given argument. If a jpg file named like the
+                                      given distri name can be found in directory desktop on the ISO
+                                      (/cdrom/desktop/"$DISTRI") it will be taken as wallpaper for grml
+grml debnet                           Search through local partitions for file /etc/network/interfaces,
+                                      copy /etc/network to local system and restart networking then
+grml dns=8.8.8.8,8.8.4.4              Set DNS resolvers during boot and for live system.
+grml ip=...                           Standard Linux kernel ip= boot option. Arguments:
+                                      clientip:nfsserverip:gwip:netmask:hostname:device:autoconf
+                                      Valid values for autoconf: off, on, dhcp, bootp, rarp, both.
+                                      Almost everything is optional. Most common form: ip=dhcp
+grml mypath=...                       Add specified option into $PATH of Zsh
+                                      For example when using "grml mypath=/foobar" then /foobar
+                                      will be added to the end of $PATH inside Zsh
+grml debs                             Install all Debian packages from the "debs" directory of your DCS
+                                      directory (see myconfig=, typically the root of your ISO image).
+grml debs=path-name-wildcard          Install Debian packages from DCS directory (see myconfig=,
+                                      typically the root of your ISO image). If path does not contain a
+                                      "/" the package(s) will be installed from directory "debs" of the
+                                      DCS directory instead.  The "path-name-wildcard" can contain
+                                      wildcards (e.g. debs=rat* will install a packages starting with "rat"
+                                      from directory debs/).
+grml scripts=path-name                Execute script (defaulting to grml.sh) inside DCS dir. Path names
+                                      allowed. If path-name points to a directory, all scripts found in
+                                      the directory are executed.
+grml config=path-name                 Unpack archive that path-name points to
+grml noautoconfig                     Disable searching for device labeled GRMLCFG
+grml nobeep                           Disable welcome chime, sounded before grml-quickconfig starts.
 
 Notice: Take a look at http://grml.org/config/ and 'man 1 grml-autoconfig'
 for more information regarding the configuration framework of Grml.
 
 Booting related options:
 ------------------------
-grml toram                          Copy the whole CD/medium to RAM and run from there
-grml toram=filename.squashfs        Copy the specified file to RAM and run from there
-                                    Usage example: grml toram=grml-medium.squashfs
-                                    Notice: grml2ram is an alias for this option which
-                                    corresponds with the grml flavour settings by default
-grml tohd=/dev/sda1                 Copy Grml's squashfs file to harddisk partition for later
-                                    use via "grml bootfrom=/dev/sda1"
-grml bootfrom=/dev/sda1             Use the squashfs file from directory 'live' of the specified device
-                                    Setup can be done booting 'grml tohd=/dev/sda1' or
-                                    running 'rsync -a --progress /run/live/medium/live /media/sda1/'
-grml bootfrom=removable             Restrict search for the live media to removable type only.
-grml bootfrom=removable-usb         Restrict search for the live media to usb mass storage only.
-grml isofrom=/dev/sda1/grml.iso     Use specified ISO image for booting
-                                    Useful when booting as a rescue system from harddisk - just boot
-                                    the according grml kernel and initrd using the bootoptions
-                                    "boot=live isofrom=/dev/sda1/grml.iso"
-                                    Notice: "fromiso" does the same as "isofrom", it's just there
-                                    to prevent any typing errors
-grml findiso=/grml_2010.12.iso      Look for the specified ISO file on all disks where it usually
-                                    looks for the .squashfs file (so you don't have to know the device name
-                                    as in isofrom=....).
-grml fetch=$IP/filename.squashfs    Download a squashfs image from a given url, copying to ram and booting it.
-                                    [Note: releases before 2011.05 didn't support DNS but IP only.]
-grml live-media-path=/live/grml...  Sets the path to the live filesystem on the medium
-                                    By default, it is set to /live/$GRML_FLAVOUR/ (where $GRML_FLAVOUR
-                                    is corresponding to grml64-full, grml32-full, grml64-small,...
-                                    [Note: this option is mandatory since release 2011.12]
-grml module=grml                    Instead of using the default "$name.module" another file can
-                                    be specified without the extension ".module"; it should be placed
-                                    on "/live" directory of the live medium
-                                    Useful for Multiboot USB pen, see
-                                    http://wiki.grml.org/doku.php?id=tips#multiboot_usb_pen
-grml bootid=mybootid                Use specified argument as identifier for the ISO.
-                                    mybootid is specified in /conf/bootid.txt on the ISO.
-                                    [Note: only available since release 2010.04]
-grml ignore_bootid                  Disable bootid verification.
-                                    [Note: only available since release 2010.04]
+grml toram                            Copy the whole CD/medium to RAM and run from there
+grml toram=filename.squashfs          Copy the specified file to RAM and run from there
+                                      Usage example: grml toram=grml-medium.squashfs
+                                      Notice: grml2ram is an alias for this option which
+                                      corresponds with the grml flavour settings by default
+grml tohd=/dev/sda1                   Copy Grml's squashfs file to harddisk partition for later
+                                      use via "grml bootfrom=/dev/sda1"
+grml bootfrom=/dev/sda1               Use the squashfs file from directory 'live' of the specified device
+                                      Setup can be done booting 'grml tohd=/dev/sda1' or
+                                      running 'rsync -a --progress /run/live/medium/live /media/sda1/'
+grml bootfrom=removable               Restrict search for the live media to removable type only.
+grml bootfrom=removable-usb           Restrict search for the live media to usb mass storage only.
+grml isofrom=[fs:][/device]/grml.iso  Use specified ISO image for booting.
+                                      Useful when booting as a rescue system from a different device.
+                                      If you want to load the image from a device different from the root device
+                                      specified through the bootloader, prefix its device path to the path, like
+                                      in "/dev/sda1/grml.iso".
+                                      Internally, the initrd will mount the given device, automatically detecting
+                                      the file system.
+                                      If needed, prefix the file system separated with a colon character to
+                                      override the automatic detection, like in "reiserfs:/dev/sda1/grml.iso".
+                                      As an example, boot the according grml kernel and initrd using the
+                                      bootoptions "boot=live isofrom=btrfs:/dev/vda40/path/to/grml.iso"
+                                      Notice: "fromiso" does the same as "isofrom", it's just there
+                                      to prevent any typing errors
+grml findiso=/grml_2010.12.iso        Look for the specified ISO file on all disks where it usually
+                                      looks for the .squashfs file (so you don't have to know the device name
+                                      as in isofrom=....).
+grml fetch=$IP/filename.squashfs      Download a squashfs image from a given url, copying to ram and booting it.
+                                      [Note: releases before 2011.05 didn't support DNS but IP only.]
+grml live-media-path=/live/grml...    Sets the path to the live filesystem on the medium
+                                      By default, it is set to /live/$GRML_FLAVOUR/ (where $GRML_FLAVOUR
+                                      is corresponding to grml64-full, grml32-full, grml64-small,...
+                                      [Note: this option is mandatory since release 2011.12]
+grml module=grml                      Instead of using the default "$name.module" another file can
+                                      be specified without the extension ".module"; it should be placed
+                                      on "/live" directory of the live medium
+                                      Useful for Multiboot USB pen, see
+                                      http://wiki.grml.org/doku.php?id=tips#multiboot_usb_pen
+grml bootid=mybootid                  Use specified argument as identifier for the ISO.
+                                      mybootid is specified in /conf/bootid.txt on the ISO.
+                                      [Note: only available since release 2010.04]
+grml ignore_bootid                    Disable bootid verification.
+                                      [Note: only available since release 2010.04]
 
 
 Debugging related settings:
 ---------------------------
-grml debug                          Get shells during process of booting, using GNU screen, be verbose
-grml debug=1                        Get shells during process of booting, using GNU screen, be verbose and
-                                    display shell code being executed in initramfs.
-grml debug=noscreen                 Get shells during process of booting, verbose, but without using GNU screen
-grml nocolor                        Disable colorized output while booting
-                                    Also set SYSTEMD_COLORS=0 to disable colors in systemd output
-grml log                            Log error messages while booting to /tmp/grml.log.`date +%Y%m%d`"
-                                    and /var/log/boot
-grml testcd                         Check CD data integrity and md5sums
+grml debug                            Get shells during process of booting, using GNU screen, be verbose
+grml debug=1                          Get shells during process of booting, using GNU screen, be verbose and
+                                      display shell code being executed in initramfs.
+grml debug=noscreen                   Get shells during process of booting, verbose, but without using GNU screen
+grml nocolor                          Disable colorized output while booting
+                                      Also set SYSTEMD_COLORS=0 to disable colors in systemd output
+grml log                              Log error messages while booting to /tmp/grml.log.`date +%Y%m%d`"
+                                      and /var/log/boot
+grml testcd                           Check CD data integrity and md5sums
 
 Security / login related settings:
 ----------------------------------
 
-grml ssh=password                   Set password for root & grml user and start ssh-server
-grml passwd=...                     Set password for root & grml user
-grml encpasswd=....                 Set specified hash as password for root & grml user, use e.g.
-                                    'mkpasswd -H md5' to generate such a hash (available in Grml >=2013.09)
+grml ssh=password                     Set password for root & grml user and start ssh-server
+grml passwd=...                       Set password for root & grml user
+grml encpasswd=....                   Set specified hash as password for root & grml user, use e.g.
+                                      'mkpasswd -H md5' to generate such a hash (available in Grml >=2013.09)
 
 Service related settings:
 -------------------------
-grml startup=script                 Start $script instead of grml-quickconfig on startup
-grml nosyslog                       Do not start syslog daemon
-grml nogpm                          Disable GPM daemon
-grml noconsolefont                  Disable setting of console font (using consolechars)
-grml noblank                        Disable console blanking
-grml noquick                        Disable grml-quickconfig startup script
-grml wondershaper=eth0,1000,500     Set up basic traffic shaping
-grml services={postfix,mysql,...}   Start service(s) which have an init-script (/etc/init.d/)
-grml welcome                        Welcome message via soundoutput
-grml noeject                        Do NOT eject CD after halt/reboot
-grml noprompt                       Do NOT prompt to remove the CD when halting/rebooting the system
-grml startx{=windowmanager}         Start X window system automatically
-                                    Default window manager (if not provided): wm-ng (wrapper around fluxbox)
-grml nostartx                       If using startx as default bootoption the nostartx *disables* automatic
-                                    startup of X again. (This bootoption is relevant for grml based derivatives
-                                    which decide to enable startx by default only, plain grml does not use
-                                    automatic startup of X by default.)
-grml vnc=password                   Start VNC server with startup of X.org and sets the password to the specified
-                                    one. To automatically start the VNC server use the startx bootoption.
-                                    [Note: Grml 2011.12+ doesn't include a VNC server.]
-grml vnc_connect=host[:port]        Connect to a listening VNC client ("vncviewer -listen" reverse connection).
-                                    Can be used to connect from devices behind firewalls as connection is
-                                    initiated from the VNC server instead of the VNC client. Has to be
-                                    combined with the vnc bootoption.
-                                    [Note: Grml 2011.12+ doesn't include a VNC client.]
-grml getfile.retries=$NUM           Retry the download of the files specified in the netconfig=... +
-                                    netscript=... options up to $NUM times
+grml startup=script                   Start $script instead of grml-quickconfig on startup
+grml nosyslog                         Do not start syslog daemon
+grml nogpm                            Disable GPM daemon
+grml noconsolefont                    Disable setting of console font (using consolechars)
+grml noblank                          Disable console blanking
+grml noquick                          Disable grml-quickconfig startup script
+grml wondershaper=eth0,1000,500       Set up basic traffic shaping
+grml services={postfix,mysql,...}     Start service(s) which have an init-script (/etc/init.d/)
+grml welcome                          Welcome message via soundoutput
+grml noeject                          Do NOT eject CD after halt/reboot
+grml noprompt                         Do NOT prompt to remove the CD when halting/rebooting the system
+grml startx{=windowmanager}           Start X window system automatically
+                                      Default window manager (if not provided): wm-ng (wrapper around fluxbox)
+grml nostartx                         If using startx as default bootoption the nostartx *disables* automatic
+                                      startup of X again. (This bootoption is relevant for grml based derivatives
+                                      which decide to enable startx by default only, plain grml does not use
+                                      automatic startup of X by default.)
+grml vnc=password                     Start VNC server with startup of X.org and sets the password to the specified
+                                      one. To automatically start the VNC server use the startx bootoption.
+                                      [Note: Grml 2011.12+ doesn't include a VNC server.]
+grml vnc_connect=host[:port]          Connect to a listening VNC client ("vncviewer -listen" reverse connection).
+                                      Can be used to connect from devices behind firewalls as connection is
+                                      initiated from the VNC server instead of the VNC client. Has to be
+                                      combined with the vnc bootoption.
+                                      [Note: Grml 2011.12+ doesn't include a VNC client.]
+grml getfile.retries=$NUM             Retry the download of the files specified in the netconfig=... +
+                                      netscript=... options up to $NUM times
 
 
 Accessibility related settings:
 -------------------------------
-grml brltty=type,port,table         Parameters for Braille device (e.g.: brltty=al,/dev/ttyS0,text.de.tbl)
-                                    See http://mielke.cc/brltty/guidelines.html for documentation.
+grml brltty=type,port,table           Parameters for Braille device (e.g.: brltty=al,/dev/ttyS0,text.de.tbl)
+                                      See http://mielke.cc/brltty/guidelines.html for documentation.
 
 Hardware related settings:
 --------------------------
-grml swap                           Activate present/detected swap partitions
-grml noswraid                       Disable scanning for software raid arrays (creates /etc/mdadm/mdadm.conf)
-grml swraid                         Enable automatic assembling of software raid arrays
-grml nodmraid                       Do not enable present dmraid devices.
-grml dmraid=on                      Automatically enable any present dmraid devices.
-grml dmraid=off                     Actively try to stop any present dmraid devices.
-grml nolvm                          Disable scanning for Logical Volumes (LVM)
-grml lvm                            Automatically activate Logival Volumes (LVM) during boot
-grml read-only                      Make sure all harddisk devices (/dev/hd* /dev/sd*) are forced to read-only mode
-grml ethdevice=...                  Use specified network device for network boot instead of default (eth0)
-grml ethdevice-timeout=...          Use specified network configuration timeout instead of default (15sec)
-grml xmodule=ati|fbdev|i810|mga     Use specified X.org-Module (1)
-grml xmodule=nv|radeon|savage|s3    Use specified X.org-Module (2)
-grml xmodule=radeon|svga|i810       Use specified X.org-Module (3)
-grml no{acpi,cpu,dhcp,fstab,swap}   Skip parts of HW-detection
-grml blacklist=modulename[,module2] Completely disable loading of specified module(s) via
-                                    blacklisting through udev's /etc/modprobe.d/grml
-grml nosound                        Mute sound devices (notice: this does not deactivate loading of sound drivers!)
-grml vol=number                     Set mixer volumes to level $number
-grml micvol=number                  Set mixer volume of microphone to level $number (default: 0)
-grml acpi=off                       Disable ACPI Bios completely
-grml pci=irqmask=0x0e98             Try this, if PS/2 mouse doesn't work *)
-grml pci=bios                       Workaround for bad PCI controllers
-grml libata.force=[ID:]VAL          Force configurations for libata.
-                                    Usage example: grml libata.force=1:pio4
-                                    to force pio4 mode on device "ata1:00:"
-grml libata.dma=0                   Disable DMA on PATA and SATA devices
-grml libata.ignore_hpa=1            Disable host protected area (which should enable the whole disk)
-grml vga=normal                     No-framebuffer mode (does not influence X)
-grml vga=ask                        Display menu for framebuffer mode
-grml radeon.modeset=0  nomodeset    Disable Kernel Mode Setting (KMS) for Radeon driver.
-grml i915.modeset=0    nomodeset    Disable Kernel Mode Setting (KMS) for Intel driver.
-grml nouveau.modeset=0 nomodeset    Disable Kernel Mode Setting (KMS) for Nouveau driver.
-grml cirrus.modeset=0  nomodeset    Disable Kernel Mode Setting (KMS) for Cirrus driver.
-grml mgag200.modeset=0 nomodeset    Disable Kernel Mode Setting (KMS) for MGAG200 driver.
+grml swap                             Activate present/detected swap partitions
+grml noswraid                         Disable scanning for software raid arrays (creates /etc/mdadm/mdadm.conf)
+grml swraid                           Enable automatic assembling of software raid arrays
+grml nodmraid                         Do not enable present dmraid devices.
+grml dmraid=on                        Automatically enable any present dmraid devices.
+grml dmraid=off                       Actively try to stop any present dmraid devices.
+grml nolvm                            Disable scanning for Logical Volumes (LVM)
+grml lvm                              Automatically activate Logival Volumes (LVM) during boot
+grml read-only                        Make sure all harddisk devices (/dev/hd* /dev/sd*) are forced to read-only mode
+grml ethdevice=...                    Use specified network device for network boot instead of default (eth0)
+grml ethdevice-timeout=...            Use specified network configuration timeout instead of default (15sec)
+grml xmodule=ati|fbdev|i810|mga       Use specified X.org-Module (1)
+grml xmodule=nv|radeon|savage|s3      Use specified X.org-Module (2)
+grml xmodule=radeon|svga|i810         Use specified X.org-Module (3)
+grml no{acpi,cpu,dhcp,fstab,swap}     Skip parts of HW-detection
+grml blacklist=modulename[,module2]   Completely disable loading of specified module(s) via
+                                      blacklisting through udev's /etc/modprobe.d/grml
+grml nosound                          Mute sound devices (notice: this does not deactivate loading of sound drivers!)
+grml vol=number                       Set mixer volumes to level $number
+grml micvol=number                    Set mixer volume of microphone to level $number (default: 0)
+grml acpi=off                         Disable ACPI Bios completely
+grml pci=irqmask=0x0e98               Try this, if PS/2 mouse doesn't work *)
+grml pci=bios                         Workaround for bad PCI controllers
+grml libata.force=[ID:]VAL            Force configurations for libata.
+                                      Usage example: grml libata.force=1:pio4
+                                      to force pio4 mode on device "ata1:00:"
+grml libata.dma=0                     Disable DMA on PATA and SATA devices
+grml libata.ignore_hpa=1              Disable host protected area (which should enable the whole disk)
+grml vga=normal                       No-framebuffer mode (does not influence X)
+grml vga=ask                          Display menu for framebuffer mode
+grml radeon.modeset=0  nomodeset      Disable Kernel Mode Setting (KMS) for Radeon driver.
+grml i915.modeset=0    nomodeset      Disable Kernel Mode Setting (KMS) for Intel driver.
+grml nouveau.modeset=0 nomodeset      Disable Kernel Mode Setting (KMS) for Nouveau driver.
+grml cirrus.modeset=0  nomodeset      Disable Kernel Mode Setting (KMS) for Cirrus driver.
+grml mgag200.modeset=0 nomodeset      Disable Kernel Mode Setting (KMS) for MGAG200 driver.
 
 Installation related settings:
 ------------------------------
@@ -239,7 +246,7 @@ Caution: do *NOT* use the debian2hd bootoption if you do not know what you are d
 
 Install plain Debian via debian2hd bootoption (which runs grml-debootstrap in non-interactive mode):
 
-debian2hd <options>                 ... whereas valid options for debian2hd are:
+debian2hd <options>                   ... whereas valid options for debian2hd are:
 
   target=       target partition/directory of the new Debian system, e.g.: target=/dev/sda1
   grub=         where to install grub to, e.g.: grub=/dev/sda
