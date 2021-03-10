@@ -1385,8 +1385,8 @@ else
 
    # use sane defaults if $SQUASHFS_OPTIONS isn't set
    if [ -z "$SQUASHFS_OPTIONS" ] ; then
-     # use blocksize 256k as this gives best result with regards to time + compression
-     SQUASHFS_OPTIONS="-b 256k"
+     # use block size 1m as this gives good result with regards to time + compression
+     SQUASHFS_OPTIONS="-b 1m"
 
      # set lzma/xz compression by default, unless -z option has been specified on command line
      if [ -z "$SQUASHFS_ZLIB" ] ; then
