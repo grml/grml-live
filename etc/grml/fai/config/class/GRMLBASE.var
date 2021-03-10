@@ -20,3 +20,6 @@ ROOTPW='x'
 # needs to be quite high so we can override installation
 # of specific packages through the IGNORE class.
 MAXPACKAGES=3000
+
+# Do not check package names whether they are valid, but report failure instead.
+# FAI_DISABLE_PACKAGE_NAME_CHECK=1
