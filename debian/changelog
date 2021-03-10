@@ -1,3 +1,34 @@
+grml-live (0.38.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * Documentation related changes:
+    - [102cd35] grml-cheatcodes.txt: document getfile.retries boot option
+    - [63954ff] grml-cheatcodes.txt: remove several unsupported boot options
+    - [acbc268] grml-cheatcodes.txt: fix URL for initramfs-tools manpage
+  * New features:
+    - [07181b4] Provide apt sources.list file to support 'bullseye' as
+      Debian suite
+    - [fada6de] Use 1m as new default squashfs block size. Thanks to
+      Mihai Moldovan <ionic@ionic.de>
+    - [8c0c9d9] GRUB templates: provide menu entry for UEFI
+      Firmware Settings
+    - [4e93b8e] GRMLBASE/01-packages: also detect and report unknown
+      package names
+  * Fixes:
+    - [fb26a16] GRMLBASE/16-depmod: no longer rely on /boot/System.map-*
+      file
+    - [89c4398] GRUB templates: do not set root/chainloader but just exit
+      for boot from next device
+
+  [ Mihai Moldovan ]
+  * [c959c14] GRUB: drop loopback usage for balder10/FreeDOS.
+  * [aa74c00] grml-live: isohybrid is the default, reflect that.
+  * [7833e77] docs/grml-live.txt: fix markdown issue, escape *.
+  * [2ae2174] grml-cheatcodes.txt: update fromiso doc.
+  * [84a0622] grml-cheatcodes.txt: reflow, no actual change.
+
+ -- Michael Prokop <mika@grml.org>  Wed, 10 Mar 2021 17:30:50 +0100
+
 grml-live (0.37.2) unstable; urgency=medium
 
   [ Michael Lass ]
