@@ -974,7 +974,7 @@ grub_setup() {
           ;;
         *)
           log   "Secure Boot method '${SECURE_BOOT}' is unsupported."
-          error "Secure Boot method '${SECURE_BOOT}' is unsupported." ; eend 1
+          eerror "Secure Boot method '${SECURE_BOOT}' is unsupported." ; eend 1
           bailout 59
           ;;
       esac
