@@ -33,6 +33,19 @@ GRML_LIVE_VERSION='***UNRELEASED***'
 PN="$(basename $0)"
 CMDLINE="$0 $@"
 ADDONS_LIST_FILE='/boot/isolinux/addons_list.cfg'
+
+# This essentially re-creates what's done in the base-files package, but we
+# really need it, so make sure to keep it synchronized (and alphabetically
+# sorted, if possible).
+# Luckily, it shouldn't change too often.
+base_dirs=(
+  '/bin' '/boot' '/dev'
+  '/etc'{,'/'{'default','dpkg/origins','opt','profile.d','skel','update-motd.d'}}
+  '/home' '/lib' '/media' '/mnt' '/opt' '/proc' '/root' '/run'{,'/lock'} '/sbin'
+  '/srv' '/sys' '/tmp'
+  '/usr'{,'/'{'bin','games','lib','local'{,'/'{'bin','etc','games','include','lib','sbin','share'{,'/man'},'src'}},'sbin','share'{,'/'{'base-files','common-licenses','dict','info','lintian/overrides','man','misc'}},'src'}}
+  '/var'{,'/'{'backups','cache','lib'{,'/'{'dpkg','misc'}},'local','lock','log','mail','opt','run','spool','tmp'}}
+)
 # }}}
 
 # usage information {{{
@@ -159,6 +172,123 @@ else
 fi
 # }}}
 
+# Safe rmdir -p wrapper, stopping on base directories.
+# Expects a chroot base as its first parameters and directories to remove as
+# additional parameters. Each of these additional parameters must match the
+# chroot prefix if provided.
+# The chroot base is optional - pass an empty string if no chroot operation is
+# intended. {{{
+safe_rmdir_p() {
+  local chroot_base="${1?"No chroot base provided, this is unsupported."}"
+  shift
+
+  if [ -n "${chroot_base}" ]; then
+    # Drop trailing slashes on the chroot prefix.
+    local chroot_base_old="${chroot_base}"
+    chroot_base="${chroot_base%/}"
+    while [ "${chroot_base_old}" != "${chroot_base}" ]; do
+      chroot_base_old="${chroot_base}"
+      chroot_base="${chroot_base%/}"
+    done
+
+    # Check if the chroot prefix is canonical.
+    local canonical_chroot_base=''
+    canonical_chroot_base="$(readlink -f "${chroot_base}")"
+    if [ "${canonical_chroot_base}" != "${chroot_base}" ]; then
+      eerror "Chroot prefix '${chroot_base}' is not canonical, this is unsupported."
+      eend 1
+    else
+      # Okay, it's canonical, so use it.
+      chroot_base="${canonical_chroot_base}"
+    fi
+  fi
+
+  local dir=''
+  for dir in "${@}"; do
+    # Handle empty values - skip them.
+    [ -z "${dir}" ] && continue
+
+    # We won't allow relative directories.
+    if [ -n "${dir%%/*}" ]; then
+      eerror "Relative path '${dir}' passed to safe_rmdir_p(), this is unsafe and unsupported, path will be skipped."
+      continue
+    fi
+
+    # Check for the chroot prefix, if necessary.
+    if [ -n "${chroot_base}" ]; then
+      local non_chroot_dir="${dir#${chroot_base}}"
+      if [ "${dir}" = "${non_chroot_dir}" ]; then
+        eerror "Path '${dir}' did not contain the chroot prefix '${chroot_base}', skipping it."
+        continue
+      fi
+    fi
+
+    # Okay, good, at this point we know that we can remove the chroot prefix
+    # successfully or we don't have one to begin with.
+    local new_dir="${dir}"
+
+    # Remove the chroot prefix if necessary.
+    [ -n "${chroot_base}" ] && new_dir="${new_dir#${chroot_base}}"
+
+    # Now, canonicalize the path.
+    # Since the chroot prefix, if given, is known to be canonical, it won't
+    # change, so this operation should be safe.
+    while [ '/' != "${new_dir}" ]; do
+      local canonical_new_dir=''
+      canonical_new_dir="$(readlink -f "${chroot_base}/${new_dir}")"
+
+      if [ -z "${canonical_new_dir}" ]; then
+        # If the directory to handle is now empty, it means that some component
+        # (excluding the last one) did not exist.
+        # We don't know which one exactly, but that means that we'll be able to
+        # drop the last component and retry.
+        new_dir="$(dirname "${new_dir}")"
+      else
+        # Otherwise, the canonicalization was successful and we know that
+        # every but the last component must exist.
+        # Continue with that (chroot prefix removal included).
+        # Don't try to "optimize" here and just use ${new_dir} - that would
+        # undermine all our efforts at canonicalization.
+        dir="${canonical_new_dir}"
+        [ -n "${chroot_base}" ] && dir="${dir#${chroot_base}}"
+        break
+      fi
+    done
+
+    # If the canonicalization stopped at the root, there's nothing to do.
+    [ '/' = "${new_dir}" ] && continue
+
+    # Likewise, if the directory to handle is now empty, there's nothing to do,
+    # so move on.
+    [ -z "${dir}" ] && continue
+
+    while [ '/' != "${dir}" ]; do
+      # This is pretty slow, but optimizing it would require hashes or the like,
+      # so... better keep it simple.
+      local base_dir=''
+      for base_dir in "${base_dirs[@]}"; do
+        if [ "${base_dir}" = "${dir}" ]; then
+          # Stop. We don't want to remove base directories.
+          dir='/'
+          break;
+        fi
+      done
+
+      if [ '/' != "${dir}" ]; then
+        # If rmdir failed it probably means the directory isn't empty, so we can
+        # just terminate the removal loop.
+        rmdir "${chroot_base}/${dir}" || dir='/'
+
+        # Otherwise, keep going.
+        # If we set the directory to '/' above, dirname '/' will just return
+        # '/' (and the loop stop), so no harm there.
+        dir="$(dirname "${dir}")"
+      fi
+    done
+  done
+}
+# }}}
+
 # umount all directories {{{
 umount_all() {
    # make sure we don't leave any mounts - FAI doesn't remove them always
@@ -182,7 +312,7 @@ umount_all() {
    umount "${CHROOT_OUTPUT}/grml-live/sources/" 2>/dev/null || /bin/true
    if [ -n "${MIRROR_DIRECTORY}" ]; then
      umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
-     rmdir -p "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
+     safe_rmdir_p "${CHROOT_OUTPUT}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
    fi
 }
 # }}}
