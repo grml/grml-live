@@ -180,10 +180,7 @@ umount_all() {
    fi
 
    umount "${CHROOT_OUTPUT}/grml-live/sources/" 2>/dev/null || /bin/true
-   if [ -n "${MIRROR_DIRECTORY}" ]; then
-     umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
-     rmdir -p "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
-   fi
+   [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
 }
 # }}}
 
