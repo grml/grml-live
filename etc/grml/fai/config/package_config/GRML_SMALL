@@ -62,6 +62,7 @@ ndisc6
 netbase
 netcat-openbsd
 net-tools
+ntfs-3g
 ntpdate
 nwipe
 parted
