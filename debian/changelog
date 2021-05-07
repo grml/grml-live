@@ -1,3 +1,18 @@
+grml-live (0.38.1) unstable; urgency=medium
+
+  [ Mihai Moldovan ]
+  * [fef1c19] grml-live: fix typo in (e)error command.
+
+  [ Michael Prokop ]
+
+  * Software related changes:
+    - [79d0a1c] add ntfs-3g to GRML_SMALL. Thanks to Evgeni Golov for
+      the suggestion
+  * [7e4369c] Bump Standards-Version to 4.5.1
+  * [155ca2a] Refresh lintian overrides to reflect current state
+
+ -- Michael Prokop <mika@grml.org>  Fri, 07 May 2021 17:48:36 +0200
+
 grml-live (0.38.0) unstable; urgency=medium
 
   [ Michael Prokop ]
