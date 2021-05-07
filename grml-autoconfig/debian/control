@@ -2,12 +2,14 @@ Source: grml-autoconfig
 Section: grml
 Priority: optional
 Maintainer: Michael Prokop <mika@grml.org>
-Build-Depends: debhelper (>= 10~)
+Build-Depends:
+ debhelper (>= 10~),
 Standards-Version: 4.5.1
-Build-Depends-Indep: asciidoc,
-                     docbook-xsl,
-                     xsltproc,
-                     zsh
+Build-Depends-Indep:
+ asciidoc,
+ docbook-xsl,
+ xsltproc,
+ zsh,
 Homepage: https://git.grml.org/?p=grml-autoconfig.git
 Vcs-git: git://git.grml.org/grml-autoconfig.git
 Vcs-Browser: https://git.grml.org/?p=grml-autoconfig.git
@@ -16,31 +18,35 @@ Bugs: mailto:bugs@grml.org
 
 Package: grml-autoconfig
 Architecture: all
-Conflicts: grml-etc (<= 0.4-7),
-           grml-saveconfig
-Replaces: grml-saveconfig
-Depends: beep,
-         console-setup,
-         console-setup-linux,
-         gawk,
-         gpm,
-         grml-etc-core (>= 0.1-3),
-         grml-network (>= 0.3.7),
-         grml-scripts (>= 0.8-14),
-         kbd | console-utilities,
-         rsync,
-         rsyslog | system-log-daemon,
-         udev,
-         zsh,
-         ${misc:Depends},
-         ${shlibs:Depends}
-Recommends: acpi-support,
-            alsa-utils,
-            grml-debootstrap (>= 0.7),
-            hwinfo,
-            locales,
-            mdadm,
-            x11vnc
+Conflicts:
+ grml-etc (<= 0.4-7),
+ grml-saveconfig,
+Replaces:
+ grml-saveconfig,
+Depends:
+ beep,
+ console-setup,
+ console-setup-linux,
+ gawk,
+ gpm,
+ grml-etc-core (>= 0.1-3),
+ grml-network (>= 0.3.7),
+ grml-scripts (>= 0.8-14),
+ kbd | console-utilities,
+ rsync,
+ rsyslog | system-log-daemon,
+ udev,
+ zsh,
+ ${misc:Depends},
+ ${shlibs:Depends},
+Recommends:
+ acpi-support,
+ alsa-utils,
+ grml-debootstrap (>= 0.7),
+ hwinfo,
+ locales,
+ mdadm,
+ x11vnc,
 Description: main bootup process of a Grml (based) system
  grml-autoconfig is the main part of the bootup process of the
  grml system. This includes the hardware recognition system and
