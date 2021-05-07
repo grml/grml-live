@@ -1,0 +1,9 @@
+# grml specific packaging
+grml-autoconfig: unknown-section grml
+grml-autoconfig: bugs-field-does-not-refer-to-debian-infrastructure mailto:bugs@grml.org
+# we have our custom look'n'feel
+grml-autoconfig: init.d-script-does-not-source-init-functions etc/init.d/grml-autoconfig
+# we have our custom target
+grml-autoconfig: systemd-service-file-refers-to-unusual-wantedby-target lib/systemd/system/grml-autoconfig.service grml-boot.target
+# we have no better way yet
+grml-autoconfig: systemd-service-file-wraps-init-script lib/systemd/system/grml-autoconfig.service ExecStart

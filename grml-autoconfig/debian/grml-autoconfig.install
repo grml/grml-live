@@ -1,1 +1,10 @@
+autoconfig           /etc/grml/
+autoconfig.functions /etc/grml/
+autoconfig.local     /etc/grml/
+bin/restore-config /usr/bin/
+bin/save-config /usr/bin/
+etc/* /etc/
+grml-autoconfig      /etc/init.d/
+language-functions   /etc/grml/
+sbin/grml-autoconfig /usr/sbin/
 systemd/* lib/systemd/system/
