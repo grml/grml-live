@@ -9,70 +9,15 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-build: build-stamp
+%:
+	dh $@
 
-build-stamp:
-	dh_testdir
-	# tests against shunit2 2.1.6-1 fail in unstable envs as of 2019-03-21
-	# (cd tests && ./run_tests.sh)
+# tests against shunit2 2.1.6-1 fail in unstable envs since 2019-03-21 :-/
+#ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
+#override_dh_auto_test:
+#	(cd tests && ./run_tests.sh)
+#	make shellcheck
+#endif
+
+override_dh_auto_build:
 	(cd doc && $(MAKE))
-
-	touch build-stamp
-
-clean:
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp
-	cd doc && $(MAKE) clean && cd ..
-
-	dh_clean
-
-install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs etc/grml etc/init.d usr/sbin usr/bin usr/share/doc/grml-saveconfig
-
-	# Add here commands to install the package into debian/grml-autoconfig.
-	install -m 755 grml-autoconfig      debian/grml-autoconfig/etc/init.d/grml-autoconfig
-	install -m 644 autoconfig           debian/grml-autoconfig/etc/grml/autoconfig
-	install -m 644 autoconfig.local     debian/grml-autoconfig/etc/grml/autoconfig.local
-	install -m 755 autoconfig.functions debian/grml-autoconfig/etc/grml/autoconfig.functions
-	install -m 644 language-functions   debian/grml-autoconfig/etc/grml/language-functions
-	install -m 755 sbin/grml-autoconfig debian/grml-autoconfig/usr/sbin/grml-autoconfig
-
-	install -m 755 bin/restore-config debian/grml-autoconfig/usr/bin/restore-config
-	install -m 755 bin/save-config debian/grml-autoconfig/usr/bin/save-config
-
-	# just as a "backup" solution:
-	cp -a etc/* debian/grml-autoconfig/etc/
-
-# Build architecture-dependent files here.
-binary-arch: build install
-# We have nothing to do by default.
-
-# Build architecture-independent files here.
-binary-indep: build install
-	dh_testdir
-	dh_testroot
-	dh_install
-	dh_installchangelogs
-	dh_installdocs doc/grml-autoconfig.1.html doc/grml-autoconfig.8.html \
-			doc/restore-config.1.html doc/save-config.1.html
-	dh_installman doc/grml-autoconfig.1.gz doc/grml-autoconfig.8.gz \
-			doc/restore-config.1.gz doc/save-config.1.gz
-	# backward compability:
-	dh_link /usr/share/doc/grml-autoconfig/grml-autoconfig.1.html /usr/share/doc/grml-saveconfig/grml-config.html
-	dh_strip
-	dh_compress
-	mkdir -p $(CURDIR)/debian/grml-autoconfig/usr/share/lintian/overrides/
-	cp -av debian/overrides $(CURDIR)/debian/grml-autoconfig/usr/share/lintian/overrides/grml-autoconfig
-	dh_fixperms
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install
