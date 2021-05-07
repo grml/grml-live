@@ -259,7 +259,7 @@ config_language(){
         if [ -r /usr/share/consolefonts/Uni3-Terminus16.psf.gz ] ; then
           CONSOLEFONT='Uni3-Terminus16'
         else
-          ewarn "/usr/share/consolefonts/Uni3-Terminus16.psf.gz not available. Please upgrade package console-terminus." ; eend 1
+          ewarn "/usr/share/consolefonts/Uni3-Terminus16.psf.gz not available. Please upgrade package console-setup-linux." ; eend 1
         fi
         if ! hasfb ; then
           CONSOLEFONT='Lat15-Terminus16'
