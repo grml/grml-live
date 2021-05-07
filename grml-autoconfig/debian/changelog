@@ -1,3 +1,17 @@
+grml-autoconfig (0.20.0) grml-testing; urgency=medium
+
+  * [bf5fdcc] The Uni3-Terminus16.psf.gz font is shipped by console-setup-
+    linux nowadays
+  * [ac2c74a] Refresh packaging and use new debhelper style
+  * [b5b1296] Drop deprecated /etc/dhcp3 and ship as /etc/dhcp only
+  * [682ab2c] Drop /etc/init.d/grml-autoconfig.strace
+  * [43e0bd2] Convert language-functions from ISO-8859 to UTF-8
+  * [b6ad875] Apply wrap-and-sort (-tas) on Debian packaging
+  * [d949005] Drop deprecated Conflicts and Replaces on grml-etc + grml-
+    saveconfig
+
+ -- Michael Prokop <mika@grml.org>  Fri, 07 May 2021 17:30:00 +0200
+
 grml-autoconfig (0.19.4) grml-testing; urgency=medium
 
   * [14203cc] Do not run VirtualBox setup under enabled Secure Boot to
