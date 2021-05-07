@@ -18,11 +18,6 @@ Bugs: mailto:bugs@grml.org
 
 Package: grml-autoconfig
 Architecture: all
-Conflicts:
- grml-etc (<= 0.4-7),
- grml-saveconfig,
-Replaces:
- grml-saveconfig,
 Depends:
  beep,
  console-setup,
