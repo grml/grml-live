@@ -7,3 +7,5 @@ grml-autoconfig: init.d-script-does-not-source-init-functions etc/init.d/grml-au
 grml-autoconfig: systemd-service-file-refers-to-unusual-wantedby-target lib/systemd/system/grml-autoconfig.service grml-boot.target
 # we have no better way yet
 grml-autoconfig: systemd-service-file-wraps-init-script lib/systemd/system/grml-autoconfig.service ExecStart
+# that's the way dhclient hook scripts are working
+grml-autoconfig: executable-not-elf-or-script etc/dhcp/dhclient-exit-hooks.d/grml-sethostname
