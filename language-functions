@@ -656,7 +656,7 @@ case "$LANGUAGE" in
                 COUNTRY="no"
                 LANG="nb_NO.UTF-8"
                 LANGUAGE="no:nb_NO"
-                # Keytable "no*" is correct if זרו (the 3 final letters in the
+                # Keytable "no*" is correct if  (the 3 final letters in the
                 # norse alphabet) shows up as "a+e", "oslash" and "aring".
                 # Otherwise try the other variants no-latin1 etc.
                 KEYTABLE="no"
