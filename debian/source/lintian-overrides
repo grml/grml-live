@@ -2,4 +2,3 @@ grml-live source: source-contains-prebuilt-windows-binary templates/EFI/debian/B
 grml-live source: source-contains-prebuilt-windows-binary templates/EFI/debian/BOOT/shimx64.efi.signed
 grml-live source: source-contains-prebuilt-windows-binary templates/EFI/ubuntu/BOOT/grubx64.efi.signed
 grml-live source: source-contains-prebuilt-windows-binary templates/EFI/ubuntu/BOOT/shimx64.efi.signed
-grml-live source: vcs-field-uses-insecure-uri vcs-git git://git.grml.org/grml-live.git
