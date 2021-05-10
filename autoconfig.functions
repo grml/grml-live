@@ -1643,7 +1643,7 @@ config_dmraid(){
   fi
 
   if ! [ -x /sbin/dmraid ] ; then
-    eerror "dmraid not available, can not execute it." ; eend 1
+    ewarn "dmraid not available, can not execute it." ; eend 1
     return
   fi
 
