@@ -63,6 +63,7 @@ xz-utils
 # firmware packages
 atmel-firmware
 bluez-firmware
+firmware-ath9k-htc
 firmware-atheros
 firmware-bnx2
 firmware-bnx2x
