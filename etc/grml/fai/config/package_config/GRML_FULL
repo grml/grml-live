@@ -208,7 +208,6 @@ usb-modeswitch
 vlan
 wireguard
 wireshark
-wvdial
 
 # network transfers
 ca-certificates
