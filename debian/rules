@@ -1,63 +1,8 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
-# Sample debian/rules that uses debhelper.
-# GNU copyright 1997 to 1999 by Joey Hess.
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-build: build-stamp
-
-build-stamp:
-	dh_testdir
-
-	touch build-stamp
-
-clean:
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp
-
-	dh_clean 
-	rm -rf debian/grml-etc/
-
-install: build
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdirs
-
-	# Add here commands to install the package into debian/grml-etc.
-	cp -a etc/                       debian/grml-etc/
-
-# Build architecture-dependent files here.
-binary-arch: build install
-
-# Build architecture-independent files here.
-binary-indep: build install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs
-	dh_installdocs
-	dh_link /etc/rcS.d/important_notice /etc/rc0.d/important_notice
-	dh_link /etc/rcS.d/important_notice /etc/rc1.d/important_notice
-	dh_link /etc/rcS.d/important_notice /etc/rc2.d/important_notice
-	dh_link /etc/rcS.d/important_notice /etc/rc3.d/important_notice
-	dh_link /etc/rcS.d/important_notice /etc/rc4.d/important_notice
-	dh_link /etc/rcS.d/important_notice /etc/rc5.d/important_notice
-	dh_link /etc/rcS.d/important_notice /etc/rc6.d/important_notice
-	dh_link /etc/init.d/grml-reboot     /etc/init.d/grml-halt
-	dh_compress
-	mkdir -p debian/grml-etc/usr/share/lintian/overrides/
-	cp -av debian/overrides debian/grml-etc/usr/share/lintian/overrides/grml-etc
-	dh_fixperms
-	dh_installdeb
-	find debian/grml-etc/etc -type f ! -name \*.xpm ! -name \*.png -print | \
-	sed -e 's#^debian/grml-etc##g' > debian/grml-etc/DEBIAN/conffiles
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install
+%:
+	dh $@

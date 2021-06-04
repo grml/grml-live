@@ -1,3 +1,0 @@
-grml-etc source: vcs-field-uses-insecure-uri vcs-git git://git.grml.org/grml-etc.git
-grml-etc source: debian-rules-missing-recommended-target build-arch
-grml-etc source: debian-rules-missing-recommended-target build-indep
