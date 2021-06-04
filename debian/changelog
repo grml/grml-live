@@ -1,3 +1,31 @@
+grml-etc (1.8.0) grml-testing; urgency=medium
+
+  * [fc8eadd] irssi: replace freenode with oftc
+  * [004e4c3] Drop deprecated init scripts
+  * [323f8ac] Drop deprecated and unmaintained /etc/resolv.conf.template
+  * [4e0acf3] Drop deprecated /etc/skel/.a2ps/a2psrc
+  * [4596bed] Drop /etc/rcS.d/important_notice, we no longer use file-rc
+  * [a4faad0] Drop deprecated /etc/skel/.acrorc
+  * [c90701b] Drop deprecated /etc/skel/.asoundrc.example
+  * [a554d6f] Drop deprecated centericq configuration
+  * [259fe66] Drop deprecated /etc/skel/.snownews/urls
+  * [3ab457b] Drop unmaintained /etc/skel/.jackdrc
+  * [1a4a99c] etc/skel/.signature: use https and proper "Grml" spelling
+  * [980d874] Refresh /etc/skel/.links2/bookmarks.html
+  * [942b0e4] Drop deprecated /etc/skel/.links/
+  * [441114f] Drop unmaintained /etc/skel/.w3m/config
+  * [5e49585] Drop debian/conffiles
+  * [231d68d] Drop deprecated /etc/locale.gen.grml +
+    /etc/locale.gen.minimal
+  * [780bb6b] Drop unmaintained /etc/lynx.cfg
+  * [5b9a5cc] Drop deprecated /etc/wvdial.conf.umts
+  * [371db27] Drop deprecated debian/postrm + debian/preinst
+  * [36b423e] Include maintscript to remove deprecated configuration files
+  * [97d5c47] Rework debian/ to follow current best practices and drop
+    deprecated symlinks
+
+ -- Michael Prokop <mika@grml.org>  Fri, 04 Jun 2021 13:31:12 +0200
+
 grml-etc (1.7.0) grml-testing; urgency=medium
 
   * [1e5a531] grml-reboot: switch default mount point from
