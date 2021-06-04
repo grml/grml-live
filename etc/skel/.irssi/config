@@ -16,8 +16,8 @@ servers = (
   },
   { address = "irc.dal.net"; chatnet = "DALnet"; port = "6667"; },
   {
-    address = "irc.freenode.net";
-    chatnet = "freenode";
+    address = "irc.oftc.net";
+    chatnet = "oftc";
     autoconnect = "yes";
     port = "6667";
   },
@@ -125,7 +125,7 @@ chatnets = {
 };
 
 channels = (
-  { name = "#grml"; chatnet = "freenode"; autojoin = "Yes"; },
+  { name = "#grml"; chatnet = "oftc"; autojoin = "Yes"; },
   { name = "#irssi"; chatnet = "ircnet"; autojoin = "No"; },
   { name = "silc"; chatnet = "silc"; autojoin = "No"; }
 );
