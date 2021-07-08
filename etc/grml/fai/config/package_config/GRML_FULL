@@ -278,6 +278,7 @@ binutils
 buffer
 coreutils
 diffutils
+jq
 mawk
 mc
 patch
