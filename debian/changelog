@@ -1,3 +1,11 @@
+grml-live (0.38.3) unstable; urgency=medium
+
+  * Software related changes:
+    - [c52cdfc] add jq to GRML_FULL
+    - [c50146e] add wireless-regdb to GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Fri, 09 Jul 2021 09:15:10 +0200
+
 grml-live (0.38.2) unstable; urgency=medium
 
   * Software related changes:
