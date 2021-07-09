@@ -206,6 +206,7 @@ uml-utilities
 usb-modeswitch
 vlan
 wireguard
+wireless-regdb
 wireshark
 
 # network transfers
