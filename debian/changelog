@@ -1,3 +1,16 @@
+grml-live (0.38.4) unstable; urgency=medium
+
+  * [6e42896] etc/grml/fai/config/files/etc/hosts/GRMLBASE: sync IPv6
+    entries with Debian
+  * Software related changes:
+    - [90d1996] drop rng-tools from GRMLBASE
+    - [438832c] add inxi to GRML_FULL. Thanks to Darshaka Pathirana for
+      the suggestion
+    - [f16d872] add speedtest-cli to GRML_FULL. Thanks to Darshaka
+      Pathirana for the suggestion
+
+ -- Michael Prokop <mika@grml.org>  Mon, 12 Jul 2021 09:48:41 +0200
+
 grml-live (0.38.3) unstable; urgency=medium
 
   * Software related changes:
