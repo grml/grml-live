@@ -194,6 +194,7 @@ sipcalc
 slurm
 snmp
 socat
+speedtest-cli
 ssh
 ssmping
 tcpdump
