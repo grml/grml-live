@@ -294,6 +294,7 @@ zsh
 augeas-tools
 facter
 flashrom
+inxi
 mcollective
 memtester
 puppet
