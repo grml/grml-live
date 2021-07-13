@@ -1605,7 +1605,7 @@ fi
 
 # netboot package {{{
 create_netbootpackage() {
-  local OUTPUT_FILE="${NETBOOT}/grml_netboot_package_${GRML_NAME}_${VERSION}.tar.bz2"
+  local OUTPUT_FILE="${NETBOOT}/grml_netboot_package_${GRML_NAME}_${VERSION}.tar"
 
   if [ -f "${OUTPUT_FILE}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" ] ; then
     log   "Skipping stage 'netboot' as $OUTPUT_FILE exists already."
@@ -1707,12 +1707,10 @@ create_netbootpackage() {
     fi
   fi
 
-  if tar -C "$OUTPUTDIR" -jcf "${OUTPUT_FILE}" "grml_netboot_package_${GRML_NAME}_${VERSION}" ; then
+  if tar -C "$OUTPUTDIR" -cf "${OUTPUT_FILE}" "grml_netboot_package_${GRML_NAME}_${VERSION}" ; then
     (
       cd $(dirname "${OUTPUT_FILE}")
-      sha1sum $(basename "${OUTPUT_FILE}") > "${OUTPUT_FILE}.sha1"
       sha256sum $(basename "${OUTPUT_FILE}") > "${OUTPUT_FILE}.sha256"
-      sha512sum $(basename "${OUTPUT_FILE}") > "${OUTPUT_FILE}.sha512"
     )
     einfo "Generated netboot package ${OUTPUT_FILE}" ; eend 0
     rm -rf "${OUTPUTDIR}"
