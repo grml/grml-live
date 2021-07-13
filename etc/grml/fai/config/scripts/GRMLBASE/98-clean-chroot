@@ -101,7 +101,7 @@ rm -rf --one-file-system $target/etc/sysconfig/* \
 
 # remove only "temporary" or saved files in the given directories
 nuke(){
-  for i in $(find "$@" -name \*.gz -o -name \*.bz2 -o -name \*.0 2>/dev/null); do
+  for i in $(find "$@" -name \*.gz -o -name \*.bz2 -o -name \*.xz -o -name \*.0 2>/dev/null); do
     rm -f --one-file-system "$i"
   done
 }
