@@ -1,3 +1,13 @@
+grml-live (0.38.5) unstable; urgency=medium
+
+  * [a4b23f1] GRMLBASE/98-clean-chroot: also nuke *.xz files
+  * [fe5a77d] No longer produce md5, sha1 + sha512 checksums, but only
+    sha256
+  * [ddbbaaa] netboot creation: no longer compress the tarball + only
+    generate sha256 checksum file
+
+ -- Michael Prokop <mika@grml.org>  Tue, 13 Jul 2021 16:03:17 +0200
+
 grml-live (0.38.4) unstable; urgency=medium
 
   * [6e42896] etc/grml/fai/config/files/etc/hosts/GRMLBASE: sync IPv6
