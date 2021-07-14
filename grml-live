@@ -345,8 +345,12 @@ adjust_boot_files() {
       sed -i "s/%DISTRI_NAME%/$DISTRI_NAME/g"      "${file}"
       sed -i "s/%DISTRI_SPLASH%/$DISTRI_SPLASH/g"  "${file}"
       sed -i "s/%GRML_NAME%/$GRML_NAME/g"          "${file}"
-      sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/g"  "${file}"
-      sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/g"    "${file}"
+      if [ -n "${fixed_squashfs_name}" ] ; then
+        sed -i "s/%SQUASHFS_NAME%/${fixed_squashfs_name}/g" "${file}"
+      fi
+      if [ -n "${fixed_release_info}" ] ; then
+        sed -i "s/%RELEASE_INFO%/${fixed_release_info}/g"   "${file}"
+      fi
       sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
       sed -i "s/%VERSION%/$VERSION/g"              "${file}"
       if [ -n "${BOOT_FILE}" ] ; then
@@ -448,6 +452,7 @@ fi
 [ -n "$HYBRID_METHOD" ]           || HYBRID_METHOD='isohybrid'
 [ -n "$RELEASENAME" ]             || RELEASENAME='grml-live rocks'
 [ -n "$SECURE_BOOT" ]             || SECURE_BOOT='disable'
+[ -n "$SQUASHFS_BINARY" ]         || SQUASHFS_BINARY='mksquashfs'
 [ -n "$SQUASHFS_EXCLUDES_FILE" ]  || SQUASHFS_EXCLUDES_FILE="${GRML_FAI_CONFIG}/config/grml/squashfs-excludes"
 [ -n "$SUITE" ]                   || SUITE='testing'
 [ -n "$TEMPLATE_DIRECTORY" ]      || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
@@ -1214,10 +1219,10 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
     mkdir -p "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/
     cp -a ${TEMPLATE_DIRECTORY}/GRML/* "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/
 
-    # adjust boot splash information:
+    # adjust boot splash information, as used within adjust_boot_files()
     RELEASE_INFO="$GRML_NAME $VERSION - Release Codename $RELEASENAME"
-    RELEASE_INFO="$(cut_string 68 "$RELEASE_INFO")"
-    RELEASE_INFO="$(extend_string_end 68 "$RELEASE_INFO")"
+    fixed_release_info="$(cut_string 68 "$RELEASE_INFO")"
+    fixed_release_info="$(extend_string_end 68 "$fixed_release_info")"
 
     if [ -r "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version ] ; then
       sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version
@@ -1241,12 +1246,12 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
     done
 
     # adjust bootsplash accordingly but make sure the string has the according length
-    SQUASHFS_NAME="$(cut_string 20 "$SQUASHFS_NAME")"
-    SQUASHFS_NAME="$(extend_string_end 20 "$SQUASHFS_NAME")"
+    fixed_squashfs_name="$(cut_string 20 "$SQUASHFS_NAME")"
+    fixed_squashfs_name="$(extend_string_end 20 "$fixed_squashfs_name")"
     for file in f4 f5 ; do
       if [ -r "${BUILD_OUTPUT}/boot/isolinux/${file}" ] ; then
-        sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
-        sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
+        sed -i "s/%SQUASHFS_NAME%/${fixed_squashfs_name}/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
+        sed -i "s/%SQUASHFS_NAME%/${fixed_squashfs_name}/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
       fi
     done
 
@@ -1369,11 +1374,6 @@ else
    # make sure we don't leave (even an empty) base.tgz:
    [ -f "$CHROOT_OUTPUT/base.tgz" ] && rm -f "$CHROOT_OUTPUT/base.tgz"
 
-   # if unconfigured default to squashfs-tools' mksquashfs binary
-   if [ -z "$SQUASHFS_BINARY" ] ; then
-      SQUASHFS_BINARY='mksquashfs'
-   fi
-
    if which "$SQUASHFS_BINARY" >/dev/null 2>&1 ; then
       log    "Using mksquashfs binary ${SQUASHFS_BINARY}"
       einfo  "Using mksquashfs binary ${SQUASHFS_BINARY}" ; eend 0
@@ -1438,6 +1438,65 @@ if [ -z "$BOOTSTRAP_ONLY" ] ; then
   ( cd $BUILD_OUTPUT/GRML/"${GRML_NAME}" &&
   find ../.. -type f -not -name md5sums -not -name isolinux.bin -exec md5sum {} \; > md5sums )
 fi
+# }}}
+
+# information how the ISO was generated {{{
+# shellcheck disable=SC2034
+generate_build_info() {
+  jo -p \
+    boot_method="${BOOT_METHOD}" \
+    bootstrap_only="${BOOTSTRAP_ONLY}" \
+    build_date="${DATE}" \
+    build_dirty="${BUILD_DIRTY}" \
+    build_only="${BUILD_ONLY}" \
+    chroot_install="${CHROOT_INSTALL}" \
+    classes="${CLASSES}" \
+    clean_artifacts="${CLEAN_ARTIFACTS}" \
+    default_bootoptions="${DEFAULT_BOOTOPTIONS}" \
+    distri_info="${DISTRI_INFO}" \
+    distri_name="${DISTRI_NAME}" \
+    extract_iso_name="${EXTRACT_ISO_NAME}" \
+    fai_cmdline="BUILD_ONLY=${BUILD_ONLY} BOOTSTRAP_ONLY=${BOOTSTRAP_ONLY} GRML_LIVE_CONFIG=${CONFIGDUMP} WAYBACK_DATE=${WAYBACK_DATE} fai ${VERBOSE} -C ${GRML_FAI_CONFIG} -s file:///${GRML_FAI_CONFIG}/config -c${CLASSES} -u ${HOSTNAME} ${FAI_ACTION} ${CHROOT_OUTPUT} ${FAI_ARGS}" \
+    fai_version="$(fai --help 2>/dev/null | head -1 | awk '{print $2}' | sed 's/\.$//' || true)" \
+    grml_architecture="${ARCH}" \
+    grml_bootid="${BOOTID}" \
+    grml_build_output="${BUILD_OUTPUT}" \
+    grml_chroot_output="${CHROOT_OUTPUT}" \
+    grml_debian_version="${SUITE}" \
+    grml_iso_name="${ISO_NAME}" \
+    grml_iso_output="${ISO_OUTPUT}" \
+    grml_live_cmdline="${CMDLINE}" \
+    grml_live_config_file="${LIVE_CONF}" \
+    grml_live_scripts_directory="${SCRIPTS_DIRECTORY}" \
+    grml_live_template_directory="${TEMPLATE_DIRECTORY}" \
+    grml_live_version="${GRML_LIVE_VERSION}" \
+    grml_local_config="${LOCAL_CONFIG}" \
+    grml_name="${GRML_NAME}" \
+    grml_short_name="${SHORT_NAME}" \
+    grml_username="${USERNAME}" \
+    grml_version="${VERSION}" \
+    host_architecture="$(dpkg --print-architecture || true)" \
+    host_debian_version="$(cat /etc/debian_version 2>/dev/null || true)" \
+    host_kernel_version="$(uname -a)" \
+    hybrid_method="${HYBRID_METHOD}" \
+    mkisofs_cmdline="${MKISOFS} -V ${GRML_NAME} ${VERSION} -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -no-pad -o ${ISO_OUTPUT}/${ISO_NAME}" \
+    mkisofs_version="$(${MKISOFS} --version 2>/dev/null | head -1 || true)" \
+    mksquashfs_cmdline="${SQUASHFS_BINARY} ${CHROOT_OUTPUT}/ ${BUILD_OUTPUT}/live/${GRML_NAME}/${GRML_NAME}.squashfs -noappend ${SQUASHFS_OPTIONS}" \
+    mksquashfs_version="$(${SQUASHFS_BINARY} -version | head -1 || true)" \
+    output_owner="${CHOWN_USER}" \
+    release_info="${RELEASE_INFO}" \
+    release_name="${RELEASENAME}" \
+    secure_boot="${SECURE_BOOT}" \
+    skip_mkisofs="${SKIP_MKISOFS}" \
+    skip_mksquashfs_="${SKIP_MKSQUASHFS}" \
+    skip_netboot="${SKIP_NETBOOT}" \
+    squashfs_name="${SQUASHFS_NAME}" \
+    template_directory="${TEMPLATE_DIRECTORY}" \
+    timestamp="$(TZ=UTC date +%s)" \
+    update_only="${UPDATE}" \
+    wayback_date="${WAYBACK_DATE}" \
+  :
+}
 # }}}
 
 # ISO_OUTPUT - mkisofs {{{
@@ -1522,6 +1581,13 @@ else
          echo 1 16 | mksh "${SCRIPTS_DIRECTORY}/bootgrub.mksh" -B 11 | \
             dd of=boot/grub/toriboot.bin conv=notrunc 2>/dev/null
       fi
+
+      log   "Generating build information in conf/buildinfo.json"
+      einfo "Generating build information in conf/buildinfo.json"
+      mkdir -p conf/
+      generate_build_info > conf/buildinfo.json
+      eend $?
+
       log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS $EFI_ARGS -no-pad -o ${ISO_OUTPUT}/${ISO_NAME} ."
       $MKISOFS -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
               -l -r -J $BOOT_ARGS $EFI_ARGS -no-pad \
