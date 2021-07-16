@@ -1589,9 +1589,19 @@ else
       eend $?
 
       log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS $EFI_ARGS -no-pad -o ${ISO_OUTPUT}/${ISO_NAME} ."
+      einfo "Generating ISO file..."
       $MKISOFS -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
               -l -r -J $BOOT_ARGS $EFI_ARGS -no-pad \
               -o "${ISO_OUTPUT}/${ISO_NAME}" . ; RC=$?
+      eend $RC
+
+      # do not continue on errors, otherwise we might generate/overwrite the ISO with dd if=... stuff
+      if [ "$RC" != 0 ] ; then
+        log    "Error: critical error while generating ISO [exit code ${RC}]. Exiting."
+        eerror "Error: critical error while generating ISO [exit code ${RC}]. Exiting." ; eend 1
+        bailout $RC
+      fi
+
       # both of these need core.img there, so it’s easier to write it here
       if [ "$BOOT_METHOD" = "grub2" ] || [ "$HYBRID_METHOD" = "grub2" ]; then
          # must be <= 30720 bytes
