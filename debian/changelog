@@ -1,3 +1,11 @@
+grml-live (0.39.0) unstable; urgency=medium
+
+  * [9453222] Provide information how ISO was generated in file
+    conf/buildinfo.json
+  * [e703806] Immediately bail out on errors when generating the ISO fails
+
+ -- Michael Prokop <mika@grml.org>  Sun, 25 Jul 2021 17:25:08 +0200
+
 grml-live (0.38.5) unstable; urgency=medium
 
   * [a4b23f1] GRMLBASE/98-clean-chroot: also nuke *.xz files
