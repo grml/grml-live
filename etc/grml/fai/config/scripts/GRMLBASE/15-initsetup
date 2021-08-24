@@ -23,6 +23,9 @@ systemd_setup() {
       $ROOTCMD systemctl set-default grml-boot.target || true
       ;;
     *)
+      # workaround for #992847 to workaround /lib/systemd -> /usr/lib/systemd transition
+      $ROOTCMD rm -f /etc/systemd/system/syslog.service
+
       $ROOTCMD systemctl preset-all
       $ROOTCMD systemctl set-default grml-boot.target
       ;;
