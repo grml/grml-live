@@ -1,3 +1,14 @@
+grml-live (0.39.1) unstable; urgency=medium
+
+  * [093e8a1] Update DEBIAN_STABLE's apt sources.list configuration for
+    bullseye. Thanks to d630 for the bug report
+  * [dfaf77a] GRMLBASE/15-initsetup: provide workaround for failing
+    rsyslog
+  * [48c2038] isolinux: fix toram=... variable usage within isolinux
+    configs. Thanks to Chris S for the bug report
+
+ -- Michael Prokop <mika@grml.org>  Mon, 27 Sep 2021 10:54:43 +0200
+
 grml-live (0.39.0) unstable; urgency=medium
 
   * [9453222] Provide information how ISO was generated in file
