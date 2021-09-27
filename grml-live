@@ -347,9 +347,13 @@ adjust_boot_files() {
       sed -i "s/%GRML_NAME%/$GRML_NAME/g"          "${file}"
       if [ -n "${fixed_squashfs_name}" ] ; then
         sed -i "s/%SQUASHFS_NAME%/${fixed_squashfs_name}/g" "${file}"
+      else
+        ewarn "Variable fixed_squashfs_name is unset, can't adjust %SQUASHFS_NAME% in templates." ; eend 1
       fi
       if [ -n "${fixed_release_info}" ] ; then
         sed -i "s/%RELEASE_INFO%/${fixed_release_info}/g"   "${file}"
+      else
+        ewarn "Variable fixed_release_info is unset, can't adjust %RELEASE_INFO% in templates." ; eend 1
       fi
       sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
       sed -i "s/%VERSION%/$VERSION/g"              "${file}"
@@ -1231,6 +1235,15 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
     # make sure the squashfs filename is set accordingly:
     SQUASHFS_NAME="$GRML_NAME.squashfs"
+    # adjust bootsplash accordingly but make sure the string has the according length
+    fixed_squashfs_name="$(cut_string 20 "$SQUASHFS_NAME")"
+    fixed_squashfs_name="$(extend_string_end 20 "$fixed_squashfs_name")"
+    for file in f4 f5 ; do
+      if [ -r "${BUILD_OUTPUT}/boot/isolinux/${file}" ] ; then
+        sed -i "s/%SQUASHFS_NAME%/${fixed_squashfs_name}/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
+        sed -i "s/%SQUASHFS_NAME%/${fixed_squashfs_name}/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
+      fi
+    done
 
     # adjust all variables in the templates with the according distribution information
     adjust_boot_files "${BUILD_OUTPUT}"/boot/isolinux/*.cfg \
@@ -1243,16 +1256,6 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
         value="$(eval echo '$'"$param")"
         mv ${file} ${file/\%${param}\%/$value}
       done
-    done
-
-    # adjust bootsplash accordingly but make sure the string has the according length
-    fixed_squashfs_name="$(cut_string 20 "$SQUASHFS_NAME")"
-    fixed_squashfs_name="$(extend_string_end 20 "$fixed_squashfs_name")"
-    for file in f4 f5 ; do
-      if [ -r "${BUILD_OUTPUT}/boot/isolinux/${file}" ] ; then
-        sed -i "s/%SQUASHFS_NAME%/${fixed_squashfs_name}/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
-        sed -i "s/%SQUASHFS_NAME%/${fixed_squashfs_name}/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
-      fi
     done
 
     # generate addon list
