@@ -24,6 +24,7 @@ dosfstools
 e2fsprogs
 ed
 ethtool
+f2fs-tools
 findutils
 fsarchiver
 gddrescue

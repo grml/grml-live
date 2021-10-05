@@ -103,6 +103,7 @@ dosfstools
 e2fsprogs
 exfat-fuse
 exfat-utils
+f2fs-tools
 genisoimage
 hfsutils
 jfsutils
