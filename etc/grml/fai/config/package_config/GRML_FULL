@@ -191,7 +191,6 @@ rdnssd
 rfkill
 ser2net
 sipcalc
-slurm
 snmp
 socat
 speedtest-cli
