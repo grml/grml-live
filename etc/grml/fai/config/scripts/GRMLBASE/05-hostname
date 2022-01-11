@@ -29,9 +29,5 @@ if [ -r $target/etc/postfix/main.cf ] ; then
   $ROOTCMD newaliases
 fi
 
-if [ -r $target/etc/bacula/bacula-fd.conf ] ; then
-  sed -i "s/$BUILD_HOSTNAME/$HOSTNAME/g" $target/etc/bacula/bacula-fd.conf
-fi
-
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

@@ -251,10 +251,6 @@ recoverjpeg
 testdisk
 
 # restore from backup
-bacula-common
-bacula-console
-bacula-fd
-bacula-sd
 borgbackup
 clonezilla
 dirvish
