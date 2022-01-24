@@ -1,3 +1,21 @@
+grml-live (0.39.2) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * Software related changes:
+    - [46732ed] drop ifenslave from GRML_SMALL and GRML_FULL
+    - [b6bb1f8] add f2fs-tools to GRML_SMALL + GRML_FULL.
+      Thanks to Arun for the suggestion
+    - [5b2e199] drop slurm from GRML_FULL
+    - [ba06af6] replace exfat-utils with exfatprogs in GRML_FULL
+    - [9b5ecef] drop bacula-* from GRML_FULL
+    - [ebb166f] drop firmware-ath9k-htc from GRMLBASE
+    - [1c4ce53] drop iptstate from GRML_SMALL + GRML_FULL
+
+  [ Dr. András Korn ]
+  * [3b07e29] grml-live.txt: output dir mount options; manifold
+
+ -- Michael Prokop <mika@grml.org>  Mon, 24 Jan 2022 17:18:31 +0100
+
 grml-live (0.39.1) unstable; urgency=medium
 
   * [093e8a1] Update DEBIAN_STABLE's apt sources.list configuration for
