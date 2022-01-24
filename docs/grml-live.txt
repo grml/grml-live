@@ -494,6 +494,10 @@ should have at least 4GB of total free disk space
 * fast network access for retrieving the Debian packages used for creating the
 chroot (check out "local mirror" to workaround this problem as far as possible)
 
+* your output directory should not be mounted with any of the "nodev", "noexec"
+or "nosuid" mount options. (/tmp typically is at least "nodev" and "nosuid" on
+most systems.)
+
 For further information see next section.
 
 [[X8]]
@@ -606,6 +610,12 @@ If you need help with grml-live or would like to see new features as part of
 grml-live you can get commercial support via
 link:http://grml-solutions.com/[Grml Solutions].
 
+Note that FAI doesn't abort immediately on errors that will ultimately cause
+the build to fail. Be sure to look through the logs and find the actual error;
+look for lines that start with "E: " or contain "FAILED" or "exit code 1".
+Some messages that may look like errors are actually benign; e.g.
+"/tmp/grml64/grml_chroot/var/lib/dpkg is not a mounted ramdisk" is not an error.
+
 [[install-local-files]]
 How do I install further files into the chroot/ISO?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -686,8 +696,10 @@ That's it.  All downloaded files will be cached in /var/cache/apt-cacher-ng then
 How do I revert the manifold feature from an ISO?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The so-called manifold feature Grml ISOs can, but by default do not, use allows
-one to use the same ISO for CD boot and USB boot. If you notice any problems
+By default, Grml ISOs use isohybrid to allow them to be booted from CDs as
+well as USB sticks. Manifold is an alternative to isohybrid.
+
+If you notice any problems
 when booting manifold-crafted media, just revert the manifold feature running:
 
   % dd if=/dev/zero of=grml.iso bs=512 count=1 conv=notrunc
