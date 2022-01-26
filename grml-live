@@ -1498,7 +1498,7 @@ generate_build_info() {
     timestamp="$(TZ=UTC date +%s)" \
     update_only="${UPDATE}" \
     wayback_date="${WAYBACK_DATE}" \
-  :
+  --
 }
 # }}}
 
