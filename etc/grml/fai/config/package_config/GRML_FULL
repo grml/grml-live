@@ -50,7 +50,6 @@ pppoeconf
 
 # disk subsystems support/debugging
 array-info
-bonnie++
 cciss-vol-status
 cryptsetup
 disktype
