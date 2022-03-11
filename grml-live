@@ -337,6 +337,19 @@ adjust_boot_files() {
     exit 1
   fi
 
+  local release_info
+  if [ -n "${RELEASE_INFO:-}" ] ; then
+    release_info="${RELEASE_INFO}"
+  else
+    ewarn "Variable RELEASE_INFO is unset, applying fallback for usage in adjust_boot_files." ; eend 1
+    release_info="$GRML_NAME $VERSION - Release Codename $RELEASENAME"
+  fi
+
+  # ensure this has a specific length
+  local fixed_release_info
+  fixed_release_info="$(cut_string 68 "$release_info")"
+  fixed_release_info="$(extend_string_end 68 "$fixed_release_info")"
+
   for file in "$@" ; do
     if [ -r "${file}" ] && [ -f "${file}" ] ; then
       sed -i "s/%ARCH%/$ARCH/g"                    "${file}"
@@ -345,16 +358,8 @@ adjust_boot_files() {
       sed -i "s/%DISTRI_NAME%/$DISTRI_NAME/g"      "${file}"
       sed -i "s/%DISTRI_SPLASH%/$DISTRI_SPLASH/g"  "${file}"
       sed -i "s/%GRML_NAME%/$GRML_NAME/g"          "${file}"
-      if [ -n "${fixed_squashfs_name}" ] ; then
-        sed -i "s/%SQUASHFS_NAME%/${fixed_squashfs_name}/g" "${file}"
-      else
-        ewarn "Variable fixed_squashfs_name is unset, can't adjust %SQUASHFS_NAME% in templates." ; eend 1
-      fi
-      if [ -n "${fixed_release_info}" ] ; then
-        sed -i "s/%RELEASE_INFO%/${fixed_release_info}/g"   "${file}"
-      else
-        ewarn "Variable fixed_release_info is unset, can't adjust %RELEASE_INFO% in templates." ; eend 1
-      fi
+      sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/g"  "${file}"
+      sed -i "s/%RELEASE_INFO%/$fixed_release_info/g" "${file}"
       sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
       sed -i "s/%VERSION%/$VERSION/g"              "${file}"
       if [ -n "${BOOT_FILE}" ] ; then
@@ -1024,6 +1029,10 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
     mkdir -p "$BUILD_OUTPUT"/boot/isolinux
     mkdir -p "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"
 
+    # this is a variable we're using for adjusting boot templates, not only in
+    # adjust_boot_files though, so set here
+    RELEASE_INFO="$GRML_NAME $VERSION - Release Codename $RELEASENAME"
+
     # if we don't have an initrd we a) can't boot and b) there was an error
     # during build, so check for the file:
     INITRD="$(ls $CHROOT_OUTPUT/boot/initrd* 2>/dev/null| grep -v '.bak$' | sort -r | head -1)"
@@ -1223,14 +1232,9 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
     mkdir -p "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/
     cp -a ${TEMPLATE_DIRECTORY}/GRML/* "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/
 
-    # adjust boot splash information, as used within adjust_boot_files()
-    RELEASE_INFO="$GRML_NAME $VERSION - Release Codename $RELEASENAME"
-    fixed_release_info="$(cut_string 68 "$RELEASE_INFO")"
-    fixed_release_info="$(extend_string_end 68 "$fixed_release_info")"
-
     if [ -r "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version ] ; then
-      sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version
-      sed -i "s/%DATE%/$DATE/"                                      "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version
+      sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version
+      sed -i "s/%DATE%/$DATE/"                 "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version
     fi
 
     # make sure the squashfs filename is set accordingly:
@@ -1325,7 +1329,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
     fi
 
     if [ -e "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6 ]; then
-      sed -i "s/%RELEASE_INFO%/$GRML_NAME $VERSION - $RELEASENAME/" "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6
+      sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6
     fi
 
     DPKG_LIST="/var/log/fai/$HOSTNAME/last/dpkg.list" # the dpkg --list output of the chroot
