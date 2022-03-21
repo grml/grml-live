@@ -549,20 +549,19 @@ running_under_secureboot() {
   # doesn't work as needed as it relies on /sys/firmware/efi/efivars (while
   # /sys/firmware/efi/vars would exist)
   if ! $SYSTEMD ; then
-    if modprobe efivars &>/dev/null ; then
+    if modprobe efivarfs &>/dev/null ; then
       mount -t efivarfs efivarfs /sys/firmware/efi/efivars
     fi
   fi
 
-  if [ -x /usr/bin/mokutil ] ; then
-    local secstate=$(mokutil --sb-state 2>/dev/null) # "SecureBoot enabled"
-    if [ -n "$secstate" ] ; then
+  if [[ -x "$(command -v mokutil)" ]] ; then
+    if mokutil --sb-state 2>/dev/null | grep -q 'SecureBoot enabled' ; then
       return 0
     else
       return 1
     fi
   else
-    if modprobe efivars &>/dev/null ; then
+    if modprobe efivarfs &>/dev/null ; then
       if od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data 2>/dev/null | grep -q 1 ; then
         return 0
       else
