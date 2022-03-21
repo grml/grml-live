@@ -1,3 +1,10 @@
+grml-autoconfig (0.20.2) grml-testing; urgency=medium
+
+  * [a08b349] running_under_secureboot: update for efivarfs + new mokutil
+    behavior
+
+ -- Michael Prokop <mika@grml.org>  Mon, 21 Mar 2022 18:02:52 +0100
+
 grml-autoconfig (0.20.1) grml-testing; urgency=medium
 
   * [59c0504] Demote unavailability of dmraid from error to warning only
