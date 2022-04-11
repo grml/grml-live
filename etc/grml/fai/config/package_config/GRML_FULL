@@ -22,8 +22,8 @@ locales
 lsb-release
 lsof
 mount
-ntp
-ntpdate
+ntpsec
+ntpsec-ntpdate
 nullmailer
 passwd
 procps

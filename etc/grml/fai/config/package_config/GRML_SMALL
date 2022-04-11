@@ -62,7 +62,7 @@ netbase
 netcat-openbsd
 net-tools
 ntfs-3g
-ntpdate
+ntpsec-ntpdate
 nwipe
 parted
 partimage
