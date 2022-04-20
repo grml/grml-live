@@ -1,3 +1,11 @@
+grml-live (0.40.1) unstable; urgency=medium
+
+  * Software related changes:
+    - [3edddae] move from ntp/ntpdate to ntpsec/ntpsec-ntpdate in
+      GRML_SMALL + GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Wed, 20 Apr 2022 14:48:15 +0200
+
 grml-live (0.40.0) unstable; urgency=medium
 
   * [50d26fb] buildinfo generation: avoid error message with older
