@@ -69,6 +69,7 @@ scsitools
 sdparm
 sg3-utils
 smartmontools
+stenc
 
 # disk partitioning/boot
 boot-info-script
