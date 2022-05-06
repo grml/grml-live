@@ -6,6 +6,7 @@
 # License:       This file is licensed under the GPL v2.
 ################################################################################
 
+# shellcheck disable=SC1091
 . /etc/grml/script-functions
 
 check4root || exit 1
@@ -31,7 +32,7 @@ fi
 if [ -z "$NONINTERACTIVE" ] ; then
    NEW_HOSTNAME="$(dialog --stdout --title "${PN}" --extra-button --extra-label "Propose hostname" \
    --inputbox "Set hostname (/etc/hostname, /etc/hosts and /etc/postfix/main.cf will be adjusted)\
-\n\nTip: press 'Propose hostname' for another proposal" 14 70 $NEW_HOSTNAME)"
+\\n\\nTip: press 'Propose hostname' for another proposal" 14 70 "$NEW_HOSTNAME")"
   retval=$?
 else
   retval=0
@@ -55,7 +56,9 @@ case $retval in
   0)
      echo "$NEW_HOSTNAME" > /etc/hostname
      echo "$NEW_HOSTNAME" > /etc/mailname
+     # shellcheck disable=SC1117
      sed -ir "s/^\(127.0.0.1\s*\).*localhost.*/\1$NEW_HOSTNAME localhost/" /etc/hosts
+     # shellcheck disable=SC1117
      sed -ir "s/^\(::1\s*\).*ip6-localhost.*/\1ip6-localhost ip6-loopback $NEW_HOSTNAME/" /etc/hosts
 
      POSTFIX=''
@@ -66,7 +69,7 @@ Configuration of myhostname in /etc/postfix/main.cf has been adjusted as well. D
      fi
 
      if [ -n "$DISPLAY" ] ; then
-       if sudo -u $RUNASUSER xauth add $(xauth -n list | grep "${OLDHOSTNAME}/unix:0" | sed "s|${OLDHOSTNAME}/unix:0|${NEW_HOSTNAME}/unix:0|") ; then
+       if sudo -u $RUNASUSER xauth add "$(xauth -n list | grep "${OLDHOSTNAME}/unix:0" | sed "s|${OLDHOSTNAME}/unix:0|${NEW_HOSTNAME}/unix:0|")" ; then
 	  sudo -u $RUNASUSER xauth remove "${OLDHOSTNAME}/unix:0"
        fi
      fi
