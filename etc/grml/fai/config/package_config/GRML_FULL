@@ -125,6 +125,7 @@ mtools
 
 # generic tools
 cpp
+sqlite3
 whois
 xorriso
 
