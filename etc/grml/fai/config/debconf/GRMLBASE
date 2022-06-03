@@ -1,5 +1,7 @@
 locales locales/default_environment_locale select en_US.UTF-8
 locales locales/locales_to_be_generated multiselect en_US.UTF-8 UTF-8
+man-db man-db/auto-update boolean false
+man-db man-db/build-database boolean false
 openssh-server openssh-server/permit-root-login boolean true
 passwd passwd/shadow boolean true
 portmap portmap/loopback boolean false
