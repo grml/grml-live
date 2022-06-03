@@ -1,3 +1,14 @@
+grml-live (0.40.2) unstable; urgency=medium
+
+  * [1d02eb2] Disable man-db settings to speed up package installation.
+    Thanks to Thorsten Glaser for the suggestion
+  * Software related changes:
+    - [63e3a60] add stenc to GRML_FULL
+    - [0989e6c] add mbuffer to GRML_FULL
+    - [94bec0b] add sqlite3 to GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Fri, 03 Jun 2022 14:33:53 +0200
+
 grml-live (0.40.1) unstable; urgency=medium
 
   * Software related changes:
