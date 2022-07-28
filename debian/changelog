@@ -1,3 +1,10 @@
+grml-live (0.40.3) unstable; urgency=medium
+
+  * [482cb8d] GRMLBASE/50-lvm: also clear /lib/udev/rules.d/69-lvm.rules
+  * [f131526] GRMLBASE/21-usersetup: use adduser for adding user to group
+
+ -- Michael Prokop <mika@grml.org>  Thu, 28 Jul 2022 10:58:44 +0200
+
 grml-live (0.40.2) unstable; urgency=medium
 
   * [1d02eb2] Disable man-db settings to speed up package installation.
