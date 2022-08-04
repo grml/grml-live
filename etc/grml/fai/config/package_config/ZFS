@@ -1,0 +1,7 @@
+PACKAGES install
+
+build-essential
+zfs-dkms
+zfsutils-linux
+dwarves
+
