@@ -1,0 +1,9 @@
+PACKAGES install
+
+build-essential
+# pahole(1), provided by the dwwarves package in older Debian releases and the pahole package in sid as of 2022-08, can be needed to build kernel modules (depending on kernel config?)
+# TODO: add a script that removes it once dkms install succeeded so that it doesn't bloat the iso
+dwarves
+zfs-dkms
+zfsutils-linux
+

@@ -13,7 +13,7 @@ set -e
 # by default it's set to UTC=no
 if [ -n "$UTC" ] && [ "$UTC" = "yes" ] ; then
    echo "UTC is set to 'yes', setting hwclock parameter UTC"
-   sed -i "s/^LOCAL/UTC/" "${target}/etc/adjtime"
+   [ -e "${target}/etc/adjtime" ] && sed -i "s/^LOCAL/UTC/" "${target}/etc/adjtime"
 fi
 
 # default timezone settings
