@@ -6,7 +6,8 @@ attr
 bash
 binutils
 bridge-utils
-bsdmainutils
+bsdextrautils
+bsdutils
 btrfs-progs
 buffer
 chntpw

@@ -9,7 +9,8 @@ grml-terminalserver
 apt
 aptitude
 binfmt-support
-bsdmainutils
+bsdextrautils
+bsdutils
 dctrl-tools
 devscripts
 dos2unix
