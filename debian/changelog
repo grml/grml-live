@@ -1,3 +1,20 @@
+grml-live (0.41.0) unstable; urgency=medium
+
+  [ András Korn ]
+  * [7e7a352] Exclude /var/lib/dkms/* from squashfs
+  * [6e5c0af] Avoid build error if etc/adjtime doesn't exist in chroot
+  * [8459108] Add ZFS fai class
+  * [c289d2f] Add comment about dwarves (can be needed to build kernel
+    modules)
+
+  [ Michael Prokop ]
+  * [ad202c1] docs: document new ZFS class
+  * Software related changes:
+    - [b2ab701] switch from bsdmainutils to bsdextrautils + bsdutils in
+      GRML_SMALL + GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Wed, 17 Aug 2022 13:30:33 +0200
+
 grml-live (0.40.3) unstable; urgency=medium
 
   * [482cb8d] GRMLBASE/50-lvm: also clear /lib/udev/rules.d/69-lvm.rules
