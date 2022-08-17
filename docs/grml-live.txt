@@ -385,6 +385,8 @@ placed in the output directory under grml_sources.
 * XORG: providing important packages for use with a base grml-featured X.org
 setup
 
+* ZFS: package selection to add support for OpenZFS/zfsonlinux
+
 [[files]]
 Files
 -----
