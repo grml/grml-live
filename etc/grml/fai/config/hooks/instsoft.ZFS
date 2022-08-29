@@ -1,0 +1,81 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/hooks/instsoft.ZFS
+# Purpose:       Build zfs modules in the chroot, then get rid of packages installed for this alone
+# Authors:       (c) András Korn <korn-grml@elan.rulez.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2, or, at your option, any later version.
+################################################################################
+
+set -u
+set -e
+
+# We don't want to install build-essential, dkms et al via package_config
+# because they will end up bloating the iso; it seems cleaner to install
+# them, build the zfs modules, then remove them.
+#
+# TODO: if https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1009179 is ever
+# fixed, switch to building a zfs-modules deb and including that.
+#
+# TODO: convert this into a framework for other classes to ship dkms
+# modules: have a hook/script that installs the build-related packages,
+# another that builds whatever must be built, and a third that does the cleanup.
+#
+# TODO: support other architectures grml and grml-live supports (PRs
+# welcome, I'm sure).
+
+echo "$0: Installing latest kernel and its headers, as well as build-essential."
+# For some reason, apt's autoremove function doesn't pick up some of the
+# extra packages we install here, e.g. gcc-11, so work around that by
+# keeping track of what gets installed. This is an ugly hack and should not
+# be needed, but without it the resulting ISO is hundreds of megabytes
+# larger. I hope this kludge can go away eventually.
+extra_packages=($($ROOTCMD apt-get --assume-no --download-only --mark-auto -u install \
+	build-essential linux-image-amd64 linux-headers-amd64 \
+	| sed '0,/The following NEW packages will be installed/d;/^[^ ]/,$d'))
+$ROOTCMD apt-get --yes --mark-auto -u install build-essential linux-image-amd64 linux-headers-amd64
+
+# Remove all but the latest kernel (TODO: support passing in the desired
+# kernel version by configuration variable instead of using the latest):
+echo "$0: Removing all kernel packages except the latest one, if any."
+for kernelversion in $($ROOTCMD sh -c 'cd /boot; ls -rt vmlinuz-*' | sed 's/^vmlinuz-//;$d'); do
+	echo "$0: Removing obsolete kernel version $kernelversion"
+	$ROOTCMD apt-get --yes --purge remove "linux-.*$kernelversion.*"
+done
+
+# Earlier Debian releases have a dwarves package; newer ones have pahole.
+# This can be needed to build the zfs modules, perhaps depending on kernel
+# configuration (TODO: look into this).
+echo "$0: Installing pahole or dwarves, whichever is available."
+if $ROOTCMD apt-get --yes --mark-auto -u install pahole; then
+	pahole=pahole
+else
+	$ROOTCMD apt-get --mark-auto --yes -u install dwarves
+	pahole=dwarves
+fi
+
+echo "$0: Installing zfs-dkms itself."
+extra_packages=(${extra_packages[@]} $($ROOTCMD apt-get --assume-no --download-only --mark-auto -u install zfs-dkms | sed '0,/The following NEW packages will be installed/d;/^[^ ]/,$d'))
+$ROOTCMD apt-get --yes --mark-auto -u install zfs-dkms
+
+# Now invoke the dkms kernel postinst script for the only kernel that's left
+# -- normally the zfs-dkms postinst script should do this, but maybe it
+# didn't, and redoing it is almost free:
+kernelversion=$($ROOTCMD sh -c 'ls -1 /boot/vmlinuz-*' | sed 's@.*boot/vmlinuz-@@')
+echo "$0: Building zfs-dkms modules for kernel $kernelversion."
+$ROOTCMD /etc/kernel/postinst.d/dkms "$kernelversion"
+
+tempfile=$(mktemp)
+echo "$0: Saving built modules into a backup file (removing the dkms package will remove them, but we'll put them back)."
+$ROOTCMD tar cf - /lib/modules/$kernelversion/updates/dkms >$tempfile
+
+echo "$0: Removing packages only needed to build zfs modules."
+remove_packages=($(echo "${extra_packages[@]}" zfs-dkms '^linux-headers-.*' build-essential $pahole | tr ' ' '\n' | sort -u))
+$ROOTCMD apt-get --yes --purge --autoremove remove ${remove_packages[@]}
+echo "$0: Trying extra hard to get rid of auto-installed packages. This is a hack that is one of the ways we're trying to work around a perceived bug in apt autoremove and should be a no-op."
+$ROOTCMD apt-get --yes --purge autoremove
+
+echo "$0: Restoring backed-up kernel modules."
+$ROOTCMD tar xf - <$tempfile
+rm $tempfile
+$ROOTCMD depmod -a $kernelversion
+echo "$0: Completed successfully. Enjoy your zfs."
