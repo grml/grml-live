@@ -1,3 +1,10 @@
+grml-autoconfig (0.20.3) grml-testing; urgency=medium
+
+  * [1e268ff] systemd unit: use StandardInput=null to work in serial
+    console mode
+
+ -- Michael Prokop <mika@grml.org>  Fri, 02 Sep 2022 17:16:56 +0200
+
 grml-autoconfig (0.20.2) grml-testing; urgency=medium
 
   * [a08b349] running_under_secureboot: update for efivarfs + new mokutil
