@@ -8,7 +8,7 @@ After=rc-local.service
 [Service]
 ExecStart=/etc/init.d/grml-autoconfig
 Type=oneshot
-StandardInput=tty
+StandardInput=null
 StandardOutput=tty
 
 [Install]
