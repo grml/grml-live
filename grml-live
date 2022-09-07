@@ -625,7 +625,7 @@ einfo "Logging actions to logfile $LOGFILE"
 
 # dump config variables into file, for script access {{{
 CONFIGDUMP=$(mktemp)
-set | egrep \
+set | grep -E \
   '^(GRML_NAME|RELEASENAME|DATE|VERSION|SUITE|ARCH|DISTRI_NAME|USERNAME|HOSTNAME|APT_PROXY)=' \
   > ${CONFIGDUMP}
 # }}}

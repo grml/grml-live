@@ -13,7 +13,7 @@ override_dh_binary:
 	dh_binary
 
 override_dh_install:
-	egrep -q "GRML_LIVE_VERSION=.*UNRELEASED" grml-live || \
+	grep -qE "GRML_LIVE_VERSION=.*UNRELEASED" grml-live || \
 			(echo "Wrong version in grml-live" && exit 2)
 	# build docs
 	cd docs && $(MAKE) && cd ../
