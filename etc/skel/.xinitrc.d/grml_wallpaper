@@ -11,7 +11,14 @@ if [ "$XINIT_GRML_WALLPAPER" = "false" ] ; then
 fi
 
 # set wallpaper
-[ -x /usr/bin/fbsetbg ] && [ -r /usr/share/grml/desktop.jpg ] && \
+if ! [ -r /usr/share/grml/desktop.jpg ] ; then
+  exit 0
+fi
+
+if command -v xwallpaper >/dev/null 2>&1 ; then
+  xwallpaper --maximize /usr/share/grml/desktop.jpg &
+elif command -v fbsetbg >/dev/null 2>&1 ; then
   fbsetbg -A /usr/share/grml/desktop.jpg &
+fi
 
 ## END OF FILE #################################################################
