@@ -235,7 +235,6 @@ pwgen
 
 # popular VCS to pull config from
 git
-subversion
 
 # recovery
 afflib-tools
