@@ -286,12 +286,9 @@ zsh
 
 # system info/mgmt
 augeas-tools
-facter
 flashrom
 inxi
-mcollective
 memtester
-puppet
 stressant
 
 # virtualization support
