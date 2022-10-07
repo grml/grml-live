@@ -200,14 +200,12 @@ tcpdump
 tcptraceroute
 telnet
 tmate
-tshark
 tsocks
 uml-utilities
 usb-modeswitch
 vlan
 wireguard
 wireless-regdb
-wireshark
 
 # network transfers
 ca-certificates
