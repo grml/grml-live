@@ -311,7 +311,7 @@ w3m
 wget
 
 # X
-openbox obconf
+fluxbox
 grml-desktop
 grml-x
 x11vnc
