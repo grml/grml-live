@@ -1,3 +1,25 @@
+grml-live (0.41.1) unstable; urgency=medium
+
+  [ András Korn ]
+  * [48f94bb] Add support for building grml ISOs with zfs
+
+  [ Michael Prokop ]
+  * [6d869c1] ssh.service: avoid indirection via /bin/sh + do not run test
+    mode in ExecStartPre
+  * [8d93bbb] ssh.service: fix ssh-keygen usage
+  * [541a6ce] Replace egrep usage with grep -E
+  * Software related changes:
+    - [e528680] drop xfsdump from GRML_FULL
+    - [37addd3] drop mercurial from GRML_FULL
+    - [8daed70] drop subversion from GRML_FULL
+    - [da5e5ca] drop tshark + wireshark from GRML_FULL
+    - [c22b14e] drop facter, mcollective + puppet from GRML_FULL
+    - [bb35e69] re-add firmware-ath9k-htc to GRMLBASE
+    - [309a8e7] re-add iptstate to GRML_SMALL + GRML_FULL
+    - [9c9bd3f] re-add fluxbox and drop openbox + obconf in GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Mon, 10 Oct 2022 18:53:40 +0200
+
 grml-live (0.41.0) unstable; urgency=medium
 
   [ András Korn ]
