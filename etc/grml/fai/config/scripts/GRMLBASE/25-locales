@@ -13,6 +13,9 @@ set -e
 # the full setup, GRMLBASE installs a minimal configuration
 fcopy -v /etc/locale.gen
 
+# set up /etc/locale.conf, to avoid systemd-firstboot prompting for user input
+fcopy -v /etc/locale.conf
+
 # get rid of locales unless using class LOCALES
 set +u
 if ! ifclass LOCALES ; then
