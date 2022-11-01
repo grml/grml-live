@@ -69,7 +69,6 @@ firmware-bnx2x
 firmware-brcm80211
 firmware-cavium
 firmware-intel-sound
-firmware-intelwimax
 firmware-iwlwifi
 firmware-libertas
 firmware-linux
