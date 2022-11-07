@@ -1,3 +1,18 @@
+grml-live (0.41.2) unstable; urgency=medium
+
+  * [bb84a88] Deploy default /etc/locale.conf, to avoid systemd-firstboot
+    prompting during bootup
+  * [6d6606f] /etc/fstab: fix note from rebuilfstab->grml-udev-
+    rebuildfstab switch. Thanks to Christoph Biedl for reporting
+  * [c137314] Drop SYSTEMD package config file, no longer relevant. Thanks
+    to András Korn for reporting
+  * [cff6607] Provide apt sources.list file to support 'bookworm' as
+    Debian suite
+  * Software related changes:
+    - [33f9c6c] drop firmware-intelwimax package from GRMLBASE
+
+ -- Michael Prokop <mika@grml.org>  Mon, 07 Nov 2022 21:25:47 +0100
+
 grml-live (0.41.1) unstable; urgency=medium
 
   [ András Korn ]
