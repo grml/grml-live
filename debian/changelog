@@ -1,3 +1,13 @@
+grml-live (0.42.0) unstable; urgency=medium
+
+  The "happy carnival" release
+
+  * [c01a86b] Support Memtest86+ with UEFI
+  * [ea1e5ea] Provide workaround for kmod/initramfs-tools issue with
+    NFS/netboot. Thanks to András Korn
+
+ -- Michael Prokop <mika@grml.org>  Fri, 11 Nov 2022 10:23:23 +0100
+
 grml-live (0.41.2) unstable; urgency=medium
 
   * [bb84a88] Deploy default /etc/locale.conf, to avoid systemd-firstboot
