@@ -161,6 +161,7 @@ dnsutils
 ethstatus
 ethtool
 hostapd
+hping3
 iftop
 ifupdown
 ipcalc
