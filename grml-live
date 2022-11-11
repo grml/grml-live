@@ -1152,7 +1152,34 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
         copy_addon_file ipxe.lkrn /usr/lib/ipxe addons
         copy_addon_file ipxe.efi /usr/lib/ipxe addons
         copy_addon_file pci.ids /usr/share/misc addons
+
+        # memtest86+ <=5.01-3.1
         copy_addon_file memtest86+.bin /boot addons
+        # make memtest filename FAT16/8.3 compatible
+        if [ -r "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" ] ; then
+          mv "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" \
+             "${BUILD_OUTPUT}/boot/addons/memtest"
+        fi
+
+        # memtest86+ >=6.00-1
+        copy_addon_file memtest86+x32.bin /boot addons
+        copy_addon_file memtest86+x32.efi /boot addons
+        copy_addon_file memtest86+x64.bin /boot addons
+        copy_addon_file memtest86+x64.efi /boot addons
+
+        # provide memtest86+ >=6.00-1 files as "memtest" file
+        # for BIOS boot in isolinux/syslinux
+        if ! [ -r "${BUILD_OUTPUT}/boot/addons/memtest" ] ; then
+          if [[ "$ARCH" == "amd64" ]] ; then
+            copy_addon_file memtest86+x64.bin /boot addons
+            mv "${BUILD_OUTPUT}/boot/addons/memtest86+x64.bin" \
+               "${BUILD_OUTPUT}/boot/addons/memtest"
+          elif [[ "$ARCH" == "i386" ]] ; then
+            copy_addon_file memtest86+x32.bin /boot addons
+            mv "${BUILD_OUTPUT}/boot/addons/memtest86+x32.bin" \
+               "${BUILD_OUTPUT}/boot/addons/memtest"
+          fi
+        fi
 
         # since syslinux(-common) v3:6.03~pre1+dfsg-4 the files are in a
         # different directory :(
@@ -1167,16 +1194,12 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
 
         copy_addon_file memdisk /usr/lib/syslinux addons
 
-        eend 0
-
-        # make memtest filename FAT16/8.3 compatible
-        mv "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" \
-          "${BUILD_OUTPUT}/boot/addons/memtest"
-
         # copy only files so we can handle bsd4grml on its own
         for file in ${TEMPLATE_DIRECTORY}/boot/addons/* ; do
           test -f $file && cp $file "$BUILD_OUTPUT"/boot/addons/
         done
+
+        eend 0
 
         if [ -n "$NO_ADDONS_BSD4GRML" ] ; then
           log   "Skipping installation of bsd4grml as requested via \$NO_ADDONS_BSD4GRML."
