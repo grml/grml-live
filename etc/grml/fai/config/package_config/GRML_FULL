@@ -37,9 +37,10 @@ tzdata
 util-linux
 
 # basic accessibility
-brltty
-espeakup
 alsa-utils
+brltty
+espeak-ng
+espeakup
 
 # broken userland debugging
 ltrace
