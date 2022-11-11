@@ -92,6 +92,7 @@ tar
 tcpdump
 telnet
 tmate
+tmux
 tree
 tsocks
 tzdata
