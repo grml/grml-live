@@ -1,3 +1,19 @@
+grml-live (0.42.1) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * Software related changes:
+    - [797426b] add hping3 to GRML_FULL
+    - [19a81f4] add tmux to GRML_SMALL
+    - [2bb0740] re-add xfsdump to GRML_FULL
+    - [acf26ea] add espeak-ng
+    - [134a171] re-add ifenslave to GRML_SMALL and GRML_FULL
+    - [74dcb54] add mtx to GRML_FULL
+
+  [ Darshaka Pathirana ]
+  * [7422d31] Set SHELL variable in tty1
+
+ -- Michael Prokop <mika@grml.org>  Fri, 11 Nov 2022 17:07:55 +0100
+
 grml-live (0.42.0) unstable; urgency=medium
 
   The "happy carnival" release
