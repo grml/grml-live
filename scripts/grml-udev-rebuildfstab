@@ -325,6 +325,12 @@ if [ -r "$MNTFILE" ] ; then
    cat $TMPFILE > $MNTFILE
 fi
 
+# ensure systemd uses recent fstab configuration
+if [ -d /run/systemd/system ]; then
+  logit 'Reloading systemd manager configuration to use current fstab'
+  systemctl daemon-reload
+fi
+
 bailout 0
 
 ## END OF FILE #################################################################
