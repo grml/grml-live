@@ -1,3 +1,10 @@
+grml-udev-config (0.6.0) unstable; urgency=medium
+
+  * [365c6de] Reload systemd after modifying fstab. Thanks to Chris
+    Hofstaedtler for the bug report
+
+ -- Michael Prokop <mika@grml.org>  Fri, 25 Nov 2022 08:51:25 +0100
+
 grml-udev-config (0.5.1) unstable; urgency=medium
 
   * [4513316] scripts/forensic-mark-readonly: fix parent device handling +
