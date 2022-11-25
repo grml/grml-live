@@ -1,3 +1,14 @@
+grml-live (0.42.2) unstable; urgency=medium
+
+  * [c55290b] GRMLBASE/39-modprobe: do not expect all files in
+    /etc/modprobe.d to be used
+  * [1aa1823] GRMLBASE/39-modprobe: avoid usage of
+    /lib/modprobe.d/50-nfs.conf
+  * [ed733f2] Revert "Set SHELL variable in tty1"
+  * [2013537] Revert "Run zsh when starting screen"
+
+ -- Michael Prokop <mika@grml.org>  Fri, 25 Nov 2022 11:57:09 +0100
+
 grml-live (0.42.1) unstable; urgency=medium
 
   [ Michael Prokop ]
