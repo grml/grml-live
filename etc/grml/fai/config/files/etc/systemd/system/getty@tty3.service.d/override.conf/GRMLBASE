@@ -6,7 +6,6 @@ Restart=always
 StandardInput=tty
 StandardOutput=tty
 TTYPath=/dev/tty3
-Environment="SHELL=/bin/zsh"
 ExecStart=
 ExecStart=-/usr/share/grml-scripts/run-screen
 
