@@ -1,10 +1,11 @@
 Origin: Debian
 Label: Debian-All
-Suite: stable
-Codename: etch
-Version: 4.0
-Architectures: i386
-Components: main contrib non-free
-Description: Debian
-Update: debian
-# SignWith: yes
+Codename: bookworm
+Description: Debian bookworm mirror
+Architectures: amd64 source
+Components: main contrib non-free non-free-firmware
+Contents: .gz
+Update: - debian-bookworm
+Tracking: minimal
+Log: bookworm
+# SignWith: ...

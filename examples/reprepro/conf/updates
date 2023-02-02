@@ -1,4 +1,8 @@
-Name: debian
-Method: http://ftp.debian.org/debian/
-# Method: http://localhost/debian/
-# Fallback: http://snapshot.debian.net/archive/2007/04/02/debian/
+Name: debian-bookworm
+Method: http://deb.debian.org/debian
+Suite: bookworm
+Components: main contrib non-free non-free-firmware
+Architectures: amd64 source
+GetInRelease: no
+# VerifyRelease: 0E98404D386FA1D9
+# Fallback: http://snapshot.debian.net/archive/2023/02/02/debian/
