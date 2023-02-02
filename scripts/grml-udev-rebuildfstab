@@ -32,7 +32,7 @@ echo "$$" > /var/run/rebuildfstab.pid
 umask 022
 
 
-[ -e /etc/grml/autconfig ] && . /etc/grml/autoconfig
+[ -e /etc/grml/autoconfig ] && . /etc/grml/autoconfig
 
 if ! [ -w "$(dirname $MNTFILE)" ] ; then
    echo "$0: can not write to $MNTFILE">&2
