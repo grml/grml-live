@@ -16,20 +16,11 @@ systemd_setup() {
   echo "Enabling user '$USERNAME' for autologin"
   sed -i "s/\$USERNAME/$USERNAME/" "$target"/etc/systemd/system/getty@tty*.service.d/override.conf
 
-  case "$(cat "${target}"/etc/debian_version)" in
-    8.*)
-      echo "Debian jessie detected. Enabling workaround for unknown systemctl preset-all/set-default exit failure."
-      $ROOTCMD systemctl preset-all || true
-      $ROOTCMD systemctl set-default grml-boot.target || true
-      ;;
-    *)
-      # workaround for #992847 to workaround /lib/systemd -> /usr/lib/systemd transition
-      $ROOTCMD rm -f /etc/systemd/system/syslog.service
+  # workaround for #992847 to workaround /lib/systemd -> /usr/lib/systemd transition
+  $ROOTCMD rm -f /etc/systemd/system/syslog.service
 
-      $ROOTCMD systemctl preset-all
-      $ROOTCMD systemctl set-default grml-boot.target
-      ;;
-  esac
+  $ROOTCMD systemctl preset-all
+  $ROOTCMD systemctl set-default grml-boot.target
 }
 
 file_rc_setup() {
