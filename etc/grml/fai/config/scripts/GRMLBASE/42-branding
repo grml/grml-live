@@ -9,7 +9,6 @@
 set -u
 set -e
 
-fcopy -v /etc/lsb-base-logging.sh
 fcopy -v /usr/share/initramfs-tools/scripts/init-top/grml
 fcopy -v /usr/share/grml/desktop-bg.png
 fcopy -v /usr/share/doc/grml-docs/startpage.html
