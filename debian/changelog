@@ -1,3 +1,22 @@
+grml-live (0.43.0) unstable; urgency=medium
+
+  The "Good Riddance" release
+
+  * [d1575f1] Drop /etc/grml/fai/config/files/etc/lsb-base-
+    logging.sh/GRMLBASE
+  * [a4d3b31] Ship custom tmpfiles.d configuration to avoid man-db cache
+    removal. Thanks to 2f2a and Darshaka Pathirana
+  * [87ea3f5] Support new non-free-firmware component
+  * [19b3f2b] Add non-free component to security.debian.org repository of
+    old Debian releases
+  * [1f5167a] Update examples/reprepro/conf to a more recent Debian
+    release
+  * [5a77db4] Drop support for lenny, squeeze, wheezy, jessie, stretch +
+    buster Debian releases and default to bookworm
+  * [19a0467] Drop file-rc support
+
+ -- Michael Prokop <mika@grml.org>  Fri, 03 Feb 2023 17:52:32 +0100
+
 grml-live (0.42.2) unstable; urgency=medium
 
   * [c55290b] GRMLBASE/39-modprobe: do not expect all files in
