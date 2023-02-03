@@ -1,3 +1,10 @@
+grml-udev-config (0.6.1) unstable; urgency=medium
+
+  * [5cea7e1] grml-udev-rebuildfstab: fix typo in checking for
+    configuration file. Thanks to Felix Egli for the bug report and fix
+
+ -- Michael Prokop <mika@grml.org>  Fri, 03 Feb 2023 17:24:22 +0100
+
 grml-udev-config (0.6.0) unstable; urgency=medium
 
   * [365c6de] Reload systemd after modifying fstab. Thanks to Chris
