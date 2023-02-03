@@ -23,41 +23,7 @@ systemd_setup() {
   $ROOTCMD systemctl set-default grml-boot.target
 }
 
-file_rc_setup() {
-  if ! [ -r "${target}"/etc/runlevel.conf ] ; then
-     echo 'Warning: /etc/runlevel.conf does not exist...'
-     echo '... assuming we do not have file-rc, skipping 15-initsetup'
-     exit 0
-  fi
-
-  # keep a backup of the original runlevel.conf file for reference
-  if [ -r "${target}"/etc/runlevel.conf.original ] ; then
-    # make sure to store old backup files if they differ as well
-    if ! cmp "${target}"/etc/runlevel.conf "${target}"/etc/runlevel.conf.original >/dev/null ; then
-      cp "${target}"/etc/runlevel.conf.original "${target}/etc/runlevel.conf.original.$(date +%Y%m%d_%k:%M:%S)"
-    fi
-  fi
-
-  cp "${target}"/etc/runlevel.conf "${target}"/etc/runlevel.conf.original
-
-  # provide Grml's default file-rc configuration
-  fcopy -v /etc/runlevel.conf
-
-  # provide Grml's inittab configuration
-  fcopy -v /etc/inittab
-  sed -i "s/\$USERNAME\$/${USERNAME}/" "${target}"/etc/inittab
-
-  # provide Grml's bootlocal init scripts
-  fcopy -v -mroot,root,0755 /etc/init.d/bootlocal.first
-  fcopy -v -mroot,root,0755 /etc/init.d/bootlocal.middle
-  fcopy -v -mroot,root,0755 /etc/init.d/bootlocal.last
-}
-
-if ifclass FILE_RC ; then
-  file_rc_setup
-else
-  systemd_setup
-fi
+systemd_setup
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
