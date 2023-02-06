@@ -212,12 +212,8 @@ fi
 config_log(){
 if checkbootparam 'log' || checkbootparam 'debug' ; then
    export DEBUG="/tmp/grml.log.`date +%Y%m%d`"
-   touch $DEBUG
-   einfo "Bootparameter log found. Log files: ${DEBUG} and /var/log/boot"
-   eindent
-     einfo "Starting bootlogd." # known to be *very* unreliable :(
-     bootlogd -r -c >>$DEBUG 2>&1 ; eend $?
-   eoutdent
+   touch "${DEBUG}"
+   einfo "Bootparameter log found, debug log file from grml-autoconfig available at '${DEBUG}'"
 else
    DEBUG="/dev/null"
 fi
