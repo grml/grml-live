@@ -1,3 +1,18 @@
+grml-live (0.43.1) unstable; urgency=medium
+
+  * [721a473] Secure Boot: update grub and shim binaries.
+    Thanks to János Pásztor for bugreport and PR
+  * [6f345c1] Use serial console with 115200n8 by default.
+    Thanks to anarcat for bugreport
+  * [cd1b0e9] Drop deprecated /etc/inittab configuration files
+  * [f771ff8] Update debian/copyright
+  * [c7d7687] Update Vcs-git header to use github.com
+  * [dfec112] Bump Standards-Version to 4.6.2
+  * Software related changes:
+    - [b55c661] drop firmware-ath9k-htc (provided by firmware-atheros)
+
+ -- Michael Prokop <mika@grml.org>  Mon, 20 Feb 2023 14:19:26 +0100
+
 grml-live (0.43.0) unstable; urgency=medium
 
   The "Good Riddance" release
