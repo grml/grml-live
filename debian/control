@@ -8,7 +8,7 @@ Build-Depends-Indep:
  asciidoc,
  docbook-xsl,
  xsltproc,
-Standards-Version: 4.5.1
+Standards-Version: 4.6.2
 Homepage: https://grml.org/grml-live/
 Vcs-git: https://github.com/grml/grml-live.git
 Vcs-Browser: https://git.grml.org/?p=grml-live.git
