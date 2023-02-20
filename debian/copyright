@@ -4,7 +4,7 @@ Upstream-Contact: Michael Prokop <mika@grml.org>
 Source: https://github.com/grml/grml-live/
 
 Files: *
-Copyright: 2007-2018 Michael Prokop <mika@grml.org>
+Copyright: 2007-2023 Michael Prokop <mika@grml.org>
 License: GPL-2+
 
 Files: fonts/graphicoreBitmapFont0-Light.otf
@@ -15,16 +15,28 @@ Files: scripts/bootgrub.mksh scripts/bootilnx.mksh
 Copyright: 2007, 2008, 2009, 2010 Thorsten Glaser <tg@mirbsd.org>
 License: MirOS
 
-Files: templates/EFI/BOOT/grubx64.efi.signed
+Files: templates/EFI/debian/BOOT/grubx64.efi.signed
 Copyright: 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc
-           2012 Canonical Ltd.
-Comment: /usr/lib/grub/x86_64-efi-signed/grubx64.efi.signed from http://de.archive.ubuntu.com/ubuntu/pool/main/g/grub2-signed/grub-efi-amd64-signed_1.80.2+2.02~beta3-4ubuntu2.2_amd64.deb
+           2009-2012 Intel Corporation
+Comment: see https://metadata.ftp-master.debian.org/changelogs/main/g/grub2/unstable_copyright
 License: GPL-3+
 
-Files: templates/EFI/BOOT/shimx64.efi.signed
+Files: templates/EFI/debian/BOOT/shimx64.efi.signed
+Copyright: 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc
+           2012 Canonical Ltd.
+Comment: see https://metadata.ftp-master.debian.org/changelogs/main/s/shim-signed/unstable_copyright
+License: BSD-2-Clause
+
+Files: templates/EFI/ubuntu/BOOT/grubx64.efi.signed
+Copyright: 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc
+           2012 Canonical Ltd.
+Comment: /usr/lib/grub/x86_64-efi-signed/grubx64.efi.signed from http://de.archive.ubuntu.com/ubuntu/pool/main/g/grub2-signed/grub-efi-amd64-signed_1.93+2.02-2ubuntu8_amd64.deb
+License: GPL-3+
+
+Files: templates/EFI/ubuntu/BOOT/shimx64.efi.signed
 Copyright: 2012 Red Hat, Inc
            2009-2012 Intel Corporation
-Comment: /usr/lib/shim/shimx64.efi.signed from http://de.archive.ubuntu.com/ubuntu/pool/main/s/shim-signed/shim-signed_1.32~17.04.1+0.9+1474479173.6c180c6-1ubuntu1_amd64.deb
+Comment: /usr/lib/shim/shimx64.efi.signed from http://de.archive.ubuntu.com/ubuntu/pool/main/s/shim-signed/shim-signed_1.34.9+13-0ubuntu2_amd64.deb
 License: BSD-2-Clause
 
 License: GPL-2+
