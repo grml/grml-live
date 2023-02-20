@@ -10,7 +10,7 @@ Build-Depends-Indep:
  xsltproc,
 Standards-Version: 4.5.1
 Homepage: https://grml.org/grml-live/
-Vcs-git: git://git.grml.org/grml-live.git
+Vcs-git: https://github.com/grml/grml-live.git
 Vcs-Browser: https://git.grml.org/?p=grml-live.git
 Origin: Grml
 Bugs: mailto:bugs@grml.org
