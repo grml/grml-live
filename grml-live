@@ -925,7 +925,7 @@ grub_setup() {
       bailout 50
     fi
 
-    dd if=/dev/zero of="${CHROOT_OUTPUT}/${EFI_IMG}" bs=4M count=1 2>/dev/null || bailout 50
+    dd if=/dev/zero of="${CHROOT_OUTPUT}/${EFI_IMG}" bs=8M count=1 2>/dev/null || bailout 50
     mkfs.vfat -n GRML "${CHROOT_OUTPUT}/${EFI_IMG}" >/dev/null || bailout 51
     mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::EFI || bailout 52
     mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::EFI/BOOT || bailout 52
@@ -1004,7 +1004,7 @@ grub_setup() {
       bailout 50
     fi
 
-    dd if=/dev/zero of="${CHROOT_OUTPUT}/${EFI_IMG}" bs=4M count=1 2>/dev/null || bailout 50
+    dd if=/dev/zero of="${CHROOT_OUTPUT}/${EFI_IMG}" bs=8M count=1 2>/dev/null || bailout 50
     mkfs.vfat -n GRML "${CHROOT_OUTPUT}/${EFI_IMG}" >/dev/null || bailout 51
     mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::EFI || bailout 52
     mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::EFI/BOOT || bailout 52
