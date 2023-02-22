@@ -915,6 +915,14 @@ grub_setup() {
   BOOTX32="/boot/bootia32.efi"
   EFI_IMG="/boot/efi.img"
 
+  local efi_size
+  if [[ "${SECURE_BOOT:-}" == "disable" ]] || [[ "${ARCH:-}" == "i386" ]] ; then
+    efi_size='4M'
+  else
+    # e.g. templates/EFI/debian for Secure Boot has >4MB and needs more space
+    efi_size='8M'
+  fi
+
   if [[ "$ARCH" == "amd64" ]] ; then
     # important: this depends on execution of ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images
     if ! [ -r "${CHROOT_OUTPUT}/${BOOTX64}" ] ; then
@@ -925,7 +933,7 @@ grub_setup() {
       bailout 50
     fi
 
-    dd if=/dev/zero of="${CHROOT_OUTPUT}/${EFI_IMG}" bs=4M count=1 2>/dev/null || bailout 50
+    dd if=/dev/zero of="${CHROOT_OUTPUT}/${EFI_IMG}" bs="${efi_size}" count=1 2>/dev/null || bailout 50
     mkfs.vfat -n GRML "${CHROOT_OUTPUT}/${EFI_IMG}" >/dev/null || bailout 51
     mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::EFI || bailout 52
     mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::EFI/BOOT || bailout 52
@@ -1004,7 +1012,7 @@ grub_setup() {
       bailout 50
     fi
 
-    dd if=/dev/zero of="${CHROOT_OUTPUT}/${EFI_IMG}" bs=4M count=1 2>/dev/null || bailout 50
+    dd if=/dev/zero of="${CHROOT_OUTPUT}/${EFI_IMG}" bs="${efi_size}" count=1 2>/dev/null || bailout 50
     mkfs.vfat -n GRML "${CHROOT_OUTPUT}/${EFI_IMG}" >/dev/null || bailout 51
     mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::EFI || bailout 52
     mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::EFI/BOOT || bailout 52
