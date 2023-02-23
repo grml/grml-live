@@ -1,3 +1,10 @@
+grml-live (0.43.2) unstable; urgency=medium
+
+  * [842c047] Increase EFI image size when using Secure Boot on amd64.
+    Thanks to János Pásztor for bugreport and initial patch
+
+ -- Michael Prokop <mika@grml.org>  Thu, 23 Feb 2023 12:37:12 +0100
+
 grml-live (0.43.1) unstable; urgency=medium
 
   * [721a473] Secure Boot: update grub and shim binaries.
