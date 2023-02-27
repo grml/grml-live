@@ -1,3 +1,10 @@
+grml-autoconfig (0.20.4) grml-testing; urgency=medium
+
+  * [7bfc241] Drop support for bootlogd. Thanks to Roland Sommer for
+    reporting
+
+ -- Michael Prokop <mika@grml.org>  Mon, 27 Feb 2023 17:37:07 +0100
+
 grml-autoconfig (0.20.3) grml-testing; urgency=medium
 
   * [1e268ff] systemd unit: use StandardInput=null to work in serial
