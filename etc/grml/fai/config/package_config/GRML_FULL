@@ -57,6 +57,7 @@ cryptsetup
 disktype
 dmraid
 dmsetup
+f3
 fai-setup-storage
 fio
 gdisk
