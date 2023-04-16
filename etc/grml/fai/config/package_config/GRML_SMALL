@@ -29,6 +29,7 @@ f2fs-tools
 findutils
 fsarchiver
 gddrescue
+gdisk
 grml-paste
 grml-quickconfig-standard
 htop
