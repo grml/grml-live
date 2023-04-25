@@ -712,7 +712,7 @@ if [ -z "$FAI_DEBOOTSTRAP" ] ; then
 fi
 
 if [ -z "$FAI_DEBOOTSTRAP_OPTS" ] ; then
-  FAI_DEBOOTSTRAP_OPTS="--exclude=info,tasksel,tasksel-data --include=aptitude --arch $ARCH --no-merged-usr"
+  FAI_DEBOOTSTRAP_OPTS="--exclude=info,tasksel,tasksel-data --include=aptitude --arch $ARCH"
 fi
 
 # create backup of old (not yet automatically generated) config file
