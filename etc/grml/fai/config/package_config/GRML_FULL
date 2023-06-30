@@ -159,6 +159,7 @@ bridge-utils
 cdpr
 cifs-utils
 cloud-init
+dhcpcd
 dnsmasq
 dnsutils
 ethstatus
@@ -178,7 +179,6 @@ iptstate
 iputils-arping
 iputils-ping
 iputils-tracepath
-isc-dhcp-client
 iw
 libnss-mdns
 libteam-utils

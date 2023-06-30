@@ -16,6 +16,7 @@ cpio
 cryptsetup
 cu
 dctrl-tools
+dhcpcd
 diffutils
 disktype
 dmraid
@@ -40,7 +41,6 @@ iperf3
 iproute2
 iptstate
 iputils-ping
-isc-dhcp-client
 iw
 jfsutils
 kexec-tools
