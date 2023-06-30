@@ -1,3 +1,21 @@
+grml-live (0.44.0) unstable; urgency=medium
+
+  * [7005037] grml-cheatcodes.txt: document usage of
+    bootfrom=/dev/disk/by-label* + drop deprecated tohd.
+    Thanks to Csillag Tamas
+  * [bac3076] No longer bootstrap with --no-merged-usr.
+    Thanks to Csillag Tamas for reporting
+  * [00d296a] DEBIAN_STABLE: enable non-free-firmware component
+    and use stable-backports
+  * Software related changes:
+    - [7eb1881] add f3 to GRML_FULL.
+      Thanks to Keith Irwin for the suggestion
+    - [3152440] add gdisk to GRML_SMALL
+    - [e7ada95] switch from isc-dhcp-client to dhcpcd.
+      Thanks to András Korn for the suggestion
+
+ -- Michael Prokop <mika@grml.org>  Fri, 30 Jun 2023 14:25:46 +0200
+
 grml-live (0.43.2) unstable; urgency=medium
 
   * [842c047] Increase EFI image size when using Secure Boot on amd64.
