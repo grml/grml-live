@@ -264,6 +264,7 @@ mtx
 restic
 
 # compressions for backup/restore
+lz4
 lzop
 zstd
 
