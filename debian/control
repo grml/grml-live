@@ -31,6 +31,7 @@ Depends:
  rsync,
  rsyslog | system-log-daemon,
  udev,
+ util-linux-extra | util-linux (<= 2.38-1),
  zsh,
  ${misc:Depends},
  ${shlibs:Depends},
