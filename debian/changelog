@@ -1,3 +1,19 @@
+grml-live (0.45.0) unstable; urgency=medium
+
+  * [d6d5fee] Drop depends on fai-server. Thanks to András Korn
+  * [75e65f3] Deprecate FAI's make-fai-nfsroot.conf
+  * [29d5e28] Update zsh completion + ship it via Debian package
+  * [5730180] Add support for Debian/trixie (current Debian/testing)
+    Thanks to cb <christopher@bocki.com> for the PR
+  * Software related changes:
+    - [8359ac7] add lz4 to GRML_FULL. Thanks to willmcginnis
+      for the suggestion
+    - [fe23a7a] drop dstat (unmaintained upstream)
+    - [0adb425] ship fwupd with fwupd-signed + policykit-1 +
+      udisks2 for firmware updates
+
+ -- Michael Prokop <mika@grml.org>  Fri, 11 Aug 2023 19:32:56 +0200
+
 grml-live (0.44.0) unstable; urgency=medium
 
   * [7005037] grml-cheatcodes.txt: document usage of
