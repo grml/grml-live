@@ -343,6 +343,12 @@ lshw
 numactl
 usbview
 
+# firmware updates
+fwupd
+fwupd-signed
+policykit-1
+udisks2
+
 # testing
 bats
 stress
