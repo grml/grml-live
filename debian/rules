@@ -21,6 +21,8 @@ override_dh_install:
 	sed -i -e "s/GRML_LIVE_VERSION='\*\*\*UNRELEASED\*\*\*'/GRML_LIVE_VERSION='$(DEB_VERSION)'/" grml-live
 	find . -name grml-live.8
 	dh_install
+	# zsh completion
+	dh_install etc/zsh/completion.d/_grml-live usr/share/zsh/vendor-completions
 
 override_dh_fixperms:
 	dh_fixperms

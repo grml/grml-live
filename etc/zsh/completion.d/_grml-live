@@ -12,7 +12,7 @@ _grmllive_flavours() { #{{{
 
   flavours=(
     grml        grml64
-    grml-medium grml64-medium
+    grml-full   grml64-full
     grml-small  grml64-small
   )
   _wanted list expl 'grml flavour(s)' compadd ${expl} -- ${flavours}
@@ -33,7 +33,9 @@ _grmllive_classes() { #{{{
     local -a already static_classes
 
     static_classes=(
-        RELEASE LATEX_CLEANUP NO_ONLINE REMOVE_DOCS LOCALES
+        DEBORPHAN FRESHCLAM
+        GRMLBASE GRML_FULL GRML_SMALL
+        LATEX LATEX_CLEANUP LOCALES NO_ONLINE RELEASE REMOVE_DOCS SOURCES XORG ZFS
         I386 AMD64
     )
     compset -P '*,'
@@ -53,17 +55,34 @@ _grmllive_suites() { #{{{
 }
 #}}}
 arguments=( #{{{
-  '-F[force execution without prompting for yes/no]'
   '-a[specifiy architecture to use]:arch(s):_grmllive_archs'
+  '-A[clean build directories before and after running]'
+  '-b[build the ISO without updating the chroot via FAI]'
+  '-B[build the ISO without touching the chroot (skips cleanup)]'
   '-c[available grml-live classes]:classe(s):_grmllive_classes'
+  '-C[configuration file for grml-live]:configuration file:_files'
+  '-d[use specified date instead of build time as date of release]:date:'
+  '-D[use specified configuration directory instead of /etc/grml/fai]:directory:_path_files -/'
+  '-e[extract ISO and squashfs contents from iso_name]:ISO file:'
+  '-F[force execution without prompting for yes/no]'
   '-g[grml flavour to use]:grml flavour(s):_grmllive_flavours'
   '-h[display usage information]'
-  '-i[iso name, ends up in $OUTPUT_DIRECTORY/grml_isos]:iso name:'
+  '-i[iso name, ends up in $OUTPUT_DIRECTORY/grml_isos (also see -o)]:ISO name:_files'
+  '-I[directory which provides files that should become part of the chroot/ISO]:directory to include:_path_files -/'
+  '-n[skip generation of ISO]'
+  '-N[bootstrap (build chroot) only, do not create files for ISO]'
   '-o[output directory]:output directory:_path_files -/'
+  '-q[skip mksquashfs]'
+  '-Q[skip netboot package build]'
+  '-r[release name]:release name:'
   '-s[debian suite to be used for live-system]:Debian suite:_grmllive_suites'
+  '-S[place of scripts (defaults to /usr/share/grml-live/scripts)]:script directory:_path_files -/'
   '-t[template directory]:template directory:_path_files -/'
-  '-u[update existing chroot if possible]'
+  '-u[update existing chroot instead of rebuilding it from scratch]'
+  '-U[arrange output to be owned by specified username]'
   '-V[increase verbosity]'
+  '-w[wayback machine, build system using Debian archives from specified date]:date:'
+  '-z[use ZLIB instead of LZMA/XZ compression]'
 )
 #}}}
 
