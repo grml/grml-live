@@ -345,7 +345,6 @@ usbview
 
 # firmware updates
 fwupd
-fwupd-signed
 policykit-1
 udisks2
 
@@ -360,6 +359,9 @@ PACKAGES install I386
 linux-image-686
 linux-cpupower
 
+# firmware updates
+fwupd-i386-signed
+
 PACKAGES install AMD64
 linux-image-amd64
 linux-cpupower
@@ -367,3 +369,6 @@ linux-cpupower
 # EFI PXE boot support in grml-terminalserver
 grub-efi-amd64-signed
 shim-signed
+
+# firmware updates
+fwupd-amd64-signed
