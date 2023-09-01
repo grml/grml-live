@@ -185,7 +185,7 @@ VIRTUALBOX=false
 VMWARE=false
 
 if virt-what 2>/dev/null | grep -q 'vmware' || \
-  imvirt 2>/dev/null | grep -i "vmware" ; then
+  imvirt 2>/dev/null | grep -iq "vmware" ; then
   VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware'
 fi
 
