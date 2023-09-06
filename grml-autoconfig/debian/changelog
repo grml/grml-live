@@ -1,3 +1,12 @@
+grml-autoconfig (0.20.6) grml-testing; urgency=medium
+
+  * [b39d89f] Replace deprecated vmware-detect with virt-what/imvirt.
+    Thanks to Christoph Biedl and András Korn for feedback
+  * [82176e8] imvirt/vmware: don't allow output of grep on stdout.
+    Thanks to András Korn
+
+ -- Michael Prokop <mika@grml.org>  Wed, 06 Sep 2023 17:25:03 +0200
+
 grml-autoconfig (0.20.5) grml-testing; urgency=medium
 
   * [39d6dbd] Depend on util-linux-extra or older util-linux
