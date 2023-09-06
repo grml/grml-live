@@ -6,7 +6,32 @@
 !###############################################################################
 ! Notice:   apply changes via running 'xrdb -merge ~/.Xresources'
 !           run "xprop WM_CLASS" to find out title of windows
+!
+! Documentation:
+!
+! * xterm(1)
+! * http://tqd1.physik.uni-freiburg.de/library/SGI_bookshelves/SGI_Developer/books/XLib_WinSys/sgi_html/ch08.html
+! * https://wiki.archlinux.org/title/X_resources
+!
 !###############################################################################
+
+! Grml Custom Key Bindings
+!
+! See: *Default Key Bindings* + *Custom Key Bindings* in xterm(1)
+!
+! The default bindings to paste a selection are Shift-Insert + second (usually
+! middle) mouse button:
+!
+!   Shift <KeyPress> Insert: insert-selection(SELECT, CUT_BUFFER0)
+!   ~Ctrl ~Meta <Btn2Up>:insert-selection(SELECT, CUT_BUFFER0)
+!
+! We have added Ctrl-Shift-c + Ctrl-Shift-v to be able to copy/paste using the
+! CLIPBOARD selection type. This is also useful if there is no middle mouse
+! button and you are not used to the Shift-Insert shortcut:
+
+*VT100.translations: #override \n\
+    Ctrl Shift <Key>V:    insert-selection(SELECT, CLIPBOARD) \n\
+    Ctrl Shift <Key>C:    copy-selection(CLIPBOARD) \n\
 
 ! If you do not have any iso8859-15 fonts, use iso8859-1
 !*font:     		-misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
