@@ -27,11 +27,26 @@
 !
 ! We have added Ctrl-Shift-c + Ctrl-Shift-v to be able to copy/paste using the
 ! CLIPBOARD selection type. This is also useful if there is no middle mouse
-! button and you are not used to the Shift-Insert shortcut:
+! button and you are not used to the Shift-Insert shortcut.
+!
+! The default bindings to change the font size are Shift-Keypad+ and
+! Shift-Keypad- / Shift-Ctrl-Keypad+:
+!
+!   Shift~Ctrl <KeyPress> KP_Add:larger-vt-font() \n\
+!   Shift Ctrl <KeyPress> KP_Add:smaller-vt-font() \n\
+!   Shift <KeyPress> KP_Subtract:smaller-vt-font() \n\
+!
+! Modern notebooks lack a numeric keypad, making it hard to use the shifted
+! keypad plus and minus bindings for switching between font sizes.
+!
+! Ctrl-+ + Ctrl-- allows us to switch between fonts on keyboards without a
+! numeric keypad.
 
 *VT100.translations: #override \n\
     Ctrl Shift <Key>V:    insert-selection(SELECT, CLIPBOARD) \n\
     Ctrl Shift <Key>C:    copy-selection(CLIPBOARD) \n\
+    Ctrl <Key> +:         larger-vt-font() \n\
+    Ctrl <Key> -:         smaller-vt-font() \n
 
 ! If you do not have any iso8859-15 fonts, use iso8859-1
 !*font:     		-misc-fixed-medium-r-normal-*-*-140-*-*-c-*-iso8859-15
