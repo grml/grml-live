@@ -14,11 +14,11 @@ fi
 set -u
 
 bailout() {
-  if [ "${1:-}" = "4" ] ; then
-    echo "Warning: update-pciids returned with exit code 4." >&2
+  if [ "${1:-}" = "4" ] || [ "${1:-}" = "1" ] ; then
+    echo "Warning: update-pciids returned with exit code ${1:-}." >&2
 
     # be verbose in logs
-    echo "Warning: update-pciids returned with exit code 4."
+    echo "Warning: update-pciids returned with exit code ${1:-}."
     echo "-> This indicates that networking inside the chroot did not work"
     echo "   while GRMLBASE/91-update-pciids was running."
     echo "   To address this issue you can either configure /etc/resolv.conf"
