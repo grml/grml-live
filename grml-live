@@ -796,7 +796,13 @@ else
          grep 'Unable to write mmap - msync (28 No space left on device)' $CHECKLOG/software.log >> $LOGFILE && ERROR=5
       fi
 
+      # FAI versions <6.0 used to write to shell.log
       if [ -r "$CHECKLOG/shell.log" ] ; then
+         grep 'FAILED with exit code' $CHECKLOG/shell.log >> $LOGFILE && ERROR=6
+      fi
+
+      # FAI versions >=6.0 always writes to scripts.log
+      if [ -r "$CHECKLOG/scripts.log" ] ; then
          grep 'FAILED with exit code' $CHECKLOG/shell.log >> $LOGFILE && ERROR=6
       fi
 
