@@ -11,7 +11,14 @@ set -u
 
 $ROOTCMD mkdir -p /boot/grub
 
-$ROOTCMD grub-mkimage -d /usr/lib/grub/i386-pc \
+if ifclass ARM64 ; then
+  echo "Skipping execution of script on ARM64"
+  exit 0
+fi
+
+# generate /boot/grub/core.img
+$ROOTCMD grub-mkimage \
+  -d /usr/lib/grub/i386-pc \
   -p /boot/grub \
   -o /boot/grub/core.img \
   biosdisk iso9660 \

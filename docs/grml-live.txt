@@ -62,8 +62,8 @@ Use the specified architecture instead of the currently running one.  This
 allows building a 32bit system on a 64bit host (though you can't build a 64bit
 system on a 32bit system/kernel of course). Please notice that real
 crosscompiling (like building a ppc system on x86) isn't possible due to the
-nature and the need of working in a chroot. Currently supported values: i386
-and amd64.
+nature and the need of working in a chroot. Currently supported values: i386,
+amd64 and arm64.
 
   -b::
 
@@ -82,7 +82,7 @@ really know that you do not want to update the chroot.
   -c **CLASSES**::
 
 Specify the CLASSES to be used for building the ISO via FAI.  By default only
-the classes GRMLBASE, GRML_FULL and I386/AMD64 (depending on system
+the classes GRMLBASE, GRML_FULL and I386/AMD64/ARM64 (depending on system
 architecture) are assumed.  Additionally you can specify a class providing a
 (grml-)kernel (see <<classes,the 'CLASSES' section in this document>> for
 details about available classes). So instead of GRML_FULL you can also use e.g.
@@ -297,9 +297,9 @@ losing the simplicity in the build process.
 The main and base class provided by grml-live is named GRMLBASE. It's strongly
 recommended to **always** use the class GRMLBASE when building an ISO using
 grml-live, as well as the architecture dependent class which provides the kernel
-(being 'I386' for x86_32 and 'AMD64' for x86_64) and a GRML_* class (like
-GRML_SMALL or GRML_FULL). The following files and directories are
-relevant for class GRMLBASE by default:
+(being 'I386' for x86_32, 'AMD64' for x86_64 and 'ARM64' for arm64) and a GRML_*
+class (like GRML_SMALL or GRML_FULL).
+The following files and directories are relevant for class GRMLBASE by default:
 
   ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/
   ${GRML_FAI_CONFIG}/config/debconf/GRMLBASE
@@ -312,10 +312,10 @@ files/directories.
 
 If you want to use your own configuration, extend an existing configuration
 and/or add additional packages to your ISO just invent a new class (or extend an
-existing one). For example if you want to use your own class named "FOOBAR" just
-set CLASSES="GRMLBASE,GRML_SMALL,AMD64,FOOBAR" inside /etc/grml/grml-live.local
-or invoke grml-live using the classes option: "grml-live -c
-GRMLBASE,GRML_SMALL,AMD64,FOOBAR ...".
+existing one). For example if you want to use your own class named "FOOBAR" on
+your amd64 build, et CLASSES="GRMLBASE,GRML_SMALL,AMD64,FOOBAR" inside
+/etc/grml/grml-live.local or invoke grml-live using the classes option:
+"grml-live -c GRMLBASE,GRML_SMALL,AMD64,FOOBAR ...".
 
 More details regarding the class concept can be found in the documentation of
 FAI itself (being available at /usr/share/doc/fai-doc/).
@@ -544,6 +544,7 @@ Instructions
   # mkdir -p /etc/grml/fai/config/basefiles/
   # mv I386.tar.gz /etc/grml/fai/config/basefiles/
   # mv AMD64.tar.gz /etc/grml/fai/config/basefiles/
+  # mv ARM64.tar.gz /etc/grml/fai/config/basefiles/
 
   # install relevant tools
   apt-get --no-install-recommends install grml-live
@@ -705,15 +706,15 @@ syslinux, used by default for official Grml images) then just execute:
   % isohybrid grml.iso
 
 [[create-a-base-tgz]]
-How do I create a base tar.gz (I386.tar.gz or AMD64.tar.gz)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+How do I create a base tar.gz (I386.tar.gz or AMD64.tar.gz or ARM64.tar.gz)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 [[basetgz]]
 
 First of all create the chroot using debootstrap (requires root):
 
   BASECHROOT='/tmp/basefile'  # path where the chroot gets generated
   SUITE='bookworm'              # using the current stable release should always work
-  debootstrap --exclude=info,tasksel,tasksel-data "$SUITE" "$BASECHROOT" http://ftp.debian.org/debian
+  debootstrap --exclude=info,tasksel,tasksel-data,isc-dhcp-client,isc-dhcp-common "$SUITE" "$BASECHROOT" http://deb.debian.org/debian
   tar -C "$BASECHROOT" --exclude='var/cache/apt/archives/*.deb' -zcf "${SUITE}".tar.gz ./
 
 [TIP]
@@ -721,10 +722,11 @@ By default debootstrap builds a chroot matching the architecture of the running
 host system. If you're using an amd64 system and want to build an i386 base.tgz
 then invoke debootstrap using the '--arch i386' option. Disclaimer: building an
 AMD64 base.tgz won't work if you are using a 32bit kernel system of course.
+Also building an ARM64 base.tgz requires an arm64 system.
 
 Finally place the generated tarball in /etc/grml/fai/config/basefiles/ (note
 that it needs to be uppercase letters matching the class names, so: e.g.
-AMD64.tar.gz for amd64 and I386.tar.gz for i386).
+AMD64.tar.gz for amd64, I386.tar.gz for i386 or ARM64.tar.gz for arm64).
 
 Then executing grml-live should use this file as base system instead of executing
 debootstrap. Check out the output for something like:

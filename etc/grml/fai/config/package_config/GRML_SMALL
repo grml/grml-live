@@ -113,3 +113,6 @@ linux-image-686
 
 PACKAGES install AMD64
 linux-image-amd64
+
+PACKAGES install ARM64
+linux-image-arm64

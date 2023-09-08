@@ -36,7 +36,7 @@ _grmllive_classes() { #{{{
         DEBORPHAN FRESHCLAM
         GRMLBASE GRML_FULL GRML_SMALL
         LATEX LATEX_CLEANUP LOCALES NO_ONLINE RELEASE REMOVE_DOCS SOURCES XORG ZFS
-        I386 AMD64
+        I386 AMD64 ARM64
     )
     compset -P '*,'
     already=(${(s<,>)IPREFIX})

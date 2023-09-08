@@ -24,14 +24,13 @@ Depends:
  fai-client (>= 3.4.0),
  isolinux (>= 3:6.03+dfsg-5+deb8u1~),
  jo,
- memtest86+,
  mksh,
  moreutils,
  mtools,
  pciutils,
  rsync,
  squashfs-tools (>= 1:4.2-0~bpo60),
- syslinux,
+ syslinux | syslinux-efi,
  xorriso,
  ${misc:Depends},
 Recommends:
@@ -39,6 +38,7 @@ Recommends:
  grub-pc-bin,
  imagemagick,
  ipxe,
+ memtest86+,
  syslinux-utils,
 Suggests:
  fai-doc,

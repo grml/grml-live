@@ -3,7 +3,6 @@ PACKAGES install
 grml-live
 grml-paste
 grml-quickconfig-standard
-grml-terminalserver
 
 # base os
 apt
@@ -41,9 +40,6 @@ brltty
 espeak-ng
 espeakup
 
-# broken userland debugging
-ltrace
-
 # deploy on remote sites
 openvpn
 ppp
@@ -51,7 +47,6 @@ pppoeconf
 
 # disk subsystems support/debugging
 array-info
-cciss-vol-status
 cryptsetup
 disktype
 dmraid
@@ -76,7 +71,6 @@ stenc
 # disk partitioning/boot
 boot-info-script
 gparted
-grub-pc-bin
 kpartx
 mbr
 partclone
@@ -334,8 +328,6 @@ xterm
 # x86 hardware support
 acpi
 acpi-support
-cmospwd
-cpuid
 irqbalance
 lm-sensors
 lshw
@@ -355,15 +347,41 @@ stress
 man-db
 
 PACKAGES install I386
+# kernel related
 linux-image-686
 linux-cpupower
+# disk subsystems support/debugging, I386/AMD64 specific
+cciss-vol-status
+# x86 hardware support
+cmospwd
+cpuid
+# broken userland debugging
+ltrace
+# disk partitioning/boot
+grub-pc-bin
+
+# PXE boot
+grml-terminalserver
 
 # firmware updates
 fwupd-i386-signed
 
 PACKAGES install AMD64
+# kernel related
 linux-image-amd64
 linux-cpupower
+# disk subsystems support/debugging
+cciss-vol-status
+# x86 hardware support
+cmospwd
+cpuid
+# broken userland debugging
+ltrace
+# disk partitioning/boot
+grub-pc-bin
+
+# PXE boot
+grml-terminalserver
 
 # EFI PXE boot support in grml-terminalserver
 grub-efi-amd64-signed
@@ -371,3 +389,11 @@ shim-signed
 
 # firmware updates
 fwupd-amd64-signed
+
+PACKAGES install ARM64
+# kernel related
+linux-image-arm64
+linux-cpupower
+
+# firmware updates
+fwupd-arm64-signed

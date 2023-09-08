@@ -28,6 +28,19 @@ ARCHS=(i386-pc)
 declare -A ADDITIONAL_MODULES
 ADDITIONAL_MODULES[i386-pc]="biosdisk"
 
+# arm64 doesn't provide /usr/lib/grub/i386-efi, so we don't include
+# i386-pc in $ARCHS (whereas on AMD64 we have both i386-pc + x86_64-efi)
+if ifclass ARM64 ; then
+  if [ -r "${target}"/usr/lib/grub/arm64-efi/moddep.lst ] ; then
+    ARCHS=(arm64-efi)
+    # NOTE: efi_uga (EFI Universal Graphics Adapter) is deprecated + unavailable on arm64
+    ADDITIONAL_MODULES[arm64-efi]="efi_gop"  # no efi_uga available
+  else
+    echo "/usr/lib/grub/arm64-efi/moddep.lst.lst could not be found, skipping."
+    echo "NOTE: grub-efi-arm64-bin not installed?"
+  fi
+fi
+
 if ifclass AMD64 ; then
   if [ -r "${target}"/usr/lib/grub/x86_64-efi/moddep.lst ] ; then
     ARCHS+=(x86_64-efi)
@@ -54,6 +67,7 @@ for arch in "${ARCHS[@]}" ; do
     i386-pc)    filename=/boot/grub/grub.img ;;
     x86_64-efi) filename=/boot/bootx64.efi   ;;
     i386-efi)   filename=/boot/bootia32.efi  ;;
+    arm64-efi)  filename=/boot/bootaa64.efi  ;;
   esac
 
   $ROOTCMD grub-mkimage -O $arch -o "$filename" --prefix=/boot/grub/ --config="$TMP_CONFIG" \

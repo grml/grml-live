@@ -43,7 +43,7 @@ $PN - build process script for generating a (grml based) Linux Live-ISO
 
 Usage: $PN [options, see as follows]
 
-   -a <architecture>       architecture; available values: i386 and amd64
+   -a <architecture>       architecture; available values: i386, amd64 + arm64
    -A                      clean build directories before and after running
    -b                      build the ISO without updating the chroot via FAI
    -B                      build the ISO without touching the chroot (skips cleanup)
@@ -484,6 +484,12 @@ specify it on the command line using the -c option."
 [ -n "$OUTPUT" ] || bailout 1 "Error: \$OUTPUT unset, please set it in $LIVE_CONF or
 specify it on the command line using the -o option."
 
+if [[ "$(dpkg --print-architecture)" != "arm64" ]] && [[ "$ARCH" == "arm64" ]] ; then
+  eerror "Failure: trying to build for arm64, but not running on arm64."
+  eend 1
+  bailout
+fi
+
 # trim characters that are known to cause problems inside $GRML_NAME;
 # for example isolinux does not like '-' inside the directory name
 [ -n "$GRML_NAME" ] && export SHORT_NAME="$(echo $GRML_NAME | tr -d ',./;\- ')"
@@ -492,6 +498,7 @@ specify it on the command line using the -o option."
 [ -n "$GRML_NAME" ]   && export GRML_NAME="$GRML_NAME"
 [ -n "$RELEASENAME" ] && export RELEASENAME="$RELEASENAME"
 # }}}
+
 
 # ZERO_LOGFILE - check for backwards compatibility reasons {{{
 # this was default behaviour until grml-live 0.9.34:
@@ -685,17 +692,25 @@ export SUITE # make sure it's available in FAI scripts
 # architecture (option), otherwise installation of kernel will fail
 if echo $CLASSES | grep -qw I386 ; then
    if ! [[ "$ARCH" == "i386" ]] ; then
-      log    "Error: You specified the I386 class but are trying to build something else (AMD64?)."
-      eerror "Error: You specified the I386 class but are trying to build something else (AMD64?)."
+      log    "Error: You specified the I386 class but are trying to build something else (AMD64/ARM64?)."
+      eerror "Error: You specified the I386 class but are trying to build something else (AMD64/ARM64?)."
       eerror "Tip:   Either invoke grml-live with '-a i386' or adjust the architecture class. Exiting."
       eend 1
       bailout
    fi
 elif echo $CLASSES | grep -qi amd64 ; then
    if ! [[ "$ARCH" == "amd64" ]] ; then
-      log    "Error: You specified the AMD64 class but are trying to build something else (I386?)."
-      eerror "Error: You specified the AMD64 class but are trying to build something else (I386?)."
+      log    "Error: You specified the AMD64 class but are trying to build something else (I386/ARM64?)."
+      eerror "Error: You specified the AMD64 class but are trying to build something else (I386/ARM64?)."
       eerror "Tip:   Either invoke grml-live with '-a amd64' or adjust the architecture class. Exiting."
+      eend 1
+      bailout
+   fi
+elif echo $CLASSES | grep -qi arm64 ; then
+   if ! [[ "$ARCH" == "arm64" ]] ; then
+      log    "Error: You specified the ARM64 class but are trying to build something else (I386/AMD64?)."
+      eerror "Error: You specified the ARM64 class but are trying to build something else (I386/AMD64?)."
+      eerror "Tip:   Either invoke grml-live with '-a arm64' or adjust the architecture class. Exiting."
       eend 1
       bailout
    fi
@@ -905,8 +920,6 @@ fi
 
 # grub boot {{{
 grub_setup() {
-  BOOTX64="/boot/bootx64.efi"
-  BOOTX32="/boot/bootia32.efi"
   EFI_IMG="/boot/efi.img"
 
   local efi_size
@@ -917,7 +930,16 @@ grub_setup() {
     efi_size='8M'
   fi
 
-  if [[ "$ARCH" == "amd64" ]] ; then
+  if [[ "$ARCH" == "amd64" ]] || [[ "$ARCH" == "arm64" ]] ; then
+    case "$ARCH" in
+      arm64)
+        BOOTX64="/boot/bootaa64.efi"
+        ;;
+      amd64)
+        BOOTX64="/boot/bootx64.efi"
+        ;;
+    esac
+
     # important: this depends on execution of ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images
     if ! [ -r "${CHROOT_OUTPUT}/${BOOTX64}" ] ; then
       log    "Can not access GRUB efi image ${CHROOT_OUTPUT}/${BOOTX64}, required for Secure Boot support"
@@ -936,8 +958,15 @@ grub_setup() {
       log   "Secure Boot is disabled."
       einfo "Secure Boot is disabled." ; eend 0
 
-      # install "$BOOTX64" as ::EFI/BOOT/bootx64.efi inside image file "$EFI_IMG":
-      mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${CHROOT_OUTPUT}/${BOOTX64}" ::EFI/BOOT/bootx64.efi >/dev/null || bailout 53
+      # install "$BOOTX64" as ::EFI/BOOT/{bootx64.efi|bootaa64.efi} inside image file "$EFI_IMG":
+      case "$ARCH" in
+        arm64)
+          mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${CHROOT_OUTPUT}/${BOOTX64}" ::EFI/BOOT/bootaa64.efi >/dev/null || bailout 53
+          ;;
+        amd64)
+          mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${CHROOT_OUTPUT}/${BOOTX64}" ::EFI/BOOT/bootx64.efi >/dev/null || bailout 53
+          ;;
+      esac
 
       log   "Generated 64-bit EFI image $BOOTX64"
       einfo "Generated 64-bit EFI image $BOOTX64" ; eend 0
@@ -998,6 +1027,7 @@ grub_setup() {
   fi
 
   if [[ "$ARCH" == "i386" ]] ; then
+    BOOTX32="/boot/bootia32.efi"
     if ! [ -r "${CHROOT_OUTPUT}/${BOOTX32}" ] ; then
       log    "Can not access GRUB efi image ${CHROOT_OUTPUT}/${BOOTX32}."
       eerror "Can not access GRUB efi image ${CHROOT_OUTPUT}/${BOOTX32}." ; eend 1
@@ -1022,7 +1052,7 @@ grub_setup() {
 mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for stage ARCH"
 
 # prepare ISO
-if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
+if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
   if [ -n "$BOOTSTRAP_ONLY" ] ; then
     log   "Skipping stage 'boot' as building with bootstrap only."
     ewarn "Skipping stage 'boot' as building with bootstrap only." ; eend 0
@@ -1092,9 +1122,17 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
     grub_setup
 
     # EFI boot files
-    if [ -r "${CHROOT_OUTPUT}/boot/efi.img" -a -r "${CHROOT_OUTPUT}/boot/bootx64.efi" ] ; then
-      einfo "Copying 64-bit EFI boot files into ISO path."
-      log   "Copying 64-bit EFI boot files into ISO path."
+    if [ -r "${CHROOT_OUTPUT}/boot/efi.img" -a -r "${CHROOT_OUTPUT}/boot/bootaa64.efi" ] ; then
+      einfo "Copying 64-bit EFI boot files (arm64) into ISO path."
+      log   "Copying 64-bit EFI boot files (arm64) into ISO path."
+      RC=$0
+      cp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
+      mkdir -p "${BUILD_OUTPUT}/EFI/BOOT/" || RC=$?
+      cp "${CHROOT_OUTPUT}/boot/bootaa64.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootaa64.efi" || RC=$?
+      eend $?
+    elif [ -r "${CHROOT_OUTPUT}/boot/efi.img" -a -r "${CHROOT_OUTPUT}/boot/bootx64.efi" ] ; then
+      einfo "Copying 64-bit EFI boot files (amd64) into ISO path."
+      log   "Copying 64-bit EFI boot files (amd64) into ISO path."
       RC=$0
       cp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
       mkdir -p "${BUILD_OUTPUT}/EFI/BOOT/" || RC=$?
@@ -1102,7 +1140,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
       eend $?
     elif [ -r "${CHROOT_OUTPUT}/boot/efi.img" -a -r "${CHROOT_OUTPUT}/boot/bootia32.efi" ] ; then
       einfo "Copying 32-bit EFI boot files into ISO path."
-      log "Copying 32-bit EFI boot files into ISO path."
+      log   "Copying 32-bit EFI boot files into ISO path."
       RC=$0
       cp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
       mkdir -p "${BUILD_OUTPUT}/EFI/BOOT/" || RC=$?
@@ -1231,22 +1269,34 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] ; then
     fi
     echo "source /boot/grub/footer.cfg" >> "${BUILD_OUTPUT}"/boot/grub/loopback.cfg
 
-    # copy grub files from target
-    mkdir -p "${BUILD_OUTPUT}"/boot/grub/i386-pc/
-    cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.mod "${BUILD_OUTPUT}"/boot/grub/i386-pc/
-    cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.o "${BUILD_OUTPUT}"/boot/grub/i386-pc/
-    cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.lst "${BUILD_OUTPUT}"/boot/grub/i386-pc/
-    cp -a "${CHROOT_OUTPUT}"/usr/share/grub/ascii.pf2 "${BUILD_OUTPUT}"/boot/grub/
-    cp -a "${CHROOT_OUTPUT}"/boot/grub/core.img "${BUILD_OUTPUT}"/boot/grub/
-    cp -a "${CHROOT_OUTPUT}"/boot/grub/grub.img "${BUILD_OUTPUT}"/boot/grub/
+    # copy modules for GRUB
+    if [ "${ARCH}" = "arm64" ] ; then
+      mkdir -p "${BUILD_OUTPUT}"/boot/grub/arm64-efi/
+      cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/arm64-efi/*.mod "${BUILD_OUTPUT}"/boot/grub/arm64-efi/
+      cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/arm64-efi/*.lst "${BUILD_OUTPUT}"/boot/grub/arm64-efi/
+      # NOTE: usage of /boot/grub/core.img + /boot/grub/grub.img unclear yet
+    elif [ "${ARCH}" = "amd64" ] || [ "${ARCH}" = "i386" ] ; then
+      # grub-pc-bin
+      mkdir -p "${BUILD_OUTPUT}"/boot/grub/i386-pc/
+      cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.mod  "${BUILD_OUTPUT}"/boot/grub/i386-pc/
+      cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.o    "${BUILD_OUTPUT}"/boot/grub/i386-pc/
+      cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/*-pc/*.lst  "${BUILD_OUTPUT}"/boot/grub/i386-pc/
 
-    # copy modules for UEFI grub, 64-bit
-    mkdir -p "${BUILD_OUTPUT}"/boot/grub/x86_64-efi/
-    cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/x86_64-efi/*.{mod,lst} "${BUILD_OUTPUT}"/boot/grub/x86_64-efi/
+      # grub-efi-amd64-bin
+      mkdir -p "${BUILD_OUTPUT}"/boot/grub/x86_64-efi/
+      cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/x86_64-efi/*.{mod,lst} "${BUILD_OUTPUT}"/boot/grub/x86_64-efi/
 
-    # copy modules for UEFI grub, 32-bit
-    mkdir -p "${BUILD_OUTPUT}"/boot/grub/i386-efi/
-    cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/i386-efi/*.{mod,lst} "${BUILD_OUTPUT}"/boot/grub/i386-efi/
+      # grub-efi-ia32-bin
+      mkdir -p "${BUILD_OUTPUT}"/boot/grub/i386-efi/
+      cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/i386-efi/*.{mod,lst} "${BUILD_OUTPUT}"/boot/grub/i386-efi/
+
+      cp -a "${CHROOT_OUTPUT}"/boot/grub/core.img       "${BUILD_OUTPUT}"/boot/grub/
+      cp -a "${CHROOT_OUTPUT}"/boot/grub/grub.img       "${BUILD_OUTPUT}"/boot/grub/
+    fi
+
+    # arch independent files
+    cp -a "${CHROOT_OUTPUT}"/usr/share/grub/ascii.pf2     "${BUILD_OUTPUT}"/boot/grub/
+    cp -a "${CHROOT_OUTPUT}"/usr/share/grub/unicode.pf2   "${BUILD_OUTPUT}"/boot/grub/  # clarify
 
     if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
       log    "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
