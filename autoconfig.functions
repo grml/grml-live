@@ -905,19 +905,23 @@ fi # -z $INSTALLED
 
 # {{{ CPU-detection
 config_cpu(){
-if checkbootparam 'nocpu'; then
-  ewarn "Skipping CPU detection as requested on boot commandline." ; eend 0
-  return 0
-fi
+  if checkbootparam 'nocpu'; then
+    ewarn "Skipping CPU detection as requested on boot commandline." ; eend 0
+    return 0
+  fi
 
-if [[ $(grep -c processor /proc/cpuinfo) -gt 1 ]] ; then
-   einfo "Found CPU:"
-   CPU=$(awk -F: '/^processor/{printf "	Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG)
-   echo $CPU | sed 's/ \{1,\}/ /g'
-   eend 0
-else
-   einfo "Found CPU: `awk -F: '/^processor/{printf " Processor"$2" is"};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>>$DEBUG` " ; eend 0
-fi
+  if ! [ -x "$(which lscpu)" ] ; then
+    ewarn "Skipping CPU detection due to lack of lscpu."; eend 0
+    return 0
+  fi
+
+  local cpu_info num_cpus
+
+  cpu_info="$(lscpu | sed -n '/^Model name:/s/[^:]*:\s*//p')"
+  num_cpus=$(grep -c processor /proc/cpuinfo)
+
+  einfo "Found ${num_cpus} CPU(s): ${cpu_info}"
+  eend 0
 }
 # }}}
 
