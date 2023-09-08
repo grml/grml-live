@@ -1,3 +1,12 @@
+grml-desktop (0.8.0) unstable; urgency=medium
+
+  [ Darshaka Pathirana ]
+  * [5208b4c] .Xresources: Add Copy/Paste Key Binding
+  * [c805923] .Xresources: Add key binding to switch between fonts without
+    a numeric keypad
+
+ -- Michael Prokop <mika@grml.org>  Fri, 08 Sep 2023 09:04:37 +0200
+
 grml-desktop (0.7.1) unstable; urgency=medium
 
   * [54b64a5] grml_wallpaper: support setting wallpaper background with
