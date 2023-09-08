@@ -1,3 +1,20 @@
+grml-live (0.46.0) unstable; urgency=medium
+
+  The "hello arm64 / aarch64" release
+
+  * [f0c9fee] Drop deprecated GRMLBASE/93-update-usbids (update-usbids
+    is gone)
+  * [cb68d92] GRMLBASE/91-update-pciids: also ignore exit code 1
+  * [74c4bce] Support FAI's newer scripts.log, as used with FAI
+    versions >=6.0
+  * [e530f07] Provide workaround for dhcpcd/isc-dhcp-client + cloud-init
+    for bookworm. Thanks to János Pásztor for the bug report
+  * [e1a5504] Initial arm64 / aarch64 support
+  * Software related changes:
+    - [97f7e34] install architecture specific fwupd-signed packages
+
+ -- Michael Prokop <mika@grml.org>  Fri, 08 Sep 2023 18:00:52 +0200
+
 grml-live (0.45.0) unstable; urgency=medium
 
   * [d6d5fee] Drop depends on fai-server. Thanks to András Korn
