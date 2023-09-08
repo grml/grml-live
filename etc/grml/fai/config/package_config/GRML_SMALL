@@ -16,7 +16,6 @@ cpio
 cryptsetup
 cu
 dctrl-tools
-dhcpcd
 diffutils
 disktype
 dmraid

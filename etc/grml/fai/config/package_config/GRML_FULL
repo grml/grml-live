@@ -158,7 +158,6 @@ bridge-utils
 cdpr
 cifs-utils
 cloud-init
-dhcpcd
 dnsmasq
 dnsutils
 ethstatus

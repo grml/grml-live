@@ -1,0 +1,10 @@
+PACKAGES install
+
+# NOTE: as of grml-live v0.44.0 we switched from isc-dhcp-client to dhcpcd.
+# But cloud-init has a hard dependency on isc-dhcp-client (at least as of
+# v21.4-2 and up and until incl. v23.2.1-1). To ensure that GRML_FULL also
+# works on bookworm OOTB and we can ship cloud-init, we enable the switch
+# towards dhcpcd only for Debian trixie/testing and newer. Also see
+# https://bugs.debian.org/1051421 and
+# https://github.com/grml/grml-live/issues/138
+isc-dhcp-client
