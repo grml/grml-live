@@ -94,8 +94,8 @@ if [ ! -r /remaster ]; then
   exit 1
 fi
 
-mkdir -p /remaster/chroot /remaster/tmp /remaster/cdrom
-mount -t tmpfs tmpfs /remaster/tmp
+mkdir -p /remaster/chroot /remaster/tmp /remaster/cdrom /remaster/work
+
 echo "#:# edit the following two lines to change the boot message" >/remaster/msg
 echo "#:#" >>/remaster/msg
 if [ -r ${LIVE_PATH_BOOT}/isolinux/boot.msg ] ; then
@@ -107,8 +107,8 @@ if ! grep -q "/remaster/cdrom squashfs" /proc/mounts ;  then
    mount -t squashfs "$SQUASHFS_FILE" /remaster/cdrom -o ro,loop
 fi
 
-if ! grep -q "aufs /remaster/chroot" /proc/mounts ; then
-   mount -t aufs aufs /remaster/chroot -o br:/remaster/tmp=rw:/remaster/cdrom=rr
+if ! grep -q "overlay /remaster/chroot" /proc/mounts ; then
+  mount -t overlay overlay -o lowerdir=/remaster/cdrom,upperdir=/remaster/tmp,workdir=/remaster/work /remaster/chroot
 fi
 
 for i in run dev dev/pts proc root sys tmp; do
