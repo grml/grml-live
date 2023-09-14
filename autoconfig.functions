@@ -1992,5 +1992,32 @@ fi
 }
 # }}}
 
+# {{{ Easteregg (for 20 years grml.org)
+config_easteregg() {
+  current_date=$(date +%Y-%m-%d)
+  birthday="2023-09-16"
+  one_month_later=$(date -d "${current_date} + 1 month" +%Y-%m-%d)
+
+  einfo "You found the birthday easter egg!" ; eend 0
+
+  # nothing to be done if it's more than one month since $birthday
+  if ! [[ "${current_date}" == "${birthday}" || "${current_date}" == "${one_month_later}" ]]; then
+    return 0
+  fi
+
+  if [[ -x /bin/toilet && -x /usr/games/lolcat ]] ; then
+    visualize() { printf "%s\n" "$*" | toilet | /usr/games/lolcat ; }
+  elif [[ -x /bin/toilet ]] ; then
+    visualize() { printf "%s\n" "$*" | toilet ; }
+  else
+    visualize() { printf "%s\n" "$*" ; }
+  fi
+
+  visualize "   \o/   "
+  visualize "20 years"
+  visualize "grml.org"
+}
+# }}}
+
 ## END OF FILE #################################################################
 # vim:foldmethod=marker expandtab ai ft=zsh shiftwidth=2
