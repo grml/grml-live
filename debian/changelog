@@ -1,3 +1,13 @@
+grml-live (0.46.1) unstable; urgency=medium
+
+  * [b041d9e] grml-live-remaster: aufs got replaced by overlay.
+    Thanks to Alhyene for the patch
+  * Software related changes:
+    - [3faa4ab] add toilet to GRML_SMALL + GRML_FULL and
+      lolcat to GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Thu, 14 Sep 2023 18:24:41 +0200
+
 grml-live (0.46.0) unstable; urgency=medium
 
   The "hello arm64 / aarch64" release
