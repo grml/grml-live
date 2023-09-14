@@ -108,6 +108,9 @@ xfsprogs
 zip
 zsh
 
+# special terminal output
+toilet
+
 PACKAGES install I386
 linux-image-686
 
