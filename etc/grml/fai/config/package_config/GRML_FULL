@@ -346,6 +346,10 @@ stress
 # docs
 man-db
 
+# special terminal output
+lolcat
+toilet
+
 PACKAGES install I386
 # kernel related
 linux-image-686
