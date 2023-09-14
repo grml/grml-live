@@ -1,3 +1,10 @@
+grml-autoconfig (0.21.0) grml-testing; urgency=medium
+
+  * [6015780] Implement easter egg for 20 years of grml.org.
+    Thanks to Christopher Bock for suggesting usage of lolcat
+
+ -- Michael Prokop <mika@grml.org>  Thu, 14 Sep 2023 18:24:38 +0200
+
 grml-autoconfig (0.20.7) grml-testing; urgency=medium
 
   * [74eef77] config_cpu: use lscpu for identifying CPU information.
