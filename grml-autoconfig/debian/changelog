@@ -1,3 +1,10 @@
+grml-autoconfig (0.21.1) grml-testing; urgency=medium
+
+  * [4e06a5e] Improve easter egg for 20 years of grml.org.
+    Thanks to Christopher Bock and András Korn
+
+ -- Michael Prokop <mika@grml.org>  Sat, 16 Sep 2023 14:44:00 +0200
+
 grml-autoconfig (0.21.0) grml-testing; urgency=medium
 
   * [6015780] Implement easter egg for 20 years of grml.org.
