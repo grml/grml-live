@@ -1993,17 +1993,8 @@ fi
 # }}}
 
 # {{{ Easteregg (for 20 years grml.org)
-config_easteregg() {
-  current_date=$(date +%Y-%m-%d)
-  birthday="2023-09-16"
-  one_month_later=$(date -d "${current_date} + 1 month" +%Y-%m-%d)
-
+display_easteregg() {
   einfo "You found the birthday easter egg!" ; eend 0
-
-  # nothing to be done if it's more than one month since $birthday
-  if ! [[ "${current_date}" == "${birthday}" || "${current_date}" == "${one_month_later}" ]]; then
-    return 0
-  fi
 
   if [[ -x /bin/toilet && -x /usr/games/lolcat ]] ; then
     visualize() { printf "%s\n" "$*" | toilet | /usr/games/lolcat ; }
@@ -2016,6 +2007,26 @@ config_easteregg() {
   visualize "   \o/   "
   visualize "20 years"
   visualize "grml.org"
+}
+
+config_easteregg() {
+  checkbootparam 'noeasteregg' && return 0
+
+  zmodload zsh/datetime 2>/dev/null || return 0
+  zmodload zsh/mathfunc 2>/dev/null || return 0
+
+  local birthday=1694822400            # := 2023-09-16 -> TZ=UTC date -d "2023-09-16" +%s
+  local one_month=$[24*30*3600]
+  local pi=3.14159265358979323846
+  local magic=$(( one_month/(pi/2) ))  # normalization factor, used to map the [birthday;birthday+-one_month] range onto [0;+-pi/2]
+
+  if [[ $(( abs(birthday-EPOCHSECONDS) )) -le $one_month ]] ; then
+    if [[ $(( rand48() )) -le $(( cos((birthday-EPOCHSECONDS)/magic) )) ]] ; then
+      display_easteregg
+    fi
+  fi
+
+  return 0
 }
 # }}}
 
