@@ -1412,7 +1412,7 @@ else
     else
       eindent
       einfo "debs, config, scripts are read from $DCSDEVICE." ; eend 0
-      DCSDIR="$(< /proc/mounts awk -v DCSDEV=$DCSDEVICE '{if ($1 == DCSDEV) { print $2 }}')"
+      DCSDIR="$(< /proc/mounts awk -v DCSDEV=$DCSDEVICE '{if ($1 == DCSDEV) { print $2; exit }}')"
       if [ -n "$DCSDIR" ]; then
         ewarn "$DCSDEVICE already mounted on $DCSDIR"; eend 0
       else
