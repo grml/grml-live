@@ -1,3 +1,10 @@
+grml-autoconfig (0.21.2) grml-testing; urgency=medium
+
+  [ Csillag Tamas ]
+  * [deb3d70] if multiple mountpoints avail, pick the first one
+
+ -- Michael Prokop <mika@grml.org>  Wed, 04 Oct 2023 18:59:59 +0200
+
 grml-autoconfig (0.21.1) grml-testing; urgency=medium
 
   * [4e06a5e] Improve easter egg for 20 years of grml.org.
