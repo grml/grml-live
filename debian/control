@@ -20,6 +20,7 @@ Architecture: all
 Depends:
  bc,
  bzip2,
+ debootstrap,
  dosfstools,
  fai-client (>= 3.4.0),
  isolinux (>= 3:6.03+dfsg-5+deb8u1~),
