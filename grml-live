@@ -327,6 +327,7 @@ copy_addon_file() {
   msg="Missing addon file: \"$1\""
   ewarn "$msg" ; eend 1
   log "copy_addon_file: $msg"
+  return 1
 }
 
 # replace placeholders in template files with actual information
@@ -1193,32 +1194,37 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
         copy_addon_file ipxe.efi /usr/lib/ipxe addons
         copy_addon_file pci.ids /usr/share/misc addons
 
-        # memtest86+ <=5.01-3.1
-        copy_addon_file memtest86+.bin /boot addons
-        # make memtest filename FAT16/8.3 compatible
-        if [ -r "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" ] ; then
-          mv "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" \
-             "${BUILD_OUTPUT}/boot/addons/memtest"
-        fi
-
         # memtest86+ >=6.00-1
-        copy_addon_file memtest86+x32.bin /boot addons
-        copy_addon_file memtest86+x32.efi /boot addons
-        copy_addon_file memtest86+x64.bin /boot addons
-        copy_addon_file memtest86+x64.efi /boot addons
+        if [[ "$ARCH" == "amd64" ]] ; then
+          copy_addon_file memtest86+x64.efi /boot addons
+        elif [[ "$ARCH" == "i386" ]] ; then
+          copy_addon_file memtest86+ia32.efi /boot addons
+        fi
 
         # provide memtest86+ >=6.00-1 files as "memtest" file
         # for BIOS boot in isolinux/syslinux
         if ! [ -r "${BUILD_OUTPUT}/boot/addons/memtest" ] ; then
           if [[ "$ARCH" == "amd64" ]] ; then
-            copy_addon_file memtest86+x64.bin /boot addons
+            copy_addon_file memtest86+x64.bin /boot addons &&
+            # make memtest filename FAT16/8.3 compatible
             mv "${BUILD_OUTPUT}/boot/addons/memtest86+x64.bin" \
                "${BUILD_OUTPUT}/boot/addons/memtest"
           elif [[ "$ARCH" == "i386" ]] ; then
-            copy_addon_file memtest86+x32.bin /boot addons
-            mv "${BUILD_OUTPUT}/boot/addons/memtest86+x32.bin" \
+            copy_addon_file memtest86+ia32.bin /boot addons &&
+            # make memtest filename FAT16/8.3 compatible
+            mv "${BUILD_OUTPUT}/boot/addons/memtest86+ia32.bin" \
                "${BUILD_OUTPUT}/boot/addons/memtest"
           fi
+        fi
+
+        # fallback: if we still don't have /boot/addons/memtest available, we
+        # might have an older memtest86+ version (<=5.01-3.1) which ships
+        # file "memtest86+.bin" instead
+        if ! [ -r "${BUILD_OUTPUT}/boot/addons/memtest" ] ; then
+          copy_addon_file memtest86+.bin /boot addons &&
+          # make memtest filename FAT16/8.3 compatible
+          mv "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" \
+             "${BUILD_OUTPUT}/boot/addons/memtest"
         fi
 
         # since syslinux(-common) v3:6.03~pre1+dfsg-4 the files are in a
