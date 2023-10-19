@@ -1,3 +1,13 @@
+grml-live (0.47.0) unstable; urgency=medium
+
+  * [f365415] Add debootstrap to Depends
+  * [1a9a788] Rework memtest handling, incl. usage of latest available
+    memtest file
+  * [e57c3ad] templates/boot/grub/addons: use chainloader instead of
+    linuxefi
+
+ -- Michael Prokop <mika@grml.org>  Thu, 19 Oct 2023 17:24:51 +0200
+
 grml-live (0.46.1) unstable; urgency=medium
 
   * [b041d9e] grml-live-remaster: aufs got replaced by overlay.
