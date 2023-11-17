@@ -370,6 +370,9 @@ grml-terminalserver
 # firmware updates
 fwupd-i386-signed
 
+# X - not relevant on more recent systems, so ship on i386 only
+xserver-xorg-video-intel
+
 PACKAGES install AMD64
 # kernel related
 linux-image-amd64
