@@ -1,3 +1,15 @@
+grml-live (0.47.1) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * Software related changes:
+    - [892768a] ship xserver-xorg-video-intel with grml32-full
+    - [f123b91] drop thin-provisioning-tools from GRML_FULL
+
+  [ Darshaka Pathirana ]
+  * [c0460ec] Unify boot options order
+
+ -- Michael Prokop <mika@grml.org>  Fri, 01 Dec 2023 12:39:26 +0100
+
 grml-live (0.47.0) unstable; urgency=medium
 
   * [f365415] Add debootstrap to Depends
