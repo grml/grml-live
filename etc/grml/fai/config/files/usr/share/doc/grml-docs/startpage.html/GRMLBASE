@@ -4,7 +4,7 @@
 # Filename:      startpage.html
 # Purpose:       information page on Grml
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
-# Bug-Reports:   see http://grml.org/bugs/
+# Bug-Reports:   see https://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
 ################################################################################
 -->
@@ -37,53 +37,55 @@
 <div class="container"><div class="content">
 <h1 align="center">Grml Live Linux</h1>
 
-<p>Grml is a Debian based Linux Live system for x86 and x86_64 systems. Its main
-purpose is providing a system for system administrators.</p>
+<p>
+Grml is a Debian based Linux Live system for system administrators and users of texttools.
+</p>
 
-<p>You are reading this page probably in the w3m or links browser on the console
-or in xlinks2 or Firefox/Iceweasel running under X. To switch between
-links in w3m and links press the &lt;tab&gt;-key. You can move the cursor via
-the cursor keys.  'B' is the key for going back one page in the browser history,
-pressing 'H' brings you to the help of w3m.  Press 'Q' for exiting w3m, links
-and xlinks2.</p>
+<p>
+You are reading this page probably in the w3m or links browser on the console, or in Firefox running under X.
+Press 'Q' for exiting w3m and links.</p>
 
-<p><strong>Note:</strong> If you find bugs, please <a
-href="http://grml.org/bugs/">report them</a>!  Thank you for helping
-us to improve Grml!</p>
-
-<h2>Overview</h2>
-
-<p>Find the package list of installed software at <a
-  href="http://grml.org/files/">grml.org/files/</a>.</p>
+<p>
+<strong>Notice:</strong> if you find any bugs please <a href="https://grml.org/bugs/">report them to the Grml team</a>!
+Thank you for helping us to improve Grml!
+</p>
 
 <h2>Quickstart</h2>
 
 <ul>
+  <li>Find the package list of installed software at <a href="https://grml.org/files/">grml.org/files/</a>.</li>
   <li>Use 'grml-tips $KEYWORD' to get hints and tips.</li>
   <li>Use 'grml-x' to start the X window system.</li>
 </ul>
 
 <h2>Online resources</h2>
 
-<p>Subscribe to <a href="http://grml.org/mailinglist/">the Grml mailinglist</a> and join #grml on irc.freenode.net!</p>
+<p>
+Subscribe to <a href="https://grml.org/mailinglist/">the Grml mailinglist</a>, or join us on IRC in #grml on irc.oftc.net.
+</p>
 
 <ul>
-  <li><a href="http://grml.org/">grml.org</a></li>
-  <li><a href="http://grml.org/news/">news @ grml.org</a></li>
-  <li><a href="http://grml.org/faq/">faq @ grml.org</a></li>
-  <li><a href="http://grml.org/docs/">docs @ grml.org</a></li>
-  <li><a href="http://grml.org/bugs/">bugs @ grml.org</a></li>
-  <li><a href="http://grml.org/zsh/">zsh @ grml.org</a></li>
-  <li><a href="http://grml.org/contact/">contact the grml-team</a></li>
-  <li><a href="http://www.tldp.org/">Linux Documentation Project</a></li>
+  <li><a href="https://grml.org/">grml.org</a></li>
+  <li><a href="https://wiki.grml.org/">grml-Wiki</a></li>
+  <li><a href="https://grml.org/news/">news @ grml.org</a></li>
+  <li><a href="https://grml.org/faq/">faq @ grml.org</a></li>
+  <li><a href="https://grml.org/docs/">docs @ grml.org</a></li>
+  <li><a href="https://grml.org/bugs/">bugs @ grml.org</a></li>
+  <li><a href="https://grml.org/zsh/">zsh @ grml.org</a></li>
+  <li><a href="https://grml.org/contact/">contact the grml-team</a></li>
 </ul>
 
-<p>Press 'Q' for exiting the browsers w3m, links and xlinks2.</p>
+<p>
+Press 'Q' for exiting the browsers w3m and links.
+</p>
 
-<p>Have fun with Grml!</p>
+<p>
+Enjoy Grml!
+</p>
+
 </div>
 <div class="copyright">
-&copy; Copyright 2004++ by the <a href="http://grml.org/team/">grml-team</a>.
+&copy; Copyright 2004++ by the <a href="https://grml.org/team/">Grml team</a>.
 </div>
 
 <!-- Piwik --> 
