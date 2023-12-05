@@ -3,131 +3,107 @@
 # Authors:       grml-team (grml.org), (c) Daniel K. Gebhart, (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
-# Latest change: Son Okt 17 18:50:33 CEST 2004 [mika]
+# Latest change: Mon Dec 04 13:23:34 CET 2023 [mika]
 ################################################################################
 
 servers = (
-  { address = "irc.stealth.net"; chatnet = "IRCnet"; port = "6668"; },
-  { address = "irc.efnet.net"; chatnet = "EFNet"; port = "6667"; },
-  { 
-    address = "irc.undernet.org";
-    chatnet = "Undernet";
-    port = "6667";
-  },
-  { address = "irc.dal.net"; chatnet = "DALnet"; port = "6667"; },
-  {
-    address = "irc.oftc.net";
-    chatnet = "oftc";
-    autoconnect = "yes";
-    port = "6667";
-  },
-  { address = "irc.gnome.org"; chatnet = "GIMPNet"; port = "6667"; },
-  { address = "10.11.18.42"; chatnet = "VCG"; port = "6667"; },
-  { address = "irc.ptlink.net"; chatnet = "PTlink"; port = "6667"; },
-  { 
-    address = "irc.sorcery.net";
-    chatnet = "SorceryNet";
-    port = "6667";
-  },
-  { 
-    address = "irc.hashmark.net";
-    chatnet = "Hashmark";
-    port = "6667";
-  },
-  { address = "irc.ptnet.org"; chatnet = "PTnet"; port = "6667"; },
-  { 
-    address = "irc.azzurra.org";
-    chatnet = "AzzurraNET";
-    port = "6667";
-  },
-  { address = "silc.silcnet.org"; chatnet = "SILC"; port = "706"; }
+  { address = "irc.dal.net";       chatnet = "DALnet";    port = "6667"; },
+  { address = "ssl.efnet.org";     chatnet = "EFNet";     port = "9999"; use_tls = "yes"; tls_verify = "no"; },
+  { address = "irc.esper.net";     chatnet = "EsperNet";  port = "6697"; use_tls = "yes"; tls_verify = "yes"; },
+  { address = "irc.libera.chat";   chatnet = "liberachat";port = "6697"; use_tls = "yes"; tls_verify = "yes"; },
+  { address = "irc.gamesurge.net"; chatnet = "GameSurge"; port = "6667"; },
+  { address = "ssl.ircnet.ovh";    chatnet = "IRCnet";    port = "6697"; use_tls = "yes"; tls_verify = "yes"; },
+  { address = "open.ircnet.net";   chatnet = "IRCnet";    port = "6667"; },
+  { address = "irc.ircsource.net"; chatnet = "IRCSource"; port = "6667"; },
+  { address = "irc.netfuze.net";   chatnet = "NetFuze";   port = "6667"; },
+  { address = "irc.oftc.net";      chatnet = "OFTC";      port = "6697"; use_tls = "yes"; tls_verify = "yes"; },
+  { address = "irc.quakenet.org";  chatnet = "QuakeNet";  port = "6667"; },
+  { address = "irc.rizon.net";     chatnet = "Rizon";     port = "6697"; use_tls = "yes"; tls_verify = "yes"; },
+  { address = "silc.silcnet.org";  chatnet = "SILC";      port = "706";  },
+  { address = "irc.undernet.org";  chatnet = "Undernet";  port = "6667"; }
 );
 
 chatnets = {
-  IRCnet = {
-    type = "IRC";
+  DALnet = {
+    type      = "IRC";
     max_kicks = "4";
-    max_modes = "3";
-    max_msgs = "5";
-    max_whois = "4";
-    max_query_chans = "5";
+    max_msgs  = "20";
+    max_whois = "30";
   };
   EFNet = {
-    type = "IRC";
-    max_kicks = "4";
-    max_modes = "4";
-    max_msgs = "3";
+    type      = "IRC";
+    max_kicks = "1";
+    max_msgs  = "4";
     max_whois = "1";
+  };
+  EsperNet = {
+    type      = "IRC";
+    max_kicks = "1";
+    max_msgs  = "4";
+    max_whois = "1";
+  };
+  liberachat = {
+    type      = "IRC";
+    max_kicks = "1";
+    max_msgs  = "4";
+    max_whois = "1";
+  };
+  GameSurge = {
+    type      = "IRC";
+    max_kicks = "1";
+    max_msgs  = "1";
+    max_whois = "1";
+  };
+  IRCnet = {
+    type      = "IRC";
+    max_kicks = "1";
+    max_msgs  = "1";
+    max_whois = "1";
+  };
+  IRCSource = {
+    type      = "IRC";
+    max_kicks = "1";
+    max_msgs  = "4";
+    max_whois = "1";
+  };
+  NetFuze = {
+    type      = "IRC";
+    max_kicks = "1";
+    max_msgs  = "1";
+    max_whois = "1";
+  };
+  OFTC = {
+    type      = "IRC";
+    max_kicks = "1";
+    max_msgs  = "1";
+    max_whois = "1";
+  };
+  QuakeNet = {
+    type      = "IRC";
+    max_kicks = "1";
+    max_msgs  = "1";
+    max_whois = "1";
+  };
+  Rizon = {
+    type      = "IRC";
+    max_kicks = "1";
+    max_msgs  = "1";
+    max_whois = "1";
+  };
+  SILC = {
+    type = "SILC";
   };
   Undernet = {
-    type = "IRC";
-    max_kicks = "4";
-    max_modes = "3";
-    max_msgs = "3";
-    max_whois = "30";
-  };
-  DALnet = {
-    type = "IRC";
-    max_kicks = "4";
-    max_modes = "6";
-    max_msgs = "3";
-    max_whois = "30";
-  };
-  freenode = {
-    type = "IRC";
-    max_kicks = "4";
-    max_modes = "4";
-    max_msgs = "1";
-    max_whois = "1";
-  };
-  GIMPNet = {
-    type = "IRC";
-    max_kicks = "4";
-    max_modes = "4";
-    max_msgs = "3";
-    max_whois = "1";
-  };
-  PTlink = {
-    type = "IRC";
+    type      = "IRC";
     max_kicks = "1";
-    max_modes = "6";
-    max_msgs = "30";
+    max_msgs  = "1";
     max_whois = "1";
   };
-  SorceryNet = {
-    type = "IRC";
-    max_kicks = "30";
-    max_modes = "6";
-    max_msgs = "30";
-    max_whois = "30";
-  };
-  Hashmark = {
-    type = "IRC";
-    max_kicks = "4";
-    max_modes = "3";
-    max_msgs = "3";
-    max_whois = "30";
-  };
-  PTnet = {
-    type = "IRC";
-    max_kicks = "30";
-    max_modes = "13";
-    max_msgs = "10";
-    max_whois = "30";
-  };
-  AzzurraNET = {
-    type = "IRC";
-    max_kicks = "4";
-    max_modes = "6";
-    max_msgs = "3";
-  };
-  SILC = { type = "SILC"; };
 };
 
 channels = (
-  { name = "#grml"; chatnet = "oftc"; autojoin = "Yes"; },
-  { name = "#irssi"; chatnet = "ircnet"; autojoin = "No"; },
-  { name = "silc"; chatnet = "silc"; autojoin = "No"; }
+  # NOTE: OFTC requires identified and verified use, so no autojoin for #grml:
+  { name = "#grml"; chatnet = "OFTC"; autojoin = "No"; },
 );
 
 aliases = {
@@ -291,7 +267,7 @@ settings = {
   core = {
     real_name = "a grml user";
     user_name = "grml";
-    nick = "grml";
+    nick = "grml42";  # please adjust!
     quit_message = "grml.org - linux for sysadmins and users of texttools";
   };
   "irc/core" = {
