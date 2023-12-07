@@ -1,3 +1,10 @@
+grml-etc (1.9.0) grml-testing; urgency=medium
+
+  * [2ae7aa3] etc/skel/.irssi/config: update servers/chatnets/channels
+    and no longer autojoin #grml
+
+ -- Michael Prokop <mika@grml.org>  Thu, 07 Dec 2023 17:22:30 +0100
+
 grml-etc (1.8.1) grml-testing; urgency=medium
 
   * [3016cf4] debian: fix github URL in Homepage/Vcs-*/Source headers
