@@ -1,3 +1,17 @@
+grml-live (0.47.2) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [94ef34a] templates/boot/isolinux/f10: use https and replace freenode
+    with oftc
+  * [69fe8e2] grml-docs/startpage.html: rework and update instructions
+  * [cbbab37] templates/boot/grub/%SHORT_NAME%_options.cfg: fix missing
+    quotes
+
+  [ Darshaka Pathirana ]
+  * [4e76a27] Remove Grml release name from the boot options
+
+ -- Michael Prokop <mika@grml.org>  Sat, 23 Dec 2023 13:22:32 +0100
+
 grml-live (0.47.1) unstable; urgency=medium
 
   [ Michael Prokop ]
