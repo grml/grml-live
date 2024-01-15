@@ -1,3 +1,10 @@
+grml-live (0.47.3) unstable; urgency=medium
+
+  * Software related changes:
+    - [c30d41f] add zstd to GRML_SMALL. Thanks to Marc Haber
+
+ -- Michael Prokop <mika@grml.org>  Mon, 15 Jan 2024 12:35:35 +0100
+
 grml-live (0.47.2) unstable; urgency=medium
 
   [ Michael Prokop ]
