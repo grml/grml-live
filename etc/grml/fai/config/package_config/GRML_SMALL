@@ -107,6 +107,7 @@ wipe
 xfsprogs
 zip
 zsh
+zstd
 
 # special terminal output
 toilet
