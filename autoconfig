@@ -57,7 +57,6 @@ CONFIG_DEBNET='yes'           # search for /etc/network/interfaces on partitions
 CONFIG_DEBS='yes'             # check for bootoption debs for installing .debs
 CONFIG_DISPLAY_SSH_FINGERPRINTS='yes' # display SSH server key fingerprints
 CONFIG_DISTRI='yes'           # support some customization via bootoption distri
-CONFIG_DMRAID='yes'           # support for dmraid
 CONFIG_EASTEREGG='yes'        # easteregg
 CONFIG_EXTRACT='yes'          # specify which (only in combination with bootparam myconfig/netconfig useful)
 CONFIG_FINDDCSDIR='yes'       # search for a debs, config, scripts directory
