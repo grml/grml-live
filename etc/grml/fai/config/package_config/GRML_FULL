@@ -49,7 +49,6 @@ pppoeconf
 array-info
 cryptsetup
 disktype
-dmraid
 dmsetup
 f3
 fai-setup-storage
