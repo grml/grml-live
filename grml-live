@@ -819,7 +819,7 @@ else
 
       # FAI versions >=6.0 always writes to scripts.log
       if [ -r "$CHECKLOG/scripts.log" ] ; then
-         grep 'FAILED with exit code' $CHECKLOG/shell.log >> $LOGFILE && ERROR=6
+         grep 'FAILED with exit code' $CHECKLOG/scripts.log >> $LOGFILE && ERROR=6
       fi
 
       if [ -r "$CHECKLOG/fai.log" ] ; then
