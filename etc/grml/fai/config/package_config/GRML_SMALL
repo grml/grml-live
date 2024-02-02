@@ -105,6 +105,7 @@ wget
 whois
 wipe
 xfsprogs
+xxd
 zip
 zsh
 zstd
