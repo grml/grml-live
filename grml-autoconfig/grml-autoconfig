@@ -83,8 +83,6 @@ checkvalue $CONFIG_TIMEZONE && config_timezone
 
 checkvalue $CONFIG_SWRAID && config_swraid
 
-checkvalue $CONFIG_DMRAID && config_dmraid
-
 checkvalue $CONFIG_LVM && config_lvm
 
 checkvalue $CONFIG_TESTCD && config_testcd
