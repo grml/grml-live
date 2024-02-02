@@ -1,3 +1,14 @@
+grml-live (0.47.4) unstable; urgency=medium
+
+  * [bdf9b40] grml-cheatcodes.txt: drop URL for no-longer existing live-
+    initramfs.en.7.txt
+  * [06e703a] Fix usage of FAI's shell.log vs. scripts.log
+  * Software related changes:
+    - [e0a2d0b] add xxd to GRML_SMALL + GRML_FULL
+    - [dca230e] add memtest86+ to GRML_FULL (amd64/i386 only)
+
+ -- Michael Prokop <mika@grml.org>  Fri, 02 Feb 2024 16:04:31 +0100
+
 grml-live (0.47.3) unstable; urgency=medium
 
   * Software related changes:
