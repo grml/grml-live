@@ -359,6 +359,7 @@ cciss-vol-status
 # x86 hardware support
 cmospwd
 cpuid
+memtest86+
 # broken userland debugging
 ltrace
 # disk partitioning/boot
@@ -382,6 +383,7 @@ cciss-vol-status
 # x86 hardware support
 cmospwd
 cpuid
+memtest86+
 # broken userland debugging
 ltrace
 # disk partitioning/boot
