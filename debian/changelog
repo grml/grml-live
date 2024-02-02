@@ -1,3 +1,12 @@
+grml-live (0.47.5) unstable; urgency=medium
+
+  * Software related changes:
+    - [922087b] drop dmraid from GRML_FULL + GRML_SMALL
+  * [ee314fb] templates: drop deprecated nodmraid boot option and update
+    grml-cheatcodes.txt
+
+ -- Michael Prokop <mika@grml.org>  Fri, 02 Feb 2024 16:52:57 +0100
+
 grml-live (0.47.4) unstable; urgency=medium
 
   * [bdf9b40] grml-cheatcodes.txt: drop URL for no-longer existing live-
