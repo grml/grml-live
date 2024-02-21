@@ -713,9 +713,9 @@ How do I create a base tar.gz (I386.tar.gz or AMD64.tar.gz or ARM64.tar.gz)
 First of all create the chroot using debootstrap (requires root):
 
   BASECHROOT='/tmp/basefile'  # path where the chroot gets generated
-  SUITE='bookworm'              # using the current stable release should always work
-  debootstrap --exclude=info,tasksel,tasksel-data,isc-dhcp-client,isc-dhcp-common "$SUITE" "$BASECHROOT" http://deb.debian.org/debian
-  tar -C "$BASECHROOT" --exclude='var/cache/apt/archives/*.deb' -zcf "${SUITE}".tar.gz ./
+  SUITE='bookworm'            # using the current stable release should always work
+  debootstrap --exclude=info,tasksel,tasksel-data,isc-dhcp-client,isc-dhcp-common "${SUITE}" "${BASECHROOT}" http://deb.debian.org/debian
+  tar -C "$BASECHROOT" --exclude='var/cache/apt/archives/*.deb' --exclude 'var/lib/apt/lists/*_*' --xattrs --xattrs-include='*.*' --acls -zcf "${SUITE}".tar.gz ./
 
 [TIP]
 By default debootstrap builds a chroot matching the architecture of the running
