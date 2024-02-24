@@ -1,3 +1,10 @@
+grml-live (0.47.6) unstable; urgency=medium
+
+  * [642ff89] docs: update instructions for basefile creation to include
+    capabilities
+
+ -- Michael Prokop <mika@grml.org>  Sat, 24 Feb 2024 10:56:00 +0100
+
 grml-live (0.47.5) unstable; urgency=medium
 
   * Software related changes:
