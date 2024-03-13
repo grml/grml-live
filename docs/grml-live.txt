@@ -536,7 +536,7 @@ Instructions
   EOF
 
   # get keyring for apt:
-  apt-get update
+  apt-get -o Acquire::AllowInsecureRepositories=true update
   apt-get --allow-unauthenticated install grml-debian-keyring
 
   # optionally(!) install basefile so we don't have to build basic
