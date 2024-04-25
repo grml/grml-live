@@ -9,20 +9,9 @@
 set -u
 set -e
 
-if ! [ -x $target/usr/bin/deborphan ] ; then
-  echo "Warning: deborphan not installed"
-  exit 0
-fi
-
 # remove all packages not necessary anymore:
 echo "Executing apt-get -y --purge autoremove"
 $ROOTCMD apt-get -y --purge autoremove
-
-# remove packages until deborphan does not find anymore:
-while [ "$($ROOTCMD deborphan)" != "" ] ; do
-  echo "Executing deborphan"
-  $ROOTCMD apt-get -y --purge remove $($ROOTCMD deborphan)
-done
 
 # make sure we don't have any removed but not-yet-purged packages left,
 # otherwise GRMLBASE/03-get-sources might try to download unavailable
@@ -32,6 +21,16 @@ PURGE_PACKAGES=$($ROOTCMD dpkg --list | awk '/^rc/ {print $2}')
 if [ -n "$PURGE_PACKAGES" ] ; then
   echo "Getting rid of packages which have been removed but not yet purged: $PURGE_PACKAGES"
   $ROOTCMD dpkg --purge $PURGE_PACKAGES
+fi
+
+# note: deborphan is no longer available as of Debian/trixie,
+# see https://github.com/grml/grml-live/issues/144
+if [ -x "$target"/usr/bin/deborphan ] ; then
+  # remove packages until deborphan does not find anymore:
+  while [ "$($ROOTCMD deborphan)" != "" ] ; do
+    echo "Executing deborphan"
+    $ROOTCMD apt-get -y --purge remove $($ROOTCMD deborphan)
+  done
 fi
 
 ## END OF FILE #################################################################
