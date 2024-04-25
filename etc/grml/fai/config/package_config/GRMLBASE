@@ -6,7 +6,6 @@ console-data
 console-setup
 cryptsetup-initramfs
 dbus
-deborphan
 dmidecode
 efibootmgr
 eject
