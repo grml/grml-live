@@ -1,3 +1,16 @@
+grml-live (0.47.7) unstable; urgency=medium
+
+  * Software related changes:
+    - [a24d308] drop deborphan from GRMLBASE, no longer present since
+      Debian/trixie
+  * [ccd246d] etc/fstab/GRMLBASE: use reserved IP following RFC5737
+  * [1f76dc8] docs: update usage instructions for setting up Grml
+    repository. Thanks to anarcat for reporting
+  * [0551e9e] DEBORPHAN: rework to not skip all its execution if deborphan
+    is missing; update docs for DEBORPHAN
+
+ -- Michael Prokop <mika@grml.org>  Mon, 10 Jun 2024 19:17:58 +0200
+
 grml-live (0.47.6) unstable; urgency=medium
 
   * [642ff89] docs: update instructions for basefile creation to include
