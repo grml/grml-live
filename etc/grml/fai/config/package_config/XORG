@@ -16,8 +16,6 @@ grml-x
 grml-desktop
 # osd_cat:
 xosd-bin
-# Esetroot:
-eterm
 # x-terminal:
 xterm
 # links2 provides a small X browser named xlinks2:

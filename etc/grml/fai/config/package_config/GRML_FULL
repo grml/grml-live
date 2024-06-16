@@ -156,7 +156,6 @@ dnsutils
 ethstatus
 ethtool
 hostapd
-hping3
 ifenslave
 iftop
 ifupdown
