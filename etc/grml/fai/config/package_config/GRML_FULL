@@ -335,7 +335,7 @@ usbview
 
 # firmware updates
 fwupd
-policykit-1
+polkitd
 udisks2
 
 # testing
