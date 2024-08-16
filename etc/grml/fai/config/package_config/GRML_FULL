@@ -101,7 +101,6 @@ exfat-fuse
 exfatprogs
 f2fs-tools
 genisoimage
-hfsutils
 jfsutils
 ntfs-3g
 reiser4progs
