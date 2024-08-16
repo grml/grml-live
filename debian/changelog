@@ -1,3 +1,10 @@
+grml-live (0.47.8) unstable; urgency=medium
+
+  * Software related changes:
+    - [aa1ccc5] depend on polkitd instead of transitional policykit-1
+
+ -- Michael Prokop <mika@grml.org>  Fri, 16 Aug 2024 14:47:14 +0200
+
 grml-live (0.47.7) unstable; urgency=medium
 
   * Software related changes:
