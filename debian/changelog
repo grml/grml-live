@@ -1,3 +1,15 @@
+grml-live (0.47.9) unstable; urgency=medium
+
+  * Software related changes:
+    [ Michael Prokop ]
+    - [0b92870] drop hfsutils (unavailable in Debian/testing and
+      deprecated filesystem)
+    - [9e98ead] drop uml-utilities (deprecated tools)
+    [ Chris Hofstaedtler ]
+    - [18e12e1] drop reiser4progs (to be removed from Debian)
+
+ -- Michael Prokop <mika@grml.org>  Sun, 18 Aug 2024 12:17:19 +0200
+
 grml-live (0.47.8) unstable; urgency=medium
 
   * Software related changes:
