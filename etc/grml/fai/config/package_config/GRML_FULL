@@ -171,7 +171,6 @@ iputils-tracepath
 iw
 libnss-mdns
 libteam-utils
-lrzsz
 mosh
 mtr-tiny
 ndisc6
