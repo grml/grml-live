@@ -1,3 +1,10 @@
+grml-live (0.47.11) unstable; urgency=medium
+
+  * [07eb2f2] Fix DHCP situation with grml-full unstable/sid. Thanks to
+    Darshaka Pathirana for assistance in tracking this down
+
+ -- Michael Prokop <mika@grml.org>  Fri, 06 Sep 2024 17:33:28 +0200
+
 grml-live (0.47.10) unstable; urgency=medium
 
   * Software related changes:
