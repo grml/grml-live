@@ -1,3 +1,0 @@
-# official debian repository:
-  deb     http://ftp.debian.org/debian/ sid main contrib non-free-firmware non-free
-  deb-src http://ftp.debian.org/debian/ sid main contrib non-free-firmware non-free
