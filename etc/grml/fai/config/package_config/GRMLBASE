@@ -26,7 +26,6 @@ grml-scripts
 grml-scripts-core
 grml-tips
 grml-udev-config
-haveged
 hdparm
 hwinfo
 initramfs-tools
