@@ -3,14 +3,14 @@
 70 The following options can be used at the boot:-prompt:                        
                                                                                
  grml   [options, list via F4-F10]                          boot Grml default  
+ grml2ram     copy medium to RAM and run from there (see F5 for alternatives)  
  memtest                                     memtest86+ (memory test program)  
  fb1280x1024, fb1024x768 or fb800x600   use framebuffer mode (e.g. notebooks)  
  nofb                                                disable framebuffer mode  
  hd / hd1 / hd2 / hd3 / floppy       boot from (1st/2nd/..) harddisk / floppy  
- serial                                               activate serial console  
- forensic              do not touch any harddisks during hardware recognition  
  debug [ break=live-bottom ]    get interactive shells during startup process  
- grml2ram     copy medium to RAM and run from there (see F5 for alternatives)  
+ forensic              do not touch any harddisks during hardware recognition  
+ serial                                               activate serial console  
  grub                                    boot GRand Unified Bootloader (GRUB)  
  dos                                                         boot FreeDOS 1.0  
  hdt                                             boot Hardware Detection Tool  
