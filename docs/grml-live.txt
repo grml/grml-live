@@ -695,23 +695,6 @@ FAI_DEBOOTSTRAP:
 Make sure apt-cacher-ng is running ('/etc/init.d/apt-cacher-ng restart').
 That's it.  All downloaded files will be cached in /var/cache/apt-cacher-ng then.
 
-[[revert_manifold]]
-How do I revert the manifold feature from an ISO?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-By default, Grml ISOs use isohybrid to allow them to be booted from CDs as
-well as USB sticks. Manifold is an alternative to isohybrid.
-
-If you notice any problems
-when booting manifold-crafted media, just revert the manifold feature running:
-
-  % dd if=/dev/zero of=grml.iso bs=512 count=1 conv=notrunc
-
-To switch from manifold to isohybrid mode (an alternative approach provided by
-syslinux, used by default for official Grml images) then just execute:
-
-  % isohybrid grml.iso
-
 [[create-a-base-tgz]]
 How do I create a base tar.gz (I386.tar.gz or AMD64.tar.gz or ARM64.tar.gz)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -25,7 +25,6 @@ Depends:
  fai-client (>= 3.4.0),
  isolinux (>= 3:6.03+dfsg-5+deb8u1~),
  jo,
- mksh,
  moreutils,
  mtools,
  pciutils,
