@@ -174,8 +174,6 @@ siz=$((cyls * 16 * 32 * 512))           # size after padding
 dd if=/dev/zero bs=1 count=1 seek=$((siz - 1)) of="$1" 2>/dev/null
 rm -R /remaster/iso
 
-# here is the place where we could apply bootgrub.mksh
-
 echo ""
 echo "ISO generation complete:"
 ls --color -l "$1"
