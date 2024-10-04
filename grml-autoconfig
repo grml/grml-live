@@ -141,8 +141,6 @@ checkvalue $CONFIG_DISTRI && config_distri
 
 checkvalue $CONFIG_BLANKING && config_blanking
 
-checkvalue $CONFIG_DEBOOTSTRAP && config_debootstrap
-
 checkvalue $CONFIG_XSTARTUP && config_x_startup
 
 checkvalue $CONFIG_EASTEREGG && config_easteregg
