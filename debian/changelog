@@ -1,3 +1,19 @@
+grml-live (0.48.0) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [cb7481d] debian/rules: get rid of build files in clean target
+  * [1f57a28] Drop support for all boot methods other than isolinux
+  * Software related changes:
+    - [33fa7a1] drop haveged from GRMLBASE
+
+  [ Darshaka Pathirana ]
+  * [165a1de] Adjust the order of the isolinux f3 help splash
+
+  [ Chris Hofstaedtler ]
+  * [4c93c8d] Drop debian2hd boot option
+
+ -- Michael Prokop <mika@grml.org>  Wed, 09 Oct 2024 08:58:59 +0200
+
 grml-live (0.47.11) unstable; urgency=medium
 
   * [07eb2f2] Fix DHCP situation with grml-full unstable/sid. Thanks to
