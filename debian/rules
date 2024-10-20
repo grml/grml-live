@@ -25,7 +25,6 @@ override_dh_install:
 	dh_install etc/zsh/completion.d/_grml-live usr/share/zsh/vendor-completions
 
 override_dh_clean:
-	rm -f docs/grml-live-db.8 docs/grml-live-db.html docs/grml-live-db.xml
 	rm -f docs/grml-live-remaster.8	docs/grml-live-remaster.html docs/grml-live-remaster.xml
 	rm -f docs/grml-live.8 docs/grml-live.html docs/grml-live.xml
 	rm -f docs/html-stamp docs/man-stamp
