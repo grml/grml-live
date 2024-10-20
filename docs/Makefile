@@ -11,10 +11,9 @@ icons:
 	cp /usr/share/asciidoc/icons/note.png		images/icons/
 	cp /usr/share/asciidoc/icons/tip.png		images/icons/
 
-html-stamp: grml-live.txt grml-live-remaster.txt grml-live-db.txt
+html-stamp: grml-live.txt grml-live-remaster.txt
 	asciidoc -b xhtml11 -a icons -a toc -a numbered grml-live.txt
 	asciidoc -b xhtml11 -a icons grml-live-remaster.txt
-	asciidoc -b xhtml11 -a icons grml-live-db.txt
 	touch html-stamp
 
 doc_man: man-stamp
@@ -24,8 +23,6 @@ man-stamp: grml-live.txt grml-live-remaster.txt
 	xsltproc --novalid /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl grml-live.xml
 	asciidoc -d manpage -b docbook grml-live-remaster.txt
 	xsltproc --novalid /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl grml-live-remaster.xml
-	asciidoc -d manpage -b docbook grml-live-db.txt
-	xsltproc --novalid /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl grml-live-db.xml
 	touch man-stamp
 
 doc_epub: epub-stamp
@@ -52,5 +49,4 @@ clean:
 	rm -rf images/icons
 	rm -f grml-live-remaster.html grml-live-remaster.xml grml-live-remaster.8
 	rm -f grml-live.html grml-live.xml grml-live.8 grml-live.epub grml-live.pdf
-	rm -f grml-live-db.html grml-live-db.xml grml-live-db.8
 	rm -f html-stamp man-stamp epub-stamp pdf-stamp
