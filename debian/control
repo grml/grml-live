@@ -11,7 +11,7 @@ Build-Depends-Indep:
 Standards-Version: 4.6.2
 Homepage: https://grml.org/grml-live/
 Vcs-git: https://github.com/grml/grml-live.git
-Vcs-Browser: https://git.grml.org/?p=grml-live.git
+Vcs-Browser: https://github.com/grml/grml-live
 Origin: Grml
 Bugs: mailto:bugs@grml.org
 
