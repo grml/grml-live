@@ -5,9 +5,9 @@ Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends:
  debhelper (>= 5),
 Standards-Version: 3.9.8
-Homepage: https://git.grml.org/?p=grml-desktop.git
-Vcs-git: git://git.grml.org/grml-desktop.git
-Vcs-Browser: https://git.grml.org/?p=grml-desktop.git
+Homepage: https://github.com/grml/grml-desktop
+Vcs-Git: https://github.com/grml/grml-desktop.git
+Vcs-Browser: https://github.com/grml/grml-desktop
 Origin: Grml
 Bugs: mailto:bugs@grml.org
 
