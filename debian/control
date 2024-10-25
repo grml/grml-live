@@ -5,9 +5,9 @@ Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends:
  debhelper-compat (= 12),
 Standards-Version: 4.5.0
-Homepage: https://git.grml.org/?p=grml-udev-config.git
-Vcs-git: git://git.grml.org/grml-udev-config.git
-Vcs-Browser: https://git.grml.org/?p=grml-udev-config.git
+Homepage: https://github.com/grml/grml-udev-config
+Vcs-Git: https://github.com/grml/grml-udev-config.git
+Vcs-Browser: https://github.com/grml/grml-udev-config
 Origin: Grml
 Bugs: mailto:bugs@grml.org
 
