@@ -28,7 +28,7 @@ $ROOTCMD apt-get update
 
 # Collect *source* package names
 $ROOTCMD dpkg-query -W -f='${Source} ${Package}\n' | sed -e 's/^ //' | awk '{ print $1 }' | sort -u | \
-  chroot "${target}" /bin/bash -c "cd \"${SOURCES_PATH}\" && xargs apt-get --download-only source" 2> "${ERRORS_LOG}"
+  chroot "${target}" /bin/bash -c "cd \"${SOURCES_PATH}\" && xargs --max-args=32 --max-procs=12 apt-get --download-only source" 2> "${ERRORS_LOG}"
 
 if grep -q '^E:' "${ERRORS_LOG}" ; then
   echo "Errors noticed while retrieving sources:" >&2
