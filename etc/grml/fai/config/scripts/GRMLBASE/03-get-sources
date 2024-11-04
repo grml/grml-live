@@ -16,9 +16,11 @@ fi
 set -u
 
 PACKAGE_LIST=$(mktemp)
+SOURCES_PATH=/grml-live/grml_sources/
+SOURCES_ERRORS_LOG="${SOURCES_PATH}"errors.log
 
 bailout() {
-  rm -f "${target}/grml-live/sources/errors.log"
+  rm -f "${target}${SOURCES_ERRORS_LOG}"
   rm -f "$PACKAGE_LIST"
 }
 
@@ -31,7 +33,7 @@ if ! [ -r "${PACKAGE_LIST}" ] ; then
   bailout
   exit 1
 else
-  mkdir -p "${target}"/grml-live/sources
+  mkdir -p "${target}${SOURCES_PATH}"
 
   # needs to be done for each package to get:
   # | Picking 'acpi-support' as source package instead of 'acpi-fakekey'
@@ -39,22 +41,22 @@ else
   # | E: Unable to find a source package for acpi-fakekey
   for package in $(grep -v '^#' ${PACKAGE_LIST}) ; do
     cat << EOT | chroot "$target" /bin/bash
-cd /grml-live/sources
-apt-get --download-only source "$package" 2>>/grml-live/sources/errors.log
+cd "${SOURCES_PATH}"
+apt-get --download-only source "$package" 2>>"${SOURCES_ERRORS_LOG}"
 EOT
   done
 
-  if grep -q '^E:' "${target}/grml-live/sources/errors.log" ; then
+  if grep -q '^E:' "${target}${SOURCES_ERRORS_LOG}" ; then
     echo "Errors noticed while retrieving sources:" >&2
-    cat "${target}/grml-live/sources/errors.log" >&2
+    cat "${target}${SOURCES_ERRORS_LOG}" >&2
     bailout
     exit 1
-  elif grep -q '^W:' "${target}/grml-live/sources/errors.log" ; then
+  elif grep -q '^W:' "${target}${SOURCES_ERRORS_LOG}" ; then
     echo "Warnings noticed while retrieving sources (not failing the build though):"
-    cat "${target}/grml-live/sources/errors.log"
-  elif grep -q '.' "${target}/grml-live/sources/errors.log" ; then
+    cat "${target}${SOURCES_ERRORS_LOG}"
+  elif grep -q '.' "${target}${SOURCES_ERRORS_LOG}" ; then
     echo "Unclassified problems noticed while retrieving sources:" >&2
-    cat "${target}/grml-live/sources/errors.log" >&2
+    cat "${target}${SOURCES_ERRORS_LOG}" >&2
     bailout
     exit 1
   fi
