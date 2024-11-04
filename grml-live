@@ -177,7 +177,6 @@ umount_all() {
      /usr/lib/fai/mkramdisk -u "$(readlink -f ${CHROOT_OUTPUT}/var/lib/dpkg)" >/dev/null 2>&1 || /bin/true
    fi
 
-   umount "${CHROOT_OUTPUT}/grml-live/sources/" 2>/dev/null || /bin/true
    [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
 }
 # }}}
@@ -777,8 +776,7 @@ else
          mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
       fi
 
-      mkdir -p "${OUTPUT}/grml_sources/" "${CHROOT_OUTPUT}/grml-live/sources/"
-      mount --bind "${OUTPUT}/grml_sources/" "${CHROOT_OUTPUT}/grml-live/sources/"
+      mkdir -p "${CHROOT_OUTPUT}/grml-live/grml_sources/"
 
       log "Executed FAI command line:"
       log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY GRML_LIVE_CONFIG=$CONFIGDUMP WAYBACK_DATE=$WAYBACK_DATE fai $VERBOSE -C $GRML_FAI_CONFIG -s file:///$GRML_FAI_CONFIG/config -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
@@ -793,6 +791,9 @@ else
         eerror "Error: critical error while executing fai [exit code ${RC}]. Exiting." ; eend 1
         bailout 1
       fi
+
+      mv "${CHROOT_OUTPUT}/grml-live/grml_sources/" "${OUTPUT}/"
+      rmdir "${CHROOT_OUTPUT}/grml-live"
 
       # provide inform fai about the ISO we build, needs to be provided
       # *after* FAI stage, otherwise FAI skips the debootstrap stage if
