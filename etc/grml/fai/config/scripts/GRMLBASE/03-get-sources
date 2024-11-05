@@ -15,53 +15,36 @@ fi
 
 set -u
 
-PACKAGE_LIST=$(mktemp)
+ERRORS_LOG=$(mktemp)
 SOURCES_PATH=/grml-live/grml_sources/
-SOURCES_ERRORS_LOG="${SOURCES_PATH}"errors.log
 
 bailout() {
-  rm -f "${target}${SOURCES_ERRORS_LOG}"
-  rm -f "$PACKAGE_LIST"
+  rm -f "$ERRORS_LOG"
 }
+
+mkdir -p "${target}${SOURCES_PATH}"
 
 $ROOTCMD apt-get update
 
-$ROOTCMD dpkg-query -W -f='${Package}\n' > "${PACKAGE_LIST}"
+# Collect *source* package names
+$ROOTCMD dpkg-query -W -f='${Source} ${Package}\n' | sed -e 's/^ //' | awk '{ print $1 }' | sort -u | \
+  chroot "${target}" /bin/bash -c "cd \"${SOURCES_PATH}\" && xargs --max-args=32 --max-procs=12 apt-get --download-only source" 2> "${ERRORS_LOG}"
 
-if ! [ -r "${PACKAGE_LIST}" ] ; then
-  echo "Can not read ${PACKAGE_LIST}, can not download source packages as requested." >&2
+if grep -q '^E:' "${ERRORS_LOG}" ; then
+  echo "Errors noticed while retrieving sources:" >&2
+  cat "${ERRORS_LOG}" >&2
   bailout
   exit 1
-else
-  mkdir -p "${target}${SOURCES_PATH}"
-
-  # needs to be done for each package to get:
-  # | Picking 'acpi-support' as source package instead of 'acpi-fakekey'
-  # instead of:
-  # | E: Unable to find a source package for acpi-fakekey
-  for package in $(grep -v '^#' ${PACKAGE_LIST}) ; do
-    cat << EOT | chroot "$target" /bin/bash
-cd "${SOURCES_PATH}"
-apt-get --download-only source "$package" 2>>"${SOURCES_ERRORS_LOG}"
-EOT
-  done
-
-  if grep -q '^E:' "${target}${SOURCES_ERRORS_LOG}" ; then
-    echo "Errors noticed while retrieving sources:" >&2
-    cat "${target}${SOURCES_ERRORS_LOG}" >&2
-    bailout
-    exit 1
-  elif grep -q '^W:' "${target}${SOURCES_ERRORS_LOG}" ; then
-    echo "Warnings noticed while retrieving sources (not failing the build though):"
-    cat "${target}${SOURCES_ERRORS_LOG}"
-  elif grep -q '.' "${target}${SOURCES_ERRORS_LOG}" ; then
-    echo "Unclassified problems noticed while retrieving sources:" >&2
-    cat "${target}${SOURCES_ERRORS_LOG}" >&2
-    bailout
-    exit 1
-  fi
-
+elif grep -q '^W:' "${ERRORS_LOG}" ; then
+  echo "Warnings noticed while retrieving sources (not failing the build though):"
+  cat "${ERRORS_LOG}"
+elif grep -q '.' "${ERRORS_LOG}" ; then
+  echo "Unclassified problems noticed while retrieving sources:" >&2
+  cat "${ERRORS_LOG}" >&2
+  bailout
+  exit 1
 fi
+
 
 bailout
 
