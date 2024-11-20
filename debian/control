@@ -1,15 +1,16 @@
 Source: grml-desktop
 Section: grml
-Priority: extra
+Priority: optional
 Maintainer: Michael Prokop <mika@grml.org>
 Build-Depends:
- debhelper (>= 5),
-Standards-Version: 3.9.8
+ debhelper (>= 10~),
+Standards-Version: 4.7.0
 Homepage: https://github.com/grml/grml-desktop
 Vcs-Git: https://github.com/grml/grml-desktop.git
 Vcs-Browser: https://github.com/grml/grml-desktop
 Origin: Grml
 Bugs: mailto:bugs@grml.org
+Rules-Requires-Root: no
 
 Package: grml-desktop
 Architecture: all
