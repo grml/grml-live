@@ -224,6 +224,9 @@ zip
 apg
 pwgen
 
+# privacy tools
+scdaemon
+
 # popular VCS to pull config from
 git
 
