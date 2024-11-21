@@ -36,7 +36,7 @@ add mod4 = Multi_key
 ! keycode 176 = XF86AudioMedia
 ! keycode 160 = XF86AudioMute
 
-! Assign Compose to "Menu"-Key (press menu-key and ' followed by letter - e.g. menu ' a => ·)
+! Assign Compose to "Menu"-Key (press menu-key and ' followed by letter - e.g. menu ' a => √°)
 ! keycode 117 = Multi_key
 
 ! keysym a = a A adiaeresis Adiaeresis
@@ -83,35 +83,35 @@ add mod4 = Multi_key
 !###############################################################################
 ! Einige Beispiele zur Compose-Taste: (Beispiel meint, wenn
 ! man man Compose + x + y tippt, erzeugt man dieses Zeichen,
-! diese Bespiele gehˆren nat¸rlich nicht in die
+! diese Bespiele geh√∂ren nat√ºrlich nicht in die
 ! .xmodmap-Datei):
 !
-! Compose  + """  +  "a"  = ‰
-! Compose  + """  +  "e"  = §
-! Compose  + """  +  "i"  = Ô
-! Compose  + """  +  "o"  = ˆ
-! Compose  + """  +  "u"  = ¸
-! Compose  + """  +  "A"  = ƒ
+! Compose  + """  +  "a"  = √§
+! Compose  + """  +  "e"  = ¬§
+! Compose  + """  +  "i"  = √Ø
+! Compose  + """  +  "o"  = √∂
+! Compose  + """  +  "u"  = √º
+! Compose  + """  +  "A"  = √Ñ
 ! ...
-! Compose  + "~"  +  "n"  = Ò
-! Compose  + "a"  +  "a" = Â
-! Compose  + "a"  +  "e" = Ê
+! Compose  + "~"  +  "n"  = √±
+! Compose  + "a"  +  "a" = √•
+! Compose  + "a"  +  "e" = √¶
 ! Compose  + "A"  +  "T" = @
-! Compose  + "!"  +  "!" = °
-! Compose  + "l"  +  "-" = £
-! Compose  + "y"  +  "=" = •
-! Compose  + "c"  +  "o" = ©
-! Compose  + "a"  +  "_" = ™
-! Compose  + "_"  +  "o" = ∫
-! Compose  + "<"  +  "<" = ´
-! Compose  + "0"  +  "*" = ∞
-! Compose  + "u"  +  "/" = µ
+! Compose  + "!"  +  "!" = ¬°
+! Compose  + "l"  +  "-" = ¬£
+! Compose  + "y"  +  "=" = ¬•
+! Compose  + "c"  +  "o" = ¬©
+! Compose  + "a"  +  "_" = ¬™
+! Compose  + "_"  +  "o" = ¬∫
+! Compose  + "<"  +  "<" = ¬´
+! Compose  + "0"  +  "*" = ¬∞
+! Compose  + "u"  +  "/" = ¬µ
 ! Compose  + "|"  +  "|" =
-! Compose  + " "  +  " " =   ("Gesch¸tztes Leerzeichen")
-! Compose  + "("  +  "r" = Æ
-! Compose  + "_"  +  "_" = Ø
-! Compose  + "-"  +  ":" = ˜
-! Compose  + "x"  +  "x" = ◊
+! Compose  + " "  +  " " =   ("Gesch√ºtztes Leerzeichen")
+! Compose  + "("  +  "r" = ¬Æ
+! Compose  + "_"  +  "_" = ¬Ø
+! Compose  + "-"  +  ":" = √∑
+! Compose  + "x"  +  "x" = √ó
 ! Compose  + """  +  """ =
 !###############################################################################
 
@@ -394,99 +394,99 @@ keycode 255 =
 !Zeichen Nr.   Zeichen   keysym        Compose   PostScript    HTML-Code
 !160 0xa0                nobreakspace  spc spc                 &nbsp;
 !160 0xa0                nobreakspace  spc spc                 &nbsp;
-!161 0xa1        °       exclamdown      ! !
-!162 0xa2        ¢       cent            C /
-!163 0xa3        £       sterling        L -
-!164 0xa4        §       currency        o x     /currency
-!165 0xa5        •       yen             Y -
-!166 0xa6        ¶       brokenbar       | |     /brokenbar
-!167 0xa7        ß       section         S O     /section
-!168 0xa8        ®       diaeresis       " "     /dieresis
-!169 0xa9        ©       copyright       C O     /copyright     &copy;   ©
-!170 0xaa        ™       ordfeminine     - A     /ordfeminine
-!171 0xab        ´       guillemotleft   < <     /guillemotleft
-!172 0xac        ¨       notsign         - |     /logicalnot
+!161 0xa1        ¬°       exclamdown      ! !
+!162 0xa2        ¬¢       cent            C /
+!163 0xa3        ¬£       sterling        L -
+!164 0xa4        ¬§       currency        o x     /currency
+!165 0xa5        ¬•       yen             Y -
+!166 0xa6        ¬¶       brokenbar       | |     /brokenbar
+!167 0xa7        ¬ß       section         S O     /section
+!168 0xa8        ¬®       diaeresis       " "     /dieresis
+!169 0xa9        ¬©       copyright       C O     /copyright     &copy;   ¬©
+!170 0xaa        ¬™       ordfeminine     - A     /ordfeminine
+!171 0xab        ¬´       guillemotleft   < <     /guillemotleft
+!172 0xac        ¬¨       notsign         - |     /logicalnot
 !173 0xad               hyphen          - -     /hyphen
-!174 0xae        Æ       registered      R O     /registered    &reg;    Æ
-!175 0xaf        Ø       macron          ^ -     /macron
-!176 0xb0        ∞       degree          ^ *     /degree        &deg;    ∞
-!177 0xb1        ±       plusminus       + -     /plusminus
-!178 0xb2        ≤       twosuperior     ^ 2     /twosuperior
-!179 0xb3        ≥       threesuperior   ^ 3     /threesuperior
-!180 0xb4        ¥       acute           \ \     /acute
-!181 0xb5        µ       mu              / u     /mu
-!182 0xb6        ∂       paragraph       P !     /paragraph
-!183 0xb7        ∑       periodcentered  ^ .     /periodcentered
-!184 0xb8        ∏       cedilla         , ,     /cedilla
-!185 0xb9        π       onesuperior     ^ 1     /onesuperior
-!186 0xba        ∫       masculine       _ O     /ordmasculine
-!187 0xbb        ª       guillemotright  > >     /guillemotright
-!188 0xbc        º       onequarter      1 4     /onequarter
-!189 0xbd        Ω       onehalf         1 2     /onehalf
-!190 0xbe        æ       threequarters   3 4     /threequarters
-!191 0xbf        ø       questiondown    ? ?     /questiondown
-!192 0xc0        ¿       Agrave          A `     /Agrave        &Agrave; ¿
-!193 0xc1        ¡       Aacute          A '     /Aacute        &Aacute; ¡
-!194 0xc2        ¬       Acircumflex     A ^     /Acircumflex   &Acirc;  ¬
-!195 0xc3        √       Atilde          A ~     /Atilde        &Atilde; √
-!196 0xc4        ƒ       Adiaeresis      A "     /Adieresis     &Auml;   ƒ
-!197 0xc5        ≈       Aring           A *     /Aring         &Aring;  ≈
-!198 0xc6        ∆       AE              A E     /AE            &AElig;  ∆
-!199 0xc7        «       Ccedilla        C ,     /Ccedilla      &Ccedil; «
-!200 0xc8        »       Egrave          E `     /Egrave        &Egrave; »
-!201 0xc9        …       Eacute          E '     /Eacute        &Eacute; …
-!202 0xca                Ecircumflex     E ^     /Ecircumflex   &Ecirc;   
-!203 0xcb        À       Ediaeresis      E "     /Edieresis     &Euml;   À
-!204 0xcc        Ã       Igrave          I `     /Igrave        &Igrave; Ã
-!205 0xcd        Õ       Iacute          I '     /Iacute        &Iacute; Õ
-!206 0xce        Œ       Icircumflex     I ^     /Icircumflex   &Icirc;  Œ
-!207 0xcf        œ       Idiaeresis      I "     /Idieresis     &Iuml;   œ
-!208 0xd0        –       ETH             D -     /Eth
-!209 0xd1        —       Ntilde          N ~     /Ntilde        &Ntilde; —
-!210 0xd2        “       Ograve          O `     /Ograve        &Ograve; “
-!211 0xd3        ”       Oacute          O '     /Oacute        &Oacute; ”
-!212 0xd4        ‘       Ocircumflex     O ^     /Ocircumflex   &Ocirc;  ‘
-!213 0xd5        ’       Otilde          O ~     /Otilde        &Otilde; ’
-!214 0xd6        ÷       Odiaeresis      O "     /Odieresis     &Ouml;   ÷
-!215 0xd7        ◊       multiply        x x     /multiply
-!216 0xd8        ÿ       Ooblique        O /     /Oslash        &Oslash; ÿ
-!217 0xd9        Ÿ       Ugrave          U `     /Ugrave        &Ugrave; Ÿ
-!218 0xda        ⁄       Uacute          U '     /Uacute        &Uacute; ⁄
-!219 0xdb        €       Ucircumflex     U ^     /Ucircumflex   &Ucirc;  €
-!220 0xdc        ‹       Udiaeresis      U "     /Udieresis     &Uuml;   ‹
-!221 0xdd        ›       Yacute          Y '     /Yacute        &Yacute; ›
-!222 0xde        ﬁ       THORN           P |     /Thorn
-!223 0xdf        ﬂ       ssharp          s s     /germandbls    &szlig;  ﬂ
-!224 0xe0        ‡       agrave          a `     /agrave        &agrave; ‡
-!225 0xe1        ·       aacute          a '     /aacute        &aacute; ·
-!226 0xe2        ‚       acircumflex     a ^     /acircumflex   &acirc;  ‚
-!227 0xe3        „       atilde          a ~     /atilde        &atilde; „
-!228 0xe4        ‰       adiaeresis      a "     /adieresis     &auml;   ‰
-!229 0xe5        Â       aring           a *     /aring         &aring;  Â
-!230 0xe6        Ê       ae              a e     /ae            &aelig;  Ê
-!231 0xe7        Á       ccedilla        c ,     /ccedilla      &ccedil; Á
-!232 0xe8        Ë       egrave          e `     /egrave        &egrave; Ë
-!233 0xe9        È       eacute          e '     /eacute        &eacute; È
-!234 0xea        Í       ecircumflex     e ^     /ecircumflex   &ecirc;  Í
-!235 0xeb        Î       ediaeresis      e "     /edieresis     &euml;   Î
-!236 0xec        Ï       igrave          i `     /igrave        &igrave; Ï
-!237 0xed        Ì       iacute          i '     /iacute        &iacute; Ì
-!238 0xee        Ó       icircumflex     i ^     /icircumflex   &icirc;  Ó
-!239 0xef        Ô       idiaeresis      i "     /idieresis     &iuml;   Ô
-!240 0xf0               eth             d -     /eth
-!241 0xf1        Ò       ntilde          n ~     /ntilde        &ntilde; Ò
-!242 0xf2        Ú       ograve          o `     /ograve        &ograve; Ú
-!243 0xf3        Û       oacute          o '     /oacute        &oacute; Û
-!244 0xf4        Ù       ocircumflex     o ^     /ocircumflex   &ocirc;  Ù
-!245 0xf5        ı       otilde          o ~     /otilde        &otilde; ı
-!246 0xf6        ˆ       odiaeresis      o "     /odieresis     &ouml;   ˆ
-!247 0xf7        ˜       division        - :     /divide
-!248 0xf8        ¯       oslash          o /     /oslash        &oslash; ¯
-!249 0xf9        ˘       ugrave          u `     /ugrave        &ugrave; ˘
-!250 0xfa        ˙       uacute          u '     /uacute        &uacute; ˙
-!251 0xfb        ˚       ucircumflex     u ^     /ucircumflex   &ucirc;  ˚
-!252 0xfc        ¸       udiaeresis      u "     /udieresis     &uuml;   ¸
-!253 0xfd        ˝       yacute          y '     /yacute        &yacute; ˝
-!254 0xfe        ˛       thorn           p |     /thorn
-!255 0xff        ˇ       ydiaeresis      y "     /ydieresis     &yuml;   ˇ
+!174 0xae        ¬Æ       registered      R O     /registered    &reg;    ¬Æ
+!175 0xaf        ¬Ø       macron          ^ -     /macron
+!176 0xb0        ¬∞       degree          ^ *     /degree        &deg;    ¬∞
+!177 0xb1        ¬±       plusminus       + -     /plusminus
+!178 0xb2        ¬≤       twosuperior     ^ 2     /twosuperior
+!179 0xb3        ¬≥       threesuperior   ^ 3     /threesuperior
+!180 0xb4        ¬¥       acute           \ \     /acute
+!181 0xb5        ¬µ       mu              / u     /mu
+!182 0xb6        ¬∂       paragraph       P !     /paragraph
+!183 0xb7        ¬∑       periodcentered  ^ .     /periodcentered
+!184 0xb8        ¬∏       cedilla         , ,     /cedilla
+!185 0xb9        ¬π       onesuperior     ^ 1     /onesuperior
+!186 0xba        ¬∫       masculine       _ O     /ordmasculine
+!187 0xbb        ¬ª       guillemotright  > >     /guillemotright
+!188 0xbc        ¬º       onequarter      1 4     /onequarter
+!189 0xbd        ¬Ω       onehalf         1 2     /onehalf
+!190 0xbe        ¬æ       threequarters   3 4     /threequarters
+!191 0xbf        ¬ø       questiondown    ? ?     /questiondown
+!192 0xc0        √Ä       Agrave          A `     /Agrave        &Agrave; √Ä
+!193 0xc1        √Å       Aacute          A '     /Aacute        &Aacute; √Å
+!194 0xc2        √Ç       Acircumflex     A ^     /Acircumflex   &Acirc;  √Ç
+!195 0xc3        √É       Atilde          A ~     /Atilde        &Atilde; √É
+!196 0xc4        √Ñ       Adiaeresis      A "     /Adieresis     &Auml;   √Ñ
+!197 0xc5        √Ö       Aring           A *     /Aring         &Aring;  √Ö
+!198 0xc6        √Ü       AE              A E     /AE            &AElig;  √Ü
+!199 0xc7        √á       Ccedilla        C ,     /Ccedilla      &Ccedil; √á
+!200 0xc8        √à       Egrave          E `     /Egrave        &Egrave; √à
+!201 0xc9        √â       Eacute          E '     /Eacute        &Eacute; √â
+!202 0xca        √ä       Ecircumflex     E ^     /Ecircumflex   &Ecirc;  √ä
+!203 0xcb        √ã       Ediaeresis      E "     /Edieresis     &Euml;   √ã
+!204 0xcc        √å       Igrave          I `     /Igrave        &Igrave; √å
+!205 0xcd        √ç       Iacute          I '     /Iacute        &Iacute; √ç
+!206 0xce        √é       Icircumflex     I ^     /Icircumflex   &Icirc;  √é
+!207 0xcf        √è       Idiaeresis      I "     /Idieresis     &Iuml;   √è
+!208 0xd0        √ê       ETH             D -     /Eth
+!209 0xd1        √ë       Ntilde          N ~     /Ntilde        &Ntilde; √ë
+!210 0xd2        √í       Ograve          O `     /Ograve        &Ograve; √í
+!211 0xd3        √ì       Oacute          O '     /Oacute        &Oacute; √ì
+!212 0xd4        √î       Ocircumflex     O ^     /Ocircumflex   &Ocirc;  √î
+!213 0xd5        √ï       Otilde          O ~     /Otilde        &Otilde; √ï
+!214 0xd6        √ñ       Odiaeresis      O "     /Odieresis     &Ouml;   √ñ
+!215 0xd7        √ó       multiply        x x     /multiply
+!216 0xd8        √ò       Ooblique        O /     /Oslash        &Oslash; √ò
+!217 0xd9        √ô       Ugrave          U `     /Ugrave        &Ugrave; √ô
+!218 0xda        √ö       Uacute          U '     /Uacute        &Uacute; √ö
+!219 0xdb        √õ       Ucircumflex     U ^     /Ucircumflex   &Ucirc;  √õ
+!220 0xdc        √ú       Udiaeresis      U "     /Udieresis     &Uuml;   √ú
+!221 0xdd        √ù       Yacute          Y '     /Yacute        &Yacute; √ù
+!222 0xde        √û       THORN           P |     /Thorn
+!223 0xdf        √ü       ssharp          s s     /germandbls    &szlig;  √ü
+!224 0xe0        √†       agrave          a `     /agrave        &agrave; √†
+!225 0xe1        √°       aacute          a '     /aacute        &aacute; √°
+!226 0xe2        √¢       acircumflex     a ^     /acircumflex   &acirc;  √¢
+!227 0xe3        √£       atilde          a ~     /atilde        &atilde; √£
+!228 0xe4        √§       adiaeresis      a "     /adieresis     &auml;   √§
+!229 0xe5        √•       aring           a *     /aring         &aring;  √•
+!230 0xe6        √¶       ae              a e     /ae            &aelig;  √¶
+!231 0xe7        √ß       ccedilla        c ,     /ccedilla      &ccedil; √ß
+!232 0xe8        √®       egrave          e `     /egrave        &egrave; √®
+!233 0xe9        √©       eacute          e '     /eacute        &eacute; √©
+!234 0xea        √™       ecircumflex     e ^     /ecircumflex   &ecirc;  √™
+!235 0xeb        √´       ediaeresis      e "     /edieresis     &euml;   √´
+!236 0xec        √¨       igrave          i `     /igrave        &igrave; √¨
+!237 0xed        √≠       iacute          i '     /iacute        &iacute; √≠
+!238 0xee        √Æ       icircumflex     i ^     /icircumflex   &icirc;  √Æ
+!239 0xef        √Ø       idiaeresis      i "     /idieresis     &iuml;   √Ø
+!240 0xf0        √∞       eth             d -     /eth
+!241 0xf1        √±       ntilde          n ~     /ntilde        &ntilde; √±
+!242 0xf2        √≤       ograve          o `     /ograve        &ograve; √≤
+!243 0xf3        √≥       oacute          o '     /oacute        &oacute; √≥
+!244 0xf4        √¥       ocircumflex     o ^     /ocircumflex   &ocirc;  √¥
+!245 0xf5        √µ       otilde          o ~     /otilde        &otilde; √µ
+!246 0xf6        √∂       odiaeresis      o "     /odieresis     &ouml;   √∂
+!247 0xf7        √∑       division        - :     /divide
+!248 0xf8        √∏       oslash          o /     /oslash        &oslash; √∏
+!249 0xf9        √π       ugrave          u `     /ugrave        &ugrave; √π
+!250 0xfa        √∫       uacute          u '     /uacute        &uacute; √∫
+!251 0xfb        √ª       ucircumflex     u ^     /ucircumflex   &ucirc;  √ª
+!252 0xfc        √º       udiaeresis      u "     /udieresis     &uuml;   √º
+!253 0xfd        √Ω       yacute          y '     /yacute        &yacute; √Ω
+!254 0xfe        √æ       thorn           p |     /thorn
+!255 0xff        √ø       ydiaeresis      y "     /ydieresis     &yuml;   √ø
 !# END OF FILE #################################################################
