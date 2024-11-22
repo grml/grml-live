@@ -13,7 +13,8 @@ set -e
 # and can't skip instsoft.GRMLBASE we have to make sure
 # we exit here as well
 if [ -n "$BUILD_ONLY" ] ; then
-   "Exiting hooks/instsoft.GRMLBASE as BUILD_ONLY environment is set."
+   echo "Exiting hooks/instsoft.GRMLBASE as BUILD_ONLY environment is set."
+   echo "W: This place was reached because updatebase.GRMLBASE failed."
    exit 0
 fi
 
