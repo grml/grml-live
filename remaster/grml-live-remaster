@@ -49,16 +49,12 @@ if ! isgrmlcd ; then
 fi
 
 # make sure we have what we need {{{
-if check4progs mkisofs >/dev/null 2>&1 ; then
-  MKISO=mkisofs
-fi
-
-if check4progs genisoimage >/dev/null 2>&1 ; then
-  MKISO=genisoimage
+if check4progs xorriso >/dev/null 2>&1 ; then
+  MKISO='xorriso -as mkisofs'
 fi
 
 if [ -z "$MKISO" ] ; then
-  echo "Error: neither mkisofs nor genisoimage available. Exiting." >&2
+  echo "Error: xorriso not installed. Exiting." >&2
   exit 1
 fi
 
@@ -69,7 +65,7 @@ if [ -z "$MKSQUASHFS" ] ; then
   if which mksquashfs >/dev/null 2>&1 ; then
     MKSQUASHFS=mksquashfs
   else
-    echo "Error: mksquashfs is not available. Exiting." >&2
+    echo "Error: mksquashfs not installed. Exiting." >&2
     exit 1
   fi
 fi
