@@ -2,7 +2,7 @@ Source: grml-etc
 Section: grml
 Priority: optional
 Maintainer: Michael Prokop <mika@grml.org>
-Build-Depends: debhelper (>= 10~)
+Build-Depends: debhelper-compat (= 13)
 Standards-Version: 4.7.0
 Homepage: https://github.com/grml/grml-etc
 Vcs-Git: https://github.com/grml/grml-etc.git
