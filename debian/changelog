@@ -1,3 +1,17 @@
+grml-etc (1.9.1) grml-testing; urgency=medium
+
+  [ Chris Hofstaedtler ]
+  * [419729f] debian: normalize Vcs-Git and Vcs-Browser
+
+  [ Michael Prokop ]
+  * [65d9471] debian: Bump Standards-Version to 4.7.0
+  * [0479e29] Update lintian overrides for more recent lintian versions
+  * [a1044fb] Drop debian/compat and Build-Depend on debhelper-compat
+    instead
+  * [f5900a9] Ship debian/gbp.conf for gbp usage
+
+ -- Michael Prokop <mika@grml.org>  Fri, 22 Nov 2024 12:32:03 +0100
+
 grml-etc (1.9.0) grml-testing; urgency=medium
 
   * [2ae7aa3] etc/skel/.irssi/config: update servers/chatnets/channels
