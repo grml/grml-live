@@ -21,15 +21,10 @@ fi
 
 set -e # exit on any error
 
-if [ -d /run/live/medium/ ] ; then # since Dec 2018
-  LIVE_PATH_MAIN='/run/live/medium/'
-  LIVE_PATH_BOOT='/run/live/medium/boot/'
-else # until Dec 2018
-  LIVE_PATH_MAIN='/lib/live/mount/medium/'
-  LIVE_PATH_BOOT='/lib/live/mount/medium/boot/'
-fi
+LIVE_PATH_MAIN='/run/live/medium/'
+LIVE_PATH_BOOT='/run/live/medium/boot/'
 
-VERSION='0.0.4'
+VERSION='0.0.5'
 GRML_LIVE_EDITOR=${VISUAL:-${EDITOR:-vi}}
 
 # source core functions {{{
