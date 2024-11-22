@@ -1,3 +1,14 @@
+grml-udev-config (0.6.2) unstable; urgency=medium
+
+  [ Chris Hofstaedtler ]
+  * [06edadf] debian: update Vcs-Git and Vcs-Browser
+
+  [ Michael Prokop ]
+  * [ef81bbb] debian: Bump Standards-Version to 4.7.0
+  * [188ef7c] Ship debian/gbp.conf for gbp usage
+
+ -- Michael Prokop <mika@grml.org>  Fri, 22 Nov 2024 17:47:49 +0100
+
 grml-udev-config (0.6.1) unstable; urgency=medium
 
   * [5cea7e1] grml-udev-rebuildfstab: fix typo in checking for
