@@ -637,23 +637,21 @@ extract_iso() {
 if [ -n "$EXTRACT_ISO_NAME" ]; then
   log "Unpacking ISO from ${EXTRACT_ISO_NAME}"
   einfo "Unpacking ISO from ${EXTRACT_ISO_NAME}"
-  local mountpoint=$(mktemp -d)
+  local tempdir=$(mktemp -d)
   local rc=0
-  mount -o loop "${EXTRACT_ISO_NAME}" "$mountpoint" ; rc=$?
+  mkdir -p "${tempdir}/live/"
+  osirrox -indev "${EXTRACT_ISO_NAME}" -extract live "${tempdir}/live/" ; rc=$?
   if [ "$rc" != 0 ]; then
-    rmdir "$mountpoint"
-    log "mount failed"
-    eerror "mount failed"
+    rm -rf "$tempdir"
+    log "osirrox failed"
+    eerror "osirrox failed"
     eend 1
     bailout 1
   fi
 
-  if ls "${mountpoint}"/live/*/*.squashfs 2>/dev/null | grep -q . ; then # ISOs >=2011.12
-    log "Using ${mountpoint}/live/*/*.squashfs for unsquashfs"
-    unsquashfs -d "${CHROOT_OUTPUT}" "${mountpoint}"/live/*/*.squashfs ; rc=$?
-  elif ls "${mountpoint}"/live/*.squashfs 2>/dev/null | grep -q . ; then # ISOs before 2011.12
-    log "Using ${mountpoint}/live/*.squashfs for unsquashfs"
-    unsquashfs -d "${CHROOT_OUTPUT}" "${mountpoint}"/live/*.squashfs ; rc=$?
+  if ls "${tempdir}"/live/*/*.squashfs 2>/dev/null | grep -q . ; then
+    log "Using ${tempdir}/live/*/*.squashfs for unsquashfs"
+    unsquashfs -d "${CHROOT_OUTPUT}" "${tempdir}"/live/*/*.squashfs ; rc=$?
   else
     log "Error: Could not find any *.squashfs files on the ISO"
     eerror "Error: Could not find any *.squashfs files on the ISO"
@@ -661,8 +659,7 @@ if [ -n "$EXTRACT_ISO_NAME" ]; then
     bailout 1
   fi
 
-  umount "$mountpoint"
-  rmdir "$mountpoint"
+  rm -rf "$tempdir"
   if [ "$rc" != 0 ]; then
     log "unsquashfs failed"
     eerror "unsquashfs failed"
