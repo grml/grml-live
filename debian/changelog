@@ -1,3 +1,24 @@
+grml-live (0.49.0) unstable; urgency=medium
+
+  [ Chris Hofstaedtler ]
+  * [e1acaf0] Remove grml-live-db and support for writing into it
+  * [4dcc9a0] CI: add job to build debian package
+  * [e25a5ee] debian: update Vcs-Git and Vcs-Browser
+  * [87524f9] SOURCES: move directory instead of bind-mounting it in
+  * [93399d3] get-sources: resolve source package names ourselves
+  * [5db208d] get-sources: run apt-get source parallelized
+  * [c1bc729] Add .github/FUNDING.yml
+
+  [ Michael Prokop ]
+  * [009bb78] d/control: bump Standards-Version to 4.7.0
+  * [374f949] debian: refresh lintian overrides
+  * [04be202] Secure Boot: update grub and shim binaries. Thanks to pasja
+  * [bca8c53] Ship debian/gbp.conf for gbp usage
+  * Software related changes:
+    - [7c890b4] add scdaemon to GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Fri, 22 Nov 2024 18:07:55 +0100
+
 grml-live (0.48.0) unstable; urgency=medium
 
   [ Michael Prokop ]
