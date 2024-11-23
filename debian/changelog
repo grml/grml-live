@@ -1,3 +1,18 @@
+grml-live (0.49.1) unstable; urgency=medium
+
+  [ Chris Hofstaedtler ]
+  * [8812d99] grml-live-remaster: always use xorriso
+  * [b8458a1] grml-live-remaster: drop support for ISOs < Dec 2018
+  * [0736c3c] grml-live: drop support for mkisofs/genisoimage
+  * [36911b7] instsoft.GRMLBASE: fix error handler
+  * [971bd57] updatebase.GRMLBASE: allow all mounts to fail
+  * [7a56ca0] grml-live: use xorriso instead of mount -o loop in -e mode
+  * [2822a28] Import CI build drivers
+  * Software related changes:
+    - [fab9fdf] GRML_FULL: stop installing genisoimage
+
+ -- Michael Prokop <mika@grml.org>  Sat, 23 Nov 2024 13:53:01 +0100
+
 grml-live (0.49.0) unstable; urgency=medium
 
   [ Chris Hofstaedtler ]
