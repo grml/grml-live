@@ -499,6 +499,13 @@ if [ -n "$ZERO_LOGFILE" ] ; then
 fi
 # }}}
 
+# Automatically enable NO_ADDONS=1 if addons are not present {{{
+if [ -z "${NO_ADDONS:-}" ] && [ ! -r "$TEMPLATE_DIRECTORY"/boot/addons ] ; then
+  ewarn "Boot addons not found, setting NO_ADDONS=1. (Consider installing package grml-live-addons)" ; eend 0
+  NO_ADDONS=1
+fi
+# }}}
+
 # Show configuration and ask user whether to continue {{{
 echo
 echo "${PN} [${GRML_LIVE_VERSION}] Build Configuration:"
@@ -538,6 +545,7 @@ else
     [ -n "$SKIP_MKSQUASHFS" ]     && echo "  Skipping creation of SQUASHFS file."
     [ -n "$SKIP_NETBOOT" ]        && echo "  Skipping creation of NETBOOT package."
     [ -n "$SKIP_MKISOFS" ]        && echo "  Skipping creation of ISO file."
+    [ -n "$NO_ADDONS" ]           && echo "  Skipping boot addons."
     [ -n "$BUILD_ONLY" ]          && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
     [ -n "$BUILD_DIRTY" ]         && echo "  Executing BUILD_DIRTY to leave chroot untouched."
 fi
@@ -1159,7 +1167,6 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
       ewarn "No EFI boot files found, skipping." ; eend 0
     fi
 
-    [ -n "$TEMPLATE_DIRECTORY" ] || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
     if ! [ -d "${TEMPLATE_DIRECTORY}"/boot ] ; then
       log    "Error: ${TEMPLATE_DIRECTORY}/boot does not exist. Exiting."
       eerror "Error: ${TEMPLATE_DIRECTORY}/boot does not exist. Exiting." ; eend 1
@@ -1187,87 +1194,81 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
 
     if [ -n "$NO_ADDONS" ] ; then
       rm -f "$BUILD_OUTPUT"/boot/grub/addons.cfg
-      log   "Skipping installation of boot addons as requested via \$NO_ADDONS."
-      einfo "Skipping installation of boot addons as requested via \$NO_ADDONS."; eend 0
+      log   "Skipping installation of boot addons as \$NO_ADDONS=${NO_ADDONS}."
+      einfo "Skipping installation of boot addons as \$NO_ADDONS=${NO_ADDONS}."; eend 0
     else
-      if ! [ -r "$TEMPLATE_DIRECTORY"/boot/addons ] ; then
-        log   "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)"
-        ewarn "Boot addons not found, skipping therefore. (Consider installing package grml-live-addons)" ; eend 0
-      else
-        log   "Installing boot addons."
-        einfo "Installing boot addons."
+      log   "Installing boot addons."
+      einfo "Installing boot addons."
 
-        # copy addons from system packages or grml-live-addons
-        copy_addon_file ipxe.lkrn /usr/lib/ipxe addons
-        copy_addon_file ipxe.efi /usr/lib/ipxe addons
-        copy_addon_file pci.ids /usr/share/misc addons
+      # copy addons from system packages or grml-live-addons
+      copy_addon_file ipxe.lkrn /usr/lib/ipxe addons
+      copy_addon_file ipxe.efi /usr/lib/ipxe addons
+      copy_addon_file pci.ids /usr/share/misc addons
 
-        # memtest86+ >=6.00-1
+      # memtest86+ >=6.00-1
+      if [[ "$ARCH" == "amd64" ]] ; then
+        copy_addon_file memtest86+x64.efi /boot addons
+      elif [[ "$ARCH" == "i386" ]] ; then
+        copy_addon_file memtest86+ia32.efi /boot addons
+      fi
+
+      # provide memtest86+ >=6.00-1 files as "memtest" file
+      # for BIOS boot in isolinux/syslinux
+      if ! [ -r "${BUILD_OUTPUT}/boot/addons/memtest" ] ; then
         if [[ "$ARCH" == "amd64" ]] ; then
-          copy_addon_file memtest86+x64.efi /boot addons
-        elif [[ "$ARCH" == "i386" ]] ; then
-          copy_addon_file memtest86+ia32.efi /boot addons
-        fi
-
-        # provide memtest86+ >=6.00-1 files as "memtest" file
-        # for BIOS boot in isolinux/syslinux
-        if ! [ -r "${BUILD_OUTPUT}/boot/addons/memtest" ] ; then
-          if [[ "$ARCH" == "amd64" ]] ; then
-            copy_addon_file memtest86+x64.bin /boot addons &&
-            # make memtest filename FAT16/8.3 compatible
-            mv "${BUILD_OUTPUT}/boot/addons/memtest86+x64.bin" \
-               "${BUILD_OUTPUT}/boot/addons/memtest"
-          elif [[ "$ARCH" == "i386" ]] ; then
-            copy_addon_file memtest86+ia32.bin /boot addons &&
-            # make memtest filename FAT16/8.3 compatible
-            mv "${BUILD_OUTPUT}/boot/addons/memtest86+ia32.bin" \
-               "${BUILD_OUTPUT}/boot/addons/memtest"
-          fi
-        fi
-
-        # fallback: if we still don't have /boot/addons/memtest available, we
-        # might have an older memtest86+ version (<=5.01-3.1) which ships
-        # file "memtest86+.bin" instead
-        if ! [ -r "${BUILD_OUTPUT}/boot/addons/memtest" ] ; then
-          copy_addon_file memtest86+.bin /boot addons &&
+          copy_addon_file memtest86+x64.bin /boot addons &&
           # make memtest filename FAT16/8.3 compatible
-          mv "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" \
+          mv "${BUILD_OUTPUT}/boot/addons/memtest86+x64.bin" \
+             "${BUILD_OUTPUT}/boot/addons/memtest"
+        elif [[ "$ARCH" == "i386" ]] ; then
+          copy_addon_file memtest86+ia32.bin /boot addons &&
+          # make memtest filename FAT16/8.3 compatible
+          mv "${BUILD_OUTPUT}/boot/addons/memtest86+ia32.bin" \
              "${BUILD_OUTPUT}/boot/addons/memtest"
         fi
+      fi
 
-        # since syslinux(-common) v3:6.03~pre1+dfsg-4 the files are in a
-        # different directory :(
-        if [ -d "${CHROOT_OUTPUT}/usr/lib/syslinux/modules/bios/" ] ; then
-          syslinux_modules_dir=/usr/lib/syslinux/modules/bios/
+      # fallback: if we still don't have /boot/addons/memtest available, we
+      # might have an older memtest86+ version (<=5.01-3.1) which ships
+      # file "memtest86+.bin" instead
+      if ! [ -r "${BUILD_OUTPUT}/boot/addons/memtest" ] ; then
+        copy_addon_file memtest86+.bin /boot addons &&
+        # make memtest filename FAT16/8.3 compatible
+        mv "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" \
+           "${BUILD_OUTPUT}/boot/addons/memtest"
+      fi
+
+      # since syslinux(-common) v3:6.03~pre1+dfsg-4 the files are in a
+      # different directory :(
+      if [ -d "${CHROOT_OUTPUT}/usr/lib/syslinux/modules/bios/" ] ; then
+        syslinux_modules_dir=/usr/lib/syslinux/modules/bios/
+      else
+        syslinux_modules_dir=/usr/lib/syslinux
+      fi
+      for file in chain.c32 hdt.c32 mboot.c32 menu.c32; do
+        copy_addon_file "${file}" "${syslinux_modules_dir}" addons
+      done
+
+      copy_addon_file memdisk /usr/lib/syslinux addons
+
+      # copy only files so we can handle bsd4grml on its own
+      for file in "${TEMPLATE_DIRECTORY}"/boot/addons/* ; do
+        test -f "$file" && cp "$file" "$BUILD_OUTPUT"/boot/addons/
+      done
+
+      eend 0
+
+      if [ -n "$NO_ADDONS_BSD4GRML" ] ; then
+        log   "Skipping installation of bsd4grml as requested via \$NO_ADDONS_BSD4GRML."
+        einfo "Skipping installation of bsd4grml as requested via \$NO_ADDONS_BSD4GRML."; eend 0
+      else
+        if [ -d "$TEMPLATE_DIRECTORY"/boot/addons/bsd4grml ] ; then
+          cp -a "${TEMPLATE_DIRECTORY}"/boot/addons/bsd4grml "$BUILD_OUTPUT"/boot/addons/
         else
-          syslinux_modules_dir=/usr/lib/syslinux
+          log   "Missing addon file: bsd4grml"
+          ewarn "Missing addon file: bsd4grml" ; eend 0
         fi
-        for file in chain.c32 hdt.c32 mboot.c32 menu.c32; do
-          copy_addon_file "${file}" "${syslinux_modules_dir}" addons
-        done
-
-        copy_addon_file memdisk /usr/lib/syslinux addons
-
-        # copy only files so we can handle bsd4grml on its own
-        for file in "${TEMPLATE_DIRECTORY}"/boot/addons/* ; do
-          test -f "$file" && cp "$file" "$BUILD_OUTPUT"/boot/addons/
-        done
-
-        eend 0
-
-        if [ -n "$NO_ADDONS_BSD4GRML" ] ; then
-          log   "Skipping installation of bsd4grml as requested via \$NO_ADDONS_BSD4GRML."
-          einfo "Skipping installation of bsd4grml as requested via \$NO_ADDONS_BSD4GRML."; eend 0
-        else
-          if [ -d "$TEMPLATE_DIRECTORY"/boot/addons/bsd4grml ] ; then
-            cp -a "${TEMPLATE_DIRECTORY}"/boot/addons/bsd4grml "$BUILD_OUTPUT"/boot/addons/
-          else
-            log   "Missing addon file: bsd4grml"
-            ewarn "Missing addon file: bsd4grml" ; eend 0
-          fi
-        fi
-
-      fi # no "$TEMPLATE_DIRECTORY"/boot/addons
+      fi
     fi # NO_ADDONS
 
     # generate loopback.cfg config file without depending on grub's regexp module
