@@ -84,6 +84,44 @@ def git_get_changes(local_git_path: Path, range) -> str:
     return git_changes
 
 
+def generate_git_package_changes(
+    package: str,
+    old_version: str | None,
+    version: str,
+    git_url_base: str,
+    git_repo_workspace: Path,
+    listener: Listener
+) -> list[str]:
+    """Generate changelog for a package that we believe is in our git."""
+
+    listener.info(
+        f"Generating changes list for package {package}, "
+        f"Version {old_version} -> {version}"
+    )
+
+    try:
+        # clone repo
+        git_url = f"{git_url_base}/{package}"
+        gitpath = git_repo_workspace / f"{package}.git"
+        git_repo_clone_and_update(gitpath, git_url)
+
+        if old_version:
+            range = f"v{old_version}..v{version}"
+        else:
+            range = f"v{version}"
+
+        git_changes = git_get_changes(gitpath, range)
+
+        return [
+            f"Package {package}: {range} {'(new)' if not old_version else ''}\n",
+            f"    {git_changes}\n",
+            SECTION_SEPARATOR,
+        ]
+    except Exception as e:
+        listener.warn(f"Generating change report for package {package} failed: {e}")
+        return []
+
+
 def build_changes(
     output_filename: Path,
     dpkg_list_new: Path,
@@ -118,45 +156,31 @@ def build_changes(
     debian_changes_added = []
     debian_changes_changed = []
 
+    # Show removed packages first.
     for package in set(packages_old) - set(packages):
         if re.match(f"^{package_prefix}", package):
             changelog_parts += [f"Package {package}: Removed.\n", SECTION_SEPARATOR]
         else:
             debian_changes_removed.append(package)
 
+    # Now show changed and added packages.
     for package, version in packages.items():
         old_version = packages_old.get(package)
+        if old_version and old_version == version:
+            continue
+
         if re.match(f"^{package_prefix}", package):
-            try:
-                listener.info(f"Generating changes list for package {package}...")
-                if old_version:
-                    listener.info(f"Version {old_version} -> {version}")
-                    if old_version == version:
-                        continue
-
-                # clone repo
-                git_url = f"{git_url_base}/{package}"
-                gitpath = git_repo_workspace / f"{package}.git"
-                git_repo_clone_and_update(gitpath, git_url)
-
-                if old_version:
-                    range = f"v{old_version}..v{version}"
-                else:
-                    range = f"v{version}"
-
-                git_changes = git_get_changes(gitpath, range)
-
-                changelog_parts += [
-                    f"Package {package}: {range} {'(new)' if not old_version else ''}\n",
-                    f"    {git_changes}\n",
-                    SECTION_SEPARATOR,
-                ]
-            except Exception as e:
-                listener.warn(f"Generating change report for package {package} failed: {e}")
+            changelog_parts += generate_git_package_changes(
+                package,
+                old_version,
+                version,
+                git_url_base,
+                git_repo_workspace,
+                listener
+            )
         else:
+            # Debian-originated package
             if old_version:
-                if old_version == version:
-                    continue
                 debian_changes_changed.append(f"{package} {old_version} -> {version}")
             else:
                 debian_changes_added.append(package)
