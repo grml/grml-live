@@ -1,111 +1,153 @@
 PACKAGES install
 
-apt
-atftp
-attr
-bash
-binutils
-bridge-utils
-bsdextrautils
-bsdutils
-btrfs-progs
-buffer
-chntpw
-coreutils
-cpio
-cryptsetup
-cu
-dctrl-tools
-diffutils
-disktype
-dmsetup
-dos2unix
-dosfstools
-e2fsprogs
-ed
-ethtool
-f2fs-tools
-findutils
-fsarchiver
-gddrescue
-gdisk
 grml-paste
 grml-quickconfig-standard
+
+# base os
+apt
+bsdextrautils
+bsdutils
+dctrl-tools
+dos2unix
+findutils
 htop
+libnss-myhostname
+locales
+lsof
+mount
+ntpsec-ntpdate
+passwd
+procps
+psmisc
+sudo
+sysvinit-utils
+tree
+tzdata
+util-linux
+
+# deploy on remote sites
+ppp
+pppoeconf
+
+# disk subsystems support/debugging
+cryptsetup
+disktype
+dmsetup
+gdisk
+lsscsi
+ncdu
+smartmontools
+
+# disk partitioning/boot
+kpartx
+mbr
+parted
+
+# disk wiping
+nwipe
+wipe
+
+# editors
+ed
+xxd
+
+# filesystem support
+attr
+btrfs-progs
+dosfstools
+e2fsprogs
+f2fs-tools
+jfsutils
+ntfs-3g
+xfsprogs
+
+# foreign os support/recovery
+chntpw
+mtools
+
+# generic tools
+whois
+
+# install linux
+kexec-tools
+mmdebstrap
+
+# networking
+atftp
+bridge-utils
+ethtool
 ifenslave
 ifupdown
-imvirt
 iperf3
 iproute2
 iptstate
 iputils-ping
 iw
-jfsutils
-kexec-tools
-kpartx
 ldnsutils
-lftp
-libnss-myhostname
-links
-locales
-lsof
-lsscsi
-mawk
-mbr
-memtester
-mmdebstrap
-mount
-mtools
 mtr-tiny
-ncdu
 ndisc6
+net-tools
 netbase
 netcat-openbsd
-net-tools
-ntfs-3g
-ntpsec-ntpdate
-nwipe
-parted
-partimage
-passwd
-patch
-ppp
-pppoeconf
-procps
-psmisc
-qemu-guest-agent
-qrencode
 rdnssd
 rfkill
-rpcbind
-screen
-sed
 ser2net
-setserial
-smartmontools
-statserial
-sudo
-sysvinit-utils
-tar
 tcpdump
 telnet
 tmate
-tmux
-tree
 tsocks
-tzdata
+vlan
+
+# network transfers
+lftp
+partimage
+rpcbind
+
+# packers/unpackers
+cpio
+tar
 unp
 unzip
-util-linux
-vlan
-wget
-whois
-wipe
-xfsprogs
-xxd
 zip
-zsh
+
+# recovery
+gddrescue
+
+# restore from backup
+fsarchiver
+
+# compressions for backup/restore
 zstd
+
+# serial
+cu
+setserial
+statserial
+
+# shell
+bash
+binutils
+buffer
+coreutils
+diffutils
+mawk
+patch
+qrencode
+screen
+sed
+tmux
+zsh
+
+# system info/mgmt
+memtester
+
+# virtualization support
+imvirt
+qemu-guest-agent
+
+# web
+links
+wget
 
 # special terminal output
 toilet
