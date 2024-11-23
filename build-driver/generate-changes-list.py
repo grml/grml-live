@@ -44,6 +44,46 @@ def parse_package_list(s: str) -> dict:
     return package_dict
 
 
+def git_repo_clone_and_update(local_git_path: Path, remote_url: str):
+    # Disable any input prompting from git.
+    env = dict(os.environ) | {"GIT_TERMINAL_PROMPT": "0"}
+
+    if not local_git_path.exists():
+        git_command = ["git", "clone", "--bare", "--single-branch", remote_url, str(local_git_path)]
+        subprocess.run(git_command, env=env)
+        if not local_git_path.exists():
+            raise Exception("Repository not found after git clone")
+
+    # update repo, in case it existed already (cache).
+    subprocess.run(
+        ["git", "remote", "set-url", "origin", remote_url],
+        cwd=local_git_path,
+        env=env,
+    )
+    subprocess.run(
+        ["git", "remote", "update", "--prune"],
+        cwd=local_git_path,
+        env=env,
+    ).check_returncode()
+
+
+def git_get_changes(local_git_path: Path, range) -> str:
+    """Get git log --online output. On failure, a failure string is returned."""
+
+    result = subprocess.run(
+        ["git", "log", "--oneline", range],
+        cwd=local_git_path,
+        capture_output=True,
+    )
+
+    if result.returncode != 0:
+        git_changes = "(failed)"
+    else:
+        git_changes = "\n    ".join(result.stdout.decode().splitlines())
+
+    return git_changes
+
+
 def build_changes(
     output_filename: Path,
     dpkg_list_new: Path,
@@ -97,30 +137,15 @@ def build_changes(
                 # clone repo
                 git_url = f"{git_url_base}/{package}"
                 gitpath = git_repo_workspace / f"{package}.git"
-                if not gitpath.exists():
-                    env = dict(os.environ) | {"GIT_TERMINAL_PROMPT": "0"}
-                    subprocess.run(
-                        ["git", "clone", "--bare", "--single-branch", git_url, gitpath],
-                        cwd=git_repo_workspace,
-                        env=env,
-                    )
-                if not gitpath.exists():
-                    raise Exception("Repository not found")
-
-                # update repo
-                subprocess.run(["git", "remote", "set-url", "origin", git_url], cwd=gitpath)
-                subprocess.run(["git", "remote", "update", "--prune"], cwd=gitpath).check_returncode()
+                git_repo_clone_and_update(gitpath, git_url)
 
                 if old_version:
                     range = f"v{old_version}..v{version}"
                 else:
                     range = f"v{version}"
 
-                result = subprocess.run(["git", "log", "--oneline", range], cwd=gitpath, capture_output=True)
-                if result.returncode != 0:
-                    git_changes = "(failed)"
-                else:
-                    git_changes = "\n    ".join(result.stdout.decode().splitlines())
+                git_changes = git_get_changes(gitpath, range)
+
                 changelog_parts += [
                     f"Package {package}: {range} {'(new)' if not old_version else ''}\n",
                     f"    {git_changes}\n",
