@@ -1,3 +1,9 @@
+grml-autoconfig (0.23.1) grml-testing; urgency=medium
+
+  * [48a1471] Ship debian/gbp.conf for gbp usage
+
+ -- Michael Prokop <mika@grml.org>  Sat, 23 Nov 2024 14:26:36 +0100
+
 grml-autoconfig (0.23.0) grml-testing; urgency=medium
 
   * Drop debian2hd / grml-debootstrap support
