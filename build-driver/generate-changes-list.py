@@ -152,16 +152,16 @@ def build_changes(
     except Exception as e:
         listener.info(f"While parsing old package list: {e}")
 
-    debian_changes_removed = []
-    debian_changes_added = []
-    debian_changes_changed = []
+    debian_packages_removed = []
+    debian_packages_added = []
+    debian_packages_changed = []
 
     # Show removed packages first.
     for package in set(packages_old) - set(packages):
         if re.match(f"^{package_prefix}", package):
             changelog_parts += [f"Package {package}: Removed.\n", SECTION_SEPARATOR]
         else:
-            debian_changes_removed.append(package)
+            debian_packages_removed.append(package)
 
     # Now show changed and added packages.
     for package, version in packages.items():
@@ -181,9 +181,9 @@ def build_changes(
         else:
             # Debian-originated package
             if old_version:
-                debian_changes_changed.append(f"{package} {old_version} -> {version}")
+                debian_packages_changed.append(f"{package} {old_version} -> {version}")
             else:
-                debian_changes_added.append(package)
+                debian_packages_added.append(package)
 
     def changes_to_lines(changes):
         return "\n    ".join(changes).strip()
@@ -191,11 +191,11 @@ def build_changes(
     changelog_parts += [
         "Changes to Debian package list:\n",
         "  Added:\n",
-        f"    {changes_to_lines(debian_changes_added)}\n",
+        f"    {changes_to_lines(debian_packages_added)}\n",
         "  Changed:\n",
-        f"    {changes_to_lines(debian_changes_changed)}\n",
+        f"    {changes_to_lines(debian_packages_changed)}\n",
         "  Removed:\n",
-        f"    {changes_to_lines(debian_changes_removed)}\n",
+        f"    {changes_to_lines(debian_packages_removed)}\n",
         SECTION_SEPARATOR,
     ]
 
