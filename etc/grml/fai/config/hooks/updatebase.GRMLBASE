@@ -34,7 +34,7 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    fi
    # some packages must access /sys even in chroot environment
    if ! [ -d $FAI_ROOT/sys/kernel ] ; then
-      mount -t sysfs sysfs $FAI_ROOT/sys
+      mount -t sysfs sysfs $FAI_ROOT/sys || true
    fi
    # if we are using udev, also mount it into $FAI_ROOT
    if [ -f /etc/init.d/udev ] ; then
@@ -42,7 +42,7 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    fi
 
    if [ -d $FAI_ROOT/run ] ; then
-      mount -t tmpfs tmpfs $FAI_ROOT/run
+      mount -t tmpfs tmpfs $FAI_ROOT/run || true
       mkdir $FAI_ROOT/run/lock
    fi
 
