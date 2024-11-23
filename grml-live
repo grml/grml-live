@@ -30,7 +30,6 @@ GRML_LIVE_VERSION='***UNRELEASED***'
 # global variables
 PN=$(basename "$0")
 CMDLINE="$0 $*"
-ADDONS_LIST_FILE='/boot/isolinux/addons_list.cfg'
 # }}}
 
 # usage information {{{
@@ -315,6 +314,24 @@ copy_addon_file() {
   msg="Missing addon file: \"$1\""
   ewarn "$msg" ; eend 1
   log "copy_addon_file: $msg"
+  return 1
+}
+
+# Usage: copy_optional_file_logged /path/to/destination/filename /sources /src1 ...
+copy_optional_file_logged() {
+  local dest="$1"
+  shift
+  local source_root="$1"
+  shift
+  local source
+
+  for source in "$@" ; do
+    if [ -r "${source_root}${source}" ] ; then
+      log "Installing ${source} as ${dest}"
+      cp "${source_root}${source}" "${dest}"
+      return 0
+    fi
+  done
   return 1
 }
 
@@ -1077,8 +1094,7 @@ if [ -n "$BOOTSTRAP_ONLY" ] ; then
   log   "Skipping stage 'boot' as building with bootstrap only."
   ewarn "Skipping stage 'boot' as building with bootstrap only." ; eend 0
 else
-  # booting stuff:
-  mkdir -p "$BUILD_OUTPUT"/boot/isolinux
+  # Install boot code
   mkdir -p "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"
 
   # this is a variable we're using for adjusting boot templates, not only in
@@ -1178,17 +1194,20 @@ else
     bailout 8
   fi
 
-  # copy _required_ isolinux files
-  if [ -d "${CHROOT_OUTPUT}/usr/lib/ISOLINUX" ] ; then
-    copy_addon_file isolinux.bin /usr/lib/ISOLINUX isolinux
-    for file in "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/*.c32 ; do
-      copy_addon_file "$(basename "$file")"  /usr/lib/syslinux/modules/bios/ isolinux
-    done
-  fi
+  if [ "$ARCH" != "arm64" ] ; then
+    # copy _required_ isolinux files
+    mkdir -p "$BUILD_OUTPUT"/boot/isolinux
+    if [ -d "${CHROOT_OUTPUT}/usr/lib/ISOLINUX" ] ; then
+      copy_addon_file isolinux.bin /usr/lib/ISOLINUX isolinux
+      for file in "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/*.c32 ; do
+        copy_addon_file "$(basename "$file")"  /usr/lib/syslinux/modules/bios/ isolinux
+      done
+    fi
 
-  # *always* copy files to output directory so the variables
-  # get adjusted according to the build.
-  cp "${TEMPLATE_DIRECTORY}"/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
+    # *always* copy files to output directory so the variables
+    # get adjusted according to the build.
+    cp "${TEMPLATE_DIRECTORY}"/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
+  fi
 
   mkdir -p "${BUILD_OUTPUT}/boot/grub"
   cp -a "${TEMPLATE_DIRECTORY}"/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
@@ -1239,18 +1258,20 @@ else
          "${BUILD_OUTPUT}/boot/addons/memtest"
     fi
 
-    # since syslinux(-common) v3:6.03~pre1+dfsg-4 the files are in a
-    # different directory :(
-    if [ -d "${CHROOT_OUTPUT}/usr/lib/syslinux/modules/bios/" ] ; then
-      syslinux_modules_dir=/usr/lib/syslinux/modules/bios/
-    else
-      syslinux_modules_dir=/usr/lib/syslinux
-    fi
-    for file in chain.c32 hdt.c32 mboot.c32 menu.c32; do
-      copy_addon_file "${file}" "${syslinux_modules_dir}" addons
-    done
+    if [ "$ARCH" != "arm64" ] ; then
+      # since syslinux(-common) v3:6.03~pre1+dfsg-4 the files are in a
+      # different directory :(
+      if [ -d "${CHROOT_OUTPUT}/usr/lib/syslinux/modules/bios/" ] ; then
+        syslinux_modules_dir=/usr/lib/syslinux/modules/bios/
+      else
+        syslinux_modules_dir=/usr/lib/syslinux
+      fi
+      for file in chain.c32 hdt.c32 mboot.c32 menu.c32; do
+        copy_addon_file "${file}" "${syslinux_modules_dir}" addons
+      done
 
-    copy_addon_file memdisk /usr/lib/syslinux addons
+      copy_addon_file memdisk /usr/lib/syslinux addons
+    fi
 
     # copy only files so we can handle bsd4grml on its own
     for file in "${TEMPLATE_DIRECTORY}"/boot/addons/* ; do
@@ -1352,73 +1373,76 @@ else
     done < <(find "${BUILD_OUTPUT}" -name "*%$param%*" -print0)
   done
 
-  # generate addon list
-  rm -f "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
-  for name in "${BUILD_OUTPUT}"/boot/isolinux/addon_*.cfg ; do
-    include_name=$(basename "$name")
-    echo "include $include_name"  >> "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
-  done
+  if [ "${ARCH}" = "amd64" ] || [ "${ARCH}" = "i386" ] ; then
+    # generate isolinux addon list
+    ADDONS_LIST_FILE='/boot/isolinux/addons_list.cfg'
+    rm -f "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
+    for name in "${BUILD_OUTPUT}"/boot/isolinux/addon_*.cfg ; do
+      include_name=$(basename "$name")
+      echo "include $include_name"  >> "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
+    done
 
-  if ! [ -r "${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg" ] || [ "$DISTRI_NAME" = "grml" ] ; then
-    log "including grmlmain.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-    echo "include grmlmain.cfg"    >  "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+    if ! [ -r "${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg" ] || [ "$DISTRI_NAME" = "grml" ] ; then
+      log "including grmlmain.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+      echo "include grmlmain.cfg"    >  "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
 
-    # Generate grmlmain.cfg
-    {
-      echo "include default.cfg"
-      echo "include menuoptions.cfg"
-      echo "include grml.cfg"
-      for f in "${BUILD_OUTPUT}"/boot/isolinux/submenu*.cfg ; do
-        echo "include $(basename "$f")"
-      done
-      echo "include options.cfg"
-      if [ -z "$NO_ADDONS" ] ; then
-        echo "include addons.cfg"
+      # Generate grmlmain.cfg
+      {
+        echo "include default.cfg"
+        echo "include menuoptions.cfg"
+        echo "include grml.cfg"
+        for f in "${BUILD_OUTPUT}"/boot/isolinux/submenu*.cfg ; do
+          echo "include $(basename "$f")"
+        done
+        echo "include options.cfg"
+        if [ -z "$NO_ADDONS" ] ; then
+          echo "include addons.cfg"
+        fi
+        echo "include isoprompt.cfg"
+        echo "include hd.cfg"
+        echo "include hidden.cfg"
+      } > "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+    else # assume we are building a custom distribution:
+      log "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
+      einfo "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
+      if grep -q "^include ${DISTRI_NAME}.cfg" "${BUILD_OUTPUT}/boot/isolinux/distri.cfg" ; then
+        log "include for ${DISTRI_NAME}.cfg already present, nothing to do."
+        eindent
+        einfo "include for ${DISTRI_NAME}.cfg already present, nothing to do."
+        eoutdent
+        eend $?
+      else
+        log "including ${DISTRI_NAME}.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+        echo "include ${DISTRI_NAME}.cfg" > "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+        if [ -z "$NO_ADDONS" ] ; then
+          echo "include addons.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+        fi
       fi
-      echo "include isoprompt.cfg"
-      echo "include hd.cfg"
-      echo "include hidden.cfg"
-    } > "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-  else # assume we are building a custom distribution:
-    log "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
-    einfo "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
-    if grep -q "^include ${DISTRI_NAME}.cfg" "${BUILD_OUTPUT}/boot/isolinux/distri.cfg" ; then
-      log "include for ${DISTRI_NAME}.cfg already present, nothing to do."
-      eindent
-      einfo "include for ${DISTRI_NAME}.cfg already present, nothing to do."
-      eoutdent
-      eend $?
+    fi
+
+    # use old style console based isolinux method only if requested:
+    if [[ "${ISOLINUX_METHOD}" == "console" ]] ; then
+      log "Using console based isolinux method as requested via \$ISOLINUX_METHOD."
+      einfo "Using console based isolinux method as requested via \$ISOLINUX_METHOD."
+      if grep -q '^include console.cfg' "${BUILD_OUTPUT}/boot/isolinux/distri.cfg" ; then
+        einfo "include for console.cfg already found, nothing to do."
+        eend 0
+      else
+        log "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
+        einfo "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
+        echo "include console.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
+        eend 0
+      fi
     else
-      log "including ${DISTRI_NAME}.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-      echo "include ${DISTRI_NAME}.cfg" > "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-      if [ -z "$NO_ADDONS" ] ; then
-        echo "include addons.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
+      log 'Using graphical boot menu.'
+      if grep -q '^include vesamenu.cfg' "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg" ; then
+        log "include for vesamenu.cfg already found, nothing to do."
+      else
+        log "including vesamenu.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
+        echo "include vesamenu.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
       fi
     fi
-  fi
-
-  # use old style console based isolinux method only if requested:
-  if [[ "${ISOLINUX_METHOD}" == "console" ]] ; then
-    log "Using console based isolinux method as requested via \$ISOLINUX_METHOD."
-    einfo "Using console based isolinux method as requested via \$ISOLINUX_METHOD."
-    if grep -q '^include console.cfg' "${BUILD_OUTPUT}/boot/isolinux/distri.cfg" ; then
-      einfo "include for console.cfg already found, nothing to do."
-      eend 0
-    else
-      log "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-      einfo "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-      echo "include console.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-      eend 0
-    fi
-  else
-    log 'Using graphical boot menu.'
-    if grep -q '^include vesamenu.cfg' "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg" ; then
-      log "include for vesamenu.cfg already found, nothing to do."
-    else
-      log "including vesamenu.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-      echo "include vesamenu.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-    fi
-  fi
+  fi # amd64 or i386
 
   if [ -e "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6 ]; then
     sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6
@@ -1601,6 +1625,11 @@ BOOT_ARGS="-no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/iso
 if [ "$HYBRID_METHOD" = "isohybrid" ] ; then
   EFI_ARGS="-isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin -eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
 fi
+if [ "$ARCH" = "arm64" ]; then
+  # No isolinux on arm64.
+  BOOT_ARGS=""
+  EFI_ARGS="-eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
+fi
 
 if [ -f "${ISO_OUTPUT}/${ISO_NAME}" ] && [ -z "$UPDATE" ] && [ -z "$BUILD_ONLY" ] && [ -z "$BUILD_DIRTY" ] && [ "$FORCE_ISO_REBUILD" = "false" ]  ; then
    log   "Skipping stage 'iso build' as $ISO_OUTPUT/${ISO_NAME} exists already."
@@ -1709,22 +1738,6 @@ create_netbootpackage() {
 
   mkdir -p "$NETBOOT"
 
-  # since syslinux v3:6.03~pre1+dfsg-4 the pxelinux.0 has been split into a
-  # separate pxelinux package
-  if [ -d "${CHROOT_OUTPUT}/usr/lib/PXELINUX/" ] ; then
-    local pxelinux_dir=/usr/lib/PXELINUX
-  else
-    local pxelinux_dir=/usr/lib/syslinux
-  fi
-
-  if ! [ -r "${CHROOT_OUTPUT}/${pxelinux_dir}/pxelinux.0" ] ; then
-    ewarn "File ${pxelinux_dir}/pxelinux.0 not found in build chroot." ; eend 0
-    eindent
-    einfo "Install syslinux[-common]/pxelinux package in chroot to get a netboot package."
-    eoutdent
-    return 0
-  fi
-
   local OUTPUTDIR="${NETBOOT}/build_tmp"
   local WORKING_DIR="${OUTPUTDIR}/grml_netboot_package_${GRML_NAME}_${VERSION}/tftpboot/"
 
@@ -1732,58 +1745,91 @@ create_netbootpackage() {
 
   cp "${CHROOT_OUTPUT}"/boot/vmlinuz-*    "$WORKING_DIR"/vmlinuz
   cp "${CHROOT_OUTPUT}"/boot/initrd.img-* "$WORKING_DIR"/initrd.img
-  cp "${CHROOT_OUTPUT}/${pxelinux_dir}/pxelinux.0" "${WORKING_DIR}/pxelinux.0"
 
-  if [ -r "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/ldlinux.c32 ] ; then
-    cp "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/ldlinux.c32 "${WORKING_DIR}"/
-  fi
+  if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "i386" ] ; then
+    # since syslinux v3:6.03~pre1+dfsg-4 the pxelinux.0 has been split into a
+    # separate pxelinux package
+    if [ -d "${CHROOT_OUTPUT}/usr/lib/PXELINUX/" ] ; then
+      local pxelinux_dir=/usr/lib/PXELINUX
+    else
+      local pxelinux_dir=/usr/lib/syslinux
+    fi
 
-  mkdir -p "${WORKING_DIR}/pxelinux.cfg"
-  if [ -r "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" ] ; then
-    cp "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" "${WORKING_DIR}/pxelinux.cfg/default"
-  else
-    log   "File ${BUILD_OUTPUT}/boot/isolinux/netboot.cfg not found."
-    ewarn "File ${BUILD_OUTPUT}/boot/isolinux/netboot.cfg not found."
-    eindent
-    log   "Hint: Are you using custom templates which do not provide netboot.cfg?"
-    ewarn "Hint: Are you using custom templates which do not provide netboot.cfg?" ; eend 0
-    eoutdent
-  fi
+    if ! [ -r "${CHROOT_OUTPUT}/${pxelinux_dir}/pxelinux.0" ] ; then
+      ewarn "File ${pxelinux_dir}/pxelinux.0 not found in build chroot." ; eend 0
+      eindent
+      einfo "Install syslinux[-common]/pxelinux package in chroot to get a netboot package."
+      eoutdent
+      return 0
+    fi
+
+    cp "${CHROOT_OUTPUT}/${pxelinux_dir}/pxelinux.0" "${WORKING_DIR}/pxelinux.0"
+
+    if [ -r "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/ldlinux.c32 ] ; then
+      cp "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/ldlinux.c32 "${WORKING_DIR}"/
+    fi
+
+    mkdir -p "${WORKING_DIR}/pxelinux.cfg"
+    if [ -r "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" ] ; then
+      cp "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" "${WORKING_DIR}/pxelinux.cfg/default"
+    else
+      log   "File ${BUILD_OUTPUT}/boot/isolinux/netboot.cfg not found."
+      ewarn "File ${BUILD_OUTPUT}/boot/isolinux/netboot.cfg not found."
+      eindent
+      log   "Hint: Are you using custom templates which do not provide netboot.cfg?"
+      ewarn "Hint: Are you using custom templates which do not provide netboot.cfg?" ; eend 0
+      eoutdent
+    fi
+  fi # amd64 or i386
 
   # don't include shim + grubnetx64 + grub files in i386 netboot packages,
   # as those don't make much sense there
-  if [ "$ARCH" = amd64 ] ; then
+  if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "arm64" ] ; then
     if ! [ -r "${BUILD_OUTPUT}/boot/grub/netboot.cfg" ] ; then
       log   "File ${BUILD_OUTPUT}/boot/grub/netboot.cfg not found."
       ewarn "File ${BUILD_OUTPUT}/boot/grub/netboot.cfg not found."
       eindent
-      log   "Hint: Are you using custom templates which do not provide grub.cfg?"
-      ewarn "Hint: Are you using custom templates which do not provide grub.cfg?" ; eend 0
+      log   "Hint: Are you using custom templates which do not provide netboot.cfg?"
+      ewarn "Hint: Are you using custom templates which do not provide netboot.cfg?" ; eend 0
       eoutdent
     else
       cp "${BUILD_OUTPUT}/boot/grub/netboot.cfg" "${WORKING_DIR}/grub.cfg"
       adjust_boot_files "${WORKING_DIR}/grub.cfg"
 
-      if [ -r "${CHROOT_OUTPUT}"/usr/lib/shim/shimx64.efi.signed ] ; then
-        log "Installing ${CHROOT_OUTPUT}/usr/lib/shim/shimx64.efi.signed as shim.efi in netboot package"
-        cp "${CHROOT_OUTPUT}"/usr/lib/shim/shimx64.efi.signed "${WORKING_DIR}"/shim.efi
-      elif [ -r "${CHROOT_OUTPUT}"/usr/lib/shim/shimx64.efi ] ; then
-        log "Installing ${CHROOT_OUTPUT}/usr/lib/shim/shimx64.efi as shim.efi in netboot package"
-        cp "${CHROOT_OUTPUT}"/usr/lib/shim/shimx64.efi "${WORKING_DIR}"/shim.efi
-      else
-        log   "No shimx64.efi for usage with PXE boot found (shim-signed not present?)"
-        ewarn "No shimx64.efi for usage with PXE boot found (shim-signed not present?)" ; eend 0
+      if [ "$ARCH" = "amd64" ] ; then
+        if ! copy_optional_file_logged "${WORKING_DIR}"/shim.efi "${CHROOT_OUTPUT}" \
+          /usr/lib/shim/shimx64.efi.signed \
+          /usr/lib/shim/shimx64.efi
+        then
+          log   "No shimx64.efi for usage with PXE boot found (shim-signed not present?)"
+          ewarn "No shimx64.efi for usage with PXE boot found (shim-signed not present?)" ; eend 0
+        fi
+
+        if ! copy_optional_file_logged "${WORKING_DIR}"/grubx64.efi "${CHROOT_OUTPUT}" \
+          /usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed \
+          /usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi
+        then
+          log   "No grubnetx64.efi for usage with PXE boot found (grub-efi-amd64-signed not present?)"
+          ewarn "No grubnetx64.efi for usage with PXE boot found (grub-efi-amd64-signed not present?)." ; eend 0
+        fi
       fi
 
-      if [ -r "${CHROOT_OUTPUT}"/usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed ] ; then
-        log "Installing /usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed as grubx64.efi in netboot package"
-        cp "${CHROOT_OUTPUT}"/usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed "${WORKING_DIR}"/grubx64.efi
-      elif [ -r "${CHROOT_OUTPUT}"/usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi ] ; then
-        log "Installing /usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi as grubx64.efi in netboot package"
-        cp "${CHROOT_OUTPUT}"/usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi "${WORKING_DIR}"/grubx64.efi
-      else
-        log   "No grubnetx64.efi for usage with PXE boot found (grub-efi-amd64-signed not present?)"
-        ewarn "No grubnetx64.efi for usage with PXE boot found (grub-efi-amd64-signed not present?)." ; eend 0
+      if [ "$ARCH" = "arm64" ] ; then
+        if ! copy_optional_file_logged "${WORKING_DIR}"/shim.efi "${CHROOT_OUTPUT}" \
+          /usr/lib/shim/shimaa64.efi.signed \
+          /usr/lib/shim/shimaa64.efi
+        then
+          log   "No shimaa64.efi for usage with PXE boot found (shim-signed not present?)"
+          ewarn "No shimaa64.efi for usage with PXE boot found (shim-signed not present?)" ; eend 0
+        fi
+
+        if ! copy_optional_file_logged "${WORKING_DIR}"/grubaa64.efi "${CHROOT_OUTPUT}" \
+          /usr/lib/grub/arm64-efi-signed/grubnetaa64.efi.signed \
+          /usr/lib/grub/arm64-efi/monolithic/grubnetaa64.efi
+        then
+          log   "No grubnetaa64.efi for usage with PXE boot found (grub-efi-arm64-signed not present?)"
+          ewarn "No grubnetaa64.efi for usage with PXE boot found (grub-efi-arm64-signed not present?)." ; eend 0
+        fi
       fi
 
       if [ -r "${CHROOT_OUTPUT}"/usr/share/grub/unicode.pf2 ] ; then
@@ -1795,7 +1841,7 @@ create_netbootpackage() {
         ewarn "No unicode.pf2 for usage with PXE boot found (grub-common not present?)" ; eend 0
       fi
     fi
-  fi
+  fi # amd64 or arm64
 
   if tar -C "$OUTPUTDIR" -cf "${OUTPUT_FILE}" "grml_netboot_package_${GRML_NAME}_${VERSION}" ; then
     (
