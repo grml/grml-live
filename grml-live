@@ -1184,10 +1184,6 @@ else
     for file in "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/*.c32 ; do
       copy_addon_file "$(basename "$file")"  /usr/lib/syslinux/modules/bios/ isolinux
     done
-  else # syslinux versions <= 3:4.05+dfsg-6+deb8u1
-    copy_addon_file isolinux.bin /usr/lib/syslinux isolinux
-    copy_addon_file ifcpu64.c32  /usr/lib/syslinux isolinux
-    copy_addon_file vesamenu.c32 /usr/lib/syslinux isolinux
   fi
 
   # *always* copy files to output directory so the variables
