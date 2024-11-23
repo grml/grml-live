@@ -21,15 +21,10 @@ fi
 
 set -e # exit on any error
 
-if [ -d /run/live/medium/ ] ; then # since Dec 2018
-  LIVE_PATH_MAIN='/run/live/medium/'
-  LIVE_PATH_BOOT='/run/live/medium/boot/'
-else # until Dec 2018
-  LIVE_PATH_MAIN='/lib/live/mount/medium/'
-  LIVE_PATH_BOOT='/lib/live/mount/medium/boot/'
-fi
+LIVE_PATH_MAIN='/run/live/medium/'
+LIVE_PATH_BOOT='/run/live/medium/boot/'
 
-VERSION='0.0.4'
+VERSION='0.0.5'
 GRML_LIVE_EDITOR=${VISUAL:-${EDITOR:-vi}}
 
 # source core functions {{{
@@ -49,16 +44,12 @@ if ! isgrmlcd ; then
 fi
 
 # make sure we have what we need {{{
-if check4progs mkisofs >/dev/null 2>&1 ; then
-  MKISO=mkisofs
-fi
-
-if check4progs genisoimage >/dev/null 2>&1 ; then
-  MKISO=genisoimage
+if check4progs xorriso >/dev/null 2>&1 ; then
+  MKISO='xorriso -as mkisofs'
 fi
 
 if [ -z "$MKISO" ] ; then
-  echo "Error: neither mkisofs nor genisoimage available. Exiting." >&2
+  echo "Error: xorriso not installed. Exiting." >&2
   exit 1
 fi
 
@@ -69,7 +60,7 @@ if [ -z "$MKSQUASHFS" ] ; then
   if which mksquashfs >/dev/null 2>&1 ; then
     MKSQUASHFS=mksquashfs
   else
-    echo "Error: mksquashfs is not available. Exiting." >&2
+    echo "Error: mksquashfs not installed. Exiting." >&2
     exit 1
   fi
 fi

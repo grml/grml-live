@@ -1617,23 +1617,18 @@ else
       einfo "Forcing rebuild of ISO because files on ISO have been modified."
    fi
 
-   # support xorriso as well mkisofs and genisoimage
    if which xorriso >/dev/null 2>&1 ; then
       MKISOFS='xorriso -as mkisofs'
-    elif which mkisofs >/dev/null 2>&1; then
-      MKISOFS='mkisofs'
-   elif which genisoimage >/dev/null 2>&1; then
-      MKISOFS='genisoimage'
    else
-      log    "Error: neither xorriso nor mkisofs nor genisoimage available - can not create ISO."
-      eerror "Error: neither xorriso nor mkisofs nor genisoimage available - can not create ISO." ; eend 1
+      log    "Error: xorriso not available - can not create ISO."
+      eerror "Error: xorriso not available - can not create ISO." ; eend 1
       bailout
    fi
 
    einfo "Using ${MKISOFS} to build ISO." ;  eend 0
-   case "${ARCH}-${MKISOFS}" in
+   case "${ARCH}" in
      # using -eltorito-alt-boot is limited to xorriso for now
-     amd64-xorriso*)
+     amd64)
        eindent
 
        if ! dpkg --compare-versions $(dpkg-query -W -f='${Version}\n' xorriso 2>/dev/null) gt-nl 1.1.6-1 ; then

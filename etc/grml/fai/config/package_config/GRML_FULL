@@ -100,7 +100,6 @@ e2fsprogs
 exfat-fuse
 exfatprogs
 f2fs-tools
-genisoimage
 jfsutils
 ntfs-3g
 reiserfsprogs
@@ -108,6 +107,7 @@ tcplay
 xfsdump
 xfsprogs
 xmount
+xorriso
 
 # foreign os support/recovery
 chntpw
@@ -120,7 +120,6 @@ mtools
 cpp
 sqlite3
 whois
-xorriso
 
 # install linux
 cdebootstrap
