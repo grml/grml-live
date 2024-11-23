@@ -29,7 +29,6 @@ grml-udev-config
 hdparm
 hwinfo
 initramfs-tools
-isolinux
 kbd
 less
 live-boot-grml live-boot-grml-doc
@@ -40,7 +39,6 @@ openssh-client
 openssh-server
 pciutils
 physlock
-pxelinux
 resolvconf
 rsync
 rsyslog
@@ -81,14 +79,18 @@ PACKAGES install I386
 grub-pc
 grub-efi-amd64-bin
 grub-efi-ia32-bin
+isolinux
 syslinux syslinux-common syslinux-utils
+pxelinux
 grml2usb
 
 PACKAGES install AMD64
 grub-pc
 grub-efi-amd64-bin
 grub-efi-ia32-bin
+isolinux
 syslinux syslinux-common syslinux-utils
+pxelinux
 grml2usb
 
 PACKAGES install ARM64
