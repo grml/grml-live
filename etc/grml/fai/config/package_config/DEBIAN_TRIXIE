@@ -8,3 +8,7 @@ PACKAGES install
 # https://bugs.debian.org/1051421 and
 # https://github.com/grml/grml-live/issues/138
 dhcpcd-base
+
+# Required for ping to work in trixie and newer.
+# https://github.com/grml/grml-live/issues/160
+linux-sysctl-defaults
