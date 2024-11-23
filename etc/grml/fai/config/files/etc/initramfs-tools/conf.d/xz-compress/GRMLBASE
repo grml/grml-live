@@ -1,5 +1,3 @@
 # This file is installed by grml-live in 80-initramfs.
 # Its purpose is to use XZ compression when building initramfs.
 
-# enable XZ compression, reducing initramfs size from ~50MB to ~33M
-COMPRESS=xz
