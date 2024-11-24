@@ -498,6 +498,8 @@ def main(program_name: str, argv: list[str]) -> int:
         new_dpkg_list = get_dpkg_list_path_for_build(build_dir)
         shutil.copyfile(new_dpkg_list, old_dpkg_list_previous_build)
 
+    print("I: Success.")
+
     return 0
 
 
