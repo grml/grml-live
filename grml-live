@@ -987,8 +987,8 @@ grub_setup() {
 
     # important: this depends on execution of ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images
     if ! [ -r "${CHROOT_OUTPUT}/${BOOTX64}" ] ; then
-      log    "Can not access GRUB efi image ${CHROOT_OUTPUT}/${BOOTX64}, required for Secure Boot support"
-      eerror "Can not access GRUB efi image ${CHROOT_OUTPUT}/${BOOTX64}, required for Secure Boot support" ; eend 1
+      log    "Can not access GRUB UEFI image ${CHROOT_OUTPUT}/${BOOTX64}, required for Secure Boot support"
+      eerror "Can not access GRUB UEFI image ${CHROOT_OUTPUT}/${BOOTX64}, required for Secure Boot support" ; eend 1
       log    "Possible reason is failure to run ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images"
       ewarn  "Possible reason is failure to run ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images"
       bailout 50
@@ -1013,8 +1013,8 @@ grub_setup() {
           ;;
       esac
 
-      log   "Generated 64-bit EFI image $BOOTX64"
-      einfo "Generated 64-bit EFI image $BOOTX64" ; eend 0
+      log   "Created UEFI image $EFI_IMG from $BOOTX64"
+      einfo "Created UEFI image $EFI_IMG from $BOOTX64" ; eend 0
     else
       case "${SECURE_BOOT}" in
         disable*)
@@ -1059,8 +1059,8 @@ grub_setup() {
             bailout 57
           fi
 
-          log   "Generated 64-bit Secure Boot (${SECURE_BOOT}) EFI image ${CHROOT_OUTPUT}/${EFI_IMG}"
-          einfo "Generated 64-bit Secure Boot (${SECURE_BOOT}) EFI image ${CHROOT_OUTPUT}/${EFI_IMG}" ; eend 0
+          log   "Created Secure Boot (${SECURE_BOOT}) UEFI image ${CHROOT_OUTPUT}/${EFI_IMG}"
+          einfo "Created Secure Boot (${SECURE_BOOT}) UEFI image ${CHROOT_OUTPUT}/${EFI_IMG}" ; eend 0
           ;;
         *)
           log   "Secure Boot method '${SECURE_BOOT}' is unsupported."
