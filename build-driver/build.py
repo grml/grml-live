@@ -476,21 +476,17 @@ def main(program_name: str, argv: list[str]) -> int:
     tmp_dir = Path(tempfile.mkdtemp(dir=tmp_root))
     build_dir = Path(tempfile.mkdtemp(dir=tmp_root))
 
-    if build_mode == "daily":
-        old_dpkg_list_daily = source_dir / "cache" / "dpkg.list"
-    else:
-        old_dpkg_list_daily = None
-
     # Do it now, as the next block needs curl installed.
     install_debian_dependencies()
 
+    old_dpkg_list_previous_build = cache_dir / "dpkg.list"
     old_dpkg_list_last_release = download_old_dpkg_list_last_release(tmp_dir, last_release_version, flavor)
     old_iso_path = download_old_iso(tmp_dir, old_iso_url)
 
     with results_mover(build_dir, output_dir):
         build(
             build_dir,
-            old_dpkg_list_daily,
+            old_dpkg_list_previous_build,
             old_dpkg_list_last_release,
             job_properties,
             grml_live_path,
@@ -500,7 +496,7 @@ def main(program_name: str, argv: list[str]) -> int:
 
         # Copy dpkg.list into cache for next iteration.
         new_dpkg_list = get_dpkg_list_path_for_build(build_dir)
-        shutil.copyfile(new_dpkg_list, cache_dir)
+        shutil.copyfile(new_dpkg_list, old_dpkg_list_previous_build)
 
     return 0
 
