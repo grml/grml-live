@@ -217,6 +217,9 @@ def generate_changes_list(
 def results_mover(build_dir: Path, output_dir: Path):
     try:
         yield
+    except Exception:
+        print("E: Caught fatal exception")
+        raise
     finally:
         print(f"I: moving build results from {build_dir} to {output_dir}")
         if output_dir.exists():
