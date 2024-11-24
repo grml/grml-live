@@ -948,8 +948,8 @@ grub_setup() {
 
     # important: this depends on execution of ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images
     if ! [ -r "${CHROOT_OUTPUT}/${BOOTX64}" ] ; then
-      log    "Can not access GRUB efi image ${CHROOT_OUTPUT}/${BOOTX64}, required for Secure Boot support"
-      eerror "Can not access GRUB efi image ${CHROOT_OUTPUT}/${BOOTX64}, required for Secure Boot support" ; eend 1
+      log    "Cannot access GRUB UEFI image ${CHROOT_OUTPUT}/${BOOTX64}, required for Secure Boot support"
+      eerror "Cannot access GRUB UEFI image ${CHROOT_OUTPUT}/${BOOTX64}, required for Secure Boot support" ; eend 1
       log    "Possible reason is failure to run ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images"
       ewarn  "Possible reason is failure to run ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images"
       bailout 50
@@ -974,8 +974,8 @@ grub_setup() {
           ;;
       esac
 
-      log   "Generated 64-bit EFI image $BOOTX64"
-      einfo "Generated 64-bit EFI image $BOOTX64" ; eend 0
+      log   "Created UEFI image $EFI_IMG from $BOOTX64"
+      einfo "Created UEFI image $EFI_IMG from $BOOTX64" ; eend 0
     else
       case "${SECURE_BOOT}" in
         disable*)
@@ -1020,8 +1020,8 @@ grub_setup() {
             bailout 57
           fi
 
-          log   "Generated 64-bit Secure Boot (${SECURE_BOOT}) EFI image ${CHROOT_OUTPUT}/${EFI_IMG}"
-          einfo "Generated 64-bit Secure Boot (${SECURE_BOOT}) EFI image ${CHROOT_OUTPUT}/${EFI_IMG}" ; eend 0
+          log   "Created Secure Boot (${SECURE_BOOT}) UEFI image ${CHROOT_OUTPUT}/${EFI_IMG}"
+          einfo "Created Secure Boot (${SECURE_BOOT}) UEFI image ${CHROOT_OUTPUT}/${EFI_IMG}" ; eend 0
           ;;
         *)
           log   "Secure Boot method '${SECURE_BOOT}' is unsupported."
@@ -1035,10 +1035,10 @@ grub_setup() {
   if [[ "$ARCH" == "i386" ]] ; then
     BOOTX32="/boot/bootia32.efi"
     if ! [ -r "${CHROOT_OUTPUT}/${BOOTX32}" ] ; then
-      log    "Can not access GRUB efi image ${CHROOT_OUTPUT}/${BOOTX32}."
-      eerror "Can not access GRUB efi image ${CHROOT_OUTPUT}/${BOOTX32}." ; eend 1
+      log    "Cannot access GRUB 32-bit PC EFI image ${CHROOT_OUTPUT}/${BOOTX32}."
+      eerror "Cannot access GRUB 32-bit PC EFI image ${CHROOT_OUTPUT}/${BOOTX32}." ; eend 1
       log    "Possible reason is failure to run ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images"
-      ewarn "Possible reason is failure to run ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images"
+      ewarn  "Possible reason is failure to run ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images"
       bailout 50
     fi
 
@@ -1047,8 +1047,8 @@ grub_setup() {
     mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::EFI || bailout 52
     mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::EFI/BOOT || bailout 52
     mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${CHROOT_OUTPUT}/${BOOTX32}" ::EFI/BOOT/bootia32.efi >/dev/null || bailout 53
-    log   "Generated 32-bit EFI image $BOOTX32"
-    einfo "Generated 32-bit EFI image $BOOTX32" ; eend 0
+    log   "Created 32-bit PC EFI image $EFI_IMG from $BOOTX32"
+    einfo "Created 32-bit PC EFI image $EFI_IMG from $BOOTX32" ; eend 0
   fi
 }
 # }}}
