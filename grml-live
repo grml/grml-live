@@ -1306,8 +1306,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
     fi
 
     # arch independent files
-    cp -a "${CHROOT_OUTPUT}"/usr/share/grub/ascii.pf2     "${BUILD_OUTPUT}"/boot/grub/
-    cp -a "${CHROOT_OUTPUT}"/usr/share/grub/unicode.pf2   "${BUILD_OUTPUT}"/boot/grub/  # clarify
+    cp -a "${CHROOT_OUTPUT}"/usr/share/grub/unicode.pf2   "${BUILD_OUTPUT}"/boot/grub/
 
     if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
       log    "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
