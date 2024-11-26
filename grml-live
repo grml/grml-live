@@ -877,6 +877,7 @@ else
 <testsuite name="grml-live-missing-packages" tests="${package_count}" time="1" failures="${package_errors}" errors="${package_errors}" skipped="0" assertions="0">
 EOF
 
+  # shellcheck disable=SC2013 # We expect each line to be a single word.
   for package in $(awk '{print $1}' "${CHECKLOG}/package_errors.log" | sed 's;/;\\/;') ; do
     failure_reason="$(awk "/$package/ {print \$2}" "${CHECKLOG}/package_errors.log")"
     cat >> "${REPORT_MISSING_PACKAGES}" << EOF
@@ -1519,6 +1520,7 @@ fi
 
 # create md5sum file:
 if [ -z "$BOOTSTRAP_ONLY" ] ; then
+  # shellcheck disable=SC2094 # find execution ignores written file
   ( cd "$BUILD_OUTPUT"/GRML/"${GRML_NAME}" &&
   find ../.. -type f -not -name md5sums -not -name isolinux.bin -exec md5sum {} \; > md5sums )
 fi
