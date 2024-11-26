@@ -121,7 +121,7 @@ def run_grml_live(
     if not old_iso_path:
         with ci_section("Creating basefile using mmdebstrap"):
             basefiles_path = grml_fai_config / "config" / "basefiles"
-            basefiles_path.mkdir()
+            basefiles_path.mkdir(exist_ok=True)
             basefile = basefiles_path / f"{arch.upper()}.tar.gz"
             run_x(["mmdebstrap", "--format=tar", debian_suite, basefile])
 
