@@ -266,6 +266,16 @@ extend_string_end() {
   echo -n "${text}"
 }
 
+# Returns success if a given fai class was requested.
+# This is not called `ifclass`, as fai's ifclass supports a broader syntax.
+hasclass() {
+  local expected_class="$1"
+  case $CLASSES in *,${expected_class},*) return 0 ;; esac
+  case $CLASSES in *,${expected_class}) return 0 ;; esac
+  case $CLASSES in ${expected_class},*) return 0 ;; esac
+  return 1
+}
+
 # Copy addonfile $1 from either
 #   * the chroot (via $2, the system path),
 #   * or from TEMPLATE_DIRECTORY/compat (if exists),
@@ -672,7 +682,7 @@ export SUITE # make sure it's available in FAI scripts
 
 # validate whether the specified architecture class matches the
 # architecture (option), otherwise installation of kernel will fail
-if echo "$CLASSES" | grep -qw I386 ; then
+if hasclass I386 ; then
    if ! [[ "$ARCH" == "i386" ]] ; then
       log    "Error: You specified the I386 class but are trying to build something else (AMD64/ARM64?)."
       eerror "Error: You specified the I386 class but are trying to build something else (AMD64/ARM64?)."
@@ -680,7 +690,7 @@ if echo "$CLASSES" | grep -qw I386 ; then
       eend 1
       bailout
    fi
-elif echo "$CLASSES" | grep -qi amd64 ; then
+elif hasclass AMD64 ; then
    if ! [[ "$ARCH" == "amd64" ]] ; then
       log    "Error: You specified the AMD64 class but are trying to build something else (I386/ARM64?)."
       eerror "Error: You specified the AMD64 class but are trying to build something else (I386/ARM64?)."
@@ -688,7 +698,7 @@ elif echo "$CLASSES" | grep -qi amd64 ; then
       eend 1
       bailout
    fi
-elif echo "$CLASSES" | grep -qi arm64 ; then
+elif hasclass ARM64 ; then
    if ! [[ "$ARCH" == "arm64" ]] ; then
       log    "Error: You specified the ARM64 class but are trying to build something else (I386/AMD64?)."
       eerror "Error: You specified the ARM64 class but are trying to build something else (I386/AMD64?)."
@@ -1487,7 +1497,7 @@ else
    fi
 
    # get rid of unnecessary files when building grml-small for final release:
-   if echo "$CLASSES" | grep -q GRML_SMALL ; then
+   if hasclass GRML_SMALL ; then
       SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -e initrd.img* vmlinuz*"
    fi
 
@@ -1664,16 +1674,14 @@ else
       of="${ISO_OUTPUT}/${ISO_NAME}" 2>/dev/null
 
    # generate ISO checksums if we are using class 'RELEASE':
-   case $CLASSES in *RELEASE*)
-      [ "$RC" = 0 ] && \
+   if hasclass RELEASE && [ "$RC" = 0 ] ; then
       (
         if cd "$ISO_OUTPUT" ; then
           sha256sum "${ISO_NAME}" > "${ISO_NAME}.sha256" && \
           touch -r "${ISO_NAME}" "${ISO_NAME}.sha256"
         fi
       )
-      ;;
-   esac
+   fi
 
    if [ "$RC" = 0 ] ; then
       log   "Finished execution of stage 'iso build' [$(date)]"
