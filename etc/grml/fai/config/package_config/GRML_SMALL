@@ -76,7 +76,6 @@ psmisc
 qemu-guest-agent
 qrencode
 rdnssd
-reiserfsprogs
 rfkill
 rpcbind
 screen
