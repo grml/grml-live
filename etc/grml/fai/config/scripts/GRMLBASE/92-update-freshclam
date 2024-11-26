@@ -37,21 +37,14 @@ bailout() {
   exit "${1:-0}"
 }
 
-[ -x $target/usr/bin/timeout ] && TIMEOUT="10" || TIMEOUT=""
-
 if ! [ -x $target/usr/bin/freshclam ] ; then
   echo "freshclam not installed"
   exit 0
 fi
 
 echo "Updating clamav database via running freshclam"
-if [ -n "$TIMEOUT" ] ; then
-   $ROOTCMD timeout $TIMEOUT /usr/bin/freshclam
-   bailout $?
-else
-   $ROOTCMD /usr/bin/freshclam
-   bailout $?
-fi
+$ROOTCMD timeout 10 /usr/bin/freshclam
+bailout $?
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

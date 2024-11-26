@@ -52,11 +52,6 @@ if $ROOTCMD update-alternatives --list x-cursor-theme 2>/dev/null | grep -q '/wh
   $ROOTCMD update-alternatives --set x-cursor-theme /etc/X11/cursors/whiteglass.theme
 fi
 
-if $ROOTCMD update-alternatives --list x-www-browser 2>/dev/null | grep -q '/iceweasel' ; then
-  echo "Setting iceweasel as x-www-browser using update-alternatives."
-  $ROOTCMD update-alternatives --set x-www-browser /usr/bin/iceweasel
-fi
-
 if $ROOTCMD update-alternatives --list x-www-browser 2>/dev/null | grep -q '/firefox-esr' ; then
   echo "Setting firefox-esr as x-www-browser using update-alternatives."
   $ROOTCMD update-alternatives --set x-www-browser /usr/bin/firefox-esr

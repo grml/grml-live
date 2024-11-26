@@ -127,13 +127,6 @@ zero ${target}/var/account/pacct \
      ${target}/var/log       \
      ${target}/var/mail/grml
 
-# on /run we don't have to create it
-if [ -d ${target}/var/run ] ; then
-  echo "Recreate empty utmp and wtmp"
-  :>${target}/var/run/utmp
-  :>${target}/var/run/wtmp
-fi
-
 if ! [ -x $target/usr/sbin/update-ca-certificates ] ; then
   echo "Warning: update-ca-certificates not installed"
 else

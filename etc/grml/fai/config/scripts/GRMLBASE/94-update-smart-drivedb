@@ -14,22 +14,14 @@ fi
 set -u
 set -e
 
-[ -x $target/usr/bin/timeout ] && TIMEOUT="10" || TIMEOUT=""
-
 if ! [ -x ${target}/usr/sbin/update-smart-drivedb ] ; then
   echo "NOTE: update-smart-drivedb not present (possibly smartmontools >=6.4+svn4214-1 present)"
   exit 0
 fi
 
 echo "Updating smartmontool drivedb"
-if [ -n "$TIMEOUT" ] ; then
-   if ! $ROOTCMD timeout $TIMEOUT update-smart-drivedb ; then
-     echo "Warning: failed to update smartmontool drivedb, ignoring failure"
-   fi
-else
-   if ! $ROOTCMD update-smart-drivedb ; then
-     echo "Warning: failed to update smartmontool drivedb, ignoring failure"
-   fi
+if ! $ROOTCMD timeout 10 update-smart-drivedb ; then
+  echo "Warning: failed to update smartmontool drivedb, ignoring failure"
 fi
 
 ## END OF FILE #################################################################
