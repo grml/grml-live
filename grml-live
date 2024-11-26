@@ -131,12 +131,14 @@ CONFIGDUMP=''
 
 # don't use colors/escape sequences
 if [ -r /lib/lsb/init-functions ] ; then
+  # shellcheck source=/dev/null
   . /lib/lsb/init-functions
   # shellcheck disable=SC2034
   ! log_use_fancy_output && NOCOLORS=true
 fi
 
 if [ -r /etc/grml/lsb-functions ] ; then
+   # shellcheck source=/dev/null
    . /etc/grml/lsb-functions
 else
    einfo()  { echo "  [*] $*" ;}
