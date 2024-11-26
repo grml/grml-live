@@ -7,4 +7,5 @@ rm_conffile /etc/grml/fai/config/scripts/GRMLBASE/36-cpufrequtils 0.33.0~
 rm_conffile /etc/grml/fai/config/scripts/GRMLBASE/37-portmap 0.49.2~
 rm_conffile /etc/grml/fai/config/scripts/GRMLBASE/40-deborphan 0.35.0~
 rm_conffile /etc/grml/fai/config/scripts/GRMLBASE/93-update-usbids 0.45.0~
+rm_conffile /etc/grml/fai/config/scripts/GRMLBASE/94-update-smart-drivedb 0.49.2~
 rm_conffile /etc/grml/fai/config/files/etc/apt/sources.list.d/debian.list/DEBIAN_SID 0.47.10~
