@@ -494,7 +494,7 @@ fi
 
 # trim characters that are known to cause problems inside $GRML_NAME;
 # for example isolinux does not like '-' inside the directory name
-[ -n "$GRML_NAME" ] && export SHORT_NAME="$(echo "$GRML_NAME" | tr -d ',./;\- ')"
+[ -n "$GRML_NAME" ] && SHORT_NAME="$(echo "$GRML_NAME" | tr -d ',./;\- ')"
 
 # export variables to have them available in fai scripts:
 [ -n "$GRML_NAME" ]   && export GRML_NAME="$GRML_NAME"
