@@ -1627,19 +1627,14 @@ else
      amd64)
        eindent
 
-       if ! dpkg --compare-versions $(dpkg-query -W -f='${Version}\n' xorriso 2>/dev/null) gt-nl 1.1.6-1 ; then
-         log   "Disabling (U)EFI boot support because xorriso version is too old."
-         ewarn "Disabling (U)EFI boot support because xorriso version is too old." ; eend 0
+       if [ -r "${BUILD_OUTPUT}"/boot/efi.img ] ; then
+         einfo "Enabling (U)EFI boot."
+         log   "Enabling (U)EFI boot."
+         BOOT_ARGS="$BOOT_ARGS -boot-info-table -eltorito-alt-boot -e boot/efi.img -no-emul-boot"
+         eend $?
        else
-         if [ -r "${BUILD_OUTPUT}"/boot/efi.img ] ; then
-           einfo "Enabling (U)EFI boot."
-           log   "Enabling (U)EFI boot."
-           BOOT_ARGS="$BOOT_ARGS -boot-info-table -eltorito-alt-boot -e boot/efi.img -no-emul-boot"
-           eend $?
-         else
-           log   "Disabling (U)EFI boot support because /boot/efi.img is missing."
-           ewarn "Disabling (U)EFI boot support because /boot/efi.img is missing." ; eend 0
-         fi
+         log   "Disabling (U)EFI boot support because /boot/efi.img is missing."
+         ewarn "Disabling (U)EFI boot support because /boot/efi.img is missing." ; eend 0
        fi
 
        eoutdent
