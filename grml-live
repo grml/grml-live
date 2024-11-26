@@ -559,7 +559,7 @@ if [ -z "$FORCE" ] ; then
    fi
    echo
    echo -n "Is this ok for you? [y/N] "
-   read a
+   read -r a
    if ! [ "$a" = 'y' ] || [ "$a" = 'Y' ] ; then
       CLEAN_ARTIFACTS=0
       echo "Exiting as requested."
