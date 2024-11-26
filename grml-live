@@ -1110,7 +1110,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
       einfo "Generating /conf/bootid.txt with entry ${BOOTID}."
       log   "Generating /conf/bootid.txt with entry ${BOOTID}."
       echo "$BOOTID" > "$BUILD_OUTPUT"/conf/bootid.txt
-      eend $?
+      eend 0
     fi
 
     # every recent Grml ISO ships a /conf/bootid.txt, though GRUB might find
@@ -1129,7 +1129,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
       echo "# This file is relevant for GRUB boot with the Grml ISO." > "${BUILD_OUTPUT}/${BOOT_FILE}"
       # save information about the random filename inside /conf/bootfile.txt
       echo "${BOOT_FILE}" > "${BUILD_OUTPUT}"/conf/bootfile.txt
-      eend $?
+      eend 0
     fi
 
     grub_setup
@@ -1138,27 +1138,27 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
     if [ -r "${CHROOT_OUTPUT}/boot/efi.img" ] && [ -r "${CHROOT_OUTPUT}/boot/bootaa64.efi" ] ; then
       einfo "Copying 64-bit EFI boot files (arm64) into ISO path."
       log   "Copying 64-bit EFI boot files (arm64) into ISO path."
-      RC=$0
+      RC=0
       cp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
       mkdir -p "${BUILD_OUTPUT}/EFI/BOOT/" || RC=$?
       cp "${CHROOT_OUTPUT}/boot/bootaa64.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootaa64.efi" || RC=$?
-      eend $?
+      eend "$RC"
     elif [ -r "${CHROOT_OUTPUT}/boot/efi.img" ] && [ -r "${CHROOT_OUTPUT}/boot/bootx64.efi" ] ; then
       einfo "Copying 64-bit EFI boot files (amd64) into ISO path."
       log   "Copying 64-bit EFI boot files (amd64) into ISO path."
-      RC=$0
+      RC=0
       cp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
       mkdir -p "${BUILD_OUTPUT}/EFI/BOOT/" || RC=$?
       cp "${CHROOT_OUTPUT}/boot/bootx64.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootx64.efi" || RC=$?
-      eend $?
+      eend "$RC"
     elif [ -r "${CHROOT_OUTPUT}/boot/efi.img" ] && [ -r "${CHROOT_OUTPUT}/boot/bootia32.efi" ] ; then
       einfo "Copying 32-bit EFI boot files into ISO path."
       log   "Copying 32-bit EFI boot files into ISO path."
-      RC=$0
+      RC=0
       cp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
       mkdir -p "${BUILD_OUTPUT}/EFI/BOOT/" || RC=$?
       cp "${CHROOT_OUTPUT}/boot/bootia32.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootia32.efi" || RC=$?
-      eend $?
+      eend "$RC"
     else
       ewarn "No EFI boot files found, skipping." ; eend 0
     fi
@@ -1408,7 +1408,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
         log "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
         einfo "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
         echo "include console.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-        eend $?
+        eend 0
       fi
     else
       log 'Using graphical boot menu.'
