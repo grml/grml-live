@@ -31,7 +31,6 @@ bailout() {
 }
 
 
-[ -x $target/usr/bin/timeout ] && TIMEOUT="10" || TIMEOUT=""
 
 if ! [ -x "${target}/usr/sbin/update-pciids" ] && ! [ -x "${target}/usr/bin/update-pciids" ] ; then
   echo "Warning: update-pciids not installed (neither /usr/sbin/update-pciids nor /usr/bin/update-pciids exists"
@@ -39,13 +38,8 @@ if ! [ -x "${target}/usr/sbin/update-pciids" ] && ! [ -x "${target}/usr/bin/upda
 fi
 
 echo "Updating PCI-IDs"
-if [ -n "$TIMEOUT" ] ; then
-   $ROOTCMD timeout $TIMEOUT update-pciids
-   bailout $?
-else
-   $ROOTCMD update-pciids
-   bailout $?
-fi
+$ROOTCMD timeout 10 update-pciids
+bailout $?
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
