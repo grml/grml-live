@@ -9,6 +9,9 @@
 set -u
 set -e
 
+# FAI sets ${target}, but shellcheck does not know that.
+target=${target:?}
+
 # if hooks/updatebase.GRMLBASE fails for whatever reason
 # and can't skip instsoft.GRMLBASE we have to make sure
 # we exit here as well
@@ -24,16 +27,16 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    # /etc/resolv.conf is usually a symlink, pointing out of the chroot.
    # Make it a file with known contents.
    rm -f "${target}"/etc/resolv.conf
-   cat /etc/resolv.conf >> "$target"/etc/resolv.conf
+   cat /etc/resolv.conf >> "${target}"/etc/resolv.conf
 
-   if [ -r $target/etc/policy-rc.d.conf ] ; then
-      sed -i "s/EXITSTATUS=.*/EXITSTATUS='101'/" $target/etc/policy-rc.d.conf
+   if [ -r "${target}"/etc/policy-rc.d.conf ] ; then
+      sed -i "s/EXITSTATUS=.*/EXITSTATUS='101'/" "${target}"/etc/policy-rc.d.conf
    fi
 
    # we definitely don't want to fail running fai sofupdate just
    # because of some well known bugs:
-   [ -d $target/etc/apt/apt.conf.d ] || mkdir $target/etc/apt/apt.conf.d
-   cat > $target/etc/apt/apt.conf.d/10apt-listbugs << EOF
+   [ -d "${target}"/etc/apt/apt.conf.d ] || mkdir "${target}"/etc/apt/apt.conf.d
+   cat > "${target}"/etc/apt/apt.conf.d/10apt-listbugs << EOF
 // Check all packages whether they has critical bugs before they are installed.
 // If you don't like it, comment it out.
 //DPkg::Pre-Install-Pkgs {"/usr/sbin/apt-listbugs apt || exit 10"};
@@ -87,11 +90,14 @@ EOF
 
    if $ROOTCMD test -x /usr/bin/aptitude ; then
       if $ROOTCMD aptitude --help | grep -q safe-upgrade ; then
+         # shellcheck disable=SC2086 # APTITUDE_OPTS needs word-splitting.
          APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD aptitude -y $APTITUDE_OPTS safe-upgrade
       else
+         # shellcheck disable=SC2086 # APTITUDE_OPTS needs word-splitting.
          APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD aptitude -y $APTITUDE_OPTS upgrade
       fi
    else
+      # shellcheck disable=SC2086 # APTGET_OPTS needs word-splitting.
       APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD apt-get -y $APTGET_OPTS --force-yes upgrade
    fi
 
@@ -99,7 +105,7 @@ EOF
 fi
 
 # no softupdate but fresh installation
-echo "Action $FAI_ACTION of FAI (hooks/instsoft.GRMLBASE) via grml-live running"
+echo "Action ${FAI_ACTION} of FAI (hooks/instsoft.GRMLBASE) via grml-live running"
 
 # work around /etc/kernel/postinst.d/zz-update-grub failing
 # inside openvz environment, see #597084
@@ -120,8 +126,8 @@ fi
 
 # we definitely don't want to fail running fai dirinstall just
 # because of some well known bugs:
-[ -d $target/etc/apt/apt.conf.d ] || mkdir $target/etc/apt/apt.conf.d
-cat > $target/etc/apt/apt.conf.d/10apt-listbugs << EOF
+[ -d "${target}"/etc/apt/apt.conf.d ] || mkdir "${target}"/etc/apt/apt.conf.d
+cat > "${target}"/etc/apt/apt.conf.d/10apt-listbugs << EOF
 // Check all packages whether they has critical bugs before they are installed.
 // If you don't like it, comment it out.
 //DPkg::Pre-Install-Pkgs {"/usr/sbin/apt-listbugs apt || exit 10"};
@@ -130,13 +136,13 @@ cat > $target/etc/apt/apt.conf.d/10apt-listbugs << EOF
 EOF
 
 # make sure /dev/MAKEDEV is available:
-if [ -x "$target"/sbin/MAKEDEV ] && ! [ -r "$target"/dev/MAKEDEV ] ; then
-   ln -s /sbin/MAKEDEV "$target"/dev/MAKEDEV
+if [ -x "${target}"/sbin/MAKEDEV ] && ! [ -r "${target}"/dev/MAKEDEV ] ; then
+   ln -s /sbin/MAKEDEV "${target}"/dev/MAKEDEV
 fi
 
 # we don't need the invoke-rc.d.d diversion (we have grml-policyrcd :)):
-if [ -L "$target"/usr/sbin/invoke-rc.d ] ; then
-   rm -f "$target"/usr/sbin/invoke-rc.d
+if [ -L "${target}"/usr/sbin/invoke-rc.d ] ; then
+   rm -f "${target}"/usr/sbin/invoke-rc.d
    $ROOTCMD dpkg-divert --package fai --rename --remove /usr/sbin/invoke-rc.d
 fi
 
