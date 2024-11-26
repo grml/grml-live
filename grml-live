@@ -1352,10 +1352,10 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
 
     for param in ARCH DATE DISTRI_INFO DISTRI_NAME DISTRI_SPLASH GRML_NAME SQUASHFS_NAME \
       RELEASE_INFO SHORT_NAME VERSION ; do
-      for file in $(find "${BUILD_OUTPUT}" -name "*%$param%*") ; do
+      while IFS= read -r -d '' file ; do
         value=$(eval echo '$'"$param")
         mv "${file}" "${file/\%${param}\%/$value}"
-      done
+      done < <(find "${BUILD_OUTPUT}" -name "*%$param%*" -print0)
     done
 
     # generate addon list
