@@ -391,7 +391,7 @@ while getopts "a:C:c:d:D:e:g:i:I:o:r:s:S:t:U:v:w:AbBFhnNqQuVz" opt; do
     ?) echo "invalid option -$OPTARG" >&2; usage; bailout 1 ;;
   esac
 done
-shift $(($OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
+shift $((OPTIND - 1))  # set ARGV to the first not parsed commandline parameter
 
 if [ -n "$1" ] ; then
   echo "Error: unknown argument '$1' in options. Exiting to avoid possible data loss." >&2
