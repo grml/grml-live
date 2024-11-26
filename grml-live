@@ -640,9 +640,11 @@ if [ -n "$EXTRACT_ISO_NAME" ]; then
     bailout 1
   fi
 
-  if ls "${tempdir}"/live/*/*.squashfs 2>/dev/null | grep -q . ; then
-    log "Using ${tempdir}/live/*/*.squashfs for unsquashfs"
-    unsquashfs -d "${CHROOT_OUTPUT}" "${tempdir}"/live/*/*.squashfs ; rc=$?
+  local squashfs
+  squahsfs=( "${tempdir}"/live/*/*.squashfs )
+  if (( ${#squahsfs[@]} != 0 )) && [ -r "${squashfs[0]}" ]; then
+    log "Will unsquashfs ${squashfs[0]}"
+    unsquashfs -d "${CHROOT_OUTPUT}" "${squashfs[0]}" ; rc=$?
   else
     log "Error: Could not find any *.squashfs files on the ISO"
     eerror "Error: Could not find any *.squashfs files on the ISO"
