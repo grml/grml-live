@@ -254,26 +254,8 @@ cut_string() {
   echo "$2" | head -c "$1"; echo -ne "\n"
 }
 
-# prepend int = $1 spaces before string = $2
-# usage: extend_string_begin 5 "123" will output "  123"
-extend_string_begin() {
-  [ -n "$2" ] || return 1
-  local COUNT FILL
-  COUNT=$(echo "$2" | wc -c)
-  FILL=$(expr "$COUNT" - "$1")
-  while [ "$FILL" -gt 1 ] ; do
-    echo -n " "
-    FILL=$(expr "$FILL" - 1)
-  done
-  while [ "$FILL" -lt 1 ] ; do
-    echo -n " "
-    FILL=$(expr "$FILL" + 1)
-  done
-  echo "$2" | head -c "$1"; echo -ne "\n"
-}
-
 # append int = $1 spaces to string = $2
-# usage: extend_string_begin 5 "123" will output "123  "
+# usage: extend_string_end 5 "123" will output "123  "
 extend_string_end() {
   [ -n "$2" ] || return 1
   local COUNT FILL
