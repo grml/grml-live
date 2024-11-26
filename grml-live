@@ -1347,21 +1347,23 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
     if ! [ -r "${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg" ] || [ "$DISTRI_NAME" = "grml" ] ; then
       log "including grmlmain.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
       echo "include grmlmain.cfg"    >  "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-      echo "include default.cfg"     >  "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-      echo "include menuoptions.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-      echo "include grml.cfg"        >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
 
-      for f in "${BUILD_OUTPUT}"/boot/isolinux/submenu*.cfg ; do
-        echo "include $(basename "$f")"     >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-      done
-
-      echo "include options.cfg"     >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-      if [ -z "$NO_ADDONS" ] ; then
-        echo "include addons.cfg"    >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-      fi
-      echo "include isoprompt.cfg"   >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-      echo "include hd.cfg"          >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-      echo "include hidden.cfg"      >> "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
+      # Generate grmlmain.cfg
+      {
+        echo "include default.cfg"
+        echo "include menuoptions.cfg"
+        echo "include grml.cfg"
+        for f in "${BUILD_OUTPUT}"/boot/isolinux/submenu*.cfg ; do
+          echo "include $(basename "$f")"
+        done
+        echo "include options.cfg"
+        if [ -z "$NO_ADDONS" ] ; then
+          echo "include addons.cfg"
+        fi
+        echo "include isoprompt.cfg"
+        echo "include hd.cfg"
+        echo "include hidden.cfg"
+      } > "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
     else # assume we are building a custom distribution:
       log "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
       einfo "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
