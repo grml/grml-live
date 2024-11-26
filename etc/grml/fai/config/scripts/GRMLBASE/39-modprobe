@@ -9,6 +9,9 @@
 set -u
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 # Install all present modprobe.d configuration files
 fcopy -v -i -r /etc/modprobe.d
 

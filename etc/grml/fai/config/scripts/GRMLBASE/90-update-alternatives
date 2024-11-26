@@ -9,6 +9,9 @@
 set -u
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 # starting with vim v2:8.1.2136-1 it uses /usr/libexec/vim for the vim.* binaries
 if $ROOTCMD update-alternatives --list editor 2>/dev/null | grep -q /usr/libexec/vim ; then
   VIM_PATH=/usr/libexec/vim
@@ -69,7 +72,7 @@ fi
 
 # sadly isn't available via update-alternates, anyway - use
 # ntfs-3g (if available) as default for ntfs
-if [ -r $target/sbin/mount.ntfs-3g ] || [ -L $target/sbin/mount.ntfs-3g ] ; then
+if [ -r "$target"/sbin/mount.ntfs-3g ] || [ -L "$target"/sbin/mount.ntfs-3g ] ; then
   $ROOTCMD ln -sf /sbin/mount.ntfs-3g /sbin/mount.ntfs
 fi
 

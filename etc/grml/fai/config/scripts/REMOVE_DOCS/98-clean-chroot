@@ -8,26 +8,29 @@
 set -u
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 echo "Cleaning documentation directories"
-if [ -d $target/usr/share/doc/grml-docs ] ; then
-  mv $target/usr/share/doc/grml-docs $target/tmp/
+if [ -d "$target"/usr/share/doc/grml-docs ] ; then
+  mv "$target"/usr/share/doc/grml-docs "$target"/tmp/
 fi
 
-rm -rf $target/usr/share/doc
-mkdir $target/usr/share/doc
+rm -rf "$target"/usr/share/doc
+mkdir "$target"/usr/share/doc
 
-if [ -d $target/tmp/grml-docs ] ; then
-  mv $target/tmp/grml-docs $target/usr/share/doc/grml-docs
+if [ -d "$target"/tmp/grml-docs ] ; then
+  mv "$target"/tmp/grml-docs "$target"/usr/share/doc/grml-docs
 fi
 
-rm -rf $target/usr/share/gtk-doc/ \
-       $target/usr/share/man/ \
-       $target/usr/man \
-       $target/usr/share/info \
-       $target/var/cache/man/*
+rm -rf "$target"/usr/share/gtk-doc/ \
+       "$target"/usr/share/man/ \
+       "$target"/usr/man \
+       "$target"/usr/share/info \
+       "$target"/var/cache/man/*
 
 echo "Creating /usr/share/info/..."
-mkdir -p $target/usr/share/info/
+mkdir -p "$target"/usr/share/info/
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

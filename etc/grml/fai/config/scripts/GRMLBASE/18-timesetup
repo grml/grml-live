@@ -9,6 +9,9 @@
 set -u
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 # tell if hwclock is running in UTC or local time
 # by default it's set to UTC=no
 if [ -n "$UTC" ] && [ "$UTC" = "yes" ] ; then
@@ -20,14 +23,14 @@ fi
 if [ -n "$TIMEZONE" ] ; then
    echo "Setting default timezone to $TIMEZONE"
    # update debconf
-   area=$(echo $TIMEZONE | cut -d '/' -f1)
-   zone=$(echo $TIMEZONE | cut -d '/' -f2)
+   area=$(echo "$TIMEZONE" | cut -d '/' -f1)
+   zone=$(echo "$TIMEZONE" | cut -d '/' -f2)
    echo "tzdata tzdata/Areas       select $area" | $ROOTCMD debconf-set-selections
    echo "tzdata tzdata/Zones/$area select $zone" | $ROOTCMD debconf-set-selections
    # update files
-   echo $TIMEZONE > $target/etc/timezone
-   rm -f $target/etc/localtime
-   cp -f $target/usr/share/zoneinfo/$TIMEZONE $target/etc/localtime
+   echo "$TIMEZONE" > "$target"/etc/timezone
+   rm -f "$target"/etc/localtime
+   cp -f "$target"/usr/share/zoneinfo/"$TIMEZONE" "$target"/etc/localtime
 fi
 
 ## END OF FILE ################################################################

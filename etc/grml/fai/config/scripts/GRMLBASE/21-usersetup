@@ -8,25 +8,30 @@
 
 set -u
 set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+# shellcheck source=/dev/null
 . "$GRML_LIVE_CONFIG"
 
-if grep -q "$USERNAME:x:1000" $target/etc/group ; then
+if grep -q "$USERNAME:x:1000" "$target"/etc/group ; then
    echo "group $USERNAME exists already, skipping"
 else
-  $ROOTCMD addgroup --gid 1000 $USERNAME
+  $ROOTCMD addgroup --gid 1000 "$USERNAME"
 fi
 
-if grep -q "$USERNAME:x:1000" $target/etc/passwd ; then
+if grep -q "$USERNAME:x:1000" "$target"/etc/passwd ; then
    echo "user $USERNAME exists already, skipping"
 else
-   $ROOTCMD useradd -d /home/$USERNAME -m -s /bin/zsh -g 1000 $USERNAME
+   $ROOTCMD useradd -d /home/"$USERNAME" -m -s /bin/zsh -g 1000 "$USERNAME"
 fi
 
 # make sure to add the user to all relevant groups:
 add_user_to_group() {
    [ -n "$1" ] || return 1
-   if grep -q $1 $target/etc/group ; then
-      grep "$1:x:.*$USERNAME" $target/etc/group || $ROOTCMD adduser $USERNAME $1
+   if grep -q "$1" "$target"/etc/group ; then
+      grep "$1:x:.*$USERNAME" "$target"/etc/group || $ROOTCMD adduser "$USERNAME" "$1"
    fi
 }
 
@@ -55,12 +60,12 @@ add_user_to_group video
 add_user_to_group vlock
 add_user_to_group voice
 
-sed -i 's/^root::/root:*:/'            $target/etc/shadow
-sed -i "s/^$USERNAME:!:/$USERNAME:*:/" $target/etc/shadow
+sed -i 's/^root::/root:*:/'            "$target"/etc/shadow
+sed -i "s/^$USERNAME:!:/$USERNAME:*:/" "$target"/etc/shadow
 
 if $ROOTCMD [ -r /bin/zsh ] ; then
    $ROOTCMD chsh -s /bin/zsh root
-   $ROOTCMD chsh -s /bin/zsh $USERNAME
+   $ROOTCMD chsh -s /bin/zsh "$USERNAME"
 fi
 
 ## END OF FILE #################################################################

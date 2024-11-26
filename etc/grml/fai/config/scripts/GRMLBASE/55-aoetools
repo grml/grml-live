@@ -8,6 +8,9 @@
 
 set -eu
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 # see https://github.com/grml/grml/issues/32
 echo "Removing /usr/lib/modules-load.d/aoetools.conf to avoid automatic aoe discovery"
 rm -f "${target}/usr/lib/modules-load.d/aoetools.conf"

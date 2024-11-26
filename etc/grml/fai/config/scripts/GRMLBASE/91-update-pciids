@@ -13,6 +13,9 @@ fi
 
 set -u
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 bailout() {
   if [ "${1:-}" = "4" ] || [ "${1:-}" = "1" ] ; then
     echo "Warning: update-pciids returned with exit code ${1:-}." >&2
@@ -29,7 +32,6 @@ bailout() {
 
   exit "${1:-0}"
 }
-
 
 
 if ! [ -x "${target}/usr/sbin/update-pciids" ] && ! [ -x "${target}/usr/bin/update-pciids" ] ; then

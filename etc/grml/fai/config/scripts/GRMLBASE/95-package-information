@@ -9,6 +9,9 @@
 set -u
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 if ! [ -w "$LOGDIR" ] ; then
    echo "Error: can not write to ${LOGDIR}. Exiting.">&2
    exit 1
@@ -17,7 +20,8 @@ else
    COLUMNS=200 $ROOTCMD dpkg --list > "${LOGDIR}"/dpkg.list
    COLUMNS=200 $ROOTCMD dpkg --get-selections > "${LOGDIR}"/dpkg.selections
    # store list of packages sorted by size:
-   if [ -x $target/usr/bin/dpkg-query ] ; then
+   if [ -x "$target"/usr/bin/dpkg-query ] ; then
+      # shellcheck disable=SC2016 # Embedded $ is correct.
       $ROOTCMD dpkg-query -W --showformat='${Package}\t${Installed-Size}\n' > \
       "${LOGDIR}"/packages.size
    fi
@@ -26,7 +30,7 @@ else
       echo "The following packages from the Debian non-free section are included in this release" \
          > "${LOGDIR}"/nonfree-licenses.txt
       echo >> "${LOGDIR}"/nonfree-licenses.txt
-      for pkg in `$ROOTCMD aptitude search '~i ~snon-free' -F '%p'` ; do
+      for pkg in $($ROOTCMD aptitude search '~i ~snon-free' -F '%p') ; do
          echo "Package: ${pkg}" >> "${LOGDIR}"/nonfree-licenses.txt
          echo "========================================================================" \
             >> "${LOGDIR}"/nonfree-licenses.txt

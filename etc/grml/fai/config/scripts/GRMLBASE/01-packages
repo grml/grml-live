@@ -9,6 +9,9 @@
 set -u
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 echo -n > "${LOGDIR}"/package_errors.log  # ensure we start with an empty file
 
 if ! [ -e "${LOGDIR}"/software.log ] ; then

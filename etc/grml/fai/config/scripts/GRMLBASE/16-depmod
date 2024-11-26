@@ -9,13 +9,16 @@
 set -u
 set -e
 
-if ! [ -x $target/sbin/depmod ] ; then
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+if ! [ -x "$target"/sbin/depmod ] ; then
   echo "Warning: depmod not installed"
   exit 0
 fi
 
-for kernel in ${target}/boot/vmlinuz-* ; do
-  kernelversion=${kernel##$target}
+for kernel in "$target"/boot/vmlinuz-* ; do
+  kernelversion=${kernel##"$target"}
   kernelversion=${kernelversion##/boot/vmlinuz-}
 
   echo "Updating modules.dep for kernel ${kernelversion}"

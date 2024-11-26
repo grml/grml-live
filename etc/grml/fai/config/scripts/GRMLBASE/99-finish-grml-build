@@ -9,18 +9,21 @@
 set -u
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 # Restore original state from softupdate:
-if [ -r $target/etc/policy-rc.d.conf ] ; then
-   sed -i "s/EXITSTATUS='101'/EXITSTATUS='0'/" $target/etc/policy-rc.d.conf
+if [ -r "$target"/etc/policy-rc.d.conf ] ; then
+   sed -i "s/EXITSTATUS='101'/EXITSTATUS='0'/" "$target"/etc/policy-rc.d.conf
 fi
 
 # remove an existing /etc/debian_chroot file:
-if [ -r $target/etc/debian_chroot ] ; then
-   rm -f $target/etc/debian_chroot
+if [ -r "$target"/etc/debian_chroot ] ; then
+   rm -f "$target"/etc/debian_chroot
 fi
 
 # /etc/grml_cd makes the live system recognizable as a live system
-touch $target/etc/grml_cd
+touch "$target"/etc/grml_cd
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

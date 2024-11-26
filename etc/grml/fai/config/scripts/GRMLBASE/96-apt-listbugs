@@ -9,20 +9,23 @@
 set -u
 set -e
 
-if [ -r $target/etc/apt/apt.conf.d/10apt-listbugs ] ; then
-  if [ -x $target/usr/sbin/apt-listbugs ] ; then
-    sed -i 's#//DPkg::#DPkg::#' $target/etc/apt/apt.conf.d/10apt-listbugs
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+if [ -r "$target"/etc/apt/apt.conf.d/10apt-listbugs ] ; then
+  if [ -x "$target"/usr/sbin/apt-listbugs ] ; then
+    sed -i 's#//DPkg::#DPkg::#' "$target"/etc/apt/apt.conf.d/10apt-listbugs
   fi
 fi
 
 set +u
 if ifclass RELEASE ; then
 set -u
-  if [ -x $target/usr/sbin/apt-listbugs -a -x $target/usr/bin/apt-show-source ] && \
-     [ -x $target/etc/apt/grml/listbugs ] ; then
+  if [ -x "$target"/usr/sbin/apt-listbugs ] && [ -x "$target"/usr/bin/apt-show-source ] && \
+     [ -x "$target"/etc/apt/grml/listbugs ] ; then
      for severity in critical grave serious ; do
          SEVERITY=$severity $ROOTCMD /etc/apt/grml/listbugs > \
-         $LOGDIR/bugs.${severity} || true # make sure it does not fail
+         "$LOGDIR/bugs.${severity}" || true # make sure it does not fail
      done
   fi
 

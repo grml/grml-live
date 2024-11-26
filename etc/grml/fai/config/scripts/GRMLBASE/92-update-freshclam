@@ -19,6 +19,9 @@ fi
 
 set -u
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 bailout() {
   if [ "${1:-}" = "124" ] ; then
     echo "Warning: freshclam returned with exit code 124." >&2
@@ -37,7 +40,7 @@ bailout() {
   exit "${1:-0}"
 }
 
-if ! [ -x $target/usr/bin/freshclam ] ; then
+if ! [ -x "$target"/usr/bin/freshclam ] ; then
   echo "freshclam not installed"
   exit 0
 fi
