@@ -496,6 +496,7 @@ def main(program_name: str, argv: list[str]) -> int:
 
         # Copy dpkg.list into cache for next iteration.
         new_dpkg_list = get_dpkg_list_path_for_build(build_dir)
+        old_dpkg_list_previous_build.parent.mkdir(exist_ok=True)
         shutil.copyfile(new_dpkg_list, old_dpkg_list_previous_build)
 
     print("I: Success.")
