@@ -427,7 +427,7 @@ fi
 
 # assume sane defaults (if not set already) {{{
 [ -n "$ARCH" ]                    || ARCH="$(dpkg --print-architecture)"
-[ -n "$CLASSES" ]                 || CLASSES="GRMLBASE,GRML_FULL,$(echo "${ARCH}" | tr 'a-z' 'A-Z')"
+[ -n "$CLASSES" ]                 || CLASSES="GRMLBASE,GRML_FULL,$(echo "${ARCH}" | tr '[:lower:]' '[:upper:]')"
 [ -n "$DATE" ]                    || DATE="$(date +%Y-%m-%d)"
 [ -n "$DISTRI_INFO" ]             || DISTRI_INFO='Grml - Live Linux for system administrators'
 [ -n "$DISTRI_NAME" ]             || DISTRI_NAME="grml"
@@ -666,7 +666,7 @@ case "${SUITE}" in
   # avoid having to maintain DEBIAN_UNSTABLE *and* DEBIAN_SID class files:
         sid)               CLASSES="DEBIAN_UNSTABLE,$CLASSES" ;;
   # otherwise map e.g. bookworm to DEBIAN_BOOKWORM:
-          *)               CLASSES="DEBIAN_$(echo "$SUITE" | tr 'a-z' 'A-Z'),$CLASSES";;
+          *)               CLASSES="DEBIAN_$(echo "$SUITE" | tr '[:lower:]' '[:upper:]'),$CLASSES";;
 esac
 export SUITE # make sure it's available in FAI scripts
 
