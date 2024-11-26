@@ -258,15 +258,16 @@ cut_string() {
 # usage: extend_string_begin 5 "123" will output "  123"
 extend_string_begin() {
   [ -n "$2" ] || return 1
-  local COUNT=$(echo "$2" | wc -c)
-  local FILL=$(expr "$COUNT" - "$1")
+  local COUNT FILL
+  COUNT=$(echo "$2" | wc -c)
+  FILL=$(expr "$COUNT" - "$1")
   while [ "$FILL" -gt 1 ] ; do
     echo -n " "
-    local FILL=$(expr "$FILL" - 1)
+    FILL=$(expr "$FILL" - 1)
   done
   while [ "$FILL" -lt 1 ] ; do
     echo -n " "
-    local FILL=$(expr "$FILL" + 1)
+    FILL=$(expr "$FILL" + 1)
   done
   echo "$2" | head -c "$1"; echo -ne "\n"
 }
@@ -275,16 +276,17 @@ extend_string_begin() {
 # usage: extend_string_begin 5 "123" will output "123  "
 extend_string_end() {
   [ -n "$2" ] || return 1
+  local COUNT FILL
   echo -n "$2" | head -c "$1"
-  local COUNT=$(echo "$2" | wc -c)
-  local FILL=$(expr "$COUNT" - "$1")
+  COUNT=$(echo "$2" | wc -c)
+  FILL=$(expr "$COUNT" - "$1")
   while [ "$FILL" -gt 1 ] ; do
     echo -n " "
-    local FILL=$(expr "$FILL" - 1)
+    FILL=$(expr "$FILL" - 1)
   done
   while [ "$FILL" -lt 1 ] ; do
     echo -n " "
-    local FILL=$(expr "$FILL" + 1)
+    FILL=$(expr "$FILL" + 1)
   done
   echo -ne "\n"
 }
@@ -643,8 +645,9 @@ extract_iso() {
 if [ -n "$EXTRACT_ISO_NAME" ]; then
   log "Unpacking ISO from ${EXTRACT_ISO_NAME}"
   einfo "Unpacking ISO from ${EXTRACT_ISO_NAME}"
-  local tempdir=$(mktemp -d)
   local rc=0
+  local tempdir
+  tempdir=$(mktemp -d)
   mkdir -p "${tempdir}/live/"
   osirrox -indev "${EXTRACT_ISO_NAME}" -extract live "${tempdir}/live/" ; rc=$?
   if [ "$rc" != 0 ]; then
@@ -994,7 +997,8 @@ grub_setup() {
           einfo "Secure Boot is enabled [mode: ${SECURE_BOOT}]" ; eend 0
 
           local GRUBCFG_TEMPLATE="${TEMPLATE_DIRECTORY}/secureboot/grub.cfg"
-          local GRUBCFG_TMP=$(mktemp)
+          local GRUBCFG_TMP
+          GRUBCFG_TMP=$(mktemp)
 
           if ! [ -r "${GRUBCFG_TEMPLATE}" ] ; then
             log    "Secure Boot template for GRUB [${GRUBCFG_TEMPLATE}] not found."
