@@ -790,7 +790,7 @@ else
       BUILD_ONLY="$BUILD_ONLY" BOOTSTRAP_ONLY="$BOOTSTRAP_ONLY" GRML_LIVE_CONFIG="$CONFIGDUMP" fai $VERBOSE \
                   -C "$GRML_FAI_CONFIG" -s "file:///$GRML_FAI_CONFIG/config" -c"$CLASSES" \
                   -u "$HOSTNAME" "$FAI_ACTION" "$CHROOT_OUTPUT" $FAI_ARGS | tee -a "$LOGFILE"
-      RC="$PIPESTATUS" # notice: bash-only
+      RC="${PIPESTATUS[0]}" # notice: bash-only
 
       if [ "$RC" != 0 ] ; then
         store_logfiles  # ensure to have logfiles available even if building failed
