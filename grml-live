@@ -132,6 +132,7 @@ CONFIGDUMP=''
 # don't use colors/escape sequences
 if [ -r /lib/lsb/init-functions ] ; then
   . /lib/lsb/init-functions
+  # shellcheck disable=SC2034
   ! log_use_fancy_output && NOCOLORS=true
 fi
 
