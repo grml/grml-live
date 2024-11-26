@@ -1068,6 +1068,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
 
     # if we don't have an initrd we a) can't boot and b) there was an error
     # during build, so check for the file:
+    # shellcheck disable=SC2010 disable=SC2012 # We do not expect fancy characters here.
     INITRD=$(ls "$CHROOT_OUTPUT"/boot/initrd* 2>/dev/null| grep -v '.bak$' | sort -r | head -1)
     if [ -n "$INITRD" ] ; then
       cp "$INITRD" "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/initrd.img
@@ -1078,6 +1079,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
       bailout 10
     fi
 
+    # shellcheck disable=SC2010 disable=SC2012 # We do not expect fancy characters here.
     KERNEL_IMAGE=$(ls "$CHROOT_OUTPUT"/boot/vmlinuz* 2>/dev/null | sort -r | head -1)
     if [ -n "$KERNEL_IMAGE" ] ; then
       cp "$KERNEL_IMAGE" "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/vmlinuz
