@@ -90,7 +90,7 @@ Please send your bug reports and feedback to the grml-team: http://grml.org/bugs
 
 # make sure it's possible to get usage information without being
 # root or actually executing the script
-if [ "$1" = '-h' -o "$1" = '--help' ] ; then
+if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
    usage
    exit 0
 fi
@@ -213,8 +213,8 @@ bailout() {
   if [ -n "$CLEAN_ARTIFACTS" ]; then
     log "Cleaning up"
     einfo "Cleaning up"
-    [ -n "${BUILD_OUTPUT}"  -a -d "${BUILD_OUTPUT}"  ] && rm -r "${BUILD_OUTPUT}"
-    [ -n "${CHROOT_OUTPUT}" -a -d "${CHROOT_OUTPUT}" ] && rm -r "${CHROOT_OUTPUT}"
+    [ -n "${BUILD_OUTPUT}"  ] && [ -d "${BUILD_OUTPUT}"  ] && rm -r "${BUILD_OUTPUT}"
+    [ -n "${CHROOT_OUTPUT}" ] && [ -d "${CHROOT_OUTPUT}" ] && rm -r "${CHROOT_OUTPUT}"
     eend 0
   fi
 
@@ -224,12 +224,12 @@ bailout() {
   if [ -n "$CHOWN_USER" ]; then
     log "Setting ownership"
     einfo "Setting ownership"
-    [ -n "${OUTPUT}"         -a -d "${OUTPUT}"         ] && chown -R "${CHOWN_USER}:" "${OUTPUT}"
-    [ -n "${BUILD_OUTPUT}"   -a -d "${BUILD_OUTPUT}"   ] && chown -R "${CHOWN_USER}:" "${BUILD_OUTPUT}"
-    [ -n "${CHROOT_OUTPUT}"  -a -d "${CHROOT_OUTPUT}"  ] && chown -R "${CHOWN_USER}:" "${CHROOT_OUTPUT}"
-    [ -n "${ISO_OUTPUT}"     -a -d "${ISO_OUTPUT}"     ] && chown -R "${CHOWN_USER}:" "${ISO_OUTPUT}"
-    [ -n "${LOG_OUTPUT}"     -a -d "${LOG_OUTPUT}"     ] && chown -R "${CHOWN_USER}:" "${LOG_OUTPUT}"
-    [ -n "${NETBOOT}"        -a -d "${NETBOOT}"        ] && chown -R "${CHOWN_USER}:" "${NETBOOT}"
+    [ -n "${OUTPUT}"         ] && [ -d "${OUTPUT}"         ] && chown -R "${CHOWN_USER}:" "${OUTPUT}"
+    [ -n "${BUILD_OUTPUT}"   ] && [ -d "${BUILD_OUTPUT}"   ] && chown -R "${CHOWN_USER}:" "${BUILD_OUTPUT}"
+    [ -n "${CHROOT_OUTPUT}"  ] && [ -d "${CHROOT_OUTPUT}"  ] && chown -R "${CHOWN_USER}:" "${CHROOT_OUTPUT}"
+    [ -n "${ISO_OUTPUT}"     ] && [ -d "${ISO_OUTPUT}"     ] && chown -R "${CHOWN_USER}:" "${ISO_OUTPUT}"
+    [ -n "${LOG_OUTPUT}"     ] && [ -d "${LOG_OUTPUT}"     ] && chown -R "${CHOWN_USER}:" "${LOG_OUTPUT}"
+    [ -n "${NETBOOT}"        ] && [ -d "${NETBOOT}"        ] && chown -R "${CHOWN_USER}:" "${NETBOOT}"
     eend 0
   fi
   log "------------------------------------------------------------------------------"
@@ -556,7 +556,7 @@ if [ -z "$FORCE" ] ; then
    echo
    echo -n "Is this ok for you? [y/N] "
    read a
-   if ! [ "$a" = 'y' -o "$a" = 'Y' ] ; then
+   if ! [ "$a" = 'y' ] || [ "$a" = 'Y' ] ; then
       CLEAN_ARTIFACTS=0
       echo "Exiting as requested."
       exit 0
@@ -568,11 +568,11 @@ fi
 # clean up before start {{{
 if [ -n "${CLEAN_ARTIFACTS}" ]; then
   echo "Wiping old artifacts"
-  [ -n "${CHROOT_OUTPUT}"  -a -d "${CHROOT_OUTPUT}"  ] && rm -r "${CHROOT_OUTPUT}"
-  [ -n "${BUILD_OUTPUT}"   -a -d "${BUILD_OUTPUT}"   ] && rm -r "${BUILD_OUTPUT}"
-  [ -n "${ISO_OUTPUT}"     -a -d "${ISO_OUTPUT}"     ] && rm -r "${ISO_OUTPUT}"
-  [ -n "${LOG_OUTPUT}"     -a -d "${LOG_OUTPUT}"     ] && rm -r "${LOG_OUTPUT}"
-  [ -n "${NETBOOT}"        -a -d "${NETBOOT}"        ] && rm -r "${NETBOOT}"
+  [ -n "${CHROOT_OUTPUT}"  ] && [ -d "${CHROOT_OUTPUT}"  ] && rm -r "${CHROOT_OUTPUT}"
+  [ -n "${BUILD_OUTPUT}"   ] && [ -d "${BUILD_OUTPUT}"   ] && rm -r "${BUILD_OUTPUT}"
+  [ -n "${ISO_OUTPUT}"     ] && [ -d "${ISO_OUTPUT}"     ] && rm -r "${ISO_OUTPUT}"
+  [ -n "${LOG_OUTPUT}"     ] && [ -d "${LOG_OUTPUT}"     ] && rm -r "${LOG_OUTPUT}"
+  [ -n "${NETBOOT}"        ] && [ -d "${NETBOOT}"        ] && rm -r "${NETBOOT}"
 fi
 # }}}
 
@@ -751,13 +751,13 @@ if [ -n "$BUILD_DIRTY" ]; then
 else
    [ -n "$CHROOT_OUTPUT" ] || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
 
-   if [ -n "$UPDATE" -o -n "$BUILD_ONLY" ] ; then
+   if [ -n "$UPDATE" ] || [ -n "$BUILD_ONLY" ] ; then
       FAI_ACTION=softupdate
    else
       FAI_ACTION=dirinstall
    fi
 
-   if [ -n "$UPDATE" -o -n "$BUILD_ONLY" ] ; then
+   if [ -n "$UPDATE" ] || [ -n "$BUILD_ONLY" ] ; then
       if ! [ -r "$CHROOT_OUTPUT/etc/debian_version" ] ; then
          log    "Error: does not look like you have a working chroot. Updating/building not possible."
          eerror "Error: does not look like you have a working chroot. Updating/building not possible. (Drop -u/-b option?)"
@@ -766,7 +766,7 @@ else
       fi
    fi
 
-   if [ -d "$CHROOT_OUTPUT/bin" -a -z "$UPDATE" -a -z "$BUILD_ONLY" ] ; then
+   if [ -d "$CHROOT_OUTPUT/bin" ] && [ -z "$UPDATE" ] && [ -z "$BUILD_ONLY" ] ; then
       log   "Skipping stage 'fai dirinstall' as $CHROOT_OUTPUT exists already."
       ewarn "Skipping stage 'fai dirinstall' as $CHROOT_OUTPUT exists already." ; eend 0
    else
@@ -915,7 +915,7 @@ EOF
 EOF
   eend 0
 
-  if [ -n "$EXIT_ON_MISSING_PACKAGES" -a -z "$BUILD_DIRTY" ] ; then
+  if [ -n "$EXIT_ON_MISSING_PACKAGES" ] && [ -z "$BUILD_DIRTY" ] ; then
     eerror "The following packages were requested for installation but could not be processed:"
     cat "$CHECKLOG/package_errors.log"
     eerror "... exiting as requested via \$EXIT_ON_MISSING_PACKAGES."
@@ -1133,7 +1133,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
     grub_setup
 
     # EFI boot files
-    if [ -r "${CHROOT_OUTPUT}/boot/efi.img" -a -r "${CHROOT_OUTPUT}/boot/bootaa64.efi" ] ; then
+    if [ -r "${CHROOT_OUTPUT}/boot/efi.img" ] && [ -r "${CHROOT_OUTPUT}/boot/bootaa64.efi" ] ; then
       einfo "Copying 64-bit EFI boot files (arm64) into ISO path."
       log   "Copying 64-bit EFI boot files (arm64) into ISO path."
       RC=$0
@@ -1141,7 +1141,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
       mkdir -p "${BUILD_OUTPUT}/EFI/BOOT/" || RC=$?
       cp "${CHROOT_OUTPUT}/boot/bootaa64.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootaa64.efi" || RC=$?
       eend $?
-    elif [ -r "${CHROOT_OUTPUT}/boot/efi.img" -a -r "${CHROOT_OUTPUT}/boot/bootx64.efi" ] ; then
+    elif [ -r "${CHROOT_OUTPUT}/boot/efi.img" ] && [ -r "${CHROOT_OUTPUT}/boot/bootx64.efi" ] ; then
       einfo "Copying 64-bit EFI boot files (amd64) into ISO path."
       log   "Copying 64-bit EFI boot files (amd64) into ISO path."
       RC=$0
@@ -1149,7 +1149,7 @@ if [ "$ARCH" = i386 ] || [ "$ARCH" = amd64 ] || [ "$ARCH" = arm64 ] ; then
       mkdir -p "${BUILD_OUTPUT}/EFI/BOOT/" || RC=$?
       cp "${CHROOT_OUTPUT}/boot/bootx64.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootx64.efi" || RC=$?
       eend $?
-    elif [ -r "${CHROOT_OUTPUT}/boot/efi.img" -a -r "${CHROOT_OUTPUT}/boot/bootia32.efi" ] ; then
+    elif [ -r "${CHROOT_OUTPUT}/boot/efi.img" ] && [ -r "${CHROOT_OUTPUT}/boot/bootia32.efi" ] ; then
       einfo "Copying 32-bit EFI boot files into ISO path."
       log   "Copying 32-bit EFI boot files into ISO path."
       RC=$0
@@ -1460,7 +1460,7 @@ if [ -n "$CHROOT_INSTALL" ] ; then
   fi
 fi
 
-if [ -f "$BUILD_OUTPUT"/live/"${GRML_NAME}".squashfs -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" ] ; then
+if [ -f "$BUILD_OUTPUT"/live/"${GRML_NAME}".squashfs ] && [ -z "$UPDATE" ] && [ -z "$BUILD_ONLY" ] && [ -z "$BUILD_DIRTY" ] ; then
    log   "Skipping stage 'squashfs' as $BUILD_OUTPUT/live exists already."
    ewarn "Skipping stage 'squashfs' as $BUILD_OUTPUT/live exists already." ; eend 0
 elif [ -n "$SKIP_MKSQUASHFS" ] ; then
@@ -1494,7 +1494,7 @@ else
    fi
 
    # support exclusion of files via exclude-file:
-   if [ -n "$SQUASHFS_EXCLUDES_FILE" -a "$SQUASHFS_EXCLUDES_FILE" ] ; then
+   if [ -n "$SQUASHFS_EXCLUDES_FILE" ] && [ "$SQUASHFS_EXCLUDES_FILE" ] ; then
       SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -ef $SQUASHFS_EXCLUDES_FILE -wildcards"
    fi
 
@@ -1604,7 +1604,7 @@ if [ "$HYBRID_METHOD" = "isohybrid" ] ; then
   EFI_ARGS="-isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin -eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
 fi
 
-if [ -f "${ISO_OUTPUT}/${ISO_NAME}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" -a "$FORCE_ISO_REBUILD" = "false" ]  ; then
+if [ -f "${ISO_OUTPUT}/${ISO_NAME}" ] && [ -z "$UPDATE" ] && [ -z "$BUILD_ONLY" ] && [ -z "$BUILD_DIRTY" ] && [ "$FORCE_ISO_REBUILD" = "false" ]  ; then
    log   "Skipping stage 'iso build' as $ISO_OUTPUT/${ISO_NAME} exists already."
    ewarn "Skipping stage 'iso build' as $ISO_OUTPUT/${ISO_NAME} exists already." ; eend 0
 elif [ -n "$SKIP_MKISOFS" ] ; then
@@ -1706,7 +1706,7 @@ fi
 create_netbootpackage() {
   local OUTPUT_FILE="${NETBOOT}/grml_netboot_package_${GRML_NAME}_${VERSION}.tar"
 
-  if [ -f "${OUTPUT_FILE}" -a -z "$UPDATE" -a -z "$BUILD_ONLY" -a -z "$BUILD_DIRTY" ] ; then
+  if [ -f "${OUTPUT_FILE}" ] && [ -z "$UPDATE" ] && [ -z "$BUILD_ONLY" ] && [ -z "$BUILD_DIRTY" ] ; then
     log   "Skipping stage 'netboot' as $OUTPUT_FILE exists already."
     ewarn "Skipping stage 'netboot' as $OUTPUT_FILE exists already." ; eend 0
     return 0
