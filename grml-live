@@ -258,19 +258,12 @@ cut_string() {
 # usage: extend_string_end 5 "123" will output "123  "
 extend_string_end() {
   [ -n "$2" ] || return 1
-  local COUNT FILL
-  echo -n "$2" | head -c "$1"
-  COUNT=$(echo "$2" | wc -c)
-  FILL=$(expr "$COUNT" - "$1")
-  while [ "$FILL" -gt 1 ] ; do
-    echo -n " "
-    FILL=$(expr "$FILL" - 1)
+  local text
+  text=$(echo -n "$2" | head -c "$1")
+  while [ "$1" -gt "${#text}" ] ; do
+    text="${text} "
   done
-  while [ "$FILL" -lt 1 ] ; do
-    echo -n " "
-    FILL=$(expr "$FILL" + 1)
-  done
-  echo -ne "\n"
+  echo -n "${text}"
 }
 
 # Copy addonfile $1 from either
