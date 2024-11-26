@@ -7,4 +7,4 @@ PACKAGES install
 # towards dhcpcd only for Debian trixie/testing and newer. Also see
 # https://bugs.debian.org/1051421 and
 # https://github.com/grml/grml-live/issues/138
-dhcpcd
+dhcpcd-base
