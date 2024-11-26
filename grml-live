@@ -1652,8 +1652,7 @@ else
        ;;
    esac
 
-   CURRENT_DIR=$(pwd)
-   if cd "$BUILD_OUTPUT" ; then
+   if pushd "$BUILD_OUTPUT" >/dev/null; then
       log   "Generating build information in conf/buildinfo.json"
       einfo "Generating build information in conf/buildinfo.json"
       mkdir -p conf/
@@ -1694,7 +1693,8 @@ else
          ;;
       esac
 
-      cd "$CURRENT_DIR"
+      # shellcheck disable=SC2164 # If previous CWD disappears, what are we gonna do.
+      popd >/dev/null
    fi
 
    if [ "$RC" = 0 ] ; then
@@ -1814,6 +1814,7 @@ create_netbootpackage() {
 
   if tar -C "$OUTPUTDIR" -cf "${OUTPUT_FILE}" "grml_netboot_package_${GRML_NAME}_${VERSION}" ; then
     (
+      # shellcheck disable=SC2164 # We just wrote there. If it disappeared, too bad.
       cd "$(dirname "${OUTPUT_FILE}")"
       sha256sum "$(basename "${OUTPUT_FILE}")" > "${OUTPUT_FILE}.sha256"
     )
