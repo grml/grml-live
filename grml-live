@@ -499,51 +499,53 @@ if [ -n "$ZERO_LOGFILE" ] ; then
 fi
 # }}}
 
-# ask user whether the setup is ok {{{
+# Show configuration and ask user whether to continue {{{
+echo
+echo "${PN} [${GRML_LIVE_VERSION}] Build Configuration:"
+echo
+echo "  FAI classes:       $CLASSES"
+[ -n "$LOCAL_CONFIG" ]        && echo "  Configuration:     $LOCAL_CONFIG"
+[ -n "$GRML_FAI_CONFIG" ]     && echo "  Config directory:  $GRML_FAI_CONFIG"
+echo "  main directory:    $OUTPUT"
+[ -n "$EXTRACT_ISO_NAME" ]    && echo "  Extract ISO:       $EXTRACT_ISO_NAME"
+[ -n "$CHROOT_OUTPUT" ]       && echo "  Chroot target:     $CHROOT_OUTPUT"
+[ -n "$BUILD_OUTPUT" ]        && echo "  Build target:      $BUILD_OUTPUT"
+[ -n "$ISO_OUTPUT" ]          && echo "  ISO target:        $ISO_OUTPUT"
+[ -n "$GRML_NAME" ]           && echo "  Grml name:         $GRML_NAME"
+[ -n "$RELEASENAME" ]         && echo "  Release name:      $RELEASENAME"
+[ -n "$DATE" ]                && echo "  Build date:        $DATE"
+[ -n "$VERSION" ]             && echo "  Grml version:      $VERSION"
+[ -n "$SUITE" ]               && echo "  Debian suite:      $SUITE"
+[ -n "$ARCH" ]                && echo "  Architecture:      $ARCH"
+[ -n "$HYBRID_METHOD" ]       && echo "  Hybrid method:     $HYBRID_METHOD"
+[ -n "$SECURE_BOOT" ]         && echo "  Secure Boot:       $SECURE_BOOT"
+[ -n "$TEMPLATE_DIRECTORY" ]  && echo "  Template files:    $TEMPLATE_DIRECTORY"
+[ -n "$CHROOT_INSTALL" ]      && echo "  Install files from directory to chroot:  $CHROOT_INSTALL"
+[ -n "$BOOTID" ]              && echo "  Boot identifier:   $BOOTID"
+[ -n "$NO_BOOTID" ]           && echo "  Skipping bootid feature."
+[ -n "$CHOWN_USER" ]          && echo "  Output owner:      $CHOWN_USER"
+[ -n "$DEFAULT_BOOTOPTIONS" ] && echo "  Adding default bootoptions: \"$DEFAULT_BOOTOPTIONS\""
+[ -n "$FAI_ARGS" ]            && echo "  Additional arguments for FAI: $FAI_ARGS"
+[ -n "$LOGFILE" ]             && echo "  Logging to file:   $LOGFILE"
+[ -n "$SQUASHFS_ZLIB" ]       && echo "  Using ZLIB (instead of LZMA/XZ) compression."
+[ -n "$SQUASHFS_OPTIONS" ]    && echo "  Using SQUASHFS_OPTIONS ${SQUASHFS_OPTIONS}"
+[ -n "$VERBOSE" ]             && echo "  Using VERBOSE mode."
+[ -n "$CLEAN_ARTIFACTS" ]     && echo "  Will clean output before and after running."
+[ -n "$UPDATE" ]              && echo "  Executing UPDATE instead of fresh installation."
+if [ -n "$BOOTSTRAP_ONLY" ] ; then
+    echo "  Bootstrapping only and not building (files for) ISO."
+else
+    [ -n "$SKIP_MKSQUASHFS" ]     && echo "  Skipping creation of SQUASHFS file."
+    [ -n "$SKIP_NETBOOT" ]        && echo "  Skipping creation of NETBOOT package."
+    [ -n "$SKIP_MKISOFS" ]        && echo "  Skipping creation of ISO file."
+    [ -n "$BUILD_ONLY" ]          && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
+    [ -n "$BUILD_DIRTY" ]         && echo "  Executing BUILD_DIRTY to leave chroot untouched."
+fi
+echo
 if [ -z "$FORCE" ] ; then
+   echo "Check the configuration above, or use -F to force execution."
    echo
-   echo "${PN} [${GRML_LIVE_VERSION}]: check your configuration (or use -F to force execution):"
-   echo
-   echo "  FAI classes:       $CLASSES"
-   [ -n "$LOCAL_CONFIG" ]        && echo "  Configuration:     $LOCAL_CONFIG"
-   [ -n "$GRML_FAI_CONFIG" ]     && echo "  Config directory:  $GRML_FAI_CONFIG"
-   echo "  main directory:    $OUTPUT"
-   [ -n "$EXTRACT_ISO_NAME" ]    && echo "  Extract ISO:       $EXTRACT_ISO_NAME"
-   [ -n "$CHROOT_OUTPUT" ]       && echo "  Chroot target:     $CHROOT_OUTPUT"
-   [ -n "$BUILD_OUTPUT" ]        && echo "  Build target:      $BUILD_OUTPUT"
-   [ -n "$ISO_OUTPUT" ]          && echo "  ISO target:        $ISO_OUTPUT"
-   [ -n "$GRML_NAME" ]           && echo "  Grml name:         $GRML_NAME"
-   [ -n "$RELEASENAME" ]         && echo "  Release name:      $RELEASENAME"
-   [ -n "$DATE" ]                && echo "  Build date:        $DATE"
-   [ -n "$VERSION" ]             && echo "  Grml version:      $VERSION"
-   [ -n "$SUITE" ]               && echo "  Debian suite:      $SUITE"
-   [ -n "$ARCH" ]                && echo "  Architecture:      $ARCH"
-   [ -n "$HYBRID_METHOD" ]       && echo "  Hybrid method:     $HYBRID_METHOD"
-   [ -n "$SECURE_BOOT" ]         && echo "  Secure Boot:       $SECURE_BOOT"
-   [ -n "$TEMPLATE_DIRECTORY" ]  && echo "  Template files:    $TEMPLATE_DIRECTORY"
-   [ -n "$CHROOT_INSTALL" ]      && echo "  Install files from directory to chroot:  $CHROOT_INSTALL"
-   [ -n "$BOOTID" ]              && echo "  Boot identifier:   $BOOTID"
-   [ -n "$NO_BOOTID" ]           && echo "  Skipping bootid feature."
-   [ -n "$CHOWN_USER" ]          && echo "  Output owner:      $CHOWN_USER"
-   [ -n "$DEFAULT_BOOTOPTIONS" ] && echo "  Adding default bootoptions: \"$DEFAULT_BOOTOPTIONS\""
-   [ -n "$FAI_ARGS" ]            && echo "  Additional arguments for FAI: $FAI_ARGS"
-   [ -n "$LOGFILE" ]             && echo "  Logging to file:   $LOGFILE"
-   [ -n "$SQUASHFS_ZLIB" ]       && echo "  Using ZLIB (instead of LZMA/XZ) compression."
-   [ -n "$SQUASHFS_OPTIONS" ]    && echo "  Using SQUASHFS_OPTIONS ${SQUASHFS_OPTIONS}"
-   [ -n "$VERBOSE" ]             && echo "  Using VERBOSE mode."
-   [ -n "$CLEAN_ARTIFACTS" ]     && echo "  Will clean output before and after running."
-   [ -n "$UPDATE" ]              && echo "  Executing UPDATE instead of fresh installation."
-   if [ -n "$BOOTSTRAP_ONLY" ] ; then
-     echo "  Bootstrapping only and not building (files for) ISO."
-   else
-     [ -n "$SKIP_MKSQUASHFS" ]     && echo "  Skipping creation of SQUASHFS file."
-     [ -n "$SKIP_NETBOOT" ]        && echo "  Skipping creation of NETBOOT package."
-     [ -n "$SKIP_MKISOFS" ]        && echo "  Skipping creation of ISO file."
-     [ -n "$BUILD_ONLY" ]          && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
-     [ -n "$BUILD_DIRTY" ]         && echo "  Executing BUILD_DIRTY to leave chroot untouched."
-   fi
-   echo
-   echo -n "Is this ok for you? [y/N] "
+   echo -n "Continue? [y/N] "
    read -r a
    if ! [ "$a" = 'y' ] || [ "$a" = 'Y' ] ; then
       CLEAN_ARTIFACTS=0
