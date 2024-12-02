@@ -6,6 +6,9 @@
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 if ifclass SOURCES ; then
   echo "Class SOURCES set, retrieving source packages."
 else
@@ -27,6 +30,7 @@ mkdir -p "${target}${SOURCES_PATH}"
 $ROOTCMD apt-get update
 
 # Collect *source* package names
+# shellcheck disable=SC2016 # Embedded $ is correct.
 $ROOTCMD dpkg-query -W -f='${Source} ${Package}\n' | sed -e 's/^ //' | awk '{ print $1 }' | sort -u | \
   chroot "${target}" /bin/bash -c "cd \"${SOURCES_PATH}\" && xargs --max-args=32 --max-procs=12 apt-get --download-only source" 2> "${ERRORS_LOG}"
 

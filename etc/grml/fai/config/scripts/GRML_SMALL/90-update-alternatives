@@ -9,13 +9,16 @@
 set -u
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 ## Editor:
 # Too many people don't expect to get that, so use it only for grml-small
 # avoid "debug: unbound variable":
 set +u
 if ifclass GRML_SMALL ; then
 set -u
-   if [ -r $target/usr/bin/vim.tiny ] ; then
+   if [ -r "$target"/usr/bin/vim.tiny ] ; then
       # update-alternates does not work without /usr/share/man because
       # it configures (in our case non-existent) manpages as well :-/
       # $ROOTCMD update-alternatives --set editor /usr/bin/vim.tiny

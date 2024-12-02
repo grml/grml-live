@@ -9,6 +9,9 @@
 set -u
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 if ! [ -r "${target}/etc/ssh/sshd_config" ] ; then
   echo "File /etc/ssh/sshd_config doesn't exist, skipping execution of script."
   exit 0

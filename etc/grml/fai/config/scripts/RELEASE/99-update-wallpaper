@@ -6,6 +6,10 @@
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+# shellcheck source=/dev/null
 . "$GRML_LIVE_CONFIG"
 
 FONTFILE=${FONTFILE:-/usr/share/grml-live/fonts/graphicoreBitmapFont0-Light.otf}
@@ -33,6 +37,5 @@ fi
 
 convert "$GRML_BG" -gravity center \
     -fill white -font "$FONTFILE" \
-    -pointsize $TITLE_FONTSIZE \
+    -pointsize "$TITLE_FONTSIZE" \
     -draw "text 0,0 \"$VERSION\"" "$GRML_WALLPAPER"
-

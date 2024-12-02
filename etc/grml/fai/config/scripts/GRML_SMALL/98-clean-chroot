@@ -9,12 +9,15 @@
 set -e
 set -u
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 echo "Removing /usr/share/ssh/blacklist.*"
-rm -f $target/usr/share/ssh/blacklist.DSA-1024 $target/usr/share/ssh/blacklist.RSA-2048
+rm -f "$target"/usr/share/ssh/blacklist.DSA-1024 "$target"/usr/share/ssh/blacklist.RSA-2048
 
 echo "Cleaning documentation directories"
-if [ -d $target/usr/share/doc/grml-docs ] ; then
-  mv $target/usr/share/doc/grml-docs $target/tmp/
+if [ -d "$target"/usr/share/doc/grml-docs ] ; then
+  mv "$target"/usr/share/doc/grml-docs "$target"/tmp/
 fi
 
 ## END OF FILE #################################################################

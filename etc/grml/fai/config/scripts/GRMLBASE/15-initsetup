@@ -8,6 +8,11 @@
 
 set -u
 set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+# shellcheck source=/dev/null
 . "$GRML_LIVE_CONFIG"
 
 systemd_setup() {

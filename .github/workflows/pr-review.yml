@@ -1,0 +1,41 @@
+# PR Review workflows.
+
+name: pr-review
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+jobs:
+  shellcheck-code:
+    name: shellcheck main code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          path: "."
+          pattern: |
+            grml-live
+            scripts/*.sh
+            remaster/grml-live-remaster
+            etc/grml/fai/config/hooks/*
+            etc/grml/fai/config/scripts/*
+          check_all_files_with_shebangs: "false"
+
+  shellcheck-tests:
+    name: shellcheck test scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          path: tests
+          pattern: |
+            *.sh
+          check_all_files_with_shebangs: "false"

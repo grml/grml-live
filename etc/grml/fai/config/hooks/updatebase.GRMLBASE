@@ -8,15 +8,19 @@
 
 set -u
 set -e
+# shellcheck source=/dev/null
 . "$GRML_LIVE_CONFIG"
 
-# visualize chroot inside zsh:
-echo grml_chroot > $target/etc/debian_chroot
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
 
-echo "$HOSTNAME" > $target/etc/hostname
+# visualize chroot inside zsh:
+echo grml_chroot > "${target}"/etc/debian_chroot
+
+echo "$HOSTNAME" > "${target}"/etc/hostname
 
 if [ -n "${APT_PROXY:-}" ] ; then
-  cat > $target/etc/apt/apt.conf.d/90grml-apt-proxy.conf <<EOF
+  cat > "$target"/etc/apt/apt.conf.d/90grml-apt-proxy.conf <<EOF
 Acquire::http { Proxy "$APT_PROXY"; };
 EOF
 fi
@@ -29,24 +33,24 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
 
    ## based on FAI's lib/updatebase:
    # some packages must access /proc even in chroot environment
-   if ! [ -d $FAI_ROOT/proc/1 ] ; then
-      mount -t proc proc $FAI_ROOT/proc || true
+   if ! [ -d "$FAI_ROOT"/proc/1 ] ; then
+      mount -t proc proc "$FAI_ROOT"/proc || true
    fi
    # some packages must access /sys even in chroot environment
-   if ! [ -d $FAI_ROOT/sys/kernel ] ; then
-      mount -t sysfs sysfs $FAI_ROOT/sys || true
+   if ! [ -d "$FAI_ROOT"/sys/kernel ] ; then
+      mount -t sysfs sysfs "$FAI_ROOT"/sys || true
    fi
    # if we are using udev, also mount it into $FAI_ROOT
    if [ -f /etc/init.d/udev ] ; then
-      mount --bind /dev $FAI_ROOT/dev || true
+      mount --bind /dev "$FAI_ROOT"/dev || true
    fi
 
-   if [ -d $FAI_ROOT/run ] ; then
-      mount -t tmpfs tmpfs $FAI_ROOT/run || true
-      mkdir $FAI_ROOT/run/lock
+   if [ -d "$FAI_ROOT"/run ] ; then
+      mount -t tmpfs tmpfs "$FAI_ROOT"/run || true
+      mkdir "$FAI_ROOT"/run/lock
    fi
 
-   mount -t devpts devpts $FAI_ROOT/dev/pts || true
+   mount -t devpts devpts "$FAI_ROOT"/dev/pts || true
 
    # skip the task if we want to build a new ISO only,
    # this means we do NOT update any packages
@@ -61,9 +65,9 @@ if [ -n "$BOOTSTRAP_ONLY" ] ; then
 fi
 
 # work around #632624: udev fails to install on systems with old kernel versions
-if ! [ -e ${target}/etc/udev/kernel-upgrade ] ; then
+if ! [ -e "${target}"/etc/udev/kernel-upgrade ] ; then
   echo "Working around udev package bug, creating /etc/udev/kernel-upgrade"
-  echo "# installed via updatebase.GRMLBASE" > ${target}/etc/udev/kernel-upgrade
+  echo "# installed via updatebase.GRMLBASE" > "${target}"/etc/udev/kernel-upgrade
 fi
 
 # install all apt related files

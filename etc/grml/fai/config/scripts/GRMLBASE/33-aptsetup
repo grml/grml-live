@@ -8,10 +8,14 @@
 
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 # use snapshot.debian.org based on build date for release
 if ifclass RELEASE ; then
   set -u
-  perl -pi -e 'BEGIN { $d="'$(date +%Y%m%d)'"; } s#^(\s+)(deb.* )(.*://ftp.debian.org.*?)\s+([a-z-]+)\s+(.*)$#$1$2http://snapshot.debian.org/archive/debian/$d/ $4 $5#' \
+  current_date=$(date +%Y%m%d)
+  perl -pi -e 'BEGIN { $d="'"$current_date"'"; } s#^(\s+)(deb.* )(.*://ftp.debian.org.*?)\s+([a-z-]+)\s+(.*)$#$1$2http://snapshot.debian.org/archive/debian/$d/ $4 $5#' \
     "${target}/etc/apt/sources.list.d/debian.list"
 fi
 

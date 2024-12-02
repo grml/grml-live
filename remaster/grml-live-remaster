@@ -34,7 +34,9 @@ if ! [ -r /etc/grml/lsb-functions ] || ! [ -r /etc/grml/script-functions ] ; the
   exit 1
 fi
 
+# shellcheck source=/dev/null
 . /etc/grml/lsb-functions
+# shellcheck source=/dev/null
 . /etc/grml/script-functions
 # }}}
 
@@ -117,9 +119,9 @@ ${GRML_LIVE_EDITOR} /remaster/msg
 
 [ -d /remaster/iso ] || mkdir /remaster/iso
 
-for i in ${LIVE_PATH_MAIN}/*; do
-    if [ ! $i = ${LIVE_PATH_MAIN}/live ]; then
-       cp -R $i /remaster/iso
+for i in "${LIVE_PATH_MAIN}"/*; do
+    if [ ! "$i" = ${LIVE_PATH_MAIN}/live ]; then
+       cp -R "$i" /remaster/iso
     fi
 done
 
@@ -140,11 +142,11 @@ sed 3,4d "${BOOTSTUFF}"/boot.msg \
         >/remaster/iso/boot/isolinux/boot.msg
 sed 1,2d /remaster/msg >>/remaster/iso/boot/isolinux/boot.msg
 
-SQUASHFS_FQNAME=/remaster/iso/${SQUASHFS_FILE##$LIVE_PATH_MAIN}
-mkdir -p $(dirname $SQUASHFS_FQNAME)
+SQUASHFS_FQNAME=/remaster/iso/${SQUASHFS_FILE##"$LIVE_PATH_MAIN"}
+mkdir -p "$(dirname "$SQUASHFS_FQNAME")"
 # the next line is necessary for grml2usb to work on the destination image
-echo $(basename $SQUASHFS_FQNAME) > $(dirname $SQUASHFS_FQNAME)/filesystem.module
-$MKSQUASHFS /remaster/chroot $SQUASHFS_FQNAME
+basename "$SQUASHFS_FQNAME" > "$(dirname "$SQUASHFS_FQNAME")/filesystem.module"
+$MKSQUASHFS /remaster/chroot "$SQUASHFS_FQNAME"
 umount /remaster/chroot /remaster/cdrom
 
 if [ -f /remaster/iso/boot/isolinux/isolinux.bin ] ; then

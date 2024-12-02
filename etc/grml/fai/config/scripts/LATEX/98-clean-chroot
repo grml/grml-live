@@ -9,14 +9,17 @@
 set -u
 set -e
 
-rm -rf ${target}/usr/share/doc/texlive-latex-recommended/latex/ \
-       ${target}/usr/share/doc/texlive-latex-base/latex/ \
-       ${target}/usr/share/doc/texlive-base-bin/pdftex/thanh/ \
-       ${target}/usr/share/doc/texlive-latex-base/latex/base/ \
-       ${target}/usr/share/doc/texlive-latex-base/latex/hyperref/ \
-       ${target}/usr/share/doc/texlive-latex-base/generic/babel/ \
-       ${target}/usr/share/doc/texlive-latex-recommended/latex/koma-script/ \
-       ${target}/usr/share/doc/texmf/pgf/pgfmanual.pdf.gz
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+rm -rf "${target}"/usr/share/doc/texlive-latex-recommended/latex/ \
+       "${target}"/usr/share/doc/texlive-latex-base/latex/ \
+       "${target}"/usr/share/doc/texlive-base-bin/pdftex/thanh/ \
+       "${target}"/usr/share/doc/texlive-latex-base/latex/base/ \
+       "${target}"/usr/share/doc/texlive-latex-base/latex/hyperref/ \
+       "${target}"/usr/share/doc/texlive-latex-base/generic/babel/ \
+       "${target}"/usr/share/doc/texlive-latex-recommended/latex/koma-script/ \
+       "${target}"/usr/share/doc/texmf/pgf/pgfmanual.pdf.gz
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

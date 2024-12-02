@@ -9,6 +9,9 @@
 set -u
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 # set up /etc/locale.gen, only GRML_FULL and LOCALES have
 # the full setup, GRMLBASE installs a minimal configuration
 fcopy -v /etc/locale.gen
@@ -23,7 +26,7 @@ set -u
    echo 'Removing /usr/share/locale'
 
    # get rid of the original
-   rm -rf $target/usr/share/locale
+   rm -rf "$target"/usr/share/locale
 
    # restore *empty* directories because otherwise installation/upgrade of packages might fail
    [ -d "$target"/usr/share/locale ] || mkdir "$target"/usr/share/locale
@@ -45,7 +48,7 @@ if $ROOTCMD dpkg --list localepurge 2>&1 | grep -q '^ii' ; then
    $ROOTCMD dpkg-reconfigure -f noninteractive localepurge
 fi
 
-if ! [ -x $target/usr/sbin/localepurge ] ; then
+if ! [ -x "$target"/usr/sbin/localepurge ] ; then
   echo "Warning: localepurge not installed"
 else
   echo "Running localepurge."
@@ -55,7 +58,7 @@ fi
 if $ROOTCMD dpkg-query -s locales-all >/dev/null 2>&1 ; then
   echo "locales-all installed, skipping locales generation"
 else
-  if ! [ -x ${target}/usr/sbin/locale-gen ] ; then
+  if ! [ -x "$target"/usr/sbin/locale-gen ] ; then
     echo 'Warning: locale-gen [package locales] not installed'
   else
     echo "Running locale-gen"

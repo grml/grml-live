@@ -9,6 +9,9 @@
 set -e
 set -u
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 TMP_CONFIG="/tmp/grub_config_efi"
 
 # this allows us to find this specific Grml ISO,
@@ -70,10 +73,10 @@ for arch in "${ARCHS[@]}" ; do
     arm64-efi)  filename=/boot/bootaa64.efi  ;;
   esac
 
-  $ROOTCMD grub-mkimage -O $arch -o "$filename" --prefix=/boot/grub/ --config="$TMP_CONFIG" \
+  $ROOTCMD grub-mkimage -O "$arch" -o "$filename" --prefix=/boot/grub/ --config="$TMP_CONFIG" \
     echo iso9660 part_msdos search_fs_file test \
     fat ext2 reiserfs xfs btrfs squash4 part_gpt lvm \
-    ${ADDITIONAL_MODULES[$arch]}
+    "${ADDITIONAL_MODULES[$arch]}"
 done
 
 rm -f "${target}/${TMP_CONFIG}"

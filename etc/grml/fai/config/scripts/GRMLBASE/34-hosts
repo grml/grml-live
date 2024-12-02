@@ -8,12 +8,17 @@
 
 set -u
 set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+# shellcheck source=/dev/null
 . "$GRML_LIVE_CONFIG"
 
 fcopy -v /etc/hosts
 
 # replace $HOSTNAME with the real hostname:
-sed -i "s/\$HOSTNAME/$HOSTNAME/" $target/etc/hosts
+sed -i "s/\$HOSTNAME/$HOSTNAME/" "$target"/etc/hosts
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

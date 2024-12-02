@@ -19,7 +19,7 @@ if ! [ -f "${CHROOT}/etc/grml_version" ] ; then
   exit 1
 fi
 
-GRML_VERSION="$(awk '{print $1"_"$2}' ${CHROOT}/etc/grml_version)"
+GRML_VERSION=$(awk '{print $1"_"$2}' "${CHROOT}/etc/grml_version")
 
 if ! [ -r "${CHROOT}/usr/lib/syslinux/pxelinux.0" ] ; then
   echo "Error: /usr/lib/syslinux/pxelinux.0 not found. Please install syslinux[-common]." >&2

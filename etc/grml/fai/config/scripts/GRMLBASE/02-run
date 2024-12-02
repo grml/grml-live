@@ -9,6 +9,9 @@
 set -u
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 # This is what initscripts would do if everything would be fine.
 if [ -L "$target/run" ] ; then
    rm -f "$target/run"

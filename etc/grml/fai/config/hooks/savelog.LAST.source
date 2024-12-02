@@ -4,7 +4,7 @@
 # print errors and warnings found to error.log
 # WARNING: This will only work with english error messages!
 
-errfile=$LOGDIR/error.log
+errfile="$LOGDIR"/error.log
 
 # Define grep patterns. Do not start or end with an empty line!
 globalerrorpatterns="error
@@ -109,15 +109,15 @@ $myerrorpatterns"
 ignorepatterns="$globalignorepatterns
 $myignorepatterns"
 
-cd $LOGDIR || exit 3
-if [ -s $errfile ]; then
+cd "$LOGDIR" || exit 3
+if [ -s "$errfile" ]; then
     echo "Errorfile already exists. Aborting."
     exit
 fi
 
-grep -i "$errorpatterns" *.log | grep -vi "$ignorepatterns" > $errfile
+grep -i "$errorpatterns" ./*.log | grep -vi "$ignorepatterns" > "$errfile"
 
-if [ -s $errfile ]; then
+if [ -s "$errfile" ]; then
    echo "ERRORS found in log files. See $errfile."
 else
    echo "Congratulations! No errors found in log files."
