@@ -73,10 +73,11 @@ for arch in "${ARCHS[@]}" ; do
     arm64-efi)  filename=/boot/bootaa64.efi  ;;
   esac
 
+  read -r -a modules <<< "${ADDITIONAL_MODULES[$arch]}"
   $ROOTCMD grub-mkimage -O "$arch" -o "$filename" --prefix=/boot/grub/ --config="$TMP_CONFIG" \
     echo iso9660 part_msdos search_fs_file test \
     fat ext2 reiserfs xfs btrfs squash4 part_gpt lvm \
-    "${ADDITIONAL_MODULES[$arch]}"
+    "${modules[@]}"
 done
 
 rm -f "${target}/${TMP_CONFIG}"
