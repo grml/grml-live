@@ -1,3 +1,68 @@
+grml-live (0.49.2) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [585437f] SW: replace dhcpcd with dhcpcd-base in DEBIAN_*
+
+  [ Chris Hofstaedtler ]
+  * [63ec2cf] grml-live: update EFI image messages
+  * [d2927fb] grub: retitle grml boot menu entries
+  * [b0b979e] templates: replace GRUB boot theme
+  * [f97a1a2] grml-live: remove xorriso version check
+  * [3310807] grml-live: rewrite extend_string_end without expr
+  * [d8501fd] grml-live: remove dead extend_string_begin function
+  * [af9fb68] grml-live: write grmlmain.cfg in one go
+  * [8253e80] grml-live: stop manipulating CWD
+  * [fcbbf6a] grml-live: introduce hasclass helper function
+  * [a15735c] grml-live: always print requested configuration
+  * [d3540dd] GRUB templates: move non-addon entries out of addons.cfg
+  * [a2a16ec] grml-live: set NO_ADDONS=1 early if addons are absent
+  * [91425a3] grml-live: abort early if ARCH is unsupported
+  * [9e91be9] Drop support for syslinux from Debian wheezy
+  * [8d96a2e] Skip iso/pxe/syslinux on arm64
+  * [9352fd6] GRMLBASE/94-update-smart-drivedb: drop
+  * [a2c1016] scripts: remove GRMLBASE/37-portmap
+  * [24961d1] scripts: remove workaround for 2009-era unfixed Debian bugs
+  * [4af3d12] scripts: remove iceweasel support
+  * [1a40680] scripts: assume timeout is always available
+  * [b373401] scripts: assume utmp,wtmp are on tmpfs /run
+  * [23ae643] build-driver: do not require cache_dir to exist already
+  * [8001621] build-driver: allow basefiles directory to already exist
+  * [352cbcb] build-driver: clarify an exception was caught
+  * [91e97af] build-driver: fix copying dpkg.list to cache dir
+  * [7a30c71] build-driver: clearly indicate success
+  * Software related changes:
+    * [73fb627] SW: GRML_FULL, GRML_SMALL: Stop installing reiserfsprogs
+    * [573d37d] SW: GRML_SMALL: apply same groups as in GRML_FULL
+    * [136531d] DEBIAN_TESTING: correct security.debian.org URL
+    * [97dfeff] SW: Install linux-sysctl-defaults on trixie and newer
+  * shellcheck QA improvements:
+    * [69b3638] GHA: setup shellcheck
+    * [a7fecfa] shellcheck: grml-live: fix quoting issues
+    * [a999792] shellcheck: annotate NOCOLORS usage
+    * [939a5f4] shellcheck: grml-live: concat $@ correctly
+    * [089cabd] shellcheck: grml-live: fix SC2166
+    * [b484608] shellcheck: grml-live: ignore init-functions,lsb-functions sources
+    * [abd83c6] shellcheck: grml-live: do not trap SIGKILL
+    * [805dd42] grml-live: fix $? usage errors
+    * [581169c] grml-live: stop exporting SHORT_NAME
+    * [72f5e60] shellcheck: grml-live: fix SC2155
+    * [ddc9552] shellcheck: grml-live: fix SC2162
+    * [44112a5] shellcheck: grml-live: PIPESTATUS is an array
+    * [1eb3178] shellcheck: grml-live: ignore SC2164 in two places
+    * [6e77072] shellcheck: grml-live: use while/read instead of for find
+    * [583b3db] shellcheck: grml-live: fix one SC2010 case
+    * [4694d45] shellcheck: grml-live: ignore SC2010 in two cases
+    * [a8996f8] shellcheck: grml-live: fix SC2004
+    * [59bfaee] shellcheck: grml-live: fix SC2018/SC2019
+    * [5829fc8] shellcheck: grml-live: turn off two info messages
+    * [df3eedb] scripts: fix quoting issues found by shellcheck
+    * [9557a9d] remaster: fix quoting issues found by shellcheck
+    * [088dc5d] fai hooks: fix shellcheck issues
+    * [5eb2286] scripts: fix shellcheck issues
+    * [2ffb6cf] 45-grub-images: fix quoting
+
+ -- Chris Hofstaedtler <ch@grml.org>  Sat, 07 Dec 2024 16:14:49 +0100
+
 grml-live (0.49.1) unstable; urgency=medium
 
   [ Chris Hofstaedtler ]
