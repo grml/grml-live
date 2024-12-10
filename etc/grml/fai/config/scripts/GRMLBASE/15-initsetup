@@ -26,6 +26,11 @@ systemd_setup() {
 
   $ROOTCMD systemctl preset-all
   $ROOTCMD systemctl set-default grml-boot.target
+
+  # ldconfig.service updates the dynamic linker cache. This is not really
+  # useful on a live OS image, where the installed packages do not change
+  # on startup. As this is quite costly, disable it.
+  $ROOTCMD systemctl mask ldconfig.service
 }
 
 systemd_setup
