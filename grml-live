@@ -1514,6 +1514,11 @@ else
      fi
    fi
 
+   # Ignore all extended attributes. This avoids:
+   # 1) leaking containerization supplied selinux attributes into the squashfs,
+   # 2) prevents unpacking errors in a later build-only step in containers not supporting xattrs.
+   SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -no-xattrs"
+
    # support exclusion of files via exclude-file:
    if [ -n "$SQUASHFS_EXCLUDES_FILE" ] && [ "$SQUASHFS_EXCLUDES_FILE" ] ; then
       SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -ef $SQUASHFS_EXCLUDES_FILE -wildcards"
