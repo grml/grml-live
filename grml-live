@@ -677,8 +677,8 @@ if [ -n "$EXTRACT_ISO_NAME" ]; then
   fi
 
   local squashfs
-  squahsfs=( "${tempdir}"/live/*/*.squashfs )
-  if (( ${#squahsfs[@]} != 0 )) && [ -r "${squashfs[0]}" ]; then
+  squashfs=( "${tempdir}"/live/*/*.squashfs )
+  if (( ${#squashfs[@]} != 0 )) && [ -r "${squashfs[0]}" ]; then
     log "Will unsquashfs ${squashfs[0]}"
     unsquashfs -d "${CHROOT_OUTPUT}" "${squashfs[0]}" ; rc=$?
   else
