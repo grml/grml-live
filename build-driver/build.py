@@ -472,7 +472,7 @@ def main(program_name: str, argv: list[str]) -> int:
     print(f"I: {output_dir=}")
 
     # avoid building on mounted volume
-    tmp_root = Path("/tmp") if True else Path(".").absolute()
+    tmp_root = Path(tempfile.gettempdir())
     tmp_dir = Path(tempfile.mkdtemp(dir=tmp_root))
     build_dir = Path(tempfile.mkdtemp(dir=tmp_root))
 
