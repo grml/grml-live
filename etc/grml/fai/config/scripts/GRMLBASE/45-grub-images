@@ -39,7 +39,7 @@ if ifclass ARM64 ; then
     # NOTE: efi_uga (EFI Universal Graphics Adapter) is deprecated + unavailable on arm64
     ADDITIONAL_MODULES[arm64-efi]="efi_gop"  # no efi_uga available
   else
-    echo "/usr/lib/grub/arm64-efi/moddep.lst.lst could not be found, skipping."
+    echo "/usr/lib/grub/arm64-efi/moddep.lst could not be found, skipping."
     echo "NOTE: grub-efi-arm64-bin not installed?"
   fi
 fi
