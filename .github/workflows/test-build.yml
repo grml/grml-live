@@ -38,3 +38,27 @@ jobs:
           if-no-files-found: error
           path: |
             *.deb
+
+  build-iso:
+    strategy:
+      fail-fast: false
+      matrix:
+        host_release:
+          - bookworm
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: ./test/gha-build-iso.sh
+        name: "Build ISO on ${{matrix.host_release}}"
+        env:
+          HOST_RELEASE: ${{matrix.host_release}}
+
+      - name: Archive built ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: grml-live-build-result-${{matrix.host_release}}
+          if-no-files-found: error
+          path: |
+            results/*
