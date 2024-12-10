@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
   schedule:
-    - cron: '30 3 * * 2'
+    - cron: "30 3 * * 2"
 
 concurrency:
   group: "${{ github.ref }}"
@@ -16,25 +16,25 @@ jobs:
       fail-fast: false
       matrix:
         host_release:
-        - unstable
-        - trixie
-        - bookworm
+          - unstable
+          - trixie
+          - bookworm
 
     # We want a working shell, qemu, python and docker. Specific version should not matter (much).
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - run: ./test/gha-build-deb.sh
-      name: "Build .deb for ${{matrix.host_release}}"
-      env:
-        HOST_RELEASE: ${{matrix.host_release}}
+      - run: ./test/gha-build-deb.sh
+        name: "Build .deb for ${{matrix.host_release}}"
+        env:
+          HOST_RELEASE: ${{matrix.host_release}}
 
-    - name: Archive built .deb
-      uses: actions/upload-artifact@v4
-      with:
-        name: deb-${{matrix.host_release}}
-        if-no-files-found: error
-        path: |
-          *.deb
+      - name: Archive built .deb
+        uses: actions/upload-artifact@v4
+        with:
+          name: deb-${{matrix.host_release}}
+          if-no-files-found: error
+          path: |
+            *.deb
