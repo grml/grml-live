@@ -139,21 +139,12 @@ checkgrmlsmall(){
 set_passwd() {
   [ -n "$PASSWD" ] && return 0
 
-  if [ -x /usr/bin/apg ] ; then
-    PASSWD="$(apg -M NL -a 0 -m 8 -x 12 -n 1)"
-  elif [ -x /usr/bin/gpw ] ; then
-    PASSWD="$(gpw 1)"
-  elif [ -x /usr/bin/pwgen ] ; then
-    PASSWD="$(pwgen -1 8)"
-  elif [ -x /usr/bin/hexdump ] ; then
-    PASSWD="$(dd if=/dev/urandom bs=14 count=1 2>/dev/null | hexdump | awk '{print $3 $4}')"
-  elif [ -n "$RANDOM" ] ; then
-    PASSWD="grml${RANDOM}"
+  if [ -x /usr/bin/xkcdpass ] ; then
+    PASSWORD="$(xkcdpass)"
+  elif [ -x /usr/bin/diceware ] ; then
+    PASSWORD="$(diceware)"
   else
-    PASSWD=''
-    eerror "Empty passphrase and neither apg, gpw, pwgen, hexdump nor \$RANDOM available. Skipping."
-    eend 1
-    return 1
+    PASSWORD="$(tr -dc '[:alnum:]' < /dev/urandom | head -c 28)"
   fi
 }
 
