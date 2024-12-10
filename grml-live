@@ -1519,11 +1519,6 @@ else
       SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -ef $SQUASHFS_EXCLUDES_FILE -wildcards"
    fi
 
-   # get rid of unnecessary files when building grml-small for final release:
-   if hasclass GRML_SMALL ; then
-      SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -e initrd.img* vmlinuz*"
-   fi
-
    # log stuff
    SQUASHFS_STDERR="$(mktemp -t grml-live.XXXXXX)"
 
