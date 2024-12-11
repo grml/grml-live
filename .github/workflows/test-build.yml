@@ -50,15 +50,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - run: ./test/gha-build-iso.sh
+      - run: ./test/gha-build-iso.sh initial
         name: "Build ISO on ${{matrix.host_release}}"
         env:
           HOST_RELEASE: ${{matrix.host_release}}
 
       - name: Archive built ISO
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: grml-live-build-result-${{matrix.host_release}}
+          name: grml-live-build-result-initial-${{matrix.host_release}}
           if-no-files-found: error
           path: |
-            results/*
+            results-initial/*
+
+      - run: ./test/gha-build-iso.sh build-only-twice
+        name: "Repack ISO twice on ${{matrix.host_release}}"
+        env:
+          HOST_RELEASE: ${{matrix.host_release}}
+
+      - name: Archive repacked ISO
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grml-live-build-result-repack-${{matrix.host_release}}
+          if-no-files-found: error
+          path: |
+            results-build-only-second/*
