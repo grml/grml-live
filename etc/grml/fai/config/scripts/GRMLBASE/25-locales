@@ -12,8 +12,8 @@ set -e
 # FAI sets $target, but shellcheck does not know that.
 target=${target:?}
 
-# set up /etc/locale.gen, only GRML_FULL and LOCALES have
-# the full setup, GRMLBASE installs a minimal configuration
+# set up /etc/locale.gen, GRMLBASE installs a minimal configuration.
+# Only if the LOCALES class is added you get a fuller set of locales.
 fcopy -v /etc/locale.gen
 
 # set up /etc/locale.conf, to avoid systemd-firstboot prompting for user input
