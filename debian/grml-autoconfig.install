@@ -7,4 +7,4 @@ etc/* /etc/
 grml-autoconfig      /etc/init.d/
 language-functions   /etc/grml/
 sbin/grml-autoconfig /usr/sbin/
-systemd/* lib/systemd/system/
+systemd/* usr/lib/systemd/system/
