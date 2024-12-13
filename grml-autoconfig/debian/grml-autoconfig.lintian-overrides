@@ -2,10 +2,10 @@
 grml-autoconfig: unknown-section grml
 grml-autoconfig: bugs-field-does-not-refer-to-debian-infrastructure mailto:bugs@grml.org
 # we have our custom look'n'feel
-grml-autoconfig: init.d-script-does-not-source-init-functions etc/init.d/grml-autoconfig
+grml-autoconfig: init.d-script-does-not-source-init-functions [etc/init.d/grml-autoconfig]
 # we have our custom target
-grml-autoconfig: systemd-service-file-refers-to-unusual-wantedby-target lib/systemd/system/grml-autoconfig.service grml-boot.target
+grml-autoconfig: systemd-service-file-refers-to-unusual-wantedby-target grml-boot.target [usr/lib/systemd/system/grml-autoconfig.service]
 # we have no better way yet
-grml-autoconfig: systemd-service-file-wraps-init-script lib/systemd/system/grml-autoconfig.service ExecStart
+grml-autoconfig: systemd-service-file-wraps-init-script ExecStart [usr/lib/systemd/system/grml-autoconfig.service]
 # that's the way dhclient hook scripts are working
-grml-autoconfig: executable-not-elf-or-script etc/dhcp/dhclient-exit-hooks.d/grml-sethostname
+grml-autoconfig: executable-not-elf-or-script [etc/dhcp/dhclient-exit-hooks.d/grml-sethostname]
