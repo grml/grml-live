@@ -45,5 +45,20 @@ $ROOTCMD chown "${USERNAME}:${USERNAME}" "/home/${USERNAME}"
 echo "Syncing /home/${USERNAME}/ with data from /etc/skel/:"
 $ROOTCMD su -s /bin/sh "${USERNAME}" -c "rsync -Hav /etc/skel/ /home/${USERNAME}/"
 
+
+# Initialize zsh caches so first startup on Live CD is faster.
+echo "exit" | $ROOTCMD zsh -l -s -i
+echo "exit" | $ROOTCMD setpriv --reuid="${USERNAME}" --regid="${USERNAME}" --clear-groups --reset-env zsh -l -s -i
+
+echo "Listing homedir of user root:"
+ls -la "$target"/root
+echo "Listing homedir of user ${USERNAME}:"
+ls -la "$target"/home/"${USERNAME}"
+
+# "assert" zcompdump was created.
+echo "Checking existence of /root/.zcompdump and /home/${USERNAME}/.zcompdump"
+ls -la "$target"/root/.zcompdump
+ls -la "$target"/home/"${USERNAME}"/.zcompdump
+
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
