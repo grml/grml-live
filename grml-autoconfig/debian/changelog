@@ -1,3 +1,14 @@
+grml-autoconfig (0.23.2) grml-testing; urgency=medium
+
+  [ Antoine Beaupré ]
+  * [0db6676] rewrite password generation for more secure and convivial options
+
+  [ Chris Hofstaedtler ]
+  * [767550f] Install systemd unit into /usr (DEP17)
+  * [30a99ea] GHA: add debian package build workflow
+
+ -- Chris Hofstaedtler <ch@grml.org>  Fri, 13 Dec 2024 21:39:52 +0100
+
 grml-autoconfig (0.23.1) grml-testing; urgency=medium
 
   * [48a1471] Ship debian/gbp.conf for gbp usage
