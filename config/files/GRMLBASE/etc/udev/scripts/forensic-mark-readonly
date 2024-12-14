@@ -50,6 +50,9 @@ SYS_DIR="$(get_blockdev_dir)"
 base_device=$(base "${BLOCK_DEVICE}")
 if [ -n "${SYS_DIR}" ] && [ -n "${base_device}" ] ; then
   tmp_parent="$(readlink -f "${SYS_DIR}"/*/"${base_device}")"
+  if [ -z "${tmp_parent}" ]; then
+    tmp_parent=$(dir "${SYS_DIR}"/*/holders/"${base_device}")
+  fi
   if [ -d "${tmp_parent}" ] ; then
     parent_device=$(dir "${tmp_parent}")
     parent_device=$(base "${parent_device}")
