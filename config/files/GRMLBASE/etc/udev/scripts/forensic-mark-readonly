@@ -72,13 +72,11 @@ if [ -r /etc/grml/forensic.conf ] ; then
   fi
 
   if [ -n "${READONLY_IGNORE:-}" ] ; then
-    if printf "%s\n" "${READONLY_IGNORE:-}" | grep -qw "${parent_device}" ; then
-      if [ -n "${parent_device:-}" ] ; then
-        logger -t forensic-mark-readonly "not setting '${BLOCK_DEVICE}' (parent device: '${parent_device}') to read-only as present in ignore list"
-      else
-        logger -t forensic-mark-readonly "not setting '${BLOCK_DEVICE}' to read-only as present in ignore list"
+    if [ -n "${parent_device}" ] ; then
+      if printf "%s\n" "${READONLY_IGNORE:-}" | grep -qw "${parent_device}" ; then
+        logger -t forensic-mark-readonly "not setting '${BLOCK_DEVICE}' (parent device: '${parent_device}') to read-only as parent device is present in ignore list"
+        exit 0
       fi
-      exit 0
     fi
   fi
 fi
