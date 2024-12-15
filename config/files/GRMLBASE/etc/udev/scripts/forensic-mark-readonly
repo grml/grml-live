@@ -27,7 +27,12 @@ dir() {
 }
 
 is_ro() {
-  [ "$(blockdev --getro "$1")" = "1" ] && return 0 || return 1
+  # ASSUMPTION: Device paths can not contain spaces
+  while [ "$#" -gt 0 ]; do
+    [ "$(blockdev --getro "$1")" = "1" ] && return 0
+    shift
+  done
+  return 1
 }
 
 if [ -z "${1:-}" ] ; then
@@ -47,18 +52,34 @@ esac
 
 SYS_DIR="$(get_blockdev_dir)"
 
+patternsfile=
+cleanup() {
+  if [ -f "${patternsfile}" ] ; then
+    rm -f "${patternsfile}"
+  fi
+}
+trap cleanup EXIT
+
 base_device=$(base "${BLOCK_DEVICE}")
 if [ -n "${SYS_DIR}" ] && [ -n "${base_device}" ] ; then
-  tmp_parent="$(readlink -f "${SYS_DIR}"/*/"${base_device}")"
-  if [ -z "${tmp_parent}" ]; then
-    tmp_parent=$(dir "${SYS_DIR}"/*/holders/"${base_device}")
+  tmp_parents="$(readlink -f "${SYS_DIR}"/*/"${base_device}")"
+  if [ -z "${tmp_parents}" ]; then
+    tmp_parents=
+    for DEV in "${SYS_DIR}"/*/holders/"${base_device}"; do
+      [ -d "${DEV}" ] && tmp_parents="${tmp_parents:+${tmp_parents} }$(dir "${DEV}")"
+    done
   fi
-  if [ -d "${tmp_parent}" ] ; then
-    parent_device=$(dir "${tmp_parent}")
-    parent_device=$(base "${parent_device}")
-    parent_device="/dev/${parent_device}"
-  fi
-  unset tmp_parent
+  # ASSUMPTION: There should be no spaces in device names.
+  parent_devices=
+  for tmp_parent in ${tmp_parents}; do
+    if [ -d "${tmp_parent}" ] ; then
+      tmp_parent=$(dir "${tmp_parent}")
+      tmp_parent=$(base "${tmp_parent}")
+      tmp_parent="/dev/${tmp_parent}"
+      parent_devices="${parent_devices:+${parent_devices} }${tmp_parent}"
+    fi
+  done
+  unset tmp_parent tmp_parents
 fi
 
 # support configuration file
@@ -75,9 +96,11 @@ if [ -r /etc/grml/forensic.conf ] ; then
   fi
 
   if [ -n "${READONLY_IGNORE:-}" ] ; then
-    if [ -n "${parent_device}" ] ; then
-      if echo "${READONLY_IGNORE:-}" | grep -qw "${parent_device}" ; then
-        logger -t forensic-mark-readonly "not setting '${BLOCK_DEVICE}' (parent device: '${parent_device}') to read-only as its parent is present in ignore list"
+    if [ -n "${parent_devices}" ] ; then
+      patternsfile=$(mktemp forensic-mark-readonly.patterns.XXXXXX)
+      echo "${parent_devices}" | sed "s| |\n|" > "${patternsfile}"
+      if echo "${READONLY_IGNORE:-}" | grep -qw -F "${patternsfile}" ; then
+        logger -t forensic-mark-readonly "not setting '${BLOCK_DEVICE}' (parent devices: '${parent_devices}') to read-only as its parent is present in ignore list"
         exit 0
       fi
     fi
@@ -90,8 +113,8 @@ fi
 
 if is_ro "${BLOCK_DEVICE}" ; then
   logger -t forensic-mark-readonly "device ${BLOCK_DEVICE} already set to read-only mode, nothing to do"
-elif [ -n "${parent_device}" ] && ! is_ro "${parent_device}" ; then
-  logger -t forensic-mark-readonly "parent device ${parent_device} is set read-write, not modifying"
+elif [ -n "${parent_devices}" ] && ! is_ro "${parent_devices}" ; then
+  logger -t forensic-mark-readonly "all parent devices (${parent_devices}) are set read-write, not modifying"
   logger -t forensic-mark-readonly "use blockdev --setro ${BLOCK_DEVICE} to set it manually"
 else
   logger -t forensic-mark-readonly "setting ${BLOCK_DEVICE} [${ID_SERIAL}] to read-only"
