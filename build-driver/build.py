@@ -249,6 +249,10 @@ def get_grml_live_classes(arch: str, flavor: str, classes_for_mode: list[str], s
         arch.upper(),
         "IGNORE",
     ]
+    if skip_sources:
+        print("I: SKIP_SOURCES=1, skipping source download (either from config or ENV)")
+    else:
+        base_classes += ["SOURCES"]
     return base_classes + classes_for_mode
 
 
@@ -403,9 +407,7 @@ def main(program_name: str, argv: list[str]) -> int:
 
     build_config = load_config(build_config_file)
 
-    if skip_sources := should_skip_sources(build_config, dict(os.environ)):
-        print("I: SKIP_SOURCES=1, skipping source download (either from config or ENV)")
-
+    skip_sources = should_skip_sources(build_config, dict(os.environ))
     classes = get_grml_live_classes(arch, flavor, classes_for_mode, skip_sources)
 
     build_grml_name = f"grml-{flavor}-{arch}"
