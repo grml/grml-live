@@ -62,6 +62,23 @@ trap cleanup EXIT
 
 base_device=$(base "${BLOCK_DEVICE}")
 if [ -n "${SYS_DIR}" ] && [ -n "${base_device}" ] ; then
+  if [ -z "${base_device##loop[0-9]*}" ] ; then
+    if [ -e "${SYS_DIR}"/"${base_device}"/loop/backing_file ] ; then
+      backingfile=$(cat "${SYS_DIR}"/"${base_device}"/loop/backing_file)
+      parent_devices=$(findmnt -n -o source --target "${backingfile}")
+
+      # Check if either the backing file's block device or filesystem are read-only
+      if is_ro "${parent_devices}" || findmnt -n -o OPTIONS --target "${backingfile}" | grep -qE '^ro,|,ro,|,ro$'; then
+        blockdev --setro "${BLOCK_DEVICE}"
+        logger -t forensic-mark-readonly "setting '${BLOCK_DEVICE}' with backing file (${backingfile}) (parent devices: '${parent_devices}') to read-only as its parent is present or mount point ($(findmnt -n -o TARGET --target "${backingfile}")) is read-only"
+      elif [ "$(blockdev --getro "${BLOCK_DEVICE}")" == 0 ]; then
+        blockdev --setrw "${BLOCK_DEVICE}"
+        logger -t forensic-mark-readonly "setting '${BLOCK_DEVICE}' with backing file (${backingfile}) (parent devices: '${parent_devices}') to read-write because it is already set as read-only, but should be read-write"
+      fi
+      exit 0
+    fi
+  fi
+
   tmp_parents="$(readlink -f "${SYS_DIR}"/*/"${base_device}")"
   if [ -z "${tmp_parents}" ]; then
     tmp_parents=
