@@ -1,3 +1,22 @@
+grml-live (0.49.3) unstable; urgency=medium
+
+  [ Chris Hofstaedtler ]
+  * [205d589] grml-live: fix build only mode
+  * [c033554] build-driver: honor TMPDIR
+  * [d864226] grml-live: remove GRML_SMALL exclude of vmlinuz, initrd.img
+  * [7683e73] GHA: reindent
+  * [d5ad645] Run grml-live itself in GitHub test-build job
+  * [56b8b77] grml-live: strip xattrs in squashfs
+  * [9e3bd7a] GRMLBASE/45-grub-images: fix moddep.lst name in message
+  * [3c04ec5] GRMLBASE/15-initsetup: mask ldconfig.service
+  * [b04c36f] GHA: test build-only/release mode
+  * [f45341b] Initialize zsh caches so first startup on Live CD is faster
+  * [668880b] build-driver: fix SOURCES class gone missing
+  * Software related changes:
+    - [9e41bcd] GRML_FULL: stop precreating locales
+
+ -- Michael Prokop <mika@grml.org>  Tue, 17 Dec 2024 08:57:35 +0100
+
 grml-live (0.49.2) unstable; urgency=medium
 
   [ Michael Prokop ]
