@@ -178,6 +178,7 @@ netcat-openbsd
 nethogs
 netsniff-ng
 nmap
+openssh-client-ssh1
 radvd
 rdnssd
 rfkill
@@ -186,7 +187,6 @@ sipcalc
 snmp
 socat
 speedtest-cli
-ssh
 ssmping
 tcpdump
 tcptraceroute

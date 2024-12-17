@@ -89,6 +89,7 @@ ndisc6
 net-tools
 netbase
 netcat-openbsd
+openssh-client-ssh1
 rdnssd
 rfkill
 ser2net
