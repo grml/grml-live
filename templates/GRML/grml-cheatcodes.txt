@@ -20,8 +20,7 @@ hd / hd1 / hd2 / hd3                  Boot from (local) primary / secondary /...
 debug                                 Get shells during process of booting for debugging
 forensic                              Do not touch any harddisks during hardware recognition
 serial                                Activate ttyS0 and start a getty
-grub                                  Boot Grub bootloader (special all-in-one-image)
-dos                                   Boot FreeDOS
+grub                                  Boot Grub bootloader
 hdt                                   Boot Hardware Detection Tool (from syslinux project)
 
 Further documentation regarding the boot process can be found at:
