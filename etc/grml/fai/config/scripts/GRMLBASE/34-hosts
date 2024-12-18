@@ -15,7 +15,7 @@ target=${target:?}
 # shellcheck source=/dev/null
 . "$GRML_LIVE_CONFIG"
 
-fcopy -v /etc/hosts
+fcopy -M -v /etc/hosts
 
 # replace $HOSTNAME with the real hostname:
 sed -i "s/\$HOSTNAME/$HOSTNAME/" "$target"/etc/hosts

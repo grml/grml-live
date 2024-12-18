@@ -15,7 +15,7 @@ target=${target:?}
 # shellcheck source=/dev/null
 . "$GRML_LIVE_CONFIG"
 
-fcopy -v /etc/sudoers
+fcopy -m root,root,0440 -v /etc/sudoers
 sed -i "s/\$USERNAME/$USERNAME/" "$target"/etc/sudoers
 chmod 440 "$target"/etc/sudoers
 chown 0:0 "$target"/etc/sudoers

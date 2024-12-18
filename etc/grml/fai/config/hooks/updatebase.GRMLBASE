@@ -71,7 +71,7 @@ if ! [ -e "${target}"/etc/udev/kernel-upgrade ] ; then
 fi
 
 # install all apt related files
-fcopy -i -B -v -r /etc/apt
+fcopy -M -i -B -v -r /etc/apt
 
 # install packages from a repository of a specific date
 if [ -n "${WAYBACK_DATE:-}" ] ; then
