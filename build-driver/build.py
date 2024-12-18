@@ -80,15 +80,6 @@ def apt_satisfy(deps: str):
     )
 
 
-def get_grml_live(branch: str):
-    checkout_path = Path(os.getcwd()) / "grml-live"
-    run_x(["git", "clone", "-q", "--depth", "1", "-b", branch, "https://github.com/grml/grml-live", checkout_path])
-    result = run_x(["git", "describe", "--always"], cwd=checkout_path, capture_output=True)
-    version = result.stdout.strip()
-    print(f"I: grml-live version: {version} from branch {branch}")
-    return checkout_path
-
-
 def print_grml_live_version(grml_live_path: Path):
     result = run_x(["git", "describe", "--always"], cwd=grml_live_path, capture_output=True)
     version = result.stdout.strip().decode()
