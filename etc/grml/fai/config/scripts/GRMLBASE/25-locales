@@ -14,10 +14,10 @@ target=${target:?}
 
 # set up /etc/locale.gen, GRMLBASE installs a minimal configuration.
 # Only if the LOCALES class is added you get a fuller set of locales.
-fcopy -v /etc/locale.gen
+fcopy -M -v /etc/locale.gen
 
 # set up /etc/locale.conf, to avoid systemd-firstboot prompting for user input
-fcopy -v /etc/locale.conf
+fcopy -M -v /etc/locale.conf
 
 # get rid of locales unless using class LOCALES
 set +u

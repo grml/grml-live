@@ -13,7 +13,7 @@ set -e
 target=${target:?}
 
 # Install all present modprobe.d configuration files
-fcopy -v -i -r /etc/modprobe.d
+fcopy -M -v -i -r /etc/modprobe.d
 
 if [ -f "${target}/lib/modprobe.d/50-nfs.conf" ] ; then  # nfs-kernel-server >=1:2.6.2-1
   echo "Clearing /lib/modprobe.d/50-nfs.conf to avoid automatic kmod/busybox issues"

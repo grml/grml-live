@@ -9,9 +9,9 @@
 set -u
 set -e
 
-fcopy -v /usr/share/initramfs-tools/scripts/init-top/grml
-fcopy -v /usr/share/grml/desktop-bg.png
-fcopy -v /usr/share/doc/grml-docs/startpage.html
+fcopy -m root,root,0755 -v /usr/share/initramfs-tools/scripts/init-top/grml
+fcopy -M -v /usr/share/grml/desktop-bg.png
+fcopy -M -v /usr/share/doc/grml-docs/startpage.html
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
