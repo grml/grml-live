@@ -1272,7 +1272,7 @@ else
       copy_addon_file memdisk /usr/lib/syslinux addons
     fi
 
-    # copy only files so we can handle bsd4grml on its own
+    # copy only files and report which ones are installed
     if [ -d "${TEMPLATE_DIRECTORY}/arch/${ARCH}/boot/addons" ] ; then
       for file in "${TEMPLATE_DIRECTORY}/arch/${ARCH}/boot/addons/"* ; do
         if [ -f "$file" ] ; then
@@ -1292,17 +1292,6 @@ else
     fi
     eend 0
 
-    if [ -n "$NO_ADDONS_BSD4GRML" ] ; then
-      log   "Skipping installation of bsd4grml as requested via \$NO_ADDONS_BSD4GRML."
-      einfo "Skipping installation of bsd4grml as requested via \$NO_ADDONS_BSD4GRML."; eend 0
-    else
-      if [ -d "$TEMPLATE_DIRECTORY"/boot/addons/bsd4grml ] ; then
-        cp -a "${TEMPLATE_DIRECTORY}"/boot/addons/bsd4grml "$BUILD_OUTPUT"/boot/addons/
-      else
-        log   "Missing addon file: bsd4grml"
-        ewarn "Missing addon file: bsd4grml" ; eend 0
-      fi
-    fi
   fi # NO_ADDONS
 
   # generate loopback.cfg config file without depending on grub's regexp module
@@ -1455,10 +1444,6 @@ else
       fi
     fi
   fi # amd64 or i386
-
-  if [ -e "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6 ]; then
-    sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_OUTPUT"/boot/addons/bsd4grml/boot.6
-  fi
 
   DPKG_LIST="/var/log/fai/$HOSTNAME/last/dpkg.list" # the dpkg --list output of the chroot
   if ! [ -r "$DPKG_LIST" ] ; then
