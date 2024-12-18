@@ -224,13 +224,7 @@ def download_file(url: str, local_path: Path):
     run_x(["curl", "-#fSL", "--output", local_path, url])
 
 
-def should_skip_sources(build_mode: str, build_config: dict, env: dict) -> bool:
-    if build_mode == "release":
-        # skip SOURCES here as grml-live would re-download all sources, possibly
-        # mismatching the versions. Also we do not prepare a working DNS, so it
-        # would just fail. In the future, grml-live should support reusing the
-        # sources tarball and fetching just the necessary differences.
-        return True
+def skip_sources_requested(build_config: dict, env: dict) -> bool:
     if env.get("SKIP_SOURCES", "") == "1":
         return True
     if build_config.get("skip_sources", False) is True:
@@ -418,8 +412,12 @@ def main(program_name: str, argv: list[str]) -> int:
 
     build_config = load_config(build_config_file)
 
-    skip_sources = should_skip_sources(build_mode, build_config, dict(os.environ))
-    classes = get_grml_live_classes(arch, flavor, classes_for_mode, skip_sources)
+    skip_sources = skip_sources_requested(build_config, dict(os.environ))
+    # skip SOURCES in release mode as grml-live would re-download all sources,
+    # possibly mismatching the versions. Also we do not prepare a working DNS,
+    # so it would just fail. In the future, grml-live should support reusing
+    # the sources tarball and fetching just the necessary differences.
+    classes = get_grml_live_classes(arch, flavor, classes_for_mode, skip_sources or build_mode == "release")
 
     build_grml_name = f"grml-{flavor}-{arch}"
     last_release_version = build_config["last_release"]
@@ -502,7 +500,7 @@ def main(program_name: str, argv: list[str]) -> int:
         old_iso_path = None
     else:
         old_iso_path = download_old_iso(tmp_dir, old_iso_url)
-    if old_iso_url is None:
+    if skip_sources or old_iso_url is None:
         old_sources_path = None
     else:
         old_sources_path = download_old_sources(tmp_dir, old_iso_url)
