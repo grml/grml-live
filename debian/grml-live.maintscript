@@ -1,4 +1,5 @@
 rm_conffile /etc/grml/fai/config/files/etc/apt/grml.key/GRMLBASE 0.32.3~
+rm_conffile /etc/grml/fai/config/files/etc/apt/sources.list.d/debian.list/DEBIAN_SID 0.47.10~
 rm_conffile /etc/grml/fai/config/files/etc/inittab/GRMLBASE 0.43.0~
 rm_conffile /etc/grml/fai/config/files/etc/inittab/GRML_SMALL 0.43.0~
 rm_conffile /etc/grml/fai/config/files/etc/locale.gen/GRML_FULL 0.49.3~
@@ -10,4 +11,4 @@ rm_conffile /etc/grml/fai/config/scripts/GRMLBASE/37-portmap 0.49.2~
 rm_conffile /etc/grml/fai/config/scripts/GRMLBASE/40-deborphan 0.35.0~
 rm_conffile /etc/grml/fai/config/scripts/GRMLBASE/93-update-usbids 0.45.0~
 rm_conffile /etc/grml/fai/config/scripts/GRMLBASE/94-update-smart-drivedb 0.49.2~
-rm_conffile /etc/grml/fai/config/files/etc/apt/sources.list.d/debian.list/DEBIAN_SID 0.47.10~
+rm_conffile /etc/grml/fai/config/scripts/GRML_SMALL/98-clean-chroot 0.49.4~
