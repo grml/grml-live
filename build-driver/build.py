@@ -30,7 +30,8 @@ class JobProperties:
     version: str
     release_name: str
     grml_name: str
-    isoname: str
+    iso_name: str  # name of the resulting .ISO files
+    sources_name: str  # name of the resulting sources tarball
 
 
 def usage(program_name):
@@ -95,7 +96,7 @@ def run_grml_live(
     version: str,
     release_name: str,
     grml_name: str,
-    isoname: str,
+    iso_name: str,
     old_iso_path: Path | None,
 ):
     env = dict(os.environ)
@@ -134,7 +135,7 @@ def run_grml_live(
         "-g",
         grml_name,
         "-i",
-        isoname,
+        iso_name,
         "-o",
         output_dir,
     ]
@@ -223,7 +224,7 @@ def download_file(url: str, local_path: Path):
     run_x(["curl", "-#fSL", "--output", local_path, url])
 
 
-def should_skip_sources(build_config: dict, env: dict) -> bool:
+def skip_sources_requested(build_config: dict, env: dict) -> bool:
     if env.get("SKIP_SOURCES", "") == "1":
         return True
     if build_config.get("skip_sources", False) is True:
@@ -265,7 +266,7 @@ def build(
         job_properties.version,
         job_properties.release_name,
         job_properties.grml_name,
-        job_properties.isoname,
+        job_properties.iso_name,
         old_iso_path,
     )
 
@@ -349,14 +350,27 @@ def download_old_dpkg_list_last_release(tmp_dir: Path, last_release_version: str
             return None
 
 
-def download_old_iso(tmp_dir: Path, old_iso_url: str | None) -> Path | None:
-    if old_iso_url is None:
-        return None
-
+def download_old_iso(tmp_dir: Path, old_iso_url: str) -> Path | None:
     path = tmp_dir / "old.iso"
 
     with ci_section(f"Downloading old ISO {old_iso_url} to {path!s}"):
         download_file(old_iso_url, path)
+
+    return path
+
+
+def download_old_sources(tmp_dir: Path, old_iso_url: str) -> Path | None:
+    path = tmp_dir / "old-sources.tar"
+
+    # https://.../2024-12-18_10_03_44/grml_isos/grml...iso
+    # => https://.../2024-12-18_10_03_44/ , _, grml...iso
+    old_base_url, _, old_iso_name = old_iso_url.rsplit("/", 2)
+    # grml-something.iso => grml-something-sources.tar
+    old_sources_name = old_iso_name.rsplit(".", 1)[0] + "-sources.tar"
+    old_sources_url = f"{old_base_url}/{old_sources_name}"
+
+    with ci_section(f"Downloading old Sources {old_sources_url} to {path!s}"):
+        download_file(old_sources_url, path)
 
     return path
 
@@ -398,8 +412,12 @@ def main(program_name: str, argv: list[str]) -> int:
 
     build_config = load_config(build_config_file)
 
-    skip_sources = should_skip_sources(build_config, dict(os.environ))
-    classes = get_grml_live_classes(arch, flavor, classes_for_mode, skip_sources)
+    skip_sources = skip_sources_requested(build_config, dict(os.environ))
+    # skip SOURCES in release mode as grml-live would re-download all sources,
+    # possibly mismatching the versions. Also we do not prepare a working DNS,
+    # so it would just fail. In the future, grml-live should support reusing
+    # the sources tarball and fetching just the necessary differences.
+    classes = get_grml_live_classes(arch, flavor, classes_for_mode, skip_sources or build_mode == "release")
 
     build_grml_name = f"grml-{flavor}-{arch}"
     last_release_version = build_config["last_release"]
@@ -414,6 +432,7 @@ def main(program_name: str, argv: list[str]) -> int:
     if build_mode == "release":
         old_iso_url = build_config["base_iso"][flavor][arch]
         build_version = build_config["release_version"]
+        artifact_basename = f"grml-{flavor}-{build_version}-{arch}"
 
         job_properties = JobProperties(
             job_timestamp=datetime.datetime.now(),
@@ -427,7 +446,8 @@ def main(program_name: str, argv: list[str]) -> int:
             # f.e. "Glumpad Grumbirn"
             release_name=build_config["release_name"],
             grml_name=build_grml_name,
-            isoname=f"grml-{flavor}-{build_version}-{arch}.iso",
+            iso_name=f"{artifact_basename}.iso",
+            sources_name=f"{artifact_basename}-sources.tar",
         )
 
     elif build_mode == "daily":
@@ -436,6 +456,7 @@ def main(program_name: str, argv: list[str]) -> int:
         CI_PIPELINE_IID = os.getenv("CI_PIPELINE_IID", "0")
         build_version = f"d{date_stamp}b{CI_PIPELINE_IID}"
         build_release_name = f"daily{date_stamp}build{CI_PIPELINE_IID}{debian_suite}"
+        artifact_basename = f"grml-{flavor}-{build_release_name}-{arch}"
 
         job_properties = JobProperties(
             job_timestamp=datetime.datetime.now(),
@@ -446,7 +467,8 @@ def main(program_name: str, argv: list[str]) -> int:
             version=build_version,
             release_name=build_release_name,
             grml_name=build_grml_name,
-            isoname=f"grml-{flavor}-{build_release_name}-{arch}.iso",
+            iso_name=f"{artifact_basename}.iso",
+            sources_name=f"{artifact_basename}-sources.tar",
         )
 
     else:
@@ -474,7 +496,14 @@ def main(program_name: str, argv: list[str]) -> int:
 
     old_dpkg_list_previous_build = cache_dir / "dpkg.list"
     old_dpkg_list_last_release = download_old_dpkg_list_last_release(tmp_dir, last_release_version, flavor)
-    old_iso_path = download_old_iso(tmp_dir, old_iso_url)
+    if old_iso_url is None:
+        old_iso_path = None
+    else:
+        old_iso_path = download_old_iso(tmp_dir, old_iso_url)
+    if skip_sources or old_iso_url is None:
+        old_sources_path = None
+    else:
+        old_sources_path = download_old_sources(tmp_dir, old_iso_url)
 
     with results_mover(build_dir, output_dir):
         build(
@@ -491,6 +520,9 @@ def main(program_name: str, argv: list[str]) -> int:
         new_dpkg_list = get_dpkg_list_path_for_build(build_dir)
         old_dpkg_list_previous_build.parent.mkdir(exist_ok=True)
         shutil.copyfile(new_dpkg_list, old_dpkg_list_previous_build)
+
+        if old_sources_path:
+            old_sources_path.rename(build_dir / job_properties.sources_name)
 
     print("I: Success.")
 
