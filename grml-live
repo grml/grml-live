@@ -522,9 +522,9 @@ if [ -n "$ZERO_LOGFILE" ] ; then
 fi
 # }}}
 
-# Automatically enable NO_ADDONS=1 if addons are not present {{{
-if [ -z "${NO_ADDONS:-}" ] && [ ! -r "$TEMPLATE_DIRECTORY"/boot/addons ] ; then
-  ewarn "Boot addons not found, (Consider installing package grml-live-addons)" ; eend 0
+# Warn user if addons from grml-live-addons are absent {{{
+if [ -z "${NO_ADDONS:-}" ] && [ ! -r "$TEMPLATE_DIRECTORY"/arch ] ; then
+  ewarn "Boot addons not found (Consider installing package grml-live-addons)" ; eend 0
 fi
 # }}}
 
