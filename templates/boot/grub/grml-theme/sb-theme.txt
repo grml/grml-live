@@ -1,6 +1,6 @@
 title-text: ""
 title-color: "#FFF"
-desktop-color: "#000"
+desktop-image: "black.png"
 
 + image {
   file = "logo.png"
@@ -17,7 +17,6 @@ desktop-color: "#000"
   width = 92%-180
   top = 25%
   height = 55%
-  # TODO: set height=60%
   item_color = #FFF
   selected_item_color = #000
   item_spacing = 4
