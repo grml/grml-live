@@ -1864,6 +1864,38 @@ create_netbootpackage() {
 create_netbootpackage
 # }}}
 
+# {{{
+create_sourcespackages() {
+  if ! hasclass SOURCES ; then
+    log "Skipping source package generation, only enabled with class SOURCES"
+    return 0
+  fi
+
+  local OUTPUT_FILE SOURCES_DIR
+  OUTPUT_FILE="${OUTPUT}/$(basename "${ISO_NAME}" .iso)-sources.tar"
+  SOURCES_DIR="${OUTPUT}/grml_sources/"
+
+  if ! [ -d "${SOURCES_DIR}" ] ; then
+    eerror "Base directory ${SOURCES_DIR} not present, can not generate source package" ; eend 1
+    bailout 22
+  fi
+
+  if tar -C "${OUTPUT}" -cf "${OUTPUT_FILE}" "$(basename "${SOURCES_DIR}")" ; then
+   (
+     # shellcheck disable=SC2164 # We just wrote there. If it disappeared, too bad.
+     cd "$(dirname "${OUTPUT_FILE}")"
+     sha256sum "$(basename "${OUTPUT_FILE}")" > "${OUTPUT_FILE}.sha256"
+   )
+   einfo "Generated source package ${OUTPUT_FILE}" ; eend 0
+ else
+   eerror "Could not generate source package ${OUTPUT_FILE}" ; eend 1
+   bailout 22
+ fi
+}
+
+create_sourcespackages
+# }}}
+
 # finalize {{{
 if [ -n "${start_seconds}" ] ; then
   end_seconds="$(date +%s)"
