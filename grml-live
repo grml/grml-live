@@ -1273,10 +1273,23 @@ else
     fi
 
     # copy only files so we can handle bsd4grml on its own
-    for file in "${TEMPLATE_DIRECTORY}"/boot/addons/* ; do
-      test -f "$file" && cp "$file" "$BUILD_OUTPUT"/boot/addons/
-    done
-
+    if [ -d "${TEMPLATE_DIRECTORY}/arch/${ARCH}/boot/addons" ] ; then
+      for file in "${TEMPLATE_DIRECTORY}/arch/${ARCH}/boot/addons/"* ; do
+        if [ -f "$file" ] ; then
+          log   "Installing $file in /boot/addons."
+          einfo "Installing $file in /boot/addons."; eend 0
+          cp "$file" "$BUILD_OUTPUT"/boot/addons/
+        fi
+      done
+    else # legacy path (before https://github.com/grml/grml-live-grml/pull/11):
+      for file in "${TEMPLATE_DIRECTORY}"/boot/addons/* ; do
+        if [ -f "$file" ] ; then
+          log   "Installing $file in /boot/addons. (Legacy support)"
+          einfo "Installing $file in /boot/addons. (Legacy support)"; eend 0
+          cp "$file" "$BUILD_OUTPUT"/boot/addons/
+        fi
+      done
+    fi
     eend 0
 
     if [ -n "$NO_ADDONS_BSD4GRML" ] ; then
