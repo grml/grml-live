@@ -480,8 +480,8 @@ fi
 [ -n "$CHROOT_OUTPUT" ]    || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
 [ -n "$ISO_OUTPUT" ]       || ISO_OUTPUT="$OUTPUT/grml_isos"
 [ -n "$LOG_OUTPUT" ]       || LOG_OUTPUT="$OUTPUT/grml_logs"
-[ -n "$REPORTS" ]          || REPORTS="${LOG_OUTPUT}/reports/"
-[ -n "$NETBOOT" ]          || NETBOOT="${OUTPUT}/netboot/"
+[ -n "$REPORTS" ]          || REPORTS="${LOG_OUTPUT}/reports"
+[ -n "$NETBOOT" ]          || NETBOOT="${OUTPUT}/netboot"
 # }}}
 
 # some misc checks before executing FAI {{{
@@ -1724,7 +1724,10 @@ fi
 
 # netboot package {{{
 create_netbootpackage() {
-  local OUTPUT_FILE="${NETBOOT}/grml_netboot_package_${GRML_NAME}_${VERSION}.tar"
+  local OUTPUT_NAME
+  local OUTPUT_FILE
+  OUTPUT_NAME=$(basename "${ISO_NAME}" .iso)-netboot
+  OUTPUT_FILE="${NETBOOT}/${OUTPUT_NAME}.tar"
 
   if [ -f "${OUTPUT_FILE}" ] && [ -z "$UPDATE" ] && [ -z "$BUILD_ONLY" ] && [ -z "$BUILD_DIRTY" ] ; then
     log   "Skipping stage 'netboot' as $OUTPUT_FILE exists already."
@@ -1739,7 +1742,7 @@ create_netbootpackage() {
   mkdir -p "$NETBOOT"
 
   local OUTPUTDIR="${NETBOOT}/build_tmp"
-  local WORKING_DIR="${OUTPUTDIR}/grml_netboot_package_${GRML_NAME}_${VERSION}/tftpboot/"
+  local WORKING_DIR="${OUTPUTDIR}/${OUTPUT_NAME}/tftpboot/"
 
   mkdir -p "$WORKING_DIR"
 
@@ -1843,7 +1846,7 @@ create_netbootpackage() {
     fi
   fi # amd64 or arm64
 
-  if tar -C "$OUTPUTDIR" -cf "${OUTPUT_FILE}" "grml_netboot_package_${GRML_NAME}_${VERSION}" ; then
+  if tar -C "$OUTPUTDIR" -cf "${OUTPUT_FILE}" "${OUTPUT_NAME}" ; then
     (
       # shellcheck disable=SC2164 # We just wrote there. If it disappeared, too bad.
       cd "$(dirname "${OUTPUT_FILE}")"
