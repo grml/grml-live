@@ -7,7 +7,7 @@ Files: *
 Copyright: 2007-2023 Michael Prokop <mika@grml.org>
 License: GPL-2+
 
-Files: fonts/graphicoreBitmapFont0-Light.otf
+Files: templates/wallpaper/graphicoreBitmapFont0-Light.otf
 Copyright: 2010, Lasse Fister lasse@graphicore.de
 License: SIL
 

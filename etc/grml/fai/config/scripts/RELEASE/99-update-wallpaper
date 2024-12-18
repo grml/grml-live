@@ -12,12 +12,13 @@ target=${target:?}
 # shellcheck source=/dev/null
 . "$GRML_LIVE_CONFIG"
 
-FONTFILE=${FONTFILE:-/usr/share/grml-live/fonts/graphicoreBitmapFont0-Light.otf}
 TITLE_FONTSIZE=${TITLE_FONTSIZE:-200}
-GRML_BG=${GRML_BG:-$target/usr/share/grml/desktop-bg.png}
 GRML_WALLPAPER=${GRML_WALLPAPER:-$target/usr/share/grml/desktop.jpg}
 
-echo "Creating release wallpaper"
+FONTFILE="$TEMPLATE_DIRECTORY"/wallpaper/font.otf
+GRML_BG="$TEMPLATE_DIRECTORY"/wallpaper/input.png
+
+echo "Creating RELEASE wallpaper"
 
 if [ ! -x "$(which convert)" ]; then
     echo "convert not installed, skipping release wallpaper."
@@ -25,15 +26,14 @@ if [ ! -x "$(which convert)" ]; then
 fi
 
 if [ ! -f "$GRML_BG" ]; then
-    echo "Could not find Grml background image, skipping release wallpaper"
+    echo "Could not find input image $GRML_BG, skipping wallpaper"
     exit 0
 fi
 
 if [ ! -f "$FONTFILE" ]; then
-    echo "Could not find font $FONTFILE, skipping release wallpaper"
+    echo "Could not find font $FONTFILE, skipping wallpaper"
     exit 0
 fi
-
 
 convert "$GRML_BG" -gravity center \
     -fill white -font "$FONTFILE" \
