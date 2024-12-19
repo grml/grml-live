@@ -18,21 +18,17 @@
   LC_ALL=C
   [[ $UID != 0 ]] && runas='sudo' # important for /etc
 
-  if [ -d /run/live/overlay/rw ] ; then # since Dec 2018
+  if [ -d /run/live/overlay/rw ] ; then
     CHANGE_DIR='/run/live/overlay/rw'
-  elif [ -d /lib/live/mount/overlay/rw ] ; then # 2012 until Dec 2018, backwards compatibility
-    CHANGE_DIR='/lib/live/mount/overlay/rw'
   else
-    echo "Error: no overlay directories found (like /lib/live/mount/overlay or /live/overlay)." >&2
+    echo "Error: no overlay directories found (expected /run/live/overlay/rw)." >&2
     bailout; exit 1
   fi
 
   if [ -d /run/live/rootfs ] ; then
     ORIG_DIR="$(find /run/live/rootfs/ -maxdepth 1 -name \*.squashfs | head -1)"
-  elif [ -d /lib/live/mount/rootfs ] ; then
-    ORIG_DIR="$(find /lib/live/mount/rootfs/ -maxdepth 1 -name \*.squashfs | head -1)"
   else
-    echo "Error: no rootfs directories found in '/run/live/rootfs' or '/lib/live/mount/rootfs'." >&2
+    echo "Error: no rootfs directories found in '/run/live/rootfs'." >&2
     bailout; exit 1
   fi
 
