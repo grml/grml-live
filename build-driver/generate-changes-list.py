@@ -32,6 +32,14 @@ class CliListener(Listener):
         sys.stdout.write(f"W: {message}\n")
 
 
+def run_x(args, check: bool = True, **kwargs):
+    # str-ify Paths, not necessary, but for readability in logs.
+    args = [arg if isinstance(arg, str) else str(arg) for arg in args]
+    args_str = '" "'.join(args)
+    print(f'D: Running "{args_str}"', flush=True)
+    return subprocess.run(args, check=check, **kwargs)
+
+
 def parse_package_list(s: str) -> dict:
     package_dict = {}
     for line in s.split("\n"):
@@ -167,7 +175,7 @@ def fetch_grml_package_repo(git_repo_workspace: Path, package: str, git_url: str
     gitpath = git_repo_workspace / f"{package}.git"
     if not gitpath.exists():
         env = dict(os.environ) | {"GIT_TERMINAL_PROMPT": "0"}
-        subprocess.run(
+        run_x(
             ["git", "clone", "--bare", "--single-branch", git_url, gitpath],
             cwd=git_repo_workspace,
             env=env,
@@ -176,8 +184,8 @@ def fetch_grml_package_repo(git_repo_workspace: Path, package: str, git_url: str
         raise Exception("Repository not found")
 
     # update repo
-    subprocess.run(["git", "remote", "set-url", "origin", git_url], cwd=gitpath)
-    subprocess.run(["git", "remote", "update", "--prune"], cwd=gitpath).check_returncode()
+    run_x(["git", "remote", "set-url", "origin", git_url], cwd=gitpath)
+    run_x(["git", "remote", "update", "--prune"], cwd=gitpath).check_returncode()
     return gitpath
 
 
