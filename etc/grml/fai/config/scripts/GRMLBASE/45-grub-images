@@ -54,7 +54,8 @@ if ifclass AMD64 ; then
   fi
 fi
 
-if ifclass I386 ; then
+# note: enabled also on AMD64 for UEFI 32bit boot support
+if ifclass I386 || ifclass AMD64 ; then
   if [ -r "${target}"/usr/lib/grub/i386-efi/moddep.lst ] ; then
     ARCHS+=(i386-efi)
     ADDITIONAL_MODULES[i386-efi]="efi_gop efi_uga"

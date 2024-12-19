@@ -973,6 +973,7 @@ grub_setup() {
         ;;
       amd64)
         BOOTX64="/boot/bootx64.efi"
+        BOOTX32="/boot/bootia32.efi"
         ;;
     esac
 
@@ -985,6 +986,15 @@ grub_setup() {
       bailout 50
     fi
 
+    # UEFI 32bit boot support, only supported with Debian trixie and newer,
+    # so make it optional and don't fail hard
+    if [[ "$ARCH" == "amd64" ]] && ! [ -r "${CHROOT_OUTPUT}/${BOOTX32}" ] ; then
+      local uefi_32bit_support
+      uefi_32bit_support=0
+      log   "Cannot access GRUB 32-bit PC EFI image ${CHROOT_OUTPUT}/${BOOTX32}, disabling UEFI 32bit boot support."
+      ewarn "Cannot access GRUB 32-bit PC EFI image ${CHROOT_OUTPUT}/${BOOTX32}, disabling UEFI 32bit boot support" ; eend 0
+    fi
+
     dd if=/dev/zero of="${CHROOT_OUTPUT}/${EFI_IMG}" bs="${efi_size}" count=1 2>/dev/null || bailout 50
     mkfs.vfat -n GRML "${CHROOT_OUTPUT}/${EFI_IMG}" >/dev/null || bailout 51
     mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::EFI || bailout 52
@@ -994,18 +1004,23 @@ grub_setup() {
       log   "Secure Boot is disabled."
       einfo "Secure Boot is disabled." ; eend 0
 
-      # install "$BOOTX64" as ::EFI/BOOT/{bootx64.efi|bootaa64.efi} inside image file "$EFI_IMG":
+      # install "$BOOTX64" as ::EFI/BOOT/{bootx64.efi|bootaa64.efi} inside image file "$EFI_IMG",
+      # and if present also "$BOOTX32" as ::EFI/BOOT/bootia32.efi on amd64 for UEFI 32bit boot support:
       case "$ARCH" in
         arm64)
           mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${CHROOT_OUTPUT}/${BOOTX64}" ::EFI/BOOT/bootaa64.efi >/dev/null || bailout 53
           ;;
         amd64)
           mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${CHROOT_OUTPUT}/${BOOTX64}" ::EFI/BOOT/bootx64.efi >/dev/null || bailout 53
+          # UEFI 32bit boot
+          if [ "${uefi_32bit_support:-}" != "0" ] ; then
+            mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${CHROOT_OUTPUT}/${BOOTX32}" ::EFI/BOOT/bootia32.efi >/dev/null || bailout 53
+          fi
           ;;
       esac
 
-      log   "Created UEFI image $EFI_IMG from $BOOTX64"
-      einfo "Created UEFI image $EFI_IMG from $BOOTX64" ; eend 0
+      log   "Created UEFI image $EFI_IMG from $BOOTX64 ${BOOTX32:-}"
+      einfo "Created UEFI image $EFI_IMG from $BOOTX64 ${BOOTX32:-}" ; eend 0
     else
       case "${SECURE_BOOT}" in
         disable*)
@@ -1811,6 +1826,15 @@ create_netbootpackage() {
         then
           log   "No grubnetx64.efi for usage with PXE boot found (grub-efi-amd64-signed not present?)"
           ewarn "No grubnetx64.efi for usage with PXE boot found (grub-efi-amd64-signed not present?)." ; eend 0
+        fi
+
+        # UEFI 32bit boot
+        if ! copy_optional_file_logged "${WORKING_DIR}"/grubia32.efi "${CHROOT_OUTPUT}" \
+          /usr/lib/grub/i386-efi-signed/grubnetia32.efi.signed \
+          /usr/lib/grub/i386-efi/monolithic/grubnetia32.efi
+        then
+          log   "No grubnetia32.efi for usage with PXE boot found (grub-efi-ia32-unsigned present?)"
+          ewarn "No grubnetia32.efi for usage with PXE boot found (grub-efi-ia32-unsigned present?)." ; eend 0
         fi
       fi
 
