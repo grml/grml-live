@@ -20,7 +20,7 @@ EOT
 
 cat >build-gha-ci-test-config-initial <<EOT
 ---
-last_release: "2024.02"
+last_release: "2024.12"
 EOT
 
 run_build() {
@@ -53,7 +53,7 @@ elif [ "$MODE" = "build-only-twice" ]; then
     INPUT_ISO=$(ls results-initial/grml_isos/grml*iso)
     cat >build-gha-ci-test-config-build-only-first <<EOT
 ---
-last_release: "2024.02"
+last_release: "2024.12"
 debian_suite: testing
 release_version: "ci-bo-first"
 release_name: CI1
@@ -67,7 +67,7 @@ EOT
     INPUT_ISO=$(ls results-build-only-first/grml_isos/grml*iso)
     cat >build-gha-ci-test-config-build-only-second <<EOT
 ---
-last_release: "2024.02"
+last_release: "2024.12"
 debian_suite: testing
 release_version: "ci-bo-second"
 release_name: CI2
