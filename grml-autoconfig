@@ -54,11 +54,6 @@ mount_sys
 # }}}
 
 # {{{ main grml-autoconfig
-# make sure symlink /etc/mtab exists, this is usually handled by
-# /etc/init.d/checkroot.sh but we don't execute this script on the live system
-if [ -z "$INSTALLED" ] ; then
-  ln -sf /proc/mounts /etc/mtab
-fi
 
 checkvalue $CONFIG_SYSLOG && config_syslog
 
