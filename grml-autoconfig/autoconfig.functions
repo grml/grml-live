@@ -47,16 +47,13 @@ if [ -z "$CMDLINE" ]; then
   # otherwise, take CMDLINE from Kernel and config files.
   CMDLINE="$(< /proc/cmdline)"
   [ -d ${LIVECD_PATH}/bootparams/ ] && CMDLINE="$CMDLINE $(cat ${LIVECD_PATH}/bootparams/* | tr '\n' ' ')"
-  modprobe 9p 2>/dev/null || true
-  if grep -q 9p /proc/filesystems ; then
-      TAG="grml-parameters"
-      if grep -q "$TAG" /sys/bus/virtio/devices/*/mount_tag 2>/dev/null ; then
-          MOUNTDIR="$(mktemp -d)"
-          mount -t 9p -o trans=virtio,ro "$TAG" "$MOUNTDIR"
-          CMDLINE="$CMDLINE $(cat "$MOUNTDIR"/* 2>/dev/null | tr '\n' ' ')"
-          umount "$MOUNTDIR"
-          rmdir "$MOUNTDIR"
-      fi
+  TAG="grml-parameters"
+  if grep -q "$TAG" /sys/bus/virtio/devices/*/mount_tag 2>/dev/null ; then
+    MOUNTDIR="$(mktemp -d)"
+    mount -t 9p -o trans=virtio,ro "$TAG" "$MOUNTDIR"
+    CMDLINE="$CMDLINE $(cat "$MOUNTDIR"/* 2>/dev/null | tr '\n' ' ')"
+    umount "$MOUNTDIR"
+    rmdir "$MOUNTDIR"
   fi
 fi
 # }}}
@@ -1090,8 +1087,7 @@ else
       eindent
       DCSDEVICE=$(blkid -t LABEL=$GRMLCFG | head -1 | awk -F: '{print $1}')
 
-      modprobe 9p 2>/dev/null || true
-      if [ -z "$DCSDEVICE" ] && grep -q 9p /proc/filesystems ; then
+      if [ -z "$DCSDEVICE" ] ; then
           if grep -q "$GRMLCFG" /sys/bus/virtio/devices/*/mount_tag 2>/dev/null ; then
             einfo "Found 9p-virtio fs with mount_tag $GRMLCFG"
             DCSDEVICE="$GRMLCFG"

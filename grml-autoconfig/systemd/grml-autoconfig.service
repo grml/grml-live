@@ -3,7 +3,7 @@
 [Unit]
 Description=Grml boot option support
 Before=getty@tty1.service
-After=rc-local.service
+After=rc-local.service systemd-modules-load.service
 
 [Service]
 ExecStart=/etc/init.d/grml-autoconfig
