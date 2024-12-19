@@ -87,18 +87,56 @@ def main():
         sftp.mkdir(remote_latest)
     except IOError:
         pass
+    try:
+        sftp.mkdir(remote_latest + "/grml_isos")
+    except IOError:
+        pass
 
     real_iso_name = next(local_dir.glob("grml_isos/*iso")).name
     real_checksum_name = next(local_dir.glob("grml_isos/*iso.sha256")).name
-    latest_iso_name = f"{job_name}_latest.iso"
-    latest_checksum_name = f"{job_name}_latest.iso.sha256"
+    old_latest_iso_name = f"{job_name}_latest.iso"
+    old_latest_checksum_name = f"{job_name}_latest.iso.sha256"
+    latest_iso_name = f"{job_name}-latest.iso"
+    latest_checksum_name = f"{job_name}-latest.iso.sha256"
+
+    real_sources_name = next(local_dir.glob("grml*-sources.tar")).name
+    latest_sources_name = f"{job_name}-latest-sources.tar"
+
+    for symlink, real in [
+        (latest_iso_name, real_iso_name),
+        (latest_checksum_name, real_checksum_name),
+        (old_latest_iso_name, real_iso_name),
+        (old_latest_checksum_name, real_checksum_name),
+    ]:
+        remote_symlink = f"{remote_latest}/{symlink}"
+        remote_real = f"../{stamped_dirname}/grml_isos/{real}"
+        print("Updating symlink", remote_symlink, "to", remote_real)
+        try:
+            sftp.unlink(remote_symlink)
+        except FileNotFoundError:
+            pass
+        sftp.symlink(remote_real, remote_symlink)
+
 
     for symlink, real in [
         (latest_iso_name, real_iso_name),
         (latest_checksum_name, real_checksum_name),
     ]:
+        remote_symlink = f"{remote_latest}/grml_isos/{symlink}"
+        remote_real = f"../../{stamped_dirname}/grml_isos/{real}"
+        print("Updating symlink", remote_symlink, "to", remote_real)
+        try:
+            sftp.unlink(remote_symlink)
+        except FileNotFoundError:
+            pass
+        sftp.symlink(remote_real, remote_symlink)
+
+
+    for symlink, real in [
+        (latest_sources_name, real_sources_name),
+    ]:
         remote_symlink = f"{remote_latest}/{symlink}"
-        remote_real = f"../{stamped_dirname}/grml_isos/{real}"
+        remote_real = f"../{stamped_dirname}/{real}"
         print("Updating symlink", remote_symlink, "to", remote_real)
         try:
             sftp.unlink(remote_symlink)
