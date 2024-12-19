@@ -45,7 +45,7 @@ iszsh && setopt no_nomatch # || echo "Warning: not running under zsh!"
 if [ -z "$CMDLINE" ]; then
   # if CMDLINE was set from the outside, we're debugging.
   # otherwise, take CMDLINE from Kernel and config files.
-  CMDLINE="$(cat /proc/cmdline)"
+  CMDLINE="$(< /proc/cmdline)"
   [ -d ${LIVECD_PATH}/bootparams/ ] && CMDLINE="$CMDLINE $(cat ${LIVECD_PATH}/bootparams/* | tr '\n' ' ')"
   modprobe 9p 2>/dev/null || true
   if grep -q 9p /proc/filesystems ; then
@@ -311,7 +311,7 @@ config_time(){
 
     # hwclock uses the TZ variable
     KTZ="$(getbootparam 'tz' 2>>$DEBUG)"
-    [ -z "$KTZ" ] && [ -r /etc/timezone ] && KTZ=$(cat /etc/timezone)
+    [ -z "$KTZ" ] && [ -r /etc/timezone ] && KTZ=$(< /etc/timezone)
     if [ ! -f "/usr/share/zoneinfo/$KTZ" ] ; then
        ewarn "Warning: unknown timezone $KTZ" ; eend 1
        KTZ="UTC"
