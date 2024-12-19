@@ -12,3 +12,8 @@ dhcpcd-base
 # Required for ping to work in trixie and newer.
 # https://github.com/grml/grml-live/issues/160
 linux-sysctl-defaults
+
+
+PACKAGES install AMD64
+# UEFI 32bit boot support, available in Debian/trixie and newer
+grub-efi-ia32-unsigned
