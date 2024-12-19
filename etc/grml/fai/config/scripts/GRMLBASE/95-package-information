@@ -41,6 +41,7 @@ else
          fi
          echo >> "${LOGDIR}"/nonfree-licenses.txt
       done
+      gzip -9 "${LOGDIR}"/nonfree-licenses.txt
    fi
 fi
 
