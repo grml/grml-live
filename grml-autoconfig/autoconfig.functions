@@ -131,20 +131,6 @@ set_passwd() {
 
 ### }}}
 
-# {{{ filesystems (proc, pts, sys) and fixes
-mount_proc(){
-  [ -f /proc/version ] || mount -t proc /proc /proc 2>/dev/null
-}
-
-mount_pts(){
-  grep -q "/dev/pts" /proc/mounts || mount -t devpts /dev/pts /dev/pts 2>/dev/null
-}
-
-mount_sys(){
-  [ -d /sys/devices ] || mount -t sysfs /sys /sys 2>/dev/null
-}
-# }}}
-
 # {{{ Check if we are running in live mode or from HD
 INSTALLED=""
 [ -e /etc/grml_cd ] || INSTALLED="yes"

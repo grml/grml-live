@@ -47,12 +47,6 @@ source /etc/grml/autoconfig.functions  # functions
 source /etc/grml/lsb-functions         # helper functions for smart display
 # }}}
 
-# {{{ mount important directories
-mount_proc
-mount_pts
-mount_sys
-# }}}
-
 # {{{ main grml-autoconfig
 
 checkvalue $CONFIG_SYSLOG && config_syslog
