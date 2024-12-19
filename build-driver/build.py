@@ -254,7 +254,6 @@ def build(
     old_dpkg_list_last_release: Path | None,
     job_properties: JobProperties,
     grml_live_path: Path,
-    upload_to_daily: bool,
     old_iso_path: Path | None,
 ):
     run_grml_live(
@@ -287,9 +286,6 @@ def build(
             job_properties.job_name,
             job_properties.version,
         )
-
-    if upload_to_daily:
-        upload_daily(job_properties.job_name, build_dir, job_properties.job_timestamp)
 
 
 def load_config(build_config_file: str) -> dict:
@@ -514,9 +510,11 @@ def main(program_name: str, argv: list[str]) -> int:
             old_dpkg_list_last_release,
             job_properties,
             grml_live_path,
-            upload_to_daily,
             old_iso_path,
         )
+
+        if upload_to_daily:
+            upload_daily(job_properties.job_name, build_dir, job_properties.job_timestamp)
 
         # Copy dpkg.list into cache for next iteration.
         new_dpkg_list = get_dpkg_list_path_for_build(build_dir)
