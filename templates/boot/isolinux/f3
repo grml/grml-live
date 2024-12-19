@@ -12,8 +12,8 @@
  forensic              do not touch any harddisks during hardware recognition  
  serial                                               activate serial console  
  grub                                    boot GRand Unified Bootloader (GRUB)  
- dos                                                         boot FreeDOS 1.0  
  hdt                                             boot Hardware Detection Tool  
+                                                                               
                                                                                
                                                                                
  A list with all supported boot options can be found on the CD at              
