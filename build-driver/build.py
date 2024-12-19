@@ -330,16 +330,12 @@ def install_debian_dependencies():
         )
 
 
-def download_old_dpkg_list_last_release(tmp_dir: Path, last_release_version: str | None, flavor: str) -> Path | None:
+def download_old_dpkg_list_last_release(tmp_dir: Path, last_release_version: str | None, flavor: str, arch: str) -> Path | None:
     if last_release_version is None:
         return None
 
-    # TODO:
-    # 1) deal with (OLD!) release names
-    # 2) interpolate arch, etc
-    # 3) error handling?
     path = tmp_dir / "dpkg.list.previous_release"
-    url = f"https://grml.org/files/grml64-{flavor}_{last_release_version}/dpkg.list"
+    url = f"https://ftp-master.grml.org/grml-{last_release_version}-metadata/grml-full-{last_release_version}-{arch}/dpkg.list"
     with ci_section(f"Downloading old dpkg.list {url} to {path!s}"):
         try:
             download_file(url, path)
@@ -496,7 +492,7 @@ def main(program_name: str, argv: list[str]) -> int:
     install_debian_dependencies()
 
     old_dpkg_list_previous_build = cache_dir / "dpkg.list"
-    old_dpkg_list_last_release = download_old_dpkg_list_last_release(tmp_dir, last_release_version, flavor)
+    old_dpkg_list_last_release = download_old_dpkg_list_last_release(tmp_dir, last_release_version, flavor, arch)
     if old_iso_url is None:
         old_iso_path = None
     else:
