@@ -513,6 +513,15 @@ def main(program_name: str, argv: list[str]) -> int:
             old_iso_path,
         )
 
+        # Remove the sources *directory*, to not have the sources twice in the CI artifacts.
+        grml_sources_directory = build_dir / "grml_sources"
+        if grml_sources_directory.exists():
+            print(f"I: Removing {grml_sources_directory}")
+            shutil.rmtree(grml_sources_directory, ignore_errors=True)
+
+        if old_sources_path:
+            old_sources_path.rename(build_dir / job_properties.sources_name)
+
         if upload_to_daily:
             upload_daily(job_properties.job_name, build_dir, job_properties.job_timestamp)
 
@@ -520,15 +529,6 @@ def main(program_name: str, argv: list[str]) -> int:
         new_dpkg_list = get_dpkg_list_path_for_build(build_dir)
         old_dpkg_list_previous_build.parent.mkdir(exist_ok=True)
         shutil.copyfile(new_dpkg_list, old_dpkg_list_previous_build)
-
-        if old_sources_path:
-            old_sources_path.rename(build_dir / job_properties.sources_name)
-
-        # Remove the sources *directory*, to not have the sources twice in the CI artifacts.
-        grml_sources_directory = build_dir / "grml_sources"
-        if grml_sources_directory.exists():
-            print(f"I: Removing {grml_sources_directory}")
-            shutil.rmtree(grml_sources_directory, ignore_errors=True)
 
     print("I: Success.")
 
