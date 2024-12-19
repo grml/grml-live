@@ -32,6 +32,7 @@ class JobProperties:
     grml_name: str
     iso_name: str  # name of the resulting .ISO files
     sources_name: str  # name of the resulting sources tarball
+    logs_name: str  # name of the resulting logs directory
 
 
 def usage(program_name):
@@ -446,6 +447,7 @@ def main(program_name: str, argv: list[str]) -> int:
             grml_name=build_grml_name,
             iso_name=f"{artifact_basename}.iso",
             sources_name=f"{artifact_basename}-sources.tar",
+            logs_name=f"{artifact_basename}-logs",
         )
 
     elif build_mode == "daily":
@@ -467,6 +469,7 @@ def main(program_name: str, argv: list[str]) -> int:
             grml_name=build_grml_name,
             iso_name=f"{artifact_basename}.iso",
             sources_name=f"{artifact_basename}-sources.tar",
+            logs_name=f"{artifact_basename}-logs",
         )
 
     else:
@@ -522,13 +525,15 @@ def main(program_name: str, argv: list[str]) -> int:
         if old_sources_path:
             old_sources_path.rename(build_dir / job_properties.sources_name)
 
-        if upload_to_daily:
-            upload_daily(job_properties.job_name, build_dir, job_properties.job_timestamp)
-
-        # Copy dpkg.list into cache for next iteration.
+        # Copy dpkg.list from grml_logs into cache for next iteration.
         new_dpkg_list = get_dpkg_list_path_for_build(build_dir)
         old_dpkg_list_previous_build.parent.mkdir(exist_ok=True)
         shutil.copyfile(new_dpkg_list, old_dpkg_list_previous_build)
+
+        (build_dir / "grml_logs").rename(build_dir / job_properties.logs_name)
+
+        if upload_to_daily:
+            upload_daily(job_properties.job_name, build_dir, job_properties.job_timestamp)
 
     print("I: Success.")
 
