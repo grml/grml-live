@@ -1,3 +1,27 @@
+grml-live (0.50.1) grml-testing; urgency=medium
+
+  The "Adventgrenze for real" release
+
+  [ Chris Hofstaedtler ]
+  * [8b84591] build-driver: move upload_daily into caller of build()
+  * [47f34ea] build-driver: handle sources before upload_daily
+  * [ec66ecb] build-driver: rename grml_logs to a per-job unique name
+  * [77a47ef] generate-changes-list: extract repo clone/update
+  * [670c1b1] generate-changes-list: import run_x helper
+  * [6f09c0f] generate-changes-list: collect involved people
+  * [79475a8] Reduce size of nonfree-licenses.txt by gzip-compressing it
+  * [b4978d3] build-driver: create compatibly layout in /latest/
+  * [ea6e2a4] generate-changes-list: ignore GitHub as author
+  * [a0e5bbb] build-driver: update URL to latest release dpkg.list
+  * Software related changes:
+    - [1ece72b] drop cdebootstrap
+
+  [ Michael Prokop ]
+  * [d6d3743] scripts/GRMLBASE/95-package-information: get non-free info
+    without aptitude
+
+ -- Michael Prokop <mika@grml.org>  Thu, 19 Dec 2024 18:41:59 +0100
+
 grml-live (0.50.0) unstable; urgency=medium
 
   The "Adventgrenze" release
