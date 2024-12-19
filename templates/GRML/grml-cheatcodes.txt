@@ -15,9 +15,10 @@ fb1280x1024                           Use fixed framebuffer graphics (1)
 fb1024x768                            Use fixed framebuffer graphics (2) [notice: Grml's default]
 fb800x600                             Use fixed framebuffer graphics (3)
 nofb                                  Disable framebuffer
-floppy                                Boot from floppydisk
-hd / hd1 / hd2 / hd3                  Boot from (local) primary / secondary /... harddisk
-debug                                 Get shells during process of booting for debugging
+floppy                                Boot from primary floppy drive
+hd / hd1 /hd2 / hd3                   Boot from first .. fourth primary partition of (local) harddisk
+hd0 / fd0                             Chainload MBR from first harddisk / floppy drive
+debug                                 Be verbose during the process of booting for debugging
 forensic                              Do not touch any harddisks during hardware recognition
 serial                                Activate ttyS0 and start a getty
 grub                                  Boot Grub bootloader
@@ -27,6 +28,8 @@ Further documentation regarding the boot process can be found at:
 * https://manpages.debian.org/live-boot-doc/live-boot.7.en.html
 * https://manpages.debian.org/initramfs-tools-core/initramfs-tools.7.en.html
 * https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
+* https://wiki.syslinux.org/wiki/index.php?title=SYSLINUX
+* https://wiki.syslinux.org/wiki/index.php?title=Doc/chain + https://wiki.syslinux.org/wiki/index.php?title=Comboot/chain.c32
 
 The following boot options can be combined.
 Notice: not all of them are available on all the Grml flavours.
@@ -149,14 +152,9 @@ grml ignore_bootid                    Disable bootid verification.
 
 Debugging related settings:
 ---------------------------
-grml debug                            Get shells during process of booting, using GNU screen, be verbose
-grml debug=1                          Get shells during process of booting, using GNU screen, be verbose and
-                                      display shell code being executed in initramfs.
-grml debug=noscreen                   Get shells during process of booting, verbose, but without using GNU screen
 grml nocolor                          Disable colorized output while booting
                                       Also set SYSTEMD_COLORS=0 to disable colors in systemd output
 grml log                              Log error messages while booting to /tmp/grml.log.`date +%Y%m%d`"
-                                      and /var/log/boot
 grml testcd                           Check CD data integrity and md5sums
 
 Security / login related settings:
