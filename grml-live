@@ -801,7 +801,8 @@ else
          mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
       fi
 
-      mkdir -p "${CHROOT_OUTPUT}/grml-live/grml_sources/"
+      mkdir -p "${OUTPUT}"/grml_sources "${CHROOT_OUTPUT}"/grml-live/
+      mv "${OUTPUT}"/grml_sources "${CHROOT_OUTPUT}"/grml-live/
 
       log "Executed FAI command line:"
       log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY GRML_LIVE_CONFIG=$CONFIGDUMP WAYBACK_DATE=$WAYBACK_DATE fai $VERBOSE -C $GRML_FAI_CONFIG -s file:///$GRML_FAI_CONFIG/config -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
@@ -818,8 +819,8 @@ else
         bailout 1
       fi
 
-      mv "${CHROOT_OUTPUT}/grml-live/grml_sources/" "${OUTPUT}/"
-      rmdir "${CHROOT_OUTPUT}/grml-live"
+      mv "${CHROOT_OUTPUT}"/grml-live/grml_sources/ "${OUTPUT}"
+      rmdir "${CHROOT_OUTPUT}"/grml-live
 
       # provide inform fai about the ISO we build, needs to be provided
       # *after* FAI stage, otherwise FAI skips the debootstrap stage if
