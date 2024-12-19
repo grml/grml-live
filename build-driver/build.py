@@ -526,6 +526,12 @@ def main(program_name: str, argv: list[str]) -> int:
         if old_sources_path:
             old_sources_path.rename(build_dir / job_properties.sources_name)
 
+        # Remove the sources *directory*, to not have the sources twice in the CI artifacts.
+        grml_sources_directory = build_dir / "grml_sources"
+        if grml_sources_directory.exists():
+            print(f"I: Removing {grml_sources_directory}")
+            shutil.rmtree(grml_sources_directory, ignore_errors=True)
+
     print("I: Success.")
 
     return 0
