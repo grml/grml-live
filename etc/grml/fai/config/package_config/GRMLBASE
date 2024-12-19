@@ -12,6 +12,7 @@ eject
 fdisk
 file
 gpm
+grml2usb
 grml-autoconfig
 grml-crypt
 grml-debian-keyring
@@ -82,7 +83,6 @@ grub-efi-ia32-bin
 isolinux
 pxelinux
 syslinux syslinux-common syslinux-utils
-grml2usb
 
 PACKAGES install AMD64
 grub-pc
@@ -91,7 +91,6 @@ grub-efi-ia32-bin
 isolinux
 pxelinux
 syslinux syslinux-common syslinux-utils
-grml2usb
 
 PACKAGES install ARM64
 grub-efi-arm64-bin
