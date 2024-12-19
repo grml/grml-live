@@ -12,9 +12,6 @@ DEBUG="/dev/null"
 KERNEL="$(uname -r)"
 umask 022
 
-# initramfs layout since December 2012, backwards compatibility:
-[ -d /lib/live/mount/medium ] && export LIVECD_PATH='/lib/live/mount/medium'
-# initramfs layout since December 2018:
 [ -d /run/live/medium ] && export LIVECD_PATH='/run/live/medium'
 
 # Ignore these signals in non-interactive mode: INT, TERM, SEGV
