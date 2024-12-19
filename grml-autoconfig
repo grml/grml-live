@@ -75,7 +75,7 @@ checkvalue $CONFIG_HOSTNAME && config_hostname
 
 checkvalue $CONFIG_TIME && config_time
 
-checkvalue $CONFIG_KERNEL &&  config_kernel
+checkvalue $CONFIG_KERNEL && config_kernel
 
 checkvalue $CONFIG_SECUREBOOT && config_secureboot
 
