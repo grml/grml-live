@@ -367,12 +367,10 @@ running_under_secureboot() {
       return 1
     fi
   else
-    if modprobe efivarfs &>/dev/null ; then
-      if od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data 2>/dev/null | grep -q 1 ; then
-        return 0
-      else
-        return 1
-      fi
+    if od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data 2>/dev/null | grep -q 1 ; then
+      return 0
+    else
+      return 1
     fi
   fi
 }
