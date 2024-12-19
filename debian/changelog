@@ -1,3 +1,46 @@
+grml-live (0.50.0) unstable; urgency=medium
+
+  The "Adventgrenze" release
+
+  [ Chris Hofstaedtler ]
+  * [b27b742] netboot package: use ISO_NAME-netboot.tar as output name
+    (without .iso)
+  * [ca4f25a] grml-live: avoid double / in NETBOOT and REPORTS
+  * [3ea3fad] build-driver: remove unused get_grml_live function
+  * [30472fc] Do not add /dev to squashfs
+  * [5676f01] build-driver: copy sources.tar in release mode
+  * [b7d7f54] Rework wallpaper handling
+  * [d5a91e8] Update checked path for arch-specific boot addons
+  * [b1a8886] build-driver: delete grml_sources in results directory
+  * Software related changes:
+    - [22f12c8] Install openssh-client-ssh1 for DSA-keyed servers
+    - [4103307] install grml2usb on arm64, too
+
+  [ Michael Prokop ]
+  * [8b0a6fa] Generate source package tarball when using SOURCES class
+  * [d77d042] Ensure files are copied with fcopy into chroot with expected
+    permissions
+  * [c950cbe] Remove deprecated
+    /etc/grml/fai/config/scripts/GRML_SMALL/98-clean-chroot
+  * [83ec4f9] build-driver: ship ipxe + memtest86+; grml-live: fix
+    NO_ADDONS autodetection
+  * [fcfafac] Introduce architecture specific boot addon templates
+  * [c492657] Drop support for bsd4grml / NO_ADDONS_BSD4GRML
+  * [530ec9f] templates: drop deprecated boot addons from isolinux/grub
+    configs and grml-cheatcodes.txt
+  * [f81528f] templates/boot/grub/addons.cfg: drop duplicate Netboot.xyz
+    for non-efi
+  * [fdba3b2] Support UEFI 32bit boot on amd64
+  * [ea0c92e] Fix logic around grml_sources handling no longer being bind-
+    mounted
+
+  [ Darshaka Pathirana ]
+  * [de47ff8] GRUB theme: replace desktop-color with desktop-image
+  * [8becc73] Update Grml cheatcodes + clean up isolinux bootprompt
+    options
+
+ -- Michael Prokop <mika@grml.org>  Thu, 19 Dec 2024 02:42:44 +0100
+
 grml-live (0.49.3) unstable; urgency=medium
 
   [ Chris Hofstaedtler ]
