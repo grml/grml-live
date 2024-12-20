@@ -35,9 +35,6 @@ CONFIG_FSTAB_USER='grml'
 # define guid for rebuildfstab used in /etc/fstab (default: users):
 CONFIG_FSTAB_GROUP='users'
 
-# load ACPI modules (default: yes)
-CONFIG_ACPI='yes'
-
 # start syslog-ng (default: yes)
 CONFIG_SYSLOG='yes'
 
@@ -50,7 +47,6 @@ CONFIG_GPM='yes'
 CONFIG_AUTOMOUNT='yes'        # automounting of device labeled GRMLCFG
 CONFIG_BLANKING='yes'         # check for bootoption noblank to disable console blanking
 CONFIG_CONFIG='yes'           # do we want config unpacking to work?
-CONFIG_CONSOLE='yes'          # activate mgetty when using console=... as bootparam
 CONFIG_BRLTTY='yes'           # automatically start brltty if a brltty option is specified in /proc/cmdline
 CONFIG_DEBOOTSTRAP='yes'      # support automatic installation of Debian via grml-deboostrap
 CONFIG_DEBNET='yes'           # search for /etc/network/interfaces on partitions and set up network afterwards

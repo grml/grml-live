@@ -36,7 +36,6 @@ Depends:
  ${misc:Depends},
  ${shlibs:Depends},
 Recommends:
- acpi-support,
  alsa-utils,
  grml-debootstrap (>= 0.7),
  hwinfo,

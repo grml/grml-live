@@ -21,31 +21,16 @@ umask 022
 # Ignore these signals in non-interactive mode: INT, TERM, SEGV
 [ -z "$PS1" ] && trap "" 2 3 11
 
-if [ "$(cat /proc/1/comm 2>/dev/null)" = "systemd" ] ; then
-  SYSTEMD=true
-else
-  SYSTEMD=false
-fi
-
 service_wrapper() {
   if [ "$#" -lt 2 ] ; then
-    echo "Usage: service_wrapper <service> <action> [background]" >&2
+    echo "Usage: service_wrapper <service> <action>" >&2
     return 1
   fi
 
   local service="$1"
   local action="$2"
-  local background="$3"
 
-  if $SYSTEMD ; then
-    systemctl "$action" "$service"
-  else
-    if [ "${background:-}" = "background" ] ; then
-      /etc/init.d/"$service" "$action" &
-    else
-      /etc/init.d/"$service" "$action"
-    fi
-  fi
+  systemctl "$action" "$service"
 }
 
 # zsh stuff
@@ -240,163 +225,26 @@ config_language(){
     fi
   fi
 
-  if ! $SYSTEMD ; then
-    # set console font
-    if [ -z "$CONSOLEFONT" ] ; then
-      if ! checkbootparam 'nodefaultfont' >>$DEBUG 2>&1 ; then
-        if [ -r /usr/share/consolefonts/Uni3-Terminus16.psf.gz ] ; then
-          CONSOLEFONT='Uni3-Terminus16'
-        else
-          ewarn "/usr/share/consolefonts/Uni3-Terminus16.psf.gz not available. Please upgrade package console-setup-linux." ; eend 1
-        fi
-        if ! hasfb ; then
-          CONSOLEFONT='Lat15-Terminus16'
-        fi
-      fi
-    fi
-  fi # not running systemd
-
   # export it now, so error messages get translated, too
   [ -r /etc/default/locale ] && . /etc/default/locale
   export LANG LANGUAGE
 
-  if $SYSTEMD ; then
-    local KEYBOARD
-    KEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
-    [ -n "$KEYBOARD" ] || KEYBOARD="$LANGUAGE"
-    # "symbols/en" doesn't exist, so rewrite to "us"
-    [[ "$KEYBOARD" == 'en' ]] && KEYBOARD="us"
+  local KEYBOARD
+  KEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
+  [ -n "$KEYBOARD" ] || KEYBOARD="$LANGUAGE"
+  # "symbols/en" doesn't exist, so rewrite to "us"
+  [[ "$KEYBOARD" == 'en' ]] && KEYBOARD="us"
 
-    if [ -r /etc/default/keyboard ] ; then
-      sed -i "s/^XKBLAYOUT=.*/XKBLAYOUT=\"$KEYBOARD\"/" /etc/default/keyboard
+  if [ -r /etc/default/keyboard ] ; then
+    sed -i "s/^XKBLAYOUT=.*/XKBLAYOUT=\"$KEYBOARD\"/" /etc/default/keyboard
 
-      case "$KEYBOARD" in
-	de|at)
-	  sed -i "s/^XKBVARIANT=.*/XKBVARIANT=\"nodeadkeys\"/" /etc/default/keyboard
-	  ;;
-      esac
+    case "$KEYBOARD" in
+      de|at)
+        sed -i "s/^XKBVARIANT=.*/XKBVARIANT=\"nodeadkeys\"/" /etc/default/keyboard
+        ;;
+    esac
 
-    fi
-    service_wrapper console-setup restart >>$DEBUG 2>&1 ; eend $?
-  else # not running systemd, keeing for backwards compatibility:
-    # configure keyboard layout, read in already set values first:
-    [ -r /etc/sysconfig/keyboard ] && . /etc/sysconfig/keyboard
-
-    # now allow keyboard override by boot commandline for later use:
-    KKEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
-    [ -n "$KKEYBOARD" ] && KEYTABLE="$KKEYBOARD"
-    # notce: de/at is a bad choice, so take de-latin1-nodeadkeys instead:
-    [[ "$KKEYBOARD" == 'de' ]] && KEYTABLE=de-latin1-nodeadkeys
-    [[ "$KKEYBOARD" == 'at' ]] && KEYTABLE=de-latin1-nodeadkeys
-
-    # modify /etc/sysconfig/keyboard only in live-cd mode:
-    if [ -z "$INSTALLED" ] ; then
-
-      local LANGUAGE="$BOOT_LANGUAGE"
-      . /etc/grml/language-functions
-      # allow setting xkeyboard explicitly different than console keyboard
-      KXKEYBOARD="$(getbootparam 'xkeyboard' 2>>$DEBUG)"
-      if [ -n "$KXKEYBOARD" ]; then
-        XKEYBOARD="$KXKEYBOARD"
-        KDEKEYBOARD="$KXKEYBOARD"
-      elif [ -n "$KKEYBOARD" ]; then
-        XKEYBOARD="$KKEYBOARD"
-        KDEKEYBOARD="$KKEYBOARD"
-      fi
-
-      # duplicate of previous code to make sure /etc/grml/language-functions
-      # does not overwrite our values....
-      # now allow keyboard override by boot commandline for later use:
-      KKEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
-      [ -n "$KKEYBOARD" ] && KEYTABLE="$KKEYBOARD"
-      # notce: de/at is a bad choice, so take de-latin1-nodeadkeys instead:
-      [[ "$KKEYBOARD" == 'de' ]] && KEYTABLE=de-latin1-nodeadkeys
-      [[ "$KKEYBOARD" == 'at' ]] && KEYTABLE=de-latin1-nodeadkeys
-
-      # write keyboard related variables to file for later use
-      [ -d /etc/sysconfig ] || mkdir /etc/sysconfig
-      if ! [ -e /etc/sysconfig/keyboard ] ; then
-        echo "KEYTABLE=\"$KEYTABLE\""          > /etc/sysconfig/keyboard
-        echo "XKEYBOARD=\"$XKEYBOARD\""       >> /etc/sysconfig/keyboard
-        echo "KDEKEYBOARD=\"$KDEKEYBOARD\""   >> /etc/sysconfig/keyboard
-        echo "KDEKEYBOARDS=\"$KDEKEYBOARDS\"" >> /etc/sysconfig/keyboard
-      fi
-    fi
-
-    [ -r /etc/sysconfig/keyboard ] && . /etc/sysconfig/keyboard
   fi
-
-
-  if ! $SYSTEMD ; then
-    # we have to set up all consoles, therefore loop it over all ttys:
-    NUM_CONSOLES=$(fgconsole --next-available 2>/dev/null)
-    if [ -n "$NUM_CONSOLES" ] ; then
-      NUM_CONSOLES=$(expr ${NUM_CONSOLES} - 1)
-      [ ${NUM_CONSOLES} -eq 1 ] && NUM_CONSOLES=6
-    fi
-    CUR_CONSOLE=$(fgconsole 2>/dev/null)
-
-    if [ -x "$(which setfont)" ] ; then
-      use_setfont=true
-    elif [ -x "$(which consolechars)" ] ; then
-      use_consolechars=true
-    else
-      eerror "Neither setfont nor consolechars tool present, can not set font."
-      eend 1
-      return 1
-    fi
-
-    if [ -n "$CHARMAP" ] ; then
-      einfo "Setting font to ${CHARMAP}"
-      RC=0
-      for vc in $(seq 0 ${NUM_CONSOLES}) ; do
-        if $use_setfont ; then
-          setfont -C /dev/tty${vc} $CHARMAP ; RC=$?
-        elif $use_consolechars ; then
-          consolechars --tty=/dev/tty${vc} -m ${CHARMAP} ; RC=$?
-        fi
-      done
-      if [ -n "$CUR_CONSOLE" ] ; then
-        [ "$CUR_CONSOLE" != "serial" ] && chvt $CUR_CONSOLE
-      fi
-      eend $RC
-    fi
-
-    if checkbootparam 'noconsolefont' ; then
-      ewarn "Skipping setting console font as requested on boot commandline." ; eend 0
-    else
-      if [ -n "$CONSOLEFONT" ] ; then
-        einfo "Setting font to ${CONSOLEFONT}"
-        RC=0
-        for vc in $(seq 0 ${NUM_CONSOLES}) ; do
-          if $use_setfont ; then
-            setfont -C /dev/tty${vc} ${CONSOLEFONT} ; RC=$?
-          elif $use_consolechars ; then
-            consolechars --tty=/dev/tty${vc} -f ${CONSOLEFONT} ; RC=$?
-          fi
-        done
-        if [ -n "$CUR_CONSOLE" ] ; then
-          [ "$CUR_CONSOLE" != "serial" ] && chvt $CUR_CONSOLE
-        fi
-        eend $RC
-      fi
-    fi
-
-    # Set default keyboard before interactive setup
-    if [ -n "$KEYTABLE" ] ; then
-      einfo "Running loadkeys for ${WHITE}${KEYTABLE}${NORMAL} in background"
-      loadkeys -q $KEYTABLE &
-      eend $?
-    fi
-
-    # activate unicode console if running within utf8 environment
-    if [ -r /etc/default/locale ] ; then
-      if grep -q "LANG=.*UTF" /etc/default/locale ; then
-        einfo "Setting up unicode environment."
-        unicode_start ; eend $?
-      fi
-    fi
-  fi # not running systemd
 
   eoutdent
 }
@@ -533,15 +381,6 @@ config_kernel(){
 # {{{ secure boot
 # helper function to check whether we're running under (enabled) Secure Boot
 running_under_secureboot() {
-  # systemd does this for us, but if we are not running under systemd then mokutil
-  # doesn't work as needed as it relies on /sys/firmware/efi/efivars (while
-  # /sys/firmware/efi/vars would exist)
-  if ! $SYSTEMD ; then
-    if modprobe efivarfs &>/dev/null ; then
-      mount -t efivarfs efivarfs /sys/firmware/efi/efivars
-    fi
-  fi
-
   if [[ -x "$(command -v mokutil)" ]] ; then
     if mokutil --sb-state 2>/dev/null | grep -q 'SecureBoot enabled' ; then
       return 0
@@ -591,67 +430,6 @@ config_timezone(){
        fi
     fi
  fi
-}
-# }}}
-
-# activate serial console {{{
-config_console(){
-if checkbootparam 'console'; then
-  # this hack is no longer necessary with systemd
-  if $SYSTEMD ; then
-    return
-  fi
-
-  local line
-  local ws
-  ws='	 '
-
-  einfo "Bootoption for serial console detected:"
-
-  line="$CMDLINE x "
-  this=""
-  line="${line#*[$ws]}"
-  local telinitq=""
-  while [ -n "$line" ]; do
-    case "$this" in
-      console=*)
-        local serial="$this"
-        local device="${this%%,*}"
-        local device="${device##*=}"
-        if echo $serial | grep -q ttyS ; then
-          local option="${serial##*,}"
-          # default (works for kvm & CO):
-          local speed="115200,57600,38400,19200,9600,4800,2400,1200";
-          # ... unless overriden by command line:
-          case "$option" in
-            115200*) speed=115200 ;;
-             57600*) speed=57600 ;;
-             38400*) speed=38400 ;;
-             19200*) speed=19200 ;;
-              9600*) speed=9600 ;;
-              4800*) speed=4800 ;;
-              2400*) speed=2400 ;;
-              1200*) speed=1200 ;;
-          esac
-          eindent
-            einfo "Activating console login on device ${device} with speed ${speed}."
-            local number="${device#ttyS}"
-            sed -i "/^T$number:/d;/^#grmlserial#/iT$number:23:respawn:/bin/bash -c \"/sbin/getty -L $device -l /usr/share/grml-scripts/run-welcome $speed vt100 || sleep 30\"" /etc/inittab
-            eend $?
-            telinitq="1"
-          eoutdent
-        fi
-        ;;
-    esac
-    this="${line%%[$ws]*}"
-    line="${line#*[$ws]}"
-  done
-
-  if [ -n "$telinitq" ]; then
-    /sbin/telinit q
-  fi
-  eend $?
-fi
 }
 # }}}
 
@@ -724,50 +502,6 @@ if checkbootparam 'blacklist' ; then
    einfo "Please blacklist the module(s) manually using the 'blacklist' script."
   eoutdent
  fi
-fi
-}
-# }}}
-
-# {{{ ACPI
-config_acpi(){
-  if $SYSTEMD ; then
-    echo "systemd detected, no acpi(d) stuff needed." >>"$DEBUG"
-    return
-  fi
-
-  if checkbootparam 'noacpi'; then
-    ewarn "ACPI: Not loading modules as requested by boot option \"noacpi\"." ; eend 0
-  elif checkbootparam 'nogrmlacpi' ; then
-    ewarn "ACPI: Not loading modules as requested by boot option \"nogrmlacpi\"." ; eend 0
-  elif [ ! -d /proc/acpi ] ; then
-    ewarn "ACPI: Kernel support not present." ; eend 0
-  else
-    einfo "ACPI: Loading modules (disable with boot option noacpi / nogrmlacpi): "
-    eindent
-    found=""
-    for a in /lib/modules/$KERNEL/kernel/drivers/acpi/*; do
-      basename="${a##*/}"
-      basename="${basename%%.*}"
-      case "$basename" in *_acpi)
-        egrep -qi "${basename%%_acpi}" /proc/acpi/dsdt 2>>$DEBUG || continue ;;
-    esac
-    modprobe $basename >>$DEBUG 2>&1 && found="yes"
-    local BASE="$BASE $basename"
-  done
-  if [ -n "$found" ] ; then
-    einfo "$BASE"  ; eend 0
-  else
-    ewarn "(none)" ; eend 1
-  fi
-  if ! pgrep acpid >/dev/null ; then
-    einfo "Starting acpi daemon."
-    service_wrapper acpid.socket start >>$DEBUG 2>&1 ; eend $?
-    service_wrapper acpid start >>$DEBUG 2>&1 ; eend $?
-  else
-    ewarn "acpi daemon already running."
-    eend 0
-  fi
-  eoutdent
 fi
 }
 # }}}
@@ -949,7 +683,7 @@ if checkbootparam 'ssh' ; then
    einfo "Starting secure shell server in background for root and user $localuser"
    service_wrapper haveged start >>$DEBUG 2>>$DEBUG
    service_wrapper rmnologin start >>$DEBUG 2>>$DEBUG
-   service_wrapper ssh start background >>$DEBUG 2>>$DEBUG
+   service_wrapper ssh start >>$DEBUG 2>>$DEBUG
    eend $?
 
 fi
@@ -1193,7 +927,7 @@ config_gpm(){
       eerror "No mouse found - not starting GPM." ; eend 1
     else
       einfo "Starting gpm in background."
-      service_wrapper gpm start background >>$DEBUG
+      service_wrapper gpm start >>$DEBUG
       eend 0
     fi
   fi
@@ -1207,15 +941,8 @@ config_services(){
     SERVICELIST=$(echo "$SERVICE" | sed 's/,/\\n/g')
     SERVICENL=$(echo "$SERVICE" | sed 's/,/ /g')
     for service in $(echo -e $SERVICELIST) ; do
-      # support running (custom) init scripts in non-blocking mode
-      # if they contain the keyword "DO_NO_RUN_IN_BACKGROUND".
-      if grep -q 'DO_NO_RUN_IN_BACKGROUND' "/etc/init.d/${service}" 2>>$DEBUG ; then
-        einfo "Starting service ${service}."
-        service_wrapper "${service}" start >>$DEBUG
-      else
-        einfo "Starting service ${service} in background."
-        service_wrapper "${service}" start background >>$DEBUG
-      fi
+      einfo "Starting service ${service}."
+      service_wrapper "${service}" start >>$DEBUG
     done
     eend $?
  fi
@@ -1302,14 +1029,12 @@ if checkbootparam 'startx' && ! echo "$CMDLINE" | grep -q 'startx.*nostartx' ; t
    fi
    einfo "Setting up and invoking grml-x ${WINDOWMANAGER}. Just exit X windows system to get full featured consoles."
    config_userlocal
-   if $SYSTEMD ; then
-     if [ -n "$WINDOWMANAGER" ] ; then
-       mkdir -p /var/run/grml-x/
-       echo "$WINDOWMANAGER" > /var/run/grml-x/window-manager
-     fi
-     chvt 7
-     return
+   if [ -n "$WINDOWMANAGER" ] ; then
+     mkdir -p /run/grml-x/
+     echo "$WINDOWMANAGER" > /run/grml-x/window-manager
    fi
+   chvt 7
+   return
    cat>|/etc/init.d/startx<<EOF
 #!/bin/sh
 su "${localuser}" -c "/usr/bin/grml-x ${WINDOWMANAGER}"
@@ -1578,11 +1303,7 @@ config_swraid(){
 
        if ! checkbootparam 'swraid' ; then
           eindent
-          if $SYSTEMD ; then
-            einfo "Just run 'mdadm --assemble --scan' to assemble md arrays or boot using 'swraid' as bootoption for autostart."
-          else
-            einfo "Just run 'Start mdadm-raid' to assemble md arrays or boot using 'swraid' as bootoption for autostart."
-          fi
+          einfo "Just run 'mdadm --assemble --scan' to assemble md arrays or boot using 'swraid' as bootoption for autostart."
           eoutdent
        else
           einfo "Bootoption swraid found. Searching for software RAID arrays:"
@@ -1632,35 +1353,26 @@ config_lvm(){
      ewarn "Skipping LVM code as requested on boot commandline." ; eend 0
   else
     if ! [ -x /sbin/lvm ] ; then
-       eerror "LVM not available, can not execute it." ; eend 1
+      eerror "LVM not available, can not execute it." ; eend 1
     else
-       if lvdisplay 2>&1 | grep -v 'No volume groups found' >/dev/null 2>&1 ; then
-          einfo "You seem to have logical volumes (LVM) on your system."
-          eindent
-          if $SYSTEMD ; then
-            einfo "Just run 'Start lvm2-pvscan@name' to activate LV or VG 'name' or boot using 'lvm' as bootoption for autostart."
-          else
-            einfo "Just run 'Start lvm2' to activate them or boot using 'lvm' as bootoption for autostart."
+      if lvdisplay 2>&1 | grep -v 'No volume groups found' >/dev/null 2>&1 ; then
+        einfo "You seem to have logical volumes (LVM) on your system."
+        eindent
+        einfo "Just run 'Start lvm2-pvscan@name' to activate LV or VG 'name' or boot using 'lvm' as bootoption for autostart."
+        eend 0
+        if checkbootparam 'lvm' ; then
+          einfo "Bootoption LVM found, enabling related services."
+          if [ -r /etc/init.d/lvm2-lvmetad ] ; then
+            service_wrapper lvm2-lvmetad start ; eend $?
           fi
-          eend 0
-          if checkbootparam 'lvm' ; then
-             if $SYSTEMD ; then
-               einfo "Bootoption LVM found, enabling related services."
-               if [ -r /etc/init.d/lvm2-lvmetad ] ; then
-                 service_wrapper lvm2-lvmetad start ; eend $?
-               fi
-               if [ -r /etc/init.d/lvm2-lvmpolld ] ; then
-                 service_wrapper lvm2-lvmpolld start ; eend $?
-               fi
-               einfo "Searching for logical volumes and enabling them:"
-               vgchange -ay ; eend $?
-             else
-               einfo "Bootoption LVM found. Searching for logical volumes and enabling them:"
-               service_wrapper lvm2 start ; eend $?
-             fi
+          if [ -r /etc/init.d/lvm2-lvmpolld ] ; then
+            service_wrapper lvm2-lvmpolld start ; eend $?
           fi
-          eoutdent
-       fi
+          einfo "Searching for logical volumes and enabling them:"
+          vgchange -ay ; eend $?
+        fi
+        eoutdent
+      fi
     fi # check for lvm binary
   fi # check for bootoption nolvm
 }
