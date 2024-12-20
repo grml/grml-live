@@ -139,20 +139,34 @@ KVM=false
 VIRTUALBOX=false
 VMWARE=false
 
-if virt-what 2>/dev/null | grep -q 'vmware' || \
-  imvirt 2>/dev/null | grep -iq "vmware" ; then
-  VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware'
-fi
-
-if virt-what 2>/dev/null | grep -q 'kvm' || \
-  [ "$(imvirt 2>/dev/null)" = "KVM" ] ; then
-  VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM'
-fi
-
-if virt-what 2>/dev/null | grep -q 'virtualbox' || \
-  [ "$(imvirt 2>/dev/null)" = "VirtualBox" ] ; then
-  VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox'
-fi
+_detect_virtual() {
+  local virt_what_result
+  virt_what_result=$(virt-what 2>/dev/null)
+  if [[ $virt_what_result == *vmware* ]]; then
+    VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware'
+  fi
+  if [[ $virt_what_result == *kvm* ]]; then
+    VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM'
+  fi
+  if [[ $virt_what_result == *virtualbox* ]]; then
+    VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox'
+  fi
+  if [ -z "$VIRTUAL" ]; then
+    # imvirt is slow. do not use it, if virt-what already found the hypervisor.
+    local imvirt_result
+    imvirt_result=$(imvirt 2>/dev/null)
+    if [[ $imvirt_result == *VMware* ]]; then
+      VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware'
+    fi
+    if [[ $imvirt_result == "KVM" ]]; then
+      VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM'
+    fi
+    if [[ $imvirt_result == "VirtualBox" ]]; then
+      VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox'
+    fi
+  fi
+}
+_detect_virtual
 # }}}
 
 # {{{ source lsb-functions , color handling
