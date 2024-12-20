@@ -6,7 +6,7 @@ Before=getty@tty1.service
 After=rc-local.service systemd-modules-load.service
 
 [Service]
-ExecStart=/etc/init.d/grml-autoconfig
+ExecStart=/usr/share/grml-autoconfig/grml-autoconfig
 Type=oneshot
 StandardInput=null
 StandardOutput=tty

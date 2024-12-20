@@ -1,35 +1,10 @@
 #!/bin/zsh -f
-# Filename:      /etc/init.d/grml-autoconfig
+# Filename:      /usr/share/grml-autoconfig/grml-autoconfig
 # Purpose:       basic system configuration and hardware setup for grml system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
 ################################################################################
-
-# http://wiki.debian.org/LSBInitScripts =>
-### BEGIN INIT INFO
-# Provides:          grml-autoconfig
-# Required-Start:    $remote_fs
-# Required-Stop:     $remote_fs
-# Should-Start:      udev
-# Default-Start:     S 2 3 4 5
-# Default-Stop:
-### END INIT INFO
-
-# {{{ placeholder functions for restart/reload/stop
-if [[ $1 == "restart" ]] ; then
-  echo "$0 restart - empty placeholder. Doing nothing but running."
-fi
-
-if [[ $1 == "force-reload" ]] ; then
-  echo "$0 force-reload - empty placeholder. Doing nothing but running."
-fi
-
-if [[ $1 == "stop" ]] ; then
-  echo "$0 stop - empty placeholder. Doing nothing but exiting."
-  exit 1
-fi
-# }}}
 
 # {{{ path, signals, umask, zsh, colors
 export PATH="/bin:/sbin:/usr/bin:/usr/sbin"

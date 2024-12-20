@@ -4,7 +4,7 @@ autoconfig.local     /etc/grml/
 bin/restore-config /usr/bin/
 bin/save-config /usr/bin/
 etc/* /etc/
-grml-autoconfig      /etc/init.d/
+grml-autoconfig      /usr/share/grml-autoconfig/
 language-functions   /etc/grml/
 sbin/grml-autoconfig /usr/sbin/
 systemd/* usr/lib/systemd/system/
