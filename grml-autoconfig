@@ -89,8 +89,6 @@ checkvalue $CONFIG_TESTCD && config_testcd
 
 checkvalue $CONFIG_BRLTTY && config_brltty
 
-checkvalue $CONFIG_ACPI && config_acpi
-
 checkvalue $CONFIG_FSTAB && config_fstab
 
 checkvalue $CONFIG_CPU && config_cpu
@@ -128,8 +126,6 @@ checkvalue $CONFIG_DISPLAY_SSH_FINGERPRINTS && config_display_ssh_fingerprints
 checkvalue $CONFIG_NETCONFIG && config_netconfig
 
 checkvalue $CONFIG_NETSCRIPT && config_netscript
-
-checkvalue $CONFIG_CONSOLE && config_console
 
 checkvalue $CONFIG_VIRTUALBOX_SHARED_FOLDERS && config_virtualbox_shared_folders
 
