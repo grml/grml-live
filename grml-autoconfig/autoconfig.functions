@@ -140,11 +140,11 @@ set_passwd() {
   [ -n "$PASSWD" ] && return 0
 
   if [ -x /usr/bin/xkcdpass ] ; then
-    PASSWORD="$(xkcdpass)"
+    PASSWD="$(xkcdpass)"
   elif [ -x /usr/bin/diceware ] ; then
-    PASSWORD="$(diceware)"
+    PASSWD="$(diceware)"
   else
-    PASSWORD="$(tr -dc '[:alnum:]' < /dev/urandom | head -c 28)"
+    PASSWD="$(tr -dc '[:alnum:]' < /dev/urandom | head -c 28)"
   fi
 }
 
