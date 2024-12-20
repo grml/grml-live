@@ -17,28 +17,12 @@ if ! [ -r "${target}/etc/ssh/sshd_config" ] ; then
   exit 0
 fi
 
-# make sure root login works, it's set to "without-password" since openssh-server v1:6.6p1-1
-# and defaults to "prohibit-password" since openssh-server v1:7.1p1-1
-if grep -q '^PermitRootLogin ' "${target}/etc/ssh/sshd_config" ; then
-  # make sure we don't modify our own disabled snippet once again
-  if ! grep -q 'PermitRootLogin .*disabled via grml-live' "${target}/etc/ssh/sshd_config" ; then
-    sed -i "s/^\(PermitRootLogin .*\)/# \1 # disabled via grml-live\nPermitRootLogin yes/" "${target}/etc/ssh/sshd_config"
-  fi
-else
-  echo "# Added via grml-live script:" >> "${target}/etc/ssh/sshd_config"
-  echo "PermitRootLogin yes" >> "${target}/etc/ssh/sshd_config"
-fi
-
-# speedup if DNS is broken/unavailable
-if grep -q '^UseDNS ' "${target}/etc/ssh/sshd_config" ; then
-  # make sure we don't modify our own disabled snippet once again
-  if ! grep -q 'UseDNS .*disabled via grml-live' "${target}/etc/ssh/sshd_config" ; then
-    sed -i "s/^\(UseDNS .*\)/# \1 # disabled via grml-live\nUseDNS no/" "${target}/etc/ssh/sshd_config"
-  fi
-else
-  echo "# Added via grml-live script:" >> "${target}/etc/ssh/sshd_config"
-  echo "UseDNS no" >> "${target}/etc/ssh/sshd_config"
-fi
+echo "# Installed by grml-live.
+# Ensure root login works. Modern openssh-servers default to prohibit-password.
+PermitRootLogin yes
+# Speedup if DNS is broken/unavailable.
+UseDNS no
+" > "${target}"/etc/ssh/sshd_config.d/grml-live.conf
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
