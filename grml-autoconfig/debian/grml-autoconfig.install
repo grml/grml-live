@@ -8,3 +8,4 @@ grml-autoconfig      /etc/init.d/
 language-functions   /etc/grml/
 sbin/grml-autoconfig /usr/sbin/
 systemd/* usr/lib/systemd/system/
+modules-load.d/* usr/lib/modules-load.d/
