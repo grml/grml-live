@@ -1,3 +1,25 @@
+grml-autoconfig (0.23.3) grml-testing; urgency=medium
+
+  [ Chris Hofstaedtler ]
+  * [8006fa3] Restore randomized password feature
+  * [f7b8e0b] init script: use zsh -f to skip more startup rc code
+  * [9a6c121] performance: avoid uname call for ARCH
+  * [ef774c5] grml-autoconfig: trim extra whitespace
+  * [9305865] performance: stop checking for pre-2018 live media paths
+  * [1dc0d73] performance: require /etc/mtab to be a symlink already
+  * [2749725] performance: require systemd to setup /{proc,sys,dev/pts}
+  * [aa6ddb4] performance: avoid using $(cat)
+  * [0200223] performance: let systemd load 9pfs
+  * [d28a656] performance: let systemd load efivarfs
+  * [4ecdf0a] performance: avoid running virt-what, imvirt three times
+  * [ad74d63] Move main startup script into /usr/share/grml-autoconfig/
+
+  [ Michael Prokop ]
+  * [4f89bd4] Drop support for non-systemd systems.
+    Thanks to Evgeni Golov + Chris Hofstaedtler for review + feedback
+
+ -- Chris Hofstaedtler <ch@grml.org>  Sat, 21 Dec 2024 16:09:46 +0100
+
 grml-autoconfig (0.23.2) grml-testing; urgency=medium
 
   [ Antoine Beaupré ]
