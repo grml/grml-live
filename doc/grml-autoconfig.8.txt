@@ -22,9 +22,9 @@ About
 The program grml-autoconfig does not support any options but needs to be run
 with root permissions as it modifies a system wide configuration file
 (/etc/grml/autoconfig).  'grml-autoconfig' is an interface to the framework
-named grml-autoconfig.  /etc/init.d/grml-autoconfig is the main script of the
-grml-system where all the hardware recognition and activation of services take
-place.
+named grml-autoconfig.  /usr/share/grml-autoconfig/grml-autoconfig is the main
+script of the grml-system where all the hardware recognition and activation of
+services take place.
 
 grml-autoconfig supports an adjustable configuration via the configuration file
 named /etc/grml/autoconfig. The script named Bgrml-autoconfig is a simple
@@ -35,10 +35,10 @@ your own (there is no interference).
 Files
 -----
 
-  */etc/init.d/grml-autoconfig*::
+  */usr/share/grml-autoconfig/grml-autoconfig*::
 
-Init-script which runs the commands defined in /etc/grml/autoconfig.functions
-after checking configuration file /etc/grml/autoconfig.
+Main script which runs the commands defined in /etc/grml/autoconfig.functions
+after checking configuration file /etc/grml/autoconfig. Executed by systemd.
 
   */usr/sbin/grml-autoconfig*::
 

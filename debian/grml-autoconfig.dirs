@@ -1,5 +1,4 @@
 etc/grml
-etc/init.d
 usr/bin
 usr/sbin
 usr/share/doc/grml-saveconfig
