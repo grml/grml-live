@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/zsh -f
 # Filename:      /etc/init.d/grml-autoconfig
 # Purpose:       basic system configuration and hardware setup for grml system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
@@ -47,18 +47,7 @@ source /etc/grml/autoconfig.functions  # functions
 source /etc/grml/lsb-functions         # helper functions for smart display
 # }}}
 
-# {{{ mount important directories
-mount_proc
-mount_pts
-mount_sys
-# }}}
-
 # {{{ main grml-autoconfig
-# make sure symlink /etc/mtab exists, this is usually handled by
-# /etc/init.d/checkroot.sh but we don't execute this script on the live system
-if [ -z "$INSTALLED" ] ; then
-  ln -sf /proc/mounts /etc/mtab
-fi
 
 checkvalue $CONFIG_SYSLOG && config_syslog
 
@@ -75,7 +64,7 @@ checkvalue $CONFIG_HOSTNAME && config_hostname
 
 checkvalue $CONFIG_TIME && config_time
 
-checkvalue $CONFIG_KERNEL &&  config_kernel
+checkvalue $CONFIG_KERNEL && config_kernel
 
 checkvalue $CONFIG_SECUREBOOT && config_secureboot
 

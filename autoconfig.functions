@@ -10,12 +10,8 @@
 export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 DEBUG="/dev/null"
 KERNEL="$(uname -r)"
-ARCH="$(uname -m)"
 umask 022
 
-# initramfs layout since December 2012, backwards compatibility:
-[ -d /lib/live/mount/medium ] && export LIVECD_PATH='/lib/live/mount/medium'
-# initramfs layout since December 2018:
 [ -d /run/live/medium ] && export LIVECD_PATH='/run/live/medium'
 
 # Ignore these signals in non-interactive mode: INT, TERM, SEGV
@@ -49,18 +45,15 @@ iszsh && setopt no_nomatch # || echo "Warning: not running under zsh!"
 if [ -z "$CMDLINE" ]; then
   # if CMDLINE was set from the outside, we're debugging.
   # otherwise, take CMDLINE from Kernel and config files.
-  CMDLINE="$(cat /proc/cmdline)"
+  CMDLINE="$(< /proc/cmdline)"
   [ -d ${LIVECD_PATH}/bootparams/ ] && CMDLINE="$CMDLINE $(cat ${LIVECD_PATH}/bootparams/* | tr '\n' ' ')"
-  modprobe 9p 2>/dev/null || true
-  if grep -q 9p /proc/filesystems ; then
-      TAG="grml-parameters"
-      if grep -q "$TAG" /sys/bus/virtio/devices/*/mount_tag 2>/dev/null ; then
-          MOUNTDIR="$(mktemp -d)"
-          mount -t 9p -o trans=virtio,ro "$TAG" "$MOUNTDIR"
-          CMDLINE="$CMDLINE $(cat "$MOUNTDIR"/* 2>/dev/null | tr '\n' ' ')"
-          umount "$MOUNTDIR"
-          rmdir "$MOUNTDIR"
-      fi
+  TAG="grml-parameters"
+  if grep -q "$TAG" /sys/bus/virtio/devices/*/mount_tag 2>/dev/null ; then
+    MOUNTDIR="$(mktemp -d)"
+    mount -t 9p -o trans=virtio,ro "$TAG" "$MOUNTDIR"
+    CMDLINE="$CMDLINE $(cat "$MOUNTDIR"/* 2>/dev/null | tr '\n' ' ')"
+    umount "$MOUNTDIR"
+    rmdir "$MOUNTDIR"
   fi
 fi
 # }}}
@@ -135,20 +128,6 @@ set_passwd() {
 
 ### }}}
 
-# {{{ filesystems (proc, pts, sys) and fixes
-mount_proc(){
-  [ -f /proc/version ] || mount -t proc /proc /proc 2>/dev/null
-}
-
-mount_pts(){
-  grep -q "/dev/pts" /proc/mounts || mount -t devpts /dev/pts /dev/pts 2>/dev/null
-}
-
-mount_sys(){
-  [ -d /sys/devices ] || mount -t sysfs /sys /sys 2>/dev/null
-}
-# }}}
-
 # {{{ Check if we are running in live mode or from HD
 INSTALLED=""
 [ -e /etc/grml_cd ] || INSTALLED="yes"
@@ -160,20 +139,34 @@ KVM=false
 VIRTUALBOX=false
 VMWARE=false
 
-if virt-what 2>/dev/null | grep -q 'vmware' || \
-  imvirt 2>/dev/null | grep -iq "vmware" ; then
-  VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware'
-fi
-
-if virt-what 2>/dev/null | grep -q 'kvm' || \
-  [ "$(imvirt 2>/dev/null)" = "KVM" ] ; then
-  VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM'
-fi
-
-if virt-what 2>/dev/null | grep -q 'virtualbox' || \
-  [ "$(imvirt 2>/dev/null)" = "VirtualBox" ] ; then
-  VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox'
-fi
+_detect_virtual() {
+  local virt_what_result
+  virt_what_result=$(virt-what 2>/dev/null)
+  if [[ $virt_what_result == *vmware* ]]; then
+    VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware'
+  fi
+  if [[ $virt_what_result == *kvm* ]]; then
+    VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM'
+  fi
+  if [[ $virt_what_result == *virtualbox* ]]; then
+    VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox'
+  fi
+  if [ -z "$VIRTUAL" ]; then
+    # imvirt is slow. do not use it, if virt-what already found the hypervisor.
+    local imvirt_result
+    imvirt_result=$(imvirt 2>/dev/null)
+    if [[ $imvirt_result == *VMware* ]]; then
+      VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware'
+    fi
+    if [[ $imvirt_result == "KVM" ]]; then
+      VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM'
+    fi
+    if [[ $imvirt_result == "VirtualBox" ]]; then
+      VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox'
+    fi
+  fi
+}
+_detect_virtual
 # }}}
 
 # {{{ source lsb-functions , color handling
@@ -329,7 +322,7 @@ config_time(){
 
     # hwclock uses the TZ variable
     KTZ="$(getbootparam 'tz' 2>>$DEBUG)"
-    [ -z "$KTZ" ] && [ -r /etc/timezone ] && KTZ=$(cat /etc/timezone)
+    [ -z "$KTZ" ] && [ -r /etc/timezone ] && KTZ=$(< /etc/timezone)
     if [ ! -f "/usr/share/zoneinfo/$KTZ" ] ; then
        ewarn "Warning: unknown timezone $KTZ" ; eend 1
        KTZ="UTC"
@@ -388,12 +381,10 @@ running_under_secureboot() {
       return 1
     fi
   else
-    if modprobe efivarfs &>/dev/null ; then
-      if od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data 2>/dev/null | grep -q 1 ; then
-        return 0
-      else
-        return 1
-      fi
+    if od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data 2>/dev/null | grep -q 1 ; then
+      return 0
+    else
+      return 1
     fi
   fi
 }
@@ -986,6 +977,8 @@ get_remote_file() {
 # {{{ config files
 config_netconfig(){
  if checkbootparam 'netconfig' ; then
+  # Provide ARCH here as it is documented to work, but skip calling uname when not necessary.
+  ARCH="$(uname -m)"
   CONFIG="$(getbootparam 'netconfig' 2>>$DEBUG)"
   CONFIGFILE='/tmp/netconfig.grml'
 
@@ -1106,8 +1099,7 @@ else
       eindent
       DCSDEVICE=$(blkid -t LABEL=$GRMLCFG | head -1 | awk -F: '{print $1}')
 
-      modprobe 9p 2>/dev/null || true
-      if [ -z "$DCSDEVICE" ] && grep -q 9p /proc/filesystems ; then
+      if [ -z "$DCSDEVICE" ] ; then
           if grep -q "$GRMLCFG" /sys/bus/virtio/devices/*/mount_tag 2>/dev/null ; then
             einfo "Found 9p-virtio fs with mount_tag $GRMLCFG"
             DCSDEVICE="$GRMLCFG"
