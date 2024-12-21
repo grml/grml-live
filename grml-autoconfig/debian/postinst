@@ -2,7 +2,8 @@
 set -e
 
 if [ "$1" = "configure" ]; then
-  update-rc.d grml-autoconfig start 30 2 . >/dev/null
+  # upgrade from grml-autoconfig before 0.23.3
+  update-rc.d grml-autoconfig remove >/dev/null || exit 0
 fi
 
 #DEBHELPER#
