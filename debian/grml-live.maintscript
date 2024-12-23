@@ -1,4 +1,5 @@
 rm_conffile /etc/grml/fai/config/files/etc/apt/grml.key/GRMLBASE 0.32.3~
+rm_conffile /etc/grml/fai/config/files/etc/apt/sources.list.d/debian.list/DEBIAN_ETCH 0.50.2~
 rm_conffile /etc/grml/fai/config/files/etc/apt/sources.list.d/debian.list/DEBIAN_SID 0.47.10~
 rm_conffile /etc/grml/fai/config/files/etc/inittab/GRMLBASE 0.43.0~
 rm_conffile /etc/grml/fai/config/files/etc/inittab/GRML_SMALL 0.43.0~
