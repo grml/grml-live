@@ -220,7 +220,6 @@ case "$LANGUAGE" in
                 LANG="fr_FR.ISO-8859-1"
                 KEYTABLE="cf"
                 CHARSET="iso8859-1"
-                CONSOLEFONT="Lat15-Terminus16"
                 XKEYBOARD="ca_enhanced"
                 KDEKEYBOARD="ca_enhanced"
                 KDEKEYBOARDS="us"
@@ -262,7 +261,6 @@ case "$LANGUAGE" in
                 CHARSET="iso8859-2"
                 KDEKEYBOARDS="us,de,fr"
                 TZ="Europe/Prague"
-                CONSOLEFONT="Lat2-Terminus16"
                 CHARMAP="iso02"
                 ;;
         cs|cz|cs-utf8|cz-utf8)
@@ -277,7 +275,6 @@ case "$LANGUAGE" in
                 # Additional KDE Keyboards
                 KDEKEYBOARDS="us,de,fr"
                 TZ="Europe/Prague"
-                CONSOLEFONT="iso02g"
                 ;;
         de-iso)
                 # German version
@@ -392,7 +389,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="us,el"
                 KDEKEYBOARD="us"
                 CHARSET="iso8859-7"
-                CONSOLEFONT="iso07.f16"
                 IOCHARSET="8859-7"
                 IOCODEPAGE="737"
                 SYSFONTACM="iso07"
@@ -409,7 +405,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="us,el"
                 KDEKEYBOARD="us"
                 CHARSET="utf8"
-                CONSOLEFONT="iso07.f16"
                 IOCHARSET="8859-7"
                 IOCODEPAGE="737"
                 SYSFONTACM="iso07"
@@ -440,7 +435,6 @@ case "$LANGUAGE" in
                 # Additional KDE Keyboards
                 KDEKEYBOARDS="de,us,fr"
                 TZ="Europe/Madrid"
-                CONSOLEFONT="Lat15-Terminus16"
                 ;;
         fi-iso)
                 # Finnish version
@@ -676,7 +670,6 @@ case "$LANGUAGE" in
                 CHARSET="iso8859-2"
                 KDEKEYBOARDS="de,us,fr"
                 TZ="Europe/Warsaw"
-                CONSOLEFONT="Lat2-Terminus16"
                 CHARMAP="iso02"
                 ;;
         pl|pl-utf8)
@@ -691,7 +684,6 @@ case "$LANGUAGE" in
                 # Additional KDE Keyboards
                 KDEKEYBOARDS="de,us,fr"
                 TZ="Europe/Warsaw"
-                CONSOLEFONT="iso02g"
                 ;;
         pt-iso)
                 # Portuguese version
@@ -704,7 +696,6 @@ case "$LANGUAGE" in
                 # Additional KDE Keyboards
                 KDEKEYBOARDS="de,us,fr"
                 TZ="Europe/Lisbon"
-                CONSOLEFONT="Lat15-Terminus16"
                 ;;
         pt|pt-utf8)
                 # Portuguese version (UTF8)
@@ -718,7 +709,6 @@ case "$LANGUAGE" in
                 # Additional KDE Keyboards
                 KDEKEYBOARDS="de,us,fr"
                 TZ="Europe/Lisbon"
-                CONSOLEFONT="Lat15-Terminus16"
                 ;;
         ru-iso)
                 # Russian version
@@ -728,7 +718,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="ru"
                 KDEKEYBOARD="ru"
                 CHARSET="koi8-r"
-                CONSOLEFONT="Cyr_a8x16"
                 KDEKEYBOARDS="de,us,fr"
                 TZ="Europe/Moscow"
                 ;;
@@ -741,7 +730,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="ru"
                 KDEKEYBOARD="ru"
                 CHARSET="utf8"
-                CONSOLEFONT="Cyr_a8x16"
                 # Additional KDE Keyboards
                 KDEKEYBOARDS="de,us,fr"
                 TZ="Europe/Moscow"
@@ -782,7 +770,6 @@ case "$LANGUAGE" in
                 CHARSET="iso8859-2"
                 KDEKEYBOARDS="us,de"
                 TZ="Europe/Bratislava"
-                CONSOLEFONT="Lat2-Terminus16"
                 CHARMAP="iso02"
                 ;;
         sk|sk-utf8)
@@ -797,7 +784,6 @@ case "$LANGUAGE" in
                 # Additional KDE Keyboards
                 KDEKEYBOARDS="us,de"
                 TZ="Europe/Bratislava"
-                CONSOLEFONT="iso02g"
                 ;;
         sl-iso)
                 # Slovenian keyboard
@@ -810,7 +796,6 @@ case "$LANGUAGE" in
                 CHARSET="iso8859-2"
                 KDEKEYBOARDS="us,de"
                 TZ="Europe/Ljubljana"
-                CONSOLEFONT="Lat2-Terminus16"
                 CHARMAP="iso02"
                 ;;
         sl|sl-utf8)
@@ -825,7 +810,6 @@ case "$LANGUAGE" in
                 # Additional KDE Keyboards
                 KDEKEYBOARDS="us,de"
                 TZ="Europe/Ljubljana"
-                CONSOLEFONT="iso02g"
                 ;;
         tr-iso)
                 # Turkish version (guessed)
