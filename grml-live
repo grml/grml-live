@@ -505,17 +505,6 @@ fi
 [ -n "$RELEASENAME" ] && export RELEASENAME="$RELEASENAME"
 # }}}
 
-
-# ZERO_LOGFILE - check for backwards compatibility reasons {{{
-# this was default behaviour until grml-live 0.9.34:
-if [ -n "$ZERO_LOGFILE" ] ; then
-   PRESERVE_LOGFILE='' # make sure it's cleaned then
-   ewarn "Please consider disabling the \$ZERO_LOGFILE option as grml-live clears..."
-   ewarn "... the logfile $LOGFILE by default (unless \$PRESERVE_LOGFILE is set) nowadays."
-   eend 0
-fi
-# }}}
-
 # Warn user if addons from grml-live-addons are absent {{{
 if [ -z "${NO_ADDONS:-}" ] && [ ! -r "$TEMPLATE_DIRECTORY"/arch ] ; then
   ewarn "Boot addons not found (Consider installing package grml-live-addons)" ; eend 0
@@ -600,7 +589,6 @@ chmod 664 "$LOGFILE"
 # }}}
 
 # clean/zero/remove logfiles {{{
-
 if [ -n "$PRESERVE_LOGFILE" ] ; then
    echo "Preserving logfile $LOGFILE as requested via \$PRESERVE_LOGFILE"
 else
