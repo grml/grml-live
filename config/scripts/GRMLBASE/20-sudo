@@ -1,0 +1,24 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/GRMLBASE/20-sudo
+# Purpose:       configure sudo setup of the live-system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+fcopy -m root,root,0440 -v /etc/sudoers
+sed -i "s/\$USERNAME/$USERNAME/" "$target"/etc/sudoers
+chmod 440 "$target"/etc/sudoers
+chown 0:0 "$target"/etc/sudoers
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

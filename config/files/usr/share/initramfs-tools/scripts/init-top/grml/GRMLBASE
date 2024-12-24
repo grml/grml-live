@@ -1,0 +1,187 @@
+#!/bin/sh
+#
+# This file was deployed via grml-live's
+# ${GRML_FAI_CONFIG}/scripts/GRMLBASE/42-branding script, using
+# ${GRML_FAI_CONFIG}/files/usr/share/initramfs-tools/scripts/init-top/grml/GRMLBASE
+#
+# Filename:      /usr/share/initramfs-tools/scripts/init-top/grml
+# Purpose:       Early boot progress handler
+# Authors:       grml-team (grml.org),
+#                (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+# prereq header {{{
+# without this header booting will fail with:
+# "PANIC: Circular dependency.  Exiting."
+PREREQ=""
+prereqs()
+{
+        echo "$PREREQ"
+}
+case $1 in
+# get pre-requisites
+prereqs)
+        prereqs
+        exit 0
+        ;;
+esac
+# }}}
+
+# helper functions {{{
+
+if grep -qe debug -qe verbose /proc/cmdline 2>/dev/null ; then
+   echo "debug: scripts/init-top/grml running">/dev/console
+fi
+
+# get boot command line
+CMDLINE="$(cat /proc/cmdline)"
+
+# Simple shell grep
+stringinfile(){
+  case "$(cat $2)" in *$1*) return 0;; esac
+  return 1
+}
+
+# same for strings
+stringinstring(){
+  case "$2" in *$1*) return 0;; esac
+  return 1
+}
+
+# Reread boot command line; echo last parameter's argument or return false.
+getbootparam(){
+  stringinstring " $1=" "$CMDLINE" || return 1
+  result="${CMDLINE##*$1=}"
+  result="${result%%[   ]*}"
+  echo "$result"
+  return 0
+}
+
+# Check boot commandline for specified option
+checkbootparam(){
+  stringinstring " $1" "$CMDLINE"
+  return "$?"
+}
+
+if checkbootparam "nocolor" ; then
+  echo "Disabling colors in bootsequence as requested on commandline."
+  # Reset fb color mode
+  RESET="]R"
+  # ANSI COLORS
+  # Erase to end of line
+  CRE="[K"
+  # Clear and reset Screen
+  CLEAR="c"
+else
+  # Reset fb color mode
+  RESET="]R"
+  # ANSI COLORS
+  # Erase to end of line
+  CRE="[K"
+  # Clear and reset Screen
+  CLEAR="c"
+  # Normal color
+  NORMAL="[0;39m"
+  # RED: Failure or error message
+  RED="[1;31m"
+  # GREEN: Success message
+  GREEN="[1;32m"
+  # YELLOW: Descriptions
+  YELLOW="[1;33m"
+  # BLUE: System messages
+  BLUE="[1;34m"
+  # MAGENTA: Found devices or drivers
+  MAGENTA="[1;35m"
+  # CYAN: Questions
+  CYAN="[1;36m"
+  # BOLD WHITE: Hint
+  WHITE="[1;37m"
+fi
+
+log_grml_failure_msg () {
+  echo -n " ${RED}*${NORMAL} $@"
+}
+
+# int log_grml_begin_message (char *message)
+log_grml_begin_msg () {
+  echo -n " ${GREEN}*${NORMAL} $@"
+}
+
+log_grml_warn_msg () {
+  echo -n " ${YELLOW}*${NORMAL} $@"
+}
+
+# int log_grml_end_message (int exitstatus)
+SUCCESS=" ${BLUE}[ ${GREEN}ok ${BLUE}]${NORMAL}"
+FAILED=" ${NORMAL}[${RED}fail${NORMAL}]"
+
+# }}}
+
+# welcome splash {{{
+
+DISTRI="$(getbootparam 'distri' 2>/dev/null)"
+
+if [ -r /etc/grml_version ] ; then
+   GRML_VERSION="$(cat /etc/grml_version)"
+fi
+
+if checkbootparam "quiet" ; then
+    echo -e "${CLEAR}"
+fi
+
+if [ -n "$DISTRI" ] ; then
+SPLASH="
+${RED} $DISTRI
+
+${WHITE}based on grml.org.
+
+${NORMAL}"
+else
+SPLASH="
+${YELLOW}   ____              _
+${YELLOW}  / ___| _ __ _____ | |
+${YELLOW} | |  _ | / /|     || |
+${YELLOW} | |_| ||  / | | | || |
+${YELLOW}  \____||_|  |_|_|_||_|
+
+${WHITE}Grml Live Linux - http://grml.org/${NORMAL}"
+fi
+
+echo ""
+echo "${WHITE}Welcome to"
+echo "$SPLASH"
+echo
+
+if [ -n "$GRML_VERSION" ] ; then
+   log_grml_begin_msg "Running $GRML_VERSION"
+   echo
+fi
+
+# }}}
+
+## /proc/cmdline handling {{{
+# No kernel messages while probing modules:
+if ! grep -qe debug -qe verbose /proc/cmdline 2>/dev/null ; then
+   [ -r /proc/sys/kernel/printk ] && echo "0" > /proc/sys/kernel/printk
+fi
+
+# Make sure we support squashfs:
+if ! grep -q squashfs /proc/filesystems ; then
+   modprobe -q squashfs || log_grml_failure_msg "Warning: looks like you do not have support for squashfs"
+fi
+
+if grep -q 'boot=live' /proc/cmdline 2>/dev/null ; then
+   log_grml_begin_msg "Finished early booting sequence." ; echo "$SUCCESS"
+   #(256-16)*1024=245760
+   if [ "$(awk '/MemTotal/{print $2}' /proc/meminfo)" -lt 245760 ] ; then
+     log_grml_failure_msg "Warning: less than 256MB RAM, boot may fail"
+     echo
+   fi
+   log_grml_begin_msg "Searching for GRML file, this might take a few seconds..."
+   echo
+fi
+## }}}
+
+# vim: foldmethod=marker expandtab ai ft=sh

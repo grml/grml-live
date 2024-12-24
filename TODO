@@ -6,7 +6,7 @@ Patches, ideas and feedback welcome.
 * if a stage fails inside grml-live the stage is skipped on next execution → try
   to find a better way how to clean up the stage and re-execute it again
 
-* support something like a directory /etc/grml/fai/chroot_packages to install
+* support something like a directory $GRML_FAI_CONFIG/chroot_packages to install
   additional Debian packages without the need for a Debian repository
 
 * support multiple kernel versions installed in one single live-system

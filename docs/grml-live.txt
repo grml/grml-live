@@ -33,7 +33,7 @@ to include on your very own Linux Live-CD without having to deal with all the
 details of a build process.
 
 CAUTION: grml-live does **not** use /etc/fai for configuration but instead
-provides and uses ${GRML_FAI_CONFIG} which is pointing to /etc/grml/fai by default
+provides and uses ${GRML_FAI_CONFIG} which is /usr/share/grml-live/config by default
 (unless overridden using the ''-D'' option). This ensures that it does not clash
 with default FAI configuration and packages, so you can use grml-live and FAI
 completely independent at the same time!
@@ -106,9 +106,9 @@ Please notice that all configuration files have to be adjusted during execution
 of grml-live, so please make sure you use /etc/grml/grml-live.conf as a base for
 your own configuration file (usually /etc/grml/grml-live.local). Please also
 notice that the configuration file specified via this option is **not** (yet)
-supported inside the scripts/hooks/classes at ${GRML_FAI_CONFIG}/config. Instead use
+supported inside the scripts/hooks/classes at ${GRML_FAI_CONFIG}. Instead use
 /etc/grml/grml-live.local for configuration stuff used inside
-${GRML_FAI_CONFIG}/config.
+${GRML_FAI_CONFIG}.
 
   -d **DATE**::
 
@@ -122,13 +122,13 @@ advance. Usage example: '-d 2009-10-30'
 
   -D **CONFIGURATION_DIRECTORY**::
 
-The specified directory is used as configuration directory for grml-live and its
-FAI. By default /etc/grml/fai is used as default configuration directory.  If
-you want to have different configuration scripts, package definitions, etc. with
-without messing with the global configuration under /etc/grml/fai provided by
-grml-live this option provides you the option to use your own configuration
-directory. This directory is what's being referred to as ${GRML_FAI_CONFIG}
-throughout this documentation.
+The specified directory is used as configuration directory for grml-live and FAI.
+By default /usr/share/grml-live/config is used as default configuration directory.
+If you want to have different configuration scripts, package definitions, etc.
+without messing with the global configuration under /usr/share/grml-live/config
+provided by grml-live this option provides you the option to use your own
+configuration directory.
+This directory is what's being referred to as ${GRML_FAI_CONFIG} throughout this documentation.
 
   -e **EXTRACT_ISO_NAME**::
 
@@ -204,7 +204,7 @@ Specify the Debian suite you want to use for your live-system. If unset defaults
 to "testing". Supported values are: stable, testing, unstable (or their
 corresponding release names like "bookworm"). Please be aware that recent Debian
 suites might require a recent base.tgz
-(${GRML_FAI_CONFIG}/config/basefiles/$CLASSNAME.tar.gz) or a recent version of
+(${GRML_FAI_CONFIG}/basefiles/$CLASSNAME.tar.gz) or a recent version of
 debootstrap.
 
   -t **TEMPLATE_DIRECTORY**::
@@ -301,11 +301,11 @@ grml-live, as well as the architecture dependent class which provides the kernel
 class (like GRML_SMALL or GRML_FULL).
 The following files and directories are relevant for class GRMLBASE by default:
 
-  ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/
-  ${GRML_FAI_CONFIG}/config/debconf/GRMLBASE
-  ${GRML_FAI_CONFIG}/config/class/GRMLBASE.var
-  ${GRML_FAI_CONFIG}/config/hooks/instsoft.GRMLBASE
-  ${GRML_FAI_CONFIG}/config/package_config/GRMLBASE
+  ${GRML_FAI_CONFIG}/scripts/GRMLBASE/
+  ${GRML_FAI_CONFIG}/debconf/GRMLBASE
+  ${GRML_FAI_CONFIG}/class/GRMLBASE.var
+  ${GRML_FAI_CONFIG}/hooks/instsoft.GRMLBASE
+  ${GRML_FAI_CONFIG}/package_config/GRMLBASE
 
 Take a look at the next section for information about the concept of those
 files/directories.
@@ -326,8 +326,8 @@ Available classes
 -----------------
 
 The package selection part of the classes can be found in
-${GRML_FAI_CONFIG}/config/package_config whereas some further classes are defined for
-example in ${GRML_FAI_CONFIG}/config/scripts/ so specific feature sets can be
+${GRML_FAI_CONFIG}/package_config whereas some further classes are defined for
+example in ${GRML_FAI_CONFIG}/scripts/ so specific feature sets can be
 selected. The following classes are predefined:
 
 * DEBORPHAN: get rid of "autoremove" and "removed-but-not-yet-purged" packages;
@@ -418,27 +418,27 @@ over the ones from /etc/grml/grml-live.conf. If you want to override settings
 from /etc/grml/grml-live.local as well you have to specify them on the grml-live
 commandline.
 
-  ${GRML_FAI_CONFIG}/config/
+  ${GRML_FAI_CONFIG}/
 
 The main directory for configuration of FAI/grml-live. More details below.
 
-  ${GRML_FAI_CONFIG}/config/class/
+  ${GRML_FAI_CONFIG}/class/
 
 This directory contains files which specify main configuration variables for the
 FAI classes.
 
-  ${GRML_FAI_CONFIG}/config/debconf/
+  ${GRML_FAI_CONFIG}/debconf/
 
 This directory provides the files for preseeding/configuration of debconf
 through files.
 
-  ${GRML_FAI_CONFIG}/config/hooks/
+  ${GRML_FAI_CONFIG}/hooks/
 
 This directory provides files for customising the build process through hooks.
 Hooks are user defined programs or scripts, which are called during the
 installation process.
 
-  ${GRML_FAI_CONFIG}/config/package_config/
+  ${GRML_FAI_CONFIG}/package_config/
 
 Directory with lists of software packages to be installed or removed.  The
 different classes describe what should find its way to your ISO.  When running
@@ -450,7 +450,7 @@ adjust the package selection according to your needs.  Please notice that the
 directory GRMLBASE contains a package list defining a minimum but still
 reasonable package configuration.
 
-  ${GRML_FAI_CONFIG}/config/scripts/
+  ${GRML_FAI_CONFIG}/scripts/
 
 Scripts for customising the ISO within the build process.
 
@@ -537,25 +537,27 @@ Instructions
   apt-get -o Acquire::AllowInsecureRepositories=true update
   apt-get --allow-unauthenticated install grml-debian-keyring
 
+  cp -rv /usr/share/grml-live/config /srv
   # optionally(!) install basefile so we don't have to build basic
-  # chroot from scratch, grab from http://daily.grml.org/
-  # mkdir -p /etc/grml/fai/config/basefiles/
-  # mv I386.tar.gz /etc/grml/fai/config/basefiles/
-  # mv AMD64.tar.gz /etc/grml/fai/config/basefiles/
-  # mv ARM64.tar.gz /etc/grml/fai/config/basefiles/
+  # chroot from scratch. best build them with mmdebstrap.
+  # mkdir -p /srv/config/basefiles/
+  # mv I386.tar.gz /srv/config/basefiles/
+  # mv AMD64.tar.gz /srv/config/basefiles/
+  # mv ARM64.tar.gz /srv/config/basefiles/
 
   # install relevant tools
   apt-get --no-install-recommends install grml-live
 
   # adjust grml-live configuration for our needs:
   cat > /etc/grml/grml-live.local << EOF
+  GRML_LIVE_CONFIG=/srv/config
   ## want a faster build process and don't need smaller ISOs?
   ## if so use zlib compression
   # SQUASHFS_OPTIONS="-comp gzip -b 256k"
   ## want to use a specific squashfs binary?
   # SQUASHFS_BINARY='/usr/bin/mksquashfs'
   ## install local files into the chroot
-  # CHROOT_INSTALL="/etc/grml/fai/chroot_install"
+  # CHROOT_INSTALL="/srv/config/chroot_install"
   ## adjust if necessary (defaults to ./grml/):
   ## OUTPUT="/srv/grml-live"
   FAI_DEBOOTSTRAP="bookworm http://deb.debian.org/debian/"
@@ -563,14 +565,6 @@ Instructions
   CLASSES="GRMLBASE,GRML_FULL,AMD64"
   EOF
 
-  # just optional(!) - upgrade FAI to latest available version:
-  cat >> /etc/apt/sources.list.d/fai.list << EOF
-  deb     http://jenkins.grml.org/debian fai main
-  deb-src http://jenkins.grml.org/debian fai main
-  EOF
-
-  # get gpg key of FAI repos and install current FAI version:
-  wget -O - http://jenkins.grml.org/debian/C525F56752D4A654.asc | sudo apt-key add -
   apt-get update
   apt-get install fai-client fai-server fai-doc
 
@@ -585,11 +579,12 @@ and the ISO can be found inside /grml-live/grml-live/grml_isos/ then.
 What is $GRML_FAI_CONFIG?
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The variable '$GRML_FAI_CONFIG' is pointing to the directory /etc/grml/fai by
-default.  To provide you a maximum of flexibility you can set up your own
-configuration directory (e.g. based on /etc/grml/fai) and use this directory
-running grml-live with the '-D <config_dir>' option. Now '$GRML_FAI_CONFIG'
-points to the specified directory instead of using /etc/grml/fai and all the
+The variable '$GRML_FAI_CONFIG' is pointing to the directory /usr/share/grml-live/config
+by default.
+To provide you a maximum of flexibility you can set up your own configuration directory
+(e.g. based on /usr/share/grml-live/config) and use
+this directory running grml-live with the '-D <config_dir>' option.
+Now '$GRML_FAI_CONFIG' points to the specified directory and all the
 configuration files, scripts and hooks will be taken from your
 '$GRML_FAI_CONFIG' directory.
 
@@ -619,10 +614,13 @@ provides the files you would like to install. Note that the files are installed
 under '/' in the chroot - so you have to create the rootfs structure on your
 own. Usage example:
 
+  GRML_FAI_CONFIG=/srv/config
+  echo "GRML_FAI_CONFIG=$GRML_FAI_CONFIG" >> /etc/grml/grml-live.local
   echo "CHROOT_INSTALL=\$GRML_FAI_CONFIG/chroot_install" >> /etc/grml/grml-live.local
-  mkdir -p /etc/grml/fai/chroot_install/usr/src/
+  mkdir -p $GRML_FAI_CONFIG/chroot_install/usr/src/
+  cp -rv /usr/share/grml-live/config/* $GRML_FAI_CONFIG
   wget example.org/foo.tar.gz
-  mv foo.tar.gz /etc/grml/fai/chroot_install/usr/src/
+  mv foo.tar.gz $GRML_FAI_CONFIG/chroot_install/usr/src/
   grml-live ...
 
 [[local-debian-mirror]]
@@ -630,7 +628,7 @@ Can I use my own (local) Debian mirror?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Yes. Set up an according sources.list configuration as class file in
-${GRML_FAI_CONFIG}/config/files/etc/apt/sources.list.d/ and adjust the variable
+${GRML_FAI_CONFIG}/files/etc/apt/sources.list.d/ and adjust the variable
 FAI_DEBOOTSTRAP (if not already using a base.tgz) inside
 /etc/grml/grml-live.conf[.local]. If you're setting up your own class file don't
 forget to include the class name in the class list (grml-live -c ...).
@@ -648,7 +646,7 @@ How do I add additional Debian package(s) to my CD/ISO?
 
 Just create a new class (using the package_config directory):
 
-  # cat > /etc/grml/fai/config/package_config/MIKA << EOF
+  # cat > $GRML_FAI_CONFIG/package_config/MIKA << EOF
   PACKAGES install
 
   vim
@@ -664,11 +662,17 @@ and specify it when invoking grml-live then:
 I fscked up my grml-live configuration. How do I reset it to the defaults?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Notice: this deletes all your grml-live configuration files. If that's really
-what you are searching for just run:
+If you make changes to the grml-live configuration files, it is recommended
+you copy them to a new directory, set GRML_FAI_CONFIG and modify them there.
 
-  rm -rf /etc/grml/fai /etc/grml/grml-live.conf
-  dpkg -i --force-confnew --force-confmiss /path/to/grml-live_..._all.deb
+If you modified them inside /usr/share/grml-live, you can just reinstall
+grml-live:
+
+  # apt remove grml-live
+  # apt install grml-live
+
+Note: modified files in /usr/share/grml-live will not survive upgrades of
+grml-live.
 
 [[apt-cacher]]
 Set up apt-cacher-ng for use with grml-live
@@ -705,7 +709,7 @@ then invoke debootstrap using the '--arch i386' option. Disclaimer: building an
 AMD64 base.tgz won't work if you are using a 32bit kernel system of course.
 Also building an ARM64 base.tgz requires an arm64 system.
 
-Finally place the generated tarball in /etc/grml/fai/config/basefiles/ (note
+Finally place the generated tarball in $GRML_FAI_CONFIG/basefiles/ (note
 that it needs to be uppercase letters matching the class names, so: e.g.
 AMD64.tar.gz for amd64, I386.tar.gz for i386 or ARM64.tar.gz for arm64).
 
@@ -713,7 +717,7 @@ Then executing grml-live should use this file as base system instead of executin
 debootstrap. Check out the output for something like:
 
   [...]
-  ftar: extracting //etc/grml/fai/config/basefiles///AMD64.tar.gz to /srv/grml64_testing/grml_chroot//
+  ftar: extracting //srv/config/basefiles///AMD64.tar.gz to /srv/grml64_testing/grml_chroot//
   [...]
 
 [[localrepos]]
@@ -731,7 +735,7 @@ Serving via bind mount / MIRROR_DIRECTORY
 Make sure to create an according sources.list configuration file, e.g. using
 your own class name `CUSTOM`:
 
-  # cat > /etc/grml/fai/config/files/etc/apt/sources.list.d/local-packages.list/CUSTOM << EOF
+  # cat > $GRML_FAI_CONFIG/files/etc/apt/sources.list.d/local-packages.list/CUSTOM << EOF
   deb file:///home/foobar/local-packages ./
   EOF
 
@@ -753,7 +757,7 @@ Serving a repository via HTTP
 Make sure to create an according sources.list configuration file, e.g. using
 your own class name `CUSTOM`:
 
-  # cat > /etc/grml/fai/config/files/etc/apt/sources.list.d/local-packages.list/CUSTOM << EOF
+  # cat > $GRML_FAI_CONFIG/files/etc/apt/sources.list.d/local-packages.list/CUSTOM << EOF
   deb http://127.0.0.1:8000/ ./
   EOF
 
@@ -799,7 +803,7 @@ In case you want to run grml-live directly from the git repository checkout
 b) does not use the config files of an possibly installed `grml-live` package.
 Usage example:
 
-    # export GRML_FAI_CONFIG=$(pwd)/etc/grml/fai
+    # export GRML_FAI_CONFIG=$(pwd)/config
     # export SCRIPTS_DIRECTORY=$(pwd)/scripts
     # export TEMPLATE_DIRECTORY=$(pwd)/templates
     # ./grml-live -s sid -a amd64 -c GRMLBASE,GRML_FULL,AMD64
