@@ -5,10 +5,6 @@
 # ${GRML_FAI_CONFIG}/files/etc/fstab/GRMLBASE
 #
 # <filesystem> <mountpoint>   <type> <options>                             <dump> <pass>
-proc           /proc            proc   rw,nosuid,nodev,noexec                0      0
-none           /proc/bus/usb    usbfs  defaults,noauto                       0      0
-sysfs          /sys             sysfs  rw,nosuid,nodev,noexec                0      0
-devpts         /dev/pts         devpts noauto,mode=0622                      0      0
 /dev/fd0       /media/floppy    auto   user,noauto,exec                      0      0
 /dev/external  /media/external  auto   user,noauto,exec,rw,uid=USERNAME,gid=USERNAME 0      0
 /dev/external1 /media/external1 auto   user,noauto,exec,rw,uid=USERNAME,gid=USERNAME 0      0
