@@ -15,7 +15,7 @@ target=${target:?}
 if ifclass RELEASE ; then
   set -u
   current_date=$(date +%Y%m%d)
-  perl -pi -e 'BEGIN { $d="'"$current_date"'"; } s#^(\s+)(deb.* )(.*://ftp.debian.org.*?)\s+([a-z-]+)\s+(.*)$#$1$2http://snapshot.debian.org/archive/debian/$d/ $4 $5#' \
+  perl -pi -e 'BEGIN { $d="'"$current_date"'"; } s#^(\s+)(deb.* )(.*://deb.debian.org.*?)\s+([a-z-]+)\s+(.*)$#$1$2http://snapshot.debian.org/archive/debian/$d/ $4 $5#' \
     "${target}/etc/apt/sources.list.d/debian.list"
 fi
 

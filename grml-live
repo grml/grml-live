@@ -753,7 +753,7 @@ if [ -z "$FAI_DEBOOTSTRAP" ] ; then
   if [ -n "$WAYBACK_DATE" ] ; then
     FAI_DEBOOTSTRAP="$SUITE http://snapshot.debian.org/archive/debian/$WAYBACK_DATE/"
   else
-    FAI_DEBOOTSTRAP="$SUITE http://ftp.debian.org/debian"
+    FAI_DEBOOTSTRAP="$SUITE http://deb.debian.org/debian"
   fi
 fi
 

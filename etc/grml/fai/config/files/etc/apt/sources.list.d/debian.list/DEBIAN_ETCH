@@ -1,3 +1,0 @@
-# official debian repository:
-  deb     http://ftp.debian.org/debian/ etch main contrib non-free
-  deb-src http://ftp.debian.org/debian/ etch main contrib non-free

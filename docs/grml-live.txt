@@ -690,7 +690,7 @@ FAI_DEBOOTSTRAP:
   [...]
   APT_PROXY="http://localhost:3142/"
   [...]
-  FAI_DEBOOTSTRAP="bookworm http://localhost:3142/ftp.debian.org/debian bookworm main contrib non-free"
+  FAI_DEBOOTSTRAP="bookworm http://localhost:3142/deb.debian.org/debian bookworm main contrib non-free"
 
 Make sure apt-cacher-ng is running ('/etc/init.d/apt-cacher-ng restart').
 That's it.  All downloaded files will be cached in /var/cache/apt-cacher-ng then.
