@@ -12,7 +12,6 @@ set -e
 # FAI sets $target, but shellcheck does not know that.
 target=${target:?}
 
-fcopy -m root,root,0755 -v /etc/initramfs-tools/hooks/000-udev-shutup
 fcopy -M -v /etc/initramfs-tools/conf.d/xz-compress
 fcopy -M -v /etc/initramfs-tools/modules
 
