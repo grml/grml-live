@@ -393,12 +393,12 @@ Files
 
 Notice that grml-live ships FAI configuration files that do not use the same
 namespace as the FAI packages itself. This ensures that grml-live does not clash
-with your usual FAI configuration, so instead of /etc/fai/fai.conf (package
-fai-client) grml uses ${GRML_FAI_CONFIG}/fai.conf instead. For more details see
-below. To get an idea how another configuration or example files could look like
-check out /usr/share/doc/fai-doc/examples/simple/ (provided by Debian package
-fai-doc). Furthermore /usr/share/doc/fai-doc/fai-guide.html/ch-config.html
-provides documentation regarding configuration possibilities.
+with your usual FAI configuration.
+For more details see below. To get an idea how another configuration or example
+files could look like check out /usr/share/doc/fai-doc/examples/simple/
+(provided by Debian package fai-doc). Furthermore
+/usr/share/doc/fai-doc/fai-guide.html/ch-config.html provides documentation
+regarding configuration possibilities.
 
   /usr/sbin/grml-live
 
@@ -417,15 +417,6 @@ defaults of grml-live. Configurations via /etc/grml/grml-live.local are preferre
 over the ones from /etc/grml/grml-live.conf. If you want to override settings
 from /etc/grml/grml-live.local as well you have to specify them on the grml-live
 commandline.
-
-  ${GRML_FAI_CONFIG}/fai.conf
-
-Main configuration file for FAI which specifies where all the configuration
-files and scripts for FAI/grml-live can be found. By default the configuration
-variables are FAI_CONFIG_SRC=file:///etc/grml/fai/config and
-GRML_FAI_CONFIG=/etc/grml/fai/config - both pointing to a directory shipped by
-grml-live out-of-the-box so you shouldn't have to configure anything in this
-file.
 
   ${GRML_FAI_CONFIG}/config/
 
