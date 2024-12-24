@@ -444,12 +444,6 @@ if [ -n "$LOCAL_CONFIG" ]; then
 else
   LOCAL_CONFIG=''
 fi
-
-if [ -n "${GRML_LIVE_SOURCES:-}" ] ; then
-  eerror "Config variable \$GRML_LIVE_SOURCES is set. This variable has been deprecated."
-  ewarn  "Please set up \${GRML_FAI_CONFIG}/config/files/etc/apt/sources.list.d/* instead."
-  bailout 1
-fi
 # }}}
 
 # assume sane defaults (if not set already) {{{
@@ -509,17 +503,6 @@ fi
 # export variables to have them available in fai scripts:
 [ -n "$GRML_NAME" ]   && export GRML_NAME="$GRML_NAME"
 [ -n "$RELEASENAME" ] && export RELEASENAME="$RELEASENAME"
-# }}}
-
-
-# ZERO_LOGFILE - check for backwards compatibility reasons {{{
-# this was default behaviour until grml-live 0.9.34:
-if [ -n "$ZERO_LOGFILE" ] ; then
-   PRESERVE_LOGFILE='' # make sure it's cleaned then
-   ewarn "Please consider disabling the \$ZERO_LOGFILE option as grml-live clears..."
-   ewarn "... the logfile $LOGFILE by default (unless \$PRESERVE_LOGFILE is set) nowadays."
-   eend 0
-fi
 # }}}
 
 # Warn user if addons from grml-live-addons are absent {{{
@@ -606,7 +589,6 @@ chmod 664 "$LOGFILE"
 # }}}
 
 # clean/zero/remove logfiles {{{
-
 if [ -n "$PRESERVE_LOGFILE" ] ; then
    echo "Preserving logfile $LOGFILE as requested via \$PRESERVE_LOGFILE"
 else
