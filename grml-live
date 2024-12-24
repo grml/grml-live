@@ -444,12 +444,6 @@ if [ -n "$LOCAL_CONFIG" ]; then
 else
   LOCAL_CONFIG=''
 fi
-
-if [ -n "${GRML_LIVE_SOURCES:-}" ] ; then
-  eerror "Config variable \$GRML_LIVE_SOURCES is set. This variable has been deprecated."
-  ewarn  "Please set up \${GRML_FAI_CONFIG}/config/files/etc/apt/sources.list.d/* instead."
-  bailout 1
-fi
 # }}}
 
 # assume sane defaults (if not set already) {{{
