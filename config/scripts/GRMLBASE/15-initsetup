@@ -31,6 +31,11 @@ systemd_setup() {
   # useful on a live OS image, where the installed packages do not change
   # on startup. As this is quite costly, disable it.
   $ROOTCMD systemctl mask ldconfig.service
+
+  # systemd-journal-catalog-update.service updates the journald catalog
+  # cache. Do this once here, and not on each live OS image boot.
+  $ROOTCMD systemctl mask systemd-journal-catalog-update.service
+  $ROOTCMD journalctl --update-catalog
 }
 
 systemd_setup
