@@ -1,0 +1,44 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/DEBORPHAN/10-whitelist
+# Purpose:       whitelist packages to keep with deborphan
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+# workaround for dnsutils transitional package, we can drop this as soon as the
+# bind9-dnsutils package is available in all our supported Debian releases
+if [[ -r "${target}/usr/share/doc/dnsutils" ]] && [ -x "${target}/usr/bin/deborphan" ] ; then
+  echo "Adding dnsutils to deborphan whitelist"
+  # workaround for https://bugs.debian.org/929273 ("fseek on /var/lib/deborphan/keep: Invalid argument")
+  if ! [ -f "${target}"/var/lib/deborphan/keep ] ; then
+    printf 'dnsutils\n' > "${target}"/var/lib/deborphan/keep
+  elif grep -q '^dnsutils$' "${target}"/var/lib/deborphan/keep ; then
+    : # entry already present, avoid duplicates
+  else
+    printf 'dnsutils\n' >> "${target}"/var/lib/deborphan/keep
+  fi
+fi
+
+# workaround for bsdmainutils transitional package, we can drop this as soon as the
+# bsdextrautils + ncal packages are available in all our supported Debian releases
+if [[ -r "${target}/usr/share/doc/bsdmainutils" ]] && [ -x "${target}/usr/bin/deborphan" ] ; then
+  echo "Adding bsdmainutils to deborphan whitelist"
+  # workaround for https://bugs.debian.org/929273 ("fseek on /var/lib/deborphan/keep: Invalid argument")
+  if ! [ -f "${target}"/var/lib/deborphan/keep ] ; then
+    printf 'bsdmainutils\n' > "${target}"/var/lib/deborphan/keep
+  elif grep -q '^bsdmainutils$' "${target}"/var/lib/deborphan/keep ; then
+    : # entry already present, avoid duplicates
+  else
+    printf 'bsdmainutils\n' >> "${target}"/var/lib/deborphan/keep
+  fi
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

@@ -1,0 +1,37 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/GRMLBASE/05-hostname
+# Purpose:       set hostname of live-system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+# the hostname of the chroot usually isn't the same as the one for the live-system
+BUILD_HOSTNAME="$($ROOTCMD hostname)"
+[ -n "$BUILD_HOSTNAME" ] || BUILD_HOSTNAME="grml"
+
+echo "$HOSTNAME" > "$target"/etc/hostname
+echo "$HOSTNAME" > "$target"/etc/mailname
+
+if [ -r "$target"/etc/postfix/main.cf ] ; then
+  sed -i "s/^mydestination = .*/mydestination = $HOSTNAME, localhost, localhost.localdomain/" "$target"/etc/postfix/main.cf
+  sed -i "s/^myhostname = .*/myhostname = $HOSTNAME/" "$target"/etc/postfix/main.cf
+  echo "postfix postfix/mailname     string $HOSTNAME" | $ROOTCMD debconf-set-selections
+  echo "postfix postfix/destinations string ${HOSTNAME}, localhost.grml.org, localhost" \
+  | $ROOTCMD debconf-set-selections
+  # make sure to execute newaliases after adjusting configuration,
+  # otherwise the old hostname will be left inside /etc/aliases.db
+  $ROOTCMD newaliases
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

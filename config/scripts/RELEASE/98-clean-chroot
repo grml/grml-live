@@ -1,0 +1,64 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/RELEASE/98-clean-chroot
+# Purpose:       clean up $HOMEs for release
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+echo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
+rm -f "$target"/var/lib/apt/lists/*Packages \
+      "$target"/var/lib/apt/lists/*Release \
+      "$target"/var/lib/apt/lists/*Sources \
+      "$target"/var/lib/apt/lists/*Index* \
+      "$target"/var/lib/apt/lists/*Translation* \
+      "$target"/var/lib/apt/lists/*.gpg \
+      "$target"/var/cache/apt-show-versions/* \
+      "$target"/var/cache/debconf/*.dat-old \
+      "$target"/var/cache/apt/*.bin
+
+echo "Removing /var/lib/aptitude/pkgstates.old"
+rm -f "$target"/var/lib/aptitude/pkgstates.old
+
+# Remove all FAI logs from chroot via grml-live later then
+echo "Setting up /etc/grml_fai_release for grml-live"
+touch "$target"/etc/grml_fai_release
+
+echo "Removing all files inside /root"
+rm -rf "$target"/root
+mkdir -m 0755 "$target"/root
+
+echo "Removing all files inside /home/${USERNAME}"
+rm -rf "${target}/home/${USERNAME:?}"
+mkdir -m 0755 "${target}/home/${USERNAME}"
+$ROOTCMD chown "${USERNAME}:${USERNAME}" "/home/${USERNAME}"
+
+echo "Syncing /home/${USERNAME}/ with data from /etc/skel/:"
+$ROOTCMD su -s /bin/sh "${USERNAME}" -c "rsync -Hav /etc/skel/ /home/${USERNAME}/"
+
+
+# Initialize zsh caches so first startup on Live CD is faster.
+echo "exit" | $ROOTCMD zsh -l -s -i
+echo "exit" | $ROOTCMD setpriv --reuid="${USERNAME}" --regid="${USERNAME}" --clear-groups --reset-env zsh -l -s -i
+
+echo "Listing homedir of user root:"
+ls -la "$target"/root
+echo "Listing homedir of user ${USERNAME}:"
+ls -la "$target"/home/"${USERNAME}"
+
+# "assert" zcompdump was created.
+echo "Checking existence of /root/.zcompdump and /home/${USERNAME}/.zcompdump"
+ls -la "$target"/root/.zcompdump
+ls -la "$target"/home/"${USERNAME}"/.zcompdump
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

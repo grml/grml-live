@@ -1,0 +1,70 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/GRMLBASE/25-locales
+# Purpose:       locales (language) configuration of the live system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+# set up /etc/locale.gen, GRMLBASE installs a minimal configuration.
+# Only if the LOCALES class is added you get a fuller set of locales.
+fcopy -M -v /etc/locale.gen
+
+# set up /etc/locale.conf, to avoid systemd-firstboot prompting for user input
+fcopy -M -v /etc/locale.conf
+
+# get rid of locales unless using class LOCALES
+set +u
+if ! ifclass LOCALES ; then
+set -u
+   echo 'Removing /usr/share/locale'
+
+   # get rid of the original
+   rm -rf "$target"/usr/share/locale
+
+   # restore *empty* directories because otherwise installation/upgrade of packages might fail
+   [ -d "$target"/usr/share/locale ] || mkdir "$target"/usr/share/locale
+   $ROOTCMD ln -s /etc/locale.alias /usr/share/locale/locale.alias
+
+   # make sure the directories of removed locales exist; ugly hack but no other solution present :(
+   echo 'Creating empty /usr/share/locale/*/LC_MESSAGES directories'
+   for f in $($ROOTCMD dpkg -S LC_MESSAGES | awk '{print $2}' | grep '/usr/share/locale/' | sed 's#LC_MESSAGES.*##' | sort -u) ; do
+      if ! [ -d "$target/$f"/LC_MESSAGES ] ; then
+         $ROOTCMD mkdir -p "$f"/LC_MESSAGES
+      fi
+   done
+fi
+
+# make sure:
+# localepurge     localepurge/nopurge     multiselect ....
+# is set so localepurge works as expected
+if $ROOTCMD dpkg --list localepurge 2>&1 | grep -q '^ii' ; then
+   $ROOTCMD dpkg-reconfigure -f noninteractive localepurge
+fi
+
+if ! [ -x "$target"/usr/sbin/localepurge ] ; then
+  echo "Warning: localepurge not installed"
+else
+  echo "Running localepurge."
+  $ROOTCMD localepurge
+fi
+
+if $ROOTCMD dpkg-query -s locales-all >/dev/null 2>&1 ; then
+  echo "locales-all installed, skipping locales generation"
+else
+  if ! [ -x "$target"/usr/sbin/locale-gen ] ; then
+    echo 'Warning: locale-gen [package locales] not installed'
+  else
+    echo "Running locale-gen"
+    $ROOTCMD locale-gen
+  fi
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
