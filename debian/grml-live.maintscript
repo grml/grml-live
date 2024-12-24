@@ -4,6 +4,7 @@ rm_conffile /etc/grml/fai/config/files/etc/apt/sources.list.d/debian.list/DEBIAN
 rm_conffile /etc/grml/fai/config/files/etc/init.d/bootlocal.first/GRMLBASE 0.50.2~
 rm_conffile /etc/grml/fai/config/files/etc/init.d/bootlocal.last/GRMLBASE 0.50.2~
 rm_conffile /etc/grml/fai/config/files/etc/init.d/bootlocal.middle/GRMLBASE 0.50.2~
+rm_conffile /etc/grml/fai/config/files/etc/initramfs-tools/hooks/000-udev-shutup/GRMLBASE 0.50.2~
 rm_conffile /etc/grml/fai/config/files/etc/inittab/GRMLBASE 0.43.0~
 rm_conffile /etc/grml/fai/config/files/etc/inittab/GRML_SMALL 0.43.0~
 rm_conffile /etc/grml/fai/config/files/etc/locale.gen/GRML_FULL 0.49.3~
