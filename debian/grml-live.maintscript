@@ -10,6 +10,7 @@ rm_conffile /etc/grml/fai/config/files/etc/inittab/GRML_SMALL 0.43.0~
 rm_conffile /etc/grml/fai/config/files/etc/locale.gen/GRML_FULL 0.49.3~
 rm_conffile /etc/grml/fai/config/files/etc/lsb-base-logging.sh/GRMLBASE 0.42.3~
 rm_conffile /etc/grml/fai/config/files/etc/modprobe.d/modesetting.conf/GRMLBASE 0.50.2~
+rm_conffile /etc/grml/fai/config/files/etc/modprobe.d/vmwgfx.conf/GRMLBASE 0.50.2~
 rm_conffile /etc/grml/fai/config/files/etc/runlevel.conf/GRMLBASE 0.50.2~
 rm_conffile /etc/grml/fai/config/files/etc/systemd/system/serial-getty@ttyS0.service.d/override.conf/GRMLBASE 0.33.2~
 rm_conffile /etc/grml/fai/config/files/usr/share/grml/desktop-bg.png/GRMLBASE 0.49.4~
