@@ -196,7 +196,7 @@ config_language(){
   einfo "Activating language settings:"
   eindent
 
-  # people can specify $LANGUAGE and $CONSOLEFONT in a config file
+  # people can specify $LANGUAGE in a config file
   [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig
 
   # check for bootoption which overrides config from /etc/grml/autoconfig

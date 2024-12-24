@@ -22,9 +22,6 @@
 
 ## These are the options you might want to adjust: #############################
 
-# set console font, default: Lat15-Terminus16
-# CONSOLEFONT='iso15graf-16'
-
 # check for frequency-scalable CPU and activate cpydyn/powernowd (default: yes)
 CONFIG_CPU='yes'
 
