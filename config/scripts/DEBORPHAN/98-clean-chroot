@@ -1,0 +1,42 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/DEBORPHAN/98-clean-chroot
+# Purpose:       drop as many packages from grml as possible
+# Authors:       (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+# remove all packages not necessary anymore:
+echo "Executing apt-get -y --purge autoremove"
+$ROOTCMD apt-get -y --purge autoremove
+
+# make sure we don't have any removed but not-yet-purged packages left,
+# otherwise GRMLBASE/03-get-sources might try to download unavailable
+# packages and will fail doing so
+PURGE_PACKAGES=$($ROOTCMD dpkg --list | awk '/^rc/ {print $2}')
+
+if [ -n "$PURGE_PACKAGES" ] ; then
+  echo "Getting rid of packages which have been removed but not yet purged: $PURGE_PACKAGES"
+  # shellcheck disable=SC2086 # PURGE_PACKAGES needs word-splitting.
+  $ROOTCMD dpkg --purge $PURGE_PACKAGES
+fi
+
+# note: deborphan is no longer available as of Debian/trixie,
+# see https://github.com/grml/grml-live/issues/144
+if [ -x "$target"/usr/bin/deborphan ] ; then
+  # remove packages until deborphan does not find anymore:
+  while [ "$($ROOTCMD deborphan)" != "" ] ; do
+    echo "Executing deborphan"
+    # shellcheck disable=SC2046 # deborphan result needs word-splitting.
+    $ROOTCMD apt-get -y --purge remove $($ROOTCMD deborphan)
+  done
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

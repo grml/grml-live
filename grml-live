@@ -47,7 +47,7 @@ Usage: $PN [options, see as follows]
    -c <classe[s]>          classes to be used for building the ISO via FAI
    -C <configfile>         configuration file for grml-live
    -d <date>               use specified date instead of build time as date of release
-   -D <configdir>          use specified configuration directory instead of /etc/grml/fai
+   -D <configdir>          use specified configuration directory instead of /usr/share/grml-live/config
    -e <iso_name>           extract ISO and squashfs contents from iso_name
    -F                      force execution without prompting
    -g <grml_name>          set the grml flavour name
@@ -459,14 +459,14 @@ fi
 [ -n "$DISTRI_NAME" ]             || DISTRI_NAME="grml"
 [ -n "$DISTRI_SPLASH" ]           || DISTRI_SPLASH='grml.png'
 [ -n "$FORCE_ISO_REBUILD" ]       || FORCE_ISO_REBUILD="false"
-[ -n "$GRML_FAI_CONFIG" ]         || GRML_FAI_CONFIG='/etc/grml/fai'
+[ -n "$GRML_FAI_CONFIG" ]         || GRML_FAI_CONFIG='/usr/share/grml-live/config'
 [ -n "$GRML_NAME" ]               || GRML_NAME='grml'
 [ -n "$HOSTNAME" ]                || HOSTNAME='grml'
 [ -n "$HYBRID_METHOD" ]           || HYBRID_METHOD='isohybrid'
 [ -n "$RELEASENAME" ]             || RELEASENAME='grml-live rocks'
 [ -n "$SECURE_BOOT" ]             || SECURE_BOOT='disable'
 [ -n "$SQUASHFS_BINARY" ]         || SQUASHFS_BINARY='mksquashfs'
-[ -n "$SQUASHFS_EXCLUDES_FILE" ]  || SQUASHFS_EXCLUDES_FILE="${GRML_FAI_CONFIG}/config/grml/squashfs-excludes"
+[ -n "$SQUASHFS_EXCLUDES_FILE" ]  || SQUASHFS_EXCLUDES_FILE="${GRML_FAI_CONFIG}/grml/squashfs-excludes"
 [ -n "$SUITE" ]                   || SUITE='testing'
 [ -n "$TEMPLATE_DIRECTORY" ]      || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
 [ -n "$SCRIPTS_DIRECTORY" ]       || SCRIPTS_DIRECTORY='/usr/share/grml-live/scripts'
@@ -504,6 +504,18 @@ fi
 if [ -e "$GRML_FAI_CONFIG"/fai.conf ] ; then
   ewarn "The file ${GRML_FAI_CONFIG}/fai.conf exists but will be ignored."
   eend 1
+fi
+
+if [ -e /etc/grml/fai/config ] && [ -z "$GRML_FAI_CONFIG" ] ; then
+  eerror "Found old configuration files in /etc/grml/fai/config (while \$GRML_FAI_CONFIG was empty)." ; eend 1
+  eerror "You should check your configuration and move these files into a new path, and set \$GRML_FAI_CONFIG." ; eend 1
+  bailout
+fi
+
+if [ -e "$GRML_FAI_CONFIG"/config ] ; then
+  eerror "The path ${GRML_FAI_CONFIG}/config exists, very likely your \$GRML_FAI_CONFIG is invalid." ; eend 1
+  eerror "Either set \$GRML_FAI_CONFIG=${GRML_FAI_CONFIG}/config or delete ${GRML_FAI_CONFIG}/config." ; eend 1
+  bailout
 fi
 
 # trim characters that are known to cause problems inside $GRML_NAME;
@@ -818,10 +830,10 @@ else
       mv "${OUTPUT}"/grml_sources "${CHROOT_OUTPUT}"/grml-live/
 
       log "Executed FAI command line:"
-      log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY GRML_LIVE_CONFIG=$CONFIGDUMP WAYBACK_DATE=$WAYBACK_DATE fai $VERBOSE -C $FAI_CONF_DIR -s file:///$GRML_FAI_CONFIG/config -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
+      log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY GRML_LIVE_CONFIG=$CONFIGDUMP WAYBACK_DATE=$WAYBACK_DATE fai $VERBOSE -C $FAI_CONF_DIR -s file:///$GRML_FAI_CONFIG -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
       # shellcheck disable=SC2086 # $FAI_ARGS needs splitting
       BUILD_ONLY="$BUILD_ONLY" BOOTSTRAP_ONLY="$BOOTSTRAP_ONLY" GRML_LIVE_CONFIG="$CONFIGDUMP" fai $VERBOSE \
-                  -C "$FAI_CONF_DIR" -s "file:///$GRML_FAI_CONFIG/config" -c"$CLASSES" \
+                  -C "$FAI_CONF_DIR" -s "file:///$GRML_FAI_CONFIG" -c"$CLASSES" \
                   -u "$HOSTNAME" "$FAI_ACTION" "$CHROOT_OUTPUT" $FAI_ARGS | tee -a "$LOGFILE"
       RC="${PIPESTATUS[0]}" # notice: bash-only
 
@@ -991,12 +1003,12 @@ grub_setup() {
         ;;
     esac
 
-    # important: this depends on execution of ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images
+    # important: this depends on execution of ${GRML_FAI_CONFIG}/scripts/GRMLBASE/45-grub-images
     if ! [ -r "${CHROOT_OUTPUT}/${BOOTX64}" ] ; then
       log    "Cannot access GRUB UEFI image ${CHROOT_OUTPUT}/${BOOTX64}, required for Secure Boot support"
       eerror "Cannot access GRUB UEFI image ${CHROOT_OUTPUT}/${BOOTX64}, required for Secure Boot support" ; eend 1
-      log    "Possible reason is failure to run ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images"
-      ewarn  "Possible reason is failure to run ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images"
+      log    "Possible reason is failure to run ${GRML_FAI_CONFIG}/scripts/GRMLBASE/45-grub-images"
+      ewarn  "Possible reason is failure to run ${GRML_FAI_CONFIG}/scripts/GRMLBASE/45-grub-images"
       bailout 50
     fi
 
@@ -1097,8 +1109,8 @@ grub_setup() {
     if ! [ -r "${CHROOT_OUTPUT}/${BOOTX32}" ] ; then
       log    "Cannot access GRUB 32-bit PC EFI image ${CHROOT_OUTPUT}/${BOOTX32}."
       eerror "Cannot access GRUB 32-bit PC EFI image ${CHROOT_OUTPUT}/${BOOTX32}." ; eend 1
-      log    "Possible reason is failure to run ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images"
-      ewarn  "Possible reason is failure to run ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/45-grub-images"
+      log    "Possible reason is failure to run ${GRML_FAI_CONFIG}/scripts/GRMLBASE/45-grub-images"
+      ewarn  "Possible reason is failure to run ${GRML_FAI_CONFIG}/scripts/GRMLBASE/45-grub-images"
       bailout 50
     fi
 
@@ -1600,7 +1612,7 @@ generate_build_info() {
     distri_info="${DISTRI_INFO}" \
     distri_name="${DISTRI_NAME}" \
     extract_iso_name="${EXTRACT_ISO_NAME}" \
-    fai_cmdline="BUILD_ONLY=${BUILD_ONLY} BOOTSTRAP_ONLY=${BOOTSTRAP_ONLY} GRML_LIVE_CONFIG=${CONFIGDUMP} WAYBACK_DATE=${WAYBACK_DATE} fai ${VERBOSE} -C ${FAI_CONF_DIR} -s file:///${GRML_FAI_CONFIG}/config -c${CLASSES} -u ${HOSTNAME} ${FAI_ACTION} ${CHROOT_OUTPUT} ${FAI_ARGS}" \
+    fai_cmdline="BUILD_ONLY=${BUILD_ONLY} BOOTSTRAP_ONLY=${BOOTSTRAP_ONLY} GRML_LIVE_CONFIG=${CONFIGDUMP} WAYBACK_DATE=${WAYBACK_DATE} fai ${VERBOSE} -C ${FAI_CONF_DIR} -s file:///${GRML_FAI_CONFIG} -c${CLASSES} -u ${HOSTNAME} ${FAI_ACTION} ${CHROOT_OUTPUT} ${FAI_ARGS}" \
     fai_version="$(fai --help 2>/dev/null | head -1 | awk '{print $2}' | sed 's/\.$//' || true)" \
     grml_architecture="${ARCH}" \
     grml_bootid="${BOOTID}" \

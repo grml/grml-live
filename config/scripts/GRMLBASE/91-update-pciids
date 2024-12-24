@@ -1,0 +1,47 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/GRMLBASE/91-update-pciids
+# Purpose:       update pciids
+# Authors:       (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+if ifclass NO_ONLINE ; then
+  echo "Ignoring script 91-update-pciids as NO_ONLINE is set."
+  exit 0
+fi
+
+set -u
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+bailout() {
+  if [ "${1:-}" = "4" ] || [ "${1:-}" = "1" ] ; then
+    echo "Warning: update-pciids returned with exit code ${1:-}." >&2
+
+    # be verbose in logs
+    echo "Warning: update-pciids returned with exit code ${1:-}."
+    echo "-> This indicates that networking inside the chroot did not work"
+    echo "   while GRMLBASE/91-update-pciids was running."
+    echo "   To address this issue you can either configure /etc/resolv.conf"
+    echo "   accordingly or just run dnsmasq on your host."
+
+    exit 0
+  fi
+
+  exit "${1:-0}"
+}
+
+
+if ! [ -x "${target}/usr/sbin/update-pciids" ] && ! [ -x "${target}/usr/bin/update-pciids" ] ; then
+  echo "Warning: update-pciids not installed (neither /usr/sbin/update-pciids nor /usr/bin/update-pciids exists"
+  exit 0
+fi
+
+echo "Updating PCI-IDs"
+$ROOTCMD timeout 10 update-pciids
+bailout $?
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

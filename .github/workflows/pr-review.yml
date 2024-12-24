@@ -21,8 +21,8 @@ jobs:
             grml-live
             scripts/*.sh
             remaster/grml-live-remaster
-            etc/grml/fai/config/hooks/*
-            etc/grml/fai/config/scripts/*
+            config/hooks/*
+            config/scripts/*
           check_all_files_with_shebangs: "false"
 
   shellcheck-tests:

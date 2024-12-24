@@ -1,0 +1,56 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/GRMLBASE/03-get-sources
+# Purpose:       download sources of Debian packages
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+if ifclass SOURCES ; then
+  echo "Class SOURCES set, retrieving source packages."
+else
+  echo "Class SOURCES not set, nothing to do."
+  exit 0
+fi
+
+set -u
+
+ERRORS_LOG=$(mktemp)
+SOURCES_PATH=/grml-live/grml_sources/
+
+bailout() {
+  rm -f "$ERRORS_LOG"
+}
+
+mkdir -p "${target}${SOURCES_PATH}"
+
+$ROOTCMD apt-get update
+
+# Collect *source* package names
+# shellcheck disable=SC2016 # Embedded $ is correct.
+$ROOTCMD dpkg-query -W -f='${Source} ${Package}\n' | sed -e 's/^ //' | awk '{ print $1 }' | sort -u | \
+  chroot "${target}" /bin/bash -c "cd \"${SOURCES_PATH}\" && xargs --max-args=32 --max-procs=12 apt-get --download-only source" 2> "${ERRORS_LOG}"
+
+if grep -q '^E:' "${ERRORS_LOG}" ; then
+  echo "Errors noticed while retrieving sources:" >&2
+  cat "${ERRORS_LOG}" >&2
+  bailout
+  exit 1
+elif grep -q '^W:' "${ERRORS_LOG}" ; then
+  echo "Warnings noticed while retrieving sources (not failing the build though):"
+  cat "${ERRORS_LOG}"
+elif grep -q '.' "${ERRORS_LOG}" ; then
+  echo "Unclassified problems noticed while retrieving sources:" >&2
+  cat "${ERRORS_LOG}" >&2
+  bailout
+  exit 1
+fi
+
+
+bailout
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

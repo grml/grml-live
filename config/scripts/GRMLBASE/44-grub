@@ -1,0 +1,28 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/GRMLBASE/44-grub
+# Purpose:       build grub core.img to use outside
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -e
+set -u
+
+$ROOTCMD mkdir -p /boot/grub
+
+if ifclass ARM64 ; then
+  echo "Skipping execution of script on ARM64"
+  exit 0
+fi
+
+# generate /boot/grub/core.img
+$ROOTCMD grub-mkimage \
+  -d /usr/lib/grub/i386-pc \
+  -p /boot/grub \
+  -o /boot/grub/core.img \
+  biosdisk iso9660 \
+  --format=i386-pc
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

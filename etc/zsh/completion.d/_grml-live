@@ -41,7 +41,7 @@ _grmllive_classes() { #{{{
     compset -P '*,'
     already=(${(s<,>)IPREFIX})
     _wanted list expl 'classe(s)' compadd -S, -F already -q ${expl} -- \
-        /etc/grml/fai/config/class/*(.N:t:r) ${static_classes}
+        /usr/share/grml-live/config/class/*(.N:t:r) ${static_classes}
 }
 #}}}
 _grmllive_suites() { #{{{
@@ -62,7 +62,7 @@ arguments=( #{{{
   '-c[available grml-live classes]:classe(s):_grmllive_classes'
   '-C[configuration file for grml-live]:configuration file:_files'
   '-d[use specified date instead of build time as date of release]:date:'
-  '-D[use specified configuration directory instead of /etc/grml/fai]:directory:_path_files -/'
+  '-D[use specified configuration directory instead of /usr/share/grml-live/config]:directory:_path_files -/'
   '-e[extract ISO and squashfs contents from iso_name]:ISO file:'
   '-F[force execution without prompting for yes/no]'
   '-g[grml flavour to use]:grml flavour(s):_grmllive_flavours'
