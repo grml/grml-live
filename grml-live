@@ -316,8 +316,8 @@ copy_addon_file() {
   return 1
 }
 
-# Usage: copy_optional_file_logged /path/to/destination/filename /sources /src1 ...
-copy_optional_file_logged() {
+# Usage: copy_file_logged /path/to/destination/filename /sources /src1 ...
+copy_file_logged() {
   local dest="$1"
   shift
   local source_root="$1"
@@ -331,6 +331,7 @@ copy_optional_file_logged() {
       return 0
     fi
   done
+  log "Not installing ${dest}, no source files found"
   return 1
 }
 
@@ -1808,7 +1809,7 @@ create_netbootpackage() {
       adjust_boot_files "${WORKING_DIR}/grub.cfg"
 
       if [ "$ARCH" = "amd64" ] ; then
-        if ! copy_optional_file_logged "${WORKING_DIR}"/shim.efi "${CHROOT_OUTPUT}" \
+        if ! copy_file_logged "${WORKING_DIR}"/shim.efi "${CHROOT_OUTPUT}" \
           /usr/lib/shim/shimx64.efi.signed \
           /usr/lib/shim/shimx64.efi
         then
@@ -1816,7 +1817,7 @@ create_netbootpackage() {
           ewarn "No shimx64.efi for usage with PXE boot found (shim-signed not present?)" ; eend 0
         fi
 
-        if ! copy_optional_file_logged "${WORKING_DIR}"/grubx64.efi "${CHROOT_OUTPUT}" \
+        if ! copy_file_logged "${WORKING_DIR}"/grubx64.efi "${CHROOT_OUTPUT}" \
           /usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed \
           /usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi
         then
@@ -1825,7 +1826,7 @@ create_netbootpackage() {
         fi
 
         # UEFI 32bit boot
-        if ! copy_optional_file_logged "${WORKING_DIR}"/grubia32.efi "${CHROOT_OUTPUT}" \
+        if ! copy_file_logged "${WORKING_DIR}"/grubia32.efi "${CHROOT_OUTPUT}" \
           /usr/lib/grub/i386-efi-signed/grubnetia32.efi.signed \
           /usr/lib/grub/i386-efi/monolithic/grubnetia32.efi
         then
@@ -1835,7 +1836,7 @@ create_netbootpackage() {
       fi
 
       if [ "$ARCH" = "arm64" ] ; then
-        if ! copy_optional_file_logged "${WORKING_DIR}"/shim.efi "${CHROOT_OUTPUT}" \
+        if ! copy_file_logged "${WORKING_DIR}"/shim.efi "${CHROOT_OUTPUT}" \
           /usr/lib/shim/shimaa64.efi.signed \
           /usr/lib/shim/shimaa64.efi
         then
@@ -1843,7 +1844,7 @@ create_netbootpackage() {
           ewarn "No shimaa64.efi for usage with PXE boot found (shim-signed not present?)" ; eend 0
         fi
 
-        if ! copy_optional_file_logged "${WORKING_DIR}"/grubaa64.efi "${CHROOT_OUTPUT}" \
+        if ! copy_file_logged "${WORKING_DIR}"/grubaa64.efi "${CHROOT_OUTPUT}" \
           /usr/lib/grub/arm64-efi-signed/grubnetaa64.efi.signed \
           /usr/lib/grub/arm64-efi/monolithic/grubnetaa64.efi
         then
