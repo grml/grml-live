@@ -1241,10 +1241,11 @@ else
     log   "Installing boot addons."
     einfo "Installing boot addons."
 
-    # copy addons from system packages or grml-live-addons
-    copy_addon_file ipxe.lkrn /usr/lib/ipxe addons
-    copy_addon_file ipxe.efi /usr/lib/ipxe addons
-    copy_addon_file pci.ids /usr/share/misc addons
+    # copy from chroot-installed packages
+    copy_file_logged "${BUILD_OUTPUT}"/boot/addons/ipxe.lkrn "${CHROOT_OUTPUT}" /usr/lib/ipxe/ipxe.lkrn
+    copy_file_logged "${BUILD_OUTPUT}"/boot/addons/ipxe.efi "${CHROOT_OUTPUT}" /usr/lib/ipxe/ipxe.efi
+    # only for syslinux hdt?
+    copy_file_logged "${BUILD_OUTPUT}"/boot/addons/pci.ids "${CHROOT_OUTPUT}" /usr/share/misc/pci.ids
 
     # memtest86+ >=6.00-1
     if [[ "$ARCH" == "amd64" ]] ; then
