@@ -1287,19 +1287,6 @@ else
          "${BUILD_OUTPUT}/boot/addons/memtest"
     fi
 
-    if [ "$ARCH" != "arm64" ] ; then
-      # since syslinux(-common) v3:6.03~pre1+dfsg-4 the files are in a
-      # different directory :(
-      if [ -d "${CHROOT_OUTPUT}/usr/lib/syslinux/modules/bios/" ] ; then
-        syslinux_modules_dir=/usr/lib/syslinux/modules/bios/
-      else
-        syslinux_modules_dir=/usr/lib/syslinux
-      fi
-      for file in chain.c32 hdt.c32 mboot.c32 menu.c32; do
-        copy_addon_file "${file}" "${syslinux_modules_dir}" addons
-      done
-    fi
-
     # copy only files and report which ones are installed
     if [ -d "${TEMPLATE_DIRECTORY}/arch/${ARCH}/boot/addons" ] ; then
       for file in "${TEMPLATE_DIRECTORY}/arch/${ARCH}/boot/addons/"* ; do
