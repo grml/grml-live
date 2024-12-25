@@ -1219,17 +1219,15 @@ else
 
   if [ "$ARCH" != "arm64" ] ; then
     # copy _required_ isolinux files
-    mkdir -p "$BUILD_OUTPUT"/boot/isolinux
-    if [ -d "${CHROOT_OUTPUT}/usr/lib/ISOLINUX" ] ; then
-      copy_addon_file isolinux.bin /usr/lib/ISOLINUX isolinux
-      for file in "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/*.c32 ; do
-        copy_addon_file "$(basename "$file")"  /usr/lib/syslinux/modules/bios/ isolinux
-      done
-    fi
+    mkdir -p "${BUILD_OUTPUT}"/boot/isolinux
+    copy_file_logged "${BUILD_OUTPUT}"/boot/isolinux/isolinux.bin "${CHROOT_OUTPUT}" /usr/lib/ISOLINUX/isolinux.bin
+    for file in "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/*.c32 ; do
+      copy_file_logged "${BUILD_OUTPUT}"/boot/isolinux/"$(basename "$file")" "${CHROOT_OUTPUT}" "$file"
+    done
 
     # *always* copy files to output directory so the variables
     # get adjusted according to the build.
-    cp "${TEMPLATE_DIRECTORY}"/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
+    cp "${TEMPLATE_DIRECTORY}"/boot/isolinux/* "${BUILD_OUTPUT}"/boot/isolinux/
   fi
 
   mkdir -p "${BUILD_OUTPUT}/boot/grub"
