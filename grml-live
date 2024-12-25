@@ -1222,7 +1222,14 @@ else
     mkdir -p "${BUILD_OUTPUT}"/boot/isolinux
     copy_file_logged "${BUILD_OUTPUT}"/boot/isolinux/isolinux.bin "${CHROOT_OUTPUT}" /usr/lib/ISOLINUX/isolinux.bin
     for file in "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/*.c32 ; do
-      copy_file_logged "${BUILD_OUTPUT}"/boot/isolinux/"$(basename "$file")" "${CHROOT_OUTPUT}" "$file"
+      file_basename=$(basename "$file")
+      # Skip "big" files we do not use.
+      if [ "$file_basename" != "zzjson.c32" ] && \
+         [ "$file_basename" != "lua.c32" ] && \
+         [ "$file_basename" != "liblua.c32" ] && \
+         [[ "$file_basename" != *test.c32 ]] ; then
+        copy_file_logged "${BUILD_OUTPUT}"/boot/isolinux/"$file_basename" "${CHROOT_OUTPUT}" "$file"
+      fi
     done
 
     # *always* copy files to output directory so the variables
