@@ -29,7 +29,9 @@ grml-tips
 grml-udev-config
 hdparm
 hwinfo
+ifupdown
 initramfs-tools
+iputils-ping
 kbd
 less
 live-boot-grml live-boot-grml-doc
