@@ -169,9 +169,9 @@ People:
     {}
 ------------------------------------------------------------------------
 """.format(
-        "\n    ".join(debian_changes["added"]).strip(),
-        "\n    ".join(debian_changes["changed"]).strip(),
-        "\n    ".join(debian_changes["removed"]).strip(),
+        "\n    ".join(sorted(debian_changes["added"])).strip(),
+        "\n    ".join(sorted(debian_changes["changed"])).strip(),
+        "\n    ".join(sorted(debian_changes["removed"])).strip(),
     )
 
     output_filename.write_text(changelog)
