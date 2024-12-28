@@ -335,7 +335,7 @@ def download_old_dpkg_list_last_release(tmp_dir: Path, last_release_version: str
         return None
 
     path = tmp_dir / "dpkg.list.previous_release"
-    url = f"https://ftp-master.grml.org/grml-{last_release_version}-metadata/grml-full-{last_release_version}-{arch}/dpkg.list"
+    url = f"https://ftp-master.grml.org/grml-{last_release_version}-metadata/grml-{flavor}-{last_release_version}-{arch}/dpkg.list"
     with ci_section(f"Downloading old dpkg.list {url} to {path!s}"):
         try:
             download_file(url, path)
