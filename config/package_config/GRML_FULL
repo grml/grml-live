@@ -322,7 +322,6 @@ xterm
 
 # x86 hardware support
 acpi
-acpi-support
 irqbalance
 lm-sensors
 lshw
