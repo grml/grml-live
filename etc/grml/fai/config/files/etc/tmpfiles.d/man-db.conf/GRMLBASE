@@ -1,6 +1,0 @@
-# This file was deployed via grml-live's
-# ${GRML_FAI_CONFIG}/config/scripts/GRMLBASE/85-systemd script, using
-# ${GRML_FAI_CONFIG}/config/files/etc/tmpfiles.d/man-db.conf/GRMLBASE
-
-# Override default (age set to 1w) to avoid disappearing mandb caches
-d /var/cache/man 0755 man man -

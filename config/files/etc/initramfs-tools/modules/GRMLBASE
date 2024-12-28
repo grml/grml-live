@@ -1,0 +1,28 @@
+# This file was deployed via grml-live's
+# ${GRML_FAI_CONFIG}/scripts/GRMLBASE/80-initramfs script, using
+# ${GRML_FAI_CONFIG}/files/etc/initramfs-tools/modules/GRMLBASE
+################################################################################
+# List of modules that you want to include in your initramfs.
+# They will be loaded at boot time in the order below.
+#
+# Syntax:  module_name [args ...]
+#
+# You must run update-initramfs(8) to effect this change.
+#
+# Examples:
+#
+# raid1
+# sd_mod
+
+# workaround for broken netboot images, see
+# https://bugs.debian.org/1022172 +
+# https://github.com/grml/grml/issues/192
+auth_rpcgss
+grace
+lockd
+nfs
+nfs_acl
+nfsv3
+rpcrdma
+rpcsec_gss_krb5
+sunrpc

@@ -1,0 +1,25 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/LATEX/98-clean-chroot
+# Purpose:       remove some large LaTeX documentation directories
+# Authors:       (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+rm -rf "${target}"/usr/share/doc/texlive-latex-recommended/latex/ \
+       "${target}"/usr/share/doc/texlive-latex-base/latex/ \
+       "${target}"/usr/share/doc/texlive-base-bin/pdftex/thanh/ \
+       "${target}"/usr/share/doc/texlive-latex-base/latex/base/ \
+       "${target}"/usr/share/doc/texlive-latex-base/latex/hyperref/ \
+       "${target}"/usr/share/doc/texlive-latex-base/generic/babel/ \
+       "${target}"/usr/share/doc/texlive-latex-recommended/latex/koma-script/ \
+       "${target}"/usr/share/doc/texmf/pgf/pgfmanual.pdf.gz
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

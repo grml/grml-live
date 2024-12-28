@@ -33,4 +33,4 @@ override_dh_clean:
 override_dh_fixperms:
 	dh_fixperms
 	# make sure they are executable:
-	chmod 755 debian/grml-live/etc/grml/fai/config/hooks/*
+	chmod 755 debian/grml-live/usr/share/grml-live/config/hooks/*

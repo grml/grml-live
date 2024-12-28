@@ -1,0 +1,18 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/GRMLBASE/51-cloud-init
+# Purpose:       configure cloud-init package
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# NOTE: this file is relevant only with cloud-init package installed,
+# though we install it unconditionally via GRMLBASE class to have it
+# available and configured as shipped by Grml ISOs
+fcopy -M -v /etc/cloud/cloud.cfg.d/42_grml.cfg
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

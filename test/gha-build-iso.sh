@@ -8,9 +8,9 @@ set -euxo pipefail
 
 MODE=$1
 
-# Install as little Debian packages as possible,
+# Install as few Debian packages as possible,
 # we do not want to test *Debian*.
-cat > etc/grml/fai/config/package_config/GRML_GHACI <<EOT
+cat > config/package_config/GRML_GHACI <<EOT
 PACKAGES install AMD64
 linux-image-amd64
 
