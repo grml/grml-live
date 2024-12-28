@@ -64,12 +64,6 @@ if [ -n "$BOOTSTRAP_ONLY" ] ; then
   skiptask configure
 fi
 
-# work around #632624: udev fails to install on systems with old kernel versions
-if ! [ -e "${target}"/etc/udev/kernel-upgrade ] ; then
-  echo "Working around udev package bug, creating /etc/udev/kernel-upgrade"
-  echo "# installed via updatebase.GRMLBASE" > "${target}"/etc/udev/kernel-upgrade
-fi
-
 # install all apt related files
 fcopy -M -i -B -v -r /etc/apt
 
