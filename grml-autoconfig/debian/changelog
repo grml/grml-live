@@ -1,3 +1,10 @@
+grml-autoconfig (0.23.4) grml-testing; urgency=medium
+
+  * [4be463b] Drop CONSOLEFONT setting
+  * [1fb22af] Drop KDEKEYBOARD, KDEKEYBOARDS
+
+ -- Chris Hofstaedtler <ch@grml.org>  Mon, 30 Dec 2024 14:23:06 +0100
+
 grml-autoconfig (0.23.3) grml-testing; urgency=medium
 
   [ Chris Hofstaedtler ]
