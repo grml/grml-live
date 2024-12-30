@@ -104,10 +104,6 @@ if ! [ -f /etc/fstab ] ; then
   cat > /etc/fstab << EOF
 # /etc/fstab - static file system information
 # <filesystem> <mountpoint>   <type> <options>                             <dump> <pass>
-proc           /proc          proc   rw,nosuid,nodev,noexec                 0      0
-none           /proc/bus/usb  usbfs  defaults,noauto                        0      0
-sysfs          /sys           sysfs  rw,nosuid,nodev,noexec                 0      0
-devpts         /dev/pts       devpts noauto,mode=0622                       0      0
 /dev/external  ${MOUNTPOINT_PREFIX}/external  auto   user,noauto,exec,rw,uid=grml,gid=grml  0      0
 /dev/external1 ${MOUNTPOINT_PREFIX}/external1 auto   user,noauto,exec,rw,uid=grml,gid=grml  0      0
 /dev/cdrom     ${MOUNTPOINT_PREFIX}/cdrom     auto   user,noauto,exec,ro                    0      0
