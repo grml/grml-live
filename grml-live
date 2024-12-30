@@ -274,48 +274,6 @@ hasclass() {
   return 1
 }
 
-# Copy addonfile $1 from either
-#   * the chroot (via $2, the system path),
-#   * or from TEMPLATE_DIRECTORY/compat (if exists),
-#   * or from the host system (again, using $2),
-# or warn about the missing file.
-#
-# This is because:
-#   * We assume that the chroot always has a "good" version of
-#     the file. Also it makes sources handling easier.
-#   * On unstable, we recommend the Debian packages containing
-#     these files. The user can override them by putting his
-#     "better" version into the chroot.
-#   * With older releases the Debian packages are probably
-#     not available, so we look in TEMPLATE_DIRECTORY/compat,
-#     where a (custom) package might install current file versions.
-copy_addon_file() {
-  DEST="${BUILD_OUTPUT}/boot/$3"
-  if [ ! -d "${DEST}/" ]; then
-    mkdir -p "${DEST}"
-  fi
-  if [ -e "$CHROOT_OUTPUT/$2/$1" ]; then
-    log   "Copying $1 from chroot"
-    cp "$CHROOT_OUTPUT/$2/$1" "${DEST}/"
-    return $?
-  fi
-  if [ -e "${TEMPLATE_DIRECTORY}/compat/$3/$1" ]; then
-    log   "Copying $1 from ${TEMPLATE_DIRECTORY}/compat"
-    cp "${TEMPLATE_DIRECTORY}/compat/$3/$1" "${DEST}/"
-    return $?
-  fi
-  if [ -e "$2/$1" ]; then
-    log   "Copying $1 from system"
-    cp "$2/$1" "${DEST}/"
-    return $?
-  fi
-
-  msg="Missing addon file: \"$1\""
-  ewarn "$msg" ; eend 1
-  log "copy_addon_file: $msg"
-  return 1
-}
-
 # Usage: copy_file_logged /path/to/destination/filename /sources /src1 ...
 copy_file_logged() {
   local dest="$1"
