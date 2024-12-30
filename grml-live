@@ -1768,23 +1768,15 @@ create_netbootpackage() {
   cp "${CHROOT_OUTPUT}"/boot/initrd.img-* "$WORKING_DIR"/initrd.img
 
   if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "i386" ] ; then
-    # since syslinux v3:6.03~pre1+dfsg-4 the pxelinux.0 has been split into a
-    # separate pxelinux package
-    if [ -d "${CHROOT_OUTPUT}/usr/lib/PXELINUX/" ] ; then
-      local pxelinux_dir=/usr/lib/PXELINUX
-    else
-      local pxelinux_dir=/usr/lib/syslinux
-    fi
-
-    if ! [ -r "${CHROOT_OUTPUT}/${pxelinux_dir}/pxelinux.0" ] ; then
-      ewarn "File ${pxelinux_dir}/pxelinux.0 not found in build chroot." ; eend 0
+    if ! [ -r "${CHROOT_OUTPUT}/usr/lib/PXELINUX/pxelinux.0" ] ; then
+      ewarn "File /usr/lib/PXELINUX/pxelinux.0 not found in build chroot." ; eend 0
       eindent
       einfo "Install syslinux[-common]/pxelinux package in chroot to get a netboot package."
       eoutdent
       return 0
     fi
 
-    cp "${CHROOT_OUTPUT}/${pxelinux_dir}/pxelinux.0" "${WORKING_DIR}/pxelinux.0"
+    cp "${CHROOT_OUTPUT}/usr/lib/PXELINUX/pxelinux.0" "${WORKING_DIR}/pxelinux.0"
 
     if [ -r "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/ldlinux.c32 ] ; then
       cp "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/ldlinux.c32 "${WORKING_DIR}"/
