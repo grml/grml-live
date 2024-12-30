@@ -49,6 +49,7 @@ wipe
 
 # editors
 ed
+vim-tiny
 xxd
 
 # filesystem support
