@@ -1235,6 +1235,9 @@ else
     # *always* copy files to output directory so the variables
     # get adjusted according to the build.
     cp "${TEMPLATE_DIRECTORY}"/boot/isolinux/* "${BUILD_OUTPUT}"/boot/isolinux/
+
+    # only for syslinux hdt.
+    copy_file_logged "${BUILD_OUTPUT}"/boot/addons/pci.ids "${CHROOT_OUTPUT}" /usr/share/misc/pci.ids
   fi
 
   mkdir -p "${BUILD_OUTPUT}/boot/grub"
@@ -1251,8 +1254,6 @@ else
     # copy from chroot-installed packages
     copy_file_logged "${BUILD_OUTPUT}"/boot/addons/ipxe.lkrn "${CHROOT_OUTPUT}" /usr/lib/ipxe/ipxe.lkrn
     copy_file_logged "${BUILD_OUTPUT}"/boot/addons/ipxe.efi "${CHROOT_OUTPUT}" /usr/lib/ipxe/ipxe.efi
-    # only for syslinux hdt?
-    copy_file_logged "${BUILD_OUTPUT}"/boot/addons/pci.ids "${CHROOT_OUTPUT}" /usr/share/misc/pci.ids
 
     # memtest86+ >=6.00-1
     if [[ "$ARCH" == "amd64" ]] ; then
