@@ -1257,24 +1257,18 @@ else
 
     # memtest86+ >=6.00-1
     if [[ "$ARCH" == "amd64" ]] ; then
-      copy_addon_file memtest86+x64.efi /boot addons
+      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest86+x64.efi "${CHROOT_OUTPUT}" /boot/memtest86+x64.efi
     elif [[ "$ARCH" == "i386" ]] ; then
-      copy_addon_file memtest86+ia32.efi /boot addons
+      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest86+ia32.efi "${CHROOT_OUTPUT}" /boot/memtest86+ia32.efi
     fi
 
     # provide memtest86+ >=6.00-1 files as "memtest" file
     # for BIOS boot in isolinux/syslinux
     if ! [ -r "${BUILD_OUTPUT}/boot/addons/memtest" ] ; then
       if [[ "$ARCH" == "amd64" ]] ; then
-        copy_addon_file memtest86+x64.bin /boot addons &&
-        # make memtest filename FAT16/8.3 compatible
-        mv "${BUILD_OUTPUT}/boot/addons/memtest86+x64.bin" \
-           "${BUILD_OUTPUT}/boot/addons/memtest"
+        copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest "${CHROOT_OUTPUT}" /boot/memtest86+x64.bin
       elif [[ "$ARCH" == "i386" ]] ; then
-        copy_addon_file memtest86+ia32.bin /boot addons &&
-        # make memtest filename FAT16/8.3 compatible
-        mv "${BUILD_OUTPUT}/boot/addons/memtest86+ia32.bin" \
-           "${BUILD_OUTPUT}/boot/addons/memtest"
+        copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest "${CHROOT_OUTPUT}" /boot/memtest86+ia32.bin
       fi
     fi
 
@@ -1282,10 +1276,7 @@ else
     # might have an older memtest86+ version (<=5.01-3.1) which ships
     # file "memtest86+.bin" instead
     if ! [ -r "${BUILD_OUTPUT}/boot/addons/memtest" ] ; then
-      copy_addon_file memtest86+.bin /boot addons &&
-      # make memtest filename FAT16/8.3 compatible
-      mv "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" \
-         "${BUILD_OUTPUT}/boot/addons/memtest"
+      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest "${CHROOT_OUTPUT}" /boot/memtest86+.bin
     fi
 
     # copy only files and report which ones are installed
