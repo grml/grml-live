@@ -1215,6 +1215,8 @@ else
     bailout 8
   fi
 
+  mkdir -p "${BUILD_OUTPUT}"/boot/addons
+
   if [ "$ARCH" != "arm64" ] ; then
     # copy _required_ isolinux files
     mkdir -p "$BUILD_OUTPUT"/boot/isolinux
