@@ -1585,7 +1585,7 @@ generate_build_info() {
 
 BOOT_ARGS="-no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat"
 if [ "$HYBRID_METHOD" = "isohybrid" ] ; then
-  EFI_ARGS="-isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin -eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
+  EFI_ARGS="-isohybrid-mbr ${CHROOT_OUTPUT}/usr/lib/ISOLINUX/isohdpfx.bin -eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
 fi
 if [ "$ARCH" = "arm64" ]; then
   # No isolinux on arm64.
