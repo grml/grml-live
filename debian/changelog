@@ -1,3 +1,9 @@
+grml-udev-config (0.6.3) unstable; urgency=medium
+
+  * [833f100] etc/fstab: drop examples handled by systemd
+
+ -- Chris Hofstaedtler <ch@grml.org>  Mon, 30 Dec 2024 14:23:36 +0100
+
 grml-udev-config (0.6.2) unstable; urgency=medium
 
   [ Chris Hofstaedtler ]
