@@ -1289,8 +1289,6 @@ else
       for file in chain.c32 hdt.c32 mboot.c32 menu.c32; do
         copy_addon_file "${file}" "${syslinux_modules_dir}" addons
       done
-
-      copy_addon_file memdisk /usr/lib/syslinux addons
     fi
 
     # copy only files and report which ones are installed
