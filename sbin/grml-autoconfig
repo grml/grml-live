@@ -53,7 +53,6 @@ check_current_state()
 {
   is_set $CONFIG_FSTAB      && FSTABSTATUS=ON    || FSTABSTATUS=OFF
   is_set $CONFIG_CPU        && CPUSTATUS=ON      || CPUSTATUS=OFF
-  is_set $CONFIG_SYSLOG     && SYSLOGSTATUS=ON   || SYSLOGSTATUS=OFF
   is_set $CONFIG_GPM        && GPMSTATUS=ON      || GPMSTATUS=OFF
 }
 
@@ -76,7 +75,6 @@ settings in /etc/network/interfaces, it just configures grml-autoconfig
 " 0 0 0 \
 fstab "update /etc/fstab entries (check for devices)" $FSTABSTATUS \
 cpufreq "activate cpu frequency scaling" $CPUSTATUS \
-syslog "start syslog-ng" $SYSLOGSTATUS \
 gpm "start GPM (mouse on console)" $GPMSTATUS \
   2>$TMPFILE
 }
@@ -85,7 +83,6 @@ set_values()
 {
   check_setting fstab     && activate_value CONFIG_FSTAB=    || deactivate_value CONFIG_FSTAB=
   check_setting cpufreq   && activate_value CONFIG_CPU=      || deactivate_value CONFIG_CPU=
-  check_setting syslog    && activate_value CONFIG_SYSLOG=   || deactivate_value CONFIG_SYSLOG=
   check_setting gpm       && activate_value CONFIG_GPM=      || deactivate_value CONFIG_GPM=
 }
 
