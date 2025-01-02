@@ -274,7 +274,13 @@ hasclass() {
   return 1
 }
 
-# Usage: copy_file_logged /path/to/destination/filename /sources /src1 ...
+# Usage:
+#   copy_file_logged /destination/filename /tree /src1 /src2 ...
+# This copies one of the given files /src1 *or* /src2 or ..., which
+# should exist inside /tree. The first matching file will be copied
+# and be named /destination/filename.
+# If none of the source files are found, 1 will be returned. Callers
+# may opt into checking that.
 copy_file_logged() {
   local dest="$1"
   shift
