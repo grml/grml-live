@@ -32,9 +32,6 @@ CONFIG_FSTAB_USER='grml'
 # define guid for rebuildfstab used in /etc/fstab (default: users):
 CONFIG_FSTAB_GROUP='users'
 
-# start syslog-ng (default: yes)
-CONFIG_SYSLOG='yes'
-
 # start gpm (default: yes)
 CONFIG_GPM='yes'
 
