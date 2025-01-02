@@ -13,3 +13,4 @@ templates/boot/isolinux     usr/share/grml-live/templates/boot/
 templates/secureboot        usr/share/grml-live/templates/
 templates/wallpaper         usr/share/grml-live/templates/
 templates/windows           usr/share/grml-live/templates/
+usr/share/zsh/vendor-completions/_grml-live usr/share/zsh/vendor-completions/
