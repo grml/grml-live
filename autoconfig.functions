@@ -897,18 +897,6 @@ config_mixer () {
 }
 # }}}
 
-# {{{ syslog service
-config_syslog(){
- if checkbootparam 'nosyslog'; then
-    ewarn "Not starting syslog daemon as requested on boot commandline." ; eend 0
- else
-    einfo "Starting rsyslog in background."
-    service_wrapper rsyslog start >>$DEBUG
-    eend 0
- fi
-}
-# }}}
-
 # {{{ gpm
 config_gpm(){
   if checkbootparam 'nogpm'; then

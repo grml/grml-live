@@ -29,7 +29,6 @@ Depends:
  grml-scripts (>= 0.8-14),
  kbd | console-utilities,
  rsync,
- rsyslog | system-log-daemon,
  udev,
  util-linux-extra | util-linux (<= 2.38-1),
  zsh,
