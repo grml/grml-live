@@ -146,5 +146,8 @@ if [ -L "${target}"/usr/sbin/invoke-rc.d ] ; then
    $ROOTCMD dpkg-divert --package fai --rename --remove /usr/sbin/invoke-rc.d
 fi
 
+echo "[instsoft] Removing FAI diversion of /sbin/init to avoid Debian bug #1056151 for fai < 6.2.3"
+fai-divert -r /sbin/init || true
+
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
