@@ -1,3 +1,40 @@
+grml-live (0.51.0) grml-testing; urgency=medium
+
+  Big update, moves /etc/grml/fai/config to /usr/share/grml-live/config.
+  Please read the NEWS file for additional info.
+
+  * [f975ccf] 49-sshd: create dropin file instead of using sed
+  * [61be585] ttys: set WorkingDirectory to $HOME
+  * [b8af655] console-setup: create setupcon cache
+  * [e75a1f4] Switch from ftp.debian.org to deb.debian.org
+  * [20dbb1f] Drop sources.list for DEBIAN_ETCH
+  * [475cabc] Remove file-rc leftovers
+  * [52a7fa3] Remove workaround for modesetting on cirrusfb
+  * [8e46752] Drop workaround for bug in udev 168-1
+  * [2d541ae] Remove vmwgfx enable_fbdev option
+  * [0cf42f9] Drop deprecation warning for GRML_LIVE_SOURCES
+  * [ba9342a] Remove support for ZERO_LOGFILE
+  * [703b53f] fai.conf: autogenerate, treat as internal detail
+  * [f1dc42a] Move /etc/grml/fai/config into /usr/share/grml-live/config
+  * [7d561ff] Remove unused/obsolete FAI settings
+  * [3a3a7f9] updatebase.GRMLBASE: remove ineffective udev workaround
+  * [fe1c640] SW: GRML_FULL: drop acpi-support
+  * [2e2f4af] generate-changes-list: sort debian package changes
+  * [3f9f887] build-driver: use dpkg.list from same flavor
+  * [c84d711] SW: reduce basefiles tarball to Priority: required
+  * [5673e58] SW: stop installing rsyslog
+  * [2997248] Stop installing memdisk
+  * [6c50960] GRMLBASE/15-initsetup: init journald catalog cache at build time
+  * [3edbed0] etc/fstab: drop examples handled by systemd
+  * [642340d] GRMLBASE/21-usersetup: remove grep of group file
+  * [3ed439e] grub: remove nonfunctional memtest86 bios-mode selection
+  * [0509080] grml-live: remove check for syslinux from before oldoldstable
+  * [ef74174] Workaround /sbin/init vanishing, Debian bug #1056151
+  * [dc22f36] apt/preferences: move into /etc/apt/preferences.d
+  * [23db83a] Install zsh completion into /usr/share instead of /etc
+
+ -- Chris Hofstaedtler <ch@grml.org>  Sat, 04 Jan 2025 00:34:32 +0100
+
 grml-live (0.50.1) grml-testing; urgency=medium
 
   The "Adventgrenze for real" release
