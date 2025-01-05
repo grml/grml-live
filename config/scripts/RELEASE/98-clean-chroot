@@ -29,10 +29,6 @@ rm -f "$target"/var/lib/apt/lists/*Packages \
 echo "Removing /var/lib/aptitude/pkgstates.old"
 rm -f "$target"/var/lib/aptitude/pkgstates.old
 
-# Remove all FAI logs from chroot via grml-live later then
-echo "Setting up /etc/grml_fai_release for grml-live"
-touch "$target"/etc/grml_fai_release
-
 echo "Removing all files inside /root"
 rm -rf "$target"/root
 mkdir -m 0755 "$target"/root
