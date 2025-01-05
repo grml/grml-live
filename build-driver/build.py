@@ -116,7 +116,16 @@ def run_grml_live(
             basefiles_path = grml_fai_config / "basefiles"
             basefiles_path.mkdir(exist_ok=True)
             basefile = basefiles_path / f"{arch.upper()}.tar.gz"
-            run_x(["mmdebstrap", "--format=tar", "--variant=required", "--verbose", debian_suite, basefile])
+            args = [
+                "mmdebstrap",
+                "--format=tar",
+                "--variant=required",
+                "--verbose",
+                "--include=netbase",
+                debian_suite,
+                basefile,
+            ]
+            run_x(args)
 
     grml_live_cmd = [
         grml_live_path / "grml-live",
