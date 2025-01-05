@@ -1,27 +1,11 @@
-# sudoers file.
-# This file MUST be edited with the "visudo" command as root.
-# See the man page for details on how to write a sudoers file.
-
 # This file was deployed via grml-live's
 # ${GRML_FAI_CONFIG}/scripts/GRMLBASE/20-sudo script, using
-# ${GRML_FAI_CONFIG}/files/etc/sudoers/GRMLBASE
-
-# Host alias specification
-
-# User alias specification
-
-# Cmnd alias specification
-
-# User privilege specification
-root    ALL=(ALL) ALL
+# ${GRML_FAI_CONFIG}/files/etc/sudoers.d/user-nopasswd/GRMLBASE
 
 # WARNING: This allows the unprivileged $USERNAME user to start commands as root
 # WARNING: This is totally insecure and (almost) makes $USERNAME a second root account.
 # WARNING: Never allow external access to the $USERNAME user!!!
 $USERNAME    ALL=NOPASSWD: ALL
-
-# Path used for every command run from sudo
-Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # allow editing of files with editor:
 # $USERNAME ALL=NOPASSWD: sudoedit
