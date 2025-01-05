@@ -274,50 +274,14 @@ hasclass() {
   return 1
 }
 
-# Copy addonfile $1 from either
-#   * the chroot (via $2, the system path),
-#   * or from TEMPLATE_DIRECTORY/compat (if exists),
-#   * or from the host system (again, using $2),
-# or warn about the missing file.
-#
-# This is because:
-#   * We assume that the chroot always has a "good" version of
-#     the file. Also it makes sources handling easier.
-#   * On unstable, we recommend the Debian packages containing
-#     these files. The user can override them by putting his
-#     "better" version into the chroot.
-#   * With older releases the Debian packages are probably
-#     not available, so we look in TEMPLATE_DIRECTORY/compat,
-#     where a (custom) package might install current file versions.
-copy_addon_file() {
-  DEST="${BUILD_OUTPUT}/boot/$3"
-  if [ ! -d "${DEST}/" ]; then
-    mkdir -p "${DEST}"
-  fi
-  if [ -e "$CHROOT_OUTPUT/$2/$1" ]; then
-    log   "Copying $1 from chroot"
-    cp "$CHROOT_OUTPUT/$2/$1" "${DEST}/"
-    return $?
-  fi
-  if [ -e "${TEMPLATE_DIRECTORY}/compat/$3/$1" ]; then
-    log   "Copying $1 from ${TEMPLATE_DIRECTORY}/compat"
-    cp "${TEMPLATE_DIRECTORY}/compat/$3/$1" "${DEST}/"
-    return $?
-  fi
-  if [ -e "$2/$1" ]; then
-    log   "Copying $1 from system"
-    cp "$2/$1" "${DEST}/"
-    return $?
-  fi
-
-  msg="Missing addon file: \"$1\""
-  ewarn "$msg" ; eend 1
-  log "copy_addon_file: $msg"
-  return 1
-}
-
-# Usage: copy_optional_file_logged /path/to/destination/filename /sources /src1 ...
-copy_optional_file_logged() {
+# Usage:
+#   copy_file_logged /destination/filename /tree /src1 /src2 ...
+# This copies one of the given files /src1 *or* /src2 or ..., which
+# should exist inside /tree. The first matching file will be copied
+# and be named /destination/filename.
+# If none of the source files are found, 1 will be returned. Callers
+# may opt into checking that.
+copy_file_logged() {
   local dest="$1"
   shift
   local source_root="$1"
@@ -331,6 +295,7 @@ copy_optional_file_logged() {
       return 0
     fi
   done
+  log "Not installing ${dest}, no source files found"
   return 1
 }
 
@@ -1214,19 +1179,29 @@ else
     bailout 8
   fi
 
+  mkdir -p "${BUILD_OUTPUT}"/boot/addons
+
   if [ "$ARCH" != "arm64" ] ; then
     # copy _required_ isolinux files
-    mkdir -p "$BUILD_OUTPUT"/boot/isolinux
-    if [ -d "${CHROOT_OUTPUT}/usr/lib/ISOLINUX" ] ; then
-      copy_addon_file isolinux.bin /usr/lib/ISOLINUX isolinux
-      for file in "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/*.c32 ; do
-        copy_addon_file "$(basename "$file")"  /usr/lib/syslinux/modules/bios/ isolinux
-      done
-    fi
+    mkdir -p "${BUILD_OUTPUT}"/boot/isolinux
+    copy_file_logged "${BUILD_OUTPUT}"/boot/isolinux/isolinux.bin "${CHROOT_OUTPUT}" /usr/lib/ISOLINUX/isolinux.bin
+    for file in "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/*.c32 ; do
+      file_basename=$(basename "$file")
+      # Skip "big" files we do not use.
+      if [ "$file_basename" != "zzjson.c32" ] && \
+         [ "$file_basename" != "lua.c32" ] && \
+         [ "$file_basename" != "liblua.c32" ] && \
+         [[ "$file_basename" != *test.c32 ]] ; then
+        copy_file_logged "${BUILD_OUTPUT}"/boot/isolinux/"$file_basename" "${CHROOT_OUTPUT}" "$file"
+      fi
+    done
 
     # *always* copy files to output directory so the variables
     # get adjusted according to the build.
-    cp "${TEMPLATE_DIRECTORY}"/boot/isolinux/*  "$BUILD_OUTPUT"/boot/isolinux/
+    cp "${TEMPLATE_DIRECTORY}"/boot/isolinux/* "${BUILD_OUTPUT}"/boot/isolinux/
+
+    # only for syslinux hdt.
+    copy_file_logged "${BUILD_OUTPUT}"/boot/addons/pci.ids "${CHROOT_OUTPUT}" /usr/share/misc/pci.ids
   fi
 
   mkdir -p "${BUILD_OUTPUT}/boot/grub"
@@ -1240,31 +1215,24 @@ else
     log   "Installing boot addons."
     einfo "Installing boot addons."
 
-    # copy addons from system packages or grml-live-addons
-    copy_addon_file ipxe.lkrn /usr/lib/ipxe addons
-    copy_addon_file ipxe.efi /usr/lib/ipxe addons
-    copy_addon_file pci.ids /usr/share/misc addons
+    # copy from chroot-installed packages
+    copy_file_logged "${BUILD_OUTPUT}"/boot/addons/ipxe.lkrn "${CHROOT_OUTPUT}" /usr/lib/ipxe/ipxe.lkrn
+    copy_file_logged "${BUILD_OUTPUT}"/boot/addons/ipxe.efi "${CHROOT_OUTPUT}" /usr/lib/ipxe/ipxe.efi
 
     # memtest86+ >=6.00-1
     if [[ "$ARCH" == "amd64" ]] ; then
-      copy_addon_file memtest86+x64.efi /boot addons
+      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest86+x64.efi "${CHROOT_OUTPUT}" /boot/memtest86+x64.efi
     elif [[ "$ARCH" == "i386" ]] ; then
-      copy_addon_file memtest86+ia32.efi /boot addons
+      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest86+ia32.efi "${CHROOT_OUTPUT}" /boot/memtest86+ia32.efi
     fi
 
     # provide memtest86+ >=6.00-1 files as "memtest" file
     # for BIOS boot in isolinux/syslinux
     if ! [ -r "${BUILD_OUTPUT}/boot/addons/memtest" ] ; then
       if [[ "$ARCH" == "amd64" ]] ; then
-        copy_addon_file memtest86+x64.bin /boot addons &&
-        # make memtest filename FAT16/8.3 compatible
-        mv "${BUILD_OUTPUT}/boot/addons/memtest86+x64.bin" \
-           "${BUILD_OUTPUT}/boot/addons/memtest"
+        copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest "${CHROOT_OUTPUT}" /boot/memtest86+x64.bin
       elif [[ "$ARCH" == "i386" ]] ; then
-        copy_addon_file memtest86+ia32.bin /boot addons &&
-        # make memtest filename FAT16/8.3 compatible
-        mv "${BUILD_OUTPUT}/boot/addons/memtest86+ia32.bin" \
-           "${BUILD_OUTPUT}/boot/addons/memtest"
+        copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest "${CHROOT_OUTPUT}" /boot/memtest86+ia32.bin
       fi
     fi
 
@@ -1272,23 +1240,7 @@ else
     # might have an older memtest86+ version (<=5.01-3.1) which ships
     # file "memtest86+.bin" instead
     if ! [ -r "${BUILD_OUTPUT}/boot/addons/memtest" ] ; then
-      copy_addon_file memtest86+.bin /boot addons &&
-      # make memtest filename FAT16/8.3 compatible
-      mv "${BUILD_OUTPUT}/boot/addons/memtest86+.bin" \
-         "${BUILD_OUTPUT}/boot/addons/memtest"
-    fi
-
-    if [ "$ARCH" != "arm64" ] ; then
-      # since syslinux(-common) v3:6.03~pre1+dfsg-4 the files are in a
-      # different directory :(
-      if [ -d "${CHROOT_OUTPUT}/usr/lib/syslinux/modules/bios/" ] ; then
-        syslinux_modules_dir=/usr/lib/syslinux/modules/bios/
-      else
-        syslinux_modules_dir=/usr/lib/syslinux
-      fi
-      for file in chain.c32 hdt.c32 mboot.c32 menu.c32; do
-        copy_addon_file "${file}" "${syslinux_modules_dir}" addons
-      done
+      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest "${CHROOT_OUTPUT}" /boot/memtest86+.bin
     fi
 
     # copy only files and report which ones are installed
@@ -1639,7 +1591,7 @@ generate_build_info() {
 
 BOOT_ARGS="-no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat"
 if [ "$HYBRID_METHOD" = "isohybrid" ] ; then
-  EFI_ARGS="-isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin -eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
+  EFI_ARGS="-isohybrid-mbr ${CHROOT_OUTPUT}/usr/lib/ISOLINUX/isohdpfx.bin -eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
 fi
 if [ "$ARCH" = "arm64" ]; then
   # No isolinux on arm64.
@@ -1808,7 +1760,7 @@ create_netbootpackage() {
       adjust_boot_files "${WORKING_DIR}/grub.cfg"
 
       if [ "$ARCH" = "amd64" ] ; then
-        if ! copy_optional_file_logged "${WORKING_DIR}"/shim.efi "${CHROOT_OUTPUT}" \
+        if ! copy_file_logged "${WORKING_DIR}"/shim.efi "${CHROOT_OUTPUT}" \
           /usr/lib/shim/shimx64.efi.signed \
           /usr/lib/shim/shimx64.efi
         then
@@ -1816,7 +1768,7 @@ create_netbootpackage() {
           ewarn "No shimx64.efi for usage with PXE boot found (shim-signed not present?)" ; eend 0
         fi
 
-        if ! copy_optional_file_logged "${WORKING_DIR}"/grubx64.efi "${CHROOT_OUTPUT}" \
+        if ! copy_file_logged "${WORKING_DIR}"/grubx64.efi "${CHROOT_OUTPUT}" \
           /usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed \
           /usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi
         then
@@ -1825,7 +1777,7 @@ create_netbootpackage() {
         fi
 
         # UEFI 32bit boot
-        if ! copy_optional_file_logged "${WORKING_DIR}"/grubia32.efi "${CHROOT_OUTPUT}" \
+        if ! copy_file_logged "${WORKING_DIR}"/grubia32.efi "${CHROOT_OUTPUT}" \
           /usr/lib/grub/i386-efi-signed/grubnetia32.efi.signed \
           /usr/lib/grub/i386-efi/monolithic/grubnetia32.efi
         then
@@ -1835,7 +1787,7 @@ create_netbootpackage() {
       fi
 
       if [ "$ARCH" = "arm64" ] ; then
-        if ! copy_optional_file_logged "${WORKING_DIR}"/shim.efi "${CHROOT_OUTPUT}" \
+        if ! copy_file_logged "${WORKING_DIR}"/shim.efi "${CHROOT_OUTPUT}" \
           /usr/lib/shim/shimaa64.efi.signed \
           /usr/lib/shim/shimaa64.efi
         then
@@ -1843,7 +1795,7 @@ create_netbootpackage() {
           ewarn "No shimaa64.efi for usage with PXE boot found (shim-signed not present?)" ; eend 0
         fi
 
-        if ! copy_optional_file_logged "${WORKING_DIR}"/grubaa64.efi "${CHROOT_OUTPUT}" \
+        if ! copy_file_logged "${WORKING_DIR}"/grubaa64.efi "${CHROOT_OUTPUT}" \
           /usr/lib/grub/arm64-efi-signed/grubnetaa64.efi.signed \
           /usr/lib/grub/arm64-efi/monolithic/grubnetaa64.efi
         then
