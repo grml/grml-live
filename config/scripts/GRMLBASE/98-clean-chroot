@@ -183,21 +183,7 @@ else
   echo "Setting up resolvconf"
   rm -f "$target"/etc/resolvconf/resolv.conf.d/original
   rm -f "$target"/etc/resolv.conf
-
-  # avoid "/etc/resolvconf/update.d/libc: Warning: /etc/resolv.conf is not a
-  # symbolic link to /etc/resolvconf/run/resolv.conf" for resolvconf versions
-  # before 1.80
-  # shellcheck disable=SC2016 # Embedded $ is correct.
-  RESOLVCONF_VERSION=$($ROOTCMD dpkg-query -W -f='${Version}\n' resolvconf || true)
-  echo "-> Identified resolvconf version '${RESOLVCONF_VERSION}'"
-  if dpkg --compare-versions "${RESOLVCONF_VERSION}" lt 1.80 ; then
-    echo "-> Installing resolvconf symlink for versions <1.80"
-    ln -s /etc/resolvconf/run/resolv.conf "$target"/etc/resolv.conf
-  else
-    echo "-> Installing resolvconf symlink for versions >=1.80"
-    ln -s /run/resolvconf/resolv.conf "$target"/etc/resolv.conf
-  fi
-
+  ln -s /run/resolvconf/resolv.conf "$target"/etc/resolv.conf
 fi
 
 # make sure we don't leak any mdadm configurations
