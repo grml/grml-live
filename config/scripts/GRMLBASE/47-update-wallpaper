@@ -36,6 +36,7 @@ if [ ! -f "$FONTFILE" ]; then
     exit 0
 fi
 
+# OUTSIDE: This fragment assumes it runs outside the chroot.
 convert "$GRML_BG" -gravity center \
     -fill white -font "$FONTFILE" \
     -pointsize "$TITLE_FONTSIZE" \
