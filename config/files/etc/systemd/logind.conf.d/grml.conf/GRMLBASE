@@ -1,0 +1,6 @@
+# This file was deployed via grml-live.
+# See logind.conf(5) for details
+
+[Login]
+NAutoVTs=12
+HandleLidSwitch=ignore
