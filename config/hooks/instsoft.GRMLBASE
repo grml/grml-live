@@ -127,11 +127,6 @@ if [ -e "${target}"/etc/apt/apt.conf.d/10apt-listbugs ]; then
     mv "${target}"/etc/apt/apt.conf.d/10apt-listbugs "${target}"/etc/apt/apt.conf.d/10apt-listbugs.disabled
 fi
 
-# make sure /dev/MAKEDEV is available:
-if [ -x "${target}"/sbin/MAKEDEV ] && ! [ -r "${target}"/dev/MAKEDEV ] ; then
-   ln -s /sbin/MAKEDEV "${target}"/dev/MAKEDEV
-fi
-
 # we don't need the invoke-rc.d.d diversion (we have grml-policyrcd :)):
 if [ -L "${target}"/usr/sbin/invoke-rc.d ] ; then
    rm -f "${target}"/usr/sbin/invoke-rc.d
