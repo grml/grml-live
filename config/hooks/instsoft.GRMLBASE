@@ -9,6 +9,9 @@
 set -u
 set -e
 
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
 # FAI sets ${target}, but shellcheck does not know that.
 target=${target:?}
 

@@ -128,6 +128,7 @@ HOSTNAME=''
 USERNAME=''
 CONFIGDUMP=''
 FAI_CONF_DIR=''
+FAI_PROGRAM='fai'
 
 # don't use colors/escape sequences
 if [ -r /lib/lsb/init-functions ] ; then
@@ -613,10 +614,10 @@ log "$CMDLINE"
 einfo "Logging actions to logfile $LOGFILE"
 # }}}
 
-# dump config variables into file, for script access {{{
+# dump config variables into file, for hooks/scripts access {{{
 CONFIGDUMP=$(mktemp)
 set | grep -E \
-  '^(GRML_NAME|RELEASENAME|DATE|VERSION|SUITE|ARCH|DISTRI_NAME|TEMPLATE_DIRECTORY|USERNAME|HOSTNAME|APT_PROXY)=' \
+  '^(GRML_NAME|RELEASENAME|DATE|VERSION|SUITE|ARCH|DISTRI_NAME|TEMPLATE_DIRECTORY|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE)=' \
   > "${CONFIGDUMP}"
 # }}}
 
@@ -775,9 +776,9 @@ else
       mv "${OUTPUT}"/grml_sources "${CHROOT_OUTPUT}"/grml-live/
 
       log "Executed FAI command line:"
-      log "BUILD_ONLY=$BUILD_ONLY BOOTSTRAP_ONLY=$BOOTSTRAP_ONLY GRML_LIVE_CONFIG=$CONFIGDUMP WAYBACK_DATE=$WAYBACK_DATE fai $VERBOSE -C $FAI_CONF_DIR -s file:///$GRML_FAI_CONFIG -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
+      log "GRML_LIVE_CONFIG=$CONFIGDUMP $FAI_PROGRAM $VERBOSE -C $FAI_CONF_DIR -s file:///$GRML_FAI_CONFIG -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
       # shellcheck disable=SC2086 # $FAI_ARGS needs splitting
-      BUILD_ONLY="$BUILD_ONLY" BOOTSTRAP_ONLY="$BOOTSTRAP_ONLY" GRML_LIVE_CONFIG="$CONFIGDUMP" fai $VERBOSE \
+      GRML_LIVE_CONFIG="$CONFIGDUMP" "$FAI_PROGRAM" $VERBOSE \
                   -C "$FAI_CONF_DIR" -s "file:///$GRML_FAI_CONFIG" -c"$CLASSES" \
                   -u "$HOSTNAME" "$FAI_ACTION" "$CHROOT_OUTPUT" $FAI_ARGS | tee -a "$LOGFILE"
       RC="${PIPESTATUS[0]}" # notice: bash-only
