@@ -36,13 +36,9 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    # we definitely don't want to fail running fai sofupdate just
    # because of some well known bugs:
    [ -d "${target}"/etc/apt/apt.conf.d ] || mkdir "${target}"/etc/apt/apt.conf.d
-   cat > "${target}"/etc/apt/apt.conf.d/10apt-listbugs << EOF
-// Check all packages whether they has critical bugs before they are installed.
-// If you don't like it, comment it out.
-//DPkg::Pre-Install-Pkgs {"/usr/sbin/apt-listbugs apt || exit 10"};
-//DPkg::Tools::Options::/usr/sbin/apt-listbugs "";
-//DPkg::Tools::Options::/usr/sbin/apt-listbugs::Version "2";
-EOF
+   if [ -e "${target}"/etc/apt/apt.conf.d/10apt-listbugs ]; then
+       mv "${target}"/etc/apt/apt.conf.d/10apt-listbugs "${target}"/etc/apt/apt.conf.d/10apt-listbugs.disabled
+   fi
 
    # work around /etc/kernel/postinst.d/zz-update-grub failing
    # inside openvz environment, see #597084
@@ -127,13 +123,9 @@ fi
 # we definitely don't want to fail running fai dirinstall just
 # because of some well known bugs:
 [ -d "${target}"/etc/apt/apt.conf.d ] || mkdir "${target}"/etc/apt/apt.conf.d
-cat > "${target}"/etc/apt/apt.conf.d/10apt-listbugs << EOF
-// Check all packages whether they has critical bugs before they are installed.
-// If you don't like it, comment it out.
-//DPkg::Pre-Install-Pkgs {"/usr/sbin/apt-listbugs apt || exit 10"};
-//DPkg::Tools::Options::/usr/sbin/apt-listbugs "";
-//DPkg::Tools::Options::/usr/sbin/apt-listbugs::Version "2";
-EOF
+if [ -e "${target}"/etc/apt/apt.conf.d/10apt-listbugs ]; then
+    mv "${target}"/etc/apt/apt.conf.d/10apt-listbugs "${target}"/etc/apt/apt.conf.d/10apt-listbugs.disabled
+fi
 
 # make sure /dev/MAKEDEV is available:
 if [ -x "${target}"/sbin/MAKEDEV ] && ! [ -r "${target}"/dev/MAKEDEV ] ; then
