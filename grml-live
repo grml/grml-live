@@ -1193,7 +1193,7 @@ else
          [ "$file_basename" != "lua.c32" ] && \
          [ "$file_basename" != "liblua.c32" ] && \
          [[ "$file_basename" != *test.c32 ]] ; then
-        copy_file_logged "${BUILD_OUTPUT}"/boot/isolinux/"$file_basename" "${CHROOT_OUTPUT}" "$file"
+        copy_file_logged "${BUILD_OUTPUT}"/boot/isolinux/"$file_basename" "${CHROOT_OUTPUT}" /usr/lib/syslinux/modules/bios/"$file_basename"
       fi
     done
 
