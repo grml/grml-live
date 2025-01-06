@@ -24,39 +24,34 @@ if [ -n "$BUILD_ONLY" ] ; then
    exit 0
 fi
 
-if [ "$FAI_ACTION" = "softupdate" ] ; then
-   echo "Action $FAI_ACTION of FAI (hooks/instsoft.GRMLBASE) via grml-live running"
+echo "hooks/instsoft.GRMLBASE running for action ${FAI_ACTION}"
 
+# work around /etc/kernel/postinst.d/zz-update-grub failing
+# inside openvz environment, see #597084
+if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/update-grub' ; then
+  echo "Diverting update-grub executable"
+  $ROOTCMD dpkg-divert --rename --add /usr/sbin/update-grub
+  $ROOTCMD ln -s /bin/true /usr/sbin/update-grub
+fi
+
+# work around a bug which causes openvz to freeze when grub-probe is invoked
+if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/grub-probe' ; then
+  echo "Diverting grub-probe executable"
+  $ROOTCMD dpkg-divert --rename --add /usr/sbin/grub-probe
+  $ROOTCMD ln -s /bin/true /usr/sbin/grub-probe
+fi
+
+# Do not fail running softupdate for reported bugs.
+[ -d "${target}"/etc/apt/apt.conf.d ] || mkdir "${target}"/etc/apt/apt.conf.d
+if [ -e "${target}"/etc/apt/apt.conf.d/10apt-listbugs ]; then
+    mv "${target}"/etc/apt/apt.conf.d/10apt-listbugs "${target}"/etc/apt/apt.conf.d/10apt-listbugs.disabled
+fi
+
+if [ "$FAI_ACTION" = "softupdate" ] ; then
    # /etc/resolv.conf is usually a symlink, pointing out of the chroot.
    # Make it a file with known contents.
    rm -f "${target}"/etc/resolv.conf
    cat /etc/resolv.conf >> "${target}"/etc/resolv.conf
-
-   if [ -r "${target}"/etc/policy-rc.d.conf ] ; then
-      sed -i "s/EXITSTATUS=.*/EXITSTATUS='101'/" "${target}"/etc/policy-rc.d.conf
-   fi
-
-   # we definitely don't want to fail running fai sofupdate just
-   # because of some well known bugs:
-   [ -d "${target}"/etc/apt/apt.conf.d ] || mkdir "${target}"/etc/apt/apt.conf.d
-   if [ -e "${target}"/etc/apt/apt.conf.d/10apt-listbugs ]; then
-       mv "${target}"/etc/apt/apt.conf.d/10apt-listbugs "${target}"/etc/apt/apt.conf.d/10apt-listbugs.disabled
-   fi
-
-   # work around /etc/kernel/postinst.d/zz-update-grub failing
-   # inside openvz environment, see #597084
-   if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/update-grub' ; then
-     echo "Diverting update-grub executable"
-     $ROOTCMD dpkg-divert --rename --add /usr/sbin/update-grub
-     $ROOTCMD ln -s /bin/true /usr/sbin/update-grub
-   fi
-
-   # work around a bug which causes openvz to freeze when grub-probe is invoked
-   if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/grub-probe' ; then
-     echo "Diverting grub-probe executable"
-     $ROOTCMD dpkg-divert --rename --add /usr/sbin/grub-probe
-     $ROOTCMD ln -s /bin/true /usr/sbin/grub-probe
-   fi
 
    # Update package lists (so they exist at all), so we can install
    # software; if /var/lib/dpkg/available is empty, it was was probably
@@ -100,44 +95,14 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
       APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD apt-get -y $APTGET_OPTS --force-yes upgrade
    fi
 
-   exit # make sure we don't continue behind the following "fi"
+   exit  # make sure we don't continue behind the following "fi"
 fi
 
-# no softupdate but fresh installation
-echo "Action ${FAI_ACTION} of FAI (hooks/instsoft.GRMLBASE) via grml-live running"
+# fresh installation, not softupdate.
 
-# work around /etc/kernel/postinst.d/zz-update-grub failing
-# inside openvz environment, see #597084
-if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/update-grub' ; then
-  echo "Diverting update-grub executable"
-  $ROOTCMD dpkg-divert --rename --add /usr/sbin/update-grub
-  $ROOTCMD ln -s /bin/true /usr/sbin/update-grub
-fi
-
-# work around a bug which causes openvz to freeze when grub-probe is invoked
-if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/grub-probe' ; then
-  echo "Diverting grub-probe executable"
-  $ROOTCMD dpkg-divert --rename --add /usr/sbin/grub-probe
-  $ROOTCMD ln -s /bin/true /usr/sbin/grub-probe
-fi
+# no hacks here, for now.
 
 # }}}
-
-# we definitely don't want to fail running fai dirinstall just
-# because of some well known bugs:
-[ -d "${target}"/etc/apt/apt.conf.d ] || mkdir "${target}"/etc/apt/apt.conf.d
-if [ -e "${target}"/etc/apt/apt.conf.d/10apt-listbugs ]; then
-    mv "${target}"/etc/apt/apt.conf.d/10apt-listbugs "${target}"/etc/apt/apt.conf.d/10apt-listbugs.disabled
-fi
-
-# we don't need the invoke-rc.d.d diversion (we have grml-policyrcd :)):
-if [ -L "${target}"/usr/sbin/invoke-rc.d ] ; then
-   rm -f "${target}"/usr/sbin/invoke-rc.d
-   $ROOTCMD dpkg-divert --package fai --rename --remove /usr/sbin/invoke-rc.d
-fi
-
-echo "[instsoft] Removing FAI diversion of /sbin/init to avoid Debian bug #1056151 for fai < 6.2.3"
-fai-divert -r /sbin/init || true
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
