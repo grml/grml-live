@@ -128,6 +128,7 @@ HOSTNAME=''
 USERNAME=''
 CONFIGDUMP=''
 FAI_CONF_DIR=''
+FAI_PROGRAM='fai'
 
 # don't use colors/escape sequences
 if [ -r /lib/lsb/init-functions ] ; then
@@ -775,9 +776,9 @@ else
       mv "${OUTPUT}"/grml_sources "${CHROOT_OUTPUT}"/grml-live/
 
       log "Executed FAI command line:"
-      log "GRML_LIVE_CONFIG=$CONFIGDUMP fai $VERBOSE -C $FAI_CONF_DIR -s file:///$GRML_FAI_CONFIG -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
+      log "GRML_LIVE_CONFIG=$CONFIGDUMP $FAI_PROGRAM $VERBOSE -C $FAI_CONF_DIR -s file:///$GRML_FAI_CONFIG -c$CLASSES -u $HOSTNAME $FAI_ACTION $CHROOT_OUTPUT $FAI_ARGS"
       # shellcheck disable=SC2086 # $FAI_ARGS needs splitting
-      GRML_LIVE_CONFIG="$CONFIGDUMP" fai $VERBOSE \
+      GRML_LIVE_CONFIG="$CONFIGDUMP" "$FAI_PROGRAM" $VERBOSE \
                   -C "$FAI_CONF_DIR" -s "file:///$GRML_FAI_CONFIG" -c"$CLASSES" \
                   -u "$HOSTNAME" "$FAI_ACTION" "$CHROOT_OUTPUT" $FAI_ARGS | tee -a "$LOGFILE"
       RC="${PIPESTATUS[0]}" # notice: bash-only
