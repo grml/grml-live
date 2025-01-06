@@ -135,11 +135,6 @@ cat > "${target}"/etc/apt/apt.conf.d/10apt-listbugs << EOF
 //DPkg::Tools::Options::/usr/sbin/apt-listbugs::Version "2";
 EOF
 
-# make sure /dev/MAKEDEV is available:
-if [ -x "${target}"/sbin/MAKEDEV ] && ! [ -r "${target}"/dev/MAKEDEV ] ; then
-   ln -s /sbin/MAKEDEV "${target}"/dev/MAKEDEV
-fi
-
 # we don't need the invoke-rc.d.d diversion (we have grml-policyrcd :)):
 if [ -L "${target}"/usr/sbin/invoke-rc.d ] ; then
    rm -f "${target}"/usr/sbin/invoke-rc.d
