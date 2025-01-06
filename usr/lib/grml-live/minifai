@@ -1,0 +1,650 @@
+#!/usr/bin/env python3
+#
+# This is a spaghetti-code minimal reimplementation of the FAI API surface grml-live needs,
+# for building Grml Live Linux. If you have additional API surface needs, please contribute.
+# Please beware that this implementation is an interim step, and we may or may not continue
+# with the FAI API.
+#
+from pathlib import Path
+import argparse
+import contextlib
+import subprocess
+import os
+import shutil
+import socket
+import traceback
+import sys
+import tempfile
+from dataclasses import dataclass
+from threading import Event, Thread
+
+
+class FaiScriptFailed(Exception):
+    pass
+
+
+class ClassFileParsingFailed(Exception):
+    pass
+
+
+@dataclass
+class DynamicState:
+    """Holds state that can change in FAI hooks, for example by calling "skiptask"."""
+
+    skip_tasks = set()
+
+
+class PackageList(dict):
+    def list_for_arch(self, arch: str):
+        return self.list_of_arch("all") | self.list_of_arch(arch)
+
+    def list_of_arch(self, arch: str):
+        return set(self.get(arch, []))
+
+    def as_apt_params(self) -> str:
+        full_list = []
+        for arch, packages in self.items():
+            if arch == "all":
+                full_list += packages
+            else:
+                full_list += [f"{package} [{arch}]" for package in packages]
+        return ", ".join(full_list)
+
+    def merge(self, other) -> None:
+        for arch, packages in other.items():
+            self.setdefault(arch, [])
+            self[arch] = list(set(self[arch] + packages))
+
+
+def parse_class_packages(conf_dir: Path, class_name: str) -> PackageList:
+    """Parse FAI package_config for class class_name."""
+
+    packagelist = conf_dir / "package_config" / class_name
+    if not packagelist.exists():
+        return PackageList({})
+
+    print(f"I: Parsing {packagelist}")
+
+    arch = "all"
+    packages = []
+    parsed = PackageList({})
+    for line in packagelist.read_text().splitlines():
+        parts = line.split()
+
+        for index, part in enumerate(parts):
+            if part.startswith("#"):
+                parts = parts[0:index]
+                break
+
+        if not parts:
+            continue
+
+        if parts[0] == "PACKAGES":
+            # section header
+            if len(parts) not in (2, 3):
+                raise ValueError(f"package class file {packagelist} has invalid PACKAGES line: {line!r}")
+            if parts[1] != "install":
+                raise ValueError(f"package class file {packagelist} PACKAGES line not understood: {line!r}")
+
+            # save previously parsed packages
+            parsed.setdefault(arch, [])
+            parsed[arch] += packages
+
+            if len(parts) == 3:
+                arch = parts[2].lower()
+            else:
+                arch = "all"
+            packages = []
+            continue
+
+        else:
+            for part in parts:
+                if part:
+                    packages.append(part)
+
+    parsed.setdefault(arch, [])
+    parsed[arch] += packages
+    return parsed
+
+
+def run_x(args, check: bool = True, **kwargs):
+    """Run program. Output goes to stdout/stderr."""
+    # str-ify Paths, not necessary, but for readability in logs.
+    args = [arg if isinstance(arg, str) else str(arg) for arg in args]
+    args_str = '" "'.join(args)
+    print(f'D: Running "{args_str}"', flush=True)
+    return subprocess.run(args, check=check, **kwargs)
+
+
+def run_chrooted(chroot_dir: Path, args, check: bool = True, **kwargs):
+    """Run program with arguments in chroot chroot_dir."""
+    kwargs["env"] = {
+        "PATH": "/usr/sbin:/sbin:/usr/bin:/bin",
+        "TERM": "dumb",
+    } | kwargs.get("env", {})
+    return run_x(["chroot", chroot_dir] + args, check=check, **kwargs)
+
+
+def chrooted_apt_satisfy(chroot_dir: Path, satisfy_list: str):
+    """Run apt satisfy in chroot_dir."""
+    env = {
+        "DEBIAN_FRONTEND": "noninteractive",
+    }
+    run_chrooted(
+        chroot_dir,
+        ["apt", "satisfy", "-q", "-y", "--no-install-recommends", satisfy_list],
+        env=env,
+        stdin=subprocess.DEVNULL,
+    )
+
+
+def chrooted_debconf_set_selections(chroot_dir: Path, selections_file: Path):
+    """Run debconf-set-selections in chroot_dir, piping in selections_file."""
+
+    env = {
+        "DEBIAN_FRONTEND": "noninteractive",
+    }
+    print("I: Loading debconf selections from", selections_file)
+    with selections_file.open("r") as selections_fd:
+        run_chrooted(chroot_dir, ["debconf-set-selections", "-v"], env=env, stdin=selections_fd)
+
+
+def run_script(chroot_dir: Path, script: Path, helper_tools_path: Path, env: dict[str, str]):
+    """
+    Run a FAI hook script or class script, if it exists.
+    PATH will include helper_tools_path.
+    Environment will include env.
+    """
+
+    if not script.exists():
+        return
+
+    env = {
+        "target": str(chroot_dir),
+        "ROOTCMD": f"chroot {chroot_dir!s} ",
+        "PATH": str(helper_tools_path) + ":" + os.environ["PATH"],
+    } | env
+    print()
+    print(f"I: *** Running script {script} ***")
+    proc = run_x([script], check=False, env=env, stdin=subprocess.DEVNULL)
+    if proc.returncode != 0:
+        print(f"E: Script {script} failed with exitcode {proc.returncode} - aborting.")
+        raise FaiScriptFailed()
+    print(f"I: Finished script {script}.")
+
+
+def run_class_scripts(conf_dir: Path, chroot_dir: Path, class_name: str, helper_tools_path: Path, env: dict[str, str]):
+    print()
+    print(f'I: Running "scripts" for class {class_name}...')
+    print()
+    scripts_dir = conf_dir / "scripts" / class_name
+    for script in sorted(scripts_dir.glob("*")):
+        if script.name.endswith(".dpkg-old") or script.name.endswith(".dpkg-new"):
+            print(f"W: Skipping {script} due to name suffix, please delete it")
+            continue
+        run_script(chroot_dir, script, helper_tools_path, env)
+
+
+def install_packages_for_classes(conf_dir: Path, chroot_dir: Path, classes: list[str], dynamic_state: DynamicState):
+    """Run equivalent of "instsoft" task: set debconf selections and install packages listed in package lists."""
+
+    # debconf is not Essential. Ensure it is installed, so we can use debconf-set-selections.
+    chrooted_apt_satisfy(chroot_dir, "debconf")
+    for class_name in classes:
+        selections_file = conf_dir / "debconf" / class_name
+        if not selections_file.exists():
+            print(f"I: Skipping non-existing {selections_file}", file=sys.stderr)
+            continue
+        chrooted_debconf_set_selections(chroot_dir, selections_file)
+
+    full_package_list = PackageList()
+    for class_name in classes:
+        package_list = parse_class_packages(conf_dir, class_name)
+        full_package_list.merge(package_list)
+        satisfy_args = package_list.as_apt_params()
+        if satisfy_args:
+            print(f"I: Installing packages for class {class_name}")
+            chrooted_apt_satisfy(chroot_dir, satisfy_args)
+
+    print()
+    print("I: Installing all packages together to detect relationship errors")
+    chrooted_apt_satisfy(chroot_dir, full_package_list.as_apt_params())
+
+
+def show_env(log_text: str, env):
+    print(f"D: Showing {log_text} ...")
+    for k, v in dict(env).items():
+        print(f"D: {log_text}: {k}={v}")
+    print()
+
+
+def do_fcopy_path(source_dir: Path, dest_path: Path, classes: list[str], mode) -> bool:
+    to_copy = None
+    for class_name in classes:
+        if (source_dir / class_name).exists():
+            to_copy = source_dir / class_name
+
+    if to_copy is not None:
+        print(f"I: fcopy: Installing {to_copy} as {dest_path}.")
+        if dest_path.exists():
+            print(f"W: fcopy: Destination {dest_path} already exists.")
+
+        # this is probably fine, as we expect to run as root and do not support
+        # different file/directory ownership.
+        dest_path.parent.mkdir(exist_ok=True, parents=True)
+
+        shutil.copyfile(to_copy, dest_path, follow_symlinks=False)
+        dest_path.chmod(mode)
+        os.chown(dest_path, 0, 0, follow_symlinks=False)
+
+    return True
+
+
+def parse_fcopy_args(fcopy_args: list[str]) -> tuple[str, str, int, bool, bool, list[str]]:
+    user = "root"
+    group = "root"
+    mode = 0o644
+    recursive = False
+    ignore_missing = False
+    paths = []
+
+    # FAI fcopy parameters:
+    # -B Remove backup files with suffix .pre_fcopy.
+    # -r Copy recursively (traverse down the tree). Copy all files below SOURCE.
+    #    These are all subdirectory leaves in the SOURCE tree.
+    #    Ignore "ignored" directories (see "-I" for details).
+    # -i Ignore warnings about no matching class and non-existing source directories.
+    #    These warnings will not set the exit code to 1.
+    # -v verbose
+    # -m user,group,mode Set user, group and mode for all copied files (mode as octal
+    #    number, user and group numeric id or name). If not specified, use file
+    #    file-modes or data of source file.
+    # -M Use default values for user, group and mode. This is equal to -m root,root,0644
+
+    parse_m = False
+    for index, arg in enumerate(fcopy_args):
+        if parse_m:
+            # TODO: handle errors
+            user, group, mode = arg.split(",")
+            mode = int(mode, 8)
+            parse_m = False
+        elif arg in ["-M", "-B", "-v"]:
+            # defaulted / ignored
+            pass
+        elif arg == "-m":
+            parse_m = True
+        elif arg == "-r":
+            recursive = True
+        elif arg == "-i":
+            ignore_missing = True
+        elif not arg.startswith("-"):
+            paths = fcopy_args[index:]
+            break
+        else:
+            raise ValueError(f"do_fcopy: param {arg} not understood")
+
+    if not paths:
+        raise ValueError("do_fcopy: no paths given")
+
+    paths = [path.lstrip("/") for path in paths]
+
+    return user, group, mode, recursive, ignore_missing, paths
+
+
+def do_fcopy(conf_dir: Path, chroot_dir: Path, classes: list[str], fcopy_args: list[str]) -> int:
+    try:
+        user, group, mode, recursive, ignore_missing, paths = parse_fcopy_args(fcopy_args)
+        if user != "root" or group != "root":
+            raise ValueError("E: In fcopy, user/group must be root/root")
+    except Exception as except_inst:
+        print(f"E: Parsing fcopy_args {fcopy_args!r} failed: {except_inst}")
+        return 1
+
+    print(f"D: fcopy {recursive=} {ignore_missing=} {user=} {group=} {mode=} {paths=}")
+    rc = 0
+    files_dir = conf_dir / "files"
+
+    if recursive:
+        for path in paths:
+            path_dir = files_dir / path
+            dirs = [p for p in path_dir.glob("**/*") if p.is_dir()]
+            for dir in dirs:
+                dir = dir.relative_to(files_dir)
+                do_fcopy_path(files_dir / dir, chroot_dir / dir, classes, mode)
+
+    else:
+        for path in paths:
+            path_dir = files_dir / path
+            found = False
+            if path_dir.exists():
+                found = do_fcopy_path(path_dir, chroot_dir / path, classes, mode)
+            if not found and not ignore_missing:
+                print(f"E: Source {path=} is missing for fcopy")
+                rc = 1
+
+    return rc
+
+
+def do_skiptask(dynamic_state: DynamicState, skiptask_args: list[str]) -> int:
+    print(f"I: Requesting skipping of tasks: {' '.join(skiptask_args)}")
+    dynamic_state.skip_tasks.update(skiptask_args)
+    return 0
+
+
+def helper_socket_thread(
+    tempdir: Path, conf_dir: Path, chroot_dir: Path, classes: list[str], exit_event: Event, dynamic_state: DynamicState
+):
+    address_family = socket.AF_UNIX
+    socket_type = socket.SOCK_STREAM
+    request_queue_size = 5
+
+    listen_socket = socket.socket(address_family, socket_type)
+    listen_socket.bind(f"{tempdir}/sock")
+    listen_socket.listen(request_queue_size)
+    listen_socket.settimeout(1)
+
+    while not exit_event.is_set():
+        try:
+            request_socket, _ = listen_socket.accept()
+        except TimeoutError:
+            continue
+
+        orig_req = request_socket.recv(4096).decode()
+        req = orig_req.split("\n")
+        rc = 120
+        if len(req) != 2 and req[1] != "":
+            print("W: socket thread: got message:", repr(orig_req))
+            print("W: socket thread: no newline, message truncated?")
+        else:
+            req = req[0].split(" ")
+            if req[0] == "fcopy":
+                rc = do_fcopy(conf_dir, chroot_dir, classes, req[1:])
+            elif req[0] == "skiptask":
+                rc = do_skiptask(dynamic_state, req[1:])
+            else:
+                print("W: socket thread: request not understood:", repr(orig_req))
+
+        request_socket.send(f"{rc!s}\n".encode())
+        request_socket.close()
+
+    listen_socket.close()
+
+
+def write_helper_tool(tools_path: Path, tool_name: str, body: str):
+    with (tools_path / tool_name).open("wt") as file:
+        file.write(body)
+        os.fchmod(file.fileno(), 0o755)
+
+
+@contextlib.contextmanager
+def helper_tools(conf_dir: Path, chroot_dir: Path, classes: list[str], dynamic_state: DynamicState):
+    tempdir = Path(tempfile.mkdtemp())
+
+    write_helper_tool(
+        tempdir,
+        "fcopy",
+        f"""#!/bin/sh
+RC=$(echo fcopy "$@" | socat - UNIX-CONNECT:{tempdir}/sock,forever)
+if [ -z "$RC" ]; then
+  echo "E: minifai fcopy: got no reply from server"
+  exit 119
+elif [ "$RC" != "0" ]; then
+  echo "E: minifai fcopy: server sent error code $RC"
+  exit "$RC"
+fi
+exit 0
+""",
+    )
+
+    write_helper_tool(
+        tempdir,
+        "skiptask",
+        f"""#!/bin/sh
+RC=$(echo skiptask "$@" | socat - UNIX-CONNECT:{tempdir}/sock,forever)
+if [ -z "$RC" ]; then
+  echo "E: minifai skiptask: got no reply from server"
+  exit 119
+elif [ "$RC" != "0" ]; then
+  echo "E: minifai skiptask: server sent error code $RC"
+  exit "$RC"
+fi
+exit 0
+    """,
+    )
+
+    write_helper_tool(
+        tempdir,
+        "ifclass",
+        f"""#!/bin/bash
+haystack=:{":".join(classes)}:
+if [[ ":$haystack:" = *:$1:* ]]; then
+    echo "I: ifclass $1: yes."
+    exit 0
+else
+    echo "I: ifclass $1: no."
+    exit 1
+fi
+""",
+    )
+
+    exit_event = Event()
+    thread = Thread(
+        target=helper_socket_thread,
+        args=(tempdir, conf_dir, chroot_dir, classes, exit_event, dynamic_state),
+        daemon=False,
+    )
+    thread.start()
+    try:
+        yield tempdir
+    finally:
+        exit_event.set()
+        thread.join()
+        shutil.rmtree(tempdir, ignore_errors=True)
+
+
+@contextlib.contextmanager
+def policy_rcd(chroot_dir: Path):
+    marker = "!MINIFAI!"
+    print("I: Installing temporary policy-rc.d")
+    program = chroot_dir / "usr" / "sbin" / "policy-rc.d"
+    with program.open("wt") as file:
+        file.write(f"#!/bin/sh\n# Installed by grml-live minifai {marker}\nexit 101\n")
+        os.fchmod(file.fileno(), 0o755)
+
+    try:
+        yield
+    finally:
+        try:
+            if marker in program.read_text():
+                print(f"I: Cleaning up {program}")
+                program.unlink()
+            else:
+                print(f"I: Not cleaning up {program} - our marker went missing")
+        except:
+            print(f"W: Failed cleaning up {program}")
+
+
+def create_logdir(chroot_dir: Path) -> Path:
+    log_dir = chroot_dir / "var" / "log" / "grml-live-minifai"
+    if log_dir.exists():
+        print(f"I: Deleting log directory from previous run: {log_dir}")
+        shutil.rmtree(log_dir)
+    print(f"I: Creating log directory: {log_dir}")
+    log_dir.mkdir()
+
+    # Create a file in there, so grml-live does not complain.
+    (log_dir / "minifai").write_text("This chroot was created by grml-live minifai. Not all features are supported.\n")
+
+    return log_dir
+
+
+def parse_varfile(varfile: Path) -> dict:
+    env = {}
+    lines = varfile.read_text().splitlines()
+    for lineno, orig_line in enumerate(lines):
+        # strip off comments
+        line = orig_line.split("#", 1)
+        if len(line) == 2:
+            line = line[0].rstrip()
+        elif line[0] == "":
+            line = ""
+        else:
+            line = line[0]
+
+        if not line:
+            continue
+
+        line = line.split("=", 1)
+        if len(line) == 2:
+            k, v = line
+            v = v.lstrip()
+            if (v.startswith('"') and v.endswith('"')) or (v.startswith("'") and v.endswith("'")):
+                v = v[1:-1]
+
+            k = k.rstrip()
+            if not k.startswith(" "):
+                # TODO: should instead check if k starts with alphanumeric (or whatever is allowed)
+                env[k] = v
+                continue
+
+        print(f"E: Cannot not understand line {lineno} in {varfile}: {orig_line}")
+        raise ClassFileParsingFailed()
+
+    return env
+
+
+def read_vars_for_classes(conf_dir: Path, classes: list[str]) -> dict:
+    """Parse FAI .var files"""
+    env = {}
+
+    for class_name in classes:
+        varfile = conf_dir / "class" / f"{class_name}.var"
+        if varfile.exists():
+            env.update(parse_varfile(varfile))
+
+    return env
+
+
+def install_base(chroot_dir: Path, debian_suite: str, mirror_url: str):
+    """Install Debian base system from given mirror"""
+    print(f'I: Installing Debian base system for suite "{debian_suite}" using mmdebstrap')
+
+    # Work around APT bug: http://bugs.debian.org/1092164
+    included_packages = ["netbase"]
+
+    # Allow using https:// mirror, if given.
+    if mirror_url.startswith("https"):
+        included_packages.append("ca-certificates")
+
+    args = [
+        "mmdebstrap",
+        "--format=directory",
+        "--variant=required",
+        "--verbose",
+        "--skip=check/empty",  # grml-live pre-creates directories in chroot, skip emptyness check.
+        f"--include={','.join(included_packages)}",
+        debian_suite,
+        chroot_dir,
+        mirror_url,
+    ]
+    run_x(args)
+
+
+def should_skip_task(dynamic_state: DynamicState, task: str) -> bool:
+    if task in dynamic_state.skip_tasks:
+        print(f'I: Skipping FAI task "{task}", as dynamically requested')
+        return True
+    return False
+
+
+def task_updatebase(chroot_dir: Path, dynamic_state: DynamicState):
+    if should_skip_task(dynamic_state, "updatebase"):
+        return
+    run_chrooted(chroot_dir, ["apt-get", "update", "-q"])
+
+
+def _run_tasks(conf_dir: Path, chroot_dir: Path, classes: list[str], grml_live_config: Path, fai_action: str) -> int:
+    dynamic_state = DynamicState()
+    logdir = create_logdir(chroot_dir)
+
+    env = {
+        "GRML_LIVE_CONFIG": str(grml_live_config),
+        "LOGDIR": str(logdir),
+    } | read_vars_for_classes(conf_dir, classes)
+    show_env("Merged class variables", env)
+
+    with helper_tools(conf_dir, chroot_dir, classes, dynamic_state) as helper_tools_path:
+        hook_env = env | {"FAI_ACTION": fai_action}
+        for class_name in classes:
+            run_script(chroot_dir, conf_dir / "hooks" / f"updatebase.{class_name}", helper_tools_path, hook_env)
+
+        with policy_rcd(chroot_dir):
+            task_updatebase(chroot_dir, dynamic_state)
+
+            if not should_skip_task(dynamic_state, "instsoft"):
+                for class_name in classes:
+                    run_script(chroot_dir, conf_dir / "hooks" / f"instsoft.{class_name}", helper_tools_path, hook_env)
+
+                install_packages_for_classes(conf_dir, chroot_dir, classes, dynamic_state)
+
+        if not should_skip_task(dynamic_state, "configure"):
+            for class_name in classes:
+                run_class_scripts(conf_dir, chroot_dir, class_name, helper_tools_path, env)
+
+        run_chrooted(chroot_dir, ["ls", "-laR", "/dev/"])
+
+    return 0
+
+
+def create_argparser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser()
+    # path to fai classes, scripts, ...
+    parser.add_argument("config", type=Path)
+    parser.add_argument("classes")
+    parser.add_argument("action", choices=["dirinstall", "softupdate"])
+    parser.add_argument("chroot_dir", type=Path)
+    parser.add_argument("grml_live_config", type=Path)
+    parser.add_argument("debian_suite", type=str)
+    parser.add_argument("mirror_url", type=str)
+    return parser
+
+
+def main(program_name: str, argv: list[str]) -> int:
+    print(f"I: {program_name} started with {argv=}")
+    args = create_argparser().parse_args(argv)
+    print(f"I: {program_name} parsed args: {args}")
+    classes = args.classes.split(",")
+    print(f"I: Using classes: {classes}")
+    conf_dir = args.config.absolute()
+    print(f"I: Using conf_dir: {conf_dir}")
+    chroot_dir: Path = args.chroot_dir.absolute()
+    print(f"I: Using chroot_dir: {args.chroot_dir}")
+
+    if not conf_dir.exists():
+        raise ValueError(f"Config directory {conf_dir} does not exist")
+    if not chroot_dir.exists():
+        raise ValueError(f"Chroot directory {chroot_dir} does not exist")
+
+    try:
+        if args.action == "dirinstall":
+            install_base(chroot_dir, args.debian_suite, args.mirror_url)
+            rc = _run_tasks(conf_dir, chroot_dir, classes, args.grml_live_config, args.action)
+        elif args.action == "softupdate":
+            rc = _run_tasks(conf_dir, chroot_dir, classes, args.grml_live_config, args.action)
+        else:
+            print(f"E: minifai: Unknown fai action: {args.action!r}")
+            rc = 1
+    except (ClassFileParsingFailed, FaiScriptFailed):
+        # assume exception site already printed relevant info
+        rc = 3
+    except Exception:
+        print("E: Caught fatal exception")
+        traceback.print_exc()
+        rc = 2
+
+    print(f"I: minifai exiting with exit code {rc}")
+    return rc
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv.pop(0), sys.argv))

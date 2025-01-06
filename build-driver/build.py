@@ -111,22 +111,6 @@ def run_grml_live(
         }
     )
 
-    if not old_iso_path:
-        with ci_section("Creating basefile using mmdebstrap"):
-            basefiles_path = grml_fai_config / "basefiles"
-            basefiles_path.mkdir(exist_ok=True)
-            basefile = basefiles_path / f"{arch.upper()}.tar.gz"
-            args = [
-                "mmdebstrap",
-                "--format=tar",
-                "--variant=required",
-                "--verbose",
-                "--include=netbase",
-                debian_suite,
-                basefile,
-            ]
-            run_x(args)
-
     grml_live_cmd = [
         grml_live_path / "grml-live",
         "-F",  # do not prompt
@@ -152,17 +136,7 @@ def run_grml_live(
     if old_iso_path:
         grml_live_cmd += ["-b", "-e", old_iso_path]
     with ci_section("Building with grml-live", collapsed=False):
-        fixup_fai()
         run_x(grml_live_cmd, env=env)
-
-
-def fixup_fai():
-    # Workaround for fai, necessary to build in docker where /dev/pts is unavailable.
-    # apt prints: E: Can not write log (Is /dev/pts mounted?) - posix_openpt (19: No such device)
-    fai_subroutines = Path("/usr/lib/fai/subroutines")
-    old_code = fai_subroutines.read_text().splitlines()
-    filtered_code = "\n".join([line for line in old_code if "task_error 472" not in line])
-    fai_subroutines.write_text(filtered_code)
 
 
 def upload_daily(job_name: str, build_dir: Path, job_timestamp: datetime.datetime):
@@ -319,7 +293,6 @@ def install_debian_dependencies():
             bzip2 ,
             curl ,
             dosfstools ,
-            fai-client (>= 3.4.0) ,
             jo ,
             mmdebstrap ,
             moreutils ,
@@ -327,6 +300,7 @@ def install_debian_dependencies():
             python3-paramiko ,
             rsync ,
             squashfs-tools (>= 1:4.2-0~bpo60) ,
+            socat ,
             xorriso ,
             imagemagick ,
             """
