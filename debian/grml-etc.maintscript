@@ -6,6 +6,7 @@ rm_conffile /etc/init.d/ssh 1.8.0~
 rm_conffile /etc/locale.gen.grml 1.8.0~
 rm_conffile /etc/locale.gen.minimal 1.8.0~
 rm_conffile /etc/lynx.cfg 1.8.0~
+rm_conffile /etc/motd 1.9.1~
 rm_conffile /etc/rcS.d/important_notice 1.8.0~
 rm_conffile /etc/resolv.conf.template 1.8.0~
 rm_conffile /etc/skel/.a2ps/a2psrc 1.8.0~
