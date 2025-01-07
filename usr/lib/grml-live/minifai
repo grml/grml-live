@@ -41,12 +41,14 @@ class PackageList(dict):
     def list_of_arch(self, arch: str):
         return set(self.get(arch, []))
 
-    def as_apt_params(self) -> str:
+    def as_apt_params(self, *, restrict_to_arch: str | None = None) -> str:
         full_list = []
         for arch, packages in self.items():
             if arch == "all":
                 full_list += packages
             else:
+                if restrict_to_arch and arch != restrict_to_arch:
+                    continue
                 full_list += [f"{package} [{arch}]" for package in packages]
         return ", ".join(full_list)
 
@@ -125,6 +127,12 @@ def run_chrooted(chroot_dir: Path, args, check: bool = True, **kwargs):
     return run_x(["chroot", chroot_dir] + args, check=check, **kwargs)
 
 
+def chrooted_dpkg_print_architecture(chroot_dir: Path) -> str:
+    """Read dpkg --print-architecture of chroot"""
+    result = run_chrooted(chroot_dir, ["dpkg", "--print-architecture"], capture_output=True)
+    return result.stdout.strip().decode()
+
+
 def chrooted_apt_satisfy(chroot_dir: Path, satisfy_list: str):
     """Run apt satisfy in chroot_dir."""
     env = {
@@ -197,18 +205,25 @@ def install_packages_for_classes(conf_dir: Path, chroot_dir: Path, classes: list
             continue
         chrooted_debconf_set_selections(chroot_dir, selections_file)
 
+    dpkg_architecture = chrooted_dpkg_print_architecture(chroot_dir)
+
     full_package_list = PackageList()
     for class_name in classes:
         package_list = parse_class_packages(conf_dir, class_name)
         full_package_list.merge(package_list)
-        satisfy_args = package_list.as_apt_params()
+        satisfy_args = package_list.as_apt_params(restrict_to_arch=dpkg_architecture)
         if satisfy_args:
             print(f"I: Installing packages for class {class_name}")
             chrooted_apt_satisfy(chroot_dir, satisfy_args)
 
     print()
     print("I: Installing all packages together to detect relationship errors")
-    chrooted_apt_satisfy(chroot_dir, full_package_list.as_apt_params())
+    chrooted_apt_satisfy(chroot_dir, full_package_list.as_apt_params(restrict_to_arch=dpkg_architecture))
+
+    with (chroot_dir / "grml-live" / "log" / "install_packages.list").open("wt") as file:
+        file.write("# List of packages installed by minifai\n")
+        file.write("\n".join(full_package_list.list_for_arch(dpkg_architecture)))
+        file.write("\n")
 
 
 def show_env(log_text: str, env):
