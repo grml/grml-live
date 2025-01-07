@@ -21,7 +21,6 @@ grml-etc
 grml-etc-core
 grml-hwinfo
 grml-network
-grml-policyrcd
 grml-quickconfig
 grml-scripts
 grml-scripts-core

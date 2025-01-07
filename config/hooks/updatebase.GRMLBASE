@@ -32,31 +32,10 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    # otherwise we're running 'aptitude update' even on with -b option
    skiptask updatebase
 
-   ## based on FAI's lib/updatebase:
-   # some packages must access /proc even in chroot environment
-   if ! [ -d "$FAI_ROOT"/proc/1 ] ; then
-      mount -t proc proc "$FAI_ROOT"/proc || true
-   fi
-   # some packages must access /sys even in chroot environment
-   if ! [ -d "$FAI_ROOT"/sys/kernel ] ; then
-      mount -t sysfs sysfs "$FAI_ROOT"/sys || true
-   fi
-   # if we are using udev, also mount it into $FAI_ROOT
-   if [ -f /etc/init.d/udev ] ; then
-      mount --bind /dev "$FAI_ROOT"/dev || true
-   fi
-
-   if [ -d "$FAI_ROOT"/run ] ; then
-      mount -t tmpfs tmpfs "$FAI_ROOT"/run || true
-      mkdir "$FAI_ROOT"/run/lock
-   fi
-
-   mount -t devpts devpts "$FAI_ROOT"/dev/pts || true
-
    # skip the task if we want to build a new ISO only,
    # this means we do NOT update any packages
    if [ -n "$BUILD_ONLY" ] ; then
-      skiptask instsoft || true
+      skiptask instsoft
    fi
 fi
 
