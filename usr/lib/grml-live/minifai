@@ -548,6 +548,8 @@ def install_base(chroot_dir: Path, debian_suite: str, mirror_url: str):
         mirror_url,
     ]
     run_x(args)
+    # Mark most leaf packages as automatically installed, so autoremove could remove them if possible.
+    run_chrooted(chroot_dir, ["apt-mark", "auto", "~i ?not(~prequired) ?not(~pimportant) ?not(~pstandard)"])
 
 
 def should_skip_task(dynamic_state: DynamicState, task: str) -> bool:
