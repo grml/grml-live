@@ -169,9 +169,8 @@ store_logfiles() {
   cp -r "$CHROOT_OUTPUT"/grml-live/log/* "$LOG_OUTPUT"/fai/
   rm -rf "$CHROOT_OUTPUT"/grml-live/log
 
-  # fixup owners
-  chown root:adm "$LOG_OUTPUT"/fai/*
-  chmod 664 "$LOG_OUTPUT"/fai/*
+  # ensure files are readable.
+  chmod a+rX "$LOG_OUTPUT"/fai/
 }
 # }}}
 
