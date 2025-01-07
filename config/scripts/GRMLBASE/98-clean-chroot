@@ -109,7 +109,7 @@ nuke(){
 zero(){
   while IFS= read -r -d '' file ; do
     :> "$file"
-  done < <(find "$@" -type f -size +0 -not -name \*.ini -not -path '*/grml-live-minifai/*' -print0 2>/dev/null)
+  done < <(find "$@" -type f -size +0 -not -name \*.ini -print0 2>/dev/null)
 }
 
 echo "Removing possible leftovers from update-pciids runs"

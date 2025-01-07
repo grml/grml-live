@@ -166,8 +166,8 @@ umount_all() {
 store_logfiles() {
   # move minifai logs into grml_logs directory
   mkdir -p "$LOG_OUTPUT"/fai/
-  cp -r "$CHROOT_OUTPUT"/var/log/grml-live-minifai/* "$LOG_OUTPUT"/fai/
-  rm -rf "$CHROOT_OUTPUT"/var/log/grml-live-minifai
+  cp -r "$CHROOT_OUTPUT"/grml-live/log/* "$LOG_OUTPUT"/fai/
+  rm -rf "$CHROOT_OUTPUT"/grml-live/log
 
   # fixup owners
   chown root:adm "$LOG_OUTPUT"/fai/*
@@ -726,8 +726,11 @@ else
       "${FAI_PROGRAM}" "${GRML_FAI_CONFIG}" "${CLASSES}" "${FAI_ACTION}" "${CHROOT_OUTPUT}" "${CONFIGDUMP}" ${FAI_DEBOOTSTRAP} 2>&1 | tee -a "${LOGFILE}"
       RC="${PIPESTATUS[0]}" # notice: bash-only
 
+      # Fetches logs from "${CHROOT_OUTPUT}"/grml-live/log.
+      # Also run this on failure.
+      store_logfiles
+
       if [ "$RC" != 0 ] ; then
-        store_logfiles  # ensure to have logfiles available even if building failed
         log    "Error: critical error while executing fai [exit code ${RC}]. Exiting."
         eerror "Error: critical error while executing fai [exit code ${RC}]. Exiting." ; eend 1
         bailout 1
@@ -744,8 +747,6 @@ else
       [ -n "$SUITE" ] && echo "SUITE=$SUITE" >> "$CHROOT_OUTPUT/etc/grml_live_version"
 
       FORCE_ISO_REBUILD=true
-
-      store_logfiles
 
       umount_all
 

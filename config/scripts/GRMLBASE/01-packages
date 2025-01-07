@@ -14,7 +14,7 @@ target=${target:?}
 
 echo -n > "${LOGDIR}"/package_errors.log  # ensure we start with an empty file
 
-PACKAGE_LIST=/var/log/install_packages.list
+PACKAGE_LIST=/grml-live/log/install_packages.list
 # shellcheck disable=SC2154
 if ! [ -r "${target}/${PACKAGE_LIST}" ] ; then
   echo "No ${target}/${PACKAGE_LIST} found, will not run package validation check."
@@ -46,6 +46,7 @@ fi
 
 if [ -s "${LOGDIR}/package_errors.log" ] ; then
   echo "Warning: failed (there have been errors, find them at ${LOGDIR}/package_errors.log)."
+  cat "${LOGDIR}/package_errors.log"
 else
   echo "Done - no errors found."
 fi

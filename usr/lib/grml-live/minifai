@@ -465,7 +465,7 @@ def policy_rcd(chroot_dir: Path):
 
 
 def create_logdir(chroot_dir: Path) -> Path:
-    log_dir = chroot_dir / "var" / "log" / "grml-live-minifai"
+    log_dir = chroot_dir / "grml-live" / "log"
     if log_dir.exists():
         print(f"I: Deleting log directory from previous run: {log_dir}")
         shutil.rmtree(log_dir)
