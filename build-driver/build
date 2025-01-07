@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# Entrypoint from CI jobs
+# Only valid assumptions:
+# - apt sources.list are valid
+# - first param is path to grml-live checkout
+# - remaining params are job config, so to say
+set -x
+GRML_LIVE_PATH=$1
+PYTHONPATH="$GRML_LIVE_PATH"/build-driver
+echo -e "\e[0Ksection_start:$(date +%s):startupdeps[collapsed=true]\r\e[0KInstall dependencies for build.py"
+apt satisfy -q -y --no-install-recommends 'python3-minimal, python3-yaml'
+echo -e "\e[0Ksection_end:$(date +%s):startupdeps\r\e[0K"
+exec "$PYTHONPATH"/build.py "$@"

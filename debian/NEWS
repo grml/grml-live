@@ -1,3 +1,39 @@
+grml-live (0.51.0) unstable; urgency=low
+
+  The location of the FAI configuration data has changed, and all users
+  who do not use the default configuration data must update their
+  configuration.
+
+  In the Debian package, the configuration data files were previously
+  installed into /etc/grml/fai/config. To avoid continuous upgrading
+  headaches, these files are now installed into
+    /usr/share/grml-live/config
+  instead.
+  If you intend to modify them, it is strongly recommended to copy the
+  entire directory tree into a new place of your choice (suggestion:
+    /srv/grml-live-config)
+  and modify them there.
+  Alternatively you're encouraged to maintain your changes as a git
+  patch stack.
+
+  GRML_FAI_CONFIG (equivalent to passing -D) now must point to the
+  "config" directory. For example, if you previously set
+  GRML_FAI_CONFIG=/path/to/your/config/fai, then you must now set
+  GRML_FAI_CONFIG=/path/to/your/config/fai/config.
+
+  If you are running grml-live from a git checkout, GRML_FAI_CONFIG
+  needs to be set to GRML_FAI_CONFIG=$(pwd)/config. Previously,
+  this was GRML_FAI_CONFIG=$(pwd)/etc/grml/fai.
+
+  fai.conf is no longer read. If your customized configuration
+  includes fai.conf, you should delete it.
+
+  If you run into trouble, please reach out:
+    https://grml.org/contact/
+  As always we are also open to providing commercial support.
+
+ -- Chris Hofstaedtler <ch@grml.org>  Tue, 24 Dec 2024 13:48:20 +0100
+
 grml-live (0.17.0) unstable; urgency=low
 
   1) The sources.list handling has been further improved and

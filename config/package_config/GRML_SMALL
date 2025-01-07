@@ -1,0 +1,166 @@
+PACKAGES install
+
+grml-paste
+grml-quickconfig-standard
+
+# base os
+apt
+bsdextrautils
+bsdutils
+dctrl-tools
+dos2unix
+findutils
+htop
+libnss-myhostname
+locales
+lsof
+mount
+ntpsec-ntpdate
+passwd
+procps
+psmisc
+sudo
+sysvinit-utils
+tree
+tzdata
+util-linux
+
+# deploy on remote sites
+ppp
+pppoeconf
+
+# disk subsystems support/debugging
+cryptsetup
+disktype
+dmsetup
+gdisk
+lsscsi
+ncdu
+smartmontools
+
+# disk partitioning/boot
+kpartx
+mbr
+parted
+
+# disk wiping
+nwipe
+wipe
+
+# editors
+ed
+vim-tiny
+xxd
+
+# filesystem support
+attr
+btrfs-progs
+dosfstools
+e2fsprogs
+f2fs-tools
+jfsutils
+ntfs-3g
+xfsprogs
+
+# foreign os support/recovery
+chntpw
+mtools
+
+# generic tools
+whois
+
+# install linux
+kexec-tools
+mmdebstrap
+
+# networking
+atftp
+bridge-utils
+ethtool
+ifenslave
+ifupdown
+iperf3
+iproute2
+iptstate
+iputils-ping
+iw
+ldnsutils
+mtr-tiny
+ndisc6
+net-tools
+netbase
+netcat-openbsd
+openssh-client-ssh1
+rdnssd
+rfkill
+ser2net
+tcpdump
+telnet
+tmate
+tsocks
+vlan
+
+# network transfers
+lftp
+partimage
+rpcbind
+
+# packers/unpackers
+cpio
+tar
+unp
+unzip
+zip
+
+# recovery
+gddrescue
+
+# restore from backup
+fsarchiver
+
+# compressions for backup/restore
+zstd
+
+# serial
+cu
+setserial
+statserial
+
+# shell
+bash
+binutils
+buffer
+coreutils
+diffutils
+mawk
+patch
+qrencode
+screen
+sed
+tmux
+zsh
+
+# system info/mgmt
+memtester
+
+# virtualization support
+imvirt
+qemu-guest-agent
+
+# web
+links
+wget
+
+# special terminal output
+toilet
+
+PACKAGES install I386
+linux-image-686
+memtest86+
+
+PACKAGES install AMD64
+linux-image-amd64
+memtest86+
+
+PACKAGES install ARM64
+linux-image-arm64

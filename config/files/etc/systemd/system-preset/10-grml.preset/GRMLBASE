@@ -1,0 +1,12 @@
+# This file was deployed via grml-live.
+
+# enable TTY logins
+enable getty@.service
+
+# enable grml-specific services
+enable gpm.service
+enable grml-autoconfig.service
+enable debug-shell.service
+enable resolvconf.service
+
+disable *

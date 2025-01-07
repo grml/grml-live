@@ -31,7 +31,7 @@ fi
 printf "Building debian/changelog: "
 if [ -n "${AUTOBUILD:-}" ] ; then
   # since=$(git show -s --pretty="tformat:%h")
-  eval $(grep '^GRML_LIVE_VERSION=' grml-live)
+  eval "$(grep '^GRML_LIVE_VERSION=' grml-live)"
   DATE=$(date -R)
   UNIXTIME=$(date +%s)
 
@@ -51,7 +51,7 @@ EOF
   git commit -m "Releasing ${GRML_LIVE_VERSION}-~autobuild${UNIXTIME} (auto build)"
 else
   since=v$(dpkg-parsechangelog | awk '/^Version:/ {print $2}')
-  git-dch --ignore-branch --since=$since \
+  git-dch --ignore-branch --since="$since" \
           --id-length=7 --meta --multimaint-merge -S
   printf "OK\n"
 fi
@@ -83,7 +83,7 @@ if [[ "$script_version" == "$debian_version" ]] ; then
   printf "OK\n"
 else
   printf "FAILED\n."
-  printf "Debian package version ($debian_version) does not match script version ($script_version).\n"
+  echo "Debian package version ($debian_version) does not match script version ($script_version)."
   exit 1
 fi
 
@@ -98,8 +98,8 @@ if [ -n "${AUTOBUILD:-}" ] ; then
   rm -rf ../grml-live.build-area/grml-live* # otherwise we're keeping files forever...
   git-buildpackage --git-ignore-branch --git-ignore-new --git-export-dir=../grml-live.build-area -us -uc
 else
-  git-buildpackage --git-ignore-branch --git-ignore-new $*
-  printf "Finished execution of $(basename $0). Do not forget to tag release ${debian_version}\n"
+  git-buildpackage --git-ignore-branch --git-ignore-new "$*"
+  echo "Finished execution of $(basename "$0"). Do not forget to tag release ${debian_version}"
 fi
 
 if [ -n "${AUTOBUILD:-}" ] ; then
@@ -109,11 +109,12 @@ if [ -n "${AUTOBUILD:-}" ] ; then
      dpkg-scanpackages . /dev/null | gzip > Packages.gz
    )
    git checkout master
-   git branch -D ${autobuild_branch} || true
+   git branch -D "${autobuild_branch}" || true
 
    env APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none sudo apt-get update
 
    PACKAGES=$(dpkg --list grml-live\* | awk '/^ii/ {print $2}')
+   # shellcheck disable=SC2086 # PACKAGES needs word-splitting.
    env APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none sudo apt-get -y \
      -o DPkg::Options::=--force-confmiss \
      -o DPkg::Options::=--force-confnew  \

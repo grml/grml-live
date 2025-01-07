@@ -1,0 +1,53 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/GRMLBASE/95-package-information
+# Purpose:       store package information of chroot system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -eu -o pipefail
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+if ! [ -w "${LOGDIR}" ] ; then
+  echo "Error: can not write to ${LOGDIR}. Exiting.">&2
+  exit 1
+fi
+
+# store package list:
+COLUMNS=200 $ROOTCMD dpkg --list > "${LOGDIR}"/dpkg.list
+COLUMNS=200 $ROOTCMD dpkg --get-selections > "${LOGDIR}"/dpkg.selections
+
+# store list of packages sorted by size:
+if [ -x "$target"/usr/bin/dpkg-query ] ; then
+  # shellcheck disable=SC2016 # Embedded $ is correct.
+  $ROOTCMD dpkg-query -W --showformat='${Package}\t${Installed-Size}\n' > \
+    "${LOGDIR}"/packages.size
+fi
+
+# store a list of non-free packages and their licenses
+echo "The following packages from the Debian non-free section are included in this release" \
+   > "${LOGDIR}"/nonfree-licenses.txt
+echo >> "${LOGDIR}"/nonfree-licenses.txt
+
+# copyright information for non-free packages
+non_free_pkgs=$($ROOTCMD apt-cache show '~i' | awk '/^Package: / {pkg=$2} /^Section: non-free/ {print pkg}')
+
+for pkg in ${non_free_pkgs:-} ; do
+  echo "Package: ${pkg}" >> "${LOGDIR}"/nonfree-licenses.txt
+  echo "========================================================================" \
+    >> "${LOGDIR}"/nonfree-licenses.txt
+  if $ROOTCMD test -r "/usr/share/doc/${pkg}/copyright" ; then
+    $ROOTCMD cat "/usr/share/doc/${pkg}/copyright" >> "${LOGDIR}"/nonfree-licenses.txt
+  else
+    echo "${pkg} does not provide a copyright file" >> "${LOGDIR}"/nonfree-licenses.txt
+  fi
+  echo >> "${LOGDIR}"/nonfree-licenses.txt
+done
+
+gzip -9 "${LOGDIR}"/nonfree-licenses.txt
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

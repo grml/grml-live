@@ -8,9 +8,9 @@ Build-Depends-Indep:
  asciidoc,
  docbook-xsl,
  xsltproc,
-Standards-Version: 4.6.2
+Standards-Version: 4.7.0
 Homepage: https://grml.org/grml-live/
-Vcs-git: https://github.com/grml/grml-live.git
+Vcs-Git: https://github.com/grml/grml-live.git
 Vcs-Browser: https://github.com/grml/grml-live
 Origin: Grml
 Bugs: mailto:bugs@grml.org
@@ -23,23 +23,15 @@ Depends:
  debootstrap,
  dosfstools,
  fai-client (>= 3.4.0),
- isolinux (>= 3:6.03+dfsg-5+deb8u1~),
  jo,
  moreutils,
  mtools,
- pciutils,
  rsync,
  squashfs-tools (>= 1:4.2-0~bpo60),
- syslinux | syslinux-efi,
  xorriso,
  ${misc:Depends},
 Recommends:
- grml-live-db,
- grub-pc-bin,
  imagemagick,
- ipxe,
- memtest86+,
- syslinux-utils,
 Suggests:
  fai-doc,
  grml-live-addons,
@@ -47,20 +39,3 @@ Description: build system for creating a Grml (based) Linux live system
  This package provides the build system for creating a Debian /
  Grml based Linux live system (also known as live cd). It is
  based on the FAI (Fully Automatic Installation) framework.
-
-Package: grml-live-db
-Architecture: all
-Depends:
- grml-live,
- libdbd-sqlite3-perl,
- libdbi-perl,
- libtimedate-perl,
- sqlite3,
- ${misc:Depends},
-Recommends:
- perl-doc,
-Description: log package build information of grml-live to database
- This package provides a database layer for storing build
- information about grml-live builds in a sqlite3 database.
- More details are available in the provided grml-live-db manpage
- and /usr/share/doc/grml-live-db/grml-live-db.html

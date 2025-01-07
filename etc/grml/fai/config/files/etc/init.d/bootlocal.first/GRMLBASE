@@ -1,7 +1,0 @@
-#!/bin/sh
-# This file is NOT upgraded during system upgrades.
-# You can use it to customize the boot process.
-# bootlocal.first is executed in runlevel 'S', at the very beginning.
-################################################################################
-
-## END OF FILE #################################################################

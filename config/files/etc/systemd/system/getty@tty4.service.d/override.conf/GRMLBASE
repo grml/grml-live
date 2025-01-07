@@ -1,0 +1,15 @@
+# This file was deployed via grml-live.
+
+[Service]
+Type=idle
+Restart=always
+StandardInput=tty
+StandardOutput=tty
+TTYPath=/dev/tty4
+User=$USERNAME
+WorkingDirectory=~
+ExecStart=
+ExecStart=-/usr/share/grml-scripts/run-screen
+
+[Unit]
+Description=screen ($USERNAME) on tty4

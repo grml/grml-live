@@ -1,7 +1,0 @@
-#!/bin/sh
-# This file is NOT upgraded during system upgrades.
-# You can use it to customize the boot process.
-# bootlocal.last is executed in runlevel '2', at the very end.
-################################################################################
-
-## END OF FILE #################################################################

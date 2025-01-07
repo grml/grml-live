@@ -1,0 +1,402 @@
+PACKAGES install
+
+grml-live
+grml-paste
+grml-quickconfig-standard
+
+# base os
+apt
+aptitude
+binfmt-support
+bsdextrautils
+bsdutils
+dctrl-tools
+devscripts
+dos2unix
+findutils
+htop
+libnss-myhostname
+localepurge
+locales
+lsb-release
+lsof
+mount
+ntpsec
+ntpsec-ntpdate
+nullmailer
+passwd
+procps
+psmisc
+sudo
+sysstat
+sysvinit-utils
+tree
+tzdata
+util-linux
+
+# basic accessibility
+alsa-utils
+brltty
+espeak-ng
+espeakup
+
+# deploy on remote sites
+openvpn
+ppp
+pppoeconf
+
+# disk subsystems support/debugging
+array-info
+cryptsetup
+disktype
+dmsetup
+f3
+fai-setup-storage
+fio
+gdisk
+iotop
+lsscsi
+mpt-status
+multipath-tools
+ncdu
+nocache
+nvme-cli
+scsitools
+sdparm
+sg3-utils
+smartmontools
+stenc
+
+# disk partitioning/boot
+boot-info-script
+gparted
+kpartx
+mbr
+partclone
+parted
+
+# disk wiping
+nwipe
+secure-delete
+wipe
+
+# editors
+ed
+hexedit
+nano
+vim
+vim-gtk3
+xxd
+zile
+
+# filesystem support
+acl
+attr
+bcache-tools
+btrfs-progs
+dislocker
+dosfstools
+e2fsprogs
+exfat-fuse
+exfatprogs
+f2fs-tools
+jfsutils
+ntfs-3g
+tcplay
+xfsdump
+xfsprogs
+xmount
+xorriso
+
+# foreign os support/recovery
+chntpw
+clamav
+clamav-base
+clamav-freshclam
+mtools
+
+# generic tools
+cpp
+sqlite3
+whois
+
+# install linux
+crosshurd
+debootstrap
+kexec-tools
+mmdebstrap
+rinse
+
+# iscsi (target) support
+libiscsi-bin
+open-iscsi
+targetcli-fb
+tgt
+
+# ata-over-ethernet
+aoetools
+vblade
+
+# networking
+atftp
+avahi-daemon
+avahi-utils
+bind9-host
+bridge-utils
+cdpr
+cifs-utils
+cloud-init
+dnsmasq
+dnsutils
+ethstatus
+ethtool
+hostapd
+hping3
+ifenslave
+iftop
+ifupdown
+ipcalc
+iperf
+iperf3
+ipmitool
+iproute2
+iptraf-ng
+iptstate
+iputils-arping
+iputils-ping
+iputils-tracepath
+iw
+libnss-mdns
+libteam-utils
+mosh
+mtr-tiny
+ndisc6
+net-tools
+netbase
+netcat-openbsd
+nethogs
+netsniff-ng
+nmap
+openssh-client-ssh1
+radvd
+rdnssd
+rfkill
+ser2net
+sipcalc
+snmp
+socat
+speedtest-cli
+ssmping
+tcpdump
+tcptraceroute
+telnet
+tmate
+tsocks
+usb-modeswitch
+vlan
+wireguard
+wireless-regdb
+
+# network transfers
+ca-certificates
+fuse3
+lftp
+nfs-kernel-server
+partimage
+partimage-server
+rpcbind
+samba
+sshfs
+udpcast
+
+# packers/unpackers
+cabextract
+cpio
+tar
+unp
+unzip
+zip
+
+# password generators
+apg
+pwgen
+
+# privacy tools
+scdaemon
+
+# popular VCS to pull config from
+git
+
+# recovery
+afflib-tools
+autopsy
+binwalk
+dcfldd
+ewf-tools
+extundelete
+gddrescue
+gpart
+myrescue
+recoverjpeg
+testdisk
+
+# restore from backup
+borgbackup
+clonezilla
+dirvish
+dump
+duplicity
+fsarchiver
+mtx
+restic
+
+# compressions for backup/restore
+lz4
+lzop
+zstd
+
+# serial
+cu
+minicom
+setserial
+statserial
+
+# shell
+bash
+binutils
+buffer
+coreutils
+diffutils
+jq
+mawk
+mbuffer
+mc
+patch
+pv
+qrencode
+screen
+sed
+tmux
+zsh
+
+# system info/mgmt
+augeas-tools
+flashrom
+inxi
+memtester
+stressant
+
+# virtualization support
+imvirt
+open-vm-tools
+qemu-guest-agent
+qemu-system-gui
+qemu-system-x86
+qemu-utils
+zerofree
+
+# web
+curl
+firefox-esr
+irssi
+links2
+lynx
+w3m
+wget
+
+# X
+fluxbox
+grml-desktop
+grml-x
+x11vnc
+xauth
+xcursor-themes
+xfonts-75dpi
+xfonts-base
+xpdf
+xserver-xorg
+xserver-xorg-core
+xserver-xorg-input-all
+xserver-xorg-video-all
+xterm
+
+# x86 hardware support
+acpi
+irqbalance
+lm-sensors
+lshw
+numactl
+usbview
+
+# firmware updates
+fwupd
+polkitd
+udisks2
+
+# testing
+bats
+stress
+
+# docs
+man-db
+
+# special terminal output
+lolcat
+toilet
+
+PACKAGES install I386
+# kernel related
+linux-image-686
+linux-cpupower
+# disk subsystems support/debugging, I386/AMD64 specific
+cciss-vol-status
+# x86 hardware support
+cmospwd
+cpuid
+memtest86+
+# broken userland debugging
+ltrace
+# disk partitioning/boot
+grub-pc-bin
+
+# PXE boot
+grml-terminalserver
+
+# firmware updates
+fwupd-i386-signed
+
+# X - not relevant on more recent systems, so ship on i386 only
+xserver-xorg-video-intel
+
+PACKAGES install AMD64
+# kernel related
+linux-image-amd64
+linux-cpupower
+# disk subsystems support/debugging
+cciss-vol-status
+# x86 hardware support
+cmospwd
+cpuid
+memtest86+
+# broken userland debugging
+ltrace
+# disk partitioning/boot
+grub-pc-bin
+
+# PXE boot
+grml-terminalserver
+
+# EFI PXE boot support in grml-terminalserver
+grub-efi-amd64-signed
+shim-signed
+
+# firmware updates
+fwupd-amd64-signed
+
+PACKAGES install ARM64
+# kernel related
+linux-image-arm64
+linux-cpupower
+
+# firmware updates
+fwupd-arm64-signed

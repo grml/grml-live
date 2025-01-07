@@ -1,0 +1,143 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/hooks/instsoft.GRMLBASE
+# Purpose:       Grml specific software installation in the chroot, executed after updatebase
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+# FAI sets ${target}, but shellcheck does not know that.
+target=${target:?}
+
+# if hooks/updatebase.GRMLBASE fails for whatever reason
+# and can't skip instsoft.GRMLBASE we have to make sure
+# we exit here as well
+if [ -n "$BUILD_ONLY" ] ; then
+   echo "Exiting hooks/instsoft.GRMLBASE as BUILD_ONLY environment is set."
+   echo "W: This place was reached because updatebase.GRMLBASE failed."
+   exit 0
+fi
+
+if [ "$FAI_ACTION" = "softupdate" ] ; then
+   echo "Action $FAI_ACTION of FAI (hooks/instsoft.GRMLBASE) via grml-live running"
+
+   # /etc/resolv.conf is usually a symlink, pointing out of the chroot.
+   # Make it a file with known contents.
+   rm -f "${target}"/etc/resolv.conf
+   cat /etc/resolv.conf >> "${target}"/etc/resolv.conf
+
+   if [ -r "${target}"/etc/policy-rc.d.conf ] ; then
+      sed -i "s/EXITSTATUS=.*/EXITSTATUS='101'/" "${target}"/etc/policy-rc.d.conf
+   fi
+
+   # we definitely don't want to fail running fai sofupdate just
+   # because of some well known bugs:
+   [ -d "${target}"/etc/apt/apt.conf.d ] || mkdir "${target}"/etc/apt/apt.conf.d
+   if [ -e "${target}"/etc/apt/apt.conf.d/10apt-listbugs ]; then
+       mv "${target}"/etc/apt/apt.conf.d/10apt-listbugs "${target}"/etc/apt/apt.conf.d/10apt-listbugs.disabled
+   fi
+
+   # work around /etc/kernel/postinst.d/zz-update-grub failing
+   # inside openvz environment, see #597084
+   if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/update-grub' ; then
+     echo "Diverting update-grub executable"
+     $ROOTCMD dpkg-divert --rename --add /usr/sbin/update-grub
+     $ROOTCMD ln -s /bin/true /usr/sbin/update-grub
+   fi
+
+   # work around a bug which causes openvz to freeze when grub-probe is invoked
+   if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/grub-probe' ; then
+     echo "Diverting grub-probe executable"
+     $ROOTCMD dpkg-divert --rename --add /usr/sbin/grub-probe
+     $ROOTCMD ln -s /bin/true /usr/sbin/grub-probe
+   fi
+
+   # Update package lists (so they exist at all), so we can install
+   # software; if /var/lib/dpkg/available is empty, it was was probably
+   # cleaned by GRMLBASE/98-clean-chroot, so we need to rebuild it
+   # anyway
+   $ROOTCMD /usr/lib/dpkg/methods/apt/update /var/lib/dpkg/ apt apt
+
+   if ! $ROOTCMD test -x /usr/bin/aptitude ; then
+     # the apt-get update might return an error if there's for example
+     # a hashsum mismatch on Debian mirror sources, we might want to continue
+     # but should warn the user
+     if ! $ROOTCMD apt-get update ; then
+       echo "Warning: there was an error executing apt-get update, continuing anyway."
+       echo "Warning: there was an error executing apt-get update, continuing anyway." >&2
+     fi
+
+     $ROOTCMD apt-get -y install aptitude
+   fi
+
+   # make sure we can upgrade automatically,
+   # even with unsigned repos, but only if user wants it
+   if [ "${FAI_ALLOW_UNSIGNED:-}" = "1" ] ; then
+     APTGET_OPTS="${APTGET_OPTS:-} --allow-unauthenticated"
+     APTITUDE_OPTS="${APTITUDE_OPTS:-} --allow-untrusted"
+   fi
+
+   # make sure we don't fail when configuration files changed
+   APTGET_OPTS="${APTGET_OPTS:-} -o DPkg::Options::=--force-confdef -o DPkg::Options::=--force-confmiss -o DPkg::Options::=--force-confnew"
+   APTITUDE_OPTS="${APTITUDE_OPTS:-} -o DPkg::Options::=--force-confdef -o DPkg::Options::=--force-confmiss -o DPkg::Options::=--force-confnew"
+
+   if $ROOTCMD test -x /usr/bin/aptitude ; then
+      if $ROOTCMD aptitude --help | grep -q safe-upgrade ; then
+         # shellcheck disable=SC2086 # APTITUDE_OPTS needs word-splitting.
+         APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD aptitude -y $APTITUDE_OPTS safe-upgrade
+      else
+         # shellcheck disable=SC2086 # APTITUDE_OPTS needs word-splitting.
+         APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD aptitude -y $APTITUDE_OPTS upgrade
+      fi
+   else
+      # shellcheck disable=SC2086 # APTGET_OPTS needs word-splitting.
+      APT_LISTCHANGES_FRONTEND=none APT_LISTBUGS_FRONTEND=none $ROOTCMD apt-get -y $APTGET_OPTS --force-yes upgrade
+   fi
+
+   exit # make sure we don't continue behind the following "fi"
+fi
+
+# no softupdate but fresh installation
+echo "Action ${FAI_ACTION} of FAI (hooks/instsoft.GRMLBASE) via grml-live running"
+
+# work around /etc/kernel/postinst.d/zz-update-grub failing
+# inside openvz environment, see #597084
+if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/update-grub' ; then
+  echo "Diverting update-grub executable"
+  $ROOTCMD dpkg-divert --rename --add /usr/sbin/update-grub
+  $ROOTCMD ln -s /bin/true /usr/sbin/update-grub
+fi
+
+# work around a bug which causes openvz to freeze when grub-probe is invoked
+if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/grub-probe' ; then
+  echo "Diverting grub-probe executable"
+  $ROOTCMD dpkg-divert --rename --add /usr/sbin/grub-probe
+  $ROOTCMD ln -s /bin/true /usr/sbin/grub-probe
+fi
+
+# }}}
+
+# we definitely don't want to fail running fai dirinstall just
+# because of some well known bugs:
+[ -d "${target}"/etc/apt/apt.conf.d ] || mkdir "${target}"/etc/apt/apt.conf.d
+if [ -e "${target}"/etc/apt/apt.conf.d/10apt-listbugs ]; then
+    mv "${target}"/etc/apt/apt.conf.d/10apt-listbugs "${target}"/etc/apt/apt.conf.d/10apt-listbugs.disabled
+fi
+
+# we don't need the invoke-rc.d.d diversion (we have grml-policyrcd :)):
+if [ -L "${target}"/usr/sbin/invoke-rc.d ] ; then
+   rm -f "${target}"/usr/sbin/invoke-rc.d
+   $ROOTCMD dpkg-divert --package fai --rename --remove /usr/sbin/invoke-rc.d
+fi
+
+echo "[instsoft] Removing FAI diversion of /sbin/init to avoid Debian bug #1056151 for fai < 6.2.3"
+fai-divert -r /sbin/init || true
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

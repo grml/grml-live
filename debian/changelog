@@ -1,3 +1,227 @@
+grml-live (0.51.0) grml-testing; urgency=medium
+
+  Big update, moves /etc/grml/fai/config to /usr/share/grml-live/config.
+  Please read the NEWS file for additional info.
+
+  * [f975ccf] 49-sshd: create dropin file instead of using sed
+  * [61be585] ttys: set WorkingDirectory to $HOME
+  * [b8af655] console-setup: create setupcon cache
+  * [e75a1f4] Switch from ftp.debian.org to deb.debian.org
+  * [20dbb1f] Drop sources.list for DEBIAN_ETCH
+  * [475cabc] Remove file-rc leftovers
+  * [52a7fa3] Remove workaround for modesetting on cirrusfb
+  * [8e46752] Drop workaround for bug in udev 168-1
+  * [2d541ae] Remove vmwgfx enable_fbdev option
+  * [0cf42f9] Drop deprecation warning for GRML_LIVE_SOURCES
+  * [ba9342a] Remove support for ZERO_LOGFILE
+  * [703b53f] fai.conf: autogenerate, treat as internal detail
+  * [f1dc42a] Move /etc/grml/fai/config into /usr/share/grml-live/config
+  * [7d561ff] Remove unused/obsolete FAI settings
+  * [3a3a7f9] updatebase.GRMLBASE: remove ineffective udev workaround
+  * [fe1c640] SW: GRML_FULL: drop acpi-support
+  * [2e2f4af] generate-changes-list: sort debian package changes
+  * [3f9f887] build-driver: use dpkg.list from same flavor
+  * [c84d711] SW: reduce basefiles tarball to Priority: required
+  * [5673e58] SW: stop installing rsyslog
+  * [2997248] Stop installing memdisk
+  * [6c50960] GRMLBASE/15-initsetup: init journald catalog cache at build time
+  * [3edbed0] etc/fstab: drop examples handled by systemd
+  * [642340d] GRMLBASE/21-usersetup: remove grep of group file
+  * [3ed439e] grub: remove nonfunctional memtest86 bios-mode selection
+  * [0509080] grml-live: remove check for syslinux from before oldoldstable
+  * [ef74174] Workaround /sbin/init vanishing, Debian bug #1056151
+  * [dc22f36] apt/preferences: move into /etc/apt/preferences.d
+  * [23db83a] Install zsh completion into /usr/share instead of /etc
+
+ -- Chris Hofstaedtler <ch@grml.org>  Sat, 04 Jan 2025 00:34:32 +0100
+
+grml-live (0.50.1) grml-testing; urgency=medium
+
+  The "Adventgrenze for real" release
+
+  [ Chris Hofstaedtler ]
+  * [8b84591] build-driver: move upload_daily into caller of build()
+  * [47f34ea] build-driver: handle sources before upload_daily
+  * [ec66ecb] build-driver: rename grml_logs to a per-job unique name
+  * [77a47ef] generate-changes-list: extract repo clone/update
+  * [670c1b1] generate-changes-list: import run_x helper
+  * [6f09c0f] generate-changes-list: collect involved people
+  * [79475a8] Reduce size of nonfree-licenses.txt by gzip-compressing it
+  * [b4978d3] build-driver: create compatibly layout in /latest/
+  * [ea6e2a4] generate-changes-list: ignore GitHub as author
+  * [a0e5bbb] build-driver: update URL to latest release dpkg.list
+  * Software related changes:
+    - [1ece72b] drop cdebootstrap
+
+  [ Michael Prokop ]
+  * [d6d3743] scripts/GRMLBASE/95-package-information: get non-free info
+    without aptitude
+
+ -- Michael Prokop <mika@grml.org>  Thu, 19 Dec 2024 18:41:59 +0100
+
+grml-live (0.50.0) unstable; urgency=medium
+
+  The "Adventgrenze" release
+
+  [ Chris Hofstaedtler ]
+  * [b27b742] netboot package: use ISO_NAME-netboot.tar as output name
+    (without .iso)
+  * [ca4f25a] grml-live: avoid double / in NETBOOT and REPORTS
+  * [3ea3fad] build-driver: remove unused get_grml_live function
+  * [30472fc] Do not add /dev to squashfs
+  * [5676f01] build-driver: copy sources.tar in release mode
+  * [b7d7f54] Rework wallpaper handling
+  * [d5a91e8] Update checked path for arch-specific boot addons
+  * [b1a8886] build-driver: delete grml_sources in results directory
+  * Software related changes:
+    - [22f12c8] Install openssh-client-ssh1 for DSA-keyed servers
+    - [4103307] install grml2usb on arm64, too
+
+  [ Michael Prokop ]
+  * [8b0a6fa] Generate source package tarball when using SOURCES class
+  * [d77d042] Ensure files are copied with fcopy into chroot with expected
+    permissions
+  * [c950cbe] Remove deprecated
+    /etc/grml/fai/config/scripts/GRML_SMALL/98-clean-chroot
+  * [83ec4f9] build-driver: ship ipxe + memtest86+; grml-live: fix
+    NO_ADDONS autodetection
+  * [fcfafac] Introduce architecture specific boot addon templates
+  * [c492657] Drop support for bsd4grml / NO_ADDONS_BSD4GRML
+  * [530ec9f] templates: drop deprecated boot addons from isolinux/grub
+    configs and grml-cheatcodes.txt
+  * [f81528f] templates/boot/grub/addons.cfg: drop duplicate Netboot.xyz
+    for non-efi
+  * [fdba3b2] Support UEFI 32bit boot on amd64
+  * [ea0c92e] Fix logic around grml_sources handling no longer being bind-
+    mounted
+
+  [ Darshaka Pathirana ]
+  * [de47ff8] GRUB theme: replace desktop-color with desktop-image
+  * [8becc73] Update Grml cheatcodes + clean up isolinux bootprompt
+    options
+
+ -- Michael Prokop <mika@grml.org>  Thu, 19 Dec 2024 02:42:44 +0100
+
+grml-live (0.49.3) unstable; urgency=medium
+
+  [ Chris Hofstaedtler ]
+  * [205d589] grml-live: fix build only mode
+  * [c033554] build-driver: honor TMPDIR
+  * [d864226] grml-live: remove GRML_SMALL exclude of vmlinuz, initrd.img
+  * [7683e73] GHA: reindent
+  * [d5ad645] Run grml-live itself in GitHub test-build job
+  * [56b8b77] grml-live: strip xattrs in squashfs
+  * [9e3bd7a] GRMLBASE/45-grub-images: fix moddep.lst name in message
+  * [3c04ec5] GRMLBASE/15-initsetup: mask ldconfig.service
+  * [b04c36f] GHA: test build-only/release mode
+  * [f45341b] Initialize zsh caches so first startup on Live CD is faster
+  * [668880b] build-driver: fix SOURCES class gone missing
+  * Software related changes:
+    - [9e41bcd] GRML_FULL: stop precreating locales
+
+ -- Michael Prokop <mika@grml.org>  Tue, 17 Dec 2024 08:57:35 +0100
+
+grml-live (0.49.2) unstable; urgency=medium
+
+  [ Michael Prokop ]
+  * [585437f] SW: replace dhcpcd with dhcpcd-base in DEBIAN_*
+
+  [ Chris Hofstaedtler ]
+  * [63ec2cf] grml-live: update EFI image messages
+  * [d2927fb] grub: retitle grml boot menu entries
+  * [b0b979e] templates: replace GRUB boot theme
+  * [f97a1a2] grml-live: remove xorriso version check
+  * [3310807] grml-live: rewrite extend_string_end without expr
+  * [d8501fd] grml-live: remove dead extend_string_begin function
+  * [af9fb68] grml-live: write grmlmain.cfg in one go
+  * [8253e80] grml-live: stop manipulating CWD
+  * [fcbbf6a] grml-live: introduce hasclass helper function
+  * [a15735c] grml-live: always print requested configuration
+  * [d3540dd] GRUB templates: move non-addon entries out of addons.cfg
+  * [a2a16ec] grml-live: set NO_ADDONS=1 early if addons are absent
+  * [91425a3] grml-live: abort early if ARCH is unsupported
+  * [9e91be9] Drop support for syslinux from Debian wheezy
+  * [8d96a2e] Skip iso/pxe/syslinux on arm64
+  * [9352fd6] GRMLBASE/94-update-smart-drivedb: drop
+  * [a2c1016] scripts: remove GRMLBASE/37-portmap
+  * [24961d1] scripts: remove workaround for 2009-era unfixed Debian bugs
+  * [4af3d12] scripts: remove iceweasel support
+  * [1a40680] scripts: assume timeout is always available
+  * [b373401] scripts: assume utmp,wtmp are on tmpfs /run
+  * [23ae643] build-driver: do not require cache_dir to exist already
+  * [8001621] build-driver: allow basefiles directory to already exist
+  * [352cbcb] build-driver: clarify an exception was caught
+  * [91e97af] build-driver: fix copying dpkg.list to cache dir
+  * [7a30c71] build-driver: clearly indicate success
+  * Software related changes:
+    * [73fb627] SW: GRML_FULL, GRML_SMALL: Stop installing reiserfsprogs
+    * [573d37d] SW: GRML_SMALL: apply same groups as in GRML_FULL
+    * [136531d] DEBIAN_TESTING: correct security.debian.org URL
+    * [97dfeff] SW: Install linux-sysctl-defaults on trixie and newer
+  * shellcheck QA improvements:
+    * [69b3638] GHA: setup shellcheck
+    * [a7fecfa] shellcheck: grml-live: fix quoting issues
+    * [a999792] shellcheck: annotate NOCOLORS usage
+    * [939a5f4] shellcheck: grml-live: concat $@ correctly
+    * [089cabd] shellcheck: grml-live: fix SC2166
+    * [b484608] shellcheck: grml-live: ignore init-functions,lsb-functions sources
+    * [abd83c6] shellcheck: grml-live: do not trap SIGKILL
+    * [805dd42] grml-live: fix $? usage errors
+    * [581169c] grml-live: stop exporting SHORT_NAME
+    * [72f5e60] shellcheck: grml-live: fix SC2155
+    * [ddc9552] shellcheck: grml-live: fix SC2162
+    * [44112a5] shellcheck: grml-live: PIPESTATUS is an array
+    * [1eb3178] shellcheck: grml-live: ignore SC2164 in two places
+    * [6e77072] shellcheck: grml-live: use while/read instead of for find
+    * [583b3db] shellcheck: grml-live: fix one SC2010 case
+    * [4694d45] shellcheck: grml-live: ignore SC2010 in two cases
+    * [a8996f8] shellcheck: grml-live: fix SC2004
+    * [59bfaee] shellcheck: grml-live: fix SC2018/SC2019
+    * [5829fc8] shellcheck: grml-live: turn off two info messages
+    * [df3eedb] scripts: fix quoting issues found by shellcheck
+    * [9557a9d] remaster: fix quoting issues found by shellcheck
+    * [088dc5d] fai hooks: fix shellcheck issues
+    * [5eb2286] scripts: fix shellcheck issues
+    * [2ffb6cf] 45-grub-images: fix quoting
+
+ -- Chris Hofstaedtler <ch@grml.org>  Sat, 07 Dec 2024 16:14:49 +0100
+
+grml-live (0.49.1) unstable; urgency=medium
+
+  [ Chris Hofstaedtler ]
+  * [8812d99] grml-live-remaster: always use xorriso
+  * [b8458a1] grml-live-remaster: drop support for ISOs < Dec 2018
+  * [0736c3c] grml-live: drop support for mkisofs/genisoimage
+  * [36911b7] instsoft.GRMLBASE: fix error handler
+  * [971bd57] updatebase.GRMLBASE: allow all mounts to fail
+  * [7a56ca0] grml-live: use xorriso instead of mount -o loop in -e mode
+  * [2822a28] Import CI build drivers
+  * Software related changes:
+    - [fab9fdf] GRML_FULL: stop installing genisoimage
+
+ -- Michael Prokop <mika@grml.org>  Sat, 23 Nov 2024 13:53:01 +0100
+
+grml-live (0.49.0) unstable; urgency=medium
+
+  [ Chris Hofstaedtler ]
+  * [e1acaf0] Remove grml-live-db and support for writing into it
+  * [4dcc9a0] CI: add job to build debian package
+  * [e25a5ee] debian: update Vcs-Git and Vcs-Browser
+  * [87524f9] SOURCES: move directory instead of bind-mounting it in
+  * [93399d3] get-sources: resolve source package names ourselves
+  * [5db208d] get-sources: run apt-get source parallelized
+  * [c1bc729] Add .github/FUNDING.yml
+
+  [ Michael Prokop ]
+  * [009bb78] d/control: bump Standards-Version to 4.7.0
+  * [374f949] debian: refresh lintian overrides
+  * [04be202] Secure Boot: update grub and shim binaries. Thanks to pasja
+  * [bca8c53] Ship debian/gbp.conf for gbp usage
+  * Software related changes:
+    - [7c890b4] add scdaemon to GRML_FULL
+
+ -- Michael Prokop <mika@grml.org>  Fri, 22 Nov 2024 18:07:55 +0100
+
 grml-live (0.48.0) unstable; urgency=medium
 
   [ Michael Prokop ]

@@ -1,0 +1,29 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/GRMLBASE/16-depmod
+# Purpose:       set up kernel's modules.dep
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+if ! [ -x "$target"/sbin/depmod ] ; then
+  echo "Warning: depmod not installed"
+  exit 0
+fi
+
+for kernel in "$target"/boot/vmlinuz-* ; do
+  kernelversion=${kernel##"$target"}
+  kernelversion=${kernelversion##/boot/vmlinuz-}
+
+  echo "Updating modules.dep for kernel ${kernelversion}"
+  $ROOTCMD depmod -a "${kernelversion}"
+done
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

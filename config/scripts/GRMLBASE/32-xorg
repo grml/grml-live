@@ -1,0 +1,25 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/GRMLBASE/32-xorg
+# Purpose:       make sure there does not exist /etc/X11/xorg.conf by default
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+if [ -r "$target"/etc/X11/xorg.conf ] ; then
+   mv -f "$target"/etc/X11/xorg.conf "$target"/etc/X11/xorg.conf.debian
+fi
+
+if [ "$(readlink "$target"/etc/X11/X)" = "/bin/true" ] ; then
+   echo "Warning: /etc/X11/X is a symlink to /bin/true - fixing for you">&2
+   ln -sf /usr/bin/Xorg "$target"/etc/X11/X
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
