@@ -72,11 +72,10 @@ fcopy -M -i -B -v -r /etc/apt
 if [ -n "${WAYBACK_DATE:-}" ] ; then
   echo "Wayback date '$WAYBACK_DATE' identified, enabling for snapshot.debian.org usage."
 
-  perl -pi -e "s#^(\s+)(deb.* )(.*://deb.debian.org.*?)\s+([a-z-]+)\s+(.*)\$#\$1\$2 [check-valid-until=no] http://snapshot.debian.org/archive/debian/$WAYBACK_DATE/ \$4 \$5#" \
-    "${target}/etc/apt/sources.list.d/debian.list"
-
-  perl -pi -e "s#^(\s+)(deb.* )(.*://security.debian.org.*?)\s+([a-z-/]+)\s+(.*)\$#\$1\$2 [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/$WAYBACK_DATE/ \$4 \$5#" \
-    "${target}/etc/apt/sources.list.d/debian.list"
+  perl -pi -e 'BEGIN { $d="'"$WAYBACK_DATE"'"; }
+    s#^(URIs:)\s+(.*://deb.debian.org.*?)$#$1 http://snapshot.debian.org/archive/debian/$d/#' \
+      "${target}/etc/apt/sources.list.d/debian.sources"
+  sed -i '/^Suites/a Check-Valid-Unit: no' "${target}/etc/apt/sources.list.d/debian.sources"
 fi
 
 ## END OF FILE #################################################################

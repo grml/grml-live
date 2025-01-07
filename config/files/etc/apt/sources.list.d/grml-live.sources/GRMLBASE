@@ -1,0 +1,16 @@
+Types: deb
+URIs: http://deb.grml.org/
+Suites: grml-live
+Components: main
+Enabled: yes
+Signed-By:
+ /etc/apt/trusted.gpg.d/grml-archive-keyring.gpg
+
+Types: deb-src
+URIs: http://deb.grml.org/
+Suites: grml-live
+Components: main
+Enabled: yes
+Signed-By:
+ /etc/apt/trusted.gpg.d/grml-archive-keyring.gpg
+
