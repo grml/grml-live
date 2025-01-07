@@ -780,7 +780,7 @@ else
       # shellcheck disable=SC2086 # $FAI_ARGS needs splitting
       GRML_LIVE_CONFIG="$CONFIGDUMP" "$FAI_PROGRAM" $VERBOSE \
                   -C "$FAI_CONF_DIR" -s "file:///$GRML_FAI_CONFIG" -c"$CLASSES" \
-                  -u "$HOSTNAME" "$FAI_ACTION" "$CHROOT_OUTPUT" $FAI_ARGS | tee -a "$LOGFILE"
+                  -u "$HOSTNAME" "$FAI_ACTION" "$CHROOT_OUTPUT" $FAI_ARGS 2>&1 | tee -a "$LOGFILE"
       RC="${PIPESTATUS[0]}" # notice: bash-only
 
       if [ "$RC" != 0 ] ; then
