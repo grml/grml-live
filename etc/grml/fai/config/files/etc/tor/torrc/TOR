@@ -1,0 +1,4 @@
+SocksPort 0
+Log notice syslog
+HiddenServiceDir /var/lib/tor/ssh_onion_service
+HiddenServicePort 22 127.0.0.1:22
