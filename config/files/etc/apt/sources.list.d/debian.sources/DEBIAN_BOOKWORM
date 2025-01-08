@@ -1,31 +1,31 @@
-Types: deb
+Types:
+ deb
+ deb-src
 URIs: http://deb.debian.org/debian/
-Suites: bookworm
-Components: main contrib non-free-firmware non-free
+Suites:
+ bookworm
+# bookworm-updates
+# bookworm-proposed-updates
+# bookworm-backports
+Components:
+ main
+ contrib
+ non-free-firmware
+ non-free
 Enabled: yes
 Signed-By:
  /usr/share/keyrings/debian-archive-keyring.gpg
 
-Types: deb-src
-URIs: http://deb.debian.org/debian/
-Suites: bookworm
-Components: main contrib non-free-firmware non-free
-Enabled: yes
-Signed-By:
- /usr/share/keyrings/debian-archive-keyring.gpg
-
-Types: deb
+Types:
+ deb
+ deb-src
 URIs: http://deb.debian.org/debian-security
 Suites: bookworm-security
-Components: main contrib non-free-firmware non-free
-Enabled: yes
-Signed-By:
- /usr/share/keyrings/debian-archive-keyring.gpg
-
-Types: deb-src
-URIs: http://deb.debian.org/debian-security
-Suites: bookworm-security
-Components: main contrib non-free-firmware non-free
+Components:
+ main
+ contrib
+ non-free-firmware
+ non-free
 Enabled: yes
 Signed-By:
  /usr/share/keyrings/debian-archive-keyring.gpg
