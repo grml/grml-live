@@ -1284,7 +1284,6 @@ else
     mkdir -p "${BUILD_OUTPUT}"/boot/grub/arm64-efi/
     cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/arm64-efi/*.mod "${BUILD_OUTPUT}"/boot/grub/arm64-efi/
     cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/arm64-efi/*.lst "${BUILD_OUTPUT}"/boot/grub/arm64-efi/
-    # NOTE: usage of /boot/grub/core.img + /boot/grub/grub.img unclear yet
   elif [ "${ARCH}" = "amd64" ] || [ "${ARCH}" = "i386" ] ; then
     # grub-pc-bin
     mkdir -p "${BUILD_OUTPUT}"/boot/grub/i386-pc/
@@ -1299,9 +1298,6 @@ else
     # grub-efi-ia32-bin
     mkdir -p "${BUILD_OUTPUT}"/boot/grub/i386-efi/
     cp -a "${CHROOT_OUTPUT}"/usr/lib/grub/i386-efi/*.{mod,lst} "${BUILD_OUTPUT}"/boot/grub/i386-efi/
-
-    cp -a "${CHROOT_OUTPUT}"/boot/grub/core.img       "${BUILD_OUTPUT}"/boot/grub/
-    cp -a "${CHROOT_OUTPUT}"/boot/grub/grub.img       "${BUILD_OUTPUT}"/boot/grub/
   fi
 
   # arch independent files
