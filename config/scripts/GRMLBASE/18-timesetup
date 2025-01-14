@@ -28,7 +28,10 @@ if [ -n "$TIMEZONE" ] ; then
    echo "tzdata tzdata/Areas       select $area" | $ROOTCMD debconf-set-selections
    echo "tzdata tzdata/Zones/$area select $zone" | $ROOTCMD debconf-set-selections
    # update files
-   echo "$TIMEZONE" > "$target"/etc/timezone
+   if [ -e "$target"/etc/timezone ] ; then
+      # only for tzdata before 2024b-6 (Debian trixie).
+      echo "$TIMEZONE" > "$target"/etc/timezone
+   fi
    rm -f "$target"/etc/localtime
    cp -f "$target"/usr/share/zoneinfo/"$TIMEZONE" "$target"/etc/localtime
 fi
