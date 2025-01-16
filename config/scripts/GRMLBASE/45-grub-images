@@ -17,10 +17,12 @@ target=${target:?}
 
 TMP_CONFIG="/tmp/grub_config_efi"
 
+mkdir -p "${target}"/boot/grub
+
 # this allows us to find this specific Grml ISO,
 # even if there are multiple Grml ISOs present
 bootfile="${GRML_NAME}_$(TZ=UTC date +%s)"
-echo "$bootfile" > "${target}/"boot/grub/bootfile.txt
+echo "$bootfile" > "${target}"/boot/grub/bootfile.txt
 
 cat > "${target}/${TMP_CONFIG}" <<EOF
 search.file /conf/bootfile_$bootfile root
@@ -30,12 +32,9 @@ normal
 echo "E: Could not find root device (for /conf/bootfile_$bootfile)!"
 EOF
 
-ARCHS=(i386-pc)
+ARCHS=()
 declare -A ADDITIONAL_MODULES
-ADDITIONAL_MODULES[i386-pc]="biosdisk"
 
-# arm64 doesn't provide /usr/lib/grub/i386-efi, so we don't include
-# i386-pc in $ARCHS (whereas on AMD64 we have both i386-pc + x86_64-efi)
 if ifclass ARM64 ; then
   if [ -r "${target}"/usr/lib/grub/arm64-efi/moddep.lst ] ; then
     ARCHS=(arm64-efi)
@@ -71,7 +70,6 @@ fi
 for arch in "${ARCHS[@]}" ; do
   filename=''
   case "$arch" in
-    i386-pc)    filename=/boot/grub/grub.img ;;
     x86_64-efi) filename=/boot/bootx64.efi   ;;
     i386-efi)   filename=/boot/bootia32.efi  ;;
     arm64-efi)  filename=/boot/bootaa64.efi  ;;
