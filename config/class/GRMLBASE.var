@@ -1,7 +1,7 @@
 # default values for installation. You can override them in your *.var files
 
 # allow installation of packages from unsigned repositories
-FAI_ALLOW_UNSIGNED=1
+# FAI_ALLOW_UNSIGNED=1
 
 CONSOLEFONT=
 KEYMAP=us-latin1
