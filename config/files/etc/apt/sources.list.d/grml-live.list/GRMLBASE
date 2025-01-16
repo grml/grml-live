@@ -1,3 +1,0 @@
-# grml-live override repository:
-  deb     http://deb.grml.org/ grml-live main
-  deb-src http://deb.grml.org/ grml-live main
