@@ -149,6 +149,9 @@ def chrooted_apt_satisfy(chroot_dir: Path, satisfy_list: str):
 def chrooted_debconf_set_selections(chroot_dir: Path, selections_file: Path):
     """Run debconf-set-selections in chroot_dir, piping in selections_file."""
 
+    if not selections_file.exists():
+        return
+
     env = {
         "DEBIAN_FRONTEND": "noninteractive",
     }
@@ -193,22 +196,27 @@ def run_class_scripts(conf_dir: Path, chroot_dir: Path, class_name: str, helper_
         run_script(chroot_dir, script, helper_tools_path, env)
 
 
-def install_packages_for_classes(conf_dir: Path, chroot_dir: Path, classes: list[str], dynamic_state: DynamicState):
+def install_packages_for_classes(
+    conf_dir: Path,
+    chroot_dir: Path,
+    classes: list[str],
+    helper_tools_path: Path,
+    hook_env: dict,
+    dynamic_state: DynamicState,
+):
     """Run equivalent of "instsoft" task: set debconf selections and install packages listed in package lists."""
 
     # debconf is not Essential. Ensure it is installed, so we can use debconf-set-selections.
     chrooted_apt_satisfy(chroot_dir, "debconf")
-    for class_name in classes:
-        selections_file = conf_dir / "debconf" / class_name
-        if not selections_file.exists():
-            print(f"I: Skipping non-existing {selections_file}", file=sys.stderr)
-            continue
-        chrooted_debconf_set_selections(chroot_dir, selections_file)
 
     dpkg_architecture = chrooted_dpkg_print_architecture(chroot_dir)
 
     full_package_list = PackageList()
     for class_name in classes:
+        chrooted_debconf_set_selections(chroot_dir, conf_dir / "debconf" / class_name)
+
+        run_script(chroot_dir, conf_dir / "hooks" / f"instsoft.{class_name}", helper_tools_path, hook_env)
+
         package_list = parse_class_packages(conf_dir, class_name)
         full_package_list.merge(package_list)
         satisfy_args = package_list.as_apt_params(restrict_to_arch=dpkg_architecture)
@@ -599,10 +607,7 @@ def _run_tasks(conf_dir: Path, chroot_dir: Path, classes: list[str], grml_live_c
             task_updatebase(chroot_dir, dynamic_state)
 
             if not should_skip_task(dynamic_state, "instsoft"):
-                for class_name in classes:
-                    run_script(chroot_dir, conf_dir / "hooks" / f"instsoft.{class_name}", helper_tools_path, hook_env)
-
-                install_packages_for_classes(conf_dir, chroot_dir, classes, dynamic_state)
+                install_packages_for_classes(conf_dir, chroot_dir, classes, helper_tools_path, hook_env, dynamic_state)
 
         if not should_skip_task(dynamic_state, "configure"):
             for class_name in classes:
