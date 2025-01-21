@@ -15,11 +15,11 @@ gpm
 grml2usb
 grml-autoconfig
 grml-crypt
-grml-debian-keyring
 grml-debootstrap
 grml-etc
 grml-etc-core
 grml-hwinfo
+grml-keyring
 grml-network
 grml-policyrcd
 grml-quickconfig
