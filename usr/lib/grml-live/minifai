@@ -548,7 +548,7 @@ def read_vars_for_classes(conf_dir: Path, classes: list[str]) -> dict:
     return env
 
 
-def install_base(chroot_dir: Path, debian_suite: str, mirror_url: str):
+def install_base(conf_dir: Path, chroot_dir: Path, classes, debian_suite: str, mirror_url: str):
     """Install Debian base system from given mirror"""
     print(f'I: Installing Debian base system for suite "{debian_suite}" using mmdebstrap')
 
@@ -559,12 +559,20 @@ def install_base(chroot_dir: Path, debian_suite: str, mirror_url: str):
     if mirror_url.startswith("https"):
         included_packages.append("ca-certificates")
 
+    # Find keyring to use for mmdebstrap
+    keyring_dir = conf_dir / "bootstrap-keyring"
+    keyring_file = None
+    for class_name in classes:
+        if (keyring_dir / class_name).exists():
+            keyring_file = keyring_dir / class_name
+
     args = [
         "mmdebstrap",
         "--format=directory",
         "--variant=required",
         "--verbose",
         "--skip=check/empty",  # grml-live pre-creates directories in chroot, skip emptyness check.
+        f"--keyring={keyring_file}",
         f"--include={','.join(included_packages)}",
         debian_suite,
         chroot_dir,
@@ -649,7 +657,7 @@ def main(program_name: str, argv: list[str]) -> int:
 
     try:
         if args.action == "dirinstall":
-            install_base(chroot_dir, args.debian_suite, args.mirror_url)
+            install_base(conf_dir, chroot_dir, classes, args.debian_suite, args.mirror_url)
             rc = _run_tasks(conf_dir, chroot_dir, classes, args.grml_live_config, args.action)
         elif args.action == "softupdate":
             rc = _run_tasks(conf_dir, chroot_dir, classes, args.grml_live_config, args.action)
