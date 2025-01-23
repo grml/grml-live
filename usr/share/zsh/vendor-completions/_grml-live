@@ -54,6 +54,18 @@ _grmllive_suites() { #{{{
   _wanted list expl 'Debian suite' compadd ${expl} -- ${suites}
 }
 #}}}
+_grmllive_waybackdates() { #{{{
+  local expl
+  local -a waybackdates 
+
+  if command -pv jq curl >/dev/null; then
+  waybackdates=(
+	  ${(u)$(curl -sfL "http://snapshot.debian.org/mr/timestamp/?after=$(date +%Y%m%d --date='-6month')&archive=debian" |jq -r '.result.debian[]?|@text')%T*}
+  )
+  fi
+  _wanted list expl 'wayback date(s)' compadd ${expl} -- ${waybackdates}
+}
+#}}}
 arguments=( #{{{
   '-a[specifiy architecture to use]:arch(s):_grmllive_archs'
   '-A[clean build directories before and after running]'
@@ -81,7 +93,7 @@ arguments=( #{{{
   '-u[update existing chroot instead of rebuilding it from scratch]'
   '-U[arrange output to be owned by specified username]'
   '-V[increase verbosity]'
-  '-w[wayback machine, build system using Debian archives from specified date]:date:'
+  '-w[wayback machine, build system using Debian archives from specified date]:wayback date(s):_grmllive_waybackdates'
   '-z[use ZLIB instead of LZMA/XZ compression]'
 )
 #}}}
