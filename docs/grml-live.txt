@@ -767,12 +767,13 @@ just invoke:
 
   % cd /home/foobar/packages
   % dpkg-scanpackages . /dev/null | gzip > Packages.gz
-  % python -m SimpleHTTPServer 8000
+  % python -m http.server 8000
 
 [TIP]
 Of course you can also use a real Debian repository setup using tools like
 reprepro(1) and/or using a real web server, though for quick debugging sessions
-python's SimpleHTTPServer in combination with dpkg-scanpackages from package
+python's link:https://docs.python.org/3/library/http.server.html[http.server]
+in combination with dpkg-scanpackages from package
 dpkg-dev is a simple and easy approach.
 
 Finally invoke grml-live with your class name (`CUSTOM` in this example) added
