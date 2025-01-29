@@ -25,6 +25,7 @@ Depends:
  mmdebstrap,
  moreutils,
  mtools,
+ python3,
  rsync,
  socat,
  squashfs-tools,
