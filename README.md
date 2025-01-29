@@ -1,10 +1,9 @@
 grml-live
 =========
 
-grml-live is a build system for creating a
-[Grml](https://grml.org/) and [Debian](https://www.debian.org/)
-based Linux Live system. The build system is based on FAI ([Fully
-Automatic Installation](https://fai-project.org/)).
+grml-live is a build system for creating a [Grml](https://grml.org/) and [Debian](https://www.debian.org/) based Linux Live system.
+
+The build system is based on the class concept of FAI ([Fully Automatic Installation](https://fai-project.org/)).
 
 Building a Debian based 64bit live system is as simple as running:
 

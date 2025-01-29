@@ -4,4 +4,3 @@ grml-live: privacy-breach-generic [<link rel="home" href="http://grml.org/" titl
 grml-live: unknown-section grml
 grml-live: uses-dpkg-database-directly [usr/share/grml-live/config/hooks/instsoft.GRMLBASE]
 grml-live: uses-dpkg-database-directly [usr/share/grml-live/config/scripts/GRMLBASE/98-clean-chroot]
-grml-live: uses-dpkg-database-directly [usr/sbin/grml-live]
