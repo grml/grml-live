@@ -12,13 +12,6 @@ set -e
 # FAI sets $target, but shellcheck does not know that.
 target=${target:?}
 
-# tell if hwclock is running in UTC or local time
-# by default it's set to UTC=no
-if [ -n "$UTC" ] && [ "$UTC" = "yes" ] ; then
-   echo "UTC is set to 'yes', setting hwclock parameter UTC"
-   [ -e "${target}/etc/adjtime" ] && sed -i "s/^LOCAL/UTC/" "${target}/etc/adjtime"
-fi
-
 # default timezone settings
 if [ -n "$TIMEZONE" ] ; then
    echo "Setting default timezone to $TIMEZONE"
@@ -32,8 +25,7 @@ if [ -n "$TIMEZONE" ] ; then
       # only for tzdata before 2024b-6 (Debian trixie).
       echo "$TIMEZONE" > "$target"/etc/timezone
    fi
-   rm -f "$target"/etc/localtime
-   cp -f "$target"/usr/share/zoneinfo/"$TIMEZONE" "$target"/etc/localtime
+   chroot "$target" ln -sf /usr/share/zoneinfo/"$TIMEZONE" /etc/localtime
 fi
 
 ## END OF FILE ################################################################
