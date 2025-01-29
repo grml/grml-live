@@ -41,16 +41,16 @@ class PackageList(dict):
     def list_of_arch(self, arch: str):
         return set(self.get(arch, []))
 
-    def as_apt_params(self, *, restrict_to_arch: str | None = None) -> str:
+    def as_apt_params(self, *, restrict_to_arch: str) -> list[str]:
         full_list = []
         for arch, packages in self.items():
             if arch == "all":
                 full_list += packages
             else:
-                if restrict_to_arch and arch != restrict_to_arch:
+                if arch != restrict_to_arch:
                     continue
-                full_list += [f"{package} [{arch}]" for package in packages]
-        return ", ".join(full_list)
+                full_list += [f"{package}" for package in packages]
+        return full_list
 
     def merge(self, other) -> None:
         for arch, packages in other.items():
@@ -133,14 +133,14 @@ def chrooted_dpkg_print_architecture(chroot_dir: Path) -> str:
     return result.stdout.strip().decode()
 
 
-def chrooted_apt_satisfy(chroot_dir: Path, satisfy_list: str):
-    """Run apt satisfy in chroot_dir."""
+def chrooted_apt_install(chroot_dir: Path, install_list: list[str]):
+    """Run apt install in chroot_dir."""
     env = {
         "DEBIAN_FRONTEND": "noninteractive",
     }
     run_chrooted(
         chroot_dir,
-        ["apt", "satisfy", "-q", "-y", "--no-install-recommends", satisfy_list],
+        ["apt", "install", "-q", "-y", "--no-install-recommends"] + install_list,
         env=env,
         stdin=subprocess.DEVNULL,
     )
@@ -207,7 +207,7 @@ def install_packages_for_classes(
     """Run equivalent of "instsoft" task: set debconf selections and install packages listed in package lists."""
 
     # debconf is not Essential. Ensure it is installed, so we can use debconf-set-selections.
-    chrooted_apt_satisfy(chroot_dir, "debconf")
+    chrooted_apt_install(chroot_dir, ["debconf"])
 
     dpkg_architecture = chrooted_dpkg_print_architecture(chroot_dir)
 
@@ -219,14 +219,14 @@ def install_packages_for_classes(
 
         package_list = parse_class_packages(conf_dir, class_name)
         full_package_list.merge(package_list)
-        satisfy_args = package_list.as_apt_params(restrict_to_arch=dpkg_architecture)
-        if satisfy_args:
+        install_args = package_list.as_apt_params(restrict_to_arch=dpkg_architecture)
+        if install_args:
             print(f"I: Installing packages for class {class_name}")
-            chrooted_apt_satisfy(chroot_dir, satisfy_args)
+            chrooted_apt_install(chroot_dir, install_args)
 
     print()
     print("I: Installing all packages together to detect relationship errors")
-    chrooted_apt_satisfy(chroot_dir, full_package_list.as_apt_params(restrict_to_arch=dpkg_architecture))
+    chrooted_apt_install(chroot_dir, full_package_list.as_apt_params(restrict_to_arch=dpkg_architecture))
 
     with (chroot_dir / "grml-live" / "log" / "install_packages.list").open("wt") as file:
         file.write("# List of packages installed by minifai\n")
