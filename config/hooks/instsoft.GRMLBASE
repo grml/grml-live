@@ -54,7 +54,7 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    cat /etc/resolv.conf >> "${target}"/etc/resolv.conf
 
    # Update package lists (so they exist at all), so we can install
-   # software; if /var/lib/dpkg/available is empty, it was was probably
+   # software; if /var/lib/dpkg/available is empty, it was probably
    # cleaned by GRMLBASE/98-clean-chroot, so we need to rebuild it
    # anyway
    $ROOTCMD /usr/lib/dpkg/methods/apt/update /var/lib/dpkg/ apt apt
