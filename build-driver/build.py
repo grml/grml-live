@@ -299,7 +299,7 @@ def install_debian_dependencies():
             mtools ,
             python3-paramiko ,
             rsync ,
-            squashfs-tools (>= 1:4.2-0~bpo60) ,
+            squashfs-tools ,
             socat ,
             xorriso ,
             imagemagick ,

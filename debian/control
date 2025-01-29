@@ -27,7 +27,7 @@ Depends:
  mtools,
  rsync,
  socat,
- squashfs-tools (>= 1:4.2-0~bpo60),
+ squashfs-tools,
  xorriso,
  ${misc:Depends},
 Recommends:
