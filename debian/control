@@ -37,5 +37,7 @@ Suggests:
  grml-live-addons,
 Description: build system for creating a Grml (based) Linux live system
  This package provides the build system for creating a Debian /
- Grml based Linux live system (also known as live cd). It is
- based on the FAI (Fully Automatic Installation) framework.
+ Grml based Linux live system.
+ .
+ The build system is based on the class concept of FAI
+ (Fully Automatic Installation).
