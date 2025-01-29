@@ -59,6 +59,16 @@ else
 	pahole=dwarves
 fi
 
+# Workaround for dkms: dkms uses bash, and bash uses /dev/fd/... to
+# implement the "read < <(subprocess)" shell construct. /dev/fd is a
+# symlink to /proc/fd, so /proc/fd and thus /proc have to exist and work.
+MOUNTED_PROC=0
+if $ROOTCMD mount -t proc proc /proc ; then
+    # The mount call typically fails within restricted build contexts
+    # like podman/docker etc. If this happens, dkms just won't work.
+    MOUNTED_PROC=1
+fi
+
 echo "$0: Installing zfs-dkms itself."
 mapfile -t zfs_packages < <($ROOTCMD \
     apt-get --assume-no --download-only --mark-auto -u install \
@@ -89,3 +99,7 @@ $ROOTCMD tar xf - <"$tempfile"
 rm "$tempfile"
 $ROOTCMD depmod -a "$kernelversion"
 echo "$0: Completed successfully. Enjoy your zfs."
+
+if [ "$MOUNTED_PROC" = 1 ]; then
+    $ROOTCMD umount /proc
+fi

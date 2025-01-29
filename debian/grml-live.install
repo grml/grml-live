@@ -1,6 +1,7 @@
+etc/grml                    etc
+usr/lib/grml-live           usr/lib/
 docs/grml-live-remaster.8   usr/share/man/man8/
 docs/grml-live.8            usr/share/man/man8/
-etc/grml                    etc
 examples                    usr/share/doc/grml-live/
 grml-live                   usr/sbin/
 remaster/grml-live-remaster usr/sbin/

@@ -84,8 +84,6 @@ if [ -d "$target"/var/spool/squid/ ] ; then
 fi
 
 echo "Cleaning and removing some misc files and directories"
-find "$target"/etc -type f -name '*.pre_fcopy' -delete
-find "$target"/etc -type l -name '*.pre_fcopy' -delete
 rm -rf --one-file-system "$target"/etc/sysconfig/* \
        "$target"/etc/motd.dpkg-* "$target"/etc/auto.master.*dpkg* \
        "$target"/etc/samba/*.SID "$target"/etc/samba/*.tdb \
@@ -111,7 +109,7 @@ nuke(){
 zero(){
   while IFS= read -r -d '' file ; do
     :> "$file"
-  done < <(find "$@" -type f -size +0 -not -name \*.ini -not -path '*/fai/*' -not -name install_packages.list -print0 2>/dev/null)
+  done < <(find "$@" -type f -size +0 -not -name \*.ini -print0 2>/dev/null)
 }
 
 echo "Removing possible leftovers from update-pciids runs"

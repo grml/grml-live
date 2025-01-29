@@ -4,8 +4,7 @@ grml-live(8)
 Name
 ----
 
-grml-live - build framework based on FAI for generating a Grml and Debian based
-Linux Live system (CD/ISO)
+grml-live - build framework for the Grml Live Linux system
 
 Synopsis
 --------
@@ -19,24 +18,20 @@ grml-live [-a <architecture>] [-c <classe[s]>] [-C <configfile>] [
 Description
 -----------
 
-grml-live provides the build system for creating a Grml and Debian based Linux
-Live-CD. The build system is based on
-link:http://fai-project.org/[FAI] (Fully Automatic
-Installation). grml-live uses the "fai dirinstall" feature to generate a chroot
-system based on the class concept of FAI (see later sections for further
-details) and provides the framework to be able to generate a full-featured ISO.
-It does not use all the FAI features by default though and you don't have to
-know FAI to be able to use it.
+grml-live is the build system for the Grml Live Linux system. You can also
+use it to adapt a Grml release to your own needs.
 
-The use of FAI gives you the flexibility to choose the packages you would like
-to include on your very own Linux Live-CD without having to deal with all the
-details of a build process.
+The build system is based on the class concept of link:http://fai-project.org/[FAI]
+(Fully Automatic Installation). While older versions directly used FAI, the
+current version of grml-live supports the same class-based configuration concept
+but provides its own implementation.
 
-CAUTION: grml-live does **not** use /etc/fai for configuration but instead
-provides and uses ${GRML_FAI_CONFIG} which is /usr/share/grml-live/config by default
-(unless overridden using the ''-D'' option). This ensures that it does not clash
-with default FAI configuration and packages, so you can use grml-live and FAI
-completely independent at the same time!
+The class-based configuration concept gives you the flexibility to choose the
+packages you would like to include on your own Linux Live-CD without having to
+deal with all the details of a build process.
+
+CAUTION: grml-live no longer uses FAI. This means you are free to use FAI
+separately in any way you like, but also you no longer need to have FAI installed.
 
 [NOTE]
 
@@ -67,7 +62,7 @@ amd64 and arm64.
 
   -b::
 
-Build the ISO without updating the chroot via FAI. This option is useful for
+Build the ISO without updating the chroot. This option is useful for
 example when working on stable releases: if you have a working base
 system/chroot and do not want to execute any further updates (via "-u" option)
 but intend to only build the ISO.
@@ -75,13 +70,13 @@ but intend to only build the ISO.
   -B::
 
 Build the ISO without touching the chroot at all. This option is useful if
-you modified anything that FAI or grml-live might adjust via Grml's FAI
-scripts.  It's like the '-b' option but even more advanced. Use only if you
-really know that you do not want to update the chroot.
+you modified anything grml-live might adjust via the class-based configuration.
+It's like the '-b' option but even more advanced. Use only if you really know
+that you do not want to update the chroot.
 
   -c **CLASSES**::
 
-Specify the CLASSES to be used for building the ISO via FAI.  By default only
+Specify the CLASSES to be used for building the ISO.  By default only
 the classes GRMLBASE, GRML_FULL and I386/AMD64/ARM64 (depending on system
 architecture) are assumed.  Additionally you can specify a class providing a
 (grml-)kernel (see <<classes,the 'CLASSES' section in this document>> for
@@ -122,13 +117,14 @@ advance. Usage example: '-d 2009-10-30'
 
   -D **CONFIGURATION_DIRECTORY**::
 
-The specified directory is used as configuration directory for grml-live and FAI.
+The specified directory is used as configuration directory for grml-live.
 By default /usr/share/grml-live/config is used as default configuration directory.
 If you want to have different configuration scripts, package definitions, etc.
 without messing with the global configuration under /usr/share/grml-live/config
 provided by grml-live this option provides you the option to use your own
 configuration directory.
-This directory is what's being referred to as ${GRML_FAI_CONFIG} throughout this documentation.
+This directory is what's being referred to as ${GRML_FAI_CONFIG} throughout this
+documentation.
 
   -e **EXTRACT_ISO_NAME**::
 
@@ -179,7 +175,7 @@ remaining stages and finalize the ISO.
 
   -o **OUTPUT_DIRECTORY**::
 
-Main output directory of the build process of FAI.  Some directories are created
+Main output directory of the build process.  Some directories are created
 inside this target directory, being: grml_cd (where the files for creating the
 ISO are located, including the compressed squashfs file), grml_chroot (the
 chroot system) and grml_isos (where the resulting ISO is stored).
@@ -214,8 +210,7 @@ Specify place of the templates used for building the ISO. By default
 
   -u::
 
-Update existing chroot instead of rebuilding it from scratch. This option is
-based on the softupdate feature of FAI.
+Update existing chroot instead of rebuilding it from scratch..
 
   -U **USERNAME**::
 
@@ -284,15 +279,13 @@ Main features of grml-live
 * supports use and integration of own Software and/or Kernels via simple use of
 Debian repositories
 
-* native support of FAI features
-
 [[class-concept]]
 The class concept
 -----------------
 
-grml-live uses FAI and its class based concept for adjusting configuration and
-setup according to your needs. This gives you flexibility and strength without
-losing the simplicity in the build process.
+grml-live uses a class based concept, like FAI, for adjusting configuration and
+customizing the installation according to your needs. This gives you flexibility
+and strength without losing the simplicity in the build process.
 
 The main and base class provided by grml-live is named GRMLBASE. It's strongly
 recommended to **always** use the class GRMLBASE when building an ISO using
@@ -318,7 +311,9 @@ your amd64 build, et CLASSES="GRMLBASE,GRML_SMALL,AMD64,FOOBAR" inside
 "grml-live -c GRMLBASE,GRML_SMALL,AMD64,FOOBAR ...".
 
 More details regarding the class concept can be found in the documentation of
-FAI itself (being available at /usr/share/doc/fai-doc/).
+FAI (being available at /usr/share/doc/fai-doc/ if you install fai-doc).
+In the past, grml-live directly used FAI. Nowadays, it uses an internal
+implementation of the class concept.
 
 [[X7]]
 [[classes]]
@@ -391,14 +386,13 @@ setup
 Files
 -----
 
-Notice that grml-live ships FAI configuration files that do not use the same
-namespace as the FAI packages itself. This ensures that grml-live does not clash
-with your usual FAI configuration.
-For more details see below. To get an idea how another configuration or example
-files could look like check out /usr/share/doc/fai-doc/examples/simple/
-(provided by Debian package fai-doc). Furthermore
+To understand the class-based configuration concept, please refer to the
+FAI documentation (provided by the Debian package fai-doc). Examples can
+be found in /usr/share/doc/fai-doc/examples/simple/ . Furthermore
 /usr/share/doc/fai-doc/fai-guide.html/ch-config.html provides documentation
-regarding configuration possibilities.
+regarding configuration possibilities. Note that grml-live uses its own
+implementation of the class-based concept, so not all FAI features are
+available.
 
   /usr/sbin/grml-live
 
@@ -420,12 +414,12 @@ commandline.
 
   ${GRML_FAI_CONFIG}/
 
-The main directory for configuration of FAI/grml-live. More details below.
+The main directory for configuration of grml-live. More details below.
 
   ${GRML_FAI_CONFIG}/class/
 
 This directory contains files which specify main configuration variables for the
-FAI classes.
+classes.
 
   ${GRML_FAI_CONFIG}/debconf/
 
@@ -565,9 +559,6 @@ Instructions
   CLASSES="GRMLBASE,GRML_FULL,AMD64"
   EOF
 
-  apt-get update
-  apt-get install fai-client fai-server fai-doc
-
 That's it. Now invoking 'grml-live -V' should build the ISO.  If everything
 worked as expected the last line of the shell output should look like:
 
@@ -599,11 +590,8 @@ If you need help with grml-live or would like to see new features as part of
 grml-live you can get commercial support via
 link:http://grml-solutions.com/[Grml Solutions].
 
-Note that FAI doesn't abort immediately on errors that will ultimately cause
-the build to fail. Be sure to look through the logs and find the actual error;
-look for lines that start with "E: " or contain "FAILED" or "exit code 1".
-Some messages that may look like errors are actually benign; e.g.
-"/tmp/grml64/grml_chroot/var/lib/dpkg is not a mounted ramdisk" is not an error.
+If there were errors during the build, grml-live should have aborted when
+the error happened.
 
 [[install-local-files]]
 How do I install further files into the chroot/ISO?
@@ -629,9 +617,9 @@ Can I use my own (local) Debian mirror?
 
 Yes. Set up an according sources.list configuration as class file in
 ${GRML_FAI_CONFIG}/files/etc/apt/sources.list.d/ and adjust the variable
-FAI_DEBOOTSTRAP (if not already using a base.tgz) inside
-/etc/grml/grml-live.conf[.local]. If you're setting up your own class file don't
-forget to include the class name in the class list (grml-live -c ...).
+FAI_DEBOOTSTRAP in /etc/grml/grml-live.conf[.local]. If you're setting up
+your own class file make sure to include the class name in the class list
+(grml-live -c ...).
 
 If you want to use a local (for example NFS mount) mirror additionally then
 adjust MIRROR_DIRECTORY in /etc/grml/grml-live.conf[.local] as well.
@@ -695,30 +683,7 @@ How do I create a base tar.gz (I386.tar.gz or AMD64.tar.gz or ARM64.tar.gz)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 [[basetgz]]
 
-First of all create the chroot using debootstrap (requires root):
-
-  BASECHROOT='/tmp/basefile'  # path where the chroot gets generated
-  SUITE='bookworm'            # using the current stable release should always work
-  debootstrap --exclude=info,tasksel,tasksel-data,isc-dhcp-client,isc-dhcp-common "${SUITE}" "${BASECHROOT}" http://deb.debian.org/debian
-  tar -C "$BASECHROOT" --exclude='var/cache/apt/archives/*.deb' --exclude 'var/lib/apt/lists/*_*' --xattrs --xattrs-include='*.*' --acls -zcf "${SUITE}".tar.gz ./
-
-[TIP]
-By default debootstrap builds a chroot matching the architecture of the running
-host system. If you're using an amd64 system and want to build an i386 base.tgz
-then invoke debootstrap using the '--arch i386' option. Disclaimer: building an
-AMD64 base.tgz won't work if you are using a 32bit kernel system of course.
-Also building an ARM64 base.tgz requires an arm64 system.
-
-Finally place the generated tarball in $GRML_FAI_CONFIG/basefiles/ (note
-that it needs to be uppercase letters matching the class names, so: e.g.
-AMD64.tar.gz for amd64, I386.tar.gz for i386 or ARM64.tar.gz for arm64).
-
-Then executing grml-live should use this file as base system instead of executing
-debootstrap. Check out the output for something like:
-
-  [...]
-  ftar: extracting //srv/config/basefiles///AMD64.tar.gz to /srv/grml64_testing/grml_chroot//
-  [...]
+This is no longer supported. grml-live will call mmdebstrap for you.
 
 [[localrepos]]
 How to use your own local repository
@@ -800,7 +765,7 @@ Run grml-live directly from git
 
 In case you want to run grml-live directly from the git repository checkout
 (after making sure all dependencies are installed), you should set
-`GRML_FAI_CONFIG` so that a) it finds the according FAI configuration files and
+`GRML_FAI_CONFIG` so that a) it finds its class-based configuration files and
 b) does not use the config files of an possibly installed `grml-live` package.
 Usage example:
 
