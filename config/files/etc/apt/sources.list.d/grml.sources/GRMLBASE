@@ -1,0 +1,6 @@
+Types: deb deb-src
+URIs: http://deb.grml.org
+Suites: grml-stable grml-live grml-testing
+Components: main
+Enabled: yes
+Signed-By: /usr/share/keyrings/grml-archive-keyring.gpg

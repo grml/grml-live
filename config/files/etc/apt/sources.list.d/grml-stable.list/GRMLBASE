@@ -1,3 +1,0 @@
-# stable Grml repository:
-  deb     http://deb.grml.org/ grml-stable  main
-  deb-src http://deb.grml.org/ grml-stable  main
