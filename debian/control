@@ -20,9 +20,9 @@ Architecture: all
 Depends:
  bc,
  bzip2,
- debootstrap,
  dosfstools,
  jo,
+ mmdebstrap,
  moreutils,
  mtools,
  rsync,
