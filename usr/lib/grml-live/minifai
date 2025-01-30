@@ -5,17 +5,18 @@
 # Please beware that this implementation is an interim step, and we may or may not continue
 # with the FAI API.
 #
-from pathlib import Path
 import argparse
 import contextlib
-import subprocess
+import datetime
 import os
 import shutil
+import subprocess
 import socket
-import traceback
 import sys
 import tempfile
+import traceback
 from dataclasses import dataclass
+from pathlib import Path
 from threading import Event, Thread
 
 
@@ -56,6 +57,10 @@ class PackageList(dict):
         for arch, packages in other.items():
             self.setdefault(arch, [])
             self[arch] = list(set(self[arch] + packages))
+
+
+def now_for_log() -> str:
+    return datetime.datetime.now().isoformat()
 
 
 def parse_class_packages(conf_dir: Path, class_name: str) -> PackageList:
@@ -372,23 +377,30 @@ def helper_socket_thread(
         except TimeoutError:
             continue
 
-        orig_req = request_socket.recv(4096).decode()
-        req = orig_req.split("\n")
-        rc = 120
-        if len(req) != 2 and req[1] != "":
-            print("W: socket thread: got message:", repr(orig_req))
-            print("W: socket thread: no newline, message truncated?")
-        else:
-            req = req[0].split(" ")
-            if req[0] == "fcopy":
-                rc = do_fcopy(conf_dir, chroot_dir, classes, req[1:])
-            elif req[0] == "skiptask":
-                rc = do_skiptask(dynamic_state, req[1:])
+        try:
+            request_socket.settimeout(5 * 60)  # 5 minutes
+            orig_req = request_socket.recv(4096).decode()
+            req = orig_req.split("\n")
+            rc = 120
+            if len(req) != 2 and req[1] != "":
+                print("W: socket thread: got message:", repr(orig_req))
+                print("W: socket thread: no newline, message truncated?")
             else:
-                print("W: socket thread: request not understood:", repr(orig_req))
+                req = req[0].split(" ")
+                if req[0] == "fcopy":
+                    rc = do_fcopy(conf_dir, chroot_dir, classes, req[1:])
+                elif req[0] == "skiptask":
+                    rc = do_skiptask(dynamic_state, req[1:])
+                else:
+                    print("W: socket thread: request not understood:", repr(orig_req))
 
-        request_socket.send(f"{rc!s}\n".encode())
-        request_socket.close()
+            request_socket.send(f"{rc!s}\n".encode())
+            request_socket.close()
+
+        except Exception:
+            print(f"E: {now_for_log()} helper_socket_thread caught fatal exception", flush=True)
+            traceback.print_exc()
+            break
 
     listen_socket.close()
 
@@ -407,9 +419,10 @@ def helper_tools(conf_dir: Path, chroot_dir: Path, classes: list[str], dynamic_s
         tempdir,
         "fcopy",
         f"""#!/bin/sh
+echo "D: minifai fcopy: $(date +%FT%T) requesting $@"
 RC=$(echo fcopy "$@" | socat - UNIX-CONNECT:{tempdir}/sock,forever)
 if [ -z "$RC" ]; then
-  echo "E: minifai fcopy: got no reply from server"
+  echo "E: minifai fcopy: $(date +%FT%T) got no reply from server"
   exit 119
 elif [ "$RC" != "0" ]; then
   echo "E: minifai fcopy: server sent error code $RC"
@@ -423,9 +436,10 @@ exit 0
         tempdir,
         "skiptask",
         f"""#!/bin/sh
+echo "D: minifai skiptask: $(date +%FT%T) requesting $@"
 RC=$(echo skiptask "$@" | socat - UNIX-CONNECT:{tempdir}/sock,forever)
 if [ -z "$RC" ]; then
-  echo "E: minifai skiptask: got no reply from server"
+  echo "E: minifai skiptask: $(date +%FT%T) got no reply from server"
   exit 119
 elif [ "$RC" != "0" ]; then
   echo "E: minifai skiptask: server sent error code $RC"
@@ -621,8 +635,6 @@ def _run_tasks(conf_dir: Path, chroot_dir: Path, classes: list[str], grml_live_c
             for class_name in classes:
                 run_class_scripts(conf_dir, chroot_dir, class_name, helper_tools_path, env)
 
-        run_chrooted(chroot_dir, ["ls", "-laR", "/dev/"])
-
     return 0
 
 
@@ -668,7 +680,7 @@ def main(program_name: str, argv: list[str]) -> int:
         # assume exception site already printed relevant info
         rc = 3
     except Exception:
-        print("E: Caught fatal exception")
+        print(f"E: {now_for_log()} minifai main caught fatal exception")
         traceback.print_exc()
         rc = 2
 
