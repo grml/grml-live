@@ -1,7 +1,10 @@
 Source: grml-autoconfig
 Section: grml
 Priority: optional
-Maintainer: Michael Prokop <mika@grml.org>
+Maintainer: Grml Team <team@grml.org>
+Uploaders:
+ Michael Prokop <mika@debian.org>,
+ Chris Hofstaedtler <zeha@debian.org>,
 Build-Depends:
  debhelper (>= 10~),
 Standards-Version: 4.5.1
