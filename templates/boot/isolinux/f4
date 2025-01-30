@@ -9,7 +9,8 @@
  grml blacklist=usbcore                                   disable USB drivers  
  grml debnet        search local partitions for file /etc/network/interfaces,  
                 copy /etc/network then to local system and restart networking  
- grml gmt tz=Europe/Vienna   use GMT-based time and specified timezone for TZ  
+ grml localtime                   assume Hardware Clock (RTC) is in localtime  
+ grml tz=Europe/Vienna                         set timezone (default: tz=UTC)  
  grml home=/dev/sda1                   use specified device as home directory  
  grml keyboard=de                                                set keyboard  
  grml lang=[at|ch|da|de|es|fr|it|...|us]              set keyboard + language  
@@ -18,6 +19,5 @@
  grml nodhcp                     disable searching for network setup via DHCP  
  grml noeject noprompt      do not eject CD after halt / do not prompt for it  
  grml nofstab / nolabel   disable generating of /etc/fstab / use of fs-labels  
-                                                                               
                                                                                
 1f
