@@ -1,3 +1,93 @@
+grml-live (0.52.0) grml-testing; urgency=medium
+
+  The "we got minifai" release
+
+  [ Chris Hofstaedtler ]
+  * [462ecca] grml-live: rename copy_optional_file_logged
+  * [ff42d61] grml-live: always create /boot/addons directory on ISO
+  * [dbfb637] isolinux: use copy_file_logged instead of copy_addon_file
+  * [938ffce] grub: hide ipxe boot entry if files are absent
+  * [01a29b5] grml-live: use copy_file_logged for ipxe, pci.ids
+  * [81efbab] isolinux: skip "big" files not used by templates
+  * [303888a] isolinux: deduplicate {chain,mboot,hdt,menu}.c32
+  * [af08a3c] grml-live: install pci.ids only if we install syslinux
+  * [79dc460] grml-live: use copy_file_logged for memtest86+
+  * [d25906f] grml-live: delete copy_addon_file
+  * [7c16dbb] grub: hide netboot.xyz boot entry if files are absent
+  * [5248f7c] grml-live: use isohybrid mbr from chroot
+  * [e86a6bc] Remove Depends: syslinux, ipxe, memtest86+, pciutils
+  * [6278b16] grml-live: expand copy_file_logged comment
+  * [11a9bf3] Drop workaround for nfs-utils bug, fixed in Debian stable
+  * [95ef3b9] Install /etc/sudoers.d/user-nopasswd instead of /etc/sudoers
+  * [6997454] Drop another workaround for nfs >=1:2.6.2-1 < 1:2.6.3
+  * [1e76daa] build-driver: run mmdebstrap in verbose mode
+  * [04b6c0e] build-driver: work around apt ignoring SRV records
+  * [e7f6cbc] systemd: use dropin config files
+  * [0a8ca00] modules: use dropin config file
+  * [5a977ae] Remove obsolete touch /etc/grml_fai_release
+  * [92335e8] Remove version detection of old resolvconf
+  * [05e0f31] Remove vestigal apt-list{bugs,changes} support
+  * [55d9e20] Remove workaround for lighty issue from 15years ago
+  * [149325a] Stop providing /dev/MAKEDEV
+  * [4713573] hooks/scripts: use GRML_LIVE_CONFIG
+  * [30b547a] grml-live: make "fai" overridable in grml-live later on
+  * [268db08] grml-live: capture stderr from fai
+  * [8cb4956] Fix missing isolinux files
+  * [89df0a0] Remove chainloading of grub from isolinux
+  * [acfd1d6] Update /etc/timezone only if it exists
+  * [c7ab5a8] Require package repositories to be signed, by default
+  * [c99fecb] ZFS: derive linux package names from primary Debian
+    architecture
+  * [28be0da] Follow rename of grml-debian-keyring to grml-keyring
+  * [312f4f2] Replace FAI with our own implementation
+  * [2d58b8f] minifai: mark leaf packages as automatically installed
+  * [e61bad4] minifai: write logs into /grml-live/log/
+  * [bc4dc17] minifai: write install_packages.list
+  * [93f826f] grml-live: drop chown of minifai logs
+  * [c18d68c] minifai: apply debconf selections before calling instsoft
+    hooks
+  * [396543e] ZFS: mount /proc for minifai and other /proc-less
+    environments
+  * [34f96ca] Introduce config/bootstrap-keyring to set keyring for
+    mmdebstrap
+  * [fcc0961] minifai: avoid using apt satisfy
+  * [34167e2] Fix timezone and RTC setup
+  * [5ce040c] minifai: set timeout on request socket
+  * [5943118] minifai: add debug log and timestamps to fcopy
+  * [c33bdb2] minifai: drop debug listing of /dev
+  * [e107bcb] minifai: resort imports
+  * [1325995] hooks: drop savelog.LAST.source
+  * Software related changes:
+    - [a55455f] GRML_SMALL: install memtest86+
+
+  [ Christopher Bock ]
+  * [4dceb67] SimpleHttpServer was Python2 - Long live Python3 -m
+    http.server
+  * [0af27a3] zsh completion: wayback dates via /mr/timestamp
+  * [4f36e59] Use deb822.sources
+
+  [ Michael Prokop ]
+  * [759aecc] d/control: Replace dependency on debootstrap with mmdebstrap
+  * [2b084ea] Drop versioned dependency on squashfs-tools
+  * [0397d65] Drop deprecated docs/design.txt
+  * [6c8c67b] Update README and d/control for minifai related adjustments
+  * [8350a99] config/hooks/instsoft.GRMLBASE: fix minor typo (word
+    duplication)
+  * [2894d61] debian/grml-live.install: run wrap-and-sort -tas
+  * [e3a8618] debian/grml-live.lintian-overrides: drop deprecated check
+  * [486d697] d/control: add python3 to Depends
+  * [71b0db0] debian/source/lintian-overrides: add absolute-symbolic-link-
+    target-in-source override for keyring files
+  * [ca86de6] Drop support for package_errors.log +
+    EXIT_ON_MISSING_PACKAGES
+  * Software related changes:
+    - [1af9d5a] add gnupg to GRML_FULL
+
+  [ Darshaka Pathirana ]
+  * [4c3098a] isolinux: Drop bootoption "gmt"
+
+ -- Michael Prokop <mika@grml.org>  Thu, 30 Jan 2025 18:02:50 +0100
+
 grml-live (0.51.0) grml-testing; urgency=medium
 
   Big update, moves /etc/grml/fai/config to /usr/share/grml-live/config.

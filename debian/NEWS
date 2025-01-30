@@ -1,3 +1,12 @@
+grml-live (0.52.0) unstable; urgency=medium
+
+  We replaced FAI with our own implementation minifai.  It should be
+  backwards compatible, though if you notice any problems, please
+  reach out (via https://github.com/grml/grml-live/issues or
+  https://grml.org/contact/).
+
+ -- Michael Prokop <mika@grml.org>  Thu, 30 Jan 2025 18:04:48 +0100
+
 grml-live (0.51.0) unstable; urgency=low
 
   The location of the FAI configuration data has changed, and all users
