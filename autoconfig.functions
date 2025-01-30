@@ -355,25 +355,22 @@ config_timezone(){
   local timezone
   timezone="$(getbootparam 'tz' 2>>$DEBUG)"
 
+  if [ -n "${timezone}" ] ; then
+    if ! [ -e "/usr/share/zoneinfo/${timezone}" ] ; then
+      ewarn "Warning: unknown timezone ${timezone}, falling back to UTC" ; eend 1
+      timezone="UTC"
+    fi
+
+    einfo "Setting timezone to ${timezone}"
+    ln -sf /usr/share/zoneinfo/"${timezone}" /etc/localtime
+    eend $?
+  fi
+
   if checkbootparam 'localtime' ; then
     einfo "Bootoption localtime is set, configuring RTC to local time."
     timedatectl set-local-rtc 1
     eend $?
   fi
-
-  # nothing further to do for us if boot option isn't set
-  if [ -z "${timezone:-}" ] ; then
-    return 0
-  fi
-
-  if ! [ -e "/usr/share/zoneinfo/${timezone}" ] ; then
-    ewarn "Warning: unknown timezone ${timezone}, falling back to UTC" ; eend 1
-    timezone="UTC"
-  fi
-
-  einfo "Setting timezone to ${timezone}"
-  ln -sf /usr/share/zoneinfo/"${timezone}" /etc/localtime
-  eend $?
 }
 # }}}
 
