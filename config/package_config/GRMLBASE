@@ -1,9 +1,11 @@
 PACKAGES install
 
+beep
 busybox
 bzip2
 console-data
 console-setup
+console-setup-linux
 cryptsetup-initramfs
 dbus
 dmidecode
@@ -11,9 +13,9 @@ efibootmgr
 eject
 fdisk
 file
+gawk
 gpm
 grml2usb
-grml-autoconfig
 grml-crypt
 grml-debootstrap
 grml-etc
