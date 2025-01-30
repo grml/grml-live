@@ -635,8 +635,6 @@ def _run_tasks(conf_dir: Path, chroot_dir: Path, classes: list[str], grml_live_c
             for class_name in classes:
                 run_class_scripts(conf_dir, chroot_dir, class_name, helper_tools_path, env)
 
-        run_chrooted(chroot_dir, ["ls", "-laR", "/dev/"])
-
     return 0
 
 
