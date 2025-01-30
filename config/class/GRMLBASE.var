@@ -3,6 +3,4 @@
 # allow installation of packages from unsigned repositories
 # FAI_ALLOW_UNSIGNED=1
 
-# Set UTC=yes if your system clock is set to UTC (GMT) and UTC=no if not.
-UTC=no
-TIMEZONE=UTC
+TIMEZONE=Etc/UTC
