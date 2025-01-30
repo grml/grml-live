@@ -1,6 +1,0 @@
-# This file was deployed via grml-live's
-# ${GRML_FAI_CONFIG}/scripts/GRMLBASE/25-locales script, using
-# ${GRML_FAI_CONFIG}/files/etc/locale.conf/GRMLBASE
-################################################################################
-# This file lists the locales configuration as used by e.g. systemd-firstboot
-LANG=C.UTF-8
