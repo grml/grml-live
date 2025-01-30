@@ -16,10 +16,12 @@ if ! [ -w "${LOGDIR}" ] ; then
   exit 1
 fi
 
+# OUTSIDE: This fragment assumes it runs outside the chroot.
 # store package list:
 COLUMNS=200 $ROOTCMD dpkg --list > "${LOGDIR}"/dpkg.list
 COLUMNS=200 $ROOTCMD dpkg --get-selections > "${LOGDIR}"/dpkg.selections
 
+# OUTSIDE: This fragment assumes it runs outside the chroot.
 # store list of packages sorted by size:
 if [ -x "$target"/usr/bin/dpkg-query ] ; then
   # shellcheck disable=SC2016 # Embedded $ is correct.
@@ -27,6 +29,7 @@ if [ -x "$target"/usr/bin/dpkg-query ] ; then
     "${LOGDIR}"/packages.size
 fi
 
+# OUTSIDE: This fragment assumes it runs outside the chroot.
 # store a list of non-free packages and their licenses
 echo "The following packages from the Debian non-free section are included in this release" \
    > "${LOGDIR}"/nonfree-licenses.txt
@@ -35,6 +38,7 @@ echo >> "${LOGDIR}"/nonfree-licenses.txt
 # copyright information for non-free packages
 non_free_pkgs=$($ROOTCMD apt-cache show '~i' | awk '/^Package: / {pkg=$2} /^Section: non-free/ {print pkg}')
 
+# OUTSIDE: This fragment assumes it runs outside the chroot.
 for pkg in ${non_free_pkgs:-} ; do
   echo "Package: ${pkg}" >> "${LOGDIR}"/nonfree-licenses.txt
   echo "========================================================================" \

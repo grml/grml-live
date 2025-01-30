@@ -12,6 +12,7 @@ set -e
 # FAI sets $target, but shellcheck does not know that.
 target=${target:?}
 
+# OUTSIDE: This fragment assumes it runs outside the chroot.
 echo -n > "${LOGDIR}"/package_errors.log  # ensure we start with an empty file
 
 PACKAGE_LIST=/grml-live/log/install_packages.list
