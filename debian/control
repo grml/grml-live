@@ -30,7 +30,6 @@ Depends:
  kbd | console-utilities,
  rsync,
  udev,
- util-linux-extra | util-linux (<= 2.38-1),
  zsh,
  ${misc:Depends},
  ${shlibs:Depends},
