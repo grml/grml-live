@@ -222,6 +222,7 @@ apg
 pwgen
 
 # privacy tools
+gnupg
 scdaemon
 
 # popular VCS to pull config from
