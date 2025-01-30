@@ -1,3 +1,10 @@
+grml-autoconfig (0.23.7) grml-testing; urgency=medium
+
+  [ Darshaka Pathirana ]
+  * [d5a8453] Set timezone before timedatectl set-local-rtc 1
+
+ -- Chris Hofstaedtler <ch@grml.org>  Thu, 30 Jan 2025 18:59:24 +0100
+
 grml-autoconfig (0.23.6) grml-testing; urgency=medium
 
   [ Michael Prokop ]
