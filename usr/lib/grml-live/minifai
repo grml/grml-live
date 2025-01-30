@@ -372,6 +372,7 @@ def helper_socket_thread(
         except TimeoutError:
             continue
 
+        request_socket.settimeout(5 * 60)  # 5 minutes
         orig_req = request_socket.recv(4096).decode()
         req = orig_req.split("\n")
         rc = 120
