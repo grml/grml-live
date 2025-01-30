@@ -1,3 +1,14 @@
+grml-autoconfig (0.23.6) grml-testing; urgency=medium
+
+  [ Michael Prokop ]
+  * [e96da70] Re-design config_timezone for TZ + localtime handling + drop
+    config_time
+
+  [ Chris Hofstaedtler ]
+  * [3ea1818] d/control: update Maintainer/Uploaders
+
+ -- Chris Hofstaedtler <ch@grml.org>  Thu, 30 Jan 2025 02:04:30 +0100
+
 grml-autoconfig (0.23.5) grml-testing; urgency=medium
 
   * [e37fd30] Stop managing / depending on rsyslog
