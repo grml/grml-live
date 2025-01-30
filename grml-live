@@ -112,7 +112,6 @@ fi
 
 # lsb-functions and configuration stuff {{{
 # make sure they are not set by default
-VERBOSE='1'
 FORCE=''
 UPDATE=''
 BUILD_ONLY=''
@@ -753,85 +752,6 @@ else
       einfo "Finished execution of stage 'fai $FAI_ACTION'"
    fi
 fi # BUILD_DIRTY?
-# }}}
-
-# package validator {{{
-CHECKLOG="$LOG_OUTPUT"/fai/
-if [ -r "$CHECKLOG/dpkg.selections" ] ; then
-  package_count=$(wc -l "$CHECKLOG/dpkg.selections" | awk '{print $1}')
-else
-  package_count="unknown"
-fi
-
-mkdir -p "$REPORTS"
-REPORT_MISSING_PACKAGES="${REPORTS}/TEST-MissingPackages.xml"
-
-# check for missing packages
-if ! [ -s "$CHECKLOG/package_errors.log" ] ; then
-  einfo "No missing packages found, generating empty junit report."
-
-  cat > "${REPORT_MISSING_PACKAGES}" << EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="grml-live-missing-packages" tests="${package_count}" time="1" failures="0" errors="0" skipped="0" assertions="0">
-  <testcase name="test_missing_packages" time="0" assertions="0">
-  </testcase>
-  <system-out>
-  </system-out>
-  <system-err>
-  </system-err>
-</testsuite>
-EOF
-  eend 0
-else
-  einfo "Missing packages found, generating junit report."
-
-  if [ -r "$CHECKLOG/package_errors.log" ] ; then
-    package_errors=$(wc -l "$CHECKLOG/package_errors.log" | awk '{print $1}')
-  else
-    package_errors="unknown"
-  fi
-
-  mkdir -p "$REPORTS"
-  REPORT_MISSING_PACKAGES="${REPORTS}/TEST-MissingPackages.xml"
-
-  cat > "${REPORT_MISSING_PACKAGES}" << EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="grml-live-missing-packages" tests="${package_count}" time="1" failures="${package_errors}" errors="${package_errors}" skipped="0" assertions="0">
-EOF
-
-  # shellcheck disable=SC2013 # We expect each line to be a single word.
-  for package in $(awk '{print $1}' "${CHECKLOG}/package_errors.log" | sed 's;/;\\/;') ; do
-    failure_reason="$(awk "/$package/ {print \$2}" "${CHECKLOG}/package_errors.log")"
-    cat >> "${REPORT_MISSING_PACKAGES}" << EOF
-  <testcase name="test_missing_packages_${package}" time="0" assertions="0">
-    <failure type="${failure_reason}" message="Package ${package} is missing">
-Package $package is missing in chroot (${failure_reason})
-  </failure>
-  </testcase>
-EOF
-  done
-
-  cat >> "${REPORT_MISSING_PACKAGES}" << EOF
-  <system-out>
-  </system-out>
-  <system-err>
-  </system-err>
-</testsuite>
-EOF
-  eend 0
-
-  if [ -n "$EXIT_ON_MISSING_PACKAGES" ] && [ -z "$BUILD_DIRTY" ] ; then
-    eerror "The following packages were requested for installation but could not be processed:"
-    cat "$CHECKLOG/package_errors.log"
-    eerror "... exiting as requested via \$EXIT_ON_MISSING_PACKAGES."
-    eend 1
-    bailout 13
-  else
-    ewarn "The following packages were requested for installation but could not be processed:"
-    cat "$CHECKLOG/package_errors.log"
-    eend 0
-  fi
-fi
 # }}}
 
 # grub boot {{{
