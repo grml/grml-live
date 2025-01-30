@@ -5,18 +5,18 @@
 # Please beware that this implementation is an interim step, and we may or may not continue
 # with the FAI API.
 #
-from pathlib import Path
 import argparse
 import contextlib
-import subprocess
 import datetime
 import os
 import shutil
+import subprocess
 import socket
-import traceback
 import sys
 import tempfile
+import traceback
 from dataclasses import dataclass
+from pathlib import Path
 from threading import Event, Thread
 
 
