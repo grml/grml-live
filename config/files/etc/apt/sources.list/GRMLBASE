@@ -1,9 +1,0 @@
-###################################################################
-# Installed via grml-live's
-# ${GRML_FAI_CONFIG}/files/etc/apt/sources.list/GRMLBASE
-###################################################################
-
-##### IMPORTANT NOTE ##############################################
-# The configuration file /etc/apt/sources.list has been split
-# into structured files in directory /etc/apt/sources.list.d
-##### IMPORTANT NOTE ##############################################
