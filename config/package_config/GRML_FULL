@@ -165,6 +165,7 @@ iptstate
 iputils-arping
 iputils-ping
 iputils-tracepath
+ipxe
 iw
 libnss-mdns
 libteam-utils

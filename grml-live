@@ -1045,8 +1045,14 @@ else
     einfo "Installing boot addons."
 
     # copy from chroot-installed packages
-    copy_file_logged "${BUILD_OUTPUT}"/boot/addons/ipxe.lkrn "${CHROOT_OUTPUT}" /usr/lib/ipxe/ipxe.lkrn
-    copy_file_logged "${BUILD_OUTPUT}"/boot/addons/ipxe.efi "${CHROOT_OUTPUT}" /usr/lib/ipxe/ipxe.efi
+
+    # ipxe >= 1.21.1+git20220113.fbbdc3926+dfsg-3
+    if [[ "$ARCH" == "amd64" ]] ; then
+      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/ipxe.lkrn "${CHROOT_OUTPUT}" /usr/lib/ipxe/ipxe.lkrn
+      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/ipxe.efi "${CHROOT_OUTPUT}" /usr/lib/ipxe/ipxe-amd64.efi
+    elif [[ "$ARCH" == "arm64" ]] ; then
+      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/ipxe.efi "${CHROOT_OUTPUT}" /usr/lib/ipxe/ipxe-arm64.efi
+    fi
 
     # memtest86+ >=6.00-1
     if [[ "$ARCH" == "amd64" ]] ; then
