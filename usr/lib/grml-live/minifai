@@ -420,7 +420,7 @@ def helper_tools(conf_dir: Path, chroot_dir: Path, classes: list[str], dynamic_s
         "fcopy",
         f"""#!/bin/sh
 echo "D: minifai fcopy: $(date +%FT%T) requesting $@"
-RC=$(echo fcopy "$@" | socat - UNIX-CONNECT:{tempdir}/sock,forever)
+RC=$(echo fcopy "$@" | socat -t3600 - UNIX-CONNECT:{tempdir}/sock,forever)
 if [ -z "$RC" ]; then
   echo "E: minifai fcopy: $(date +%FT%T) got no reply from server"
   exit 119
@@ -437,7 +437,7 @@ exit 0
         "skiptask",
         f"""#!/bin/sh
 echo "D: minifai skiptask: $(date +%FT%T) requesting $@"
-RC=$(echo skiptask "$@" | socat - UNIX-CONNECT:{tempdir}/sock,forever)
+RC=$(echo skiptask "$@" | socat -t3600 - UNIX-CONNECT:{tempdir}/sock,forever)
 if [ -z "$RC" ]; then
   echo "E: minifai skiptask: $(date +%FT%T) got no reply from server"
   exit 119
