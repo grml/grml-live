@@ -230,6 +230,7 @@ grml libata.force=[ID:]VAL            Force configurations for libata.
                                       to force pio4 mode on device "ata1:00:"
 grml libata.dma=0                     Disable DMA on PATA and SATA devices
 grml libata.ignore_hpa=1              Disable host protected area (which should enable the whole disk)
+grml dis_ucode_ldr                    Disable loading of CPU microcode
 grml vga=normal                       No-framebuffer mode (does not influence X)
 grml vga=ask                          Display menu for framebuffer mode
 grml radeon.modeset=0  nomodeset      Disable Kernel Mode Setting (KMS) for Radeon driver.
