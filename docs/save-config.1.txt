@@ -1,0 +1,101 @@
+save-config(1)
+==============
+
+Name
+----
+save-config - save configuration
+
+Synopsis
+--------
+
+save-config <safe-options>
+
+About
+-----
+
+This script generates a plain bzip2 compressed tar archive containing the
+specified files, suitable as a GCA ('grml configuration archive', see
+grml-autoconfig(1) for details).
+
+Options
+-------
+
+The following options are supported for specifying which parts should be saved
+in the configuration file:
+
+  *-home*::
+
+Store hidden files from $HOME ($HOME/.*).
+
+  *-grmlhome*::
+
+Store hidden files from \$HOME (\$HOME/.*) of user grml [use as user root].
+
+  *-etc*::
+
+Sstore modified files from /etc.
+
+  *-configdir*::
+
+Store $HOME/config.
+
+  *-all*::
+
+Store all configuration files (:= -home, -configdir and -etc).
+
+[TIP]
+It is also possible to use environment variables for specifying which parts
+should be saved.  Just set the corresponding variable: $SAVE_HOME, $SAVE_ETC,
+$SAVE_CONFIGDIR and $SAVE_ALL
+
+The default filename of the generated configuration file is config.tbz.  The
+following options are supported for specifying another destination of the
+configuration file:
+
+  *-ssh user@host:/path/to/file*::
+
+Copy configuration via ssh/scp to remote host.
+
+  *-mail <recipient>*::
+
+Send configuration via mail.
+
+  *-file foo_bar_config.tbz*::
+
+Save configuration in specified file.
+
+Usage examples
+--------------
+
+  *save-config -all*::
+
+Store all configuration files in config.tbz in current dir.
+
+  *save-config -home -mail  devnull@grml.org*::
+
+Store $HOME/.* in config.tbz and send it via mail.
+
+  *save-config -etc  -ssh   devnull@grml.org:/path/*::
+
+Store /etc in config.tbz and scp it to specified host.
+
+  *save-config -all  -file  foo.tbz*::
+
+Store all configuration files in foo.tbz.
+
+  *SAVE_ALL=yes save-config -file /path/foo.tbz*::
+
+Store all configuration files in /path/foo.tbz.
+
+Bugs
+----
+If you find a bug please report it. See link:http://grml.org/bugs/[] for details
+about how to report bugs.
+
+See also
+--------
+grml-autoconfig(1), grml-autoconfig(8), restore-config(1)
+
+Author
+------
+(c) 2005++, Michael Prokop <mika@grml.org>
