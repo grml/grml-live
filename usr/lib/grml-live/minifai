@@ -220,7 +220,7 @@ def install_packages_for_classes(
     for class_name in classes:
         chrooted_debconf_set_selections(chroot_dir, conf_dir / "debconf" / class_name)
 
-        run_script(chroot_dir, conf_dir / "hooks" / f"instsoft.{class_name}", helper_tools_path, hook_env)
+        run_script(chroot_dir, conf_dir / "hooks" / class_name / "instsoft", helper_tools_path, hook_env)
 
         package_list = parse_class_packages(conf_dir, class_name)
         full_package_list.merge(package_list)
@@ -246,26 +246,56 @@ def show_env(log_text: str, env):
     print()
 
 
-def do_fcopy_path(source_dir: Path, dest_path: Path, classes: list[str], mode) -> bool:
-    to_copy = None
-    for class_name in classes:
-        if (source_dir / class_name).exists():
-            to_copy = source_dir / class_name
+def do_fcopy_file(to_copy: Path, chroot_dir: Path, path: str, mode):
+    dest_path = chroot_dir / path
 
-    if to_copy is not None:
-        print(f"I: fcopy: Installing {to_copy} as {dest_path}.")
-        if dest_path.exists():
-            print(f"W: fcopy: Destination {dest_path} already exists.")
+    print(f"I: fcopy: Installing {to_copy} as {dest_path}.")
+    if dest_path.exists():
+        print(f"W: fcopy: Destination {dest_path} already exists.")
 
-        # this is probably fine, as we expect to run as root and do not support
-        # different file/directory ownership.
-        dest_path.parent.mkdir(exist_ok=True, parents=True)
+    # this is probably fine, as we expect to run as root and do not support
+    # different file/directory ownership.
+    dest_path.parent.mkdir(exist_ok=True, parents=True)
 
-        shutil.copyfile(to_copy, dest_path, follow_symlinks=False)
-        dest_path.chmod(mode)
-        os.chown(dest_path, 0, 0, follow_symlinks=False)
+    shutil.copyfile(to_copy, dest_path, follow_symlinks=False)
+    dest_path.chmod(mode)
+    os.chown(dest_path, 0, 0, follow_symlinks=False)
 
     return True
+
+
+def do_fcopy_path(files_dir: Path, chroot_dir: Path, classes: list[str], path: str, mode: int) -> bool:
+    to_copy = None
+    for class_name in classes:
+        class_path = files_dir / class_name / path
+        if class_path.exists():
+            to_copy = class_path
+
+    if to_copy:
+        do_fcopy_file(to_copy, chroot_dir, path, mode)
+        return True
+    else:
+        return False
+
+
+def do_fcopy_recursive(files_dir: Path, chroot_dir: Path, classes: list[str], path_root: str, mode: int):
+    tree = {}
+
+    for class_name in classes:
+        class_files_dir = files_dir / class_name
+        if not class_files_dir.exists():
+            continue
+
+        class_path_root = class_files_dir / path_root
+        if not class_path_root.exists():
+            continue
+
+        files = [p.relative_to(class_files_dir) for p in class_path_root.glob("**/*") if not p.is_dir()]
+        for file in files:
+            tree[file] = class_name
+
+    for path, class_name in tree.items():
+        do_fcopy_file(files_dir / class_name/ path, chroot_dir, path, mode)
 
 
 def parse_fcopy_args(fcopy_args: list[str]) -> tuple[str, str, int, bool, bool, list[str]]:
@@ -334,18 +364,11 @@ def do_fcopy(conf_dir: Path, chroot_dir: Path, classes: list[str], fcopy_args: l
 
     if recursive:
         for path in paths:
-            path_dir = files_dir / path
-            dirs = [p for p in path_dir.glob("**/*") if p.is_dir()]
-            for dir in dirs:
-                dir = dir.relative_to(files_dir)
-                do_fcopy_path(files_dir / dir, chroot_dir / dir, classes, mode)
+            do_fcopy_recursive(files_dir, chroot_dir, classes, path, mode)
 
     else:
         for path in paths:
-            path_dir = files_dir / path
-            found = False
-            if path_dir.exists():
-                found = do_fcopy_path(path_dir, chroot_dir / path, classes, mode)
+            found = do_fcopy_path(files_dir, chroot_dir, classes, path, mode)
             if not found and not ignore_missing:
                 print(f"E: Source {path=} is missing for fcopy")
                 rc = 1
@@ -550,12 +573,12 @@ def parse_varfile(varfile: Path) -> dict:
     return env
 
 
-def read_vars_for_classes(conf_dir: Path, classes: list[str]) -> dict:
-    """Parse FAI .var files"""
+def read_envvars_for_classes(conf_dir: Path, classes: list[str]) -> dict:
+    """Read environment variable files"""
     env = {}
 
     for class_name in classes:
-        varfile = conf_dir / "class" / f"{class_name}.var"
+        varfile = conf_dir / "env" / class_name
         if varfile.exists():
             env.update(parse_varfile(varfile))
 
@@ -617,13 +640,13 @@ def _run_tasks(conf_dir: Path, chroot_dir: Path, classes: list[str], grml_live_c
     env = {
         "GRML_LIVE_CONFIG": str(grml_live_config),
         "LOGDIR": str(logdir),
-    } | read_vars_for_classes(conf_dir, classes)
+    } | read_envvars_for_classes(conf_dir, classes)
     show_env("Merged class variables", env)
 
     with helper_tools(conf_dir, chroot_dir, classes, dynamic_state) as helper_tools_path:
         hook_env = env | {"FAI_ACTION": fai_action}
         for class_name in classes:
-            run_script(chroot_dir, conf_dir / "hooks" / f"updatebase.{class_name}", helper_tools_path, hook_env)
+            run_script(chroot_dir, conf_dir / "hooks" / class_name / "updatebase", helper_tools_path, hook_env)
 
         with policy_rcd(chroot_dir):
             task_updatebase(chroot_dir, dynamic_state)

@@ -1,7 +1,0 @@
-// Installed via ${GRML_FAI_CONFIG}/files/etc/apt/apt.conf.d/15grml-live/GRMLBASE
-
-// Recommends just pull in way tooooo much packages, so disable it:
-APT::Install-Recommends false;   // added by grml-live
-
-// Build may refer to snapshot.debian.org, which expires
-Acquire::Check-Valid-Until false; // added by grml-live
