@@ -1,6 +1,7 @@
 config                      usr/share/grml-live/
 docs/grml-live-remaster.8   usr/share/man/man8/
 docs/grml-live.8            usr/share/man/man8/
+etc/cruft/filters/grml-live etc/cruft/filters
 etc/grml                    etc
 examples                    usr/share/doc/grml-live/
 grml-live                   usr/sbin/
