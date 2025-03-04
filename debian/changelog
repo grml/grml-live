@@ -1,3 +1,18 @@
+grml-live (0.52.1) grml-testing; urgency=medium
+
+  [ Chris Hofstaedtler ]
+  * [98577f3] debian/NEWS: remove entries from 2011 and older
+  * [a55e178] SW: follow transition from dnsutils to bind9-dnsutils
+  * [8bede65] SW: add ipxe to GRML_FULL
+  * [48e5c53] Support ipxe >= 1.21.1+git20220113.fbbdc3926+dfsg-3
+  * [be2cd1b] socat: wait longer than default 0.5sec
+
+  [ Michael Prokop ]
+  * [f699310] templates/GRML/grml-cheatcodes.txt: document kernel parameter
+    dis_ucode_ldr
+
+ -- Chris Hofstaedtler <ch@grml.org>  Tue, 04 Mar 2025 23:44:06 +0100
+
 grml-live (0.52.0) grml-testing; urgency=medium
 
   The "we got minifai" release
