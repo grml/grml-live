@@ -31,6 +31,7 @@ hwinfo
 ifupdown
 initramfs-tools
 iputils-ping
+iwd
 kbd
 less
 live-boot-grml live-boot-grml-doc
@@ -72,6 +73,7 @@ firmware-qlogic
 firmware-realtek
 firmware-ti-connectivity
 firmware-zd1211
+wireless-regdb
 
 libpam-systemd
 systemd-container
