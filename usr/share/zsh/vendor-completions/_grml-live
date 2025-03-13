@@ -58,11 +58,16 @@ _grmllive_waybackdates() { #{{{
   local expl
   local -a waybackdates 
 
-  if command -pv jq curl >/dev/null; then
+  getdates() {
+    whence -p python3 &>/dev/null || return 0
+    local timespan='-6month'
+    local timestamp="$(date +%Y%m%d --date="${timespan}")"
+    local url="http://snapshot.debian.org/mr/timestamp/?archive=debian&after=${timestamp}"
+    python3 -c 'import sys,urllib.request,json;[print(x) for x in json.loads(urllib.request.urlopen(sys.argv[1]).read())["result"]["debian"]]' "$url" 2>/dev/null || :
+  }
   waybackdates=(
-	  ${(u)$(curl -sfL "http://snapshot.debian.org/mr/timestamp/?after=$(date +%Y%m%d --date='-6month')&archive=debian" |jq -r '.result.debian[]?|@text')%T*}
+    ${(u)$(getdates)%T*}
   )
-  fi
   _wanted list expl 'wayback date(s)' compadd ${expl} -- ${waybackdates}
 }
 #}}}
