@@ -616,7 +616,7 @@ Can I use my own (local) Debian mirror?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Yes. Set up an according sources.list configuration as class file in
-${GRML_FAI_CONFIG}/files/etc/apt/sources.list.d/ and adjust the variable
+${GRML_FAI_CONFIG}/files/${CLASS}/etc/apt/sources.list.d/ and adjust the variable
 FAI_DEBOOTSTRAP in /etc/grml/grml-live.conf[.local]. If you're setting up
 your own class file make sure to include the class name in the class list
 (grml-live -c ...).
@@ -700,7 +700,7 @@ Serving via bind mount / MIRROR_DIRECTORY
 Make sure to create an according sources.list configuration file, e.g. using
 your own class name `CUSTOM`:
 
-  # cat > $GRML_FAI_CONFIG/files/etc/apt/sources.list.d/local-packages.list/CUSTOM << EOF
+  # cat > $GRML_FAI_CONFIG/files/CUSTOM/etc/apt/sources.list.d/local-packages.list << EOF
   deb file:///home/foobar/local-packages ./
   EOF
 
@@ -722,7 +722,7 @@ Serving a repository via HTTP
 Make sure to create an according sources.list configuration file, e.g. using
 your own class name `CUSTOM`:
 
-  # cat > $GRML_FAI_CONFIG/files/etc/apt/sources.list.d/local-packages.list/CUSTOM << EOF
+  # cat > $GRML_FAI_CONFIG/files/CUSTOM/etc/apt/sources.list.d/local-packages.list << EOF
   deb http://127.0.0.1:8000/ ./
   EOF
 
