@@ -1,0 +1,19 @@
+# This file was deployed via grml-live's
+# ${GRML_FAI_CONFIG}/scripts/GRMLBASE/20-sudo script, using
+# ${GRML_FAI_CONFIG}/files/GRMLBASE/etc/sudoers.d/user-nopasswd
+
+# WARNING: This allows the unprivileged $USERNAME user to start commands as root
+# WARNING: This is totally insecure and (almost) makes $USERNAME a second root account.
+# WARNING: Never allow external access to the $USERNAME user!!!
+$USERNAME    ALL=NOPASSWD: ALL
+
+# allow editing of files with editor:
+# $USERNAME ALL=NOPASSWD: sudoedit
+
+# usage examples:
+# $USERNAME ALL=NOPASSWD: /sbin/hdparm
+# $USERNAME ALL=NOPASSWD: /usr/sbin/hwinfo
+# Cmnd_Alias DEBIAN = /usr/bin/apt-get, /usr/bin/dpkg, /usr/bin/auto-apt, /usr/bin/apt-file
+# $USERNAME ALL=NOPASSWD: DEBIAN
+# chroot       ALL=NOPASSWD: /usr/sbin/chroot, /bin/su - chroot
+# chroot       ALL=NOPASSWD: /usr/sbin/chroot, /bin/su - chroot

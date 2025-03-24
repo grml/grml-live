@@ -1,0 +1,12 @@
+# This file was deployed via grml-live's
+# ${GRML_FAI_CONFIG}/scripts/GRMLBASE/35-network script, using
+# ${GRML_FAI_CONFIG}/files/GRMLBASE/etc/network/interfaces
+
+# interfaces(5) file used by ifup(8) and ifdown(8)
+
+# Include files from /etc/network/interfaces.d:
+source /etc/network/interfaces.d/*
+
+# The loopback interface
+auto lo
+iface lo inet loopback
