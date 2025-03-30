@@ -1,0 +1,84 @@
+#!/usr/bin/python3
+
+from os import environ
+from pathlib import Path
+from subprocess import run, Popen, PIPE
+from time import sleep
+
+target = environ.get("target")
+assert target, "no $target set in the environment, aborting"
+assert isinstance(target, str), "$target environment variable must be a string"
+
+wants_dir = Path(target) / "etc/systemd/system/grml-boot.target.wants/"
+print("enabling tor.service in", str(wants_dir))
+assert not str(wants_dir).startswith("/etc"), "wants dir starts with /etc"
+wants_dir.mkdir(exist_ok=True)
+(wants_dir / "tor.service").symlink_to("/lib/systemd/system/tor.service")
+
+print("deploying minimal torrc config for SSH onion service")
+run(["fcopy", "-i", "-B", "-v", "/etc/tor/torrc"], check=True)
+
+cmd = [
+    "chroot",
+    target,
+    "runuser",
+    "-u",
+    "debian-tor",
+    "--",
+    "tor",
+    "--DisableNetwork",
+    "1",
+    "--Runasdaemon",
+    "0",
+    "--SocksPort",
+    "0",
+    "--HiddenServiceDir",
+    "/var/lib/tor/ssh_onion_service",
+    "--HiddenServicePort",
+    "22 127.0.0.1:22",
+]
+print("starting tor to create the private keys and hostname with", str(cmd))
+process = Popen(
+    cmd,
+    stdout=PIPE,
+    text=True,
+)
+
+assert process.stdout, "no output from tor command?"
+
+hostname_path = Path(target) / "var/lib/tor/ssh_onion_service/hostname"
+for line in process.stdout:
+    print(line.strip())
+    if "DisableNetwork is set." in line:
+        count = 0
+        while count < 10 and not hostname_path.exists():
+            print(f"path {hostname_path} doesn't exist, sleeping")
+            sleep(1)
+            count += 1
+        process.terminate()
+
+with hostname_path.open() as hn:
+    print("Tor onion service hostnamename:", hn.read().strip())
+
+print("generating SSH keys in", target)
+run(["chroot", target, "ssh-keygen", "-A"], check=True)
+
+count = 0
+for path in [str(x) for x in (Path(target) / "etc/ssh").iterdir()]:
+    if not path.endswith("_key.pub"):
+        continue
+    print(path)
+    cmd = [
+        "chroot",
+        target,
+        "ssh-keygen",
+        "-l",
+        "-f",
+        path.removeprefix(target),
+    ]
+
+    ret = run(cmd, check=True, stdout=PIPE, stderr=PIPE, text=True)
+    print(ret.stdout, end='')
+    print(ret.stderr, end='')
+    count += 1
+assert count, "no SSH keys found in %s" % (Path(target) / "etc/ssh")
