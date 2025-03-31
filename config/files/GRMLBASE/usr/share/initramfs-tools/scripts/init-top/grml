@@ -65,13 +65,14 @@ checkbootparam(){
   return "$?"
 }
 
+CR="$(printf '\015')"
 if checkbootparam "nocolor" ; then
   echo "Disabling colors in bootsequence as requested on commandline."
   # Reset fb color mode
   RESET="]R"
   # ANSI COLORS
   # Erase to end of line
-  CRE="[K"
+  CRE="${CR}[K"
   # Clear and reset Screen
   CLEAR="c"
 else
@@ -79,7 +80,7 @@ else
   RESET="]R"
   # ANSI COLORS
   # Erase to end of line
-  CRE="[K"
+  CRE="${CR}[K"
   # Clear and reset Screen
   CLEAR="c"
   # Normal color
