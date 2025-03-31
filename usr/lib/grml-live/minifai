@@ -250,8 +250,14 @@ def do_fcopy_file(to_copy: Path, chroot_dir: Path, path: str, mode):
     dest_path = chroot_dir / path
 
     print(f"I: fcopy: Installing {to_copy} as {dest_path}.")
-    if dest_path.exists():
-        print(f"W: fcopy: Destination {dest_path} already exists.")
+    try:
+        dest_exists = bool(dest_path.lstat())
+    except FileNotFoundError:
+        dest_exists = False
+
+    if dest_exists:
+        print(f"W: fcopy: Destination {dest_path} already exists, removing.")
+        dest_path.unlink()
 
     # this is probably fine, as we expect to run as root and do not support
     # different file/directory ownership.
