@@ -65,39 +65,35 @@ checkbootparam(){
   return "$?"
 }
 
+CR="$(printf '\015')"
+ESC="$(printf '\033')"
+# Reset fb color mode
+RESET="${ESC}]R"
+# Erase to end of line
+CRE="${CR}${ESC}[K"
+# Clear and reset Screen
+CLEAR="${ESC}c"
+
 if checkbootparam "nocolor" ; then
   echo "Disabling colors in bootsequence as requested on commandline."
-  # Reset fb color mode
-  RESET="]R"
-  # ANSI COLORS
-  # Erase to end of line
-  CRE="[K"
-  # Clear and reset Screen
-  CLEAR="c"
 else
-  # Reset fb color mode
-  RESET="]R"
   # ANSI COLORS
-  # Erase to end of line
-  CRE="[K"
-  # Clear and reset Screen
-  CLEAR="c"
   # Normal color
-  NORMAL="[0;39m"
+  NORMAL="${ESC}[0;39m"
   # RED: Failure or error message
-  RED="[1;31m"
+  RED="${ESC}[1;31m"
   # GREEN: Success message
-  GREEN="[1;32m"
+  GREEN="${ESC}[1;32m"
   # YELLOW: Descriptions
-  YELLOW="[1;33m"
+  YELLOW="${ESC}[1;33m"
   # BLUE: System messages
-  BLUE="[1;34m"
+  BLUE="${ESC}[1;34m"
   # MAGENTA: Found devices or drivers
-  MAGENTA="[1;35m"
+  MAGENTA="${ESC}[1;35m"
   # CYAN: Questions
-  CYAN="[1;36m"
+  CYAN="${ESC}[1;36m"
   # BOLD WHITE: Hint
-  WHITE="[1;37m"
+  WHITE="${ESC}[1;37m"
 fi
 
 log_grml_failure_msg () {
