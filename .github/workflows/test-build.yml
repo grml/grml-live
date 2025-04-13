@@ -45,6 +45,7 @@ jobs:
       matrix:
         host_release:
           - bookworm
+          - trixie
 
     runs-on: ubuntu-latest
     steps:
