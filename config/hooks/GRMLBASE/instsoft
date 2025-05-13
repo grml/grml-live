@@ -28,14 +28,14 @@ echo "hooks/instsoft.GRMLBASE running for action ${FAI_ACTION}"
 
 # work around /etc/kernel/postinst.d/zz-update-grub failing
 # inside openvz environment, see #597084
-if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/update-grub' ; then
+if [ '/usr/sbin/update-grub' = "$($ROOTCMD dpkg-divert --truename '/usr/sbin/update-grub')" ]; then
   echo "Diverting update-grub executable"
   $ROOTCMD dpkg-divert --rename --add /usr/sbin/update-grub
   $ROOTCMD ln -s /bin/true /usr/sbin/update-grub
 fi
 
 # work around a bug which causes openvz to freeze when grub-probe is invoked
-if ! $ROOTCMD dpkg-divert --list | grep -q '/usr/sbin/grub-probe' ; then
+if [ '/usr/sbin/grub-probe' = "$($ROOTCMD dpkg-divert --truename '/usr/sbin/grub-probe')" ]; then
   echo "Diverting grub-probe executable"
   $ROOTCMD dpkg-divert --rename --add /usr/sbin/grub-probe
   $ROOTCMD ln -s /bin/true /usr/sbin/grub-probe
