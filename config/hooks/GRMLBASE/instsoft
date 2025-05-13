@@ -41,6 +41,13 @@ if [ '/usr/sbin/grub-probe' = "$($ROOTCMD dpkg-divert --truename '/usr/sbin/grub
   $ROOTCMD ln -s /bin/true /usr/sbin/grub-probe
 fi
 
+# Divert update-initramfs for performance.
+if [ '/usr/sbin/update-initramfs' = "$($ROOTCMD dpkg-divert --truename '/usr/sbin/update-initramfs')" ]; then
+  echo "Diverting update-initramfs executable"
+  $ROOTCMD dpkg-divert --rename --add /usr/sbin/update-initramfs
+  $ROOTCMD ln -s /bin/true /usr/sbin/update-initramfs
+fi
+
 # Do not fail running softupdate for reported bugs.
 [ -d "${target}"/etc/apt/apt.conf.d ] || mkdir "${target}"/etc/apt/apt.conf.d
 if [ -e "${target}"/etc/apt/apt.conf.d/10apt-listbugs ]; then
