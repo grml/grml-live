@@ -1,0 +1,15 @@
+# This file was deployed via grml-live.
+
+[Unit]
+Description=Deploy SSH service config for Avahi
+ConditionPathExists=/usr/share/doc/avahi-daemon/examples/ssh.service
+ConditionPathExists=/etc/avahi/services
+PartOf=ssh.service
+After=ssh.service
+
+[Service]
+Type=oneshot
+ExecStart=cp /usr/share/doc/avahi-daemon/examples/ssh.service /etc/avahi/services/
+
+[Install]
+WantedBy=ssh.service
