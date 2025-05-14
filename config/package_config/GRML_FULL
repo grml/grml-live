@@ -33,6 +33,7 @@ sysvinit-utils
 tree
 tzdata
 util-linux
+util-linux-extra
 
 # basic accessibility
 alsa-utils
