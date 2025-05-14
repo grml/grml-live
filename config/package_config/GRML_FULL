@@ -121,7 +121,6 @@ sqlite3
 whois
 
 # install linux
-crosshurd
 debootstrap
 kexec-tools
 mmdebstrap
