@@ -21,6 +21,13 @@ fi
 
 echo "Rebuilding initramfs"
 
+# Undo divert done in instsoft.
+if [ '/usr/sbin/update-initramfs' != "$($ROOTCMD dpkg-divert --truename '/usr/sbin/update-initramfs')" ]; then
+  echo "Undoing dpkg-divert of update-initramfs executable"
+  $ROOTCMD rm -f /usr/sbin/update-initramfs
+  $ROOTCMD dpkg-divert --rename --remove /usr/sbin/update-initramfs
+fi
+
 for initrd in $(basename "$target"/boot/vmlinuz-*) ; do
     if ! $ROOTCMD update-initramfs -k "${initrd##vmlinuz-}" -c ; then
         echo "Creating fresh initramfs did not work, trying update instead:"
