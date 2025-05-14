@@ -1,3 +1,35 @@
+grml-live (0.53.0) grml-testing; urgency=medium
+
+  The "2025.05 release is coming" release
+
+  [ Michael Prokop ]
+  * [09fdf0d] Provide migration script migrate-to-minifai
+  * Software related changes:
+    - [34536b8] add iwd + wireless-regdb to GRMLBASE
+
+  [ Christopher Bock ]
+  * [eb1ad7d] etc/cruft/filters/grml-live: add cruft-ng filter
+  * [bcfb767] usr/share/zsh/vendor-completions/_grml-live: use python
+    instead of jq
+
+  [ Chris Hofstaedtler ]
+  * [3a4bd41] Adopt new layout for files/, class/, hooks/
+  * [50bfa73] ssh.service: adapt for trixie
+  * [7c368e3] fcopy: remove target files and symlinks before overwriting
+    them
+  * [1635de4] init-top/grml: use printf instead of inlining ^M
+  * [16ca576] init-top/grml: deduplicate init of RESET,CRE,CLEAR
+  * [e566c6e] init-top/grml: use printf instead of inlining ESC
+  * [3917199] diverts: use dpkg-divert --truename
+  * [f0d405c] Divert update-initramfs for performance
+  * Software related changes:
+    - [8eb426f] re-add lrzsz to GRML_FULL
+
+  [ crpb ]
+  * [f2cd404] GHA: test running on trixie
+
+ -- Michael Prokop <mika@grml.org>  Wed, 14 May 2025 13:50:57 +0200
+
 grml-live (0.52.1) grml-testing; urgency=medium
 
   [ Chris Hofstaedtler ]
