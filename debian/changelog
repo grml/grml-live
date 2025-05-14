@@ -1,3 +1,20 @@
+grml-live (0.53.1) grml-testing; urgency=medium
+
+  The "2025.05 release is nearly here" release
+
+  [ Michael Prokop ]
+  * Software related changes:
+    * [c6f4001] drop crosshurd from GRML_FULL
+    * [63052e1] add util-linux-extra to GRML_FULL
+
+  [ Darshaka Pathirana ]
+  * [2672fc4] Announce SSH service with Avahi
+
+  [ Chris Hofstaedtler ]
+  * [ee237de] GRMLBASE: update grml-archive-keyring
+
+ -- Chris Hofstaedtler <ch@grml.org>  Wed, 14 May 2025 17:43:46 +0200
+
 grml-live (0.53.0) grml-testing; urgency=medium
 
   The "2025.05 release is coming" release
