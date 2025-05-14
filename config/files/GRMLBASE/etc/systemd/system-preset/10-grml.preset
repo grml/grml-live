@@ -8,5 +8,7 @@ enable gpm.service
 enable grml-autoconfig.service
 enable debug-shell.service
 enable resolvconf.service
+enable avahi-daemon.service
+enable avahi-ssh.service
 
 disable *
