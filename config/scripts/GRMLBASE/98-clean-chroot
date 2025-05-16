@@ -192,10 +192,33 @@ if [ -f "$target/etc/mdadm/mdadm.conf" ] ; then
 fi
 
 if ! $ROOTCMD test -x /usr/bin/updatedb ; then
-  echo "Warning: updatedb not installed"
+  echo "Warning: updatedb not installed (install plocate?)"
 else
   echo "Updating locate-database"
-  $ROOTCMD updatedb --prunepaths='/tmp /usr/tmp /var/tmp /grml /root /proc /sys'
+
+  if ! [ -x "$target"/usr/bin/plocate ] ; then
+    echo "* Detected old locate implementation, directly invoking updatedb"
+    $ROOTCMD updatedb --prunepaths='/tmp /usr/tmp /var/tmp /grml /root /proc /sys'
+  else
+    echo "* Detected plocate implementation, invoking its /etc/cron.daily/plocate"
+
+    # we need /proc, otherwise updatedb of plocate fails
+    # hard with `linkat: No such file or directory`
+    MOUNTED_PROC=0
+    if $ROOTCMD mount -t proc proc /proc ; then
+      # The mount call typically fails within restricted build contexts
+      # like podman/docker etc. If this happens, plocate just won't work.
+      MOUNTED_PROC=1
+    fi
+
+    # plocate has sane defaults in /etc/updatedb.conf and
+    # its cronob does the right thing for our needs
+    $ROOTCMD /etc/cron.daily/plocate
+
+    if [ "$MOUNTED_PROC" = 1 ] ; then
+      $ROOTCMD umount /proc
+    fi
+  fi
 fi
 
 if [ -r "$target"/etc/machine-id ] ; then
