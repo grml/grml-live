@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-if [ -d ".git" ] ; then
+if [ -d ".git" ] || git rev-parse --is-inside-work-tree &>/dev/null ; then
   echo "Git repository detected, operating with git"
   git_cmd='git'
 else
@@ -14,7 +14,7 @@ fi
 
 ## fcopy files
 # e.g. config/files/etc/hosts/GRMLBASE becomes config/files/GRMLBASE/etc/hosts
-find config/files/ -type f -print0 | while IFS= read -r -d '' file; do
+[ -d config/files ] && find config/files/ -type f -print0 | while IFS= read -r -d '' file; do
   orig_filename="${file}"
   new_filename="$(dirname "${orig_filename#config/files/}")"
   class_name="$(basename "${orig_filename%/}")"
@@ -24,7 +24,7 @@ done
 
 ## hooks
 # e.g. config/hooks/instsoft.GRMLBASE becomes config/hooks/GRMLBASE/instsoft
-find config/hooks/ -type f -print0 | while IFS= read -r -d '' file; do
+[ -d config/hooks ] && find config/hooks/ -type f -print0 | while IFS= read -r -d '' file; do
   case "$file" in
     "config/hooks/savelog.LAST.source")
       echo "WARN: skipping unsupported file config/hooks/savelog.LAST.source detected, remove or convert manually"
@@ -41,9 +41,11 @@ done
 
 ## env
 # e.g. config/class/GRMLBASE.var becomes config/env/GRMLBASE
-find config/class/ -type f -print0 | while IFS= read -r -d '' file; do
+[ -d config/class ] && find config/class/ -type f -print0 | while IFS= read -r -d '' file; do
   orig_filename="${file}"
   class_name="$(basename "${orig_filename%/}" .var)"
   mkdir -p config/env/
   "$git_cmd" mv "${file}" "config/env/${class_name}"
 done
+
+echo "Finished execution"
