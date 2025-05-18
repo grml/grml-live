@@ -608,6 +608,8 @@ def install_base(conf_dir: Path, chroot_dir: Path, classes, debian_suite: str, m
     for class_name in classes:
         if (keyring_dir / class_name).exists():
             keyring_file = keyring_dir / class_name
+        else:
+            keyring_file = '/usr/share/keyrings/debian-archive-keyring.pgp'
 
     args = [
         "mmdebstrap",
