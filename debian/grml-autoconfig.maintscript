@@ -1,1 +1,0 @@
-rm_conffile /etc/init.d/grml-autoconfig 0.23.3~
