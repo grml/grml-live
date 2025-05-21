@@ -1,0 +1,1506 @@
+#!/bin/zsh
+# Filename:      autoconfig.functions
+# Purpose:       basic system configuration and hardware setup for grml system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+# {{{ path, variables, signals, umask, zsh
+export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+DEBUG="/dev/null"
+KERNEL="$(uname -r)"
+umask 022
+
+[ -d /run/live/medium ] && export LIVECD_PATH='/run/live/medium'
+
+# Ignore these signals in non-interactive mode: INT, TERM, SEGV
+[ -z "$PS1" ] && trap "" 2 3 11
+
+service_wrapper() {
+  if [ "$#" -lt 2 ] ; then
+    echo "Usage: service_wrapper <service> <action>" >&2
+    return 1
+  fi
+
+  local service="$1"
+  local action="$2"
+
+  systemctl "$action" "$service"
+}
+
+# zsh stuff
+iszsh(){
+if [ -n "$ZSH_VERSION" ] ; then
+  return 0
+else
+  return 1
+fi
+}
+# avoid 'no matches found: ...'
+iszsh && setopt no_nomatch # || echo "Warning: not running under zsh!"
+# }}}
+
+# {{{ Read in boot parameters
+if [ -z "$CMDLINE" ]; then
+  # if CMDLINE was set from the outside, we're debugging.
+  # otherwise, take CMDLINE from Kernel and config files.
+  CMDLINE="$(< /proc/cmdline)"
+  [ -d ${LIVECD_PATH}/bootparams/ ] && CMDLINE="$CMDLINE $(cat ${LIVECD_PATH}/bootparams/* | tr '\n' ' ')"
+  TAG="grml-parameters"
+  if grep -q "$TAG" /sys/bus/virtio/devices/*/mount_tag 2>/dev/null ; then
+    MOUNTDIR="$(mktemp -d)"
+    mount -t 9p -o trans=virtio,ro "$TAG" "$MOUNTDIR"
+    CMDLINE="$CMDLINE $(cat "$MOUNTDIR"/* 2>/dev/null | tr '\n' ' ')"
+    umount "$MOUNTDIR"
+    rmdir "$MOUNTDIR"
+  fi
+fi
+# }}}
+
+### {{{ Utility Functions
+
+# Get a bootoption's parameter: read boot command line and either
+# echo last parameter's argument or return false.
+getbootparam(){
+  local line
+  local ws
+  ws='	 '
+  line=" $CMDLINE "
+  case "$line" in
+    *[${ws}]"$1="*)
+      result="${line##*[$ws]$1=}"
+      result="${result%%[$ws]*}"
+      echo "$result"
+      return 0 ;;
+    *) # no match?
+      return 1 ;;
+  esac
+}
+
+# Check boot commandline for specified option
+checkbootparam(){
+  [ -n "$1" ] || ( echo "Error: missing argument to checkbootparam()" ; return 1 )
+  local line
+  local ws
+  ws='	 '
+  line=" $CMDLINE "
+  case "$line" in
+    *[${ws}]"$1"=*|*[${ws}]"$1"[${ws}]*)
+      return 0 ;;
+    *)
+      return 1 ;;
+  esac
+}
+
+# Check if currently using a framebuffer
+hasfb() {
+    [ -e /dev/fb0 ] && return 0 || return 1
+}
+
+# Check wheter a configuration variable (like $CONFIG_TOHD) is
+# enabled or not
+checkvalue(){
+  case "$1" in
+    [yY][eE][sS])     return 0 ;; # it's set to 'yes'
+    [tT][rR][uU][eE]) return 0 ;; # it's set to 'true'
+                   *) return 1 ;; # default
+  esac
+}
+
+# Are we using grml-small?
+checkgrmlsmall(){
+  grep -q small /etc/grml_version 2>>$DEBUG && return 0 || return 1
+}
+
+# if no password is set return a random password
+set_passwd() {
+  [ -n "$PASSWD" ] && return 0
+
+  if [ -x /usr/bin/xkcdpass ] ; then
+    PASSWD="$(xkcdpass)"
+  elif [ -x /usr/bin/diceware ] ; then
+    PASSWD="$(diceware)"
+  else
+    PASSWD="$(tr -dc '[:alnum:]' < /dev/urandom | head -c 28)"
+  fi
+}
+
+### }}}
+
+# {{{ Check if we are running in live mode or from HD
+INSTALLED=""
+[ -e /etc/grml_cd ] || INSTALLED="yes"
+# }}}
+
+# {{{ provide information about virtual environments
+VIRTUAL=false # assume physical system by default
+KVM=false
+VIRTUALBOX=false
+VMWARE=false
+
+_detect_virtual() {
+  local virt_what_result
+  virt_what_result=$(virt-what 2>/dev/null)
+  if [[ $virt_what_result == *vmware* ]]; then
+    VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware'
+  fi
+  if [[ $virt_what_result == *kvm* ]]; then
+    VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM'
+  fi
+  if [[ $virt_what_result == *virtualbox* ]]; then
+    VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox'
+  fi
+  if [ -z "$VIRTUAL" ]; then
+    # imvirt is slow. do not use it, if virt-what already found the hypervisor.
+    local imvirt_result
+    imvirt_result=$(imvirt 2>/dev/null)
+    if [[ $imvirt_result == *VMware* ]]; then
+      VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware'
+    fi
+    if [[ $imvirt_result == "KVM" ]]; then
+      VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM'
+    fi
+    if [[ $imvirt_result == "VirtualBox" ]]; then
+      VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox'
+    fi
+  fi
+}
+_detect_virtual
+# }}}
+
+# {{{ source lsb-functions , color handling
+if checkbootparam 'nocolor'; then
+  . /etc/grml/lsb-functions
+  einfo "Disabling colors in bootsequence as requested on commandline." ; eend 0
+else
+  . /etc/grml/lsb-functions
+fi
+# }}}
+
+# {{{ log
+config_log(){
+if checkbootparam 'log' || checkbootparam 'debug' ; then
+   export DEBUG="/tmp/grml.log.`date +%Y%m%d`"
+   touch "${DEBUG}"
+   einfo "Bootparameter log found, debug log file from grml-autoconfig available at '${DEBUG}'"
+else
+   DEBUG="/dev/null"
+fi
+}
+# }}}
+
+### {{{ language configuration / localization
+config_language(){
+
+  einfo "Activating language settings:"
+  eindent
+
+  # people can specify $LANGUAGE in a config file
+  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig
+
+  # check for bootoption which overrides config from /etc/grml/autoconfig
+  BOOT_LANGUAGE="$(getbootparam 'lang' 2>>$DEBUG)"
+  [ -n "$BOOT_LANGUAGE" ] && LANGUAGE="$BOOT_LANGUAGE"
+
+  # set default to 'en' in live-cd mode iff $LANGUAGE is not set yet
+  if [ -z "$INSTALLED" ] ; then
+    [ -n "$LANGUAGE" ] || LANGUAGE='en'
+  fi
+
+  if [ -x /usr/sbin/grml-setlang ] ; then
+    # if bootoption lang is used update /etc/default/locale accordingly
+    if [ -n "$BOOT_LANGUAGE" ] ; then
+      /usr/sbin/grml-setlang "$LANGUAGE"
+      # otherwise default to lang=en
+    else
+      /usr/sbin/grml-setlang "en"
+    fi
+  fi
+
+  # export it now, so error messages get translated, too
+  [ -r /etc/default/locale ] && . /etc/default/locale
+  export LANG LANGUAGE
+
+  local KEYBOARD
+  KEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
+  [ -n "$KEYBOARD" ] || KEYBOARD="$LANGUAGE"
+  # "symbols/en" doesn't exist, so rewrite to "us"
+  [[ "$KEYBOARD" == 'en' ]] && KEYBOARD="us"
+
+  if [ -r /etc/default/keyboard ] ; then
+    sed -i "s/^XKBLAYOUT=.*/XKBLAYOUT=\"$KEYBOARD\"/" /etc/default/keyboard
+
+    case "$KEYBOARD" in
+      de|at)
+        sed -i "s/^XKBVARIANT=.*/XKBVARIANT=\"nodeadkeys\"/" /etc/default/keyboard
+        ;;
+    esac
+
+  fi
+
+  eoutdent
+}
+# }}}
+
+# {{{ Set hostname
+config_hostname(){
+  if ! checkbootparam 'hostname' ; then
+    return 0
+  fi
+
+  HOSTNAME="$(getbootparam 'hostname' 2>>$DEBUG)"
+  if [ -z "$HOSTNAME" ] && [ -x /usr/bin/random-hostname ] ; then
+    einfo "Generating random hostname as no hostname was specified."
+    HOSTNAME="$(/usr/bin/random-hostname)"
+    eend $?
+  fi
+
+  einfo "Setting hostname to $HOSTNAME as requested."
+  grml-hostname $HOSTNAME >>$DEBUG
+  eend $?
+}
+# }}}
+
+# fstabuser (needed when running from harddisk with username != grml {{{
+config_userfstab(){
+  # force load of build-in and local config
+  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig
+  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig.local
+
+  # 1st. try configured fstab user
+  if [ -n "$CONFIG_FSTAB_USER" ] ; then
+     fstabuser=$(getent passwd $CONFIG_FSTAB_USER | cut -d: -f1)
+  fi
+
+  # 2nd. use standard user id
+  [ -n "$fstabuser" ] || fstabuser=$(getent passwd 1000 | cut -d: -f1)
+
+  # 3rd. use standard user name
+  [ -n "$fstabuser" ] || fstabuser=$(getent passwd grml | cut -d: -f1)
+
+  # if not yet set fall back to 'root' user, avoid bad /etc/fstab
+  [ -n "$fstabuser" ] || fstabuser='root'
+}
+# }}}
+
+# local_user (needed when running with username != grml {{{
+config_userlocal() {
+
+  # force load of build-in and local config
+  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig
+  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig.local
+
+  # 1st. try id of primary user
+  localuser=$(getent passwd 1000 | cut -d: -f1)
+
+  # 2nd. use name standard user
+  [ -n "$localuser" ] || localuser=$(getent passwd grml | cut -d: -f1)
+}
+# }}}
+
+# {{{ print kernel info
+config_kernel(){
+  if $VIRTUAL && [ -n "$VIRTUAL_ENV" ] ; then
+    einfo "Running Linux Kernel $KERNEL inside $VIRTUAL_ENV" ; eend 0
+  else
+    einfo "Running Linux Kernel $KERNEL" ; eend 0
+  fi
+
+  if [ -r /proc/cpuinfo ] ; then
+    if egrep -q '^flags.*(vmx|svm)' /proc/cpuinfo ; then
+      eindent
+      einfo 'CPU(s) featuring virtualization technology detected' ; eend 0
+      eoutdent
+    fi
+  fi
+
+  if [ -d /proc/xen ] ; then
+    eindent
+    einfo 'Running kernel featuring support for Xen detected' ; eend 0
+    eoutdent
+  fi
+}
+# }}}
+
+# {{{ secure boot
+# helper function to check whether we're running under (enabled) Secure Boot
+running_under_secureboot() {
+  if [[ -x "$(command -v mokutil)" ]] ; then
+    if mokutil --sb-state 2>/dev/null | grep -q 'SecureBoot enabled' ; then
+      return 0
+    else
+      return 1
+    fi
+  else
+    if od -An -t u1 /sys/firmware/efi/vars/SecureBoot-*/data 2>/dev/null | grep -q 1 ; then
+      return 0
+    else
+      return 1
+    fi
+  fi
+}
+
+config_secureboot(){
+  if running_under_secureboot ; then
+      einfo "SecureBoot is enabled" ; eend 0
+  else
+      einfo "SecureBoot not detected" ; eend 0
+  fi
+}
+# }}}
+
+# {{{ Configure timezone when using boot option tz, or RTC for boot option localtime
+config_timezone(){
+  local timezone
+  timezone="$(getbootparam 'tz' 2>>$DEBUG)"
+
+  if [ -n "${timezone}" ] ; then
+    if ! [ -e "/usr/share/zoneinfo/${timezone}" ] ; then
+      ewarn "Warning: unknown timezone ${timezone}, falling back to UTC" ; eend 1
+      timezone="UTC"
+    fi
+
+    einfo "Setting timezone to ${timezone}"
+    ln -sf /usr/share/zoneinfo/"${timezone}" /etc/localtime
+    eend $?
+  fi
+
+  if checkbootparam 'localtime' ; then
+    einfo "Bootoption localtime is set, configuring RTC to local time."
+    timedatectl set-local-rtc 1
+    eend $?
+  fi
+}
+# }}}
+
+# {{{ CD Checker
+config_testcd(){
+if checkbootparam 'testcd' ; then
+  einfo "Checking CD data integrity as requested by '${WHITE}testcd${NORMAL}' boot option."
+  eindent
+
+  local ERROR=true
+  local FOUND_FILE=false
+  local logfile='/tmp/md5sum.log'
+
+  rm -f "$logfile"
+
+  for md5 in $(find "${LIVECD_PATH}" -name md5sums) ; do
+    einfo "Checking files against $md5, this may take a while..."
+
+    FOUND_FILE=true
+    OLD_PWD=$(pwd)
+    cd $(dirname "$md5")
+    md5sum -c $(basename "$md5") |& tee -a "${logfile}"
+    if [ $pipestatus[1] -eq 0 ] ; then
+      ERROR=false
+    fi
+    cd "${OLD_PWD}"
+  done
+
+  if ! $FOUND_FILE ; then
+    eerror 'Error: Could not find md5sum file' ; eend 1
+    return
+  fi
+
+  if ! $ERROR ; then
+    einfo "Everything looks OK" ; eend 0
+  else
+    eerror 'Checksum failed for theses files:' ; eend 1
+    egrep -v '(^md5sum:|OK$)' "${logfile}"
+    eerror 'Data on the medium is possibly incomplete/damaged or RAM of your system is broken.' ; eend 1
+    einfon "Hit return to continue, or press the power button to shut down system."
+    read a
+  fi
+
+  eoutdent
+fi
+}
+# }}}
+
+# {{{ blacklist specific module [ used in /etc/init.d/udev ]
+config_blacklist(){
+if checkbootparam 'blacklist' ; then
+ if [ -z "$INSTALLED" ]; then
+  einfo "Bootoption blacklist found."
+  BLACK="$(getbootparam 'blacklist' 2>>$DEBUG)"
+  BLACKLIST_FILE='/etc/modprobe.d/grml.conf'
+  if [ -n "$BLACK" ] ; then
+    for module in $(echo ${BLACK//,/ }) ; do
+        einfo "Blacklisting module ${module} via ${BLACKLIST_FILE}."
+        echo "# begin entry generated by config_blacklist of grml-autoconfig" >> "$BLACKLIST_FILE"
+        echo "blacklist $module"     >> "$BLACKLIST_FILE"
+        echo "alias     $module off" >> "$BLACKLIST_FILE"
+        echo "# end   entry generated by config_blacklist of grml-autoconfig" >> "$BLACKLIST_FILE" ; eend $?
+    done
+  else
+   eerror "No given module for blacklist found. Blacklisting will not work therefore."
+  fi
+ else
+  ewarn "Backlisting via bootoption is not intended for use on harddisk installations." ; eend 1
+  eindent
+   einfo "Please blacklist the module(s) manually using the 'blacklist' script."
+  eoutdent
+ fi
+fi
+}
+# }}}
+
+# {{{ Start brltty
+config_brltty() {
+  if checkbootparam 'brltty' ; then
+    einfo "Starting brltty service as requested on boot commandline."
+    service_wrapper brltty start ; eend $?
+  fi
+}
+# }}}
+
+# {{{ Start creating /etc/fstab with HD partitions and USB SCSI devices now
+config_fstab(){
+
+NOSWAP="yes" # we do not use swap by default!
+if checkbootparam 'swap' || checkbootparam 'anyswap' ; then
+   NOSWAP=''
+   checkbootparam 'anyswap' && export ANYSWAP='yes' || export ANYSWAP=""
+fi
+
+# Scan for swap, config, homedir - but only in live-mode
+if [ -z "$INSTALLED" ] ; then
+   [ -z "$NOSWAP" ] && einfo "Searching for swap partition(s) as requested."
+   GRML_IMG=""
+   GRML_SWP=""
+   HOMEDIR="$(getbootparam 'home')"
+   if [ -n "$partitions" ]; then
+      while read p m f relax; do
+        case "$p" in *fd0*|*proc*|*sys*|*\#*) continue;; esac
+        partoptions="users,exec"
+        fnew=""
+        # it's a swap partition?
+        case "$f" in swap)
+          eindent
+          if [ -n "$NOSWAP" ]; then
+             ewarn "Ignoring swap partition ${WHITE}$p${NORMAL}. (Force usage via boot option 'swap', or execute grml-swapon)"
+             eend 0
+          else
+             case "$(dd if=$p bs=1 count=6 skip=4086 2>/dev/null)" in
+                   S1SUSP|S2SUSP|pmdisk|[zZ]*)
+                     if [ -n "$ANYSWAP" ] ; then
+                        einfo "Using swap partition ${WHITE}${p}${NORMAL} [bootoption anyswap found]."
+                        swapon $p 2>>$DEBUG ; eend $?
+                     else
+                        ewarn "Suspend signature on ${WHITE}${p}${NORMAL} found, not using as swap. (Force usage via boot option: anyswap)"
+                     fi
+                     ;;
+                   *)
+                     if [[ "$p" == LABEL* ]] ; then
+                        p=$(blkid -t $p | awk -F: '{print $1}')
+                     fi
+                     if grep -q $p /proc/swaps ; then
+                        ewarn "Not using swap partition ${WHITE}${p}${NORMAL} as it is already in use." ; eend 0
+                     else
+                        if [ -b "$p" ] ; then
+                        einfo "Using swap partition ${WHITE}${p}${NORMAL}."
+                        swapon $p 2>>$DEBUG ; eend $?
+                        else
+                        ewarn "$p is not a valid block device - not using it therefore." ; eend 0
+                        fi
+                     fi
+                     ;;
+             esac # dd-check
+          fi # -n "$NOSWAP
+          eoutdent
+          continue
+          ;;
+        esac # it's a swap partition?
+
+        # mount read-only
+        MOUNTOPTS="ro"
+        case "$f" in
+          vfat|msdos|ntfs) MOUNTOPTS="$MOUNTOPTS,uid=${fstabuser},gid=${fstabuser}" ;;
+          ext2|ext3|reiserfs|jfs|reiser4|xfs) MOUNTOPTS="$MOUNTOPTS,noatime" ;;
+          *) continue ;;
+          # *) NONEFOUND='1'; continue ;;
+        esac
+
+        # use a swapfile
+        if [ -z "$NOSWAP" ] ; then
+           mount -o "$MOUNTOPTS" -t $f $p $m 2>>$DEBUG && MOUNTED=1 || continue
+           # Activate swapfile, if exists
+           SWAPFILE="$(/bin/ls -1d $m/[Gg][Rr][Mm][Ll].[Ss][Ww][Pp] 2>/dev/null)"
+        fi
+        if [ -z "$NOSWAP" -a -n "$SWAPFILE" -a -f "$SWAPFILE" ]; then
+           mount -o remount,rw $m && MOUNTED=1
+           if swapon "$SWAPFILE" 2>>$DEBUG ; then
+              eindent
+                einfo "Using GRML swapfile ${WHITE}${SWAPFILE}${NORMAL}."
+              eoutdent
+              fnew="$SWAPFILE swap swap defaults 0 0"
+              grep -q "$fnew" "/etc/fstab" || echo "$fnew" >> /etc/fstab
+              GRML_SWP="$GRML_SWP $SWAPFILE"
+              eend 0
+           fi
+           mount -o remount,ro $m 2>>$DEBUG && MOUNTED=1
+        fi
+
+        # use a image as home
+        IMAGE="$(/bin/ls -1d $m/[Gg][Rr][Mm][Ll].[Ii][Mm][Gg] 2>/dev/null)"
+        if [ -z "$GRML_IMG" -a -n "$IMAGE" -a -f "$IMAGE" ]; then
+           if [ -n "$HOMEDIR" ]; then
+              if [ "$HOMEDIR" != "scan" -a "$HOMEDIR" != "$IMAGE" -a "$HOMEDIR" != "${IMAGE%/*.*}" ]; then
+                 continue
+              fi
+           fi
+           if type -a grml-image >/dev/null 2>&1 && grml-image "$IMAGE" </dev/console >/dev/console 2>&1; then
+              GRML_IMG="$IMAGE"
+              mount -o remount,ro $m 2>>$DEBUG && MOUNTED=1
+           fi
+        fi
+        eend 0
+
+        # Umount, if not in use
+        [ -n "$MOUNTED" ] && umount -r $m 2>/dev/null
+
+      done <<EOT
+      $(cat /etc/fstab)
+EOT
+   fi # -n $partitions
+fi # -z $INSTALLED
+}
+# }}}
+
+# {{{ CPU-detection
+config_cpu(){
+  if checkbootparam 'nocpu'; then
+    ewarn "Skipping CPU detection as requested on boot commandline." ; eend 0
+    return 0
+  fi
+
+  if ! [ -x "$(which lscpu)" ] ; then
+    ewarn "Skipping CPU detection due to lack of lscpu."; eend 0
+    return 0
+  fi
+
+  local cpu_info num_cpus
+
+  cpu_info="$(lscpu | sed -n '/^Model name:/s/[^:]*:\s*//p')"
+  num_cpus=$(grep -c processor /proc/cpuinfo)
+
+  einfo "Found ${num_cpus} CPU(s): ${cpu_info}"
+  eend 0
+}
+# }}}
+
+# {{{ autostart of ssh
+config_ssh(){
+if checkbootparam 'ssh' ; then
+   local PASSWD
+   PASSWD="$(getbootparam 'ssh' 2>>$DEBUG)"
+
+   config_userlocal
+   einfo "Bootoption ssh found, trying to set password for root and user $localuser"
+   [ -z "$localuser" ] && eend 1
+
+   eindent
+   if [ -z "$PASSWD" ] ; then
+     set_passwd && ewarn "No given password for found. Using random password: $PASSWD" && eend 0
+   fi
+   eoutdent
+
+   if [ -n "$PASSWD" ] ; then
+      chpass_options=""
+      if chpasswd --help 2>&1 | grep -q -- '-m,' ; then
+        chpass_options="-m"
+      fi
+
+      echo "$localuser:$PASSWD" | chpasswd $chpass_options
+      echo "root:$PASSWD" | chpasswd $chpass_options
+
+      eindent
+      ewarn "Warning: please change the password for root and user $localuser as soon as possible!"
+      eoutdent
+   fi
+
+   einfo "Starting secure shell server in background for root and user $localuser"
+   service_wrapper haveged start >>$DEBUG 2>>$DEBUG
+   service_wrapper rmnologin start >>$DEBUG 2>>$DEBUG
+   service_wrapper ssh start >>$DEBUG 2>>$DEBUG
+   eend $?
+
+fi
+}
+
+# }}}
+
+# {{{ display hostkeys of SSH server
+config_display_ssh_fingerprints() {
+  if ! ls /etc/ssh/ssh_host_\*_key >/dev/null 2>&1 ; then
+    return 0 # no SSH host keys present
+  fi
+
+  einfo "SSH key fingerprints:"
+  for file in /etc/ssh/ssh_host_*_key ; do
+    einfon
+    ssh-keygen -l -f $file
+  done | column -t
+  eend $?
+}
+# }}}
+
+# {{{ autostart of x11vnc
+config_vnc(){
+if checkbootparam 'vnc' ; then
+   config_userlocal
+   VNC_PASSWD=''
+   VNC_PASSWD="$(getbootparam 'vnc' 2>>$DEBUG)"
+   einfo "Bootoption vnc found, trying to set password for user $localuser."
+   eindent
+   if [ -z "$VNC_PASSWD" ] ; then
+      if [ -x /usr/bin/apg ] ; then
+         VNC_PASSWD="$(apg -M NL -a 0 -m 8 -x 12 -n 1)"
+      elif [ -x /usr/bin/gpw ] ; then
+         VNC_PASSWD="$(gpw 1)"
+      elif [ -x /usr/bin/pwgen ] ; then
+         VNC_PASSWD="$(pwgen -1 8)"
+      elif [ -x /usr/bin/hexdump ] ; then
+         VNC_PASSWD="$(dd if=/dev/urandom bs=14 count=1 2>/dev/null | hexdump | awk '{print $3 $4}')"
+      elif [ -n "$RANDOM" ] ; then
+         VNC_PASSWD="${localuser}${RANDOM}"
+      else
+         VNC_PASSWD=''
+         eerror "Empty passphrase and neither pwgen nor hexdump nor \$RANDOM found. Skipping."
+         eend 1
+      fi
+
+      if [ -n "$VNC_PASSWD" ] ; then
+         ewarn "No given password for vnc found. Using random password: $VNC_PASSWD" ; eend 0
+      fi
+   fi
+   eoutdent
+
+   # finally check if we have a password we can use:
+   if [ -n "$VNC_PASSWD" ] ; then
+
+      VNCDIR="/home/${localuser}/.vnc"
+      [ -d "$VNCDIR" ] || mkdir "$VNCDIR"
+
+      if [ ! -x /usr/bin/x11vnc ] ; then
+         eerror "Error: x11vnc not found - can not set up vnc. Please make sure to install the x11vnc package."
+         eend 1
+      else
+         /usr/bin/x11vnc -storepasswd "$VNC_PASSWD" "$VNCDIR"/passwd ; eend $?
+         /bin/chown -R "$localuser": "$VNCDIR"
+      fi
+   fi
+   if checkbootparam 'vnc_connect' ; then
+      VNC_CONNECT=''
+      VNC_CONNECT="$(getbootparam 'vnc_connect' 2>>$DEBUG)"
+      einfo "Bootoption vnc_connect found, will start vnc with connect to $VNC_CONNECT."
+      #store the options in a file
+      VNCDIR="/home/${localuser}/.vnc"
+      [ -d "$VNCDIR" ] || mkdir "$VNCDIR"
+      echo " --connect $VNC_CONNECT " >> $VNCDIR/options
+   fi
+fi
+}
+# }}}
+
+# {{{ set password for root and default user
+config_passwd(){
+if checkbootparam 'passwd' >>$DEBUG 2>&1; then
+  local PASSWD
+  PASSWD="$(getbootparam 'passwd' 2>>$DEBUG)"
+
+  config_userlocal
+  einfo "Bootoption passwd found, trying to set password for root and user $localuser"
+  [ -z "$localuser" ] && eend 1
+
+  eindent
+  if [ -z "$PASSWD" ] ; then
+    set_passwd && ewarn "No given password for found. Using random password: $PASSWD" && eend 0
+  fi
+  eoutdent
+
+  if [ -n "$PASSWD" ] ; then
+    chpass_options=""
+    if chpasswd --help 2>&1 | grep -q -- '-m,' ; then
+      chpass_options="-m"
+    fi
+
+    echo "$localuser:$PASSWD" | chpasswd $chpass_options
+    echo "root:$PASSWD" | chpasswd $chpass_options
+
+    eindent
+    ewarn "Warning: please change the password for root and user $localuser as soon as possible!"
+    eoutdent
+  fi
+
+fi
+
+if checkbootparam 'encpasswd' >>$DEBUG 2>&1; then
+  local PASSWD
+  PASSWD="$(getbootparam 'encpasswd' 2>>$DEBUG)"
+
+  if [ -z "$PASSWD" ] ; then
+    eerror "No hashed password found, can not set password."
+    eend 1
+    return
+  fi
+
+  config_userlocal
+  einfo "Bootoption encpasswd found, trying to set hashed password for root and user $localuser"
+  [ -z "$localuser" ] && eend 1
+
+  if [ -n "$PASSWD" ] ; then
+    chpass_options="-e"
+
+    echo "$localuser:$PASSWD" | chpasswd $chpass_options
+    echo "root:$PASSWD" | chpasswd $chpass_options
+
+    eindent
+    ewarn "Warning: please change the password for root and user $localuser as soon as possible!"
+    eoutdent
+  fi
+
+fi
+}
+# }}}
+
+# {{{ Sound
+config_mixer () {
+  if ! [ -x /usr/bin/amixer ] ; then
+    logger -t grml-autoconfig "amixer binary not available"
+    return
+  fi
+
+  if ! [ -r /proc/asound/cards ] ; then
+    ewarn "No soundcard present, skipping mixer settings therefore."
+    eend 0
+    return
+  fi
+
+  for card in $(cat /proc/asound/cards| grep -e '^\s*[0-9]' | awk '{print $1}') ; do
+    einfo "Configuring soundcard \"$(awk -F\[ '/^ *'$card' \[/{ FS=" "; $0=$2; print $1}' < /proc/asound/cards)\""
+    eindent
+
+    if checkbootparam 'vol' ; then
+      VOL="$(getbootparam 'vol' 2>>$DEBUG)"
+      if [ -z "$VOL" ] ; then
+        eerror "Bootoption vol found but no volume level/parameter given. Using defaults (75%)."
+        VOL='75'
+        eend 1
+      fi
+    else
+      VOL='75'
+    fi
+
+    if checkbootparam 'nosound' ; then
+      einfo "Muting sound devices on request."
+      ERROR=$(amixer -q set Master mute)
+      RC=$?
+      if [ -n "$ERROR" ] ; then
+        eindent
+        eerror "Problem muting sound devices: $ERROR"
+        eoutdent
+      fi
+      eend $RC
+    elif [ -z "$INSTALLED" ] ; then
+      einfo "Setting mixer volumes to level ${WHITE}${VOL}${NORMAL}."
+
+      if checkbootparam 'micvol' ; then
+        MICVOL="$(getbootparam 'micvol' 2>>$DEBUG)"
+        einfo "Setting microphone to ${WHITE}${MICVOL}${NORMAL}."
+      else
+        MICVOL=0
+      fi
+
+      CONTROLS=$(amixer -c $card scontrols | awk -F"Simple mixer control " '{print $2}')
+      IFSOLD=${IFS:-}
+      IFS=$'\n'
+      for CONTROL in ${=CONTROLS} ; do
+        # such devices can not be controlled with amixer ... unmute
+        [[ "$CONTROL" == *Console* ]] && continue
+
+        if ! echo "${CONTROL}" | grep -q -i "mic" ; then
+          if amixer -c $card sget "${CONTROL}" | grep -q 'Capabilities:.*pswitch' ; then
+            amixer -c $card -q set "${CONTROL}" unmute
+          fi
+          if amixer -c $card sget "${CONTROL}" | grep -q -P 'Capabilities:.*(pvolume| volume)' ; then
+            amixer -c $card -q set "${CONTROL}" "${VOL}"%
+          fi
+        fi
+
+        if [ ${MICVOL} -ne 0 ] ; then
+          if amixer -c $card sget "${CONTROL}" | grep -q 'Capabilities:.*cswitch' ; then
+            amixer -c $card -q set "${CONTROL}" unmute
+          fi
+          if amixer -c $card sget "${CONTROL}" | grep -q 'Capabilities:.*cvolume' ; then
+            amixer -c $card -q set "${CONTROL}" $MICVOL%
+          fi
+          eend $?
+        fi
+      done
+      IFS=$IFSOLD
+    fi # checkbootparam 'nosound'
+    eoutdent
+  done
+}
+# }}}
+
+# {{{ gpm
+config_gpm(){
+  if checkbootparam 'nogpm'; then
+    ewarn "Not starting GPM as requested on boot commandline." ; eend 0
+  else
+    if ! [ -r /dev/input/mice ] ; then
+      eerror "No mouse found - not starting GPM." ; eend 1
+    else
+      einfo "Starting gpm in background."
+      service_wrapper gpm start >>$DEBUG
+      eend 0
+    fi
+  fi
+}
+# }}}
+
+# {{{ services
+config_services(){
+ if checkbootparam 'services' ; then
+    SERVICE="$(getbootparam 'services' 2>>$DEBUG)"
+    SERVICELIST=$(echo "$SERVICE" | sed 's/,/\\n/g')
+    SERVICENL=$(echo "$SERVICE" | sed 's/,/ /g')
+    for service in $(echo -e $SERVICELIST) ; do
+      einfo "Starting service ${service}."
+      service_wrapper "${service}" start >>$DEBUG
+    done
+    eend $?
+ fi
+}
+# }}}
+
+# {{{ remote files
+get_remote_file() {
+  [ "$#" -eq 2 ] || ( echo "Error: wrong parameter for get_remote_file()" ; return 1 )
+  SOURCE=$(eval echo "$1")
+  TARGET="$2"
+  getconfig() {
+  wget --timeout=10 --dns-timeout=10  --connect-timeout=10 --tries=1 \
+       --read-timeout=10 ${SOURCE} -O ${TARGET} && return 0 || return 1
+  }
+  einfo "Trying to get ${WHITE}${TARGET}${NORMAL}"
+
+  if checkbootparam 'getfile.retries' ; then
+    local counter="$(getbootparam 'getfile.retries' 2>>$DEBUG)"
+  else
+    local counter=10
+  fi
+
+  while ! getconfig && [[ "$counter" != 0 ]] ; do
+    echo -n "Sleeping for 1 second and trying to get config again... "
+    counter=$(( counter-1 ))
+    echo "$counter tries left" ; sleep 1
+  done
+  if [ -s "$TARGET" ] ; then
+    einfo "Downloading was successfull." ; eend 0
+    einfo "md5sum of ${WHITE}${TARGET}${NORMAL}: "
+    md5sum ${TARGET} ; eend 0
+    return 0;
+  else
+    einfo "Sorry, could not fetch ${SOURCE}" ; eend 1
+    return 1;
+ fi
+}
+# }}}
+
+# {{{ config files
+config_netconfig(){
+ if checkbootparam 'netconfig' ; then
+  # Provide ARCH here as it is documented to work, but skip calling uname when not necessary.
+  ARCH="$(uname -m)"
+  CONFIG="$(getbootparam 'netconfig' 2>>$DEBUG)"
+  CONFIGFILE='/tmp/netconfig.grml'
+
+  if get_remote_file ${CONFIG} ${CONFIGFILE} ; then
+    cd / && einfo "Unpacking ${WHITE}${CONFIGFILE}${NORMAL}:" && /usr/bin/unp $CONFIGFILE $EXTRACTOPTIONS ; eend $?
+  fi
+
+ fi
+}
+# }}}
+
+# {{{ remote scripts
+config_netscript() {
+ if checkbootparam 'netscript' ; then
+  CONFIG="$(getbootparam 'netscript' 2>>$DEBUG)"
+  SCRIPTFILE='/tmp/netscript.grml'
+
+  if get_remote_file ${CONFIG} ${SCRIPTFILE} ; then
+    chmod +x ${SCRIPTFILE}
+    einfo "Running ${WHITE}${SCRIPTFILE}${NORMAL}:" && NETSCRIPT=${CONFIG} ${SCRIPTFILE} ; eend $?
+  fi
+
+ fi
+}
+# }}}
+
+# {{{ start X window system via grml-x
+config_x_startup(){
+
+
+# make sure we start X only if startx is used *before* a nostartx option
+# so it's possible to disable automatic X startup using nostart
+if checkbootparam 'startx' && ! echo "$CMDLINE" | grep -q 'startx.*nostartx' ; then
+ if [ -x "$(which X)" ] ; then
+  if [ -z "$INSTALLED" ] ; then
+   WINDOWMANAGER="$(getbootparam 'startx' 2>>$DEBUG)"
+   if [ -z "$WINDOWMANAGER" ] ; then
+     einfo "No window manager specified. Using default one." && eend 0
+   else
+     einfo "Window manager ${WHITE}${WINDOWMANAGER}${NORMAL} found as bootoption." && eend 0
+   fi
+   einfo "Setting up and invoking grml-x ${WINDOWMANAGER}. Just exit X windows system to get full featured consoles."
+   config_userlocal
+   if [ -n "$WINDOWMANAGER" ] ; then
+     mkdir -p /run/grml-x/
+     echo "$WINDOWMANAGER" > /run/grml-x/window-manager
+   fi
+   chvt 7
+   return
+   cat>|/etc/init.d/startx<<EOF
+#!/bin/sh
+su "${localuser}" -c "/usr/bin/grml-x ${WINDOWMANAGER}"
+EOF
+   chmod 755 /etc/init.d/startx
+
+   # adjust inittab for startx
+   if grep -q '^6:' /etc/inittab ; then
+      sed -i 's|^6:.*|6:2345:respawn:/bin/zsh --login -c "/etc/init.d/startx ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>\&1 </dev/tty6|' /etc/inittab
+   else # just append tty6 to inittab if no definition is present:
+      echo '6:2345:respawn:/bin/zsh --login -c "/etc/init.d/startx ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>&1 < /dev/tty6' >> /etc/inittab
+   fi
+
+   /sbin/telinit q ; eend $?
+
+   if grep -q '^allowed_users=' /etc/X11/Xwrapper.config ; then
+      sed -i 's/^allowed_users=.*/allowed_users=anybody/' /etc/X11/Xwrapper.config
+   else
+      echo 'allowed_users=anybody' >> /etc/X11/Xwrapper.config
+   fi
+
+  else
+    eerror "We are not running in live mode - startx will not work, skipping it."
+    eerror " -> Please use something like xdm, gdm or kdm for starting X on a harddisk system!" ; eend 1
+  fi
+ else
+   eerror "/usr/bin/X is not present on this grml flavour."
+   eerror "  -> Boot parameter startx does not work therefore." ; eend 1
+ fi
+fi
+}
+# }}}
+
+# {{{ configuration framework
+config_extract(){
+if checkbootparam 'extract' ; then
+ EXTRACT="$(getbootparam 'extract' 2>>$DEBUG)"
+ EXTRACTOPTIONS="-- -x $EXTRACT"
+fi
+}
+
+config_finddcsdir() {
+#  - If no GRMLCFG partition is found and noautoconfig is _not_ given
+#    on the command line, nothing is changed and the dcs files are
+#    searched within the .iso, $dcs-dir is set to the root directory
+#    within the .iso
+#  - If a GRMLCFG partition is found, $dcs-dir is set to the root of
+#    the GRMLCFG partition unless noautoconfig is set. If noautoconfig is
+#    set, $dcs-dir is set to the root directory within the .iso.
+#  - If myconfig=foo is set on the command line, $dcs-dir is set to
+#    foo, even if a GRMLCFG partition is present.
+DCSDIR=""
+DCSMP="/mnt/grml"
+# autoconfig, see issue673
+GRMLCFG="$(getbootparam 'autoconfig' 2>>$DEBUG)"
+[ -n "$GRMLCFG" ] || GRMLCFG="GRMLCFG"
+if checkbootparam 'noautoconfig' ; then
+  DCSDIR="${LIVECD_PATH}" # set default so it works for "scripts" boot option as expected
+  ewarn "Skipping running automount of device(s) labeled $GRMLCFG as requested." ; eend 0
+else
+  if [ -z "$INSTALLED" ] ; then
+    if checkbootparam 'myconfig' ; then
+      DCSDEVICE="$(getbootparam 'myconfig' 2>>$DEBUG)"
+      if [ -z "$DCSDEVICE" ]; then
+        eerror "Error: No device for bootoption myconfig provided." ; eend 1
+      fi # [ -z "$DCSDEVICE" ]
+    elif checkvalue $CONFIG_MYCONFIG; then # checkbootparam myconfig
+      einfo "Searching for device(s) labeled with $GRMLCFG. (Disable this via boot option: noautoconfig)" ; eend 0
+      eindent
+      DCSDEVICE=$(blkid -t LABEL=$GRMLCFG | head -1 | awk -F: '{print $1}')
+
+      if [ -z "$DCSDEVICE" ] ; then
+          if grep -q "$GRMLCFG" /sys/bus/virtio/devices/*/mount_tag 2>/dev/null ; then
+            einfo "Found 9p-virtio fs with mount_tag $GRMLCFG"
+            DCSDEVICE="$GRMLCFG"
+            MOUNTOPTIONS="ro,trans=virtio"
+            DCSFS="9p"
+          fi
+      fi
+
+      if [ -n "$DCSDEVICE" ]; then
+        DCSMP="/mnt/grmlcfg"
+      fi
+      eoutdent
+    fi
+
+    # if not specified/present then assume default:
+    if [ -z "$DCSDEVICE" ]; then
+      DCSDIR="${LIVECD_PATH}"
+    else
+      eindent
+      einfo "debs, config, scripts are read from $DCSDEVICE." ; eend 0
+      DCSDIR="$(< /proc/mounts awk -v DCSDEV=$DCSDEVICE '{if ($1 == DCSDEV) { print $2; exit }}')"
+      if [ -n "$DCSDIR" ]; then
+        ewarn "$DCSDEVICE already mounted on $DCSDIR"; eend 0
+      else
+        [ -d $DCSMP ] || mkdir $DCSMP
+        umount $DCSMP >>$DEBUG 2>&1 # make sure it is not mounted
+        mount -o ${MOUNTOPTIONS:-ro} -t ${DCSFS:-auto} $DCSDEVICE  $DCSMP ; RC="$?"
+        if [[ $RC == 0 ]]; then
+          einfo "Successfully mounted $DCSDEVICE to $DCSMP (readonly)." ; eend 0
+        else
+          eerror "Error: mounting $DCSDEVICE to $DCSMP (readonly) failed." ; eend 1
+        fi
+        DCSDIR="$DCSMP"
+      fi
+      eoutdent
+    fi
+  fi
+fi
+
+if [ -n "$DCSDIR" -a "$DCSDIR" != "${LIVECD_PATH}" ] ; then
+  einfo "Debs, config, scripts (if present) will be read from $DCSDIR." ; eend 0
+elif checkbootparam 'debs' || checkbootparam 'config' || checkbootparam 'scripts'; then
+  einfo "Debs, config, scripts will be read from the live image directly." ; eend 0
+fi
+}
+
+
+config_partconf() {
+if checkbootparam 'partconf' ; then
+ MOUNTDEVICE="$(getbootparam 'partconf' 2>>$DEBUG)"
+ if [ -n "$MOUNTDEVICE" ]; then
+   [ -d /mnt/grml ] || mkdir /mnt/grml
+   mount -o ro -t auto $MOUNTDEVICE /mnt/grml ; RC="$?"
+    if [[ $RC == 0 ]]; then
+      einfo "Successfully mounted $MOUNTDEVICE to /mnt/grml (readonly)." ; eend 0
+      einfo "Copying files from $MOUNTDEVICE over grml system."
+      for file in `cat /etc/grml/partconf` ; do
+        [ -d /mnt/grml/$file ] && cp -a /mnt/grml/${file}* ${file} && echo "copied: $file"
+        [ -f /mnt/grml/$file ] && cp -a /mnt/grml/${file}  ${file} && echo "copied: $file"
+      done && eend 0
+    else
+      einfo "Could not mount $MOUNTDEVICE to /mnt/grml - sorry." ; eend 1
+    fi # mount $MOUNTDEVICE
+   grep -q '/mnt/grml' /proc/mounts && umount /mnt/grml
+ else
+   einfo "Sorry, no device for bootoption partconf provided. Skipping." ; eend 1
+ fi # [ -n "$MOUNTDEVICE" ]
+fi
+}
+# }}}
+
+# {{{ /cdrom/.*-options
+config_debs(){
+if checkbootparam 'debs' ; then
+   iszsh && setopt localoptions shwordsplit
+   DEBS="$(getbootparam 'debs' 2>>$DEBUG)"
+   if [ -z "$DEBS" ] ; then
+      DEBS="*.deb"
+   fi
+   if ! echo $DEBS | grep -q '/'; then
+     # backwards compatibility: if no path is given get debs from debs/
+     DEBS="debs/$DEBS"
+   fi
+   einfo "Trying to install Debian package(s) ${DEBS}"
+   DEBS="$(eval echo ${DCSDIR}/$DEBS)"
+   dpkg -i $DEBS ; eend $?
+fi
+}
+
+config_scripts(){
+if checkbootparam 'scripts' || [ "$DCSMP" = "/mnt/grmlcfg" ]; then
+   SCRIPTS="$(getbootparam 'scripts' 2>>$DEBUG)"
+   if [ -d ${DCSDIR}/scripts ] && [ -z "$SCRIPTS" ]; then
+     SCRIPTS="$(cd ${DCSDIR}/scripts; /bin/ls -1d [Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
+   fi
+   if ! echo $SCRIPTS | grep -q '/'; then
+     # backwards compatibility: if no path is given get scripts from scripts/
+     SCRIPTS="scripts/$SCRIPTS"
+   fi
+   if [ -n "$SCRIPTS" ]; then
+     SCRIPTS="${DCSDIR}/$SCRIPTS"
+     if [ "$DCSMP" = "/mnt/grmlcfg" ]; then
+       einfo "Trying to execute ${SCRIPTS}"
+       sh -c $SCRIPTS
+       eend $?
+     elif [ -d "$SCRIPTS" ]; then
+       einfo "Bootparameter scripts found. Trying to execute from directory ${SCRIPTS}:"
+       run-parts --regex '.*' $SCRIPTS
+       eend $?
+     else
+       einfo "Bootparameter scripts found. Trying to execute ${SCRIPTS}:"
+       sh -c $SCRIPTS
+       eend $?
+     fi
+   fi
+fi
+}
+
+config_config(){
+if checkbootparam 'config' || [ "$DCSMP" = "/mnt/grmlcfg" ]; then
+  CONFIG="$(getbootparam 'config' 2>>$DEBUG)"
+  if [ -z "$CONFIG" ]; then
+    CONFIG="$(cd ${DCSDIR}; ls -1d [Cc][Oo][Nn][Ff][Ii][Gg].[Tt][Bb][Zz] 2>>$DEBUG)"
+  fi
+  if [ -n "$CONFIG" ]; then
+    if [ -d "${DCSDIR}/${CONFIG}" ] ; then
+      einfo "Taking configuration from directory ${DCSDIR}/${CONFIG}"
+
+      cp -a ${DCSDIR}/${CONFIG}/* /
+    elif [ -f "${DCSDIR}/${CONFIG}" ]; then
+      einfo "Extracting configuration from file ${DCSDIR}/${CONFIG}"
+
+      cd /
+      unp ${DCSDIR}/${CONFIG} $EXTRACTOPTIONS ; eend $?
+    else
+      ewarn "Sorry, could not find configuration file or directory ${DCSDIR}/${FILENAME}." ; eend 1
+    fi
+  fi
+fi
+}
+# }}}
+
+# {{{ confing_umount_dcsdir
+config_umount_dcsdir(){
+   # umount $DCSMP if it was mounted by finddcsdir
+   grep -q "$DCSMP" /proc/mounts && umount "$DCSMP"
+}
+# }}}
+
+# {{{ mypath
+config_mypath(){
+if checkbootparam 'mypath' ; then
+   MY_PATH="$(getbootparam 'mypath' 2>>$DEBUG)"
+   einfo "Bootparameter mypath found, adding ${MY_PATH} to /etc/grml/my_path"
+   touch /etc/grml/my_path
+   chmod 644 /etc/grml/my_path
+   # make sure the directories exist:
+   eindent
+   for i in $(echo $MY_PATH | sed 's/:/\n/g') ; do
+       if ! [ -d "$i" ] ; then
+          einfo "Creating directory $i"
+          mkdir -p "$i" ; eend $?
+       fi
+   done
+   grep -q "${MY_PATH}" /etc/grml/my_path || echo "${MY_PATH}" >> /etc/grml/my_path ; eend $?
+   eoutdent
+fi
+}
+# }}}
+
+# {{{ SW-RAID
+config_swraid(){
+  [ -n "$INSTALLED" ] && return 0
+
+  if checkbootparam 'noraid'   || checkbootparam 'noswraid' || \
+     checkbootparam 'raid=noautodetect' ; then
+     ewarn "Skipping SW-RAID code as requested on boot commandline." ; eend 0
+  else
+    [ -e /proc/mdstat ] || modprobe md_mod
+    if ! [ -x /sbin/mdadm ] ; then
+       eerror "mdadm not available, can not execute it." ; eend 1
+    else
+
+       # if ! egrep -qv '^(MAILADDR.*|#.*|)$' /etc/mdadm/mdadm.conf 2>>$DEBUG ; then
+       # find out whether we have a valid configuration file already
+       if ! grep -q ARRAY /etc/mdadm/mdadm.conf 2>>$DEBUG ; then
+          einfo "Creating /etc/mdadm/mdadm.conf for use with mdadm."
+          [ -r /etc/mdadm/mdadm.conf ] && mv /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.old
+          MDADM_MAILADDR__='root' /usr/share/mdadm/mkconf > /etc/mdadm/mdadm.conf ; eend $?
+        else
+          ewarn "/etc/mdadm/mdadm.conf looks like a configured mdadm setup, will not touch it." ; eend 0
+       fi
+
+       if ! checkbootparam 'swraid' ; then
+          eindent
+          einfo "Just run 'mdadm --assemble --scan' to assemble md arrays or boot using 'swraid' as bootoption for autostart."
+          eoutdent
+       else
+          einfo "Bootoption swraid found. Searching for software RAID arrays:"
+          eindent
+           IFSOLD=${IFS:-}
+           IFS=$'\n'
+           for line in $(mdadm --assemble --scan 2>&1) ; do
+               case $line in
+                 *'No arrays found'*)
+                   ewarn "$line" ; eend 0
+                   ;;
+                 *)
+                   einfo "$line" ; eend 0
+                   ;;
+               esac
+           done
+           IFS=$IFSOLD
+         eoutdent
+
+         if [ -r /proc/mdstat ] ; then
+            eindent
+            MDSTAT=$(grep '^md[0-9]' /proc/mdstat)
+            if [ -z "$MDSTAT" ] ; then
+               ewarn "No active arrays found" ; eend 0
+            else
+               IFSOLD=${IFS:-}
+               IFS=$'\n'
+               for line in $(grep '^md[0-9]' /proc/mdstat) ; do
+                   einfo "active arrays: $line" ; eend 0
+               done
+               IFS=$IFSOLD
+            fi
+            eoutdent
+         fi # /proc/mdstat
+       fi # bootoption swraid
+
+     fi # is /sbin/mdadm executable?
+  fi # check for bootoptions
+}
+# }}}
+
+# {{{ LVM (Logical Volumes)
+config_lvm(){
+  [ -n "$INSTALLED" ] && return 0
+
+  if checkbootparam 'nolvm' ; then
+     ewarn "Skipping LVM code as requested on boot commandline." ; eend 0
+  else
+    if ! [ -x /sbin/lvm ] ; then
+      eerror "LVM not available, can not execute it." ; eend 1
+    else
+      if lvdisplay 2>&1 | grep -v 'No volume groups found' >/dev/null 2>&1 ; then
+        einfo "You seem to have logical volumes (LVM) on your system."
+        eindent
+        einfo "Just run 'Start lvm2-pvscan@name' to activate LV or VG 'name' or boot using 'lvm' as bootoption for autostart."
+        eend 0
+        if checkbootparam 'lvm' ; then
+          einfo "Bootoption LVM found, enabling related services."
+          if [ -r /etc/init.d/lvm2-lvmetad ] ; then
+            service_wrapper lvm2-lvmetad start ; eend $?
+          fi
+          if [ -r /etc/init.d/lvm2-lvmpolld ] ; then
+            service_wrapper lvm2-lvmpolld start ; eend $?
+          fi
+          einfo "Searching for logical volumes and enabling them:"
+          vgchange -ay ; eend $?
+        fi
+        eoutdent
+      fi
+    fi # check for lvm binary
+  fi # check for bootoption nolvm
+}
+# }}}
+
+# {{{ debnet: setup network based on an existing one found on a partition
+config_debnet(){
+if checkbootparam 'debnet' ; then
+ einfo "Bootoption 'debnet' found. Searching for Debian network configuration: "
+ /usr/sbin/debnet
+fi
+}
+# }}}
+
+# {{{ disable console blanking
+config_blanking(){
+if checkbootparam 'noblank' ; then
+  einfo "Bootoption noblank found. Disabling monitor blanking."
+  setterm -blank 0 ; eend $?
+fi
+}
+# }}}
+
+# {{{ virtualbox shared folders
+config_virtualbox_shared_folders() {
+  if ! $VIRTUALBOX ; then
+    return
+  fi
+
+  if checkbootparam 'novboxsf' ; then
+    ewarn "Skipping VirtualBox Shared Folders setup as requested on boot commandline." ; eend 0
+  else
+    einfo "VirtualBox detected, trying to set up Shared Folders."
+    if ! modinfo vboxsf &>/dev/null ; then
+      ewarn "vboxsf driver not present, not setting up VirtualBox Shared Folders."
+      eend 0
+    elif ! [ -x /usr/sbin/VBoxService ] ; then
+      ewarn "virtualbox-guest-utils not installed, not setting up VirtualBox Shared Folders."
+      eend 0
+    else
+      eindent
+
+      einfo "Loading vboxsf driver."
+      lsmod | grep -q vboxsf || modprobe vboxsf
+      eend $?
+
+      einfo "Adjusting /dev/vboxguest."
+      chown root:vboxsf /dev/vboxguest
+      chmod 660 /dev/vboxguest
+      eend $?
+
+      config_userfstab
+
+      einfo "Adding user ${fstabuser:-grml} to group vboxsf."
+      adduser "${fstabuser:-grml}" vboxsf >>"${DEBUG}" 2>&1
+      eend $?
+
+      einfo "Starting VBoxService."
+      VBoxService >/dev/null
+      eend $?
+
+      local vbautomation='automation'
+      if checkbootparam 'vbautomation'; then
+        vbautomation="$(getbootparam 'vbautomation' 2>>$DEBUG)"
+      fi
+
+      if ! VBoxControl sharedfolder list | egrep -q "^[0-9]+ - ${vbautomation}(\s+|$)" ; then
+        ewarn "No automount shared folder '$vbautomation' available"
+        eend 0
+      else
+        einfo "Found automount shared folder '$vbautomation'"
+        eend 0
+
+        local distri="$(getbootparam 'distri' 2>>$DEBUG)"
+        [ -n "$distri" ] || distri='grml'
+
+        local vbox_auto_sf="/media/sf_${vbautomation}"
+
+        sleep 1 # ugly but necessary
+
+        counter=10
+        eindent
+        while ! [ -d "${vbox_auto_sf}" ] && [[ "$counter" != 0 ]]; do
+          einfo "Waiting another second to retry access to ${vbox_auto_sf}"
+          sleep 1
+          counter=$(( counter-1 ))
+          eend 0
+        done
+        eoutdent
+
+        if ! [ -d "${vbox_auto_sf}" ] ; then
+          eerror "Giving up trying to access folder ${vbox_auto_sf} which doesn't seem to exist"
+          eend 1
+        else
+          einfo "Found shared folders automation directory $vbox_auto_sf"
+          eend 0
+
+          eindent
+          if checkbootparam 'novbautomation' ; then
+            einfo "Bootoption novbautomation found. Disabling automation script execution."
+            eend 0
+          else
+            if ! [ -x "${vbox_auto_sf}/${distri}" ] ; then
+              ewarn "Couldn't find an automation script named ${vbox_auto_sf}/${distri}"
+              eend 1
+            else
+              einfo "Executing '${vbox_auto_sf}/${distri}' now:"
+              "${vbox_auto_sf}/${distri}"
+              eend $?
+            fi
+          fi
+          eoutdent
+        fi
+      fi
+
+      eoutdent
+    fi
+  fi
+}
+# }}}
+
+# {{{ VirtualBox application
+config_virtualbox_setup() {
+  if checkbootparam 'novbox' ; then
+    ewarn "Skipping VirtualBox setup as requested on boot commandline." ; eend 0
+    return
+  fi
+
+  if ! [ -x /usr/bin/VBox ] ; then
+    return
+  fi
+
+  if running_under_secureboot ; then
+    ewarn "VirtualBox service can not be started as running under enabled Secure Boot." ; eend 0
+    return
+  fi
+
+  einfo "VirtualBox service detected, trying to set up."
+  service_wrapper vboxdrv restart >>"${DEBUG}" 2>&1 ; eend $?
+
+  config_userfstab
+
+  einfo "Adding user ${fstabuser:-grml} to group vboxusers."
+  adduser "${fstabuser:-grml}" vboxusers >>"${DEBUG}" 2>&1
+  eend $?
+}
+# }}}
+
+# {{{ Support customization
+config_distri(){
+if checkbootparam 'distri'; then
+  DISTRI="$(getbootparam 'distri' 2>>$DEBUG)"
+  if [ -r "${LIVECD_PATH}"/desktop/"$DISTRI".jpg ] ; then
+     # make sure the desktop.jpg file is not a symlink, so copying does not file then
+     [ -L /usr/share/grml/desktop.jpg ] && rm /usr/share/grml/desktop.jpg
+     cp "${LIVECD_PATH}"/desktop/"$DISTRI".jpg /usr/share/grml/desktop.jpg
+  fi
+fi
+}
+# }}}
+
+# {{{ Easteregg (for 20 years grml.org)
+display_easteregg() {
+  einfo "You found the birthday easter egg!" ; eend 0
+
+  if [[ -x /bin/toilet && -x /usr/games/lolcat ]] ; then
+    visualize() { printf "%s\n" "$*" | toilet | /usr/games/lolcat ; }
+  elif [[ -x /bin/toilet ]] ; then
+    visualize() { printf "%s\n" "$*" | toilet ; }
+  else
+    visualize() { printf "%s\n" "$*" ; }
+  fi
+
+  visualize "   \o/   "
+  visualize "20 years"
+  visualize "grml.org"
+}
+
+config_easteregg() {
+  checkbootparam 'noeasteregg' && return 0
+
+  zmodload zsh/datetime 2>/dev/null || return 0
+  zmodload zsh/mathfunc 2>/dev/null || return 0
+
+  local birthday=1694822400            # := 2023-09-16 -> TZ=UTC date -d "2023-09-16" +%s
+  local one_month=$[24*30*3600]
+  local pi=3.14159265358979323846
+  local magic=$(( one_month/(pi/2) ))  # normalization factor, used to map the [birthday;birthday+-one_month] range onto [0;+-pi/2]
+
+  if [[ $(( abs(birthday-EPOCHSECONDS) )) -le $one_month ]] ; then
+    if [[ $(( rand48() )) -le $(( cos((birthday-EPOCHSECONDS)/magic) )) ]] ; then
+      display_easteregg
+    fi
+  fi
+
+  return 0
+}
+# }}}
+
+## END OF FILE #################################################################
+# vim:foldmethod=marker expandtab ai ft=zsh shiftwidth=2

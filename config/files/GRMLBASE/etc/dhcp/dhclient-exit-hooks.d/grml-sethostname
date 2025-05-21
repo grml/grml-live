@@ -1,0 +1,12 @@
+# only run the command if we bound to a new ip
+case "$reason" in BOUND)
+if ! grep -q 'nodhcphostname' /proc/cmdline && [ -f /etc/grml_cd ] ; then
+
+    hostname=$(busybox nslookup "$new_ip_address" | awk '/Address 1: '$new_ip_address'/ {print $4}')
+    if [ -n "$hostname" ] ; then
+        grml-hostname "$hostname"
+        hostname -F /etc/hostname
+    fi
+fi
+;;
+esac

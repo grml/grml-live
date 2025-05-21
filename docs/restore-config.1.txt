@@ -1,0 +1,72 @@
+restore-config(1)
+=================
+
+Name
+----
+restore-config - restore configuration
+
+Synopsis
+--------
+
+restore-config <restore-options>
+
+About
+-----
+
+You can either restore a GCA ('grml configuration archive', see
+grml-autoconfig(1) for details) using the boot parameters or by a script file named
+'restore-config'. Specify the filename of the configuration archive which
+should be used as a parameter.
+
+Options
+-------
+
+The following options are available to specify which parts of the archive should
+be extracted.
+
+  *-home*::
+
+Extract hidden files from $HOME ($HOME/.*).
+
+  *-grmlhome*::
+
+Store hidden files from \$HOME (\$HOME/.*) of user grml [use as user root].
+
+  *-etc*::
+
+Extract modified files from /etc.
+
+  *-configdir*::
+
+Extract $HOME/config.
+
+Note: The default is to extract (restore) all files found in the archive.
+
+[TIP]
+It is also possible to use environment variables for specifying which part
+should be restored. Just set the corresponding variable: $RESTORE_HOME,
+$RESTORE_ETC, $RESTORE_CONFIGDIR and $RESTORE_ALL
+
+Usage examples
+--------------
+
+  *restore-config -home foo_bar_config.tbz*::
+
+Restore configuration from file foo_bar_config.tbz.
+
+  *restore-config config.tbz*::
+
+Restore configuration from file config.tbz.
+
+Bugs
+----
+If you find a bug please report it. See link:http://grml.org/bugs/[] for details
+about how to report bugs.
+
+See also
+--------
+grml-autoconfig(1), grml-autoconfig(8), save-config(1)
+
+Author
+------
+(c) 2005++, Michael Prokop <mika@grml.org>
