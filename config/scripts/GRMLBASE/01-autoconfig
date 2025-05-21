@@ -1,0 +1,31 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/GRMLBASE/01-autoconfig
+# Purpose:       Install grml-autoconfig
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+fcopy -m root,root,0755 -v /etc/dhcp/dhclient-exit-hooks.d/grml-sethostname
+fcopy -M -v /etc/grml/autoconfig.functions
+fcopy -M -v /etc/grml/autoconfig.local
+fcopy -M -v /etc/grml/autoconfig
+fcopy -M -v /etc/grml/language-functions
+fcopy -M -v /etc/grml/modules
+fcopy -M -v /etc/grml/partconf
+fcopy -M -v /etc/modules-load.d/grml-autoconfig.conf
+fcopy -M -v /etc/systemd/system/grml-autoconfig.service
+
+fcopy -m root,root,0755 /usr/share/grml-autoconfig/grml-autoconfig
+fcopy -m root,root,0755 -v /usr/bin/restore-config
+fcopy -m root,root,0755 -v /usr/bin/save-config
+fcopy -m root,root,0755 -v /usr/sbin/grml-autoconfig
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

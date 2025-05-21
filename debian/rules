@@ -23,9 +23,7 @@ override_dh_install:
 	dh_install
 
 override_dh_clean:
-	rm -f docs/grml-live-remaster.8	docs/grml-live-remaster.html docs/grml-live-remaster.xml
-	rm -f docs/grml-live.8 docs/grml-live.html docs/grml-live.xml
-	rm -f docs/html-stamp docs/man-stamp
+	cd docs && $(MAKE) clean && cd ../
 	dh_clean
 
 override_dh_fixperms:
