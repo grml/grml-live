@@ -1453,26 +1453,6 @@ else
       bailout
    fi
 
-   einfo "Using ${MKISOFS} to build ISO." ;  eend 0
-   case "${ARCH}" in
-     # using -eltorito-alt-boot is limited to xorriso for now
-     amd64)
-       eindent
-
-       if [ -r "${BUILD_OUTPUT}"/boot/efi.img ] ; then
-         einfo "Enabling (U)EFI boot."
-         log   "Enabling (U)EFI boot."
-         BOOT_ARGS="$BOOT_ARGS -boot-info-table -eltorito-alt-boot -e boot/efi.img -no-emul-boot"
-         eend $?
-       else
-         log   "Disabling (U)EFI boot support because /boot/efi.img is missing."
-         ewarn "Disabling (U)EFI boot support because /boot/efi.img is missing." ; eend 0
-       fi
-
-       eoutdent
-       ;;
-   esac
-
    log   "Generating build information in conf/buildinfo.json"
    einfo "Generating build information in conf/buildinfo.json"
    mkdir -p "$BUILD_OUTPUT"/conf/
