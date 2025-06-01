@@ -598,9 +598,9 @@ def install_base(conf_dir: Path, chroot_dir: Path, classes, debian_suite: str, m
     # Work around APT bug: http://bugs.debian.org/1092164
     included_packages = ["netbase"]
 
-    # Allow using https:// mirror, if given.
-    if mirror_url.startswith("https"):
-        included_packages.append("ca-certificates")
+    # Allow using https:// sources. Do this unconditionally, so sources added with
+    # fcopy /etc/apt just work.
+    included_packages.append("ca-certificates")
 
     # Find keyring to use for mmdebstrap
     keyring_dir = conf_dir / "bootstrap-keyring"
