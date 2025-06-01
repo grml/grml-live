@@ -13,13 +13,6 @@ export LC_ALL=C
 # avoid leaking into chroots
 unset TMPDIR
 
-# define function getfilesize before "set -e"
-if stat --help >/dev/null 2>&1; then
-  getfilesize='stat -c %s'  # GNU stat
-else
-  getfilesize='stat -f %z'  # BSD stat
-fi
-
 # exit on any error:
 # disable for now since it seems to cause some problems
 # set -e
@@ -1400,7 +1393,7 @@ generate_build_info() {
     host_architecture="$(dpkg --print-architecture || true)" \
     host_debian_version="$(cat /etc/debian_version 2>/dev/null || true)" \
     host_kernel_version="$(uname -a)" \
-    mkisofs_cmdline="${MKISOFS} -V ${GRML_NAME} ${VERSION} -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -no-pad -o ${ISO_OUTPUT}/${ISO_NAME}" \
+    mkisofs_cmdline="${MKISOFS} -V ${GRML_NAME} ${VERSION} -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o ${ISO_OUTPUT}/${ISO_NAME}" \
     mkisofs_version="$(${MKISOFS} --version 2>/dev/null | head -1 || true)" \
     mksquashfs_cmdline="${SQUASHFS_BINARY} ${CHROOT_OUTPUT}/ ${BUILD_OUTPUT}/live/${GRML_NAME}/${GRML_NAME}.squashfs -noappend ${SQUASHFS_OPTIONS}" \
     mksquashfs_version="$(${SQUASHFS_BINARY} -version | head -1 || true)" \
@@ -1459,11 +1452,11 @@ else
    generate_build_info > "$BUILD_OUTPUT"/conf/buildinfo.json
    eend $?
 
-   log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS $EFI_ARGS -no-pad -o ${ISO_OUTPUT}/${ISO_NAME} ."
+   log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS $EFI_ARGS -o ${ISO_OUTPUT}/${ISO_NAME} ."
    einfo "Generating ISO file..."
    # shellcheck disable=SC2086 # BOOT_ARGS and EFI_ARGS need splitting
    $MKISOFS -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
-           -l -r -J $BOOT_ARGS $EFI_ARGS -no-pad \
+           -l -r -J $BOOT_ARGS $EFI_ARGS \
            -o "${ISO_OUTPUT}/${ISO_NAME}" "$BUILD_OUTPUT"/ ; RC=$?
    eend $RC
 
@@ -1473,13 +1466,6 @@ else
      eerror "Error: critical error while generating ISO [exit code ${RC}]. Exiting." ; eend 1
      bailout "$RC"
    fi
-
-   # pad the output ISO to multiples of 256 KiB for partition table support
-   siz=$($getfilesize "${ISO_OUTPUT}/${ISO_NAME}")
-   cyls=$((siz / 512 / 32 / 16 + 1))   # C=$cyls H=16 S=32
-   siz=$((cyls * 16 * 32 * 512))   # size after padding
-   dd if=/dev/zero bs=1 count=1 seek=$((siz - 1)) \
-      of="${ISO_OUTPUT}/${ISO_NAME}" 2>/dev/null
 
    # generate ISO checksums if we are using class 'RELEASE':
    if hasclass RELEASE && [ "$RC" = 0 ] ; then
