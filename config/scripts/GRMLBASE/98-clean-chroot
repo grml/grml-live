@@ -126,12 +126,8 @@ zero "$target"/var/account/pacct \
      "$target"/var/log       \
      "$target"/var/mail/grml
 
-if ! [ -x "$target"/usr/sbin/update-ca-certificates ] ; then
-  echo "Warning: update-ca-certificates not installed"
-else
-  echo "Updating ca-certificates"
-  $ROOTCMD update-ca-certificates
-fi
+echo "Updating ca-certificates"
+$ROOTCMD update-ca-certificates
 
 # regenerate ls.so.cache
 if ! [ -x "$target"/sbin/ldconfig ] ; then

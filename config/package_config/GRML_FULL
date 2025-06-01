@@ -200,7 +200,6 @@ wireguard
 wireless-regdb
 
 # network transfers
-ca-certificates
 fuse3
 lftp
 nfs-kernel-server
