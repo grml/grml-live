@@ -388,7 +388,6 @@ fi
 [ -n "$GRML_FAI_CONFIG" ]         || GRML_FAI_CONFIG='/usr/share/grml-live/config'
 [ -n "$GRML_NAME" ]               || GRML_NAME='grml'
 [ -n "$HOSTNAME" ]                || HOSTNAME='grml'
-[ -n "$HYBRID_METHOD" ]           || HYBRID_METHOD='isohybrid'
 [ -n "$RELEASENAME" ]             || RELEASENAME='grml-live rocks'
 [ -n "$SECURE_BOOT" ]             || SECURE_BOOT='disable'
 [ -n "$SQUASHFS_BINARY" ]         || SQUASHFS_BINARY='mksquashfs'
@@ -444,6 +443,12 @@ if [ -n "$FAI_DEBOOTSTRAP_OPTS" ] ; then
   bailout
 fi
 
+if [ -n "$HYBRID_METHOD" ] ; then
+  eerror "The variable \$HYBRID_METHOD is set, but it is unsupported." ; eend 1
+  eerror "Please unset it. Current value: \$HYBRID_METHOD=$HYBRID_METHOD" ; eend 1
+  bailout
+fi
+
 if [ -e /etc/grml/fai/config ] && [ -z "$GRML_FAI_CONFIG" ] ; then
   eerror "Found old configuration files in /etc/grml/fai/config (while \$GRML_FAI_CONFIG was empty)." ; eend 1
   eerror "You should check your configuration and move these files into a new path, and set \$GRML_FAI_CONFIG." ; eend 1
@@ -486,7 +491,6 @@ echo "  main directory:    $OUTPUT"
 [ -n "$VERSION" ]             && echo "  Grml version:      $VERSION"
 [ -n "$SUITE" ]               && echo "  Debian suite:      $SUITE"
 [ -n "$ARCH" ]                && echo "  Architecture:      $ARCH"
-[ -n "$HYBRID_METHOD" ]       && echo "  Hybrid method:     $HYBRID_METHOD"
 [ -n "$SECURE_BOOT" ]         && echo "  Secure Boot:       $SECURE_BOOT"
 [ -n "$TEMPLATE_DIRECTORY" ]  && echo "  Template files:    $TEMPLATE_DIRECTORY"
 [ -n "$CHROOT_INSTALL" ]      && echo "  Install files from directory to chroot:  $CHROOT_INSTALL"
@@ -1396,7 +1400,6 @@ generate_build_info() {
     host_architecture="$(dpkg --print-architecture || true)" \
     host_debian_version="$(cat /etc/debian_version 2>/dev/null || true)" \
     host_kernel_version="$(uname -a)" \
-    hybrid_method="${HYBRID_METHOD}" \
     mkisofs_cmdline="${MKISOFS} -V ${GRML_NAME} ${VERSION} -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -no-pad -o ${ISO_OUTPUT}/${ISO_NAME}" \
     mkisofs_version="$(${MKISOFS} --version 2>/dev/null | head -1 || true)" \
     mksquashfs_cmdline="${SQUASHFS_BINARY} ${CHROOT_OUTPUT}/ ${BUILD_OUTPUT}/live/${GRML_NAME}/${GRML_NAME}.squashfs -noappend ${SQUASHFS_OPTIONS}" \
@@ -1422,9 +1425,7 @@ generate_build_info() {
 [ -n "$ISO_NAME" ] || ISO_NAME="${GRML_NAME}_${VERSION}.iso"
 
 BOOT_ARGS="-no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat"
-if [ "$HYBRID_METHOD" = "isohybrid" ] ; then
-  EFI_ARGS="-isohybrid-mbr ${CHROOT_OUTPUT}/usr/lib/ISOLINUX/isohdpfx.bin -eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
-fi
+EFI_ARGS="-isohybrid-mbr ${CHROOT_OUTPUT}/usr/lib/ISOLINUX/isohdpfx.bin -eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
 if [ "$ARCH" = "arm64" ]; then
   # No isolinux on arm64.
   BOOT_ARGS=""
