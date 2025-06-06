@@ -1,3 +1,19 @@
+grml-live (0.53.2) grml-testing; urgency=medium
+
+  [ Michael Prokop ]
+  * [3015873] scripts/migrate-to-minifai: improve git repos support +
+    don't fail on non-existing directories
+  * [8ce547f] debian/grml-live.maintscript: drop leftover deprecated
+    files. Thanks to Chris Hofstaedtler for feedback
+  * [a8e7d94] GRMLBASE/98-clean-chroot: support plocate usage
+
+  [ Chris Hofstaedtler ]
+  * [84d55b0] minifai: always install ca-certificates to allow
+    https:// sources
+  * [e948670] Rely on minifai to install ca-certificates
+
+ -- Michael Prokop <mika@grml.org>  Fri, 06 Jun 2025 12:27:07 +0200
+
 grml-live (0.53.1) grml-testing; urgency=medium
 
   The "2025.05 release is nearly here" release
