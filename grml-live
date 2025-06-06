@@ -13,13 +13,6 @@ export LC_ALL=C
 # avoid leaking into chroots
 unset TMPDIR
 
-# define function getfilesize before "set -e"
-if stat --help >/dev/null 2>&1; then
-  getfilesize='stat -c %s'  # GNU stat
-else
-  getfilesize='stat -f %z'  # BSD stat
-fi
-
 # exit on any error:
 # disable for now since it seems to cause some problems
 # set -e
@@ -388,7 +381,6 @@ fi
 [ -n "$GRML_FAI_CONFIG" ]         || GRML_FAI_CONFIG='/usr/share/grml-live/config'
 [ -n "$GRML_NAME" ]               || GRML_NAME='grml'
 [ -n "$HOSTNAME" ]                || HOSTNAME='grml'
-[ -n "$HYBRID_METHOD" ]           || HYBRID_METHOD='isohybrid'
 [ -n "$RELEASENAME" ]             || RELEASENAME='grml-live rocks'
 [ -n "$SECURE_BOOT" ]             || SECURE_BOOT='disable'
 [ -n "$SQUASHFS_BINARY" ]         || SQUASHFS_BINARY='mksquashfs'
@@ -444,6 +436,12 @@ if [ -n "$FAI_DEBOOTSTRAP_OPTS" ] ; then
   bailout
 fi
 
+if [ -n "$HYBRID_METHOD" ] ; then
+  eerror "The variable \$HYBRID_METHOD is set, but it is unsupported." ; eend 1
+  eerror "Please unset it. Current value: \$HYBRID_METHOD=$HYBRID_METHOD" ; eend 1
+  bailout
+fi
+
 if [ -e /etc/grml/fai/config ] && [ -z "$GRML_FAI_CONFIG" ] ; then
   eerror "Found old configuration files in /etc/grml/fai/config (while \$GRML_FAI_CONFIG was empty)." ; eend 1
   eerror "You should check your configuration and move these files into a new path, and set \$GRML_FAI_CONFIG." ; eend 1
@@ -486,7 +484,6 @@ echo "  main directory:    $OUTPUT"
 [ -n "$VERSION" ]             && echo "  Grml version:      $VERSION"
 [ -n "$SUITE" ]               && echo "  Debian suite:      $SUITE"
 [ -n "$ARCH" ]                && echo "  Architecture:      $ARCH"
-[ -n "$HYBRID_METHOD" ]       && echo "  Hybrid method:     $HYBRID_METHOD"
 [ -n "$SECURE_BOOT" ]         && echo "  Secure Boot:       $SECURE_BOOT"
 [ -n "$TEMPLATE_DIRECTORY" ]  && echo "  Template files:    $TEMPLATE_DIRECTORY"
 [ -n "$CHROOT_INSTALL" ]      && echo "  Install files from directory to chroot:  $CHROOT_INSTALL"
@@ -1396,8 +1393,7 @@ generate_build_info() {
     host_architecture="$(dpkg --print-architecture || true)" \
     host_debian_version="$(cat /etc/debian_version 2>/dev/null || true)" \
     host_kernel_version="$(uname -a)" \
-    hybrid_method="${HYBRID_METHOD}" \
-    mkisofs_cmdline="${MKISOFS} -V ${GRML_NAME} ${VERSION} -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -no-pad -o ${ISO_OUTPUT}/${ISO_NAME}" \
+    mkisofs_cmdline="${MKISOFS} -V ${GRML_NAME} ${VERSION} -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o ${ISO_OUTPUT}/${ISO_NAME}" \
     mkisofs_version="$(${MKISOFS} --version 2>/dev/null | head -1 || true)" \
     mksquashfs_cmdline="${SQUASHFS_BINARY} ${CHROOT_OUTPUT}/ ${BUILD_OUTPUT}/live/${GRML_NAME}/${GRML_NAME}.squashfs -noappend ${SQUASHFS_OPTIONS}" \
     mksquashfs_version="$(${SQUASHFS_BINARY} -version | head -1 || true)" \
@@ -1421,14 +1417,11 @@ generate_build_info() {
 [ -n "$ISO_OUTPUT" ] || ISO_OUTPUT="$OUTPUT/grml_isos"
 [ -n "$ISO_NAME" ] || ISO_NAME="${GRML_NAME}_${VERSION}.iso"
 
-BOOT_ARGS="-no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat"
-if [ "$HYBRID_METHOD" = "isohybrid" ] ; then
-  EFI_ARGS="-isohybrid-mbr ${CHROOT_OUTPUT}/usr/lib/ISOLINUX/isohdpfx.bin -eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
-fi
+BOOT_ARGS="-no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat -isohybrid-mbr ${CHROOT_OUTPUT}/usr/lib/ISOLINUX/isohdpfx.bin"
+EFI_ARGS="-eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
 if [ "$ARCH" = "arm64" ]; then
   # No isolinux on arm64.
   BOOT_ARGS=""
-  EFI_ARGS="-eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
 fi
 
 if [ -f "${ISO_OUTPUT}/${ISO_NAME}" ] && [ -z "$UPDATE" ] && [ -z "$BUILD_ONLY" ] && [ -z "$BUILD_DIRTY" ] && [ "$FORCE_ISO_REBUILD" = "false" ]  ; then
@@ -1453,37 +1446,17 @@ else
       bailout
    fi
 
-   einfo "Using ${MKISOFS} to build ISO." ;  eend 0
-   case "${ARCH}" in
-     # using -eltorito-alt-boot is limited to xorriso for now
-     amd64)
-       eindent
-
-       if [ -r "${BUILD_OUTPUT}"/boot/efi.img ] ; then
-         einfo "Enabling (U)EFI boot."
-         log   "Enabling (U)EFI boot."
-         BOOT_ARGS="$BOOT_ARGS -boot-info-table -eltorito-alt-boot -e boot/efi.img -no-emul-boot"
-         eend $?
-       else
-         log   "Disabling (U)EFI boot support because /boot/efi.img is missing."
-         ewarn "Disabling (U)EFI boot support because /boot/efi.img is missing." ; eend 0
-       fi
-
-       eoutdent
-       ;;
-   esac
-
    log   "Generating build information in conf/buildinfo.json"
    einfo "Generating build information in conf/buildinfo.json"
    mkdir -p "$BUILD_OUTPUT"/conf/
    generate_build_info > "$BUILD_OUTPUT"/conf/buildinfo.json
    eend $?
 
-   log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS $EFI_ARGS -no-pad -o ${ISO_OUTPUT}/${ISO_NAME} ."
+   log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS $EFI_ARGS -o ${ISO_OUTPUT}/${ISO_NAME} ."
    einfo "Generating ISO file..."
    # shellcheck disable=SC2086 # BOOT_ARGS and EFI_ARGS need splitting
    $MKISOFS -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
-           -l -r -J $BOOT_ARGS $EFI_ARGS -no-pad \
+           -l -r -J $BOOT_ARGS $EFI_ARGS \
            -o "${ISO_OUTPUT}/${ISO_NAME}" "$BUILD_OUTPUT"/ ; RC=$?
    eend $RC
 
@@ -1493,13 +1466,6 @@ else
      eerror "Error: critical error while generating ISO [exit code ${RC}]. Exiting." ; eend 1
      bailout "$RC"
    fi
-
-   # pad the output ISO to multiples of 256 KiB for partition table support
-   siz=$($getfilesize "${ISO_OUTPUT}/${ISO_NAME}")
-   cyls=$((siz / 512 / 32 / 16 + 1))   # C=$cyls H=16 S=32
-   siz=$((cyls * 16 * 32 * 512))   # size after padding
-   dd if=/dev/zero bs=1 count=1 seek=$((siz - 1)) \
-      of="${ISO_OUTPUT}/${ISO_NAME}" 2>/dev/null
 
    # generate ISO checksums if we are using class 'RELEASE':
    if hasclass RELEASE && [ "$RC" = 0 ] ; then
