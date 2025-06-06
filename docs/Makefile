@@ -1,8 +1,23 @@
+MANPAGES = grml-autoconfig.1 grml-autoconfig.8 restore-config.1 save-config.1 grml-live.8 grml-live-remaster.8
+
 all: doc
 
 doc: doc_man doc_html
 
-doc_html: html-stamp
+doc_html: $(addsuffix .html, $(MANPAGES))
+doc_man: $(addsuffix .gz, $(MANPAGES))
+
+%.html : %.txt ;
+	asciidoc -b xhtml11 -a icons $^
+
+%.gz : %.txt ;
+	asciidoc -d manpage -b docbook $^
+	#sed -i 's/<emphasis role="strong">/<emphasis role="bold">/g' `echo $^ |sed -e 's/.txt/.xml/'`
+	xsltproc -nonet /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl `echo $^ |sed -e 's/.txt/.xml/'` > /dev/null 2>&1
+	gzip -f --best `echo $^ |sed -e 's/.txt//'`
+
+grml-live.8.html: grml-live.8.txt
+	asciidoc -b xhtml11 -a icons -a toc -a numbered $^
 
 icons:
 	mkdir -p images/icons
@@ -11,42 +26,21 @@ icons:
 	cp /usr/share/asciidoc/icons/note.png		images/icons/
 	cp /usr/share/asciidoc/icons/tip.png		images/icons/
 
-html-stamp: grml-live.txt grml-live-remaster.txt
-	asciidoc -b xhtml11 -a icons -a toc -a numbered grml-live.txt
-	asciidoc -b xhtml11 -a icons grml-live-remaster.txt
-	touch html-stamp
-
-doc_man: man-stamp
-
-man-stamp: grml-live.txt grml-live-remaster.txt
-	asciidoc -d manpage -b docbook grml-live.txt
-	xsltproc --novalid /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl grml-live.xml
-	asciidoc -d manpage -b docbook grml-live-remaster.txt
-	xsltproc --novalid /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl grml-live-remaster.xml
-	touch man-stamp
-
 doc_epub: epub-stamp
 
 epub-stamp:
-	a2x --icons -a toc -a toclevels=3 -a docinfo -f epub grml-live.txt
+	a2x --icons -a toc -a toclevels=3 -a docinfo -f epub grml-live.8.txt
 	touch epub-stamp
 
 doc_pdf: pdf-stamp
 
 pdf-stamp:
-	a2x --icons -a toc -a toclevels=3 -a docinfo -f pdf grml-live.txt
+	a2x --icons -a toc -a toclevels=3 -a docinfo -f pdf grml-live.8.txt
 	touch pdf-stamp
-
-online: icons doc_html doc_epub doc_pdf
-	# this is assume that a checkout of grml.org.git is available
-	# next to grml-live.git as "grml.org"
-	test -d ../../grml.org/grml-live || exit 1
-	cp grml-live.html	../../grml.org/grml-live/index.html
-	cp grml-live.pdf	../../grml.org/grml-live/
-	cp grml-live.epub	../../grml.org/grml-live/
 
 clean:
 	rm -rf images/icons
-	rm -f grml-live-remaster.html grml-live-remaster.xml grml-live-remaster.8
-	rm -f grml-live.html grml-live.xml grml-live.8 grml-live.epub grml-live.pdf
+	for i in $(MANPAGES); do \
+		rm -f $$i.html $$i.xml $$i.gz $$i.pdf $$i.epub $$i; done
 	rm -f html-stamp man-stamp epub-stamp pdf-stamp
+

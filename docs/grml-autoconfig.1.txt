@@ -1,0 +1,199 @@
+grml-autoconfig(1)
+==================
+
+Name
+----
+grml-autoconfig - main bootup process of a grml system
+
+Synopsis
+--------
+None - it is a framework. See grml-autoconfig(8) for information regarding
+the interface script.
+
+Introduction
+------------
+
+By using the config framework, it is possible to customize Grml's startup in a
+multitude of ways. It allows to:
+
+- execute one or more scripts on startup
+- install Debian packages from deb files on startup
+- unpack configuration on startup
+
+The combination of Debs, Configuration and Scripts is called DCS in Grml. DCS
+can be read from the Live Image itself, from an arbitrary file system on the
+local system which is marked with the volume label GRMLCFG, or from the file
+system pointed to by the myconfig boot parameter.
+
+The DCS handling is controlled by a number of boot parameters.
+
+The scripts save-config and restore-config can be used to create and handle
+files called 'grml configuration archive', abbreviated GCA. save-config stores
+the running configuration inside a GCA; restore-config is a script to restore a
+configuration from a GCA.
+
+[TIP]
+A GCA is a plain bzip2 compressed tar archive. All the files are generated
+starting from the root-directory '/' so it is easy to handle. You can generate
+configuration archives manually as well. save-config is just a frontend which
+should make it easier to use.
+
+[IMPORTANT]
+Starting with Grml release 2009.05 its possible to use root persistency on grml.
+This means you can store your settings and reuse them on reboot, without having
+to deal with this config framework. Visit
+link:http://wiki.grml.org/doku.php?id=persistency[] for further information.
+
+[[current-versions]]
+include::grml-autoconfig.current.txt[]
+
+[[X7]]
+Usage scenarios
+---------------
+
+Personal configuration files
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You are a fan of the editor vim? Great. You probably have your own ~/.vimrc and
+want to use it on the Grml system. You also don't like the default zsh
+configuration and want to use your own ~/.zshrc?  How to proceed? Copy your
+.vimrc and .zshrc to $HOME of user 'grml'.  Place additional files in
+$HOME/config. Now create a configuration for your files running:
+
+  save-config -home -configdir
+
+Now you should have a file named config.tbz containing your configuration files.
+You can copy the archive to a webserver and restore it via downloading during
+reboot using the following commandline on bootprompt:
+
+  grml netconfig=server.tld/path/to/config.tbz
+
+You don't have network access but own a USB device? Copy the file to a USB
+device and boot with something like:
+
+  grml myconfig=/dev/sda1
+
+Network configuration
+~~~~~~~~~~~~~~~~~~~~~
+
+You need a specific network setup and want to use your own
+/etc/network/interfaces by default? Generate the configuration archive running
+the following command as user root:
+
+  save-config -etc
+
+Now you should have a file named config.tbz containing your configuration files.
+If you want to use it with a USB device copy the file to it and boot via
+using the following command on boot prompt:
+
+  grml myconfig=/dev/sda1
+
+You do have an existing harddisk installation and want to use its configuration?
+Let's say the Debian system is located in /dev/sda2. You want to use the
+directory /etc/network. This directory is activated by default in
+/etc/grml/partconf so we don't have to do any further work.  We just need to
+activate it via using the following commandline on bootprompt:
+
+  grml partconf=/dev/sda2
+
+Automatic installation of debian packages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You have a specified debian package named 'foobar.deb' and want to use it with
+(therefore: install it on) Grml by default? Notice: this feature is useful
+especially for grml-small (a ~100 MB ISO). If you want to use it with the large
+version of Grml you might have to overburn the ISO.
+
+Let's assume you have burned the Grml iso to a CD-RW using a commandline like:
+
+  cdrecord dev=/dev/hdc -v -multi -tao grml_0.5.iso
+
+Now create a directory named debs and place foobar.deb in it:
+
+  mkdir debs/ && cp foobar.deb debs/
+
+Notice: This directory will be located in /run/live/medium after burning the second
+session.
+
+Now create the second session containing this directory:
+
+  mkisofs -M grml_0.5.iso -C `cdrecord -msinfo dev=/dev/hdc` -R -o 2nd_session.iso debs
+
+Finally append the second session to the cd using:
+
+  cdrecord dev=/dev/hdc -v -multi -tao 2nd_session.iso
+
+TIP: the application k3b (not available on the live CD but available through the
+Debian repositories) provides an easy to use interface for doing the
+multisession task.
+
+Now boot from your new personalized Grml CD using the debs parameter:
+
+  grml debs
+
+Run your own commands on startup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You know that booting with 'grml services=foobar' executes
+/etc/init.d/foobar when booting Grml. But you want to setup a more
+complex network configuration, adjust some other stuff and so on, on
+your own? Just write a script named grml.sh which does the job and use
+one of the mentioned boot parameters. Let's say you have placed grml.sh
+on your usb device (usb stick) then use the following commandline on
+bootprompt:
+
+  grml myconfig=/dev/sda1
+
+Or even better: create a device with label GRMLCFG running (adjust /dev/sdX1
+according to your needs):
+
+  mkfs.ext3 -L GRMLCFG /dev/sdX1  # warning: this destroys all data on /dev/sdX1
+
+TIP: several filesystems provide the possibility to provide a label.  For
+example FAT provides this through: 'mkfs.vfat -n GRMLCFG /dev/sda1' (attention:
+this will destroy data on /dev/sda1 of course!). Take a look at the
+documentation/manpage of the filesystem you want to use.
+
+Now place your configuration archive (see save-config and the other
+usage scenarios) and the script grml.sh on the device. Now you can boot
+your system without specifying any boot parameters on bootprompt because
+devices labeled with GRMLCFG are mounted readonly and used by default.
+If you did not label your device you can use the device anyway using
+'grml myconfig=/dev/sdX' (adjust /dev/sdX) on the bootprompt.
+
+Debug remote systems
+~~~~~~~~~~~~~~~~~~~~
+
+You are responsible for a customer's system in her data center. The system has
+failed and you need to debug from remote, and the remote hands available in the
+data center do not have enough knowledge to get Grml booted and configure the
+network without external help?
+
+If the hard disk of the system is still available, you hopefully have saved a
+configuration file with IP address, netmask and default gateway somewhere on
+that hard disk. Grml can use the information found on a partition. Take a look
+at the 'partconf' boot parameter.  Usage example: 'grml partconf=/dev/sda2'
+copies files defined in /etc/grml/partconf from /dev/sda2 to the Grml system. As
+/etc/network is predefined in /etc/grml/partconf the configuration from
+/dev/sda2 will be taken.
+
+Or you use a standard Grml medium and have grml read IP address, netmask and
+default gateway from another medium like a USB stick. Take a look at the script
+saveconfig and the boot parameter myconfig.
+
+Or you put a grml.iso file on your hard disk (maybe in /boot/grml) or on an USB
+stick, use grub to boot from there and place debs, configuration scripts or Grml
+configuration archives alongside the .iso.
+
+Bugs
+----
+If you find a bug please report it. See link:http://grml.org/bugs/[] for details
+about how to report bugs.
+
+See also
+--------
+grml-autoconfig(8), restore-config(1), save-config(1)
+
+Author
+------
+(c) 2005++, Michael Prokop <mika@grml.org>
