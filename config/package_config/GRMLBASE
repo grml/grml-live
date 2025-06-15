@@ -13,7 +13,6 @@ fdisk
 file
 gpm
 grml2usb
-grml-autoconfig
 grml-crypt
 grml-debootstrap
 grml-etc
