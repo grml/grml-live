@@ -18,7 +18,7 @@ setopt no_nomatch # avoid 'no matches found: ...'
 
 # {{{ source main files
 source /etc/grml/autoconfig            # configuration file
-source /etc/grml/autoconfig.functions  # functions
+source /usr/share/grml-autoconfig/autoconfig.functions  # functions
 source /etc/grml/lsb-functions         # helper functions for smart display
 # }}}
 
