@@ -11,16 +11,6 @@ case "$LANGUAGE" in
                 LANG="C"
                 LANGUAGE="C"
                 ;;
-        at-iso)
-                # Austrian version
-                COUNTRY="at"
-                LANG="de_AT@euro"
-                LANGUAGE="de_AT:de"
-                KEYTABLE="de-latin1-nodeadkeys"
-                XKEYBOARD="de"
-                CHARSET="iso8859-15"
-                TZ="Europe/Vienna"
-                ;;
         at|at-utf8)
                 # Austrian version (UTF8)
                 COUNTRY="at"
@@ -32,16 +22,6 @@ case "$LANGUAGE" in
                 # CHARSET="lat9w-16"
                 TZ="Europe/Vienna"
                 ;;
-        au-iso)
-                # Australian version
-                LANGUAGE="en"
-                COUNTRY="au"
-                LANG="en_AU"
-                KEYTABLE="us"
-                XKEYBOARD="us"
-                CHARSET="iso8859-1"
-                TZ="Australia/Sydney"
-                ;;
         au|au-utf8)
                 # Australian version (UTF8)
                 LANGUAGE="en_AU:en"
@@ -52,16 +32,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Australia/Sydney"
                 ;;
-        be-iso|bed-iso)
-                # Belgian version (default and dutch one)
-                LANGUAGE="nl"
-                COUNTRY="be"
-                LANG="C"
-                KEYTABLE="be2-latin1"
-                XKEYBOARD="be"
-                CHARSET="iso8859-15"
-                TZ="Europe/Brussels"
-                ;;
         be|be-utf8|bed|bed-utf8)
                 # Belgian version (default and dutch one) (UTF8)
                 LANGUAGE="nl_BE:nl"
@@ -70,16 +40,6 @@ case "$LANGUAGE" in
                 KEYTABLE="be2-latin1"
                 XKEYBOARD="be"
                 CHARSET="utf8"
-                TZ="Europe/Brussels"
-                ;;
-        bef-iso)
-                # Belgian version (french)
-                LANGUAGE="fr"
-                COUNTRY="be"
-                LANG="C"
-                KEYTABLE="be2-latin1"
-                XKEYBOARD="be"
-                CHARSET="iso8859-15"
                 TZ="Europe/Brussels"
                 ;;
         bef|bef-utf8)
@@ -92,16 +52,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Europe/Brussels"
                 ;;
-        beg-iso)
-                # Belgian version (german)
-                LANGUAGE="de"
-                COUNTRY="be"
-                LANG="C"
-                KEYTABLE="be2-latin1"
-                XKEYBOARD="be"
-                CHARSET="iso8859-15"
-                TZ="Europe/Brussels"
-                ;;
         beg|beg-utf8)
                 # Belgian version (german) (UTF8)
                 LANGUAGE="de_BE:de"
@@ -111,16 +61,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="be"
                 CHARSET="utf8"
                 TZ="Europe/Brussels"
-                ;;
-        bg-iso)
-                # Bulgarian version
-                LANGUAGE="bg"
-                COUNTRY="bg"
-                LANG="bg_BG"
-                KEYTABLE="bg"
-                XKEYBOARD="bg"
-                CHARSET="microsoft-cp1251"
-                TZ="Europe/Sofia"
                 ;;
         bg|bg-utf8)
                 # Bulgarian version (UTF8)
@@ -132,16 +72,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Europe/Sofia"
                 ;;
-        br-iso)
-                # Brazilian Version
-                LANGUAGE="pt_BR"
-                COUNTRY="br"
-                LANG="pt_BR"
-                KEYTABLE="br-abnt2"
-                XKEYBOARD="abnt2"
-                CHARSET="iso8859-1"
-                TZ="America/Sao_Paulo"
-                ;;
         br|br-utf8)
                 # Brazilian Version (UTF8)
                 LANGUAGE="pt_BR:pt"
@@ -151,16 +81,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="abnt2"
                 CHARSET="utf8"
                 TZ="America/Sao_Paulo"
-                ;;
-        ch-iso)
-                # Swiss version
-                LANGUAGE="de"
-                COUNTRY="ch"
-                LANG="de_CH"
-                KEYTABLE="sg-latin1"
-                XKEYBOARD="ch"
-                CHARSET="iso8859-15"
-                TZ="Europe/Zurich"
                 ;;
         ch|ch-utf8)
                 # Swiss version (basically de with some modifications)
@@ -182,16 +102,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="ca_enhanced"
                 TZ="America/Montreal"
                 ;;
-        cn-iso)
-                # Simplified Chinese version
-                COUNTRY="cn"
-                LANG="zh_CN.GB2312"
-                KEYTABLE="us"
-                XKEYBOARD="us"
-                CHARSET="gb2312.1980-0"
-                XMODIFIERS="@im=Chinput"
-                TZ="Asia/Shanghai"
-                ;;
         cn|cn-utf8)
                 # Simplified Chinese version (UTF8)
                 COUNTRY="zh_CN:cn"
@@ -201,17 +111,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 XMODIFIERS="@im=Chinput"
                 TZ="Asia/Shanghai"
-                ;;
-        cs-iso|cz-iso)
-                # Czech version
-                LANGUAGE="cs"
-                COUNTRY="cs"
-                LANG="cs_CZ"
-                KEYTABLE="cz-lat2"
-                XKEYBOARD="cs"
-                CHARSET="iso8859-2"
-                TZ="Europe/Prague"
-                CHARMAP="iso02"
                 ;;
         cs|cz|cs-utf8|cz-utf8)
                 # Czech version (UTF8)
@@ -223,16 +122,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Europe/Prague"
                 ;;
-        de-iso)
-                # German version
-                COUNTRY="de"
-                LANG="de_DE@euro"
-                LANGUAGE="de_DE:de"
-                KEYTABLE="de-latin1-nodeadkeys"
-                XKEYBOARD="de"
-                CHARSET="iso8859-15"
-                TZ="Europe/Berlin"
-                ;;
         de|de-utf8)
                 # German version (UTF8)
                 COUNTRY="de"
@@ -242,18 +131,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="de"
                 CHARSET="utf8"
                 TZ="Europe/Berlin"
-                ;;
-        dk-iso|da-iso)
-                # Dansk version
-                COUNTRY="dk"
-                LANG="da_DK"
-                # Workaround: "dk" broken in gettext, use da:da_DK
-                LANGUAGE="da:da_DK"
-                # Keytable "dk" is correct.
-                KEYTABLE="dk"
-                XKEYBOARD="dk"
-                CHARSET="iso8859-15"
-                TZ="Europe/Copenhagen"
                 ;;
         dk|da|dk-utf8|da-utf8)
                 # Dansk version (UTF8)
@@ -277,27 +154,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="UTC"
                 ;;
-        dvorak-iso)
-                # Dvorak layout (ISO)
-                LANGUAGE="us"
-                COUNTRY="at"
-                LANG="en_US.iso885915"
-                KEYTABLE="dvorak"
-                XKEYBOARD="dvorak"
-                CHARSET="iso8859-15"
-                TZ="UTC"
-                ;;
-        en-iso)
-                # English in Austria [see us + uk for american and english version!]
-                # LANGUAGE="en_US:en_GB:en"
-                LANGUAGE="en"
-                COUNTRY="at"
-                LANG="en_US.iso885915"
-                KEYTABLE="us"
-                XKEYBOARD="us"
-                CHARSET="iso8859-15"
-                TZ="UTC"
-                ;;
         en|en-utf8)
                 # English in Austria [see us + uk for american and english version!] (UTF8)
                 LANGUAGE="en"
@@ -307,19 +163,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="us"
                 CHARSET="utf8"
                 TZ="UTC"
-                ;;
-        el-iso)
-                # Greek version
-                LANGUAGE="el"
-                COUNTRY="gr"
-                LANG="el_GR"
-                KEYTABLE="gr"
-                XKEYBOARD="us,el"
-                CHARSET="iso8859-7"
-                IOCHARSET="8859-7"
-                IOCODEPAGE="737"
-                SYSFONTACM="iso07"
-                TZ="Europe/Athens"
                 ;;
         el|el-utf8)
                 # Greek version (UTF8)
@@ -334,15 +177,6 @@ case "$LANGUAGE" in
                 SYSFONTACM="iso07"
                 TZ="Europe/Athens"
                 ;;
-        es-iso)
-                # Spanish version
-                COUNTRY="es"
-                LANG="es_ES@euro"
-                KEYTABLE="es"
-                XKEYBOARD="es"
-                CHARSET="iso8859-15"
-                TZ="Europe/Madrid"
-                ;;
         es|es-utf8)
                 # Spanish version (UTF8)
                 LANGUAGE="es_ES:es"
@@ -352,15 +186,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="es"
                 CHARSET="utf8"
                 TZ="Europe/Madrid"
-                ;;
-        fi-iso)
-                # Finnish version
-                COUNTRY="fi"
-                LANG="fi_FI@euro"
-                KEYTABLE="fi-latin1" # old value: fi
-                XKEYBOARD="fi"
-                CHARSET="iso8859-15"
-                TZ="Europe/Helsinki"
                 ;;
         fi|fi-utf8)
                 # Finnish version (UTF8)
@@ -372,15 +197,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Europe/Helsinki"
                 ;;
-        fr-iso)
-                # French version
-                COUNTRY="fr"
-                LANG="fr_FR@euro"
-                KEYTABLE="fr"
-                XKEYBOARD="fr"
-                CHARSET="iso8859-15"
-                TZ="Europe/Paris"
-                ;;
         fr|fr-utf8)
                 # French version (UTF8)
                 LANGUAGE="fr_FR"
@@ -391,15 +207,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Europe/Paris"
                 ;;
-        ga-iso)
-                # Irish Gaeilge version
-                COUNTRY="ie"
-                LANG="ga_IE@euro"
-                KEYTABLE="uk"
-                XKEYBOARD="uk"
-                CHARSET="iso8859-15"
-                TZ="Europe/Dublin"
-                ;;
         ga|ga-utf8)
                 # Irish Gaeilge version (UTF8)
                 COUNTRY="ie"
@@ -408,16 +215,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="uk"
                 CHARSET="utf8"
                 TZ="Europe/Dublin"
-                ;;
-        he-iso|il-iso)
-                # Hebrew version
-                LANGUAGE="he"
-                COUNTRY="il"
-                LANG="he_IL"
-                KEYTABLE="us"
-                XKEYBOARD="us"
-                CHARSET="iso8859-8"
-                TZ="Asia/Jerusalem"
                 ;;
         he|il|he-utf8|il-utf8)
                 # Hebrew version (UTF8)
@@ -429,15 +226,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Asia/Jerusalem"
                 ;;
-        ie-iso)
-                # Irish (English) version
-                COUNTRY="ie"
-                LANG="en_IE@euro"
-                KEYTABLE="uk"
-                XKEYBOARD="uk"
-                CHARSET="iso8859-15"
-                TZ="Europe/Dublin"
-                ;;
         ie|ie-utf8)
                 # Irish (English) version (UTF8)
                 LANGUAGE="en_IE:en"
@@ -448,15 +236,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Europe/Dublin"
                 ;;
-        it-iso)
-                # Italian version
-                COUNTRY="it"
-                LANG="it_IT@euro"
-                KEYTABLE="it"
-                XKEYBOARD="it"
-                CHARSET="iso8859-15"
-                TZ="Europe/Rome"
-                ;;
         it|it-utf8)
                 # Italian version (UTF8)
                 LANGUAGE="it_IT"
@@ -466,17 +245,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="it"
                 CHARSET="utf8"
                 TZ="Europe/Rome"
-                ;;
-        ja-iso|jp-iso)
-                # (limited) Japanese version
-                COUNTRY="jp"
-                LANG="ja_JP"
-                LANGUAGE="ja"
-                KEYTABLE="jp106"
-                XKEYMODEL="jp106"
-                XKEYBOARD="jp"
-                CHARSET="iso8859-15"
-                TZ="Asia/Tokyo"
                 ;;
         ja|ja-utf8|jp|jp-utf8)
                 # (limited) Japanese version (UTF8)
@@ -490,15 +258,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Asia/Tokyo"
                 ;;
-        nl-iso)
-                # Dutch version
-                COUNTRY="nl"
-                LANG="nl_NL@euro"
-                KEYTABLE="us" # nl
-                XKEYBOARD="us" # nl
-                CHARSET="iso8859-15"
-                TZ="Europe/Amsterdam"
-                ;;
         nl|nl-utf8)
                 # Dutch version (UTF8)
                 LANGUAGE="nl_NL:nl"
@@ -508,16 +267,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="us"
                 CHARSET="utf8"
                 TZ="Europe/Amsterdam"
-                ;;
-        no-iso|nb-iso|nn-iso)
-                # Norsk versjon
-                COUNTRY="no"
-                LANG="nb_NO"
-                LANGUAGE="no:nb_NO"
-                KEYTABLE="no"
-                XKEYBOARD="no"
-                CHARSET="iso8859-15"
-                TZ="Europe/Oslo"
                 ;;
         no|nb|nn|no-utf8|nb-utf8|nn-utf8)
                 # Norsk versjon (UTF8)
@@ -532,16 +281,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Europe/Oslo"
                 ;;
-        pl-iso)
-                # Polish version
-                COUNTRY="pl"
-                LANG="pl_PL"
-                KEYTABLE="pl"
-                XKEYBOARD="pl"
-                CHARSET="iso8859-2"
-                TZ="Europe/Warsaw"
-                CHARMAP="iso02"
-                ;;
         pl|pl-utf8)
                 # Polish version (UTF8)
                 LANGUAGE="pl_PL:pl"
@@ -551,15 +290,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="pl"
                 CHARSET="utf8"
                 TZ="Europe/Warsaw"
-                ;;
-        pt-iso)
-                # Portuguese version
-                COUNTRY="pt"
-                LANG="pt_PT@euro"
-                KEYTABLE="pt-latin1"
-                XKEYBOARD="pt"
-                CHARSET="iso8859-1"
-                TZ="Europe/Lisbon"
                 ;;
         pt|pt-utf8)
                 # Portuguese version (UTF8)
@@ -571,15 +301,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Europe/Lisbon"
                 ;;
-        ru-iso)
-                # Russian version
-                COUNTRY="ru"
-                LANG="ru_RU.KOI8-R"
-                KEYTABLE="ru"
-                XKEYBOARD="ru"
-                CHARSET="koi8-r"
-                TZ="Europe/Moscow"
-                ;;
         ru|ru-utf8)
                 # Russian version (UTF8)
                 LANGUAGE="ru_RU:ru"
@@ -589,16 +310,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="ru"
                 CHARSET="utf8"
                 TZ="Europe/Moscow"
-                ;;
-        se-iso)
-                # Swedish version
-                LANGUAGE="sv_SE:sv"
-                COUNTRY="se"
-                LANG="sv_SE.iso885915"
-                KEYTABLE="se-latin1"
-                XKEYBOARD="se"
-                CHARSET="sv_SE.iso885915"
-                TZ="Europe/Stockholm"
                 ;;
         se|se-utf8)
                 # Swedish version (UTF8)
@@ -610,16 +321,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Europe/Stockholm"
                 ;;
-        sk-iso)
-                # Slovak version (guessed)
-                COUNTRY="sk"
-                LANG="sk"
-                KEYTABLE="sk-qwerty"
-                XKEYBOARD="sk"
-                CHARSET="iso8859-2"
-                TZ="Europe/Bratislava"
-                CHARMAP="iso02"
-                ;;
         sk|sk-utf8)
                 # Slovak version (guessed) (UTF8)
                 LANGUAGE="sk_SK:sk"
@@ -629,17 +330,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="sk"
                 CHARSET="utf8"
                 TZ="Europe/Bratislava"
-                ;;
-        sl-iso)
-                # Slovenian keyboard
-                LANGUAGE="sl"
-                COUNTRY="si"
-                LANG="sl_SI"
-                KEYTABLE="slovene"
-                XKEYBOARD="sl"
-                CHARSET="iso8859-2"
-                TZ="Europe/Ljubljana"
-                CHARMAP="iso02"
                 ;;
         sl|sl-utf8)
                 # Slovenian keyboard (UTF8)
@@ -651,15 +341,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Europe/Ljubljana"
                 ;;
-        tr-iso)
-                # Turkish version (guessed)
-                COUNTRY="tr"
-                LANG="tr_TR"
-                KEYTABLE="tr_q-latin5"
-                XKEYBOARD="tr"
-                CHARSET="iso8859-9"
-                TZ="Europe/Istanbul"
-                ;;
         tr|tr-utf8)
                 # Turkish version (guessed) (UTF8)
                 LANGUAGE="tr_TR"
@@ -669,18 +350,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="tr"
                 CHARSET="utf8"
                 TZ="Europe/Istanbul"
-                ;;
-        tw-iso)
-                # Traditional Chinese version
-                COUNTRY="tw"
-                LANG="zh_TW.Big5"
-                LANGUAGE="zh_TW.Big5"
-                KEYTABLE="us"
-                XKEYBOARD="us"
-                # CHARSET="big5-0"
-                CHARSET="iso8859-1"
-                XMODIFIERS="@im=xcin"
-                TZ="Asia/Taipei"
                 ;;
         tw|tw-utf8)
                 # Traditional Chinese version (UTF8)
@@ -694,16 +363,6 @@ case "$LANGUAGE" in
                 XMODIFIERS="@im=xcin"
                 TZ="Asia/Taipei"
                 ;;
-        uk-iso)
-                # British version
-                COUNTRY="uk"
-                LANG="en_GB"
-                LANGUAGE="en"
-                KEYTABLE="uk"
-                XKEYBOARD="uk"
-                CHARSET="iso8859-1"
-                TZ="Europe/London"
-                ;;
         uk|uk-utf8)
                 # British version (UTF8)
                 LANGUAGE="en_GB:en"
@@ -713,16 +372,6 @@ case "$LANGUAGE" in
                 XKEYBOARD="uk"
                 CHARSET="utf8"
                 TZ="Europe/London"
-                ;;
-        us-iso)
-                # American version
-                LANGUAGE="en_US:en"
-                COUNTRY="us"
-                LANG="en_US.iso885915"
-                KEYTABLE="us"
-                XKEYBOARD="us"
-                CHARSET="en_US.iso885915"
-                TZ="America/New_York"
                 ;;
         us|us-utf8)
                 # American version (UTF8)
