@@ -27,7 +27,6 @@ nullmailer
 passwd
 procps
 psmisc
-sudo
 sysstat
 sysvinit-utils
 tree
