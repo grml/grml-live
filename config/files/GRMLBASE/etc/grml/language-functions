@@ -92,16 +92,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Europe/Zurich"
                 ;;
-        cf)
-                # French Canadian version
-                LANGUAGE="fr"
-                COUNTRY="ca"
-                LANG="fr_FR.ISO-8859-1"
-                KEYTABLE="cf"
-                CHARSET="iso8859-1"
-                XKEYBOARD="ca_enhanced"
-                TZ="America/Montreal"
-                ;;
         cn|cn-utf8)
                 # Simplified Chinese version (UTF8)
                 COUNTRY="zh_CN:cn"
@@ -111,6 +101,16 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 XMODIFIERS="@im=Chinput"
                 TZ="Asia/Shanghai"
+                ;;
+        cf)
+                # French Canadian version (UTF8)
+                LANGUAGE="fr_CA:fr"
+                COUNTRY="ca"
+                LANG="fr_CA.UTF-8"
+                KEYTABLE="cf"
+                XKEYBOARD="ca_enhanced"
+                CHARSET="utf8"
+                TZ="America/Montreal"
                 ;;
         cs|cz|cs-utf8|cz-utf8)
                 # Czech version (UTF8)

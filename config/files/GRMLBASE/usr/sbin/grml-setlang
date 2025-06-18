@@ -117,7 +117,7 @@ Configuration will be written to $CONFFILE" 0 0 0 \
  bg 'bulgarian (unicode version)' off \
  br 'brazilian (unicode version)' off \
  ch 'swiss (unicode version)' off \
- cf 'french canadian' off \
+ cf 'french canadian (unicode version)' off \
  cn 'chinese (unicode version)' off \
  cs 'czech (unicode version)' off \
  cz 'czech (unicode version)' off \
