@@ -8,19 +8,6 @@ set -euxo pipefail
 
 MODE=$1
 
-# Install as few Debian packages as possible,
-# we do not want to test *Debian*.
-cat > config/package_config/GRML_GHACI <<EOT
-PACKAGES install
-vim-tiny
-
-PACKAGES install AMD64
-linux-image-amd64
-
-PACKAGES install ARM64
-linux-image-arm64
-EOT
-
 cat >build-gha-ci-test-config-initial <<EOT
 ---
 last_release: "2024.12"
