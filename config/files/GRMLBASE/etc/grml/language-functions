@@ -226,6 +226,16 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="Asia/Jerusalem"
                 ;;
+        hu)
+                # Hungarian version (UTF8)
+                LANGUAGE="hu_HU:hu"
+                COUNTRY="hu"
+                LANG="hu_HU.UTF-8"
+                KEYTABLE="hu"
+                XKEYBOARD="hu"
+                CHARSET="utf8"
+                TZ="Europe/Budapest"
+                ;;
         ie|ie-utf8)
                 # Irish (English) version (UTF8)
                 LANGUAGE="en_IE:en"

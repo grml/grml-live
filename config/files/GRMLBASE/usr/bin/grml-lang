@@ -11,7 +11,7 @@ PN="$(basename "$0")"
 
 usage(){
     echo "Usage: ${PN} <language>"
-    echo "supported values: at, ch, de, dvorak, es, fr, it, jp, uk, us"
+    echo "supported values: at, ch, de, dvorak, es, fr, hu, it, jp, uk, us"
 }
 
 setvalue(){

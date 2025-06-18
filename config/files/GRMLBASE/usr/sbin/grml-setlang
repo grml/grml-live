@@ -131,6 +131,7 @@ Configuration will be written to $CONFFILE" 0 0 0 \
  fr 'frensh (unicode version)' off \
  ga 'irish gaeilge (unicode version)' off \
  he 'hebrew (unicode version)' off \
+ hu 'hungarian (unicode version)' off \
  il 'hebrew (unicode version)' off \
  ie 'irish (unicode version)' off \
  it 'italian (unicode version)' off \
