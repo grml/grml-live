@@ -37,7 +37,7 @@ Files
 
   */usr/share/grml-autoconfig/grml-autoconfig*::
 
-Main script which runs the commands defined in /etc/grml/autoconfig.functions
+Main script which runs the commands defined in /usr/share/grml-autoconfig/autoconfig.functions
 after checking configuration file /etc/grml/autoconfig. Executed by systemd.
 
   */usr/sbin/grml-autoconfig*::
@@ -55,7 +55,7 @@ User specific configuration file for grml-autoconfig. You can edit it directly
 or use the dialog interface /usr/sbin/grml-autoconfig.
 
 
-  */etc/grml/autoconfig.functions*::
+  */usr/share/grml-autoconfig/autoconfig.functions*::
 
 Main functions of the grml-autoconfig. You do not need to configure or execute
 the file.  For debugging purposes you can source this script also from within an
