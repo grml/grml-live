@@ -1,0 +1,147 @@
+#!/bin/bash
+# Filename:      grml-lang
+# Purpose:       load specific keyboard layout settings
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+CONFFILE=/etc/default/keyboard
+PN="$(basename "$0")"
+
+usage(){
+    echo "Usage: ${PN} <language>"
+    echo "supported values: at, ch, de, dvorak, es, fr, it, jp, uk, us"
+}
+
+setvalue(){
+  [ -n "$2" ] || return 1
+  sudo sed -i "s#^${1}=.*#${1}=\"${2}\"#" "${CONFFILE}"
+}
+
+if [ $# -lt "1" ] ; then
+   usage >&2
+   exit 1
+fi
+
+LANGUAGE="$1"
+
+# shellcheck disable=SC1091
+. /etc/grml/language-functions
+
+if [ -n "$XKEYBOARD" ] ; then
+  setvalue XKBLAYOUT "$XKEYBOARD"
+fi
+
+if [ -z "$DISPLAY" ] ;then
+  if [ "$1" = "de" ] ; then
+    echo "Loading keymap for Germany..."
+    sudo loadkeys i386/qwertz/de-latin1-nodeadkeys.kmap.gz
+    echo -e "\nDone."
+  elif [ "$1" = "at" ] ; then
+    echo "Loading keymap for Austria..."
+    sudo loadkeys i386/qwertz/de-latin1-nodeadkeys.kmap.gz
+    echo -e "\nDone."
+  elif [ "$1" = "ch" ] ; then
+    echo "Loading keymap for Switzerland..."
+    sudo loadkeys i386/qwertz/sg-latin1.kmap.gz
+    echo -e "\nDone."
+  elif [ "$1" = "it" ] ; then
+    echo "Loading keymap for Italy..."
+    sudo loadkeys i386/qwerty/it.kmap.gz
+    echo -e "\nDone."
+  elif [ "$1" = "us" ] ; then
+    echo 'Loading keymap us...'
+    sudo loadkeys i386/qwerty/us-latin1.kmap.gz
+    echo -e "\nDone."
+  elif [ "$1" = "dvorak" ] ; then
+    echo 'Loading keymap dvorak...'
+    sudo loadkeys dvorak
+    echo -e "\nDone."
+  elif [ "$1" = "jp" ] ; then
+    echo 'Loading keymap jp...'
+    sudo loadkeys i386/qwerty/jp106.kmap.gz
+    echo -e "\nDone."
+  elif [ "$1" = "es" ] ; then
+    echo 'Loading keymap es...'
+    sudo loadkeys i386/qwerty/es.kmap.gz
+    echo -e "\nDone."
+  elif [ "$1" = "fr" ] ; then
+    echo 'Loading keymap fr...'
+    sudo loadkeys i386/azerty/fr.kmap.gz
+    echo -e "\nDone."
+  elif [ "$1" = "uk" ] ; then
+    echo 'Loading keymap uk...'
+    sudo loadkeys i386/qwerty/uk.kmap.gz
+    echo -e "\nDone."
+  else echo "No valid parameter given.
+
+Notice: Use loadkeys on console and setxkbmap when running X for
+modifying keyboard layout. Adjust \$LANG and \$LC_ALL for setting locales." ; exit 1
+  fi
+  # switch to unicode mode on console
+  case $LANG in *UTF-8) kbd_mode -u ; ;; esac
+else
+  if [ $# = 0 ] ; then
+     usage
+  else
+    if [ "$1" = "de" ] ; then
+      echo "Loading keymap for Germany..."
+      if [ -r "${HOME}"/.Xmodmap.german ] ; then
+        xmodmap "${HOME}"/.Xmodmap.german || setxkbmap de
+      else
+        setxkbmap de
+      fi
+      echo -e "\nDone."
+    elif [ "$1" = "at" ] ; then
+      echo "Loading keymap for Austria..."
+      setxkbmap de
+      echo -e "\nDone."
+    elif [ "$1" = "ch" ] ; then
+      echo "Loading keymap for Switzerland..."
+      setxkbmap ch
+      echo -e "\nDone."
+    elif [ "$1" = "it" ] ; then
+      echo "Loading keymap for Italy..."
+      setxkbmap it
+      echo -e "\nDone."
+    elif [ "$1" = "jp" ] ; then
+      echo "Loading keymap for Japan..."
+      setxkbmap -model jp106 -layout jp
+      echo -e "\nDone."
+    elif [ "$1" = "dvorak" ] ; then
+      echo "Loading keymap dvorak..."
+      setxkbmap dvorak
+      echo -e "\nDone."
+    elif [ "$1"  = "us" ] ; then
+      echo 'Loading keymap us...'
+      if [ -r "${HOME}"/.Xmodmap ] ; then
+        xmodmap "${HOME}"/.Xmodmap || setxkbmap us
+      else
+        setxkbmap us
+      fi
+      echo -e "\nDone."
+    elif [ "$1" = "es" ] ; then
+      echo "Loading keymap es..."
+      setxkbmap es
+      echo -e "\nDone."
+    elif [ "$1" = "fr" ] ; then
+      echo "Loading keymap fr..."
+      setxkbmap fr
+      echo -e "\nDone."
+    elif [ "$1" = "uk" ] ; then
+      echo "Loading keymap gb for uk..."
+      setxkbmap gb
+      echo -e "\nDone."
+    else
+      echo "No valid parameter given."
+      echo
+      usage
+      echo
+      echo "Notice: Use loadkeys on console and setxkbmap when running X for
+modifying keyboard layout. Adjust \$LANG and \$LC_ALL for setting locales." ; exit 1
+    fi
+  fi
+fi
+
+## END OF FILE #################################################################
