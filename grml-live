@@ -685,7 +685,11 @@ if [ -n "$BUILD_DIRTY" ]; then
 else
    [ -n "$CHROOT_OUTPUT" ] || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
 
-   if [ -n "$UPDATE" ] || [ -n "$BUILD_ONLY" ] ; then
+   if [ -n "$BOOTSTRAP_ONLY" ] ; then
+      FAI_ACTION=bootstrap
+   elif [ -n "$BUILD_ONLY" ] ; then
+      FAI_ACTION=reconfigure
+   elif [ -n "$UPDATE" ] ; then
       FAI_ACTION=softupdate
    else
       FAI_ACTION=dirinstall

@@ -15,15 +15,6 @@ set -e
 # FAI sets ${target}, but shellcheck does not know that.
 target=${target:?}
 
-# if hooks/updatebase.GRMLBASE fails for whatever reason
-# and can't skip instsoft.GRMLBASE we have to make sure
-# we exit here as well
-if [ -n "$BUILD_ONLY" ] ; then
-   echo "Exiting hooks/instsoft.GRMLBASE as BUILD_ONLY environment is set."
-   echo "W: This place was reached because updatebase.GRMLBASE failed."
-   exit 0
-fi
-
 echo "hooks/instsoft.GRMLBASE running for action ${FAI_ACTION}"
 
 # work around /etc/kernel/postinst.d/zz-update-grub failing
@@ -60,21 +51,7 @@ if [ "$FAI_ACTION" = "softupdate" ] ; then
    rm -f "${target}"/etc/resolv.conf
    cat /etc/resolv.conf >> "${target}"/etc/resolv.conf
 
-   # Update package lists (so they exist at all), so we can install
-   # software; if /var/lib/dpkg/available is empty, it was probably
-   # cleaned by GRMLBASE/98-clean-chroot, so we need to rebuild it
-   # anyway
-   $ROOTCMD /usr/lib/dpkg/methods/apt/update /var/lib/dpkg/ apt apt
-
    if ! $ROOTCMD test -x /usr/bin/aptitude ; then
-     # the apt-get update might return an error if there's for example
-     # a hashsum mismatch on Debian mirror sources, we might want to continue
-     # but should warn the user
-     if ! $ROOTCMD apt-get update ; then
-       echo "Warning: there was an error executing apt-get update, continuing anyway."
-       echo "Warning: there was an error executing apt-get update, continuing anyway." >&2
-     fi
-
      $ROOTCMD apt-get -y install aptitude
    fi
 
