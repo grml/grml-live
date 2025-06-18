@@ -976,7 +976,7 @@ EOF
 
    # adjust inittab for startx
    if grep -q '^6:' /etc/inittab ; then
-      sed -i 's|^6:.*|6:2345:respawn:/bin/zsh --login -c "/etc/init.d/startx ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>\&1 </dev/tty6|' /etc/inittab
+      sed -i --follow-symlinks 's|^6:.*|6:2345:respawn:/bin/zsh --login -c "/etc/init.d/startx ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>\&1 </dev/tty6|' /etc/inittab
    else # just append tty6 to inittab if no definition is present:
       echo '6:2345:respawn:/bin/zsh --login -c "/etc/init.d/startx ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>&1 < /dev/tty6' >> /etc/inittab
    fi
@@ -984,7 +984,7 @@ EOF
    /sbin/telinit q ; eend $?
 
    if grep -q '^allowed_users=' /etc/X11/Xwrapper.config ; then
-      sed -i 's/^allowed_users=.*/allowed_users=anybody/' /etc/X11/Xwrapper.config
+      sed -i --follow-symlinks 's/^allowed_users=.*/allowed_users=anybody/' /etc/X11/Xwrapper.config
    else
       echo 'allowed_users=anybody' >> /etc/X11/Xwrapper.config
    fi

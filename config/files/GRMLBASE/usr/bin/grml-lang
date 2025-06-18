@@ -16,7 +16,7 @@ usage(){
 
 setvalue(){
   [ -n "$2" ] || return 1
-  sudo sed -i "s#^${1}=.*#${1}=\"${2}\"#" "${CONFFILE}"
+  sudo sed -i --follow-symlinks "s#^${1}=.*#${1}=\"${2}\"#" "${CONFFILE}"
 }
 
 # Update keyboard configuration and apply changes
