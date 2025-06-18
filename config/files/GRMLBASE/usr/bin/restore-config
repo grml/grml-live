@@ -1,0 +1,175 @@
+#!/bin/zsh
+# Filename:      restore-config
+# Purpose:       generate grml configuration archive and store it anywhere
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Son Mai 13 11:12:38 CEST 2007 [mika]
+################################################################################
+
+# some zsh-stuff {{{
+  autoload colors ; colors
+  [ -r /etc/grml/sh-lib ] && . /etc/grml/sh-lib
+# }}}
+
+# set variables  {{{
+  LANG=C
+  LC_ALL=C
+  PROGRAMNAME=${0##*/}
+  TMPDIR=/tmp
+
+# functions {{{
+debug(){
+  if [[ $DEBUG -gt 0 ]] ; then
+    echo "debug: $*"
+  fi
+# setopt xtrace
+# set -x
+}
+
+bailout(){
+  rm -f "$TMP_FILELIST"
+}
+
+trap bailout 1 2 3 15
+# }}}
+
+# usage information {{{
+usage()
+{
+  print 1>&2 "
+$bg[black]$fg[green]${boldcolor}${PROGRAMNAME} - restore configuration of grml system${reset_color}
+
+$bg[black]$fg[blue]${boldcolor}Usage:${reset_color}
+  $PROGRAMNAME [-target_options] <configuration_file>
+
+$bg[black]$fg[blue]${boldcolor}Target options:${reset_color}
+  -home                         extract hidden files from \$HOME (\$HOME/.*)
+  -grmlhome                     store hidden files from \$HOME (\$HOME/.*) of user grml [use as user root]
+  -etc                          extract modified files from /etc
+  -configdir                    extract \$HOME/config
+
+  Default: restore/extract complete archive.
+
+  Notice: it is also possible to use environment variables:
+          \$RESTORE_HOME, \$RESTORE_ETC, \$RESTORE_CONFIGDIR and \$RESTORE_ALL
+
+$bg[black]$fg[blue]${boldcolor}Usage examples:${reset_color}
+  $PROGRAMNAME -home foo_bar_config.tbz  => restore configuration from file foo_bar_config.tbz
+  $PROGRAMNAME config.tbz                => restore configuration from file config.tbz
+
+More information on restore-config can be found in the manual page: man restore-config
+
+See also: save-config(1), bootoptions: myconfig=/dev/ice, extract=PATH,
+          netconfig=server.tld/path/to/config.tbz
+
+Report bugs, send wishes and feedback to the grml team:
+http://grml.org/bugs/ - contact (at) grml.org
+"
+}
+# }}}
+
+
+# extract configuration file {{{
+restore_all(){
+  echo "Trying to extract $FILENAME"
+  ( cd / && unp $FILENAME )
+}
+
+restore_home(){
+  echo "Trying to extract $FILENAME in $HOME"
+  ( cd $HOME && unp $FILENAME -- -x $HOME )
+}
+
+restore_grmlhome(){
+  echo "Trying to extract $FILENAME in /home/grml"
+  ( cd /home/grml/ && unp $FILENAME -- -x /home/grml )
+}
+
+restore_etc(){
+  echo "Trying to extract $FILENAME in /etc"
+  ( cd /etc && unp $FILENAME -- -x /etc )
+}
+
+restore_config(){
+  echo "Trying to extract $FILENAME in $HOME/config"
+  ( cd $HOME && unp $FILENAME -- -x $HOME/config )
+}
+# }}}
+
+
+# commandline parsing {{{
+parse_options()
+{
+   zparseopts -K -- help=o_help file:=o_file home=o_home etc=o_etc \
+                    configdir=o_configdir all=o_all
+
+   if [[ "$#" == 0 || "$o_help" != "" || "$1" == '-h' || "$1" == '--help' ]]; then
+      usage ; exit
+   fi
+
+   if [[ "$1" == "" ]]; then
+     echo "Error: No filename provided." ; exit 1
+   else
+     eval FILENAME=\${$#}
+     FILENAME=`readlink -f $FILENAME`
+   fi
+
+   if [[ "$o_home" != "" ]]; then
+      echo "debug: home is set"
+      RESTORE_HOME="yes"
+   fi
+
+   if [[ "$o_grmlhome" != "" ]]; then
+      echo "debug: grmlhome is set"
+      RESTORE_GRMLHOME="yes"
+   fi
+
+   if [[ "$o_etc" != "" ]]; then
+      echo "debug: etc is set"
+      RESTORE_ETC="yes"
+   fi
+
+   if [[ "$o_configdir" != "" ]]; then
+      echo "debug: configdir is set"
+      RESTORE_CONFIGDIR="yes"
+   fi
+
+}
+parse_options $*
+# }}}
+
+runit(){
+   if [[ $RESTORE_HOME == "yes" ]]; then
+     debug "running restore_home"
+     restore_home
+     RESTORE_SET=1
+   fi
+   if [[ $RESTORE_GRMLHOME == "yes" ]]; then
+     debug "running restore_grmlhome"
+     restore_grmlhome
+     RESTORE_SET=1
+   fi
+   if [[ $RESTORE_ETC == "yes" ]] ; then
+     debug "running restore_etc"
+     restore_etc
+     RESTORE_SET=1
+   fi
+   if [[ $RESTORE_CONFIGDIR == "yes" ]] ; then
+     debug "running restore_configdir"
+     restore_config
+     RESTORE_SET=1
+   fi
+   debug "FILENAME = $FILENAME"
+   if [ -z $RESTORE_SET ] ; then
+     debug "running restore all"
+     restore_all
+   fi
+}
+
+# now run it
+  runit
+  bailout
+
+## END OF FILE #################################################################
+# vim:foldmethod=marker

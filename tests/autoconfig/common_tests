@@ -1,0 +1,15 @@
+#!/bin/zsh
+
+setopt shwordsplit
+
+oneTimeSetUp() {
+    OLDPATH=$PATH
+
+    . ../autoconfig.functions
+
+    export PATH=$OLDPATH
+}
+
+
+SHUNIT_PARENT=$1
+. /usr/share/shunit2//shunit2

@@ -1,0 +1,15 @@
+# This file is part of grml-autoconfig for usage with systemd.
+
+[Unit]
+Description=Grml boot option support
+Before=getty@tty1.service
+After=rc-local.service systemd-modules-load.service
+
+[Service]
+ExecStart=/usr/share/grml-autoconfig/grml-autoconfig
+Type=oneshot
+StandardInput=null
+StandardOutput=tty
+
+[Install]
+WantedBy=grml-boot.target
