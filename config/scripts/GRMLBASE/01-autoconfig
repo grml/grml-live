@@ -32,6 +32,7 @@ fcopy -m root,root,0755 -v /usr/sbin/grml-autoconfig
 fcopy -m root,root,0755 -v /usr/bin/grml-lang
 fcopy -m root,root,0644 -v /usr/share/zsh/vendor-completions/_grml-lang
 fcopy -m root,root,0755 -v /usr/sbin/grml-setlang
+fcopy -m root,root,0644 -v /usr/share/man/man1/grml-lang.1
 fcopy -m root,root,0644 -v /usr/share/man/man8/grml-setlang.8
 
 ## END OF FILE #################################################################
