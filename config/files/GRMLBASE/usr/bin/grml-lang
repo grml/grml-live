@@ -15,7 +15,6 @@ usage(){
 }
 
 setvalue(){
-  [ -n "$2" ] || return 1
   sudo sed -i --follow-symlinks "s#^${1}=.*#${1}=\"${2}\"#" "${CONFFILE}"
 }
 
@@ -27,9 +26,7 @@ configure_keyboard(){
   # Update /etc/default/keyboard
   if [ -r "$CONFFILE" ] ; then
     setvalue XKBLAYOUT "$layout"
-    if [ -n "$variant" ] ; then
-      setvalue XKBVARIANT "$variant"
-    fi
+    setvalue XKBVARIANT "$variant"
   else
     # Create the file if it doesn't exist
     sudo tee "$CONFFILE" > /dev/null <<EOF
