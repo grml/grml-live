@@ -196,34 +196,17 @@ config_language(){
   einfo "Activating language settings:"
   eindent
 
-  # people can specify $LANGUAGE in a config file
-  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig
-
   # check for bootoptions which override config from /etc/grml/autoconfig
   BOOT_LANGUAGE="$(getbootparam 'lang' 2>>$DEBUG)"
   BOOT_KEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
 
-  [ -n "$BOOT_LANGUAGE" ] && LANGUAGE="$BOOT_LANGUAGE"
-
-  # set default to 'en' in live-cd mode iff $LANGUAGE is not set yet
-  if [ -z "$INSTALLED" ] ; then
-    [ -n "$LANGUAGE" ] || LANGUAGE='en'
+  if [ -z "$BOOT_LANGUAGE" ] ; then
+    # default to US if nothing was set
+    BOOT_LANGUAGE="us"
   fi
 
   # Configure locale using grml-setlang
-  if [ -x /usr/sbin/grml-setlang ] ; then
-    # if bootoption lang is used update /etc/default/locale accordingly
-    if [ -n "$BOOT_LANGUAGE" ] ; then
-      /usr/sbin/grml-setlang "$LANGUAGE"
-      # otherwise default to lang=en
-    else
-      /usr/sbin/grml-setlang "en"
-    fi
-  fi
-
-  # export it now, so error messages get translated, too
-  [ -r /etc/default/locale ] && . /etc/default/locale
-  export LANG LANGUAGE
+  /usr/sbin/grml-setlang "$BOOT_LANGUAGE"
 
   # Configure keyboard layout using grml-lang
   # keyboard= parameter takes precedence over lang= for keyboard layout
@@ -231,15 +214,9 @@ config_language(){
   if [ -n "$BOOT_KEYBOARD" ] ; then
     KEYBOARD_LANG="$BOOT_KEYBOARD"
   elif [ -n "$BOOT_LANGUAGE" ] ; then
-    KEYBOARD_LANG="$LANGUAGE"
-    # "symbols/en" doesn't exist, so rewrite to "us"
-    [[ "$KEYBOARD_LANG" == 'en' ]] && KEYBOARD_LANG="us"
+    KEYBOARD_LANG="$BOOT_LANGUAGE"
   fi
-
-  # Configure keyboard layout if we have a language/keyboard to set
-  if [ -n "$KEYBOARD_LANG" ] && [ -x /usr/bin/grml-lang ] ; then
-    /usr/bin/grml-lang "$KEYBOARD_LANG"
-  fi
+  /usr/bin/grml-lang "$KEYBOARD_LANG"
 
   eoutdent
 }
