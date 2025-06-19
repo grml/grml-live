@@ -39,9 +39,17 @@ EOF
     fi
   fi
 
-  # Apply keyboard changes immediately
+  # Apply keyboard changes immediately:
+  # Let setupcon update the files /etc/console-setup/cached*. It will also try
+  # to activate the new configuration.
+  sudo setupcon --force --save
+  # However, due to an apparenty loadkeys or kernel limitation, when the current
+  # screen is managed by X11, loadkeys *without* -u fails or does nothing. Force
+  # loading the keymap for the linux virtual consoles.
+  sudo loadkeys -u /etc/console-setup/cached_UTF-8_del.kmap.gz
+  # Trigger udev rules for input devices. If X11 is installed, this will make
+  # udev pick up /etc/default/keyboard, and X11 will pick up the keymap from udev.
   sudo udevadm trigger --subsystem-match=input --action=change
-  sudo /lib/console-setup/console-setup.sh
 }
 
 if [ $# -lt "1" ] ; then
