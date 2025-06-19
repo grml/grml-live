@@ -583,7 +583,7 @@ def parse_varfile(varfile: Path) -> dict:
                 env[k] = v
                 continue
 
-        print(f"E: Cannot not understand line {lineno} in {varfile}: {orig_line}")
+        print(f"E: Cannot understand line {lineno} in {varfile}: {orig_line}")
         raise ClassFileParsingFailed()
 
     return env
