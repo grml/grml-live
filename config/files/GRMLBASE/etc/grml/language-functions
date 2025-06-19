@@ -393,16 +393,6 @@ case "$LANGUAGE" in
                 CHARSET="utf8"
                 TZ="America/New_York"
                 ;;
-        *)
-                # Default
-                LANGUAGE="us"
-                COUNTRY="at"
-                LANG="en_US.UTF-8"
-                KEYTABLE="us"
-                XKEYBOARD="us"
-                CHARSET="utf8"
-                TZ="UTC"
-                ;;
 esac
 
 ## END OF FILE #################################################################
