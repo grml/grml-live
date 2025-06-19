@@ -196,48 +196,27 @@ config_language(){
   einfo "Activating language settings:"
   eindent
 
-  # people can specify $LANGUAGE in a config file
-  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig
-
-  # check for bootoption which overrides config from /etc/grml/autoconfig
+  # check for bootoptions which override config from /etc/grml/autoconfig
   BOOT_LANGUAGE="$(getbootparam 'lang' 2>>$DEBUG)"
-  [ -n "$BOOT_LANGUAGE" ] && LANGUAGE="$BOOT_LANGUAGE"
+  BOOT_KEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
 
-  # set default to 'en' in live-cd mode iff $LANGUAGE is not set yet
-  if [ -z "$INSTALLED" ] ; then
-    [ -n "$LANGUAGE" ] || LANGUAGE='en'
+  if [ -z "$BOOT_LANGUAGE" ] ; then
+    # default to US if nothing was set
+    BOOT_LANGUAGE="us"
   fi
 
-  if [ -x /usr/sbin/grml-setlang ] ; then
-    # if bootoption lang is used update /etc/default/locale accordingly
-    if [ -n "$BOOT_LANGUAGE" ] ; then
-      /usr/sbin/grml-setlang "$LANGUAGE"
-      # otherwise default to lang=en
-    else
-      /usr/sbin/grml-setlang "en"
-    fi
+  # Configure locale using grml-setlang
+  /usr/sbin/grml-setlang "$BOOT_LANGUAGE"
+
+  # Configure keyboard layout using grml-lang
+  # keyboard= parameter takes precedence over lang= for keyboard layout
+  local KEYBOARD_LANG
+  if [ -n "$BOOT_KEYBOARD" ] ; then
+    KEYBOARD_LANG="$BOOT_KEYBOARD"
+  elif [ -n "$BOOT_LANGUAGE" ] ; then
+    KEYBOARD_LANG="$BOOT_LANGUAGE"
   fi
-
-  # export it now, so error messages get translated, too
-  [ -r /etc/default/locale ] && . /etc/default/locale
-  export LANG LANGUAGE
-
-  local KEYBOARD
-  KEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
-  [ -n "$KEYBOARD" ] || KEYBOARD="$LANGUAGE"
-  # "symbols/en" doesn't exist, so rewrite to "us"
-  [[ "$KEYBOARD" == 'en' ]] && KEYBOARD="us"
-
-  if [ -r /etc/default/keyboard ] ; then
-    sed -i "s/^XKBLAYOUT=.*/XKBLAYOUT=\"$KEYBOARD\"/" /etc/default/keyboard
-
-    case "$KEYBOARD" in
-      de|at)
-        sed -i "s/^XKBVARIANT=.*/XKBVARIANT=\"nodeadkeys\"/" /etc/default/keyboard
-        ;;
-    esac
-
-  fi
+  /usr/bin/grml-lang "$KEYBOARD_LANG"
 
   eoutdent
 }
@@ -974,7 +953,7 @@ EOF
 
    # adjust inittab for startx
    if grep -q '^6:' /etc/inittab ; then
-      sed -i 's|^6:.*|6:2345:respawn:/bin/zsh --login -c "/etc/init.d/startx ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>\&1 </dev/tty6|' /etc/inittab
+      sed -i --follow-symlinks 's|^6:.*|6:2345:respawn:/bin/zsh --login -c "/etc/init.d/startx ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>\&1 </dev/tty6|' /etc/inittab
    else # just append tty6 to inittab if no definition is present:
       echo '6:2345:respawn:/bin/zsh --login -c "/etc/init.d/startx ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>&1 < /dev/tty6' >> /etc/inittab
    fi
@@ -982,7 +961,7 @@ EOF
    /sbin/telinit q ; eend $?
 
    if grep -q '^allowed_users=' /etc/X11/Xwrapper.config ; then
-      sed -i 's/^allowed_users=.*/allowed_users=anybody/' /etc/X11/Xwrapper.config
+      sed -i --follow-symlinks 's/^allowed_users=.*/allowed_users=anybody/' /etc/X11/Xwrapper.config
    else
       echo 'allowed_users=anybody' >> /etc/X11/Xwrapper.config
    fi

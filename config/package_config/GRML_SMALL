@@ -19,7 +19,6 @@ ntpsec-ntpdate
 passwd
 procps
 psmisc
-sudo
 sysvinit-utils
 tree
 tzdata
