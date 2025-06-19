@@ -1,8 +1,14 @@
-# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)
+# This file was deployed via grml-live's
+# ${GRML_FAI_CONFIG}/scripts/GRMLBASE/35-network script, using
+# ${GRML_FAI_CONFIG}/files/GRMLBASE/etc/network/interfaces.examples
+
+# interfaces(5) file used by ifup(8) and ifdown(8)
 # Also check out /usr/share/doc/ifupdown/examples/network-interfaces.gz
 
+# Include files from /etc/network/interfaces.d:
+source /etc/network/interfaces.d/*
+
 # The loopback interface
-# automatically added when upgrading
 auto lo
 iface lo inet loopback
 
