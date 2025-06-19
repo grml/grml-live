@@ -7,7 +7,7 @@
 ################################################################################
 
 # shellcheck disable=SC1091
-. /etc/grml/sh-lib
+. /etc/grml/script-functions
 
 export SHELL=/bin/zsh
 
@@ -28,7 +28,7 @@ esac
 case "$CMDLINE" in
    # allow customized startup via bootoption startup:
    *startup=*)
-       script="$(getBootParam startup)"
+       script="$(getbootparam startup)"
        if [ -x "$(command -v "$script")" ] ; then
           $script
        fi
@@ -43,34 +43,37 @@ case "$CMDLINE" in
       fi
 esac
 
-# just print out an empty line if bootoption "nowelcome" is present
-if grep -q nowelcome /proc/cmdline 2>/dev/null ; then
-  echo
-# ... otherwise allow customized release information
-elif [ -r /etc/release_info ] ; then
-  cat /etc/release_info
-else # ... or finally fall back to grml's default
-  # display version information depending on the version:
-  if grep -q -- '-rc[0-9]' /etc/grml_version 2>/dev/null ; then
-     echo
-     echo
-     echo 'NOTICE: This is a release candidate version!'
-     echo 'Please notice that this is not yet a stable release.'
-     echo 'Please report any bugs you notice: http://grml.org/bugs/'
-     echo
-  fi
+case "$CMDLINE" in
+  *\ nowelcome*)
+    # just print out an empty line if bootoption "nowelcome" is present
+    echo
+    ;;
+  *)
+    # ... otherwise allow customized release information
+    if [ -r /etc/release_info ] ; then
+      cat /etc/release_info
+    else # ... or finally fall back to grml's default
+      # display version information depending on the version:
+      if grep -q -- '-rc[0-9]' /etc/grml_version 2>/dev/null ; then
+        echo
+        echo
+        echo 'NOTICE: This is a release candidate version!'
+        echo 'Please notice that this is not yet a stable release.'
+        echo 'Please report any bugs you notice: http://grml.org/bugs/'
+        echo
+      fi
 
-  if grep -q 'daily' /etc/grml_version 2>/dev/null ; then
-     echo
-     echo
-     echo 'NOTICE: This is a daily snapshot version!'
-     echo 'Please notice that this is not yet a stable release.'
-     echo 'See http://daily.grml.org/ for more details.'
-     echo 'Please report any bugs you notice: http://grml.org/bugs/'
-     echo
-  fi
+      if grep -q 'daily' /etc/grml_version 2>/dev/null ; then
+        echo
+        echo
+        echo 'NOTICE: This is a daily snapshot version!'
+        echo 'Please notice that this is not yet a stable release.'
+        echo 'See http://daily.grml.org/ for more details.'
+        echo 'Please report any bugs you notice: http://grml.org/bugs/'
+        echo
+      fi
 
-  echo "
+      echo "
 Welcome to ${GRMLVERSION}!
 
 New to ${distri}? Want to read some documentation?
@@ -82,7 +85,8 @@ Switch to other consoles via alt-F<number> keys.
 
 Happy hacking!               http://grml.org/
 "
-fi
+    fi
+esac
 
 exec "$SHELL" -l
 
