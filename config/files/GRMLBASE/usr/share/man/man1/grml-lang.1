@@ -1,0 +1,59 @@
+.TH grml-lang 1
+.SH "NAME"
+grml-lang \- configure keyboard layout on grml system
+.SH SYNOPSIS
+.B grml-lang
+.I language
+.SH DESCRIPTION
+.B grml-lang
+configures the keyboard layout for grml systems by setting up
+/etc/default/keyboard with the appropriate XKB layout, variant, and options.
+The tool immediately applies the keyboard configuration to both the console
+and X11 sessions.
+.SH ARGUMENTS
+.TP
+.B language
+Required language/keyboard code. The tool will abort with an error if
+an unsupported language code is provided.
+.SH SUPPORTED LANGUAGES
+at, ch, de, dvorak, en, es, fr, hu, it, jp, uk, us
+.SH EXAMPLES
+.TP
+.B grml-lang de
+Configure German keyboard layout with nodeadkeys variant
+.TP
+.B grml-lang us
+Configure US keyboard layout
+.TP
+.B grml-lang dvorak
+Configure Dvorak keyboard layout
+.TP
+.B grml-lang en
+Configure US keyboard layout (English in Austria)
+.TP
+.B grml-lang ch
+Configure Swiss German keyboard layout
+.SH FILES
+.TP
+.B /etc/default/keyboard
+System keyboard configuration file
+.TP
+.B /usr/share/grml-autoconfig/language-functions
+Language and keyboard layout definitions
+.SH NOTES
+grml-lang only configures keyboard layouts and does not affect system
+locale settings like LANG or LC_* variables. For locale configuration, use
+grml-setlang instead.
+
+The tool requires sudo privileges to modify system configuration files
+and apply keyboard settings.
+.SH SEE ALSO
+.BR grml-setlang (8)
+for locale configuration,
+.BR setupcon (1),
+.BR loadkeys (1),
+.BR keyboard (5)
+.SH AUTHOR
+grml-lang was written by Michael Prokop <mika@grml.org> and the grml team.
+.PP
+This manual page was written for the grml project.

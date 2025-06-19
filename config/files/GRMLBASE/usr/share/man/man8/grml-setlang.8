@@ -5,23 +5,48 @@ grml-setlang \- set language system-wide on grml system
 .B grml-setlang
 .RI " [ <language> ] "
 .SH DESCRIPTION
-This manual page documents briefly the
 .B grml-setlang
-command.
+configures system-wide language and locale settings for grml systems.
+It sets environment variables for language, locale collation, time formatting,
+and timezone in /etc/default/locale. The tool can run interactively with
+a dialog interface or non-interactively with a language parameter.
+
+If the specified locale is not available, grml-setlang will automatically
+generate it using locale-gen (unless locales-all package is installed).
 .SH OPTIONS
-If you invoke grml-setlang without any further options you will get a
-dialog based configuration frontend.  If you invoke grml-setlang with one
-option, grml-setlang will take the first option as input for regenerating
-/etc/default/locale according to the definitions in
-/usr/share/grml-autoconfig/language-functions. If the provided option is not supported the
-default (en_US) will be taken.
-.SH USAGE EXAMPLES
+.TP
+.B language
+Language/locale code to configure non-interactively. If not provided,
+launches an interactive dialog for language selection. If the provided
+language is not supported, grml-setlang will abort with an error.
+.SH EXAMPLES
+.TP
+.B grml-setlang
+Launch interactive dialog to select language
 .TP
 .B grml-setlang de
-Write german environment variables LANGUAGE, LANG, LC_MESSAGES, COUNTRY, CHARSET and TZ into /etc/default/locales.
+Configure German language
 .TP
-.B grml-setlang at-utf8
-Write austrian environment variables LANGUAGE, LANG, LC_MESSAGES, COUNTRY, CHARSET and TZ with unicode/utf8-support into /etc/default/locales.
+.B grml-setlang at
+Configure Austrian German
+.TP
+.B grml-setlang en
+Configure English (Austrian localization)
+.TP
+.B grml-setlang us
+Configure American English
+.SH FILES
+.TP
+.B /etc/default/locale
+System-wide locale configuration file
+.TP
+.B /usr/share/grml-autoconfig/language-functions
+Language definitions and mappings
+.SH SEE ALSO
+.BR grml-lang (1)
+for keyboard configuration,
+.BR locale-gen (8),
+.BR locale (1)
 .SH AUTHOR
 grml-setlang was written by Michael Prokop <mika@grml.org>.
 .PP
