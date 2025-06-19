@@ -193,16 +193,13 @@ fi
 ### {{{ language configuration / localization
 config_language(){
 
-  einfo "Activating language settings:"
-  eindent
-
   # check for bootoptions which override config from /etc/grml/autoconfig
   BOOT_LANGUAGE="$(getbootparam 'lang' 2>>$DEBUG)"
   BOOT_KEYBOARD="$(getbootparam 'keyboard' 2>>$DEBUG)"
 
   if [ -z "$BOOT_LANGUAGE" ] ; then
-    # default to US if nothing was set
-    BOOT_LANGUAGE="us"
+    # default to English (Austrian) if nothing was set
+    BOOT_LANGUAGE="en"
   fi
 
   # Configure locale using grml-setlang
@@ -217,8 +214,6 @@ config_language(){
     KEYBOARD_LANG="$BOOT_LANGUAGE"
   fi
   /usr/bin/grml-lang "$KEYBOARD_LANG"
-
-  eoutdent
 }
 # }}}
 

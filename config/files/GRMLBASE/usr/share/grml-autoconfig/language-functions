@@ -1,396 +1,292 @@
 # Filename:      /usr/share/grml-autoconfig/language-functions
-# Purpose:       general language stuff used in several parts of the grml-system
+# Purpose:       language data used by grml-lang, grml-setlang
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
 ################################################################################
 
+# Defaults. XKBLAYOUT is not defaulted, so caller can determine unhandled values.
+XKBVARIANT=""
+XKBOPTIONS=""
+LC_COLLATE=""
+LC_TIME=""
+TZ="UTC"
+
 # The default language/keyboard to use. This CAN NOT be autoprobed.
 case "$LANGUAGE" in
         C|POSIX)
-                LANG="C"
+                LANG="C.UTF-8"
                 LANGUAGE="C"
+                XKBLAYOUT="us"
                 ;;
         at|at-utf8)
-                # Austrian version (UTF8)
-                COUNTRY="at"
+                # Austrian
                 LANG="de_AT.UTF-8"
                 LANGUAGE="de_AT:de"
-                KEYTABLE="de-latin1-nodeadkeys"
-                XKEYBOARD="de"
-                CHARSET="utf8"
-                # CHARSET="lat9w-16"
+                XKBLAYOUT="de"
+                XKBVARIANT="nodeadkeys"
                 TZ="Europe/Vienna"
                 ;;
         au|au-utf8)
-                # Australian version (UTF8)
-                LANGUAGE="en_AU:en"
-                COUNTRY="au"
+                # Australian
                 LANG="en_AU.UTF-8"
-                KEYTABLE="us"
-                XKEYBOARD="us"
-                CHARSET="utf8"
+                LANGUAGE="en_AU:en"
+                XKBLAYOUT="us"
                 TZ="Australia/Sydney"
                 ;;
         be|be-utf8|bed|bed-utf8)
-                # Belgian version (default and dutch one) (UTF8)
-                LANGUAGE="nl_BE:nl"
-                COUNTRY="be"
+                # Belgian (default and dutch)
                 LANG="nl_BE.UTF-8"
-                KEYTABLE="be2-latin1"
-                XKEYBOARD="be"
-                CHARSET="utf8"
+                LANGUAGE="nl_BE:nl"
+                XKBLAYOUT="be"
                 TZ="Europe/Brussels"
                 ;;
         bef|bef-utf8)
-                # Belgian version (french) (UTF8)
-                LANGUAGE="fr_BE:fr"
-                COUNTRY="be"
+                # Belgian French
                 LANG="fr_BE.UTF-8"
-                KEYTABLE="be2-latin1"
-                XKEYBOARD="be"
-                CHARSET="utf8"
+                LANGUAGE="fr_BE:fr"
+                XKBLAYOUT="be"
                 TZ="Europe/Brussels"
                 ;;
         beg|beg-utf8)
-                # Belgian version (german) (UTF8)
-                LANGUAGE="de_BE:de"
-                COUNTRY="be"
+                # Belgian German
                 LANG="de_BE.UTF-8"
-                KEYTABLE="be2-latin1"
-                XKEYBOARD="be"
-                CHARSET="utf8"
+                LANGUAGE="de_BE:de"
+                XKBLAYOUT="be"
                 TZ="Europe/Brussels"
                 ;;
         bg|bg-utf8)
-                # Bulgarian version (UTF8)
-                LANGUAGE="bg_BG:bg"
-                COUNTRY="bg"
+                # Bulgarian
                 LANG="bg_BG.UTF-8"
-                KEYTABLE="bg"
-                XKEYBOARD="bg"
-                CHARSET="utf8"
+                LANGUAGE="bg_BG:bg"
+                XKBLAYOUT="bg"
                 TZ="Europe/Sofia"
                 ;;
         br|br-utf8)
-                # Brazilian Version (UTF8)
-                LANGUAGE="pt_BR:pt"
-                COUNTRY="br"
+                # Brazilian
                 LANG="pt_BR.UTF-8"
-                KEYTABLE="br-abnt2"
-                XKEYBOARD="abnt2"
-                CHARSET="utf8"
+                LANGUAGE="pt_BR:pt"
+                XKBLAYOUT="br"
                 TZ="America/Sao_Paulo"
                 ;;
         ch|ch-utf8)
-                # Swiss version (basically de with some modifications)
-                LANGUAGE="de_CH:de"
-                COUNTRY="ch"
+                # Swiss German
                 LANG="de_CH.UTF-8"
-                KEYTABLE="sg-latin1"
-                XKEYBOARD="ch"
-                CHARSET="utf8"
+                LANGUAGE="de_CH:de"
+                XKBLAYOUT="ch"
+                XKBVARIANT="de_nodeadkeys"
                 TZ="Europe/Zurich"
                 ;;
         cn|cn-utf8)
-                # Simplified Chinese version (UTF8)
-                COUNTRY="zh_CN:cn"
+                # Simplified Chinese
                 LANG="zh_CN.UTF-8"
-                KEYTABLE="us"
-                XKEYBOARD="us"
-                CHARSET="utf8"
-                XMODIFIERS="@im=Chinput"
+                XKBLAYOUT="us"
+                XKBVARIANT="altgr-pinyin"
                 TZ="Asia/Shanghai"
                 ;;
         cf)
-                # French Canadian version (UTF8)
-                LANGUAGE="fr_CA:fr"
-                COUNTRY="ca"
+                # French Canadian
                 LANG="fr_CA.UTF-8"
-                KEYTABLE="cf"
-                XKEYBOARD="ca_enhanced"
-                CHARSET="utf8"
+                LANGUAGE="fr_CA:fr"
+                XKBLAYOUT="ca"
+                XKBVARIANT="multix"
                 TZ="America/Montreal"
                 ;;
         cs|cz|cs-utf8|cz-utf8)
-                # Czech version (UTF8)
-                LANGUAGE="cs_CZ:cs"
-                COUNTRY="cs"
+                # Czech
                 LANG="cs_CZ.UTF-8"
-                KEYTABLE="cz-lat2"
-                XKEYBOARD="cs"
-                CHARSET="utf8"
+                LANGUAGE="cs_CZ:cs"
+                XKBLAYOUT="cz"
                 TZ="Europe/Prague"
                 ;;
         de|de-utf8)
-                # German version (UTF8)
-                COUNTRY="de"
+                # German
                 LANG="de_DE.UTF-8"
                 LANGUAGE="de_DE:de"
-                KEYTABLE="de-latin1-nodeadkeys"
-                XKEYBOARD="de"
-                CHARSET="utf8"
+                XKBLAYOUT="de"
+                XKBVARIANT="nodeadkeys"
                 TZ="Europe/Berlin"
                 ;;
         dk|da|dk-utf8|da-utf8)
-                # Dansk version (UTF8)
-                COUNTRY="dk"
+                # Dansk
                 LANG="da_DK.UTF-8"
                 # Workaround: "dk" broken in gettext, use da:da_DK
                 LANGUAGE="da_DK:da"
-                # Keytable "dk" is correct.
-                KEYTABLE="dk"
-                XKEYBOARD="dk"
-                CHARSET="utf8"
+                XKBLAYOUT="dk"
                 TZ="Europe/Copenhagen"
                 ;;
         dvorak|dvorak-utf8)
-                # Dvorak layout (UTF8)
-                LANGUAGE="us"
-                COUNTRY="at"
+                # American Dvorak
                 LANG="en_US.UTF-8"
-                KEYTABLE="dvorak"
-                XKEYBOARD="dvorak"
-                CHARSET="utf8"
-                TZ="UTC"
+                LANGUAGE="us"
+                XKBLAYOUT="us"
+                XKBVARIANT="dvorak"
                 ;;
         en|en-utf8)
-                # English in Austria [see us + uk for american and english version!] (UTF8)
-                LANGUAGE="en"
-                COUNTRY="at"
+                # English in Austria [see us + uk for american and english version!]
                 LANG="en_US.UTF-8"
-                KEYTABLE="us"
-                XKEYBOARD="us"
-                CHARSET="utf8"
-                TZ="UTC"
+                LANGUAGE="en"
+                XKBLAYOUT="us"
+                LC_COLLATE="de_AT.UTF-8"
+                LC_TIME="de_AT.UTF-8"
                 ;;
         el|el-utf8)
-                # Greek version (UTF8)
-                LANGUAGE="el_GR:el"
-                COUNTRY="gr"
+                # Greek
                 LANG="el_GR.UTF-8"
-                KEYTABLE="gr-utf8"
-                XKEYBOARD="us,el"
-                CHARSET="utf8"
-                IOCHARSET="8859-7"
-                IOCODEPAGE="737"
-                SYSFONTACM="iso07"
+                LANGUAGE="el_GR:el"
+                XKBLAYOUT="us,gr"
+                XKBOPTIONS="grp:alt_shift_toggle,grp_led:scroll"
                 TZ="Europe/Athens"
                 ;;
         es|es-utf8)
-                # Spanish version (UTF8)
-                LANGUAGE="es_ES:es"
-                COUNTRY="es"
+                # Spanish
                 LANG="es_ES.UTF-8"
-                KEYTABLE="es"
-                XKEYBOARD="es"
-                CHARSET="utf8"
+                LANGUAGE="es_ES:es"
+                XKBLAYOUT="es"
                 TZ="Europe/Madrid"
                 ;;
         fi|fi-utf8)
-                # Finnish version (UTF8)
-                LANGUAGE="fi_FI:fi"
-                COUNTRY="fi"
+                # Finnish
                 LANG="fi_FI.UTF-8"
-                KEYTABLE="fi-latin1"
-                XKEYBOARD="fi"
-                CHARSET="utf8"
+                LANGUAGE="fi_FI:fi"
+                XKBLAYOUT="fi"
                 TZ="Europe/Helsinki"
                 ;;
         fr|fr-utf8)
-                # French version (UTF8)
-                LANGUAGE="fr_FR"
-                COUNTRY="fr"
+                # French
                 LANG="fr_FR.UTF-8"
-                KEYTABLE="fr"
-                XKEYBOARD="fr"
-                CHARSET="utf8"
+                LANGUAGE="fr_FR"
+                XKBLAYOUT="fr"
                 TZ="Europe/Paris"
                 ;;
         ga|ga-utf8)
-                # Irish Gaeilge version (UTF8)
-                COUNTRY="ie"
+                # Irish Gaeilge
                 LANG="ga_IE@UTF-8"
-                KEYTABLE="uk"
-                XKEYBOARD="uk"
-                CHARSET="utf8"
+                LANGUAGE="ga_IE:ga"
+                XKBLAYOUT="ie"
                 TZ="Europe/Dublin"
                 ;;
         he|il|he-utf8|il-utf8)
-                # Hebrew version (UTF8)
-                LANGUAGE="he_IL:he"
-                COUNTRY="il"
+                # Hebrew
                 LANG="he_IL.UTF-8"
-                KEYTABLE="us"
-                XKEYBOARD="us"
-                CHARSET="utf8"
+                LANGUAGE="he_IL:he"
+                XKBLAYOUT="us,il"
+                XKBOPTIONS="grp:alt_shift_toggle,grp_led:scroll"
                 TZ="Asia/Jerusalem"
                 ;;
         hu)
-                # Hungarian version (UTF8)
-                LANGUAGE="hu_HU:hu"
-                COUNTRY="hu"
+                # Hungarian
                 LANG="hu_HU.UTF-8"
-                KEYTABLE="hu"
-                XKEYBOARD="hu"
-                CHARSET="utf8"
+                LANGUAGE="hu_HU:hu"
+                XKBLAYOUT="hu"
                 TZ="Europe/Budapest"
                 ;;
         ie|ie-utf8)
-                # Irish (English) version (UTF8)
-                LANGUAGE="en_IE:en"
-                COUNTRY="ie"
+                # Irish (English)
                 LANG="en_IE.UTF-8"
-                KEYTABLE="uk"
-                XKEYBOARD="uk"
-                CHARSET="utf8"
+                LANGUAGE="en_IE:en"
+                XKBLAYOUT="uk"
                 TZ="Europe/Dublin"
                 ;;
         it|it-utf8)
-                # Italian version (UTF8)
-                LANGUAGE="it_IT"
-                COUNTRY="it"
+                # Italian
                 LANG="it_IT.UTF-8"
-                KEYTABLE="it"
-                XKEYBOARD="it"
-                CHARSET="utf8"
+                LANGUAGE="it_IT"
+                XKBLAYOUT="it"
                 TZ="Europe/Rome"
                 ;;
         ja|ja-utf8|jp|jp-utf8)
-                # (limited) Japanese version (UTF8)
-                LANGUAGE="ja_JP:ja"
-                COUNTRY="jp"
+                # (limited) Japanese
                 LANG="ja_JP.UTF-8"
-                LANGUAGE="ja"
-                KEYTABLE="jp106"
-                XKEYMODEL="jp106"
-                XKEYBOARD="jp"
-                CHARSET="utf8"
+                LANGUAGE="ja_JP:ja"
+                XKBLAYOUT="jp"
                 TZ="Asia/Tokyo"
                 ;;
         nl|nl-utf8)
-                # Dutch version (UTF8)
-                LANGUAGE="nl_NL:nl"
-                COUNTRY="nl"
+                # Dutch
                 LANG="nl_NL.UTF-8"
-                KEYTABLE="us"
-                XKEYBOARD="us"
-                CHARSET="utf8"
+                LANGUAGE="nl_NL:nl"
+                XKBLAYOUT="nl"
                 TZ="Europe/Amsterdam"
                 ;;
         no|nb|nn|no-utf8|nb-utf8|nn-utf8)
-                # Norsk versjon (UTF8)
-                COUNTRY="no"
+                # Norwegian
                 LANG="nb_NO.UTF-8"
                 LANGUAGE="no:nb_NO"
-                # Keytable "no*" is correct if  (the 3 final letters in the
-                # norse alphabet) shows up as "a+e", "oslash" and "aring".
-                # Otherwise try the other variants no-latin1 etc.
-                KEYTABLE="no"
-                XKEYBOARD="no"
-                CHARSET="utf8"
+                XKBLAYOUT="no"
                 TZ="Europe/Oslo"
                 ;;
         pl|pl-utf8)
-                # Polish version (UTF8)
-                LANGUAGE="pl_PL:pl"
-                COUNTRY="pl"
+                # Polish
                 LANG="pl_PL.UTF-8"
-                KEYTABLE="pl"
-                XKEYBOARD="pl"
-                CHARSET="utf8"
+                LANGUAGE="pl_PL:pl"
+                XKBLAYOUT="pl"
                 TZ="Europe/Warsaw"
                 ;;
         pt|pt-utf8)
-                # Portuguese version (UTF8)
-                LANGUAGE="pt_PT:pt"
-                COUNTRY="pt"
+                # Portuguese
                 LANG="pt_PT.UTF-8"
-                KEYTABLE="pt-latin1"
-                XKEYBOARD="pt"
-                CHARSET="utf8"
+                LANGUAGE="pt_PT:pt"
+                XKBLAYOUT="pt"
                 TZ="Europe/Lisbon"
                 ;;
         ru|ru-utf8)
-                # Russian version (UTF8)
-                LANGUAGE="ru_RU:ru"
-                COUNTRY="ru"
+                # Russian
                 LANG="ru_RU.UTF-8"
-                KEYTABLE="ru"
-                XKEYBOARD="ru"
-                CHARSET="utf8"
+                LANGUAGE="ru_RU:ru"
+                XKBLAYOUT="us,ru"
+                XKBOPTIONS="grp:alt_shift_toggle,grp_led:scroll"
                 TZ="Europe/Moscow"
                 ;;
         se|se-utf8)
-                # Swedish version (UTF8)
-                LANGUAGE="sv_SE:sv"
-                COUNTRY="se"
+                # Swedish
                 LANG="sv_SE.utf8"
-                KEYTABLE="se-latin1"
-                XKEYBOARD="se"
-                CHARSET="utf8"
+                LANGUAGE="sv_SE:sv"
+                XKBLAYOUT="se"
                 TZ="Europe/Stockholm"
                 ;;
         sk|sk-utf8)
-                # Slovak version (guessed) (UTF8)
-                LANGUAGE="sk_SK:sk"
-                COUNTRY="sk"
+                # Slovak
                 LANG="sk_SK.UTF-8"
-                KEYTABLE="sk-qwerty"
-                XKEYBOARD="sk"
-                CHARSET="utf8"
+                LANGUAGE="sk_SK:sk"
+                XKBLAYOUT="sk"
+                XKBVARIANT="qwerty"
                 TZ="Europe/Bratislava"
                 ;;
         sl|sl-utf8)
-                # Slovenian keyboard (UTF8)
-                LANGUAGE="sl_SI:sl"
-                COUNTRY="si"
+                # Slovenian
                 LANG="sl_SI.UTF-8"
-                KEYTABLE="slovene"
-                XKEYBOARD="sl"
-                CHARSET="utf8"
+                LANGUAGE="sl_SI:sl"
+                XKBLAYOUT="si"
                 TZ="Europe/Ljubljana"
                 ;;
         tr|tr-utf8)
-                # Turkish version (guessed) (UTF8)
-                LANGUAGE="tr_TR"
-                COUNTRY="tr"
+                # Turkish
                 LANG="tr_TR.UTF-8"
-                KEYTABLE="tr_q-latin5"
-                XKEYBOARD="tr"
-                CHARSET="utf8"
+                LANGUAGE="tr_TR"
+                XKBLAYOUT="tr"
+                XKBVARIANT="alt"
                 TZ="Europe/Istanbul"
                 ;;
         tw|tw-utf8)
-                # Traditional Chinese version (UTF8)
-                LANGUAGE="zh_TW:zh"
-                COUNTRY="tw"
+                # Taiwanese
                 LANG="zh_TW.UTF-8"
-                KEYTABLE="us"
-                XKEYBOARD="us"
-                # CHARSET="big5-0"
-                CHARSET="utf8"
-                XMODIFIERS="@im=xcin"
+                LANGUAGE="zh_TW:zh"
+                XKBLAYOUT="tw"
                 TZ="Asia/Taipei"
                 ;;
         uk|uk-utf8)
-                # British version (UTF8)
-                LANGUAGE="en_GB:en"
-                COUNTRY="uk"
+                # British English
                 LANG="en_GB.UTF-8"
-                KEYTABLE="uk"
-                XKEYBOARD="uk"
-                CHARSET="utf8"
+                LANGUAGE="en_GB:en"
+                XKBLAYOUT="gb"
                 TZ="Europe/London"
                 ;;
         us|us-utf8)
-                # American version (UTF8)
-                LANGUAGE="en_US:en"
-                COUNTRY="us"
+                # American English
                 LANG="en_US.UTF-8"
-                KEYTABLE="us"
-                XKEYBOARD="us"
-                CHARSET="utf8"
+                LANGUAGE="en_US:en"
+                XKBLAYOUT="us"
                 TZ="America/New_York"
                 ;;
 esac

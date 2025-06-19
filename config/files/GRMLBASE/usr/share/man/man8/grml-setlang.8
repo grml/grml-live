@@ -13,15 +13,15 @@ If you invoke grml-setlang without any further options you will get a
 dialog based configuration frontend.  If you invoke grml-setlang with one
 option, grml-setlang will take the first option as input for regenerating
 /etc/default/locale according to the definitions in
-/usr/share/grml-autoconfig/language-functions. If the provided option is not supported the
-default (en_US) will be taken.
+/usr/share/grml-autoconfig/language-functions. If the provided option is not
+supported, grml-setlang will abort.
 .SH USAGE EXAMPLES
 .TP
 .B grml-setlang de
-Write german environment variables LANGUAGE, LANG, LC_MESSAGES, COUNTRY, CHARSET and TZ into /etc/default/locales.
+Write German environment variables LANGUAGE, LANG, LC_COLLATE, LC_TIME and TZ into /etc/default/locale.
 .TP
-.B grml-setlang at-utf8
-Write austrian environment variables LANGUAGE, LANG, LC_MESSAGES, COUNTRY, CHARSET and TZ with unicode/utf8-support into /etc/default/locales.
+.B grml-setlang at
+Write Austrian environment variables LANGUAGE, LANG, LC_COLLATE, LC_TIME and TZ into /etc/default/locale.
 .SH AUTHOR
 grml-setlang was written by Michael Prokop <mika@grml.org>.
 .PP

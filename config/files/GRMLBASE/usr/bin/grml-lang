@@ -1,6 +1,6 @@
 #!/bin/bash
 # Filename:      grml-lang
-# Purpose:       load specific keyboard layout settings
+# Purpose:       load keyboard layout
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
@@ -9,35 +9,23 @@
 CONFFILE=/etc/default/keyboard
 PN="$(basename "$0")"
 
+# shellcheck disable=SC1091
+. /etc/grml/lsb-functions
+
 usage(){
     echo "Usage: ${PN} <language>"
-    echo "supported values: at, ch, de, dvorak, es, fr, hu, it, jp, uk, us"
-}
-
-setvalue(){
-  sudo sed -i --follow-symlinks "s#^${1}=.*#${1}=\"${2}\"#" "${CONFFILE}"
+    echo "supported values: at, ch, de, dvorak, en, es, fr, hu, it, jp, uk, us"
 }
 
 # Update keyboard configuration and apply changes
 configure_keyboard(){
-  local layout="$1"
-  local variant="${2:-}"
-
-  # Update /etc/default/keyboard
-  if [ -r "$CONFFILE" ] ; then
-    setvalue XKBLAYOUT "$layout"
-    setvalue XKBVARIANT "$variant"
-  else
-    # Create the file if it doesn't exist
-    sudo tee "$CONFFILE" > /dev/null <<EOF
-# Keyboard configuration for grml
+  sudo tee "$CONFFILE" > /dev/null <<EOF
+# Keyboard configuration, written by grml-lang.
 XKBMODEL="pc105"
-XKBLAYOUT="$layout"
+XKBLAYOUT="$XKBLAYOUT"
+XKBVARIANT="$XKBVARIANT"
+XKBOPTIONS="$XKBOPTIONS"
 EOF
-    if [ -n "$variant" ] ; then
-      echo "XKBVARIANT=\"$variant\"" | sudo tee -a "$CONFFILE" > /dev/null
-    fi
-  fi
 
   # Apply keyboard changes immediately:
   # Let setupcon update the files /etc/console-setup/cached*. It will also try
@@ -63,7 +51,7 @@ LANGUAGE="$1"
 . /usr/share/grml-autoconfig/language-functions
 
 # Check if we found a valid keyboard configuration
-if [ -z "$XKEYBOARD" ] ; then
+if [ -z "$XKBLAYOUT" ] ; then
   echo "E: No valid language given."
   echo
   usage
@@ -73,20 +61,10 @@ if [ -z "$XKEYBOARD" ] ; then
   exit 1
 fi
 
-if [ -n "$XKEYBOARD" ] ; then
-  # Determine variant based on language
-  case "$LANGUAGE" in
-    de|at)
-      configure_keyboard "$XKEYBOARD" "nodeadkeys"
-      ;;
-    *)
-      configure_keyboard "$XKEYBOARD"
-      ;;
-  esac
-fi
+configure_keyboard
 
-echo "Keyboard layout configured: $XKEYBOARD"
-[ -n "$2" ] && echo "Variant: $2"
-echo "Done."
+eindent
+einfo "Configured Keyboard Layout: $XKBLAYOUT $XKBVARIANT."
+eend 0
 
 ## END OF FILE #################################################################
