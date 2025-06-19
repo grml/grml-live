@@ -1,4 +1,4 @@
-# Filename:      /etc/grml/language-functions
+# Filename:      /usr/share/grml-autoconfig/language-functions
 # Purpose:       general language stuff used in several parts of the grml-system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/

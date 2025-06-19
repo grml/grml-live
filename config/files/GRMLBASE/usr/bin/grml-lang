@@ -55,7 +55,7 @@ fi
 LANGUAGE="$1"
 
 # shellcheck disable=SC1091
-. /etc/grml/language-functions
+. /usr/share/grml-autoconfig/language-functions
 
 # Check if we found a valid keyboard configuration
 if [ -z "$XKEYBOARD" ] ; then

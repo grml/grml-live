@@ -8,7 +8,7 @@
 
 PN="$(basename "$0")"
 DIALOG=dialog
-LANGFUNC=/etc/grml/language-functions
+LANGFUNC=/usr/share/grml-autoconfig/language-functions
 
 # notice: Debian's locales.postinst has been modified to write
 # locale variables into /etc/default/locale instead of
