@@ -60,7 +60,7 @@ else # ... or finally fall back to grml's default
      echo
   fi
 
-  if grep -q 'grml-live-autobuild' /etc/grml_version 2>/dev/null ; then
+  if grep -q 'daily' /etc/grml_version 2>/dev/null ; then
      echo
      echo
      echo 'NOTICE: This is a daily snapshot version!'
