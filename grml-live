@@ -45,7 +45,7 @@ Usage: $PN [options, see as follows]
    -A                      clean build directories before and after running
    -b                      build the ISO without updating the chroot
    -B                      build the ISO without touching the chroot (skips cleanup)
-   -c <classe[s]>          classes to be used for building the ISO
+   -c <class[es]>          classes to be used for building the ISO
    -C <configfile>         configuration file for grml-live
    -d <date>               use specified date instead of build time as date of release
    -D <configdir>          use specified configuration directory instead of /usr/share/grml-live/config
