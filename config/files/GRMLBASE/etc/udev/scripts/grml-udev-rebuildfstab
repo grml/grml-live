@@ -22,8 +22,8 @@ logit() {
 
 bailout() {
    [ -n "$1" ] && EXITCODE="$1" || EXITCODE=1
-   rm -f $TMP $TMPFILE /var/run/rebuildfstab.pid
-   exit $EXITCODE
+   rm -f "$TMP" "$TMPFILE" /var/run/rebuildfstab.pid
+   exit "$EXITCODE"
 }
 
 echo "$$" > /var/run/rebuildfstab.pid
@@ -32,6 +32,7 @@ echo "$$" > /var/run/rebuildfstab.pid
 umask 022
 
 
+# shellcheck source=../../grml/autoconfig
 [ -e /etc/grml/autoconfig ] && . /etc/grml/autoconfig
 
 if ! [ -w "$(dirname $MNTFILE)" ] ; then
@@ -40,7 +41,7 @@ if ! [ -w "$(dirname $MNTFILE)" ] ; then
    bailout 10
 fi
 
-if [ -z "$TMP" -o -z "$TMPFILE" ] ; then
+if [ -z "$TMP" ] || [ -z "$TMPFILE" ] ; then
    echo "$0: could not create tmpfile (is / mounted read-only?), exiting" >&2
    logit 'fatal - could not create tmpfile (is / mounted read-only?), exiting'
    bailout 3
@@ -58,13 +59,14 @@ if [ "$CONFIG_FSTAB" = "no" ] ; then
 fi
 
 
-if grep -q ' $MOUNTPOINT_PREFIX ' /proc/mounts ; then
-   logit '$MOUNTPOINT_PREFIX is a mounted directory, exiting.'
+if grep -q " $MOUNTPOINT_PREFIX " /proc/mounts ; then
+   logit "$MOUNTPOINT_PREFIX is a mounted directory, exiting."
    bailout 1
 fi
 
 LABEL=true # by default use labels
 
+# shellcheck disable=SC1091
 if [ -r /etc/grml/rebuildfstab.conf ] ; then
   logit 'Reading /etc/grml/rebuildfstab.conf'
   . /etc/grml/rebuildfstab.conf
@@ -130,9 +132,9 @@ fi
 
 # Simple shell grep, searches for lines STARTING with string
 stringinfile () {
-  while read line ;do
+  while read -r line ;do
     case "$line" in
-            ($1*) return 0 ;;
+      ($1*) return 0 ;;
     esac
   done < "$2"
   return 1
@@ -141,8 +143,8 @@ stringinfile () {
 # Remove comment line $1 and the following line from file $2
 # sed '/^# Added by GRML/{N;d;}'
 removeentries () {
-	entry="$1"
-	entry=$(echo $1 |  sed "s#/#\\\/#g")
+    # shellcheck disable=SC2001
+	entry=$(echo "$1" |  sed "s#/#\\\/#g")
 	(
 		flock -x 200
 		sed -i -e "/$entry/{N;d}" /etc/fstab
@@ -151,38 +153,40 @@ removeentries () {
 
 
 get_device_name() {
-case $ID_FS_TYPE in
-# dont use labels for some filesystem
-iso9660)
-break;
-;;
-*)
-if "$LABEL" && [ -n "$ID_FS_LABEL_ENC" ] ; then
-  # see check_for_label() in scanpartitions for details
-  case $ID_FS_LABEL_ENC in
-    *\x*)
-      logit "special char in label ($ID_FS_LABEL_ENC) not supported, skipping label for $DEVNAME"
-      break ;;
-    *)
-      echo "LABEL=$ID_FS_LABEL_ENC"
-      return
-      break;
-  esac
-fi
-;;
-esac
-[ -n "$DM_NAME" ] && echo /dev/mapper/$DM_NAME && return
+    case $ID_FS_TYPE in
+        iso9660)
+            # dont use labels for some filesystem
+            return;
+            ;;
+        *)
+            if "$LABEL" && [ -n "$ID_FS_LABEL_ENC" ] ; then
+                # see check_for_label() in scanpartitions for details
+                case $ID_FS_LABEL_ENC in
+                    *\\x*)
+                    logit "special char in label ($ID_FS_LABEL_ENC) not supported, skipping label for $DEVNAME"
+                    return
+                    ;;
+                    *)
+                    echo "LABEL=$ID_FS_LABEL_ENC"
+                    return
+                    ;;
+                esac
+            fi
+            ;;
+    esac
 
-NAME="$DEVNAME"
-for name in $DEVLINKS ; do
-    case $name in
-        *usb-sd*|*cdrom*|*dvd*)
+    [ -n "$DM_NAME" ] && echo /dev/mapper/"$DM_NAME" && return
+
+    NAME="$DEVNAME"
+    for name in $DEVLINKS ; do
+        case $name in
+            *usb-sd*|*cdrom*|*dvd*)
             NAME="$name"
-	    break;
-        ;;
-esac
-done
-echo "$NAME"
+            return
+            ;;
+        esac
+    done
+    echo "$NAME"
 }
 
 get_mount_point() {
@@ -190,15 +194,6 @@ get_mount_point() {
     mountpoint="${device##*/}"
     mountpoint="${mountpoint#*=}"
     echo "$MOUNTPOINT_PREFIX/$mountpoint"
-}
-
-append_fstab() {
-	(
-		flock -x 200
-		echo $ADDEDBYGRML $1 >> /etc/fstab
-		echo "$2" >> /etc/fstab
-	) 200>/var/run/rebuildfstab.lock
-
 }
 
 
@@ -228,24 +223,24 @@ esac
 removeentries "$ADDEDBYGRML $DEVNAME" /etc/fstab
 
 device=$(get_device_name)
-mountpoint=$(get_mount_point $device)
+mountpoint=$(get_mount_point "$device")
 
 # if entry is already present in /etc/fstab ignore the current event
 (
     flock -x 200
-    grep -v '^#' /etc/fstab > $TMPFILE
+    grep -v '^#' /etc/fstab > "$TMPFILE"
 ) 200>/var/run/rebuildfstab.lock
 
 for devicelink in $DEVLINKS ; do
     # ignore external
     case "$devicelink" in *external*) continue ;; esac
-    stringinfile $devicelink $TMPFILE && bailout 0
+    stringinfile "$devicelink" "$TMPFILE" && bailout 0
 done
 
 # if entry is already present ignore it
-stringinfile $device $TMPFILE && bailout 0
+stringinfile "$device" "$TMPFILE" && bailout 0
 
-if [ "$ID_FS_USAGE" != "filesystem" -a "$ID_FS_TYPE" != "swap" ]; then
+if [ "$ID_FS_USAGE" != "filesystem" ] && [ "$ID_FS_TYPE" != "swap" ]; then
     # blockdevice in question won't be mountable in this case
     bailout 0
 fi
@@ -294,31 +289,32 @@ esac
 
 # Clean $MOUNTPOINT_PREFIX according to info $MNTFILE
 if [ -r "$MNTFILE" ] ; then
-   for directory in $(cat $MNTFILE) ; do
-     rmdir $directory 2>/dev/null && sed -i "s#$directory##" $MNTFILE
+   for directory in $(< "$MNTFILE") ; do
+     rmdir "$directory" 2>/dev/null && sed -i "s#$directory##" "$MNTFILE"
    done
-   grep '^/.*$' $MNTFILE | sort -u > $TMPFILE
-   cat $TMPFILE > $MNTFILE
+   grep '^/.*$' "$MNTFILE" | sort -u > "$TMPFILE"
+   cat "$TMPFILE" > "$MNTFILE"
 fi
 
 # Make sure we have all directories in $MOUNTPOINT_PREFIX
-while read p m f relax; do
+while read -r _p m _f _relax; do
   case "$m" in *none*|*proc*|*sys*|'') continue ;; esac
   if ! grep -q "$m" /proc/mounts ; then
      if ! [ -d "$m" ] ; then
+        # shellcheck disable=SC2174
         if mkdir -m 755 -p "$m" ; then
           [ -r "$MNTFILE" ] && grep -q "$m" $MNTFILE || echo "$m" >> $MNTFILE
         fi
      fi
   fi
 done <<EOT
-$(cat /etc/fstab | grep -v '^#')
+$(grep -v '^#' /etc/fstab)
 EOT
 
 # sort the file again...
 if [ -r "$MNTFILE" ] ; then
-   grep '^/.*$' $MNTFILE | sort -u > $TMPFILE
-   cat $TMPFILE > $MNTFILE
+   grep '^/.*$' "$MNTFILE" | sort -u > "$TMPFILE"
+   cat "$TMPFILE" > "$MNTFILE"
 fi
 
 # ensure systemd uses recent fstab configuration
