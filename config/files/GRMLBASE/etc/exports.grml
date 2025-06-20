@@ -1,0 +1,26 @@
+# /etc/exports: the access control list for filesystems which may be exported
+#               to NFS clients.  See exports(5).
+#
+# main options:
+# =============
+# rw              => Allows read and write access to the share
+# ro              => Only allows read access, writing is blocked
+# all_squash      => Forces all connecting users to "nobody" account and permissions
+# no_root_squash  => Allows root account on client to access export share on server as the root account
+# anonuid         => Forces all anonymous connections to predefined UID on server
+# anongid         => Forces all anonymous connections to predefined GID on server
+# => more information in 'man exports'
+#
+# usage example:
+# ==============
+# /etc/init.d/portmap start
+# /etc/init.d/nfs-common start
+# /etc/init.d/nfs-kernel-server start
+# mount -t nfs 192.168.1.101:/ /mnt/test
+#
+# Notice: starting nfs-server fails if there is no entry in /etc/exports :-/
+#
+# example:
+# ========
+# /home/grml/nfs 192.168.1.101(ro,sync)
+# /              192.168.1.101(rw,no_root_squash,no_subtree_check,sync)

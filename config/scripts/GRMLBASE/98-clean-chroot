@@ -17,6 +17,9 @@ if ! ls "$target"/boot/config-* &>/dev/null ; then
   exit 1
 fi
 
+echo "Installing files into /etc/skel"
+fcopy -M -i -B -v -r /etc/skel
+
 echo "Creating ~/.zshrc"
 touch "$target"/root/.zshrc
 
