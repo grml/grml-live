@@ -9,6 +9,9 @@
 set -u
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 fcopy -M -v /etc/default/console-setup
 
 # Have setupcon write its cache into /etc/console-setup, to avoid doing
