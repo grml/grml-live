@@ -9,10 +9,12 @@
 
 # some zsh-stuff {{{
   autoload colors ; colors
-  [ -r /etc/grml/sh-lib ] && . /etc/grml/sh-lib
+  . /etc/grml/lsb-functions
+  . /etc/grml/script-functions
 # }}}
 
 # set variables  {{{
+  DEBUG=0
   LANG=C
   LC_ALL=C
   PROGRAMNAME=${0##*/}
