@@ -93,11 +93,6 @@ checkbootparam(){
   esac
 }
 
-# Check if currently using a framebuffer
-hasfb() {
-    [ -e /dev/fb0 ] && return 0 || return 1
-}
-
 # Check wheter a configuration variable (like $CONFIG_TOHD) is
 # enabled or not
 checkvalue(){
