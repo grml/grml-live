@@ -151,9 +151,13 @@ def chrooted_apt_install(chroot_dir: Path, install_list: list[str]):
     env = {
         "DEBIAN_FRONTEND": "noninteractive",
     }
+    command = ["apt", "install", "-q", "-y", "--no-install-recommends"]
+    if os.environ.get("GRML_LIVE_DEBUG_APT", "") != "":
+        command.insert(1, "-oDebug::Acquire::http=true")
+    command += install_list
     run_chrooted(
         chroot_dir,
-        ["apt", "install", "-q", "-y", "--no-install-recommends"] + install_list,
+        command,
         env=env,
         stdin=subprocess.DEVNULL,
     )
