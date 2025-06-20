@@ -38,8 +38,8 @@ For example the X window system is not part of grml-small.
 Regional settings:
 ------------------
 
-grml lang=at|ch|de|es|fr|hu|it        Specify language ($LANG, $LC_ALL, $LANGUAGE) + keyboard
-grml lang=jp|uk|us|dvorak             Specify language ($LANG, $LC_ALL, $LANGUAGE) + keyboard
+grml lang=at|ch|de|de-neo|es|fr       Specify language ($LANG, $LC_ALL, $LANGUAGE) + keyboard
+grml lang=hu|it|jp|uk|us|dvorak       Specify language ($LANG, $LC_ALL, $LANGUAGE) + keyboard
 grml localtime                        Assume Hardware Clock (RTC) is set in localtime (default: RTC is in UTC)
 grml tz=Europe/Vienna                 Use specified timezone for TZ, defaults to TZ=UTC
 grml keyboard=us                      Use different keyboard layout (see list from lang=)
