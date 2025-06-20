@@ -19,6 +19,19 @@ jobs:
       - name: Check ruff formatting
         run: ruff format --line-length 120 --check usr/lib/grml-live/minifai usr/lib/grml-live/*.py usr/lib/grml-live/tests/*.py build-driver/*.py
 
+  autoconfig-tests:
+    name: autoconfig tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: run_tests
+        run: |
+          # Install lsb-functions, etc.
+          git clone --depth 1 https://github.com/grml/grml-etc-core
+          sudo cp -rv grml-etc-core/etc/ /
+
+          cd tests/autoconfig && ./run_tests.sh
+
   shellcheck:
     name: shellcheck all scripts
     runs-on: ubuntu-latest
