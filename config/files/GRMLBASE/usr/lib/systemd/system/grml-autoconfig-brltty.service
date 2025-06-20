@@ -1,0 +1,15 @@
+# This file is part of grml-autoconfig for usage with systemd.
+
+[Unit]
+Description=grml-autoconfig: start brltty if requested
+ConditionKernelCommandLine=brltty
+Wants=brltty.service
+# No After=, as this is a conditional start.
+
+[Service]
+Type=oneshot
+ExecStart=/bin/true
+RemainAfterExit=yes
+
+[Install]
+WantedBy=grml-boot.target

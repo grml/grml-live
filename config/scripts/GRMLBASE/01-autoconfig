@@ -19,7 +19,8 @@ fcopy -M -v /etc/grml/modules
 fcopy -M -v /etc/grml/partconf
 
 fcopy -M -v /usr/lib/modules-load.d/grml-autoconfig.conf
-fcopy -M -v /usr/lib/systemd/system/grml-autoconfig.service
+fcopy -M /usr/lib/systemd/system/grml-autoconfig.service
+fcopy -M /usr/lib/systemd/system/grml-autoconfig-brltty.service
 fcopy -M -v /usr/share/grml-autoconfig/autoconfig.functions
 
 fcopy -m root,root,0755 /usr/share/grml-autoconfig/grml-autoconfig
