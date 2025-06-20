@@ -49,6 +49,7 @@ usbutils
 uuid-runtime
 wireless-tools
 wpasupplicant
+virt-what  # used by autoconfig
 xz-utils
 
 # firmware packages
