@@ -33,7 +33,7 @@
   fi
 
   check4progs mutt &>/dev/null || echo "Warning, mutt not available for mail handling.">&2
-  check4progs tar || { echo "Sorry, can't continue. Exiting.">&2 ; bailout ; exit 1 }
+  check4progs tar || { echo "The tar program is required.">&2 ; bailout ; exit 1 }
 
   CONFIG=/etc/grml/saveconfig
   [ -r "$CONFIG" ] && . $CONFIG
