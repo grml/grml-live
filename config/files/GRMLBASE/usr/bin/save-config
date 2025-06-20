@@ -9,7 +9,7 @@
 # some zsh-stuff {{{
   autoload colors ; colors
   setopt nonomatch
-  . /etc/grml/sh-lib
+  . /etc/grml/lsb-functions
   . /etc/grml/script-functions
 # }}}
 
