@@ -1,0 +1,74 @@
+# udev rules file for brltty
+#
+
+ACTION!="add", GOTO="brltty_rules_end"
+
+SUBSYSTEM=="usb_device", GOTO="brltty_usb_begin"
+SUBSYSTEM=="usb", KERNEL!="*:*", GOTO="brltty_usb_begin"
+GOTO="brltty_rules_end"
+
+LABEL="brltty_usb_begin"
+
+# Alva
+ATTRS{idVendor}=="06b0", ATTRS{idProduct}=="0001", RUN+="/lib/brltty/brltty.sh -b al -d usb:"
+ATTRS{idVendor}=="0798", ATTRS{idProduct}=="0640", RUN+="/lib/brltty/brltty.sh -b al -d usb:"
+ATTRS{idVendor}=="0798", ATTRS{idProduct}=="0680", RUN+="/lib/brltty/brltty.sh -b al -d usb:"
+
+# Baum
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="fe70", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="fe71", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="fe72", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="fe73", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="fe74", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="fe75", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="fe76", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="fe77", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0904", ATTRS{idProduct}=="2000", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0904", ATTRS{idProduct}=="2001", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0904", ATTRS{idProduct}=="2002", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0904", ATTRS{idProduct}=="2007", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0904", ATTRS{idProduct}=="2008", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0904", ATTRS{idProduct}=="2009", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0904", ATTRS{idProduct}=="2010", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0904", ATTRS{idProduct}=="2011", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0904", ATTRS{idProduct}=="2014", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0904", ATTRS{idProduct}=="2015", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0904", ATTRS{idProduct}=="2016", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+ATTRS{idVendor}=="0904", ATTRS{idProduct}=="3000", RUN+="/lib/brltty/brltty.sh -b bm -d usb:"
+
+# EuroBraille
+ATTRS{idVendor}=="c251", ATTRS{idProduct}=="1122", RUN+="/lib/brltty/brltty.sh -b eu -d usb:"
+ATTRS{idVendor}=="c251", ATTRS{idProduct}=="1124", RUN+="/lib/brltty/brltty.sh -b eu -d usb:"
+
+# FreedomScientific
+ATTRS{idVendor}=="0f4e", ATTRS{idProduct}=="0100", RUN+="/lib/brltty/brltty.sh -b fs -d usb:"
+ATTRS{idVendor}=="0f4e", ATTRS{idProduct}=="0111", RUN+="/lib/brltty/brltty.sh -b fs -d usb:"
+ATTRS{idVendor}=="0f4e", ATTRS{idProduct}=="0112", RUN+="/lib/brltty/brltty.sh -b fs -d usb:"
+ATTRS{idVendor}=="0f4e", ATTRS{idProduct}=="0114", RUN+="/lib/brltty/brltty.sh -b fs -d usb:"
+
+# HandyTech
+ATTRS{idVendor}=="0921", ATTRS{idProduct}=="1200", RUN+="/lib/brltty/brltty.sh -b ht -d usb:"
+#ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", RUN+="/lib/brltty/brltty.sh -b ht -d usb:"
+ATTRS{idVendor}=="1fe4", ATTRS{idProduct}=="0003", RUN+="/lib/brltty/brltty.sh -b ht -d usb:"
+ATTRS{idVendor}=="1fe4", ATTRS{idProduct}=="0044", RUN+="/lib/brltty/brltty.sh -b ht -d usb:"
+ATTRS{idVendor}=="1fe4", ATTRS{idProduct}=="0074", RUN+="/lib/brltty/brltty.sh -b ht -d usb:"
+
+# HIMS
+ATTRS{idVendor}=="045e", ATTRS{idProduct}=="930a", RUN+="/lib/brltty/brltty.sh -b hm -d usb:"
+
+# Metec
+ATTRS{idVendor}=="0452", ATTRS{idProduct}=="0100", RUN+="/lib/brltty/brltty.sh -b mt -d usb:"
+
+# Papenmeier
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="f208", RUN+="/lib/brltty/brltty.sh -b pm -d usb:"
+
+# Pegasus
+ATTRS{idVendor}=="4242", ATTRS{idProduct}=="0001", RUN+="/lib/brltty/brltty.sh -b pg -d usb:"
+
+# Seika
+#ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", RUN+="/lib/brltty/brltty.sh -b sk -d usb:"
+
+# Voyager
+ATTRS{idVendor}=="0798", ATTRS{idProduct}=="0001", RUN+="/lib/brltty/brltty.sh -b vo -d usb:"
+
+LABEL="brltty_rules_end"

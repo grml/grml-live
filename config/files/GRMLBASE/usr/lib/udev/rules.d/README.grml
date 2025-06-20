@@ -1,0 +1,45 @@
+grml-udev-config for Debian - Documentation of provided rules
+-------------------------------------------------------------
+
+/lib/udev/rules.d/01-grml-forensic.rules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Mark new block devices as readonly when booting with kernel command line
+option read-only (boot menu entry forensic/readonly).
+
+/lib/udev/rules.d/60-grml-external.rules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Udev rule to map USB pendrives/sticks to /dev/external* device nodes (or
+symlinks respectively).
+
+Note: This rule is deprecated in favour of the grml-usbdev rules file mentioned
+below. Nevertheless this way of accessing devices is retained for backwards
+compatibility reasons.
+
+/lib/udev/rules.d/60-grml-usbdev.rules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This udev rule allows simple access to USB devices like pendrives upon plugging
+them in.  You'll get according symlinks in /dev (prefixed with 'usb-'), entries
+in /etc/fstab (via rebuildfstab) and directories in /media according to available
+labeled filesystems for free. On removal of the USB device the symlinks and
+usb*-directories in /media will automatically vanish.
+
+/lib/udev/rules.d/85-brltty.rules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Automatically start brltty if a supported USB device gets attached.
+
+/lib/udev/rules.d/89-grml-dm.rules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Add watch option for dm devices to get change notification if device changes.
+
+/lib/udev/rules.d/90-grml-blockdevices.rules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This script triggers the /usr/sbin/rebuildfstab script for updating /etc/fstab
+and /media/* when block devices are added or removed from the system.
+
+ -- Michael Prokop <mika@grml.org>  Fri, 13 Nov 2009 12:02:41 +0100

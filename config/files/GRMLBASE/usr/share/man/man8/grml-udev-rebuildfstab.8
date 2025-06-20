@@ -1,0 +1,49 @@
+.TH GRML-UDEV-REBUILDFSTAB 8
+.SH NAME
+grml-udev-rebuildfstab \- scan for new devices and add entries to /etc/fstab
+.SH DESCRIPTION
+.PP
+
+\fBgrml-udev-rebuildfstab\fP updates /etc/fstab for available devices and
+partitions.
+
+.SH DETAILS ABOUT GENERATION OF /etc/fstab
+
+If the file /etc/fstab is not present at all a default file will be
+generated. As devices are added or removed to the system, new entries for
+for these devices will be added to /etc/fstab. Please note that entries
+are added to the end of /etc/fstab, so you should \fBnot\fP add your own
+devices below any lines containing "Added by GRML" but instead \fBabove\fP
+the line \'"Warning!  Please do....\'".
+
+If a partition contains a filesystem with a filesystem label on it, an entry
+with LABEL= is generated so you can run \'mount /media/$LABEL\'. If multiple
+filesystems have the same filesystem, label entries with UUID= are generated
+instead so uniqueness for mounting filesystems can be guaranteed. If duplicate
+labels are present but UUIDs are not set it is falling back to normal
+/dev/ice-schema. For present filesystem labels see /dev/disk/by-label/* for the
+label<->partition mapping.  If you want to get details about a filesystem (and
+if a label is defined) run \'"/lib/udev/vol_id /dev/ice\'". If you want to
+disable the LABEL feature take a look at the FAQ below.
+
+External USB Devices are named usb-sd*.
+
+.SH FAQ
+.TP
+.B How to disable the LABEL-feature?
+
+Set the boot option 'nolabel'.
+
+.TP
+.B How do I set uid/gid for the user(s) who should be allowed to access the device?
+
+Adjust CONFIG_FSTAB_USER and CONFIG_FSTAB_GROUP in /etc/grml/autoconfig. Further
+updates will then use these new values.
+
+.SH BUGS
+Please report any problems you notice. See http://grml.org/bugs/ for details.
+.SH AUTHOR
+grml-udev-rebuildfstab was written by Ulrich Dangel and Michael Prokop.
+.PP
+This manual page was written by Michael Prokop <mika@grml.org>
+for the grml project (but may be used by others).

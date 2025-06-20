@@ -1,0 +1,8 @@
+# USB-Stick rule
+SUBSYSTEM=="block", SUBSYSTEMS=="usb", KERNEL=="sd[a-z]*", SYMLINK+="external%n"
+
+# Create /dev/cdrom* symlinks for CD-ROM devices
+# ENV{ID_CDROM}=="?*",			SYMLINK+="cdrom"
+# ENV{ID_CDROM_CD_RW}=="?*",		SYMLINK+="cdrw"
+# ENV{ID_CDROM_DVD}=="?*",		SYMLINK+="dvd"
+# ENV{ID_CDROM_DVD_R}=="?*",		SYMLINK+="dvdrw"
