@@ -41,7 +41,6 @@ CONFIG_GPM='yes'
 CONFIG_AUTOMOUNT='yes'        # automounting of device labeled GRMLCFG
 CONFIG_BLANKING='yes'         # check for bootoption noblank to disable console blanking
 CONFIG_CONFIG='yes'           # do we want config unpacking to work?
-CONFIG_BRLTTY='yes'           # automatically start brltty if a brltty option is specified in /proc/cmdline
 CONFIG_DEBOOTSTRAP='yes'      # support automatic installation of Debian via grml-deboostrap
 CONFIG_DEBNET='yes'           # search for /etc/network/interfaces on partitions and set up network afterwards
 CONFIG_DEBS='yes'             # check for bootoption debs for installing .debs

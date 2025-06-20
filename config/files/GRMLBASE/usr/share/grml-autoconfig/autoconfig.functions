@@ -421,15 +421,6 @@ fi
 }
 # }}}
 
-# {{{ Start brltty
-config_brltty() {
-  if checkbootparam 'brltty' ; then
-    einfo "Starting brltty service as requested on boot commandline."
-    service_wrapper brltty start ; eend $?
-  fi
-}
-# }}}
-
 # {{{ Start creating /etc/fstab with HD partitions and USB SCSI devices now
 config_fstab(){
 
