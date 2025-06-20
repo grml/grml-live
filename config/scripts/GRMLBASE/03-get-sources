@@ -29,10 +29,15 @@ mkdir -p "${target}${SOURCES_PATH}"
 
 $ROOTCMD apt-get update
 
+apt_debug_option=""
+if [ -n "${GRML_LIVE_DEBUG_APT:-}" ]; then
+    apt_debug_option="-oDebug::Acquire::http=true"
+fi
+
 # Collect *source* package names
 # shellcheck disable=SC2016 # Embedded $ is correct.
 $ROOTCMD dpkg-query -W -f='${Source} ${Package}\n' | sed -e 's/^ //' | awk '{ print $1 }' | sort -u | \
-  chroot "${target}" /bin/bash -c "cd \"${SOURCES_PATH}\" && xargs --max-args=32 --max-procs=12 apt-get --download-only source" 2> "${ERRORS_LOG}"
+  chroot "${target}" /bin/bash -c "cd \"${SOURCES_PATH}\" && xargs --max-args=32 --max-procs=12 apt-get $apt_debug_option --download-only source" 2> "${ERRORS_LOG}"
 
 if grep -q '^E:' "${ERRORS_LOG}" ; then
   echo "Errors noticed while retrieving sources:" >&2
