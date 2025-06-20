@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 # Filename:      autoconfig.functions
 # Purpose:       basic system configuration and hardware setup for grml system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
@@ -6,7 +6,7 @@
 # License:       This file is licensed under the GPL v2.
 ################################################################################
 
-# {{{ path, variables, signals, umask, zsh
+# {{{ path, variables, signals, umask
 export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 DEBUG="/dev/null"
 KERNEL="$(uname -r)"
@@ -28,17 +28,6 @@ service_wrapper() {
 
   systemctl "$action" "$service"
 }
-
-# zsh stuff
-iszsh(){
-if [ -n "$ZSH_VERSION" ] ; then
-  return 0
-else
-  return 1
-fi
-}
-# avoid 'no matches found: ...'
-iszsh && setopt no_nomatch # || echo "Warning: not running under zsh!"
 # }}}
 
 # {{{ Read in boot parameters
@@ -132,28 +121,20 @@ VMWARE=false
 _detect_virtual() {
   local virt_what_result
   virt_what_result=$(virt-what 2>/dev/null)
-  if [[ $virt_what_result == *vmware* ]]; then
-    VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware'
-  fi
-  if [[ $virt_what_result == *kvm* ]]; then
-    VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM'
-  fi
-  if [[ $virt_what_result == *virtualbox* ]]; then
-    VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox'
-  fi
+  case "$virt_what_result" in
+    *vmware*) VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware' ;;
+    *kvm*) VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM' ;;
+    *virtualbox*) VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox' ;;
+  esac
   if [ -z "$VIRTUAL" ]; then
     # imvirt is slow. do not use it, if virt-what already found the hypervisor.
     local imvirt_result
     imvirt_result=$(imvirt 2>/dev/null)
-    if [[ $imvirt_result == *VMware* ]]; then
-      VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware'
-    fi
-    if [[ $imvirt_result == "KVM" ]]; then
-      VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM'
-    fi
-    if [[ $imvirt_result == "VirtualBox" ]]; then
-      VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox'
-    fi
+    case "$imvirt_result" in
+      *VMware*) VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware' ;;
+      "KVM") VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM' ;;
+      "VirtualBox") VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox' ;;
+    esac
   fi
 }
 _detect_virtual
@@ -229,8 +210,10 @@ config_hostname(){
 # fstabuser (needed when running from harddisk with username != grml {{{
 config_userfstab(){
   # force load of build-in and local config
+  # shellcheck source=../../../etc/grml/autoconfig
   [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig
-  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig.local
+  # shellcheck source=../../../etc/grml/autoconfig.local
+  [ -r /etc/grml/autoconfig.local ] && . /etc/grml/autoconfig.local
 
   # 1st. try configured fstab user
   if [ -n "$CONFIG_FSTAB_USER" ] ; then
@@ -252,8 +235,10 @@ config_userfstab(){
 config_userlocal() {
 
   # force load of build-in and local config
+  # shellcheck source=../../../etc/grml/autoconfig
   [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig
-  [ -r /etc/grml/autoconfig ] && . /etc/grml/autoconfig.local
+  # shellcheck source=../../../etc/grml/autoconfig.local
+  [ -r /etc/grml/autoconfig.local ] && . /etc/grml/autoconfig.local
 
   # 1st. try id of primary user
   localuser=$(getent passwd 1000 | cut -d: -f1)
@@ -356,8 +341,8 @@ if checkbootparam 'testcd' ; then
     FOUND_FILE=true
     OLD_PWD=$(pwd)
     cd $(dirname "$md5")
-    md5sum -c $(basename "$md5") |& tee -a "${logfile}"
-    if [ $pipestatus[1] -eq 0 ] ; then
+    md5sum -c $(basename "$md5") 2>&1 | tee -a "${logfile}"
+    if [ "${PIPESTATUS[0]}" -eq 0 ] ; then
       ERROR=false
     fi
     cd "${OLD_PWD}"
@@ -448,9 +433,11 @@ if [ -z "$INSTALLED" ] ; then
                      fi
                      ;;
                    *)
-                     if [[ "$p" == LABEL* ]] ; then
+                     case "$p" in
+                       LABEL*)
                         p=$(blkid -t $p | awk -F: '{print $1}')
-                     fi
+                        ;;
+                     esac
                      if grep -q $p /proc/swaps ; then
                         ewarn "Not using swap partition ${WHITE}${p}${NORMAL} as it is already in use." ; eend 0
                      else
@@ -772,9 +759,9 @@ config_mixer () {
       CONTROLS=$(amixer -c $card scontrols | awk -F"Simple mixer control " '{print $2}')
       IFSOLD=${IFS:-}
       IFS=$'\n'
-      for CONTROL in ${=CONTROLS} ; do
+      for CONTROL in $CONTROLS ; do
         # such devices can not be controlled with amixer ... unmute
-        [[ "$CONTROL" == *Console* ]] && continue
+        case "$CONTROL" in *Console*) continue ;; esac
 
         if ! echo "${CONTROL}" | grep -q -i "mic" ; then
           if amixer -c $card sget "${CONTROL}" | grep -q 'Capabilities:.*pswitch' ; then
@@ -1067,7 +1054,6 @@ fi
 # {{{ /cdrom/.*-options
 config_debs(){
 if checkbootparam 'debs' ; then
-   iszsh && setopt localoptions shwordsplit
    DEBS="$(getbootparam 'debs' 2>>$DEBUG)"
    if [ -z "$DEBS" ] ; then
       DEBS="*.deb"
@@ -1423,9 +1409,9 @@ fi
 display_easteregg() {
   einfo "You found the birthday easter egg!" ; eend 0
 
-  if [[ -x /bin/toilet && -x /usr/games/lolcat ]] ; then
+  if [ -x /bin/toilet ] && [ -x /usr/games/lolcat ] ; then
     visualize() { printf "%s\n" "$*" | toilet | /usr/games/lolcat ; }
-  elif [[ -x /bin/toilet ]] ; then
+  elif [ -x /bin/toilet ] ; then
     visualize() { printf "%s\n" "$*" | toilet ; }
   else
     visualize() { printf "%s\n" "$*" ; }
@@ -1439,16 +1425,15 @@ display_easteregg() {
 config_easteregg() {
   checkbootparam 'noeasteregg' && return 0
 
-  zmodload zsh/datetime 2>/dev/null || return 0
-  zmodload zsh/mathfunc 2>/dev/null || return 0
-
   local birthday=1694822400            # := 2023-09-16 -> TZ=UTC date -d "2023-09-16" +%s
-  local one_month=$[24*30*3600]
-  local pi=3.14159265358979323846
-  local magic=$(( one_month/(pi/2) ))  # normalization factor, used to map the [birthday;birthday+-one_month] range onto [0;+-pi/2]
+  local one_month=$((24*30*3600))
+  local current_time=$(date +%s)
+  local time_diff=$(( current_time > birthday ? current_time - birthday : birthday - current_time ))
 
-  if [[ $(( abs(birthday-EPOCHSECONDS) )) -le $one_month ]] ; then
-    if [[ $(( rand48() )) -le $(( cos((birthday-EPOCHSECONDS)/magic) )) ]] ; then
+  # show easter egg if within a month of birthday
+  if [ "$time_diff" -le "$one_month" ] ; then
+    local random_num=$((RANDOM % 100))
+    if [ "$random_num" -lt 10 ] ; then  # 10% chance
       display_easteregg
     fi
   fi
@@ -1458,4 +1443,4 @@ config_easteregg() {
 # }}}
 
 ## END OF FILE #################################################################
-# vim:foldmethod=marker expandtab ai ft=zsh shiftwidth=2
+# vim:foldmethod=marker expandtab ai ft=bash shiftwidth=2
