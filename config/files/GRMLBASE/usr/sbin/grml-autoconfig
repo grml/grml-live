@@ -6,54 +6,55 @@
 # License:       This file is licensed under the GPL v2.
 ################################################################################
 
-if [ $(id -u) != 0 ] ; then
+if [ "$(id -u)" != 0 ] ; then
   echo "Error: please run this script with uid 0 (root)." ; exit 1
 fi
 
 LANG=C
 LC_ALL=C
-PN="$(basename $0)"
+PN="$(basename "$0")"
 TMPFILE="$(mktemp)"
 
 AUTOCONFIG=/etc/grml/autoconfig
 [ -r $AUTOCONFIG ] || exit 1
 
+# shellcheck source=../../etc/grml/autoconfig
 . $AUTOCONFIG
 
 # helper functions
 activate_value()
 {
-  check_entry $1
+  check_entry "$1"
   sed -i "s/$1.*/$1'yes'/" ${CONFIG_AUTOCONFIG_LOCAL}
 }
 
 deactivate_value()
 {
-  check_entry $1
+  check_entry "$1"
   sed -i "s/$1.*/$1'no'/" ${CONFIG_AUTOCONFIG_LOCAL}
 }
 
 check_setting()
 {
-  grep -q $* $TMPFILE && return 0 || return 1
+  grep -q "$1" "$TMPFILE" && return 0 || return 1
 }
 
 check_entry()
 {
-  if ! grep -q ${1} ${CONFIG_AUTOCONFIG_LOCAL} 2>/dev/null ; then
-    grep $1 ${AUTOCONFIG} >> ${CONFIG_AUTOCONFIG_LOCAL}
+  if ! grep -q "${1}" "${CONFIG_AUTOCONFIG_LOCAL}" 2>/dev/null ; then
+    grep "$1" "${AUTOCONFIG}" >> "${CONFIG_AUTOCONFIG_LOCAL}"
   fi
 }
 
 is_set()
 {
-    [ $1 = 'yes' ] && return 0 || return 1
+    [ "$1" = 'yes' ] && return 0 || return 1
 }
 check_current_state()
 {
-  is_set $CONFIG_FSTAB      && FSTABSTATUS=ON    || FSTABSTATUS=OFF
-  is_set $CONFIG_CPU        && CPUSTATUS=ON      || CPUSTATUS=OFF
-  is_set $CONFIG_GPM        && GPMSTATUS=ON      || GPMSTATUS=OFF
+  is_set "$CONFIG_FSTAB"      && FSTABSTATUS=ON    || FSTABSTATUS=OFF
+  is_set "$CONFIG_CPU"        && CPUSTATUS=ON      || CPUSTATUS=OFF
+  is_set "$CONFIG_GPM"        && GPMSTATUS=ON      || GPMSTATUS=OFF
 }
 
 # main program
@@ -73,28 +74,41 @@ Please do not confuse these settings with plain Debian configuration.
 For example disabling dhcp here will NOT deactivate any configured network
 settings in /etc/network/interfaces, it just configures grml-autoconfig
 " 0 0 0 \
-fstab "update /etc/fstab entries (check for devices)" $FSTABSTATUS \
-cpufreq "activate cpu frequency scaling" $CPUSTATUS \
-gpm "start GPM (mouse on console)" $GPMSTATUS \
-  2>$TMPFILE
+fstab "update /etc/fstab entries (check for devices)" "$FSTABSTATUS" \
+cpufreq "activate cpu frequency scaling" "$CPUSTATUS" \
+gpm "start GPM (mouse on console)" "$GPMSTATUS" \
+  2>"$TMPFILE"
+}
+
+check_and_change() {
+    local shortname="$1"
+    local configname="$2"
+    if check_setting "$shortname" ; then
+        activate_value "$configname="
+    else
+        deactivate_value "$configname="
+    fi
 }
 
 set_values()
 {
-  check_setting fstab     && activate_value CONFIG_FSTAB=    || deactivate_value CONFIG_FSTAB=
-  check_setting cpufreq   && activate_value CONFIG_CPU=      || deactivate_value CONFIG_CPU=
-  check_setting gpm       && activate_value CONFIG_GPM=      || deactivate_value CONFIG_GPM=
+  check_and_change fstab CONFIG_FSTAB
+  check_and_change cpufreq CONFIG_CPU
+  check_and_change gpm CONFIG_GPM
 }
 
 # and now run it:
   check_current_state
   interface
-  retval=$?
+  retval="$?"
   case $retval in
    0)
-    set_values && dialog --stdout --title "${PN}" --msgbox "Adjusting values via grml-autoconfig was successful!" 5 60 || \
-    dialog --stdout --title "${PN}" --msgbox "There was an error adjusting values via grml-autoconfig. Sorry." 5 60
-    rm -f $TMPFILE &>/dev/null
+    if set_values ; then
+        dialog --stdout --title "${PN}" --msgbox "Adjusting values via grml-autoconfig was successful!" 5 60
+    else
+        dialog --stdout --title "${PN}" --msgbox "There was an error adjusting values via grml-autoconfig. Sorry." 5 60
+    fi
+    rm -f "$TMPFILE" &>/dev/null
     ;;
    1)
     echo "Exit pressed."
