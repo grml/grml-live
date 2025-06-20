@@ -107,6 +107,14 @@ case "$LANGUAGE" in
                 XKBVARIANT="nodeadkeys"
                 TZ="Europe/Berlin"
                 ;;
+        de-neo)
+                # German with Neo Layout (https://neo-layout.org/)
+                LANG="de_DE.UTF-8"
+                LANGUAGE="de_DE:de"
+                XKBLAYOUT="de"
+                XKBVARIANT="neo"
+                TZ="Europe/Berlin"
+                ;;
         dk|da|dk-utf8|da-utf8)
                 # Dansk
                 LANG="da_DK.UTF-8"
