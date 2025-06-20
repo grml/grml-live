@@ -568,8 +568,6 @@ if checkbootparam 'ssh' ; then
    fi
 
    einfo "Starting secure shell server in background for root and user $localuser"
-   service_wrapper haveged start >>$DEBUG 2>>$DEBUG
-   service_wrapper rmnologin start >>$DEBUG 2>>$DEBUG
    service_wrapper ssh start >>$DEBUG 2>>$DEBUG
    eend $?
 
