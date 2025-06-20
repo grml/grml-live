@@ -36,9 +36,9 @@ if [ -n "${WAYBACK_DATE:-}" ] ; then
 
   perl -pi -e 'BEGIN { $d="'"$WAYBACK_DATE"'"; }
     s#^(URIs:)\s+(.*://deb.debian.org/)(.*)\/?$#$1 http://snapshot.debian.org/archive/$3/$d#' \
-    "${target}/etc/apt/sources.list.d/debian.sources"
+    "${target}"/etc/apt/sources.list.d/debian.sources
 
-  sed -i '/^Types:/a Check-Valid-Until: no' "${target}/etc/apt/sources.list.d/debian.sources"
+  sed -i '/^Types:/a Check-Valid-Until: no' "${target}"/etc/apt/sources.list.d/debian.sources
 fi
 
 ## END OF FILE #################################################################

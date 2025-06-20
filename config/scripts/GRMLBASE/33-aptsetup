@@ -16,8 +16,10 @@ if ifclass RELEASE ; then
   set -u
   current_date=$(date +%Y%m%d)
   perl -pi -e 'BEGIN { $d="'"$current_date"'"; } \
-    s#^(URIs:)\s+(.*://deb.debian.org.*?)$#$1 http://snapshot.debian.org/archive/debian/$d/#' \
-    "${target}/etc/apt/sources.list.d/debian.sources"
+    s#^(URIs:)\s+(.*://deb.debian.org/)(.*)\/?$#$1 http://snapshot.debian.org/archive/$3/$d#' \
+    "${target}"/etc/apt/sources.list.d/debian.sources
+
+  sed -i '/^Types:/a Check-Valid-Until: no' "${target}"/etc/apt/sources.list.d/debian.sources
 fi
 
 ## END OF FILE #################################################################
