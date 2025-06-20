@@ -36,9 +36,9 @@ echo "$0: Installing latest kernel and its headers, as well as build-essential."
 # larger. I hope this kludge can go away eventually.
 mapfile -t extra_packages < <($ROOTCMD \
     apt-get --assume-no --download-only --mark-auto -u install \
-	build-essential linux-image-${arch} linux-headers-${arch} \
+	build-essential linux-image-"${arch}" linux-headers-"${arch}" \
 	| sed -e '0,/The following NEW packages will be installed/d;/^[^ ]/,$d' -e 's/\s/\n/g' | sed '/^$/d')
-$ROOTCMD apt-get --yes --mark-auto -u install build-essential linux-image-${arch} linux-headers-${arch}
+$ROOTCMD apt-get --yes --mark-auto -u install build-essential linux-image-"${arch}" linux-headers-"${arch}"
 
 # Remove all but the latest kernel (TODO: support passing in the desired
 # kernel version by configuration variable instead of using the latest):
