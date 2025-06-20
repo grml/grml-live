@@ -63,6 +63,7 @@ if [ -r /etc/grml/forensic.conf ] ; then
   READONLY_MODE=""
   READONLY_IGNORE=""
 
+  # shellcheck disable=SC1091
   . /etc/grml/forensic.conf
 
   if [ "${READONLY_MODE:-}" = "disable" ] ; then
