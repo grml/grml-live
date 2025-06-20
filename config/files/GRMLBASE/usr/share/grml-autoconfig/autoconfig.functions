@@ -103,11 +103,6 @@ checkvalue(){
   esac
 }
 
-# Are we using grml-small?
-checkgrmlsmall(){
-  grep -q small /etc/grml_version 2>>$DEBUG && return 0 || return 1
-}
-
 # if no password is set return a random password
 set_passwd() {
   [ -n "$PASSWD" ] && return 0
