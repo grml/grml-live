@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 # Filename:      restore-config
 # Purpose:       generate grml configuration archive and store it anywhere
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
@@ -7,11 +7,9 @@
 # Latest change: Son Mai 13 11:12:38 CEST 2007 [mika]
 ################################################################################
 
-# some zsh-stuff {{{
-  autoload colors ; colors
-  . /etc/grml/lsb-functions
-  . /etc/grml/script-functions
-# }}}
+# Source functions and load colors
+. /etc/grml/lsb-functions
+. /etc/grml/script-functions
 
 # set variables  {{{
   DEBUG=0
@@ -22,11 +20,9 @@
 
 # functions {{{
 debug(){
-  if [[ $DEBUG -gt 0 ]] ; then
+  if [ "$DEBUG" -gt 0 ] ; then
     echo "debug: $*"
   fi
-# setopt xtrace
-# set -x
 }
 
 bailout(){
@@ -39,13 +35,13 @@ trap bailout 1 2 3 15
 # usage information {{{
 usage()
 {
-  print 1>&2 "
-$bg[black]$fg[green]${boldcolor}${PROGRAMNAME} - restore configuration of grml system${reset_color}
+  cat >&2 <<EOF
+${GREEN}${PROGRAMNAME} - restore configuration of grml system${NORMAL}
 
-$bg[black]$fg[blue]${boldcolor}Usage:${reset_color}
+${BLUE}Usage:${NORMAL}
   $PROGRAMNAME [-target_options] <configuration_file>
 
-$bg[black]$fg[blue]${boldcolor}Target options:${reset_color}
+${BLUE}Target options:${NORMAL}
   -home                         extract hidden files from \$HOME (\$HOME/.*)
   -grmlhome                     store hidden files from \$HOME (\$HOME/.*) of user grml [use as user root]
   -etc                          extract modified files from /etc
@@ -56,7 +52,7 @@ $bg[black]$fg[blue]${boldcolor}Target options:${reset_color}
   Notice: it is also possible to use environment variables:
           \$RESTORE_HOME, \$RESTORE_ETC, \$RESTORE_CONFIGDIR and \$RESTORE_ALL
 
-$bg[black]$fg[blue]${boldcolor}Usage examples:${reset_color}
+${BLUE}Usage examples:${NORMAL}
   $PROGRAMNAME -home foo_bar_config.tbz  => restore configuration from file foo_bar_config.tbz
   $PROGRAMNAME config.tbz                => restore configuration from file config.tbz
 
@@ -67,7 +63,7 @@ See also: save-config(1), bootoptions: myconfig=/dev/ice, extract=PATH,
 
 Report bugs, send wishes and feedback to the grml team:
 http://grml.org/bugs/ - contact (at) grml.org
-"
+EOF
 }
 # }}}
 
@@ -75,27 +71,27 @@ http://grml.org/bugs/ - contact (at) grml.org
 # extract configuration file {{{
 restore_all(){
   echo "Trying to extract $FILENAME"
-  ( cd / && unp $FILENAME )
+  ( cd / && unp "$FILENAME" )
 }
 
 restore_home(){
   echo "Trying to extract $FILENAME in $HOME"
-  ( cd $HOME && unp $FILENAME -- -x $HOME )
+  ( cd "$HOME" && unp "$FILENAME" -- -x "$HOME" )
 }
 
 restore_grmlhome(){
   echo "Trying to extract $FILENAME in /home/grml"
-  ( cd /home/grml/ && unp $FILENAME -- -x /home/grml )
+  ( cd /home/grml/ && unp "$FILENAME" -- -x /home/grml )
 }
 
 restore_etc(){
   echo "Trying to extract $FILENAME in /etc"
-  ( cd /etc && unp $FILENAME -- -x /etc )
+  ( cd /etc && unp "$FILENAME" -- -x /etc )
 }
 
 restore_config(){
   echo "Trying to extract $FILENAME in $HOME/config"
-  ( cd $HOME && unp $FILENAME -- -x $HOME/config )
+  ( cd "$HOME" && unp "$FILENAME" -- -x "$HOME/config" )
 }
 # }}}
 
@@ -103,67 +99,71 @@ restore_config(){
 # commandline parsing {{{
 parse_options()
 {
-   zparseopts -K -- help=o_help file:=o_file home=o_home etc=o_etc \
-                    configdir=o_configdir all=o_all
-
-   if [[ "$#" == 0 || "$o_help" != "" || "$1" == '-h' || "$1" == '--help' ]]; then
+   if [ "$#" -eq 0 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
       usage ; exit
    fi
 
-   if [[ "$1" == "" ]]; then
-     echo "Error: No filename provided." ; exit 1
-   else
-     eval FILENAME=\${$#}
-     FILENAME=`readlink -f $FILENAME`
-   fi
+   while [ "$#" -gt 0 ]; do
+     case "$1" in
+       -h|--help)
+         usage ; exit ;;
+       -home)
+         echo "debug: home is set"
+         RESTORE_HOME="yes" ;;
+       -grmlhome)
+         echo "debug: grmlhome is set"
+         RESTORE_GRMLHOME="yes" ;;
+       -etc)
+         echo "debug: etc is set"
+         RESTORE_ETC="yes" ;;
+       -configdir)
+         echo "debug: configdir is set"
+         RESTORE_CONFIGDIR="yes" ;;
+       -*)
+         echo "Error: Unknown option: $1" >&2
+         exit 1 ;;
+       *)
+         if [ -z "$FILENAME" ]; then
+           FILENAME="$(readlink -f "$1")"
+         else
+           echo "Error: Multiple filenames provided." >&2
+           exit 1
+         fi ;;
+     esac
+     shift
+   done
 
-   if [[ "$o_home" != "" ]]; then
-      echo "debug: home is set"
-      RESTORE_HOME="yes"
+   if [ -z "$FILENAME" ]; then
+     echo "Error: No filename provided." >&2
+     exit 1
    fi
-
-   if [[ "$o_grmlhome" != "" ]]; then
-      echo "debug: grmlhome is set"
-      RESTORE_GRMLHOME="yes"
-   fi
-
-   if [[ "$o_etc" != "" ]]; then
-      echo "debug: etc is set"
-      RESTORE_ETC="yes"
-   fi
-
-   if [[ "$o_configdir" != "" ]]; then
-      echo "debug: configdir is set"
-      RESTORE_CONFIGDIR="yes"
-   fi
-
 }
-parse_options $*
+parse_options "$@"
 # }}}
 
 runit(){
-   if [[ $RESTORE_HOME == "yes" ]]; then
+   if [ "$RESTORE_HOME" = "yes" ]; then
      debug "running restore_home"
      restore_home
      RESTORE_SET=1
    fi
-   if [[ $RESTORE_GRMLHOME == "yes" ]]; then
+   if [ "$RESTORE_GRMLHOME" = "yes" ]; then
      debug "running restore_grmlhome"
      restore_grmlhome
      RESTORE_SET=1
    fi
-   if [[ $RESTORE_ETC == "yes" ]] ; then
+   if [ "$RESTORE_ETC" = "yes" ] ; then
      debug "running restore_etc"
      restore_etc
      RESTORE_SET=1
    fi
-   if [[ $RESTORE_CONFIGDIR == "yes" ]] ; then
+   if [ "$RESTORE_CONFIGDIR" = "yes" ] ; then
      debug "running restore_configdir"
      restore_config
      RESTORE_SET=1
    fi
    debug "FILENAME = $FILENAME"
-   if [ -z $RESTORE_SET ] ; then
+   if [ -z "$RESTORE_SET" ] ; then
      debug "running restore all"
      restore_all
    fi

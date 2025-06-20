@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 # Filename:      save-config
 # Purpose:       generate grml configuration archive and store it anywhere
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
@@ -6,17 +6,14 @@
 # License:       This file is licensed under the GPL v2.
 ################################################################################
 
-# some zsh-stuff {{{
-  autoload colors ; colors
-  setopt nonomatch
-  . /etc/grml/lsb-functions
-  . /etc/grml/script-functions
-# }}}
+# Source functions and load colors
+. /etc/grml/lsb-functions
+. /etc/grml/script-functions
 
 # set variables  {{{
   LANG=C
   LC_ALL=C
-  [[ $UID != 0 ]] && runas='sudo' # important for /etc
+  [ "$UID" != 0 ] && runas='sudo' # important for /etc
 
   if [ -d /run/live/overlay/rw ] ; then
     CHANGE_DIR='/run/live/overlay/rw'
@@ -33,30 +30,28 @@
   fi
 
   check4progs mutt &>/dev/null || echo "Warning, mutt not available for mail handling.">&2
-  check4progs tar || { echo "The tar program is required.">&2 ; bailout ; exit 1 }
+  check4progs tar || { echo "The tar program is required." >&2 ; bailout ; exit 1 ; }
 
   CONFIG=/etc/grml/saveconfig
-  [ -r "$CONFIG" ] && . $CONFIG
+  [ -r "$CONFIG" ] && . "$CONFIG"
 
   PROGRAMNAME=${0##*/}
   HOSTNAME=$(hostname)
   DATE=$(date)
-  GRML_VERSION=$(awk '{print $1}' /etc/grml_version 2>/dev/null || print "not a grml system")
+  GRML_VERSION=$(awk '{print $1}' /etc/grml_version 2>/dev/null || echo "not a grml system")
   KERNEL=$(uname -a)
 
   TMPDIR='/tmp'
   MAILFILE="${TMPDIR}/mail.txt"
 
-  [ -n "$FILELIST" ] || FILELIST=$(mktemp $TMPDIR/filelist.XXXXXX)
+  [ -n "$FILELIST" ] || FILELIST=$(mktemp "$TMPDIR/filelist.XXXXXX")
 # }}}
 
 # functions {{{
 debug(){
-  if [[ $DEBUG -gt 0 ]] ; then
+  if [ "$DEBUG" -gt 0 ] ; then
     echo "debug: $*"
   fi
-# setopt xtrace
-# set -x
 }
 
 bailout(){
@@ -80,13 +75,13 @@ findchanged() {
 # usage information {{{
 usage()
 {
-  print 1>&2 "
-$bg[black]$fg[green]${boldcolor}${PROGRAMNAME} - save configuration of grml system${reset_color}
+  cat >&2 <<EOF
+${GREEN}${PROGRAMNAME} - save configuration of grml system${NORMAL}
 
-$bg[black]$fg[blue]${boldcolor}Usage:${reset_color}
+${BLUE}Usage:${NORMAL}
   $PROGRAMNAME [-target_options] -{all,home,etc,configdir}
 
-$bg[black]$fg[blue]${boldcolor}Target options:${reset_color}
+${BLUE}Target options:${NORMAL}
   -ssh user@host:/path/to/file  copy configuration via ssh/scp to remote host
   -mail <recipient>             send configuration via mail
   -file foo_bar_config.tbz      save configuration in specified file
@@ -94,7 +89,7 @@ $bg[black]$fg[blue]${boldcolor}Target options:${reset_color}
   Notice: if no option is specified the default is assumed:
           create file config.tbz in current directory
 
-$bg[black]$fg[blue]${boldcolor}Files-to-store options:${reset_color}
+${BLUE}Files-to-store options:${NORMAL}
   -home                         store hidden files from \$HOME (\$HOME/.*)
   -grmlhome                     store hidden files from \$HOME (\$HOME/.*) of user grml [use as user root]
   -etc                          store modified files from /etc
@@ -104,7 +99,7 @@ $bg[black]$fg[blue]${boldcolor}Files-to-store options:${reset_color}
   Notice: it is also possible to use environment variables:
           \$SAVE_HOME, \$SAVE_GRMLHOME, \$SAVE_ETC, \$SAVE_CONFIGDIR and \$SAVE_ALL
 
-$bg[black]$fg[blue]${boldcolor}Usage examples:${reset_color}
+${BLUE}Usage examples:${NORMAL}
   $PROGRAMNAME -all                                  => store all configuration files in config.tbz in current dir
   $PROGRAMNAME -home -mail  devnull@grml.org         => store \$HOME/.* in config.tbz and send it via mail
   $PROGRAMNAME -etc  -ssh   devnull@grml.org:/path/  => store /etc in config.tbz and scp it to specified host
@@ -118,21 +113,21 @@ See also: restore-config(1), bootoptions: myconfig=/dev/ice, extract=PATH,
 
 Report bugs, send wishes and feedback to the grml team:
 http://grml.org/bugs/ - contact (at) grml.org
-"
+EOF
 }
 # }}}
 
 # what do we want to store? {{{
 save_home(){
   debug "save home"
-  for i in $HOME/.* ; do findchanged "$i" /etc/skel/$(basename "$i"); done >> $FILELIST
+  for i in "$HOME"/.* ; do findchanged "$i" "/etc/skel/$(basename "$i")"; done >> "$FILELIST"
   debug "debug: $FILELIST"
 }
 
 save_grmlhome(){
   debug "save grmlhome"
   if [ -d /home/grml/ ] ; then
-     for i in /home/grml/.* ; do findchanged "$i" /etc/skel/$(basename "$i"); done >> $FILELIST
+     for i in /home/grml/.* ; do findchanged "$i" "/etc/skel/$(basename "$i")"; done >> "$FILELIST"
   fi
   debug "debug: $FILELIST"
 }
@@ -140,17 +135,17 @@ save_grmlhome(){
 save_etc(){
   debug "save etc"
   if [ -n "$NEWLAYOUT" ] ; then
-     $runas find "${CHANGE_DIR}/etc" | sed -e "s#${CHANGE_DIR}## ; /etc$/d" >> $FILELIST
+     $runas find "${CHANGE_DIR}/etc" | sed -e "s#${CHANGE_DIR}## ; /etc$/d" >> "$FILELIST"
   else
-     $runas findchanged /etc "${ORIG_DIR}/etc" >> $FILELIST
+     $runas findchanged /etc "${ORIG_DIR}/etc" >> "$FILELIST"
   fi
 }
 
 save_configdir(){
   debug "save configdir"
-  if [ -d $HOME/config ] ; then
-     ls $HOME/config/*  >> $FILELIST 2>/dev/null
-     ls $HOME/config/.* >> $FILELIST 2>/dev/null
+  if [ -d "$HOME/config" ] ; then
+     ls "$HOME"/config/* >> "$FILELIST" 2>/dev/null
+     ls "$HOME"/config/.* >> "$FILELIST" 2>/dev/null
   fi
 }
 # }}}
@@ -178,87 +173,102 @@ create_config(){
 # commandline parsing {{{
 parse_options()
 {
-   zparseopts -K -- help=o_help mail:=o_mail \
-                    file:=o_file home=o_home grmlhome=o_grmlhome etc=o_etc \
-                    configdir=o_configdir all=o_all ssh:=o_ssh
-
-   if [[ "$#" == 0 || "$o_help" != "" || "$1" == '-h' || "$1" == '--help' ]]; then
+   if [ "$#" -eq 0 ]; then
       usage ; exit
    fi
 
-   if [[ "$o_file" != "" ]]; then
-     FILENAME="$o_file[2]"
-   else
-     FILENAME="config.tbz"
-   fi
+   FILENAME="config.tbz"  # default filename
 
-   if [[ "$o_home" != "" ]]; then
-      debug "home is set"
-      SAVE_HOME="yes"
-   fi
+   while [ "$#" -gt 0 ]; do
+     case "$1" in
+       -h|--help)
+         usage ; exit ;;
+       -file)
+         shift
+         if [ -z "$1" ]; then
+           echo "Error: -file requires an argument" >&2
+           exit 1
+         fi
+         FILENAME="$1" ;;
+       -home)
+         debug "home is set"
+         SAVE_HOME="yes" ;;
+       -grmlhome)
+         debug "grmlhome is set"
+         SAVE_GRMLHOME="yes" ;;
+       -etc)
+         debug "etc is set"
+         SAVE_ETC="yes" ;;
+       -configdir)
+         debug "configdir is set"
+         SAVE_CONFIGDIR="yes" ;;
+       -all)
+         debug "home, grmlhome, etc and configdir are set"
+         SAVE_HOME="yes"
+         SAVE_GRMLHOME="yes"
+         SAVE_ETC="yes"
+         SAVE_CONFIGDIR="yes" ;;
+       -ssh)
+         shift
+         if [ -z "$1" ]; then
+           echo "Error: -ssh requires an argument" >&2
+           exit 1
+         fi
+         SSH_TARGET="$1"
+         debug "scp $FILENAME $SSH_TARGET" ;;
+       -mail)
+         shift
+         if [ -z "$1" ]; then
+           echo "Error: -mail requires an argument" >&2
+           exit 1
+         fi
+         check4progs mutt || { echo "Sorry, mutt not available for sending mail. Exiting." >&2 ; exit 1 ; }
+         MAIL_RECIPIENT="$1"
+         debug "send mail to $MAIL_RECIPIENT" ;;
+       -*)
+         echo "Error: Unknown option: $1" >&2
+         exit 1 ;;
+       *)
+         echo "Error: Unexpected argument: $1" >&2
+         exit 1 ;;
+     esac
+     shift
+   done
 
-   if [[ "$o_grmlhome" != "" ]]; then
-      debug "grmlhome is set"
-      SAVE_GRMLHOME="yes"
+   # Handle SSH and mail after file creation
+   if [ -n "$SSH_TARGET" ]; then
+     DO_SSH="yes"
    fi
-
-   if [[ "$o_etc" != "" ]]; then
-      debug "etc is set"
-      SAVE_ETC="yes"
-   fi
-
-   if [[ "$o_configdir" != "" ]]; then
-      debug "configdir is set"
-      SAVE_CONFIGDIR="yes"
-   fi
-
-   if [[ "$o_all" != "" ]]; then
-      debug "home, grmlhome, etc and configdir are set"
-      SAVE_HOME="yes"
-      SAVE_GRMLHOME="yes"
-      SAVE_ETC="yes"
-      SAVE_CONFIGDIR="yes"
-   fi
-
-   if [[ "$o_ssh" != "" ]]; then
-      debug "scp $FILENAME $o_ssh[2]"
-      scp $FILENAME $o_ssh[2]
-   fi
-
-   if [[ "$o_mail" != "" ]]; then
-      check4progs mutt || { echo "Sorry, mutt not available for sending mail. Exiting.">&2 ; exit 1 }
-      recipient=$o_mail[2]
-      debug "send mail to $recipient"
-      echo "Created on $DATE on host $HOSTNAME running grml $GRML_VERSION" > $MAILFILE
-      mutt -s "configuration of $HOSTNAME ($DATE)" -a $FILENAME $recipient < $MAILFILE
+   if [ -n "$MAIL_RECIPIENT" ]; then
+     DO_MAIL="yes"
    fi
 }
-parse_options $*
+parse_options "$@"
 # }}}
 
 # execution wrapper {{{
 runit(){
-   if [[ $SAVE_HOME == "yes" ]]; then
+   if [ "$SAVE_HOME" = "yes" ]; then
      debug "running save_home"
      save_home
      SETSAVE=1
    fi
-   if [[ $SAVE_GRMLHOME == "yes" ]]; then
+   if [ "$SAVE_GRMLHOME" = "yes" ]; then
      debug "running save_grmlhome"
      save_grmlhome
      SETSAVE=1
    fi
-   if [[ $SAVE_ETC == "yes" ]] ; then
+   if [ "$SAVE_ETC" = "yes" ] ; then
      debug "running save_etc"
      save_etc
      SETSAVE=1
    fi
-   if [[ $SAVE_CONFIGDIR == "yes" ]] ; then
+   if [ "$SAVE_CONFIGDIR" = "yes" ] ; then
      debug "running save_configdir"
      save_configdir
      SETSAVE=1
    fi
-   if [ -z $SETSAVE ] ; then
+   if [ -z "$SETSAVE" ] ; then
      echo "Sorry, you did not select any configuration which should be saved. Exiting."
      bailout ; exit 1
    fi
@@ -268,6 +278,19 @@ runit(){
 # now run it
   runit
   create_config
+
+  # Handle SSH and mail after successful file creation
+  if [ "$DO_SSH" = "yes" ] && [ -n "$SSH_TARGET" ]; then
+    debug "scp $FILENAME $SSH_TARGET"
+    scp "$FILENAME" "$SSH_TARGET"
+  fi
+
+  if [ "$DO_MAIL" = "yes" ] && [ -n "$MAIL_RECIPIENT" ]; then
+    debug "send mail to $MAIL_RECIPIENT"
+    echo "Created on $DATE on host $HOSTNAME running grml $GRML_VERSION" > "$MAILFILE"
+    mutt -s "configuration of $HOSTNAME ($DATE)" -a "$FILENAME" "$MAIL_RECIPIENT" < "$MAILFILE"
+  fi
+
   bailout
 
 ## END OF FILE #################################################################
