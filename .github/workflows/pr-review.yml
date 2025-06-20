@@ -6,40 +6,6 @@ on:
   pull_request:
   push:
 jobs:
-  shellcheck-code:
-    name: shellcheck main code
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: shellcheck
-        uses: reviewdog/action-shellcheck@v1
-        with:
-          github_token: ${{ secrets.github_token }}
-          reporter: github-pr-review
-          path: "."
-          pattern: |
-            grml-live
-            scripts/*.sh
-            remaster/grml-live-remaster
-            config/hooks/*
-            config/scripts/*
-          check_all_files_with_shebangs: "false"
-
-  shellcheck-tests:
-    name: shellcheck test scripts
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: shellcheck
-        uses: reviewdog/action-shellcheck@v1
-        with:
-          github_token: ${{ secrets.github_token }}
-          reporter: github-pr-review
-          path: tests
-          pattern: |
-            *.sh
-          check_all_files_with_shebangs: "false"
-
   ruff-format-check:
     name: ruff format check
     runs-on: ubuntu-latest
@@ -52,3 +18,58 @@ jobs:
         run: pip install ruff
       - name: Check ruff formatting
         run: ruff format --line-length 120 --check usr/lib/grml-live/minifai usr/lib/grml-live/*.py usr/lib/grml-live/tests/*.py build-driver/*.py
+
+  shellcheck:
+    name: shellcheck all scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        run: |
+          echo "Running shellcheck on all shell scripts..."
+          FOUND_ISSUES=0
+
+          # Function to run shellcheck and capture results
+          run_shellcheck() {
+            local file="$1"
+            echo "=== Checking $file ==="
+
+            # Run shellcheck from the file's directory to ensure relative paths work
+            local dir=$(dirname "$file")
+            local basename=$(basename "$file")
+
+            if ! (cd "$dir" && shellcheck -x "$basename"); then
+              echo "❌ $file has issues"
+              FOUND_ISSUES=1
+            else
+              echo "✅ $file passed"
+            fi
+          }
+
+          # Check main scripts
+          for script in \
+            build-driver/build \
+            config/files/GRMLBASE/usr/bin/restore-config \
+            config/files/GRMLBASE/usr/bin/save-config \
+            config/files/GRMLBASE/usr/share/grml-autoconfig/autoconfig.functions \
+            config/files/GRMLBASE/usr/share/grml-autoconfig/grml-autoconfig \
+            debian/update-grml-live-version \
+            grml-live \
+            remaster/grml-live-remaster \
+            scripts/migrate-to-minifai; do
+              run_shellcheck "$script"
+          done
+
+          # Check other shell scripts
+          while read -r script; do
+            if head -1 "$script" | grep -q '^#!.*sh'; then
+              run_shellcheck "$script"
+            fi
+          done < <(find . -path ./.git -prune -o -type f -print)
+
+          if [ "$FOUND_ISSUES" = "0" ]; then
+            echo "Shellcheck analysis complete!"
+          else
+            echo "Shellcheck analysis complete, but found issues."
+            exit 1
+          fi
