@@ -910,27 +910,6 @@ if checkbootparam 'startx' && ! echo "$CMDLINE" | grep -q 'startx.*nostartx' ; t
    fi
    chvt 7
    return
-   cat>|/etc/init.d/startx<<EOF
-#!/bin/sh
-su "${localuser}" -c "/usr/bin/grml-x ${WINDOWMANAGER}"
-EOF
-   chmod 755 /etc/init.d/startx
-
-   # adjust inittab for startx
-   if grep -q '^6:' /etc/inittab ; then
-      sed -i --follow-symlinks 's|^6:.*|6:2345:respawn:/bin/zsh --login -c "/etc/init.d/startx ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>\&1 </dev/tty6|' /etc/inittab
-   else # just append tty6 to inittab if no definition is present:
-      echo '6:2345:respawn:/bin/zsh --login -c "/etc/init.d/startx ; /usr/share/grml-scripts/run-welcome" >/dev/tty6 2>&1 < /dev/tty6' >> /etc/inittab
-   fi
-
-   /sbin/telinit q ; eend $?
-
-   if grep -q '^allowed_users=' /etc/X11/Xwrapper.config ; then
-      sed -i --follow-symlinks 's/^allowed_users=.*/allowed_users=anybody/' /etc/X11/Xwrapper.config
-   else
-      echo 'allowed_users=anybody' >> /etc/X11/Xwrapper.config
-   fi
-
   else
     eerror "We are not running in live mode - startx will not work, skipping it."
     eerror " -> Please use something like xdm, gdm or kdm for starting X on a harddisk system!" ; eend 1
