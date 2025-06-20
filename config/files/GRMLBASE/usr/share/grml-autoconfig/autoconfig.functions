@@ -93,11 +93,6 @@ checkbootparam(){
   esac
 }
 
-# Check if currently using a framebuffer
-hasfb() {
-    [ -e /dev/fb0 ] && return 0 || return 1
-}
-
 # Check wheter a configuration variable (like $CONFIG_TOHD) is
 # enabled or not
 checkvalue(){
@@ -106,11 +101,6 @@ checkvalue(){
     [tT][rR][uU][eE]) return 0 ;; # it's set to 'true'
                    *) return 1 ;; # default
   esac
-}
-
-# Are we using grml-small?
-checkgrmlsmall(){
-  grep -q small /etc/grml_version 2>>$DEBUG && return 0 || return 1
 }
 
 # if no password is set return a random password
