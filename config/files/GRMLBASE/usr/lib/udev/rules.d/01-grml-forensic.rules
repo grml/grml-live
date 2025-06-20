@@ -1,0 +1,4 @@
+# mark new block devices as readonly when booting with bootoption forensic/readonly
+ACTION=="add",    SUBSYSTEM=="block",                    RUN+="/etc/udev/scripts/forensic-mark-readonly $name"
+# take care of devices when e.g. partition tables get re-read (see block/genhd.c + set_disk_ro() in linux source)
+ACTION=="change", SUBSYSTEM=="block", ENV{DISK_RO}=="0", RUN+="/etc/udev/scripts/forensic-mark-readonly $name"

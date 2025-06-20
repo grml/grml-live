@@ -1,0 +1,6 @@
+# should be part of the device-mapper rules
+# Watch the device node with inotify, when closed after being opened for
+# writing, a change uevent will be synthesised.
+
+KERNEL=="dm-*", OPTIONS+="watch"
+

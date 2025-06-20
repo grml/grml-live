@@ -24,7 +24,6 @@ grml-quickconfig
 grml-scripts
 grml-scripts-core
 grml-tips
-grml-udev-config
 hdparm
 hwinfo
 ifupdown

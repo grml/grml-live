@@ -1,0 +1,2 @@
+# Create device link for /media/usb-sd* stuff
+ACTION=="add", KERNEL=="sd[a-z]*", SUBSYSTEM=="block", SUBSYSTEMS=="usb", SYMLINK+="usb-%k", GROUP="users"
