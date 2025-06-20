@@ -47,8 +47,6 @@ checkvalue $CONFIG_LVM && config_lvm
 
 checkvalue $CONFIG_TESTCD && config_testcd
 
-checkvalue $CONFIG_BRLTTY && config_brltty
-
 checkvalue $CONFIG_FSTAB && config_fstab
 
 checkvalue $CONFIG_CPU && config_cpu

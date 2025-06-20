@@ -199,7 +199,7 @@ grml getfile.retries=$NUM             Retry the download of the files specified 
 Accessibility related settings:
 -------------------------------
 grml brltty=type,port,table           Parameters for Braille device (e.g.: brltty=al,/dev/ttyS0,text.de.tbl)
-                                      See http://mielke.cc/brltty/guidelines.html for documentation.
+                                      See https://brltty.app/guidelines.html for documentation.
 
 Hardware related settings:
 --------------------------
