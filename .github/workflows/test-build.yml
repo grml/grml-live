@@ -62,6 +62,7 @@ jobs:
         with:
           name: grml-live-build-result-initial-${{matrix.host_release}}
           if-no-files-found: error
+          retention-days: 15
           path: |
             results-initial/*
 
@@ -76,5 +77,77 @@ jobs:
         with:
           name: grml-live-build-result-repack-${{matrix.host_release}}
           if-no-files-found: error
+          retention-days: 15
           path: |
             results-build-only-second/*
+
+  comment-artifacts:
+    if: github.event_name == 'pull_request'
+    needs: [build-iso]
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Comment on PR with ISO artifact links
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Get all artifacts from this workflow run
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId,
+            });
+
+            // Filter to only ISO artifacts
+            const isoArtifacts = artifacts.data.artifacts.filter(a =>
+              a.name.startsWith('grml-live-build-result-')
+            );
+
+            if (isoArtifacts.length === 0) {
+              return; // No ISO artifacts to comment about
+            }
+
+            // Build comment content
+            let comment = `## 💿 ISO Build Results\n\n`;
+            comment += `The following ISO build artifacts are available from this PR:\n\n`;
+
+            for (const artifact of isoArtifacts) {
+              const downloadUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/artifacts/${artifact.id}`;
+              comment += `- [${artifact.name}.zip](${downloadUrl}) (${(artifact.size_in_bytes / 1024 / 1024).toFixed(2)} MB)\n`;
+            }
+
+            comment += `\n> **Note:** Downloads are ZIP files containing the ISO images. You need to be logged into GitHub to download. Artifacts are available for 15 days.\n`;
+            comment += `> \n`;
+            comment += `> **Build Information:**\n`;
+            comment += `> - Workflow Run: [${context.runId}](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})\n`;
+            comment += `> - Commit: ${context.sha.substring(0, 7)}\n`;
+
+            // Check if comment already exists
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const botComment = comments.data.find(comment =>
+              comment.user.type === 'Bot' && comment.body.includes('💿 ISO Build Results')
+            );
+
+            if (botComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: comment
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment
+              });
+            }
