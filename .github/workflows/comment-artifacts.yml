@@ -1,0 +1,110 @@
+name: comment-artifacts
+
+on:
+  workflow_run:
+    workflows: ["test-build"]
+    types: [completed]
+
+jobs:
+  comment-pr:
+    if: github.event.workflow_run.event == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Get PR number from workflow run
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Get the workflow run that triggered this
+            const workflowRun = context.payload.workflow_run;
+
+            // Get pull requests associated with the head SHA
+            const prs = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: workflowRun.head_sha,
+            });
+
+            if (prs.data.length === 0) {
+              console.log('No PR found for commit', workflowRun.head_sha);
+              return;
+            }
+
+            // Use the first PR (should be the one that triggered the workflow)
+            const pr = prs.data[0];
+            console.log('Found PR:', pr.number);
+            core.setOutput('number', pr.number);
+            core.setOutput('found', 'true');
+
+      - name: Comment on PR with ISO artifact links
+        if: steps.pr.outputs.found == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = ${{ steps.pr.outputs.number }};
+            const workflowRunId = context.payload.workflow_run.id;
+
+            // Get all artifacts from the triggering workflow run
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: workflowRunId,
+            });
+
+            // Filter to only ISO artifacts
+            const isoArtifacts = artifacts.data.artifacts.filter(a =>
+              a.name.startsWith('grml-live-build-result-')
+            );
+
+            if (isoArtifacts.length === 0) {
+              console.log('No ISO artifacts found');
+              return;
+            }
+
+            // Build comment content
+            let comment = `## 💿 ISO Build Results\n\n`;
+            comment += `The following ISO build artifacts are available from this PR:\n\n`;
+
+            for (const artifact of isoArtifacts) {
+              const downloadUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${workflowRunId}/artifacts/${artifact.id}`;
+              comment += `- [${artifact.name}.zip](${downloadUrl}) (${(artifact.size_in_bytes / 1024 / 1024).toFixed(2)} MB)\n`;
+            }
+
+            comment += `\n> **Note:** Downloads are ZIP files containing the ISO images. You need to be logged into GitHub to download. Artifacts are available for 15 days.\n`;
+            comment += `> \n`;
+            comment += `> **Build Information:**\n`;
+            comment += `> - Workflow Run: [${workflowRunId}](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${workflowRunId})\n`;
+            comment += `> - Commit: ${context.payload.workflow_run.head_sha.substring(0, 7)}\n`;
+
+            // Check if comment already exists
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+            });
+
+            const botComment = comments.data.find(comment =>
+              comment.user.type === 'Bot' && comment.body.includes('💿 ISO Build Results')
+            );
+
+            if (botComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: comment
+              });
+              console.log('Updated existing comment');
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: comment
+              });
+              console.log('Created new comment');
+            }
