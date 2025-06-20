@@ -10,5 +10,5 @@ if [ $# -ne 0 ] ; then
 fi
 
 version=$(dpkg-parsechangelog | awk '/^Version:/ {print $2}')
-sed -i 's/^\(GRML_LIVE_VERSION=.\).*\(.\)\s*$/\1'$version'\2/' grml-live
+sed -i 's/^\(GRML_LIVE_VERSION=.\).*\(.\)\s*$/\1'"$version"'\2/' grml-live
 
