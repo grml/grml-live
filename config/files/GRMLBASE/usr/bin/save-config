@@ -6,9 +6,11 @@
 # License:       This file is licensed under the GPL v2.
 ################################################################################
 
-# Source functions and load colors
-. /etc/grml/lsb-functions
-. /etc/grml/script-functions
+# shellcheck source=/dev/null
+{
+  . /etc/grml/lsb-functions
+  . /etc/grml/script-functions
+}
 
 # set variables  {{{
   DEBUG=0
@@ -40,7 +42,6 @@
   HOSTNAME=$(hostname)
   DATE=$(date)
   GRML_VERSION=$(awk '{print $1}' /etc/grml_version 2>/dev/null || echo "not a grml system")
-  KERNEL=$(uname -a)
 
   TMPDIR='/tmp'
   MAILFILE="${TMPDIR}/mail.txt"
@@ -64,7 +65,7 @@ trap bailout 1 2 3 15
 
 findchanged() {
   if [ -d "$1" ]; then
-    for i in `(cd "$1"; find . -type f 2>/dev/null | sed 's,^\./,,g' | grep -v ' ' )`; do
+    for i in $(cd "$1" || exit 1; find . -type f 2>/dev/null | sed 's,^\./,,g' | grep -v ' ' ); do
       cmp -s "$1/$i" "$2/$i" || echo "$1/$i"
     done
   elif [ -e "$1" ]; then

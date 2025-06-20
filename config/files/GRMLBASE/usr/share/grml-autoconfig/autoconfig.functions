@@ -15,7 +15,7 @@ umask 022
 [ -d /run/live/medium ] && export LIVECD_PATH='/run/live/medium'
 
 # Ignore these signals in non-interactive mode: INT, TERM, SEGV
-[ -z "$PS1" ] && trap "" 2 3 11
+[ -z "$PS1" ] && trap "" INT TERM SEGV
 
 service_wrapper() {
   if [ "$#" -lt 2 ] ; then
@@ -35,7 +35,7 @@ if [ -z "$CMDLINE" ]; then
   # if CMDLINE was set from the outside, we're debugging.
   # otherwise, take CMDLINE from Kernel and config files.
   CMDLINE="$(< /proc/cmdline)"
-  [ -d ${LIVECD_PATH}/bootparams/ ] && CMDLINE="$CMDLINE $(cat ${LIVECD_PATH}/bootparams/* | tr '\n' ' ')"
+  [ -d "${LIVECD_PATH}/bootparams/" ] && CMDLINE="$CMDLINE $(cat "${LIVECD_PATH}"/bootparams/* | tr '\n' ' ')"
   TAG="grml-parameters"
   if grep -q "$TAG" /sys/bus/virtio/devices/*/mount_tag 2>/dev/null ; then
     MOUNTDIR="$(mktemp -d)"
@@ -58,8 +58,8 @@ getbootparam(){
   line=" $CMDLINE "
   case "$line" in
     *[${ws}]"$1="*)
-      result="${line##*[$ws]$1=}"
-      result="${result%%[$ws]*}"
+      result="${line##*["$ws"]"$1"=}"
+      result="${result%%["$ws"]*}"
       echo "$result"
       return 0 ;;
     *) # no match?
@@ -130,6 +130,7 @@ _detect_virtual() {
     # imvirt is slow. do not use it, if virt-what already found the hypervisor.
     local imvirt_result
     imvirt_result=$(imvirt 2>/dev/null)
+    # shellcheck disable=SC2034  # VMWARE and KVM variables may be used externally
     case "$imvirt_result" in
       *VMware*) VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware' ;;
       "KVM") VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM' ;;
@@ -142,9 +143,11 @@ _detect_virtual
 
 # {{{ source lsb-functions , color handling
 if checkbootparam 'nocolor'; then
+  # shellcheck disable=SC1091
   . /etc/grml/lsb-functions
   einfo "Disabling colors in bootsequence as requested on commandline." ; eend 0
 else
+  # shellcheck disable=SC1091
   . /etc/grml/lsb-functions
 fi
 # }}}
@@ -152,7 +155,8 @@ fi
 # {{{ log
 config_log(){
 if checkbootparam 'log' || checkbootparam 'debug' ; then
-   export DEBUG="/tmp/grml.log.`date +%Y%m%d`"
+   DEBUG="/tmp/grml.log.$(date +%Y%m%d)"
+   export DEBUG
    touch "${DEBUG}"
    einfo "Bootparameter log found, debug log file from grml-autoconfig available at '${DEBUG}'"
 else
@@ -202,7 +206,7 @@ config_hostname(){
   fi
 
   einfo "Setting hostname to $HOSTNAME as requested."
-  grml-hostname $HOSTNAME >>$DEBUG
+  grml-hostname "$HOSTNAME" >>"$DEBUG"
   eend $?
 }
 # }}}
@@ -217,7 +221,7 @@ config_userfstab(){
 
   # 1st. try configured fstab user
   if [ -n "$CONFIG_FSTAB_USER" ] ; then
-     fstabuser=$(getent passwd $CONFIG_FSTAB_USER | cut -d: -f1)
+     fstabuser=$(getent passwd "$CONFIG_FSTAB_USER" | cut -d: -f1)
   fi
 
   # 2nd. use standard user id
@@ -257,7 +261,7 @@ config_kernel(){
   fi
 
   if [ -r /proc/cpuinfo ] ; then
-    if egrep -q '^flags.*(vmx|svm)' /proc/cpuinfo ; then
+    if grep -E -q '^flags.*(vmx|svm)' /proc/cpuinfo ; then
       eindent
       einfo 'CPU(s) featuring virtualization technology detected' ; eend 0
       eoutdent
@@ -335,13 +339,13 @@ if checkbootparam 'testcd' ; then
 
   rm -f "$logfile"
 
-  for md5 in $(find "${LIVECD_PATH}" -name md5sums) ; do
+  find "${LIVECD_PATH}" -name md5sums -print0 | while IFS= read -r -d '' md5 ; do
     einfo "Checking files against $md5, this may take a while..."
 
     FOUND_FILE=true
     OLD_PWD=$(pwd)
-    cd $(dirname "$md5")
-    md5sum -c $(basename "$md5") 2>&1 | tee -a "${logfile}"
+    cd "$(dirname "$md5")" || continue
+    md5sum -c "$(basename "$md5")" 2>&1 | tee -a "${logfile}"
     if [ "${PIPESTATUS[0]}" -eq 0 ] ; then
       ERROR=false
     fi
@@ -1071,10 +1075,10 @@ fi
 config_scripts(){
 if checkbootparam 'scripts' || [ "$DCSMP" = "/mnt/grmlcfg" ]; then
    SCRIPTS="$(getbootparam 'scripts' 2>>$DEBUG)"
-   if [ -d ${DCSDIR}/scripts ] && [ -z "$SCRIPTS" ]; then
-     SCRIPTS="$(cd ${DCSDIR}/scripts; /bin/ls -1d [Gg][Rr][Mm][Ll].[Ss][Hh] 2>>$DEBUG)"
+   if [ -d "${DCSDIR}/scripts" ] && [ -z "$SCRIPTS" ]; then
+     SCRIPTS="$(cd "${DCSDIR}/scripts" || exit; /bin/ls -1d [Gg][Rr][Mm][Ll].[Ss][Hh] 2>>"$DEBUG")"
    fi
-   if ! echo $SCRIPTS | grep -q '/'; then
+   if ! echo "$SCRIPTS" | grep -q '/'; then
      # backwards compatibility: if no path is given get scripts from scripts/
      SCRIPTS="scripts/$SCRIPTS"
    fi
@@ -1082,15 +1086,15 @@ if checkbootparam 'scripts' || [ "$DCSMP" = "/mnt/grmlcfg" ]; then
      SCRIPTS="${DCSDIR}/$SCRIPTS"
      if [ "$DCSMP" = "/mnt/grmlcfg" ]; then
        einfo "Trying to execute ${SCRIPTS}"
-       sh -c $SCRIPTS
+       sh -c "$SCRIPTS"
        eend $?
      elif [ -d "$SCRIPTS" ]; then
        einfo "Bootparameter scripts found. Trying to execute from directory ${SCRIPTS}:"
-       run-parts --regex '.*' $SCRIPTS
+       run-parts --regex '.*' "$SCRIPTS"
        eend $?
      else
        einfo "Bootparameter scripts found. Trying to execute ${SCRIPTS}:"
-       sh -c $SCRIPTS
+       sh -c "$SCRIPTS"
        eend $?
      fi
    fi
@@ -1101,18 +1105,19 @@ config_config(){
 if checkbootparam 'config' || [ "$DCSMP" = "/mnt/grmlcfg" ]; then
   CONFIG="$(getbootparam 'config' 2>>$DEBUG)"
   if [ -z "$CONFIG" ]; then
-    CONFIG="$(cd ${DCSDIR}; ls -1d [Cc][Oo][Nn][Ff][Ii][Gg].[Tt][Bb][Zz] 2>>$DEBUG)"
+    CONFIG="$(cd "${DCSDIR}" || exit; ls -1d [Cc][Oo][Nn][Ff][Ii][Gg].[Tt][Bb][Zz] 2>>"$DEBUG")"
   fi
   if [ -n "$CONFIG" ]; then
     if [ -d "${DCSDIR}/${CONFIG}" ] ; then
       einfo "Taking configuration from directory ${DCSDIR}/${CONFIG}"
 
-      cp -a ${DCSDIR}/${CONFIG}/* /
+      cp -a "${DCSDIR}/${CONFIG}"/* /
     elif [ -f "${DCSDIR}/${CONFIG}" ]; then
       einfo "Extracting configuration from file ${DCSDIR}/${CONFIG}"
 
       cd /
-      unp ${DCSDIR}/${CONFIG} $EXTRACTOPTIONS ; eend $?
+      # shellcheck disable=SC2086
+      unp "${DCSDIR}/${CONFIG}" $EXTRACTOPTIONS ; eend $?
     else
       ewarn "Sorry, could not find configuration file or directory ${DCSDIR}/${FILENAME}." ; eend 1
     fi
@@ -1137,7 +1142,7 @@ if checkbootparam 'mypath' ; then
    chmod 644 /etc/grml/my_path
    # make sure the directories exist:
    eindent
-   for i in $(echo $MY_PATH | sed 's/:/\n/g') ; do
+   for i in $(echo "$MY_PATH" | sed 's/:/\n/g') ; do
        if ! [ -d "$i" ] ; then
           einfo "Creating directory $i"
           mkdir -p "$i" ; eend $?
@@ -1310,14 +1315,15 @@ config_virtualbox_shared_folders() {
         vbautomation="$(getbootparam 'vbautomation' 2>>$DEBUG)"
       fi
 
-      if ! VBoxControl sharedfolder list | egrep -q "^[0-9]+ - ${vbautomation}(\s+|$)" ; then
+      if ! VBoxControl sharedfolder list | grep -E -q "^[0-9]+ - ${vbautomation}(\s+|$)" ; then
         ewarn "No automount shared folder '$vbautomation' available"
         eend 0
       else
         einfo "Found automount shared folder '$vbautomation'"
         eend 0
 
-        local distri="$(getbootparam 'distri' 2>>$DEBUG)"
+        local distri
+        distri="$(getbootparam 'distri' 2>>"$DEBUG")"
         [ -n "$distri" ] || distri='grml'
 
         local vbox_auto_sf="/media/sf_${vbautomation}"
@@ -1427,7 +1433,8 @@ config_easteregg() {
 
   local birthday=1694822400            # := 2023-09-16 -> TZ=UTC date -d "2023-09-16" +%s
   local one_month=$((24*30*3600))
-  local current_time=$(date +%s)
+  local current_time
+  current_time=$(date +%s)
   local time_diff=$(( current_time > birthday ? current_time - birthday : birthday - current_time ))
 
   # show easter egg if within a month of birthday

@@ -20,6 +20,7 @@ trap "" INT TERM SEGV
 source /etc/grml/autoconfig            # configuration file
 # shellcheck source=autoconfig.functions
 source /usr/share/grml-autoconfig/autoconfig.functions  # functions
+# shellcheck disable=SC1091
 source /etc/grml/lsb-functions         # helper functions for smart display
 # }}}
 
@@ -30,75 +31,75 @@ if checkbootparam 'forensic' ; then
    ewarn " Do *NOT* boot with something like 'grml forensic ...' but always use 'forensic ...' instead!" ; eend 0
 fi
 
-checkvalue $CONFIG_LANGUAGE && config_language
+checkvalue "$CONFIG_LANGUAGE" && config_language
 
-checkvalue $CONFIG_LOG && config_log
+checkvalue "$CONFIG_LOG" && config_log
 
-checkvalue $CONFIG_HOSTNAME && config_hostname
+checkvalue "$CONFIG_HOSTNAME" && config_hostname
 
-checkvalue $CONFIG_KERNEL && config_kernel
+checkvalue "$CONFIG_KERNEL" && config_kernel
 
-checkvalue $CONFIG_SECUREBOOT && config_secureboot
+checkvalue "$CONFIG_SECUREBOOT" && config_secureboot
 
-checkvalue $CONFIG_TIMEZONE && config_timezone
+checkvalue "$CONFIG_TIMEZONE" && config_timezone
 
-checkvalue $CONFIG_SWRAID && config_swraid
+checkvalue "$CONFIG_SWRAID" && config_swraid
 
-checkvalue $CONFIG_LVM && config_lvm
+checkvalue "$CONFIG_LVM" && config_lvm
 
-checkvalue $CONFIG_TESTCD && config_testcd
+checkvalue "$CONFIG_TESTCD" && config_testcd
 
-checkvalue $CONFIG_FSTAB && config_fstab
+checkvalue "$CONFIG_FSTAB" && config_fstab
 
-checkvalue $CONFIG_CPU && config_cpu
+checkvalue "$CONFIG_CPU" && config_cpu
 
-checkvalue $CONFIG_SSH && config_ssh
+checkvalue "$CONFIG_SSH" && config_ssh
 
-checkvalue $CONFIG_VNC && config_vnc
+checkvalue "$CONFIG_VNC" && config_vnc
 
-checkvalue $CONFIG_PASSWD && config_passwd
+checkvalue "$CONFIG_PASSWD" && config_passwd
 
-checkvalue $CONFIG_EXTRACT  && config_extract
+checkvalue "$CONFIG_EXTRACT " && config_extract
 
-checkvalue $CONFIG_FINDDCSDIR && config_finddcsdir
+checkvalue "$CONFIG_FINDDCSDIR" && config_finddcsdir
 
-checkvalue $CONFIG_DEBS && config_debs
+checkvalue "$CONFIG_DEBS" && config_debs
 
-checkvalue $CONFIG_CONFIG && config_config
+checkvalue "$CONFIG_CONFIG" && config_config
 
-checkvalue $CONFIG_SCRIPTS && config_scripts
+checkvalue "$CONFIG_SCRIPTS" && config_scripts
 
-checkvalue $CONFIG_FINDDCSDIR && config_umount_dcsdir
+checkvalue "$CONFIG_FINDDCSDIR" && config_umount_dcsdir
 
-checkvalue $CONFIG_PARTCONF && config_partconf
+checkvalue "$CONFIG_PARTCONF" && config_partconf
 
-checkvalue $CONFIG_MIXER && config_mixer
+checkvalue "$CONFIG_MIXER" && config_mixer
 
-checkvalue $CONFIG_GPM && config_gpm
+checkvalue "$CONFIG_GPM" && config_gpm
 
-checkvalue $CONFIG_SERVICES && config_services
+checkvalue "$CONFIG_SERVICES" && config_services
 
-checkvalue $CONFIG_DEBNET && config_debnet
+checkvalue "$CONFIG_DEBNET" && config_debnet
 
-checkvalue $CONFIG_DISPLAY_SSH_FINGERPRINTS && config_display_ssh_fingerprints
+checkvalue "$CONFIG_DISPLAY_SSH_FINGERPRINTS" && config_display_ssh_fingerprints
 
-checkvalue $CONFIG_NETCONFIG && config_netconfig
+checkvalue "$CONFIG_NETCONFIG" && config_netconfig
 
-checkvalue $CONFIG_NETSCRIPT && config_netscript
+checkvalue "$CONFIG_NETSCRIPT" && config_netscript
 
-checkvalue $CONFIG_VIRTUALBOX_SHARED_FOLDERS && config_virtualbox_shared_folders
+checkvalue "$CONFIG_VIRTUALBOX_SHARED_FOLDERS" && config_virtualbox_shared_folders
 
-checkvalue $CONFIG_VIRTUALBOX_SETUP && config_virtualbox_setup
+checkvalue "$CONFIG_VIRTUALBOX_SETUP" && config_virtualbox_setup
 
-checkvalue $CONFIG_MYPATH && config_mypath
+checkvalue "$CONFIG_MYPATH" && config_mypath
 
-checkvalue $CONFIG_DISTRI && config_distri
+checkvalue "$CONFIG_DISTRI" && config_distri
 
-checkvalue $CONFIG_BLANKING && config_blanking
+checkvalue "$CONFIG_BLANKING" && config_blanking
 
-checkvalue $CONFIG_XSTARTUP && config_x_startup
+checkvalue "$CONFIG_XSTARTUP" && config_x_startup
 
-checkvalue $CONFIG_EASTEREGG && config_easteregg
+checkvalue "$CONFIG_EASTEREGG" && config_easteregg
 # }}}
 
 # {{{ Re-enable signals
