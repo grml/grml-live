@@ -8,7 +8,6 @@
 
 # source generic screenrc
   source /etc/grml/screenrc
-# source /etc/grml/screenrc_acpi
 
 # set status lines
    caption always "%{+b bk}$USER@%{wk}%H | %{yk}(load: %l |%{rk} cpu: %1` | %{Gk}net: %2`)  %-21=%{wk}%D %d.%m.%Y %0c"
