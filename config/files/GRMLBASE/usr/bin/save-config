@@ -11,6 +11,7 @@
 . /etc/grml/script-functions
 
 # set variables  {{{
+  DEBUG=0
   LANG=C
   LC_ALL=C
   [ "$UID" != 0 ] && runas='sudo' # important for /etc
