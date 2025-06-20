@@ -15,7 +15,6 @@ target=${target:?}
 fcopy -m root,root,0755 -v /etc/dhcp/dhclient-exit-hooks.d/grml-sethostname
 fcopy -M -v /etc/grml/autoconfig.local
 fcopy -M -v /etc/grml/autoconfig
-fcopy -M -v /etc/grml/modules
 fcopy -M -v /etc/grml/partconf
 
 fcopy -M -v /usr/lib/modules-load.d/grml-autoconfig.conf
