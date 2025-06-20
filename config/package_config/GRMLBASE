@@ -15,7 +15,6 @@ gpm
 grml2usb
 grml-crypt
 grml-debootstrap
-grml-etc
 grml-etc-core
 grml-hwinfo
 grml-keyring

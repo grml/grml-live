@@ -1,0 +1,103 @@
+# Filename:      $HOME/.lftprc
+# Purpose:       configuration file for lftp
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+# Latest change: Sam Nov 25 21:26:40 CET 2006 [mika]
+################################################################################
+
+## use specific timezone for time in listings returned by LIST command
+# set ftp:timezone Europe/Berlin
+
+## the prompt
+set cmd:prompt "\[\e[1;30m\][\[\e[0;34m\]\[\e[1m\]\[\e[37m\]\s \v\[\e[1;30m\]] \[\e[1;34m\]\u\[\e[00m\]\@\h\[\e[1;30m\]\[\e[00m\] \w %\[\e[0m\] "
+# set prompt "lftp \S\? \u\@\h:\w> "
+
+## define colors
+set color:dir-colors "no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jpg=01;35:*.gif=01;35:*.bmp=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.png=01;35:*.mpg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:"
+
+## request ssl connection for data transfer between two ftp servers in FXP mode
+set ftp:ssl-protect-fxp on
+
+## some useful aliases
+alias .. cd ..
+alias ... cd ../..
+alias .... cd ../../..
+alias l dir
+alias reconnect "close; cache flush; cd ."
+
+## default protocol selection
+set cmd:default-protocol/ftp.*     ftp
+set cmd:default-protocol/www.*     http
+set cmd:default-protocol/localhost file
+
+## use remote-completion
+set cmd:remote-completion on
+
+## minimal time between reconnects
+set net:reconnect-interval-base 60
+## maximum reconnect interval
+set net:reconnect-interval-max 60
+
+## get commands will not overwrite existing files and generate an error instead
+set xfer:clobber off
+
+## do not send plain text password over the network, use skey/opie instead
+# set ftp:skey-force on
+
+## refuse to send password in clear when server does not support SSL
+# set ftp:ssl-force on
+
+## if default ftp passive mode does not work, try this:
+# set ftp:passive-mode off
+
+## Set this to follow http redirections
+# set xfer:max-redirections 10
+
+## Terminal strings to set titlebars for terminals that don't
+## properly specify tsl and fsl capabilities.
+## Use cmd:set-term-status to enable this.
+# set cmd:term-status/*screen* "\e_\T\e\\"
+# set cmd:term-status/*xterm* "\e[11;0]\e]2;\T\007\e[11]"
+# set cmd:term-status/*rxvt* "\e[11;0]\e]2;\T\007\e[11]"
+# set cmd:set-term-status on
+
+## If you don't like advertising lftp or servers hate it, set this:
+# set ftp:anon-pass "mozilla@"
+# set http:user-agent "Mozilla/4.7 [en] (WinNT; I)"
+
+## this makes lftp faster but doesn't work with some sites/routers
+# set ftp:sync-mode off
+
+## synchronous mode for broken servers and/or routers
+# set ftp:rest-stor off
+# set ftp:sync-mode/ftp.idsoftware.com on
+# set ftp:sync-mode/ftp.microsoft.com on
+# set ftp:sync-mode/sunsolve.sun.com on
+
+## extended regex to match first server message for automatic sync-mode.
+# set auto-sync-mode "icrosoft FTP Service|MadGoat"
+
+# try inet6 before inet
+# set dns:order "inet6 inet"
+
+## Proxy setup
+# set ftp:proxy ftp://[user:pass@]ftp_proxy:port
+# set ftp:proxy http://squidproxy:port
+## no proxy for host
+# set ftp:proxy/local_host ""
+## or domain
+# set ftp:proxy/*.domain.com ...
+## net:no-proxy disables proxy usage for list of domains.
+# set net:no-proxy .domain.com,.otherdom.net
+
+## This can be used for automatic saving of configuration
+# set at-exit "set > ~/.lftp/settings"
+# source ~/.lftp/settings
+
+## and this is for remembering last site
+## (combine with previous rule if you want)
+# set at-exit "bo a last"
+# open last
+
+## END OF FILE #################################################################
