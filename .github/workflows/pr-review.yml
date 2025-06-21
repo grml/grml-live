@@ -39,3 +39,16 @@ jobs:
           pattern: |
             *.sh
           check_all_files_with_shebangs: "false"
+
+  ruff-format-check:
+    name: ruff format check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install ruff
+        run: pip install ruff
+      - name: Check ruff formatting
+        run: ruff format --line-length 120 --check usr/lib/grml-live/minifai

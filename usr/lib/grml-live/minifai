@@ -313,7 +313,7 @@ def do_fcopy_recursive(files_dir: Path, chroot_dir: Path, classes: list[str], pa
             tree[file] = class_name
 
     for path, class_name in tree.items():
-        do_fcopy_file(files_dir / class_name/ path, chroot_dir, path, mode)
+        do_fcopy_file(files_dir / class_name / path, chroot_dir, path, mode)
 
 
 def parse_fcopy_args(fcopy_args: list[str]) -> tuple[str, str, int, bool, bool, list[str]]:
@@ -653,7 +653,9 @@ def task_updatebase(chroot_dir: Path, dynamic_state: DynamicState):
     run_chrooted(chroot_dir, ["apt-get", "update", "-q"])
 
 
-def _run_tasks(conf_dir: Path, chroot_dir: Path, classes: list[str], grml_live_config: Path, fai_action: str, skip_tasks: list[str]) -> int:
+def _run_tasks(
+    conf_dir: Path, chroot_dir: Path, classes: list[str], grml_live_config: Path, fai_action: str, skip_tasks: list[str]
+) -> int:
     dynamic_state = DynamicState()
     logdir = create_logdir(chroot_dir)
 
@@ -688,9 +690,12 @@ def create_argparser() -> argparse.ArgumentParser:
     # path to fai classes, scripts, ...
     parser.add_argument("config", type=Path)
     parser.add_argument("classes")
-    parser.add_argument("action", choices=[value.value for value in FaiAction.__members__.values()],
+    parser.add_argument(
+        "action",
+        choices=[value.value for value in FaiAction.__members__.values()],
         metavar="ACTION",
-        help="FAI action to execute (choices: %(choices)s)")
+        help="FAI action to execute (choices: %(choices)s)",
+    )
     parser.add_argument("chroot_dir", type=Path)
     parser.add_argument("grml_live_config", type=Path)
     parser.add_argument("debian_suite", type=str)
@@ -724,7 +729,9 @@ def main(program_name: str, argv: list[str]) -> int:
         elif args.action == FaiAction.SOFTUPDATE:
             rc = _run_tasks(conf_dir, chroot_dir, classes, args.grml_live_config, args.action, [])
         elif args.action == FaiAction.RECONFIGURE:
-            rc = _run_tasks(conf_dir, chroot_dir, classes, args.grml_live_config, args.action, ["updatebase", "instsoft"])
+            rc = _run_tasks(
+                conf_dir, chroot_dir, classes, args.grml_live_config, args.action, ["updatebase", "instsoft"]
+            )
         else:
             print(f"E: minifai: Unknown fai action: {args.action!r}")
             rc = 1
