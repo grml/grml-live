@@ -21,6 +21,9 @@ from pathlib import Path
 from threading import Event, Thread
 
 
+APT_DEBUG_ACQUIRE = "Debug::Acquire::http=true"
+
+
 class FaiScriptFailed(Exception):
     pass
 
@@ -153,7 +156,7 @@ def chrooted_apt_install(chroot_dir: Path, install_list: list[str]):
     }
     command = ["apt", "install", "-q", "-y", "--no-install-recommends"]
     if os.environ.get("GRML_LIVE_DEBUG_APT", "") != "":
-        command.insert(1, "-oDebug::Acquire::http=true")
+        command.insert(1, f"-o{APT_DEBUG_ACQUIRE}")
     command += install_list
     run_chrooted(
         chroot_dir,
@@ -635,6 +638,11 @@ def install_base(conf_dir: Path, chroot_dir: Path, classes, debian_suite: str, m
         chroot_dir,
         mirror_url,
     ]
+
+    if os.environ.get("GRML_LIVE_DEBUG_APT", "") != "":
+        args.insert(1, f"--aptopt={APT_DEBUG_ACQUIRE}")
+        args.insert(1, "--chrooted-customize-hook=rm /etc/apt/apt.conf.d/99mmdebstrap")
+
     run_x(args)
     # Mark most leaf packages as automatically installed, so autoremove could remove them if possible.
     run_chrooted(chroot_dir, ["apt-mark", "auto", "~i ?not(~prequired) ?not(~pimportant) ?not(~pstandard)"])
