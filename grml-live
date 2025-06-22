@@ -1282,6 +1282,13 @@ if [ -n "$CHROOT_INSTALL" ] ; then
   fi
 fi
 
+# The dynamic linker auxiliary cache is not reproducible and is always
+# invalid at boot (see Debian bug #845034). Unfortunately this must be
+# done from outside the chroot, as *any* program invocation inside will
+# recreate the file.
+rm -f "$CHROOT_OUTPUT"/var/cache/ldconfig/aux-cache
+rmdir --ignore-fail-on-non-empty "$CHROOT_OUTPUT"/var/cache/ldconfig
+
 if [ -f "$BUILD_OUTPUT"/live/"${GRML_NAME}".squashfs ] && [ -z "$UPDATE" ] && [ -z "$BUILD_ONLY" ] && [ -z "$BUILD_DIRTY" ] ; then
    log   "Skipping stage 'squashfs' as $BUILD_OUTPUT/live exists already."
    ewarn "Skipping stage 'squashfs' as $BUILD_OUTPUT/live exists already." ; eend 0
