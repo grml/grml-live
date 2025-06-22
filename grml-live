@@ -1370,6 +1370,8 @@ fi
 # information how the ISO was generated {{{
 # shellcheck disable=SC2034
 generate_build_info() {
+  local output_dir_placeholder="<output_dir>"
+  local configdump_placeholder="<configdump_file>"
   jo -p \
     bootstrap_only="${BOOTSTRAP_ONLY}" \
     build_date="${DATE}" \
@@ -1382,7 +1384,7 @@ generate_build_info() {
     distri_info="${DISTRI_INFO}" \
     distri_name="${DISTRI_NAME}" \
     extract_iso_name="${EXTRACT_ISO_NAME}" \
-    fai_cmdline="${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${CONFIGDUMP} ${FAI_DEBOOTSTRAP}" \
+    fai_cmdline="${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${configdump_placeholder} ${FAI_DEBOOTSTRAP}" \
     fai_version="minifai" \
     grml_architecture="${ARCH}" \
     grml_bootid="${BOOTID}" \
@@ -1418,7 +1420,8 @@ generate_build_info() {
     timestamp="$(TZ=UTC date +%s)" \
     update_only="${UPDATE}" \
     wayback_date="${WAYBACK_DATE}" \
-  --
+  -- | \
+   sed "s|$OUTPUT|${output_dir_placeholder}|g"
 }
 # }}}
 
