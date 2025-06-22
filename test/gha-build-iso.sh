@@ -8,6 +8,11 @@ set -euxo pipefail
 
 MODE=$1
 
+if [ -z "${ARCH:-}" ]; then
+    echo "E: ARCH environment variable must be set"
+    exit 1
+fi
+
 cat >build-gha-ci-test-config-initial <<EOT
 ---
 last_release: "2024.12"
@@ -25,7 +30,7 @@ run_build() {
         bash -c \
         "apt-get update -qq && apt-get satisfy -q -y --no-install-recommends 'git, ca-certificates' \
         && git config --global --add safe.directory /source \
-        && /source/build-driver/build /source ${build_mode} /source/${config_filename} ghaci amd64 testing"
+        && /source/build-driver/build /source ${build_mode} /source/${config_filename} ghaci $ARCH testing"
 
     sudo chmod -R a+rX results
     sudo mv results "${results_directory}"
@@ -49,7 +54,7 @@ release_version: "ci-bo-first"
 release_name: CI1
 base_iso:
     ghaci:
-        amd64: "file:///source/$INPUT_ISO"
+        $ARCH: "file:///source/$INPUT_ISO"
 EOT
 
     run_build build-gha-ci-test-config-build-only-first release results-build-only-first
@@ -63,7 +68,7 @@ release_version: "ci-bo-second"
 release_name: CI2
 base_iso:
     ghaci:
-        amd64: "file:///source/$INPUT_ISO"
+        $ARCH: "file:///source/$INPUT_ISO"
 EOT
 
     run_build build-gha-ci-test-config-build-only-second release results-build-only-second
