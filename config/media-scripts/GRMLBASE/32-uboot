@@ -1,0 +1,25 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/32-uboot
+# Purpose:       Install u-boot configuration
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+if ! ifclass ARM64 ; then
+  exit 0
+fi
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+media_dir="${target}/${GRML_LIVE_MEDIADIR}"
+
+grml-live-command copy-media-files media -r /boot/extlinux
+
+grml-live-adjust-boot-files "${media_dir}"/boot/extlinux/extlinux.conf
