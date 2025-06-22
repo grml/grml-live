@@ -21,7 +21,7 @@ run_build() {
     local results_directory
     results_directory=$3
 
-    docker run -i --rm --volume "${PWD}:/source" -e SKIP_SOURCES=1 -e DO_DAILY_UPLOAD=0 -w /source debian:"$HOST_RELEASE" \
+    docker run -i --rm --volume "${PWD}:/source" -e SKIP_SOURCES=1 -e DO_DAILY_UPLOAD=0 -e EXTRA_CLASSES="${EXTRA_CLASSES:-}" -w /source debian:"$HOST_RELEASE" \
         bash -c \
         "apt-get update -qq && apt-get satisfy -q -y --no-install-recommends 'git, ca-certificates' \
         && git config --global --add safe.directory /source \

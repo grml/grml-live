@@ -1,0 +1,13 @@
+# Configuration for testing grml-live in CI builds.
+# Install as few Debian packages as possible,
+# we do not want to test *Debian*.
+
+PACKAGES skip
+linux-image-amd64
+linux-image-arm64
+
+PACKAGES install AMD64
+linux-image-cloud-amd64
+
+PACKAGES install ARM64
+linux-image-cloud-arm64

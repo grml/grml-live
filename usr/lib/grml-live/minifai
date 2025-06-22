@@ -20,12 +20,10 @@ from enum import StrEnum
 from pathlib import Path
 from threading import Event, Thread
 
+from packages import PackageList, parse_class_packages, ClassFileParsingFailed
+
 
 class FaiScriptFailed(Exception):
-    pass
-
-
-class ClassFileParsingFailed(Exception):
     pass
 
 
@@ -43,83 +41,8 @@ class DynamicState:
     skip_tasks = set()
 
 
-class PackageList(dict):
-    def list_for_arch(self, arch: str):
-        return self.list_of_arch("all") | self.list_of_arch(arch)
-
-    def list_of_arch(self, arch: str):
-        return set(self.get(arch, []))
-
-    def as_apt_params(self, *, restrict_to_arch: str) -> list[str]:
-        full_list = []
-        for arch, packages in self.items():
-            if arch == "all":
-                full_list += packages
-            else:
-                if arch != restrict_to_arch:
-                    continue
-                full_list += [f"{package}" for package in packages]
-        return full_list
-
-    def merge(self, other) -> None:
-        for arch, packages in other.items():
-            self.setdefault(arch, [])
-            self[arch] = list(set(self[arch] + packages))
-
-
 def now_for_log() -> str:
     return datetime.datetime.now().isoformat()
-
-
-def parse_class_packages(conf_dir: Path, class_name: str) -> PackageList:
-    """Parse FAI package_config for class class_name."""
-
-    packagelist = conf_dir / "package_config" / class_name
-    if not packagelist.exists():
-        return PackageList({})
-
-    print(f"I: Parsing {packagelist}")
-
-    arch = "all"
-    packages = []
-    parsed = PackageList({})
-    for line in packagelist.read_text().splitlines():
-        parts = line.split()
-
-        for index, part in enumerate(parts):
-            if part.startswith("#"):
-                parts = parts[0:index]
-                break
-
-        if not parts:
-            continue
-
-        if parts[0] == "PACKAGES":
-            # section header
-            if len(parts) not in (2, 3):
-                raise ValueError(f"package class file {packagelist} has invalid PACKAGES line: {line!r}")
-            if parts[1] != "install":
-                raise ValueError(f"package class file {packagelist} PACKAGES line not understood: {line!r}")
-
-            # save previously parsed packages
-            parsed.setdefault(arch, [])
-            parsed[arch] += packages
-
-            if len(parts) == 3:
-                arch = parts[2].lower()
-            else:
-                arch = "all"
-            packages = []
-            continue
-
-        else:
-            for part in parts:
-                if part:
-                    packages.append(part)
-
-    parsed.setdefault(arch, [])
-    parsed[arch] += packages
-    return parsed
 
 
 def run_x(args, check: bool = True, **kwargs):
@@ -228,15 +151,29 @@ def install_packages_for_classes(
 
     dpkg_architecture = chrooted_dpkg_print_architecture(chroot_dir)
 
+    # First pass: Parse all package configs and build merged list
+    class_package_lists = {}
     full_package_list = PackageList()
+
+    for class_name in classes:
+        package_list = parse_class_packages(conf_dir, class_name)
+        class_package_lists[class_name] = package_list
+        full_package_list.merge(package_list)
+
+    # Show what packages will be skipped if any
+    skip_packages = full_package_list.skip_list_for_arch(dpkg_architecture)
+    if skip_packages:
+        print(f"I: Skipping {len(skip_packages)} packages: {', '.join(sorted(skip_packages))}")
+
+    # Second pass: Install packages and run hooks for each class
     for class_name in classes:
         chrooted_debconf_set_selections(chroot_dir, conf_dir / "debconf" / class_name)
 
         run_script(chroot_dir, conf_dir / "hooks" / class_name / "instsoft", helper_tools_path, hook_env)
 
-        package_list = parse_class_packages(conf_dir, class_name)
-        full_package_list.merge(package_list)
-        install_args = package_list.as_apt_params(restrict_to_arch=dpkg_architecture)
+        # Use the previously parsed package list and apply final skip rules
+        package_list = class_package_lists[class_name]
+        install_args = package_list.as_apt_params(restrict_to_arch=dpkg_architecture, exclude_from=full_package_list)
         if install_args:
             print(f"I: Installing packages for class {class_name}")
             chrooted_apt_install(chroot_dir, install_args)
