@@ -46,36 +46,44 @@ jobs:
         host_release:
           - bookworm
           - trixie
+        extra_classes:
+          - ""
+          - "GRML_GHACI_CLOUD"
+        exclude:
+          - host_release: bookworm
+            extra_classes: "GRML_GHACI_CLOUD"
 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - run: ./test/gha-build-iso.sh initial
-        name: "Build ISO on ${{matrix.host_release}}"
+        name: "Build ISO on ${{matrix.host_release}}${{matrix.extra_classes && format(' with {0}', matrix.extra_classes) || ''}}"
         env:
           HOST_RELEASE: ${{matrix.host_release}}
+          EXTRA_CLASSES: ${{matrix.extra_classes}}
 
       - name: Archive built ISO
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: grml-live-build-result-initial-${{matrix.host_release}}
+          name: grml-live-build-result-initial-${{matrix.host_release}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
           if-no-files-found: error
           retention-days: 15
           path: |
             results-initial/*
 
       - run: ./test/gha-build-iso.sh build-only-twice
-        name: "Repack ISO twice on ${{matrix.host_release}}"
+        name: "Repack ISO twice on ${{matrix.host_release}}${{matrix.extra_classes && format(' with {0}', matrix.extra_classes) || ''}}"
         env:
           HOST_RELEASE: ${{matrix.host_release}}
+          EXTRA_CLASSES: ${{matrix.extra_classes}}
 
       - name: Archive repacked ISO
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: grml-live-build-result-repack-${{matrix.host_release}}
+          name: grml-live-build-result-repack-${{matrix.host_release}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
           if-no-files-found: error
           retention-days: 15
           path: |

@@ -225,6 +225,16 @@ def get_grml_live_classes(arch: str, flavor: str, classes_for_mode: list[str], s
         arch.upper(),
         "IGNORE",
     ]
+
+    # Add extra classes from environment variable
+    extra_classes = os.getenv("EXTRA_CLASSES", "").strip()
+    if extra_classes:
+        extra_class_list = [cls.strip() for cls in extra_classes.split(",") if cls.strip()]
+        # Insert extra classes before "RELEASE"
+        release_index = base_classes.index("RELEASE")
+        base_classes[release_index:release_index] = extra_class_list
+        print(f"I: Adding extra classes: {extra_class_list}")
+
     if skip_sources:
         print("I: SKIP_SOURCES=1, skipping source download (either from config or ENV)")
     else:

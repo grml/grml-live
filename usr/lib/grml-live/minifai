@@ -151,15 +151,29 @@ def install_packages_for_classes(
 
     dpkg_architecture = chrooted_dpkg_print_architecture(chroot_dir)
 
+    # First pass: Parse all package configs and build merged list
+    class_package_lists = {}
     full_package_list = PackageList()
+
+    for class_name in classes:
+        package_list = parse_class_packages(conf_dir, class_name)
+        class_package_lists[class_name] = package_list
+        full_package_list.merge(package_list)
+
+    # Show what packages will be skipped if any
+    skip_packages = full_package_list.skip_list_for_arch(dpkg_architecture)
+    if skip_packages:
+        print(f"I: Skipping {len(skip_packages)} packages: {', '.join(sorted(skip_packages))}")
+
+    # Second pass: Install packages and run hooks for each class
     for class_name in classes:
         chrooted_debconf_set_selections(chroot_dir, conf_dir / "debconf" / class_name)
 
         run_script(chroot_dir, conf_dir / "hooks" / class_name / "instsoft", helper_tools_path, hook_env)
 
-        package_list = parse_class_packages(conf_dir, class_name)
-        full_package_list.merge(package_list)
-        install_args = package_list.as_apt_params(restrict_to_arch=dpkg_architecture)
+        # Use the previously parsed package list and apply final skip rules
+        package_list = class_package_lists[class_name]
+        install_args = package_list.as_apt_params(restrict_to_arch=dpkg_architecture, exclude_from=full_package_list)
         if install_args:
             print(f"I: Installing packages for class {class_name}")
             chrooted_apt_install(chroot_dir, install_args)
