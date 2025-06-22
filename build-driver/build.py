@@ -317,7 +317,9 @@ def install_debian_dependencies():
         )
 
 
-def download_old_dpkg_list_last_release(tmp_dir: Path, last_release_version: str | None, flavor: str, arch: str) -> Path | None:
+def download_old_dpkg_list_last_release(
+    tmp_dir: Path, last_release_version: str | None, flavor: str, arch: str
+) -> Path | None:
     if last_release_version is None:
         return None
 

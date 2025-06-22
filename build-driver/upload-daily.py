@@ -117,7 +117,6 @@ def main():
             pass
         sftp.symlink(remote_real, remote_symlink)
 
-
     for symlink, real in [
         (latest_iso_name, real_iso_name),
         (latest_checksum_name, real_checksum_name),
@@ -130,7 +129,6 @@ def main():
         except FileNotFoundError:
             pass
         sftp.symlink(remote_real, remote_symlink)
-
 
     for symlink, real in [
         (latest_sources_name, real_sources_name),

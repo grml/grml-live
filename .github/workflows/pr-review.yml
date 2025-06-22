@@ -51,4 +51,4 @@ jobs:
       - name: Install ruff
         run: pip install ruff
       - name: Check ruff formatting
-        run: ruff format --line-length 120 --check usr/lib/grml-live/minifai
+        run: ruff format --line-length 120 --check usr/lib/grml-live/minifai usr/lib/grml-live/*.py usr/lib/grml-live/tests/*.py build-driver/*.py
