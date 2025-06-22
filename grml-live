@@ -934,7 +934,7 @@ generate_build_info() {
 # }}}
 
 # ISO_OUTPUT - iso build {{{
-[ -n "$ISO_NAME" ] || ISO_NAME="${GRML_NAME}_${VERSION}.iso"
+[ -n "$ISO_NAME" ] || ISO_NAME="${GRML_NAME}_${VERSION}.img"
 
 EFI_ARGS="-eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
 
@@ -960,14 +960,20 @@ else
 
    cap_timestamps "$BUILD_OUTPUT"
 
-   log "$XORRISO_BINARY -as mkisofs -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS $EFI_ARGS -o ${ISO_OUTPUT}/${ISO_NAME} ."
-   einfo "Generating ISO file..."
-   touch -d @"$SOURCE_DATE_EPOCH" "$BUILD_OUTPUT"/
-   # shellcheck disable=SC2086 # BOOT_ARGS and EFI_ARGS need splitting
-   "$XORRISO_BINARY" -as mkisofs -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
-           -l -r -J $BOOT_ARGS $EFI_ARGS \
-           -o "${ISO_OUTPUT}/${ISO_NAME}" "$BUILD_OUTPUT"/ ; RC=$?
-   eend $RC
+   einfo "Generating ext4 disk image..."
+   /sbin/mke2fs -q -F -o Linux -E offset=16777216 -T ext4 -b 4096 -d "$BUILD_OUTPUT"/ "${ISO_OUTPUT}/${ISO_NAME}" 260000
+   eend $?
+   einfo "Resizing disk image to make space for MBR..."
+   truncate --size=+512 "${ISO_OUTPUT}/${ISO_NAME}"
+   eend $?
+   einfo "Making MBR ..."
+   MBRTMP=$(mktemp)
+   echo 'label: dos
+   start=32768, size=2080000, type=83' > "$MBRTMP"
+   cat "$MBRTMP"
+   /sbin/sfdisk "${ISO_OUTPUT}/${ISO_NAME}" < "$MBRTMP"
+   eend $?
+   rm -f "$MBRTMP"
 
    # do not continue on errors, otherwise we might generate/overwrite the ISO with dd if=... stuff
    if [ "$RC" != 0 ] ; then

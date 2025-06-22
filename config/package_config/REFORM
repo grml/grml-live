@@ -1,0 +1,7 @@
+PACKAGES skip
+linux-image-arm64
+
+PACKAGES install
+reform-tools
+linux-image-mnt-reform-arm64
+linux-headers-mnt-reform-arm64

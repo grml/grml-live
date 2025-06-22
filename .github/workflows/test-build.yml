@@ -45,12 +45,11 @@ jobs:
       matrix:
         host_release:
           - forky
+          - bookworm
           - trixie
         extra_classes:
-          - ""
-          - "GRML_GHACI_CLOUD"
+          - "REFORM"
         arch:
-          - amd64
           - arm64
 
     runs-on: ${{ matrix.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
@@ -74,19 +73,19 @@ jobs:
           path: |
             results-initial/*
 
-      - run: ./test/gha-build-iso.sh build-only-twice
-        name: "Repack ISO twice on ${{matrix.host_release}} ${{matrix.arch}}${{matrix.extra_classes && format(' with {0}', matrix.extra_classes) || ''}}"
-        env:
-          HOST_RELEASE: ${{matrix.host_release}}
-          EXTRA_CLASSES: ${{matrix.extra_classes}}
-          ARCH: ${{matrix.arch}}
+      # - run: ./test/gha-build-iso.sh build-only-twice
+      #   name: "Repack ISO twice on ${{matrix.host_release}} ${{matrix.arch}}${{matrix.extra_classes && format(' with {0}', matrix.extra_classes) || ''}}"
+      #   env:
+      #     HOST_RELEASE: ${{matrix.host_release}}
+      #     EXTRA_CLASSES: ${{matrix.extra_classes}}
+      #     ARCH: ${{matrix.arch}}
 
-      - name: Archive repacked ISO
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: grml-live-build-result-repack-${{matrix.host_release}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
-          if-no-files-found: error
-          retention-days: 15
-          path: |
-            results-build-only-second/*
+      # - name: Archive repacked ISO
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: grml-live-build-result-repack-${{matrix.host_release}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
+      #     if-no-files-found: error
+      #     retention-days: 15
+      #     path: |
+      #       results-build-only-second/*
