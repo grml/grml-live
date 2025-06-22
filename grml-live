@@ -158,7 +158,7 @@ umount_all() {
 store_logfiles() {
   # move minifai logs into grml_logs directory
   mkdir -p "$LOG_OUTPUT"/fai/
-  cp -r "$CHROOT_OUTPUT"/grml-live/log/* "$LOG_OUTPUT"/fai/
+  cp --preserve=timestamp -r "$CHROOT_OUTPUT"/grml-live/log/* "$LOG_OUTPUT"/fai/
   rm -rf "$CHROOT_OUTPUT"/grml-live/log
 
   # ensure files are readable.
@@ -251,7 +251,7 @@ copy_file_logged() {
   for source in "$@" ; do
     if [ -r "${source_root}${source}" ] ; then
       log "Installing ${source} as ${dest}"
-      cp "${source_root}${source}" "${dest}"
+      cp --preserve=timestamp "${source_root}${source}" "${dest}"
       return 0
     fi
   done
@@ -636,6 +636,13 @@ fi
 extract_iso
 # }}}
 
+# helper to cap mtime on all files in a folder {{{
+cap_timestamps() {
+  # ensure that no timestamps are newer than $SOURCE_DATE_EPOCH
+  find "$1" -newermt "@${SOURCE_DATE_EPOCH}" -print0 | TZ=UTC xargs -0r touch --no-dereference --date="@${SOURCE_DATE_EPOCH}"
+}
+# }}}
+
 # create and format EFI.IMG disk image, without files {{{
 create_efi_img() {
   local img_file="$1"
@@ -943,7 +950,7 @@ else
   # shellcheck disable=SC2010 disable=SC2012 # We do not expect fancy characters here.
   INITRD=$(ls "$CHROOT_OUTPUT"/boot/initrd* 2>/dev/null| grep -v '.bak$' | sort -r | head -1)
   if [ -n "$INITRD" ] ; then
-    cp "$INITRD" "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/initrd.img
+    cp --preserve=timestamp "$INITRD" "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/initrd.img
     find "$CHROOT_OUTPUT"/boot/ -name initrd\*.bak -exec rm {} \;
   else
     log    "Error: No initrd found inside $CHROOT_OUTPUT/boot/ - Exiting"
@@ -954,7 +961,7 @@ else
   # shellcheck disable=SC2010 disable=SC2012 # We do not expect fancy characters here.
   KERNEL_IMAGE=$(ls "$CHROOT_OUTPUT"/boot/vmlinuz* 2>/dev/null | sort -r | head -1)
   if [ -n "$KERNEL_IMAGE" ] ; then
-    cp "$KERNEL_IMAGE" "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/vmlinuz
+    cp --preserve=timestamp "$KERNEL_IMAGE" "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/vmlinuz
   else
     log    "Error: No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting"
     eerror "Error: No kernel found inside $CHROOT_OUTPUT/boot/ - Exiting" ; eend 1
@@ -1001,25 +1008,25 @@ else
     einfo "Copying 64-bit EFI boot files (arm64) into ISO path."
     log   "Copying 64-bit EFI boot files (arm64) into ISO path."
     RC=0
-    cp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
+    cp --preserve=timestamp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
     mkdir -p "${BUILD_OUTPUT}/EFI/BOOT/" || RC=$?
-    cp "${CHROOT_OUTPUT}/boot/bootaa64.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootaa64.efi" || RC=$?
+    cp --preserve=timestamp "${CHROOT_OUTPUT}/boot/bootaa64.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootaa64.efi" || RC=$?
     eend "$RC"
   elif [ -r "${CHROOT_OUTPUT}/boot/efi.img" ] && [ -r "${CHROOT_OUTPUT}/boot/bootx64.efi" ] ; then
     einfo "Copying 64-bit EFI boot files (amd64) into ISO path."
     log   "Copying 64-bit EFI boot files (amd64) into ISO path."
     RC=0
-    cp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
+    cp --preserve=timestamp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
     mkdir -p "${BUILD_OUTPUT}/EFI/BOOT/" || RC=$?
-    cp "${CHROOT_OUTPUT}/boot/bootx64.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootx64.efi" || RC=$?
+    cp --preserve=timestamp "${CHROOT_OUTPUT}/boot/bootx64.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootx64.efi" || RC=$?
     eend "$RC"
   elif [ -r "${CHROOT_OUTPUT}/boot/efi.img" ] && [ -r "${CHROOT_OUTPUT}/boot/bootia32.efi" ] ; then
     einfo "Copying 32-bit EFI boot files into ISO path."
     log   "Copying 32-bit EFI boot files into ISO path."
     RC=0
-    cp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
+    cp --preserve=timestamp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
     mkdir -p "${BUILD_OUTPUT}/EFI/BOOT/" || RC=$?
-    cp "${CHROOT_OUTPUT}/boot/bootia32.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootia32.efi" || RC=$?
+    cp --preserve=timestamp "${CHROOT_OUTPUT}/boot/bootia32.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootia32.efi" || RC=$?
     eend "$RC"
   else
     ewarn "No EFI boot files found, skipping." ; eend 0
@@ -1050,7 +1057,7 @@ else
 
     # *always* copy files to output directory so the variables
     # get adjusted according to the build.
-    cp "${TEMPLATE_DIRECTORY}"/boot/isolinux/* "${BUILD_OUTPUT}"/boot/isolinux/
+    cp --preserve=timestamp "${TEMPLATE_DIRECTORY}"/boot/isolinux/* "${BUILD_OUTPUT}"/boot/isolinux/
 
     # only for syslinux hdt.
     copy_file_logged "${BUILD_OUTPUT}"/boot/addons/pci.ids "${CHROOT_OUTPUT}" /usr/share/misc/pci.ids
@@ -1107,7 +1114,7 @@ else
         if [ -f "$file" ] ; then
           log   "Installing $file in /boot/addons."
           einfo "Installing $file in /boot/addons."; eend 0
-          cp "$file" "$BUILD_OUTPUT"/boot/addons/
+          cp --preserve=timestamp "$file" "$BUILD_OUTPUT"/boot/addons/
         fi
       done
     else # legacy path (before https://github.com/grml/grml-live-grml/pull/11):
@@ -1115,7 +1122,7 @@ else
         if [ -f "$file" ] ; then
           log   "Installing $file in /boot/addons. (Legacy support)"
           einfo "Installing $file in /boot/addons. (Legacy support)"; eend 0
-          cp "$file" "$BUILD_OUTPUT"/boot/addons/
+          cp --preserve=timestamp "$file" "$BUILD_OUTPUT"/boot/addons/
         fi
       done
     fi
@@ -1276,13 +1283,13 @@ else
     ewarn "$DPKG_LIST could not be read, ignoring to store package information on ISO therefore."
   else
     einfo "Storing package list information as /GRML/${GRML_NAME}/packages.txt on ISO."
-    cp "$DPKG_LIST" "${BUILD_OUTPUT}"/GRML/"${GRML_NAME}"/packages.txt
+    cp --preserve=timestamp "$DPKG_LIST" "${BUILD_OUTPUT}"/GRML/"${GRML_NAME}"/packages.txt
     eend $?
   fi
 
   # autostart for Windows:
   if [ -d "${TEMPLATE_DIRECTORY}/windows/autostart/" ] ; then
-    cp "${TEMPLATE_DIRECTORY}"/windows/autostart/* "$BUILD_OUTPUT"/
+    cp -a "${TEMPLATE_DIRECTORY}"/windows/autostart/* "$BUILD_OUTPUT"/
   fi
 
   FORCE_ISO_REBUILD=true
@@ -1310,6 +1317,8 @@ fi
 # recreate the file.
 rm -f "$CHROOT_OUTPUT"/var/cache/ldconfig/aux-cache
 rmdir --ignore-fail-on-non-empty "$CHROOT_OUTPUT"/var/cache/ldconfig
+
+cap_timestamps "$CHROOT_OUTPUT"
 
 if [ -f "$BUILD_OUTPUT"/live/"${GRML_NAME}".squashfs ] && [ -z "$UPDATE" ] && [ -z "$BUILD_ONLY" ] && [ -z "$BUILD_DIRTY" ] ; then
    log   "Skipping stage 'squashfs' as $BUILD_OUTPUT/live exists already."
@@ -1484,8 +1493,9 @@ else
    einfo "Generating build information in conf/buildinfo.json"
    mkdir -p "$BUILD_OUTPUT"/conf/
    generate_build_info > "$BUILD_OUTPUT"/conf/buildinfo.json
-   touch -d @"$SOURCE_DATE_EPOCH" "$BUILD_OUTPUT"/conf/buildinfo.json
    eend $?
+
+   cap_timestamps "$BUILD_OUTPUT"
 
    log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS $EFI_ARGS -o ${ISO_OUTPUT}/${ISO_NAME} ."
    einfo "Generating ISO file..."
@@ -1548,8 +1558,8 @@ create_netbootpackage() {
 
   mkdir -p "$WORKING_DIR"
 
-  cp "${CHROOT_OUTPUT}"/boot/vmlinuz-*    "$WORKING_DIR"/vmlinuz
-  cp "${CHROOT_OUTPUT}"/boot/initrd.img-* "$WORKING_DIR"/initrd.img
+  cp --preserve=timestamp "${CHROOT_OUTPUT}"/boot/vmlinuz-*    "$WORKING_DIR"/vmlinuz
+  cp --preserve=timestamp "${CHROOT_OUTPUT}"/boot/initrd.img-* "$WORKING_DIR"/initrd.img
 
   if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "i386" ] ; then
     if ! [ -r "${CHROOT_OUTPUT}/usr/lib/PXELINUX/pxelinux.0" ] ; then
@@ -1560,15 +1570,15 @@ create_netbootpackage() {
       return 0
     fi
 
-    cp "${CHROOT_OUTPUT}/usr/lib/PXELINUX/pxelinux.0" "${WORKING_DIR}/pxelinux.0"
+    cp --preserve=timestamp "${CHROOT_OUTPUT}/usr/lib/PXELINUX/pxelinux.0" "${WORKING_DIR}/pxelinux.0"
 
     if [ -r "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/ldlinux.c32 ] ; then
-      cp "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/ldlinux.c32 "${WORKING_DIR}"/
+      cp --preserve=timestamp "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/ldlinux.c32 "${WORKING_DIR}"/
     fi
 
     mkdir -p "${WORKING_DIR}/pxelinux.cfg"
     if [ -r "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" ] ; then
-      cp "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" "${WORKING_DIR}/pxelinux.cfg/default"
+      cp --preserve=timestamp "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" "${WORKING_DIR}/pxelinux.cfg/default"
     else
       log   "File ${BUILD_OUTPUT}/boot/isolinux/netboot.cfg not found."
       ewarn "File ${BUILD_OUTPUT}/boot/isolinux/netboot.cfg not found."
@@ -1590,7 +1600,7 @@ create_netbootpackage() {
       ewarn "Hint: Are you using custom templates which do not provide netboot.cfg?" ; eend 0
       eoutdent
     else
-      cp "${BUILD_OUTPUT}/boot/grub/netboot.cfg" "${WORKING_DIR}/grub.cfg"
+      cp --preserve=timestamp "${BUILD_OUTPUT}/boot/grub/netboot.cfg" "${WORKING_DIR}/grub.cfg"
       adjust_boot_files "${WORKING_DIR}/grub.cfg"
 
       if [ "$ARCH" = "amd64" ] ; then
@@ -1641,7 +1651,7 @@ create_netbootpackage() {
       if [ -r "${CHROOT_OUTPUT}"/usr/share/grub/unicode.pf2 ] ; then
         log "Installing ${CHROOT_OUTPUT}/usr/share/grub/unicode.pf2 as grub/fonts/unicode.pf2 in netboot package"
         mkdir -p "${WORKING_DIR}"/grub/fonts/
-        cp "${CHROOT_OUTPUT}"/usr/share/grub/unicode.pf2 "${WORKING_DIR}"/grub/fonts/
+        cp --preserve=timestamp "${CHROOT_OUTPUT}"/usr/share/grub/unicode.pf2 "${WORKING_DIR}"/grub/fonts/
       else
         log   "No unicode.pf2 for usage with PXE boot found (grub-common not present?)"
         ewarn "No unicode.pf2 for usage with PXE boot found (grub-common not present?)" ; eend 0
@@ -1649,6 +1659,7 @@ create_netbootpackage() {
     fi
   fi # amd64 or arm64
 
+  cap_timestamps "$OUTPUTDIR"
   if tar -C "$OUTPUTDIR" -cf "${OUTPUT_FILE}" "${OUTPUT_NAME}" ; then
     (
       # shellcheck disable=SC2164 # We just wrote there. If it disappeared, too bad.
