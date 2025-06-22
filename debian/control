@@ -18,8 +18,6 @@ Bugs: mailto:bugs@grml.org
 Package: grml-live
 Architecture: all
 Depends:
- bc,
- bzip2,
  dosfstools,
  jo,
  mmdebstrap,
