@@ -650,7 +650,7 @@ def should_skip_task(dynamic_state: DynamicState, task: str) -> bool:
 def task_updatebase(chroot_dir: Path, dynamic_state: DynamicState):
     if should_skip_task(dynamic_state, "updatebase"):
         return
-    run_chrooted(chroot_dir, ["apt-get", "update", "-q"])
+    run_chrooted(chroot_dir, ["apt-get", "--error-on=any", "update", "-q"])
 
 
 def _run_tasks(
