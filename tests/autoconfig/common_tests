@@ -1,15 +1,9 @@
-#!/bin/zsh
-
-setopt shwordsplit
+#!/bin/bash
 
 oneTimeSetUp() {
     OLDPATH=$PATH
 
-    . ../autoconfig.functions
+    . ../../config/files/GRMLBASE/usr/share/grml-autoconfig/autoconfig.functions
 
     export PATH=$OLDPATH
 }
-
-
-SHUNIT_PARENT=$1
-. /usr/share/shunit2//shunit2

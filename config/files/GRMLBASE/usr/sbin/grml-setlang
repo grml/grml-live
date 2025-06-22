@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Filename:      grml-setlang
 # Purpose:       set language system-wide on grml system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
@@ -76,7 +76,7 @@ fi
 if [ -z "$NONINTERACTIVE" ] ; then
 # shellcheck disable=SC1010
 {
-   LANGUAGE=$(LANG=C $DIALOG --stdout --title "$PN" --default-item $DEFAULT_LANGUAGE --radiolist \
+   LANGUAGE=$(LANG=C $DIALOG --stdout --title "$PN" --default-item "$DEFAULT_LANGUAGE" --radiolist \
 "Which language do you want to use?
 
 This will affect \$LANG, \$LANGUAGE, \$LC_COLLATE,
