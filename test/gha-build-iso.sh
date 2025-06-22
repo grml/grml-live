@@ -18,6 +18,13 @@ cat >build-gha-ci-test-config-initial <<EOT
 last_release: "2024.12"
 EOT
 
+mkdir -p config/files/REFORM/etc/apt/sources.list.d/
+/usr/lib/apt/apt-helper \
+	download-file \
+	https://reform.debian.net/reform_trixie.sources \
+	config/files/REFORM/etc/apt/sources.list.d/reform_trixie.sources \
+	"SHA1:3d453dbf355beebf494ce6f61d2110b98e92fcf5"
+
 run_build() {
     local config_filename
     config_filename=$1
@@ -32,7 +39,22 @@ run_build() {
         && git config --global --add safe.directory /source \
         && /source/build-driver/build /source ${build_mode} /source/${config_filename} ghaci $ARCH testing"
 
+    /usr/lib/apt/apt-helper \
+        download-file \
+        https://source.mnt.re/reform/reform-boundary-uboot/-/jobs/artifacts/2024-07-19/raw/imx8mq-mnt-reform2-flash.bin?job=build \
+        flash.bin \
+        "SHA1:60ecf649038ebd92bfb6676bdf746daa30825dbf"
+
     sudo chmod -R a+rX results
+    sudo chmod -R a+rwX results/grml_isos
+
+	( set -e ; cd results &&
+	name=$(echo ./grml_isos/*.iso)
+	imgname=${name//.iso/.img}
+    dd if=../flash.bin of="${name}" oseek=66 bs=512 conv=notrunc
+    mv "${name}" "${imgname}"
+    )
+    rm flash.bin
     sudo mv results "${results_directory}"
 }
 
