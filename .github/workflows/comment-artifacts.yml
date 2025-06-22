@@ -67,6 +67,9 @@ jobs:
             let comment = `## 💿 ISO Build Results\n\n`;
             comment += `The following ISO build artifacts are available from this PR:\n\n`;
 
+            // Sort artifacts by name for consistent ordering
+            isoArtifacts.sort((a, b) => a.name.localeCompare(b.name));
+
             for (const artifact of isoArtifacts) {
               const downloadUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${workflowRunId}/artifacts/${artifact.id}`;
               comment += `- [${artifact.name}.zip](${downloadUrl}) (${(artifact.size_in_bytes / 1024 / 1024).toFixed(2)} MB)\n`;
