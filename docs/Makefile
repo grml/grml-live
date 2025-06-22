@@ -1,4 +1,4 @@
-MANPAGES = grml-autoconfig.1 grml-autoconfig.8 restore-config.1 save-config.1 grml-live.8 grml-live-remaster.8
+MANPAGES = grml-autoconfig.1 grml-autoconfig.8 restore-config.1 save-config.1 grml-live.8 grml-live-fai.5 grml-live-remaster.8
 
 all: doc
 

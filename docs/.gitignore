@@ -1,5 +1,8 @@
 *.html
 *.pdf
 *.epub
+*.xml
 *.1
+*.5
 *.8
+*.gz
