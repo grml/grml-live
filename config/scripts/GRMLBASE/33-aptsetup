@@ -7,14 +7,17 @@
 ################################################################################
 
 set -e
+set -u
+
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
 
 # FAI sets $target, but shellcheck does not know that.
 target=${target:?}
 
 # use snapshot.debian.org based on build date for release
 if ifclass RELEASE ; then
-  set -u
-  current_date=$(date +%Y%m%d)
+  current_date=$(date --utc -d "@${SOURCE_DATE_EPOCH}" +%Y%m%d)
   perl -pi -e 'BEGIN { $d="'"$current_date"'"; } \
     s#^(URIs:)\s+(.*://deb.debian.org/)(.*)\/?$#$1 http://snapshot.debian.org/archive/$3/$d#' \
     "${target}"/etc/apt/sources.list.d/debian.sources

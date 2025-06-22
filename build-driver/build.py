@@ -99,6 +99,7 @@ def run_grml_live(
     grml_name: str,
     iso_name: str,
     old_iso_path: Path | None,
+    source_date_epoch: datetime.datetime,
 ):
     env = dict(os.environ)
     grml_fai_config = grml_live_path / "config"
@@ -108,6 +109,7 @@ def run_grml_live(
             "SCRIPTS_DIRECTORY": str(grml_live_path / "scripts"),
             "LIVE_CONF": str(grml_live_path / "etc" / "grml" / "grml-live.conf"),
             "TEMPLATE_DIRECTORY": str(grml_live_path / "templates"),
+            "SOURCE_DATE_EPOCH": str(int(source_date_epoch.timestamp())),
         }
     )
 
@@ -260,6 +262,7 @@ def build(
         job_properties.grml_name,
         job_properties.iso_name,
         old_iso_path,
+        job_properties.job_timestamp,
     )
 
     if old_dpkg_list_daily:
@@ -410,6 +413,14 @@ def main(program_name: str, argv: list[str]) -> int:
     #   release: grml-full-2024.12-arm64.iso
     # Note that release builds do not carry the debian suite in their name.
 
+    CI_PIPELINE_CREATED_AT = os.getenv("CI_PIPELINE_CREATED_AT", "")
+    if CI_PIPELINE_CREATED_AT != "":
+        print("I: deriving job timestamp from CI_PIPELINE_CREATED_AT variable")
+        job_timestamp = datetime.datetime.fromisoformat(CI_PIPELINE_CREATED_AT.replace("Z", "+00:00"))
+    else:
+        print(f"I: deriving job timestamp from {build_config_file} mtime")
+        job_timestamp = datetime.datetime.fromtimestamp(Path(build_config_file).stat().st_mtime)
+
     if build_mode == "release":
         old_iso_url = build_config["base_iso"][flavor][arch]
         build_version = build_config["release_version"]
@@ -434,14 +445,13 @@ def main(program_name: str, argv: list[str]) -> int:
 
     elif build_mode == "daily":
         old_iso_url = None
-        date_stamp = datetime.datetime.now().strftime("%Y%m%d")
         CI_PIPELINE_IID = os.getenv("CI_PIPELINE_IID", "0")
+        date_stamp = job_timestamp.strftime("%Y%m%d")
         build_version = f"d{date_stamp}b{CI_PIPELINE_IID}"
         build_release_name = f"daily{date_stamp}build{CI_PIPELINE_IID}{debian_suite}"
         artifact_basename = f"grml-{flavor}-{build_release_name}-{arch}"
-
         job_properties = JobProperties(
-            job_timestamp=datetime.datetime.now(),
+            job_timestamp=job_timestamp,
             job_name=f"{build_grml_name}-{debian_suite}",
             arch=arch,
             classes=classes,

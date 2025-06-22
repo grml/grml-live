@@ -370,10 +370,26 @@ else
 fi
 # }}}
 
+# setup SOURCE_DATE_EPOCH {{{
+if ! [[ "$CLASSES" == *NO_ONLINE* ]]; then
+  ewarn "Class NO_ONLINE NOT requested. Output will not be reproducible."; eend 1
+fi
+if [ -z "$SOURCE_DATE_EPOCH" ] ; then
+  if [ -n "$DATE" ] ; then
+    # Convert user-provided DATE to epoch timestamp
+    SOURCE_DATE_EPOCH=$(date -d "$DATE" +%s 2>/dev/null || date +%s)
+  else
+    # Fallback to current time
+    SOURCE_DATE_EPOCH=$(date +%s)
+  fi
+fi
+export SOURCE_DATE_EPOCH
+# }}}
+
 # assume sane defaults (if not set already) {{{
 [ -n "$ARCH" ]                    || ARCH="$(dpkg --print-architecture)"
 [ -n "$CLASSES" ]                 || CLASSES="GRMLBASE,GRML_FULL,$(echo "${ARCH}" | tr '[:lower:]' '[:upper:]')"
-[ -n "$DATE" ]                    || DATE="$(date +%Y-%m-%d)"
+[ -n "$DATE" ]                    || DATE="$(date --utc -d "@${SOURCE_DATE_EPOCH}" +%Y-%m-%d)"
 [ -n "$DISTRI_INFO" ]             || DISTRI_INFO='Grml - Live Linux for system administrators'
 [ -n "$DISTRI_NAME" ]             || DISTRI_NAME="grml"
 [ -n "$DISTRI_SPLASH" ]           || DISTRI_SPLASH='grml.png'
@@ -480,6 +496,7 @@ echo "  main directory:    $OUTPUT"
 [ -n "$GRML_NAME" ]           && echo "  Grml name:         $GRML_NAME"
 [ -n "$RELEASENAME" ]         && echo "  Release name:      $RELEASENAME"
 [ -n "$DATE" ]                && echo "  Build date:        $DATE"
+echo "  SOURCE_DATE_EPOCH: $SOURCE_DATE_EPOCH"
 [ -n "$WAYBACK_DATE" ]        && echo "  Wayback date:      $WAYBACK_DATE"
 [ -n "$VERSION" ]             && echo "  Grml version:      $VERSION"
 [ -n "$SUITE" ]               && echo "  Debian suite:      $SUITE"
@@ -573,7 +590,7 @@ einfo "Logging actions to logfile $LOGFILE"
 # dump config variables into file, for hooks/scripts access {{{
 CONFIGDUMP=$(mktemp)
 set | grep -E \
-  '^(GRML_NAME|RELEASENAME|DATE|VERSION|SUITE|ARCH|DISTRI_NAME|TEMPLATE_DIRECTORY|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG)=' \
+  '^(GRML_NAME|RELEASENAME|DATE|VERSION|SUITE|ARCH|DISTRI_NAME|TEMPLATE_DIRECTORY|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH)=' \
   > "${CONFIGDUMP}"
 # }}}
 
@@ -1417,7 +1434,7 @@ generate_build_info() {
     skip_netboot="${SKIP_NETBOOT}" \
     squashfs_name="${SQUASHFS_NAME}" \
     template_directory="${TEMPLATE_DIRECTORY}" \
-    timestamp="$(TZ=UTC date +%s)" \
+    timestamp="${SOURCE_DATE_EPOCH}" \
     update_only="${UPDATE}" \
     wayback_date="${WAYBACK_DATE}" \
   -- | \
@@ -1462,10 +1479,12 @@ else
    einfo "Generating build information in conf/buildinfo.json"
    mkdir -p "$BUILD_OUTPUT"/conf/
    generate_build_info > "$BUILD_OUTPUT"/conf/buildinfo.json
+   touch -d @"$SOURCE_DATE_EPOCH" "$BUILD_OUTPUT"/conf/buildinfo.json
    eend $?
 
    log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS $EFI_ARGS -o ${ISO_OUTPUT}/${ISO_NAME} ."
    einfo "Generating ISO file..."
+   touch -d @"$SOURCE_DATE_EPOCH" "$BUILD_OUTPUT"/
    # shellcheck disable=SC2086 # BOOT_ARGS and EFI_ARGS need splitting
    $MKISOFS -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
            -l -r -J $BOOT_ARGS $EFI_ARGS \
