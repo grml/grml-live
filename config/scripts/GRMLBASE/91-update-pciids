@@ -40,8 +40,9 @@ if ! [ -x "${target}/usr/sbin/update-pciids" ] && ! [ -x "${target}/usr/bin/upda
 fi
 
 echo "Updating PCI-IDs"
-$ROOTCMD timeout 10 update-pciids
-bailout $?
+$ROOTCMD timeout 10 update-pciids ; RC=$?
+rm -f "${target}"/usr/share/misc/pci.ids.old
+bailout "$RC"
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
