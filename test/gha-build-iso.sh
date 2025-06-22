@@ -18,13 +18,6 @@ cat >build-gha-ci-test-config-initial <<EOT
 last_release: "2024.12"
 EOT
 
-mkdir -p config/files/REFORM/etc/apt/sources.list.d/
-/usr/lib/apt/apt-helper \
-	download-file \
-	https://reform.debian.net/reform_trixie.sources \
-	config/files/REFORM/etc/apt/sources.list.d/reform_trixie.sources \
-	"SHA1:3d453dbf355beebf494ce6f61d2110b98e92fcf5"
-
 run_build() {
     local config_filename
     config_filename=$1
