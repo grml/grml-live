@@ -218,7 +218,6 @@ def skip_sources_requested(build_config: dict, env: dict) -> bool:
 
 def get_grml_live_classes(arch: str, flavor: str, classes_for_mode: list[str], skip_sources: bool) -> list[str]:
     base_classes = [
-        "DEBORPHAN",
         "GRMLBASE",
         f"GRML_{flavor.upper()}",
         "RELEASE",
