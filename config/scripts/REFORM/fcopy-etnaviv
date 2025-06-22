@@ -1,0 +1,3 @@
+#!/bin/sh
+set -eu
+fcopy -M -v /etc/X11/xorg.conf.d/etnaviv.conf
