@@ -968,6 +968,24 @@ else
     bailout 11
   fi
 
+  # If something in the chroot installed dtbs into /boot/dtbs, then we probably will
+  # need them outside, on the actual boot media, too.
+  # Assume the DTBs are in /boot/dtbs/<kernel-version>/. If the directory exists,
+  # copy it entirely (but igoring the <kernel-version> part).
+  DTBS=$(find "$CHROOT_OUTPUT"/boot/dtbs/ -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort -r | head -1)
+  if [ -z "$DTBS" ] ; then
+    log   "Info: No DTBs found inside $CHROOT_OUTPUT/boot/dtbs - Skipping"
+    ewarn "Info: No DTBs found inside $CHROOT_OUTPUT/boot/dtbs - Skipping" ; eend 0
+  else
+    einfo "Copying DTBs from $DTBS into ISO path."
+    mkdir -p "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/dtbs
+    rsync -a -q "$DTBS/" "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/dtbs/ ; RC=$?
+    eend "$RC"
+    if [ "$RC" != "0" ]; then
+      bailout 12
+    fi
+  fi
+
   # we need to set "$BOOTID" before we invoke adjust_boot_files for the
   # first time, being inside grub_setup below
   if [ -n "$NO_BOOTID" ] ; then
