@@ -298,7 +298,6 @@ def install_debian_dependencies():
             """
             ca-certificates ,
             git ,
-            bc ,
             curl ,
             dosfstools ,
             jo ,
