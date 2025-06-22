@@ -214,7 +214,7 @@ def do_fcopy_file(to_copy: Path, chroot_dir: Path, path: str, mode):
     # different file/directory ownership.
     dest_path.parent.mkdir(exist_ok=True, parents=True)
 
-    shutil.copyfile(to_copy, dest_path, follow_symlinks=False)
+    shutil.copy2(to_copy, dest_path, follow_symlinks=False)
     dest_path.chmod(mode)
     os.chown(dest_path, 0, 0, follow_symlinks=False)
 
