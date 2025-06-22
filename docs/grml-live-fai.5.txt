@@ -1,0 +1,225 @@
+grml-live-fai(5)
+================
+
+Name
+----
+
+grml-live-fai - FAI to minifai migration guide for grml-live
+
+Description
+-----------
+
+grml-live historically used link:http://fai-project.org/[FAI] (Fully Automatic Installation)
+as its build system. Starting with grml-live version 0.52, the project has migrated to its own
+minimal implementation called "minifai". This document explains the differences between the
+two implementations and what grml-live users can expect from the transition.
+
+Background
+----------
+
+FAI is a comprehensive system for unattended installation and configuration of Linux systems.
+grml-live originally used FAI to build its Live Linux systems, but only utilized a small subset
+of FAI's functionality. Over time, grml-live required various workarounds and hooks to adapt
+FAI's assumptions to the specific needs of building Live systems.
+
+The minifai implementation was created to address these issues by providing a focused,
+streamlined implementation that supports only the features actually needed by grml-live,
+while maintaining backward compatibility with FAI's class-based configuration approach.
+
+What is minifai?
+----------------
+
+minifai is a minimal reimplementation of the FAI API surface that grml-live requires. It is
+implemented as a single Python script (`usr/lib/grml-live/minifai`) that provides the same
+class-based configuration system as FAI but with a much simpler architecture.
+
+IMPORTANT: Users should not run minifai directly. minifai is an internal implementation
+detail of grml-live. Continue using grml-live as before - it will automatically use minifai
+instead of FAI for the build process.
+
+Key Features Preserved
+----------------------
+
+The following FAI features are fully supported by minifai and work identically to the
+original FAI implementation:
+
+Class-based Configuration::
+  The core concept of organizing configuration by classes remains unchanged. Package lists,
+  scripts, file overlays, and hooks are still organized in the same directory structure
+  under `config/`.
+
+Configuration Scripts::
+  Scripts in `config/scripts/` are executed in the same manner, with the same environment
+  variables and execution order.
+
+Hooks::
+  Hook scripts in `config/hooks/` (updatebase, instsoft) are executed at the same points
+  in the build process.
+
+Environment Variables::
+  Class-specific environment variables from `config/env/` are loaded and available to
+  scripts.
+
+Debconf Preseeding::
+  Debconf configurations in `config/debconf/` are applied before package installation.
+
+Helper Tools::
+  The `ifclass`, `fcopy`, and `skiptask` commands are available in scripts with the same
+  basic functionality.
+
+Differences from FAI
+--------------------
+
+The following differences exist between FAI and minifai:
+
+Scope::
+  minifai only implements the subset of FAI functionality used by grml-live. Advanced FAI
+  features like network booting, partitioning, and complex installation scenarios are not
+  supported.
+
+Dependencies::
+  FAI is no longer required as a system dependency. grml-live now uses `mmdebstrap` for
+  base system installation instead of FAI's `fai-do-baseinstall`.
+
+Package Installation::
+  While package lists in `config/package_config/` are parsed similarly, the installation
+  process differs. minifai installs packages class by class, then performs a final
+  installation of all packages together to detect relationship errors. Some advanced
+  package_config features may not be fully supported, such as complex conditional
+  statements or advanced package selection syntax.
+
+  Additionally, minifai has stricter error handling for package installation. If a package
+  listed in the package_config files is not available (e.g., due to a typo or because the
+  package no longer exists in the repository), minifai will abort the build process. FAI
+  was more tolerant of such errors and would continue the build despite missing packages.
+
+File Overlays (fcopy)::
+  The `fcopy` command provides core functionality but with some limitations compared to
+  FAI's full implementation. Supported features include basic file copying, recursive
+  copying (-r), ignore missing files (-i), and mode setting (-m user,group,mode).
+  However, some advanced fcopy features may not be implemented, and the class precedence
+  order for file selection may differ from FAI in edge cases.
+
+Task Execution::
+  The FAI task system is simplified. minifai supports the core tasks (updatebase, instsoft,
+  configure) but not the full range of FAI tasks.
+
+Error Handling::
+  minifai provides more targeted error messages and simplified error handling compared to
+  FAI's comprehensive but sometimes complex error reporting.
+
+Logging and Debugging::
+  The build process now produces a comprehensive, unified log output that flows directly
+  to the terminal and build logs. Unlike FAI's approach of splitting output across
+  multiple log files, minifai provides a single, chronological log stream that makes
+  it easier to follow the build process and debug issues. All build output is captured
+  in one place, making troubleshooting more straightforward.
+
+Migration Considerations
+------------------------
+
+For most grml-live users, the migration to minifai should be transparent. However, be aware
+of the following:
+
+Compatibility::
+  Existing grml-live configurations should work without modification for standard use cases.
+  The class-based configuration system is preserved, but complex package configurations or
+  advanced fcopy usage may require testing.
+
+Package Lists::
+  Review your package_config files to ensure all listed packages are available and
+  correctly spelled. Unlike FAI, minifai will fail if any package cannot be installed,
+  so obsolete or misnamed packages must be removed from the configuration.
+
+Build Scripts::
+  If you have custom build scripts that directly invoke FAI commands, these may need to be
+  updated. The `scripts/migrate-to-minifai` script can help with this transition.
+
+Package Selection::
+  If your configuration uses advanced package selection syntax beyond basic package names
+  and architecture-specific sections, review the package installation to ensure all
+  expected packages are included.
+
+File Overlays::
+  Test that file overlays work as expected, particularly if you rely on complex class
+  precedence rules or advanced fcopy options.
+
+Testing Your Configuration
+--------------------------
+
+To ensure your configuration works correctly with minifai:
+
+1. Test build your configuration with the current grml-live version
+2. Compare the resulting ISO functionality with previous builds
+3. Check that all expected packages are installed (see `$OUTPUT/grml_chroot/grml-live/log/install_packages.list`)
+4. Verify that custom scripts execute correctly
+5. Ensure file overlays are applied as expected
+
+If you encounter issues, the `scripts/migrate-to-minifai` script may help identify
+configuration elements that need adjustment.
+
+Benefits of minifai
+-------------------
+
+The migration to minifai provides several advantages:
+
+Simplified Dependencies::
+  No longer need to install and configure FAI as a system dependency.
+
+Improved Reliability::
+  Fewer moving parts mean fewer potential points of failure. Stricter error handling
+  ensures that build issues are caught early rather than producing broken systems.
+
+Better Integration::
+  minifai is designed specifically for grml-live's use case, resulting in better
+  integration and fewer workarounds.
+
+Easier Maintenance::
+  The focused implementation is easier to maintain and extend for grml-live-specific needs.
+
+Clearer Debugging::
+  Unified log output makes it much easier to understand the build process and troubleshoot
+  issues compared to FAI's scattered log files.
+
+Troubleshooting
+---------------
+
+If you experience issues after the migration:
+
+Check Error Messages::
+  minifai provides clear error messages that typically indicate the specific issue.
+
+Package Installation Errors::
+  If the build fails due to unavailable packages, review the package_config files and
+  remove or correct any problematic package names.
+
+Verify Configuration::
+  Ensure your class-based configuration follows the expected structure and syntax.
+
+Review Build Output::
+  The unified log output provides comprehensive information about the build process.
+  Look for error messages or unexpected behavior in the chronological log stream.
+
+Check Package Installation::
+  Review `$OUTPUT/grml_chroot/grml-live/log/install_packages.list` to verify all
+  expected packages were installed.
+
+Test File Overlays::
+  Manually verify that files from `config/files/` are copied to the expected locations
+  in the target system.
+
+Use Migration Script::
+  Run `scripts/migrate-to-minifai` to check for potential compatibility issues.
+
+See Also
+--------
+
+grml-live(8), grml-autoconfig(8)
+
+[[authors]]
+Authors
+-------
+
+grml-live was written by Michael Prokop <mika@grml.org> and the Grml team.
+
+This manual page documents the FAI to minifai migration for grml-live.
