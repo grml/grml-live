@@ -84,7 +84,14 @@ def chrooted_apt_install(chroot_dir: Path, install_list: list[str]):
     env = {
         "DEBIAN_FRONTEND": "noninteractive",
     }
-    args = ["apt", "install", "-q", "-y", "--no-install-recommends"] + install_list
+    args = [
+        "apt",
+        "-oapt::cmd::disable-script-warning=1",
+        "install",
+        "-q",
+        "-y",
+        "--no-install-recommends",
+    ] + install_list
     if os.environ.get("GRML_LIVE_DEBUG_APT", "") != "":
         args.insert(1, f"-o{APT_DEBUG_ACQUIRE}")
     run_chrooted(
@@ -601,7 +608,7 @@ def should_skip_task(dynamic_state: DynamicState, task: str) -> bool:
 def task_updatebase(chroot_dir: Path, dynamic_state: DynamicState):
     if should_skip_task(dynamic_state, "updatebase"):
         return
-    run_chrooted(chroot_dir, ["apt-get", "--error-on=any", "update", "-q"])
+    run_chrooted(chroot_dir, ["apt", "-oapt::cmd::disable-script-warning=1", "--error-on=any", "update", "-q"])
 
 
 def _run_tasks(
