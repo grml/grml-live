@@ -11,4 +11,7 @@ enable resolvconf.service
 enable avahi-daemon.service
 enable avahi-ssh.service
 
+# don't need the firstboot wizard
+disable systemd-firstboot.service
+
 disable *
