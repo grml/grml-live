@@ -100,7 +100,7 @@ rm -rf --one-file-system "$target"/etc/sysconfig/* \
        "$target"/etc/lvm/.cache "$target"/etc/lvm/cache/.cache \
        "$target"/etc/lvm/backup/* "$target"/tmp/* \
        "$target"/var/tmp/* "$target"/var/backups/* \
-       "$target"/var/lib/mysql "$target"/var/log/lilo_log.* "$target"/core* \
+       "$target"/var/lib/mysql "$target"/core* \
        "$target"/etc/blkid.tab
 
 # remove only "temporary" or saved files in the given directories

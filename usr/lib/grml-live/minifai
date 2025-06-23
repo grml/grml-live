@@ -53,6 +53,13 @@ def run_x(args, check: bool = True, **kwargs):
     # str-ify Paths, not necessary, but for readability in logs.
     args = [arg if isinstance(arg, str) else str(arg) for arg in args]
     args_str = '" "'.join(args)
+    if "env" in kwargs:
+        # Always pass-through SOURCE_DATE_EPOCH
+        env = {}
+        if "SOURCE_DATE_EPOCH" in os.environ:
+            env["SOURCE_DATE_EPOCH"] = os.environ["SOURCE_DATE_EPOCH"]
+        kwargs["env"] = env | kwargs["env"]  # do not update original dict
+
     print(f'D: Running "{args_str}"', flush=True)
     return subprocess.run(args, check=check, **kwargs)
 
@@ -214,7 +221,7 @@ def do_fcopy_file(to_copy: Path, chroot_dir: Path, path: str, mode):
     # different file/directory ownership.
     dest_path.parent.mkdir(exist_ok=True, parents=True)
 
-    shutil.copyfile(to_copy, dest_path, follow_symlinks=False)
+    shutil.copy2(to_copy, dest_path, follow_symlinks=False)
     dest_path.chmod(mode)
     os.chown(dest_path, 0, 0, follow_symlinks=False)
 

@@ -44,7 +44,9 @@ $ROOTCMD su -s /bin/sh "${USERNAME}" -c "rsync -Hav /etc/skel/ /home/${USERNAME}
 
 # Initialize zsh caches so first startup on Live CD is faster.
 echo "exit" | $ROOTCMD zsh -l -s -i
+rm -f "$target"/root/.zsh_history
 echo "exit" | $ROOTCMD setpriv --reuid="${USERNAME}" --regid="${USERNAME}" --clear-groups --reset-env zsh -l -s -i
+rm -f "$target"/home/"${USERNAME}"/.zsh_history
 
 echo "Listing homedir of user root:"
 ls -la "$target"/root
