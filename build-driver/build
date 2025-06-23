@@ -9,6 +9,6 @@ set -x
 GRML_LIVE_PATH=$1
 PYTHONPATH="$GRML_LIVE_PATH"/build-driver
 echo -e "\e[0Ksection_start:$(date +%s):startupdeps[collapsed=true]\r\e[0KInstall dependencies for build.py"
-apt satisfy -q -y --no-install-recommends 'python3-minimal, python3-yaml'
+apt satisfy -q -y --no-install-recommends -o Dpkg::Options::=--force-confnew 'python3-minimal, python3-yaml'
 echo -e "\e[0Ksection_end:$(date +%s):startupdeps\r\e[0K"
 exec "$PYTHONPATH"/build.py "$@"
