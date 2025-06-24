@@ -116,7 +116,6 @@ def run_grml_live(
     grml_live_cmd = [
         grml_live_path / "grml-live",
         "-F",  # do not prompt
-        "-V",  # verbose
         "-A",  # cleanup afterwards
         "-a",
         arch,

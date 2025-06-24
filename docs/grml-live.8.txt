@@ -222,7 +222,7 @@ Specify version number of the release.
 
   -V::
 
-Increase verbosity in the build process.
+Deprecated. Will be removed in a future release of grml-live.
 
   -w **DATE**::
 

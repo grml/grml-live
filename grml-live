@@ -68,7 +68,7 @@ Usage: $PN [options, see as follows]
    -u                      update existing chroot instead of rebuilding it from scratch
    -U <username>           arrange output to be owned by specified username
    -v <version_number>     specify version number of the release
-   -V                      increase verbosity in the build process
+   -V                      deprecated - will be removed from grml-live
    -w <date>               wayback machine, build system using Debian archives
                            from specified date
    -z                      use ZLIB instead of LZMA/XZ compression
