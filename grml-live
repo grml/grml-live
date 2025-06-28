@@ -968,6 +968,26 @@ else
     bailout 11
   fi
 
+  # If something in the chroot installed dtbs into /boot/dtbs, then we probably will
+  # need them outside, on the actual boot media, too.
+  # Assume the DTBs are in /boot/dtbs/<kernel-version>/. If the directory exists,
+  # copy it entirely.
+  DTBS=$(find "$CHROOT_OUTPUT"/boot/dtbs/ -mindepth 1 -maxdepth 1 -type d 2>/dev/null | tail -1)
+  if [ -z "$DTBS" ] ; then
+    log   "Info: No DTBs found inside $CHROOT_OUTPUT/boot/dtbs - Skipping"
+    ewarn "Info: No DTBs found inside $CHROOT_OUTPUT/boot/dtbs - Skipping" ; eend 0
+  else
+    einfo "Copying DTBs from $DTBS into ISO path."
+    mkdir -p "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/dtbs
+    rsync -rav "$DTBS/" "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/dtbs/ ; RC=$?
+    eend "$RC"
+    if [ "$RC" != "0" ]; then
+      bailout 12
+    fi
+  fi
+
+  ls -la "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/dtbs
+
   # we need to set "$BOOTID" before we invoke adjust_boot_files for the
   # first time, being inside grub_setup below
   if [ -n "$NO_BOOTID" ] ; then
@@ -1039,6 +1059,10 @@ else
   fi
 
   mkdir -p "${BUILD_OUTPUT}"/boot/addons
+
+  mkdir -p "${BUILD_OUTPUT}"/boot/extlinux
+  cp "${TEMPLATE_DIRECTORY}"/boot/extlinux/extlinux.conf "${BUILD_OUTPUT}"/boot/extlinux/
+  adjust_boot_files "${BUILD_OUTPUT}"/boot/extlinux/extlinux.conf
 
   if [ "$ARCH" != "arm64" ] ; then
     # copy _required_ isolinux files
@@ -1458,7 +1482,7 @@ generate_build_info() {
 
 # ISO_OUTPUT - mkisofs {{{
 [ -n "$ISO_OUTPUT" ] || ISO_OUTPUT="$OUTPUT/grml_isos"
-[ -n "$ISO_NAME" ] || ISO_NAME="${GRML_NAME}_${VERSION}.iso"
+[ -n "$ISO_NAME" ] || ISO_NAME="${GRML_NAME}_${VERSION}.img"
 
 BOOT_ARGS="-no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat -isohybrid-mbr ${CHROOT_OUTPUT}/usr/lib/ISOLINUX/isohdpfx.bin"
 EFI_ARGS="-eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
@@ -1497,14 +1521,20 @@ else
 
    cap_timestamps "$BUILD_OUTPUT"
 
-   log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS $EFI_ARGS -o ${ISO_OUTPUT}/${ISO_NAME} ."
-   einfo "Generating ISO file..."
-   touch -d @"$SOURCE_DATE_EPOCH" "$BUILD_OUTPUT"/
-   # shellcheck disable=SC2086 # BOOT_ARGS and EFI_ARGS need splitting
-   $MKISOFS -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
-           -l -r -J $BOOT_ARGS $EFI_ARGS \
-           -o "${ISO_OUTPUT}/${ISO_NAME}" "$BUILD_OUTPUT"/ ; RC=$?
-   eend $RC
+   einfo "Generating ext4 disk image..."
+   /sbin/mke2fs -q -F -o Linux -E offset=16777216 -T ext4 -b 4096 -d "$BUILD_OUTPUT"/ "${ISO_OUTPUT}/${ISO_NAME}" 260000
+   eend $?
+   einfo "Resizing disk image to make space for MBR..."
+   truncate --size=+512 "${ISO_OUTPUT}/${ISO_NAME}"
+   eend $?
+   einfo "Making MBR ..."
+   MBRTMP=$(mktemp)
+   echo 'label: dos
+   start=32768, size=2080000, type=83' > "$MBRTMP"
+   cat "$MBRTMP"
+   /sbin/sfdisk "${ISO_OUTPUT}/${ISO_NAME}" < "$MBRTMP"
+   eend $?
+   rm -f "$MBRTMP"
 
    # do not continue on errors, otherwise we might generate/overwrite the ISO with dd if=... stuff
    if [ "$RC" != 0 ] ; then
