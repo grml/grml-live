@@ -986,7 +986,7 @@ else
     fi
   fi
 
-  ls -la "$BUILD_OUTPUT/boot/dtbs/"
+  ls -la "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"/dtbs
 
   # we need to set "$BOOTID" before we invoke adjust_boot_files for the
   # first time, being inside grub_setup below
