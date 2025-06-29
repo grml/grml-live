@@ -15,16 +15,26 @@ target=${target:?}
 # shellcheck source=/dev/null
 . "$GRML_LIVE_CONFIG"
 
-echo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
-rm -f "$target"/var/lib/apt/lists/*Packages \
-      "$target"/var/lib/apt/lists/*Release \
-      "$target"/var/lib/apt/lists/*Sources \
-      "$target"/var/lib/apt/lists/*Index* \
-      "$target"/var/lib/apt/lists/*Translation* \
-      "$target"/var/lib/apt/lists/*.gpg \
-      "$target"/var/cache/apt-show-versions/* \
-      "$target"/var/cache/debconf/*.dat-old \
-      "$target"/var/cache/apt/*.bin
+if ! $ROOTCMD grep -c bookworm /etc/os-release ; then
+  echo "Cleaning APT package lists"
+  $ROOTCMD apt distclean
+else
+  # apt(-get) distclean does not exist on bookworm. Open-code it.
+  # FIXME: remove this together with DEBIAN_BOOKWORM.
+  echo "Removing /var/lib/apt/lists/*-stuff, dpkg-status-old and pkgcache.bin"
+  rm -f "$target"/var/lib/apt/lists/*Packages \
+    "$target"/var/lib/apt/lists/*Release \
+    "$target"/var/lib/apt/lists/*Sources \
+    "$target"/var/lib/apt/lists/*Index* \
+    "$target"/var/lib/apt/lists/*Translation* \
+    "$target"/var/lib/apt/lists/*.gpg \
+    "$target"/var/cache/debconf/*.dat-old \
+    "$target"/var/cache/apt/*.bin
+fi
+
+echo "Removing /var/lib/apt/lists/*Release, /var/cache/debconf/*.dat-old"
+rm -f "$target"/var/lib/apt/lists/*Release \
+      "$target"/var/cache/debconf/*.dat-old
 
 echo "Removing /var/lib/aptitude/pkgstates.old"
 rm -f "$target"/var/lib/aptitude/pkgstates.old
