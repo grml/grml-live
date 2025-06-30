@@ -13,7 +13,7 @@ grml-live [-a <architecture>] [-c <classe[s]>] [-C <configfile>] [
 -e <extract_iso_name>] [-g <grml_name>] [-i <iso_name>] [
 -o <output_directory>] [-r <release_name>] [-s <suite>] [
 -t <template_directory>] [-v <version_number>] [-U <username>] [
--w <date>] [-AbBFnNqQuVz]
+-w <date>] [-AbBFnNqQRuVz]
 
 Description
 -----------
@@ -77,16 +77,19 @@ that you do not want to update the chroot.
   -c **CLASSES**::
 
 Specify the CLASSES to be used for building the ISO.  By default only
-the classes GRMLBASE, GRML_FULL and I386/AMD64/ARM64 (depending on system
-architecture) are assumed.  Additionally you can specify a class providing a
+the class GRML_FULL is assumed.  Additionally you can specify a class providing a
 (grml-)kernel (see <<classes,the 'CLASSES' section in this document>> for
 details about available classes). So instead of GRML_FULL you can also use e.g.
 GRML_SMALL.
 
+The classes GRMLBASE, RELEASE, and AMD64/ARM64 (depending on system
+architecture) are automatically added, and shall not be given on the
+command line.
+
 [IMPORTANT]
 All class names should be written in uppercase letters. Do not use a dash, use
-an underscore. So do not use "amd64" but "AMD64", do not use "FOO BAR" but
-"FOO_BAR".
+an underscore. So do not use "grml_small" but "GRML_SMALL", do not use "FOO BAR"
+but "FOO_BAR".
 
 
   -C **CONFIGURATION_FILE**::
@@ -193,6 +196,11 @@ Build the ISO without generating a netboot package.
   -r **RELEASENAME**::
 
 Specify name of the release.
+
+  -R::
+
+After building the chroot, do not clean up for a release ISO. This skips applying
+the class "RELEASE".
 
   -s **SUITE**::
 

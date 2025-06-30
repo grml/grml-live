@@ -44,7 +44,7 @@ Usage: $PN [options, see as follows]
    -a <architecture>       architecture; available values: i386, amd64 + arm64
    -A                      clean build directories before and after running
    -b                      build the ISO without updating the chroot
-   -B                      build the ISO without touching the chroot (skips cleanup)
+   -B                      build the ISO without touching the chroot (do not clean up)
    -c <class[es]>          classes to be used for building the ISO
    -C <configfile>         configuration file for grml-live
    -d <date>               use specified date instead of build time as date of release
@@ -62,6 +62,7 @@ Usage: $PN [options, see as follows]
    -q                      skip mksquashfs
    -Q                      skip netboot package build
    -r <release_name>       release name
+   -R                      skip applying RELEASE clean up
    -s <suite>              Debian suite/release, like: stable, testing, unstable
    -S <script_directory>   place of scripts (defaults to /usr/share/grml-live/scripts)
    -t <template_directory> place of the templates
@@ -308,12 +309,12 @@ adjust_boot_files() {
 # }}}
 
 # command line parsing {{{
-while getopts "a:C:c:d:D:e:g:i:I:o:r:s:S:t:U:v:w:AbBFhnNqQuVz" opt; do
+while getopts "a:C:c:d:D:e:g:i:I:o:r:s:S:t:U:v:w:AbBFhnNqQRuVz" opt; do
   case "$opt" in
     a) ARCH="$OPTARG" ;;
     A) CLEAN_ARTIFACTS=1 ;;
     b) BUILD_ONLY=1 ;;
-    B) BUILD_DIRTY=1 ;;
+    B) BUILD_DIRTY=1; SKIP_RELEASE=1 ;;
     c) CLASSES="$OPTARG" ;;
     C) LOCAL_CONFIG="$(readlink -f "$OPTARG")" ;;
     d) DATE="$OPTARG" ;;
@@ -329,6 +330,7 @@ while getopts "a:C:c:d:D:e:g:i:I:o:r:s:S:t:U:v:w:AbBFhnNqQuVz" opt; do
     q) SKIP_MKSQUASHFS=1 ;;
     Q) SKIP_NETBOOT=1 ;;
     r) RELEASENAME="$OPTARG" ;;
+    R) SKIP_RELEASE=1 ;;
     s) SUITE="$OPTARG" ;;
     S) SCRIPTS_DIRECTORY="$OPTARG";;
     t) TEMPLATE_DIRECTORY="$OPTARG";;
@@ -388,7 +390,7 @@ export SOURCE_DATE_EPOCH
 
 # assume sane defaults (if not set already) {{{
 [ -n "$ARCH" ]                    || ARCH="$(dpkg --print-architecture)"
-[ -n "$CLASSES" ]                 || CLASSES="GRMLBASE,GRML_FULL,$(echo "${ARCH}" | tr '[:lower:]' '[:upper:]')"
+[ -n "$CLASSES" ]                 || CLASSES="GRML_FULL,$(echo "${ARCH}" | tr '[:lower:]' '[:upper:]')"
 [ -n "$DATE" ]                    || DATE="$(date --utc -d "@${SOURCE_DATE_EPOCH}" +%Y-%m-%d)"
 [ -n "$DISTRI_INFO" ]             || DISTRI_INFO='Grml - Live Linux for system administrators'
 [ -n "$DISTRI_NAME" ]             || DISTRI_NAME="grml"
@@ -475,6 +477,33 @@ fi
 [ -n "$GRML_NAME" ] && SHORT_NAME="$(echo "$GRML_NAME" | tr -d ',./;\- ')"
 # }}}
 
+# automatic classes {{{
+if hasclass GRMLBASE ; then
+  ewarn "Class GRMLBASE explicitly requested. This is now automatic, please remove it."; eend 1
+else
+  CLASSES="GRMLBASE,${CLASSES}"
+fi
+if hasclass RELEASE ; then
+  ewarn "Class RELEASE explicitly requested. This is now automatic, please remove it."; eend 1
+  if [[ "$SKIP_RELEASE" == "1" ]]; then
+    eerror "Class RELEASE explicitly requested, while conflicting option -R is also given. Please remove either."
+    bailout 1
+  fi
+elif [[ -z "$SKIP_RELEASE" ]]; then
+  CLASSES="${CLASSES},RELEASE"
+fi
+if hasclass AMD64 ; then
+  ewarn "Class AMD64 explicitly requested. This is now automatic, please remove it."; eend 1
+elif [[ "$ARCH" == "amd64" ]]; then
+  CLASSES="${CLASSES},AMD64"
+fi
+if hasclass ARM64 ; then
+  ewarn "Class ARM64 explicitly requested. This is now automatic, please remove it."; eend 1
+elif [[ "$ARCH" == "arm64" ]]; then
+  CLASSES="${CLASSES},ARM64"
+fi
+# }}}
+
 # Warn user if addons from grml-live-addons are absent {{{
 if [ -z "${NO_ADDONS:-}" ] && [ ! -r "$TEMPLATE_DIRECTORY"/arch ] ; then
   ewarn "Boot addons not found (Consider installing package grml-live-addons)" ; eend 0
@@ -523,6 +552,7 @@ else
     [ -n "$BUILD_ONLY" ]          && echo "  Executing BUILD_ONLY instead of fresh installation or UPDATE."
     [ -n "$BUILD_DIRTY" ]         && echo "  Executing BUILD_DIRTY to leave chroot untouched."
 fi
+[ -n "$SKIP_RELEASE" ]        && echo "  Skipping RELEASE clean up."
 echo
 if [ -z "$FORCE" ] ; then
    echo "Check the configuration above, or use -F to force execution."

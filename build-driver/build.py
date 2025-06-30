@@ -217,21 +217,14 @@ def skip_sources_requested(build_config: dict, env: dict) -> bool:
     return False
 
 
-def get_grml_live_classes(arch: str, flavor: str, classes_for_mode: list[str], skip_sources: bool) -> list[str]:
-    base_classes = [
-        "GRMLBASE",
-        f"GRML_{flavor.upper()}",
-        "RELEASE",
-        arch.upper(),
-    ]
+def get_grml_live_classes(flavor: str, classes_for_mode: list[str], skip_sources: bool) -> list[str]:
+    base_classes = [f"GRML_{flavor.upper()}"]
 
     # Add extra classes from environment variable
     extra_classes = os.getenv("EXTRA_CLASSES", "").strip()
     if extra_classes:
         extra_class_list = [cls.strip() for cls in extra_classes.split(",") if cls.strip()]
-        # Insert extra classes before "RELEASE"
-        release_index = base_classes.index("RELEASE")
-        base_classes[release_index:release_index] = extra_class_list
+        base_classes += extra_class_list
         print(f"I: Adding extra classes: {extra_class_list}")
 
     if skip_sources:
@@ -399,7 +392,7 @@ def main(program_name: str, argv: list[str]) -> int:
     # possibly mismatching the versions. Also we do not prepare a working DNS,
     # so it would just fail. In the future, grml-live should support reusing
     # the sources tarball and fetching just the necessary differences.
-    classes = get_grml_live_classes(arch, flavor, classes_for_mode, skip_sources or build_mode == "release")
+    classes = get_grml_live_classes(flavor, classes_for_mode, skip_sources or build_mode == "release")
 
     build_grml_name = f"grml-{flavor}-{arch}"
     last_release_version = build_config["last_release"]
