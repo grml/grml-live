@@ -224,7 +224,6 @@ def get_grml_live_classes(arch: str, flavor: str, classes_for_mode: list[str], s
         f"GRML_{flavor.upper()}",
         "RELEASE",
         arch.upper(),
-        "IGNORE",
     ]
 
     # Add extra classes from environment variable
