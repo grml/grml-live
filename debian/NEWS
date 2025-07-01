@@ -1,3 +1,22 @@
+grml-live (0.53.2) unstable; urgency=medium
+
+  Class (option -c) handling has changed:
+
+  - GRMLBASE and architecture-specific classes are now enabled by
+    default and should be removed from your grml-live invocation.
+
+  - The RELEASE class (which cleans up /root and /home/grml) is also
+    automatically enabled and can be disabled using the new "-R"
+    option.
+
+  These changes simplify the build process by reducing the need for
+  manual class specification in most common use cases.
+
+  You should still specify GRML_SMALL or GRML_FULL and/or your custom
+  classes.
+
+ -- Chris Hofstaedtler <ch@grml.org>  Tue, 01 Jul 2025 00:42:50 +0200
+
 grml-live (0.52.0) unstable; urgency=medium
 
   We replaced FAI with our own implementation minifai.  It should be
