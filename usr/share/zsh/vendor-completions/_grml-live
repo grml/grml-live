@@ -54,23 +54,21 @@ _grmllive_suites() { #{{{
   _wanted list expl 'Debian suite' compadd ${expl} -- ${suites}
 }
 #}}}
-_grmllive_waybackdates() { #{{{
-  local expl
-  local -a waybackdates 
-
-  getdates() {
-    whence -p python3 &>/dev/null || return 0
-    local timespan='-6month'
-    local timestamp="$(date +%Y%m%d --date="${timespan}")"
-    local url="http://snapshot.debian.org/mr/timestamp/?archive=debian&after=${timestamp}"
-    python3 -c 'import sys,urllib.request,json;[print(x) for x in json.loads(urllib.request.urlopen(sys.argv[1]).read())["result"]["debian"]]' "$url" 2>/dev/null || :
+_grmllive_apt_snapshot_dates() { #{{{
+  local -a expl dates
+  # Get last 6 months of dates
+  zmodload -i zsh/datetime && {
+    local i date last=$EPOCHSECONDS
+    for (( i = 0; i < 180; i++ )); do
+      strftime -s date %Y%m%d $last
+      dates+=( $date )
+      last=$(( last - (24 * 60 * 60) ))
+    done
   }
-  waybackdates=(
-    ${(u)$(getdates)%T*}
-  )
-  _wanted list expl 'wayback date(s)' compadd ${expl} -- ${waybackdates}
+  _wanted list expl 'wayback date (yyyymmdd[ThhmmssZ])' compadd -- $dates
 }
 #}}}
+
 arguments=( #{{{
   '-a[specifiy architecture to use]:arch(s):_grmllive_archs'
   '-A[clean build directories before and after running]'
@@ -98,7 +96,7 @@ arguments=( #{{{
   '-u[update existing chroot instead of rebuilding it from scratch]'
   '-U[arrange output to be owned by specified username]'
   '-V[increase verbosity]'
-  '-w[wayback machine, build system using Debian archives from specified date]:wayback date(s):_grmllive_waybackdates'
+  '-w[wayback machine, build system using Debian archives from specified date]:wayback date(s):_grmllive_apt_snapshot_dates'
   '-z[use ZLIB instead of LZMA/XZ compression]'
 )
 #}}}
