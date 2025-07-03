@@ -747,8 +747,6 @@ if [ -n "$BUILD_DIRTY" ]; then
    log   "Skipping stage 'fai' as requested via option -B"
    ewarn "Skipping stage 'fai' as requested via option -B" ; eend 0
 else
-   [ -n "$CHROOT_OUTPUT" ] || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
-
    if [ -n "$BOOTSTRAP_ONLY" ] ; then
       FAI_ACTION=bootstrap
    elif [ -n "$BUILD_ONLY" ] ; then
