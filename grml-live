@@ -64,7 +64,7 @@ Usage: $PN [options, see as follows]
    -r <release_name>       release name
    -R                      skip applying RELEASE clean up
    -s <suite>              Debian suite/release, like: stable, testing, unstable
-   -S <script_directory>   place of scripts (defaults to /usr/share/grml-live/scripts)
+   -S <arg>                deprecated - will be removed from grml-live
    -t <template_directory> place of the templates
    -u                      update existing chroot instead of rebuilding it from scratch
    -U <username>           arrange output to be owned by specified username
@@ -332,7 +332,7 @@ while getopts "a:C:c:d:D:e:g:i:I:o:r:s:S:t:U:v:w:AbBFhnNqQRuVz" opt; do
     r) RELEASENAME="$OPTARG" ;;
     R) SKIP_RELEASE=1 ;;
     s) SUITE="$OPTARG" ;;
-    S) SCRIPTS_DIRECTORY="$OPTARG";;
+    S) echo "grml-live option -S is deprecated, please remove it." ;;
     t) TEMPLATE_DIRECTORY="$OPTARG";;
     v) VERSION="$OPTARG" ;;
     F) FORCE=1 ;;
@@ -405,7 +405,6 @@ export SOURCE_DATE_EPOCH
 [ -n "$SQUASHFS_EXCLUDES_FILE" ]  || SQUASHFS_EXCLUDES_FILE="${GRML_FAI_CONFIG}/grml/squashfs-excludes"
 [ -n "$SUITE" ]                   || SUITE='testing'
 [ -n "$TEMPLATE_DIRECTORY" ]      || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
-[ -n "$SCRIPTS_DIRECTORY" ]       || SCRIPTS_DIRECTORY='/usr/share/grml-live/scripts'
 [ -n "$USERNAME" ]                || USERNAME='grml'
 [ -n "$VERSION" ]                 || VERSION='0.0.1'
 
@@ -1474,7 +1473,6 @@ generate_build_info() {
     grml_iso_output="${ISO_OUTPUT}" \
     grml_live_cmdline="${CMDLINE}" \
     grml_live_config_file="${LIVE_CONF}" \
-    grml_live_scripts_directory="${SCRIPTS_DIRECTORY}" \
     grml_live_template_directory="${TEMPLATE_DIRECTORY}" \
     grml_live_version="${GRML_LIVE_VERSION}" \
     grml_local_config="${LOCAL_CONFIG}" \
