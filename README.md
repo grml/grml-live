@@ -7,7 +7,7 @@ The build system is based on the class concept of FAI ([Fully Automatic Installa
 
 Building a Debian based 64bit live system is as simple as running:
 
-    # grml-live -s sid -a amd64 -c GRMLBASE,GRML_FULL,AMD64
+    # grml-live -s sid -a amd64 -c GRML_FULL
 
 You can fully customize the build process, including adding
 additional software and your very own configuration files.
@@ -24,4 +24,4 @@ of an installed `grml-live` package:
     # export LIVE_CONF=$(pwd)/etc/grml/grml-live.conf
     # export TEMPLATE_DIRECTORY=$(pwd)/templates
     # ln -s ../../../grml-live-grml/templates/boot/addons templates/boot/  # optional
-    # ./grml-live -s sid -a amd64 -c GRMLBASE,GRML_FULL,AMD64
+    # ./grml-live -s sid -a amd64 -c GRML_FULL

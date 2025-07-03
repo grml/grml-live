@@ -264,7 +264,7 @@ To get a 64bit Debian-testing and grml-small based Live-CD using /srv/grml-live
 as build and output directory use the following command line on your amd64
 system:
 
-  # grml-live -s testing -c GRMLBASE,GRML_SMALL,AMD64 -o /srv/grml-live
+  # grml-live -s testing -c GRML_SMALL -o /srv/grml-live
 
 [NOTE]
 
@@ -294,11 +294,11 @@ grml-live uses a class based concept, like FAI, for adjusting configuration and
 customizing the installation according to your needs. This gives you flexibility
 and strength without losing the simplicity in the build process.
 
-The main and base class provided by grml-live is named GRMLBASE. It's strongly
-recommended to **always** use the class GRMLBASE when building an ISO using
-grml-live, as well as the architecture dependent class which provides the kernel
-(being 'I386' for x86_32, 'AMD64' for x86_64 and 'ARM64' for arm64) and a GRML_*
-class (like GRML_SMALL or GRML_FULL).
+The main and base class provided by grml-live is named GRMLBASE. grml-live will
+automatically add it, together with the architecture-dependent class (being
+'I386' for x86_32, 'AMD64' for x86_64 and 'ARM64' for arm64).
+The GRML_SMALL and GRML_FULL classes define the official ISO builds.
+
 The following files and directories are relevant for class GRMLBASE by default:
 
   ${GRML_FAI_CONFIG}/scripts/GRMLBASE/
@@ -313,9 +313,9 @@ files/directories.
 If you want to use your own configuration, extend an existing configuration
 and/or add additional packages to your ISO just invent a new class (or extend an
 existing one). For example if you want to use your own class named "FOOBAR" on
-your amd64 build, et CLASSES="GRMLBASE,GRML_SMALL,AMD64,FOOBAR" inside
-/etc/grml/grml-live.local or invoke grml-live using the classes option:
-"grml-live -c GRMLBASE,GRML_SMALL,AMD64,FOOBAR ...".
+your amd64 build, set CLASSES="GRML_SMALL,FOOBAR" in /etc/grml/grml-live.local
+or invoke grml-live using the classes option:
+"grml-live -c GRML_SMALL,FOOBAR ...".
 
 More details regarding the class concept can be found in the documentation of
 FAI (being available at /usr/share/doc/fai-doc/ if you install fai-doc).
@@ -417,6 +417,10 @@ commandline.
   ${GRML_FAI_CONFIG}/
 
 The main directory for configuration of grml-live. More details below.
+Each subdirectory will have files or directories per "class". You can pick
+a single or multiple classes when invoking grml-live. Only the classes you
+selected (plus automatic classes) will influence the build result.
+Most customizations can be applied by defining a new class for your own use.
 
   ${GRML_FAI_CONFIG}/env/
 
@@ -436,14 +440,8 @@ installation process.
 
   ${GRML_FAI_CONFIG}/package_config/
 
-Directory with lists of software packages to be installed or removed.  The
-different classes describe what should find its way to your ISO.  When running
-"grml-live -c GRMLBASE,GRML_SMALL,AMD64 ..." only the configuration of GRMLBASE,
-GRML_SMALL and AMD64 will be taken. If you use 'grml-live -c
-GRMLBASE,GRML_SMALL,AMD64,FOOBAR ...' then the files of GRMLBASE, GRML_SMALL,
-AMD64 **plus** the files from FOOBAR will be taken. So just create a new class to
-adjust the package selection according to your needs.  Please notice that the
-directory GRMLBASE contains a package list defining a minimum but still
+Directory with lists of software packages to be installed or removed. Please
+note that GRMLBASE contains a package list defining a minimum but still
 reasonable package configuration.
 
   ${GRML_FAI_CONFIG}/scripts/
@@ -557,7 +555,7 @@ Instructions
   ## adjust if necessary (defaults to ./grml/):
   ## OUTPUT="/srv/grml-live"
   # ARCH="amd64"
-  CLASSES="GRMLBASE,GRML_FULL,AMD64"
+  CLASSES="GRML_FULL"
   EOF
 
 That's it. Now invoking 'grml-live -V' should build the ISO.  If everything
@@ -645,7 +643,7 @@ Just create a new class (using the package_config directory):
 
 and specify it when invoking grml-live then:
 
-  # grml-live -c GRMLBASE,GRML_SMALL,AMD64,MIKA
+  # grml-live -c GRML_SMALL,MIKA
 
 [[reset-grml-live-configuration]]
 I fscked up my grml-live configuration. How do I reset it to the defaults?
@@ -772,7 +770,7 @@ Usage example:
 
     # export GRML_FAI_CONFIG=$(pwd)/config
     # export TEMPLATE_DIRECTORY=$(pwd)/templates
-    # ./grml-live -s sid -a amd64 -c GRMLBASE,GRML_FULL,AMD64
+    # ./grml-live -s sid -a amd64 -c GRML_FULL
 
 [[source]]
 Source
