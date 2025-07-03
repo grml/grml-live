@@ -3,8 +3,8 @@ Compact tests for the packages module with full coverage.
 """
 
 import pytest
-from pathlib import Path
-from packages import PackageList, parse_class_packages, ClassFileParsingFailed
+
+from ..packages import PackageList, parse_class_packages
 
 
 @pytest.fixture

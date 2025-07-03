@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "grml-live"
+version = "0.1.0"
+description = "grml-live python tooling"
+requires-python = ">=3.11.0"
+license = {text = "GPL-2.0-or-later"}
+authors = [
+    {name = "grml team", email = "team@grml.org"},
+]
+
+[project.scripts]
+minifai = "grml_live.minifai:main"
+
+[project.urls]
+Homepage = "https://grml.org"
+Repository = "https://github.com/grml/grml-live"
+Issues = "https://github.com/grml/grml-live/issues"
+
+[tool.coverage.run]
+source = ["grml_live"]
+omit = [
+    "grml_live/tests/*",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+lint.select = [
+    "E",
+    "W",
+    "F",
+    "I",
+    "B",
+    "C4",
+    "UP",
+    "RUF",
+]
