@@ -3,10 +3,6 @@
 from pathlib import Path
 
 
-class ClassFileParsingFailed(Exception):
-    pass
-
-
 class PackageList:
     def __init__(self, to_install=None, to_skip=None):
         self.to_install = to_install or {}

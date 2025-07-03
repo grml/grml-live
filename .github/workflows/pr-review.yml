@@ -16,8 +16,12 @@ jobs:
           python-version: '3.11'
       - name: Install ruff
         run: pip install ruff
-      - name: Check ruff formatting
-        run: ruff format --line-length 120 --check usr/lib/grml-live/minifai usr/lib/grml-live/*.py usr/lib/grml-live/tests/*.py build-driver/*.py
+      - name: "build-driver: Check ruff formatting"
+        run: ruff format --line-length 120 --check build-driver/*.py
+      - name: "grml_live: Check ruff formatting"
+        run: cd usr/lib/grml-live && ruff format --line-length 120 --check .
+      - name: "grml_live: Check ruff lint"
+        run: cd usr/lib/grml-live && ruff check .
 
   autoconfig-tests:
     name: autoconfig tests
