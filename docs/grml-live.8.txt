@@ -332,14 +332,9 @@ ${GRML_FAI_CONFIG}/package_config whereas some further classes are defined for
 example in ${GRML_FAI_CONFIG}/scripts/ so specific feature sets can be
 selected. The following classes are predefined:
 
-* DEBORPHAN: get rid of "autoremove" and "removed-but-not-yet-purged" packages;
-also all packages listed in output of deborphan (only if deborphan is actually
-present, note that grml-live no longer installs deborphan by default as it's not
-present since Debian/trixie!). This class is called as such for historic
-reasons, and while deborphan itself is no longer relevant nowadays, the name of
-the class was kept as such for backwards compatibility reasons. This class is
-thought to be used *before* any further `GRML*` classes, like
-`DEBORPHAN,GRMLBASE,GRML_FULL,RELEASE,...` to get proper Grml releases.
+* DEBORPHAN: purge autoremove-able and "removed-but-not-yet-purged" packages.
+While deborphan itself is not available anymore, the name of the class was kept
+for backwards compatibility reasons.
 
 * FRESHCLAM: execute freshclam (if it's present) to update clamav definitions
 (increases resulting ISO size ~70MB). By default it's skipped to avoid bigger

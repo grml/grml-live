@@ -27,16 +27,5 @@ if [ -n "$PURGE_PACKAGES" ] ; then
   $ROOTCMD dpkg --purge $PURGE_PACKAGES
 fi
 
-# note: deborphan is no longer available as of Debian/trixie,
-# see https://github.com/grml/grml-live/issues/144
-if [ -x "$target"/usr/bin/deborphan ] ; then
-  # remove packages until deborphan does not find anymore:
-  while [ "$($ROOTCMD deborphan)" != "" ] ; do
-    echo "Executing deborphan"
-    # shellcheck disable=SC2046 # deborphan result needs word-splitting.
-    $ROOTCMD apt-get -y --purge remove $($ROOTCMD deborphan)
-  done
-fi
-
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
