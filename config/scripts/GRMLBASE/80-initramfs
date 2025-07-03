@@ -34,3 +34,5 @@ for initrd in $(basename "$target"/boot/vmlinuz-*) ; do
         $ROOTCMD update-initramfs -k "${initrd##vmlinuz-}" -u
     fi
 done
+
+$ROOTCMD find /boot/ -name initrd\*.bak -exec rm {} \;
