@@ -1,0 +1,175 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/10-efi
+# Purpose:       Create EFI image
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+# create and format EFI.IMG disk image, without files {{{
+create_efi_img() {
+  local img_file="$1"
+  local efi_size="$2"
+  dd if=/dev/zero of="${img_file}" bs="${efi_size}" count=1 2>/dev/null || exit 50
+  mformat -v GRML -N 0xcafecafe -i "${img_file}" :: || exit 51
+  mmd -i "${img_file}" ::EFI || exit 52
+  mmd -i "${img_file}" ::EFI/BOOT || exit 52
+}
+# }}}
+
+# grub boot {{{
+grub_setup() {
+  EFI_IMG="/boot/efi.img"
+
+  local efi_size
+  if [[ "${SECURE_BOOT:-}" == "disable" ]] || [[ "${ARCH:-}" == "i386" ]] ; then
+    efi_size='4M'
+  else
+    # e.g. templates/EFI/debian for Secure Boot has >4MB and needs more space
+    efi_size='8M'
+  fi
+
+  if [[ "$ARCH" == "amd64" ]] || [[ "$ARCH" == "arm64" ]] ; then
+    case "$ARCH" in
+      arm64)
+        BOOTX64="/boot/bootaa64.efi"
+        ;;
+      amd64)
+        BOOTX64="/boot/bootx64.efi"
+        BOOTX32="/boot/bootia32.efi"
+        ;;
+    esac
+
+    # important: this depends on execution of ${GRML_FAI_CONFIG}/scripts/GRMLBASE/45-grub-images
+    if ! [ -r "${target}/${BOOTX64}" ] ; then
+      echo "E: Cannot access GRUB UEFI image ${target}/${BOOTX64}, required for Secure Boot support" >&2
+      echo "W: Possible reason is failure to run ${GRML_FAI_CONFIG}/scripts/GRMLBASE/45-grub-images" >&2
+      exit 50
+    fi
+
+    # UEFI 32bit boot support, only supported with Debian trixie and newer,
+    # so make it optional and don't fail hard
+    if [[ "$ARCH" == "amd64" ]] && ! [ -r "${target}/${BOOTX32}" ] ; then
+      local uefi_32bit_support
+      uefi_32bit_support=0
+      echo "W: Cannot access GRUB 32-bit PC EFI image ${target}/${BOOTX32}, disabling UEFI 32bit boot support" >&2
+    fi
+
+    create_efi_img "${target}/${EFI_IMG}" "${efi_size}"
+
+    if [ "${SECURE_BOOT:-}" = "disable" ] ; then
+      echo "I: Secure Boot is disabled."
+
+      # install "$BOOTX64" as ::EFI/BOOT/{bootx64.efi|bootaa64.efi} inside image file "$EFI_IMG",
+      # and if present also "$BOOTX32" as ::EFI/BOOT/bootia32.efi on amd64 for UEFI 32bit boot support:
+      case "$ARCH" in
+        arm64)
+          mcopy -i "${target}/${EFI_IMG}" "${target}/${BOOTX64}" ::EFI/BOOT/bootaa64.efi >/dev/null || exit 53
+          ;;
+        amd64)
+          mcopy -i "${target}/${EFI_IMG}" "${target}/${BOOTX64}" ::EFI/BOOT/bootx64.efi >/dev/null || exit 53
+          # UEFI 32bit boot
+          if [ "${uefi_32bit_support:-}" != "0" ] ; then
+            mcopy -i "${target}/${EFI_IMG}" "${target}/${BOOTX32}" ::EFI/BOOT/bootia32.efi >/dev/null || exit 53
+          fi
+          ;;
+      esac
+
+      echo "I: Created UEFI image $EFI_IMG from $BOOTX64 ${BOOTX32:-}"
+    else
+      case "${SECURE_BOOT}" in
+        disable*)
+          echo "I: Secure Boot is disabled [mode: ${SECURE_BOOT}]"
+          ;;
+        debian|ubuntu)
+          echo "I: Secure Boot is enabled [mode: ${SECURE_BOOT}]"
+
+          local GRUBCFG_TEMPLATE="${TEMPLATE_DIRECTORY}/secureboot/grub.cfg"
+          local GRUBCFG_TMP
+          GRUBCFG_TMP=$(mktemp)
+
+          if ! [ -r "${GRUBCFG_TEMPLATE}" ] ; then
+            echo "E: Secure Boot template for GRUB [${GRUBCFG_TEMPLATE}] not found." >&2
+            exit 54
+          fi
+
+          cp "${GRUBCFG_TEMPLATE}" "${GRUBCFG_TMP}"
+          grml-live-adjust-boot-files "${GRUBCFG_TMP}"
+
+          mmd -i "${target}/${EFI_IMG}" ::boot      || exit 55
+          mmd -i "${target}/${EFI_IMG}" ::boot/grub || exit 55
+          mcopy -i "${target}/${EFI_IMG}" "${GRUBCFG_TMP}" ::boot/grub/grub.cfg || exit 56
+
+          rm "${GRUBCFG_TMP}"
+
+          if [ -r "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed" ] ; then
+            mcopy -i "${target}/${EFI_IMG}" "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed" ::EFI/BOOT/grubx64.efi >/dev/null || exit 57
+          else
+            echo "E: Secure Boot GRUB binary '${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed' not found." >&2
+            exit 57
+          fi
+
+          if [ -r "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed" ] ; then
+            mcopy -i "${target}/${EFI_IMG}" "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed" ::EFI/BOOT/bootx64.efi >/dev/null || exit 58
+          else
+            echo "E: Secure Boot GRUB binary '${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed' not found." >&2
+            exit 57
+          fi
+
+          echo "I: Created Secure Boot (${SECURE_BOOT}) UEFI image ${target}/${EFI_IMG}"
+          ;;
+        *)
+          echo "E: Secure Boot method '${SECURE_BOOT}' is unsupported." >&2
+          exit 59
+          ;;
+      esac
+    fi
+  fi
+
+  if [[ "$ARCH" == "i386" ]] ; then
+    BOOTX32="/boot/bootia32.efi"
+    if ! [ -r "${target}/${BOOTX32}" ] ; then
+      echo "E: Cannot access GRUB 32-bit PC EFI image ${target}/${BOOTX32}." >&2
+      echo "W: Possible reason is failure to run ${GRML_FAI_CONFIG}/scripts/GRMLBASE/45-grub-images" >&2
+      exit 50
+    fi
+
+    create_efi_img "${target}/${EFI_IMG}" "${efi_size}"
+    mcopy -i "${target}/${EFI_IMG}" "${target}/${BOOTX32}" ::EFI/BOOT/bootia32.efi >/dev/null || exit 53
+    echo "I: Created 32-bit PC EFI image $EFI_IMG from $BOOTX32"
+  fi
+}
+# }}}
+
+grub_setup
+
+$ROOTCMD mkdir -p "${GRML_LIVE_MEDIADIR}/boot/"
+if [ -r "${target}/boot/efi.img" ] && [ -r "${target}/boot/bootaa64.efi" ] ; then
+  echo "I: Copying 64-bit EFI boot files (arm64) into ISO path."
+  $ROOTCMD cp --preserve=timestamp "/boot/efi.img" "${GRML_LIVE_MEDIADIR}/boot/"
+  $ROOTCMD mkdir -p "${GRML_LIVE_MEDIADIR}/EFI/BOOT/"
+  $ROOTCMD cp --preserve=timestamp "/boot/bootaa64.efi" "${GRML_LIVE_MEDIADIR}/EFI/BOOT/bootaa64.efi"
+elif [ -r "${target}/boot/efi.img" ] && [ -r "${target}/boot/bootx64.efi" ] ; then
+  echo "I: Copying 64-bit EFI boot files (amd64) into ISO path."
+  $ROOTCMD cp --preserve=timestamp "/boot/efi.img" "${GRML_LIVE_MEDIADIR}/boot/"
+  $ROOTCMD mkdir -p "${GRML_LIVE_MEDIADIR}/EFI/BOOT/"
+  $ROOTCMD cp --preserve=timestamp "/boot/bootx64.efi" "${GRML_LIVE_MEDIADIR}/EFI/BOOT/bootx64.efi"
+elif [ -r "${target}/boot/efi.img" ] && [ -r "${target}/boot/bootia32.efi" ] ; then
+  echo "I: Copying 32-bit EFI boot files into ISO path."
+  $ROOTCMD cp --preserve=timestamp "/boot/efi.img" "${GRML_LIVE_MEDIADIR}/boot/"
+  $ROOTCMD mkdir -p "${GRML_LIVE_MEDIADIR}/EFI/BOOT/"
+  $ROOTCMD cp --preserve=timestamp "/boot/bootia32.efi" "${GRML_LIVE_MEDIADIR}/EFI/BOOT/bootia32.efi"
+else
+  echo "W: No EFI boot files found, skipping." >&2
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

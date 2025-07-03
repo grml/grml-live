@@ -671,17 +671,6 @@ cap_timestamps() {
 }
 # }}}
 
-# create and format EFI.IMG disk image, without files {{{
-create_efi_img() {
-  local img_file="$1"
-  local efi_size="$2"
-  dd if=/dev/zero of="${img_file}" bs="${efi_size}" count=1 2>/dev/null || bailout 50
-  mformat -v GRML -N 0xcafecafe -i "${img_file}" :: || bailout 51
-  mmd -i "${img_file}" ::EFI || bailout 52
-  mmd -i "${img_file}" ::EFI/BOOT || bailout 52
-}
-# }}}
-
 # on-the-fly configuration {{{
 
 case "${SUITE}" in
@@ -813,145 +802,6 @@ else
 fi # BUILD_DIRTY?
 # }}}
 
-# grub boot {{{
-grub_setup() {
-  EFI_IMG="/boot/efi.img"
-
-  local efi_size
-  if [[ "${SECURE_BOOT:-}" == "disable" ]] || [[ "${ARCH:-}" == "i386" ]] ; then
-    efi_size='4M'
-  else
-    # e.g. templates/EFI/debian for Secure Boot has >4MB and needs more space
-    efi_size='8M'
-  fi
-
-  if [[ "$ARCH" == "amd64" ]] || [[ "$ARCH" == "arm64" ]] ; then
-    case "$ARCH" in
-      arm64)
-        BOOTX64="/boot/bootaa64.efi"
-        ;;
-      amd64)
-        BOOTX64="/boot/bootx64.efi"
-        BOOTX32="/boot/bootia32.efi"
-        ;;
-    esac
-
-    # important: this depends on execution of ${GRML_FAI_CONFIG}/scripts/GRMLBASE/45-grub-images
-    if ! [ -r "${CHROOT_OUTPUT}/${BOOTX64}" ] ; then
-      log    "Cannot access GRUB UEFI image ${CHROOT_OUTPUT}/${BOOTX64}, required for Secure Boot support"
-      eerror "Cannot access GRUB UEFI image ${CHROOT_OUTPUT}/${BOOTX64}, required for Secure Boot support" ; eend 1
-      log    "Possible reason is failure to run ${GRML_FAI_CONFIG}/scripts/GRMLBASE/45-grub-images"
-      ewarn  "Possible reason is failure to run ${GRML_FAI_CONFIG}/scripts/GRMLBASE/45-grub-images"
-      bailout 50
-    fi
-
-    # UEFI 32bit boot support, only supported with Debian trixie and newer,
-    # so make it optional and don't fail hard
-    if [[ "$ARCH" == "amd64" ]] && ! [ -r "${CHROOT_OUTPUT}/${BOOTX32}" ] ; then
-      local uefi_32bit_support
-      uefi_32bit_support=0
-      log   "Cannot access GRUB 32-bit PC EFI image ${CHROOT_OUTPUT}/${BOOTX32}, disabling UEFI 32bit boot support."
-      ewarn "Cannot access GRUB 32-bit PC EFI image ${CHROOT_OUTPUT}/${BOOTX32}, disabling UEFI 32bit boot support" ; eend 0
-    fi
-
-    create_efi_img "${CHROOT_OUTPUT}/${EFI_IMG}" "${efi_size}"
-
-    if [ "${SECURE_BOOT:-}" = "disable" ] ; then
-      log   "Secure Boot is disabled."
-      einfo "Secure Boot is disabled." ; eend 0
-
-      # install "$BOOTX64" as ::EFI/BOOT/{bootx64.efi|bootaa64.efi} inside image file "$EFI_IMG",
-      # and if present also "$BOOTX32" as ::EFI/BOOT/bootia32.efi on amd64 for UEFI 32bit boot support:
-      case "$ARCH" in
-        arm64)
-          mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${CHROOT_OUTPUT}/${BOOTX64}" ::EFI/BOOT/bootaa64.efi >/dev/null || bailout 53
-          ;;
-        amd64)
-          mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${CHROOT_OUTPUT}/${BOOTX64}" ::EFI/BOOT/bootx64.efi >/dev/null || bailout 53
-          # UEFI 32bit boot
-          if [ "${uefi_32bit_support:-}" != "0" ] ; then
-            mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${CHROOT_OUTPUT}/${BOOTX32}" ::EFI/BOOT/bootia32.efi >/dev/null || bailout 53
-          fi
-          ;;
-      esac
-
-      log   "Created UEFI image $EFI_IMG from $BOOTX64 ${BOOTX32:-}"
-      einfo "Created UEFI image $EFI_IMG from $BOOTX64 ${BOOTX32:-}" ; eend 0
-    else
-      case "${SECURE_BOOT}" in
-        disable*)
-          log   "Secure Boot is disabled [mode: ${SECURE_BOOT}]"
-          einfo "Secure Boot is disabled [mode: ${SECURE_BOOT}]" ; eend 0
-          ;;
-        debian|ubuntu)
-          log   "Secure Boot is enabled [mode: ${SECURE_BOOT}]"
-          einfo "Secure Boot is enabled [mode: ${SECURE_BOOT}]" ; eend 0
-
-          local GRUBCFG_TEMPLATE="${TEMPLATE_DIRECTORY}/secureboot/grub.cfg"
-          local GRUBCFG_TMP
-          GRUBCFG_TMP=$(mktemp)
-
-          if ! [ -r "${GRUBCFG_TEMPLATE}" ] ; then
-            log    "Secure Boot template for GRUB [${GRUBCFG_TEMPLATE}] not found."
-            eerror "Secure Boot template for GRUB [${GRUBCFG_TEMPLATE}] not found." ; eend 1
-            bailout 54
-          fi
-
-          cp "${GRUBCFG_TEMPLATE}" "${GRUBCFG_TMP}"
-          adjust_boot_files "${GRUBCFG_TMP}"
-
-          mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::boot      || bailout 55
-          mmd -i "${CHROOT_OUTPUT}/${EFI_IMG}" ::boot/grub || bailout 55
-          mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${GRUBCFG_TMP}" ::boot/grub/grub.cfg || bailout 56
-
-          rm "${GRUBCFG_TMP}"
-
-          if [ -r "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed" ] ; then
-            mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed" ::EFI/BOOT/grubx64.efi >/dev/null || bailout 57
-          else
-            log    "Secure Boot GRUB binary '${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed' not found."
-            eerror "Secure Boot GRUB binary '${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed' not found." ; eend 1
-            bailout 57
-          fi
-
-          if [ -r "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed" ] ; then
-            mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed" ::EFI/BOOT/bootx64.efi >/dev/null || bailout 58
-          else
-            log    "Secure Boot GRUB binary '${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed' not found."
-            eerror "Secure Boot GRUB binary '${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed' not found." ; eend 1
-            bailout 57
-          fi
-
-          log   "Created Secure Boot (${SECURE_BOOT}) UEFI image ${CHROOT_OUTPUT}/${EFI_IMG}"
-          einfo "Created Secure Boot (${SECURE_BOOT}) UEFI image ${CHROOT_OUTPUT}/${EFI_IMG}" ; eend 0
-          ;;
-        *)
-          log   "Secure Boot method '${SECURE_BOOT}' is unsupported."
-          eerror "Secure Boot method '${SECURE_BOOT}' is unsupported." ; eend 1
-          bailout 59
-          ;;
-      esac
-    fi
-  fi
-
-  if [[ "$ARCH" == "i386" ]] ; then
-    BOOTX32="/boot/bootia32.efi"
-    if ! [ -r "${CHROOT_OUTPUT}/${BOOTX32}" ] ; then
-      log    "Cannot access GRUB 32-bit PC EFI image ${CHROOT_OUTPUT}/${BOOTX32}."
-      eerror "Cannot access GRUB 32-bit PC EFI image ${CHROOT_OUTPUT}/${BOOTX32}." ; eend 1
-      log    "Possible reason is failure to run ${GRML_FAI_CONFIG}/scripts/GRMLBASE/45-grub-images"
-      ewarn  "Possible reason is failure to run ${GRML_FAI_CONFIG}/scripts/GRMLBASE/45-grub-images"
-      bailout 50
-    fi
-
-    create_efi_img "${CHROOT_OUTPUT}/${EFI_IMG}" "${efi_size}"
-    mcopy -i "${CHROOT_OUTPUT}/${EFI_IMG}" "${CHROOT_OUTPUT}/${BOOTX32}" ::EFI/BOOT/bootia32.efi >/dev/null || bailout 53
-    log   "Created 32-bit PC EFI image $EFI_IMG from $BOOTX32"
-    einfo "Created 32-bit PC EFI image $EFI_IMG from $BOOTX32" ; eend 0
-  fi
-}
-# }}}
-
 # BUILD_OUTPUT - execute arch specific stuff and squashfs {{{
 mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for stage ARCH"
 
@@ -990,37 +840,6 @@ else
   # save information about the random filename inside /conf/bootfile.txt
   echo "${BOOT_FILE}" > "${BUILD_OUTPUT}"/conf/bootfile.txt
   eend 0
-
-  grub_setup
-
-  # EFI boot files
-  if [ -r "${CHROOT_OUTPUT}/boot/efi.img" ] && [ -r "${CHROOT_OUTPUT}/boot/bootaa64.efi" ] ; then
-    einfo "Copying 64-bit EFI boot files (arm64) into ISO path."
-    log   "Copying 64-bit EFI boot files (arm64) into ISO path."
-    RC=0
-    cp --preserve=timestamp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
-    mkdir -p "${BUILD_OUTPUT}/EFI/BOOT/" || RC=$?
-    cp --preserve=timestamp "${CHROOT_OUTPUT}/boot/bootaa64.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootaa64.efi" || RC=$?
-    eend "$RC"
-  elif [ -r "${CHROOT_OUTPUT}/boot/efi.img" ] && [ -r "${CHROOT_OUTPUT}/boot/bootx64.efi" ] ; then
-    einfo "Copying 64-bit EFI boot files (amd64) into ISO path."
-    log   "Copying 64-bit EFI boot files (amd64) into ISO path."
-    RC=0
-    cp --preserve=timestamp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
-    mkdir -p "${BUILD_OUTPUT}/EFI/BOOT/" || RC=$?
-    cp --preserve=timestamp "${CHROOT_OUTPUT}/boot/bootx64.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootx64.efi" || RC=$?
-    eend "$RC"
-  elif [ -r "${CHROOT_OUTPUT}/boot/efi.img" ] && [ -r "${CHROOT_OUTPUT}/boot/bootia32.efi" ] ; then
-    einfo "Copying 32-bit EFI boot files into ISO path."
-    log   "Copying 32-bit EFI boot files into ISO path."
-    RC=0
-    cp --preserve=timestamp "${CHROOT_OUTPUT}/boot/efi.img" "${BUILD_OUTPUT}/boot/" || RC=$?
-    mkdir -p "${BUILD_OUTPUT}/EFI/BOOT/" || RC=$?
-    cp --preserve=timestamp "${CHROOT_OUTPUT}/boot/bootia32.efi" "${BUILD_OUTPUT}/EFI/BOOT/bootia32.efi" || RC=$?
-    eend "$RC"
-  else
-    ewarn "No EFI boot files found, skipping." ; eend 0
-  fi
 
   if ! [ -d "${TEMPLATE_DIRECTORY}"/boot ] ; then
     log    "Error: ${TEMPLATE_DIRECTORY}/boot does not exist. Exiting."
