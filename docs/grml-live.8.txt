@@ -543,8 +543,6 @@ Instructions
   ## want a faster build process and don't need smaller ISOs?
   ## if so use zlib compression
   # SQUASHFS_OPTIONS="-comp gzip -b 256k"
-  ## want to use a specific squashfs binary?
-  # SQUASHFS_BINARY='/usr/bin/mksquashfs'
   ## install local files into the chroot
   # CHROOT_INSTALL="/srv/config/chroot_install"
   ## adjust if necessary (defaults to ./grml/):
