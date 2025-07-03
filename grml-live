@@ -775,7 +775,7 @@ fi
 # }}}
 
 # CHROOT_OUTPUT - execute FAI {{{
-if [ -n "$BUILD_DIRTY" ]; then
+if false ; then
    log   "Skipping stage 'fai' as requested via option -B"
    ewarn "Skipping stage 'fai' as requested via option -B" ; eend 0
 else
@@ -785,20 +785,25 @@ else
       FAI_ACTION=reconfigure
    elif [ -n "$UPDATE" ] ; then
       FAI_ACTION=softupdate
+   elif [ -n "$BUILD_DIRTY" ] ; then
+      FAI_ACTION=rebuild
+   elif [ -d "$CHROOT_OUTPUT/bin" ] ; then
+      log   "Skipping chroot bootstrap as $CHROOT_OUTPUT exists already."
+      ewarn "Skipping chroot bootstrap as $CHROOT_OUTPUT exists already." ; eend 0
    else
       FAI_ACTION=dirinstall
    fi
 
-   if [ -n "$UPDATE" ] || [ -n "$BUILD_ONLY" ] ; then
+   if [ -n "$UPDATE" ] || [ -n "$BUILD_ONLY" ] || [ -n "$BUILD_DIRTY" ] ; then
       if ! [ -r "$CHROOT_OUTPUT/etc/debian_version" ] ; then
          log    "Error: does not look like you have a working chroot. Updating/building not possible."
-         eerror "Error: does not look like you have a working chroot. Updating/building not possible. (Drop -u/-b option?)"
+         eerror "Error: does not look like you have a working chroot. Updating/building not possible. (Drop -u/-b/-B option?)"
          eend 1
          bailout 20
       fi
    fi
 
-   if [ -d "$CHROOT_OUTPUT/bin" ] && [ -z "$UPDATE" ] && [ -z "$BUILD_ONLY" ] ; then
+   if false ; then
       log   "Skipping stage 'fai $FAI_ACTION' as $CHROOT_OUTPUT exists already."
       ewarn "Skipping stage 'fai $FAI_ACTION' as $CHROOT_OUTPUT exists already." ; eend 0
    else
@@ -989,6 +994,11 @@ if [ -n "$BOOTSTRAP_ONLY" ] ; then
   log   "Skipping stage 'boot' as building with bootstrap only."
   ewarn "Skipping stage 'boot' as building with bootstrap only." ; eend 0
 else
+  einfo "Installing media files from chroot build"
+  log   "Installing media files from chroot build"
+  cp --preserve=timestamp -r "$CHROOT_OUTPUT/grml-live/media/." "$BUILD_OUTPUT/"
+  eend 0
+
   # Install boot code
   mkdir -p "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"
 
@@ -1584,9 +1594,10 @@ create_netbootpackage() {
   mkdir -p "$NETBOOT"
 
   local OUTPUTDIR="${NETBOOT}/build_tmp"
-  local WORKING_DIR="${OUTPUTDIR}/${OUTPUT_NAME}/tftpboot/"
 
+  local WORKING_DIR="${OUTPUTDIR}/${OUTPUT_NAME}/"
   mkdir -p "$WORKING_DIR"
+  cp --preserve=timestamp -r "$CHROOT_OUTPUT/grml-live/netboot/." "$WORKING_DIR/"
 
   cp --preserve=timestamp "${CHROOT_OUTPUT}"/boot/vmlinuz-*    "$WORKING_DIR"/vmlinuz
   cp --preserve=timestamp "${CHROOT_OUTPUT}"/boot/initrd.img-* "$WORKING_DIR"/initrd.img

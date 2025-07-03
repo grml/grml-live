@@ -33,6 +33,7 @@ class FaiAction(StrEnum):
     DIRINSTALL = "dirinstall"
     SOFTUPDATE = "softupdate"
     RECONFIGURE = "reconfigure"
+    REBUILD = "rebuild"
 
 
 @dataclass
@@ -58,6 +59,10 @@ class BuildDirectories:
     build_dir: Path
     log_dir_inside: str
     log_dir: Path
+    netboot_dir_inside: str
+    netboot_dir: Path
+    media_dir_inside: str
+    media_dir: Path
     sources_dir_inside: str
     sources_dir: Path
 
@@ -159,11 +164,18 @@ def run_script(chroot_dir: Path, script: Path, helper_tools_path: Path, env: dic
     print(f"I: Finished script {script}.")
 
 
-def run_class_scripts(conf_dir: Path, chroot_dir: Path, class_name: str, helper_tools_path: Path, env: dict[str, str]):
+def run_class_scripts(
+    script_type: str,
+    conf_dir: Path,
+    chroot_dir: Path,
+    class_name: str,
+    helper_tools_path: Path,
+    env: dict[str, str],
+):
     print()
-    print(f'I: Running "scripts" for class {class_name}...')
+    print(f'I: Running "{script_type}" for class {class_name}...')
     print()
-    scripts_dir = conf_dir / "scripts" / class_name
+    scripts_dir = conf_dir / script_type / class_name
     for script in sorted(scripts_dir.glob("*")):
         if script.name.endswith(".dpkg-old") or script.name.endswith(".dpkg-new"):
             print(f"W: Skipping {script} due to name suffix, please delete it")
@@ -610,6 +622,14 @@ def _create_dirs(chroot_dir: Path) -> BuildDirectories:
     log_dir = build_dir / log_dir_name
     log_dir.mkdir()
 
+    media_dir_name = "media"
+    media_dir = build_dir / media_dir_name
+    media_dir.mkdir()
+
+    netboot_dir_name = "netboot"
+    netboot_dir = build_dir / netboot_dir_name
+    netboot_dir.mkdir()
+
     sources_dir_name = "grml_sources"
     sources_dir = build_dir / sources_dir_name
     sources_dir.mkdir()
@@ -619,6 +639,10 @@ def _create_dirs(chroot_dir: Path) -> BuildDirectories:
         build_dir=build_dir,
         log_dir_inside=f"/{build_dir_relative}/{log_dir_name}/",
         log_dir=log_dir,
+        media_dir_inside=f"/{build_dir_relative}/{media_dir_name}/",
+        media_dir=media_dir,
+        netboot_dir_inside=f"/{build_dir_relative}/{netboot_dir_name}/",
+        netboot_dir=media_dir,
         sources_dir_inside=f"/{build_dir_relative}/{sources_dir_name}/",
         sources_dir=sources_dir,
     )
@@ -644,6 +668,8 @@ def _run_tasks(
     env = {
         "GRML_LIVE_CONFIG": str(grml_live_config_chroot),
         "GRML_LIVE_BUILDDIR": directories.build_dir_inside,
+        "GRML_LIVE_MEDIADIR": directories.media_dir_inside,
+        "GRML_LIVE_NETBOOTDIR": directories.netboot_dir_inside,
         "GRML_LIVE_SOURCESDIR": directories.sources_dir_inside,
         "LOGDIR": str(directories.log_dir),
     } | read_envvars_for_classes(conf_dir, classes)
@@ -662,7 +688,11 @@ def _run_tasks(
 
         if not should_skip_task(dynamic_state, "configure"):
             for class_name in classes:
-                run_class_scripts(conf_dir, chroot_dir, class_name, helper_tools_path, env)
+                run_class_scripts("scripts", conf_dir, chroot_dir, class_name, helper_tools_path, env)
+
+        if not should_skip_task(dynamic_state, "build"):
+            for class_name in classes:
+                run_class_scripts("media-scripts", conf_dir, chroot_dir, class_name, helper_tools_path, env)
 
     return 0
 
@@ -713,6 +743,15 @@ def _main(program_name: str, argv: list[str]) -> int:
         elif args.action == FaiAction.RECONFIGURE:
             rc = _run_tasks(
                 conf_dir, chroot_dir, classes, args.grml_live_config, args.action, ["updatebase", "instsoft"]
+            )
+        elif args.action == FaiAction.REBUILD:
+            rc = _run_tasks(
+                conf_dir,
+                chroot_dir,
+                classes,
+                args.grml_live_config,
+                args.action,
+                ["updatebase", "instsoft", "configure"],
             )
         else:
             print(f"E: minifai: Unknown fai action: {args.action!r}")

@@ -302,6 +302,7 @@ The GRML_SMALL and GRML_FULL classes define the official ISO builds.
 The following files and directories are relevant for class GRMLBASE by default:
 
   ${GRML_FAI_CONFIG}/scripts/GRMLBASE/
+  ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/
   ${GRML_FAI_CONFIG}/debconf/GRMLBASE
   ${GRML_FAI_CONFIG}/env/GRMLBASE
   ${GRML_FAI_CONFIG}/hooks/instsoft.GRMLBASE
@@ -446,7 +447,13 @@ reasonable package configuration.
 
   ${GRML_FAI_CONFIG}/scripts/
 
-Scripts for customising the ISO within the build process.
+Scripts customising the chroot (the future squashfs contents) during the
+build process.
+
+  ${GRML_FAI_CONFIG}/media-scripts/
+
+Scripts customising the ISO contents during the build process. The squashfs
+will not be available when these scripts run.
 
 [[log-files]]
 Available log files
