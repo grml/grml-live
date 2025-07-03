@@ -409,12 +409,17 @@ export SOURCE_DATE_EPOCH
 [ -n "$USERNAME" ]                || USERNAME='grml'
 [ -n "$VERSION" ]                 || VERSION='0.0.1'
 
-# output specific stuff, depends on $OUTPUT (iff not set):
+# output specific stuff, depends on $OUTPUT:
 [ -n "$OUTPUT" ]           || OUTPUT="$PWD/grml/"
+[ -n "$BUILD_OUTPUT" ]     && echo "W: setting BUILD_OUTPUT is deprecated, please remove it"
 [ -n "$BUILD_OUTPUT" ]     || BUILD_OUTPUT="$OUTPUT/grml_cd"
+[ -n "$CHROOT_OUTPUT" ]    && echo "W: setting CHROOT_OUTPUT is deprecated, please remove it"
 [ -n "$CHROOT_OUTPUT" ]    || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
+[ -n "$ISO_OUTPUT" ]       && echo "W: setting ISO_OUTPUT is deprecated, please remove it"
 [ -n "$ISO_OUTPUT" ]       || ISO_OUTPUT="$OUTPUT/grml_isos"
+[ -n "$LOG_OUTPUT" ]       && echo "W: setting LOG_OUTPUT is deprecated, please remove it"
 [ -n "$LOG_OUTPUT" ]       || LOG_OUTPUT="$OUTPUT/grml_logs"
+[ -n "$NETBOOT" ]          && echo "W: setting NETBOOT is deprecated, please remove it"
 [ -n "$NETBOOT" ]          || NETBOOT="${OUTPUT}/netboot"
 # }}}
 
@@ -516,11 +521,8 @@ echo
 echo "  FAI classes:       $CLASSES"
 [ -n "$LOCAL_CONFIG" ]        && echo "  Configuration:     $LOCAL_CONFIG"
 [ -n "$GRML_FAI_CONFIG" ]     && echo "  Config directory:  $GRML_FAI_CONFIG"
-echo "  main directory:    $OUTPUT"
+echo "  Output directory:  $OUTPUT"
 [ -n "$EXTRACT_ISO_NAME" ]    && echo "  Extract ISO:       $EXTRACT_ISO_NAME"
-[ -n "$CHROOT_OUTPUT" ]       && echo "  Chroot target:     $CHROOT_OUTPUT"
-[ -n "$BUILD_OUTPUT" ]        && echo "  Build target:      $BUILD_OUTPUT"
-[ -n "$ISO_OUTPUT" ]          && echo "  ISO target:        $ISO_OUTPUT"
 [ -n "$GRML_NAME" ]           && echo "  Grml name:         $GRML_NAME"
 [ -n "$RELEASENAME" ]         && echo "  Release name:      $RELEASENAME"
 [ -n "$DATE" ]                && echo "  Build date:        $DATE"

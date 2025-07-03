@@ -150,8 +150,7 @@ Display short usage information and exit.
 
   -i **ISO_NAME**::
 
-Specify name of ISO which will be available inside $OUTPUT_DIRECTORY/grml_isos
-by default.
+Specify name of ISO which will be available inside $OUTPUT_DIRECTORY/grml_isos.
 
   -I **CHROOT_INSTALL**::
 
@@ -480,11 +479,11 @@ please send us a bug report then). Check out <<deploy-on-debian,How do I deploy
 grml-live on a plain Debian installation>> for details how to set up grml-live
 on a plain, original Debian system.
 
-* enough free disk space; at least ~2GB are required for a minimal grml-live
-run (\~1GB for the chroot [$CHROOT_OUTPUT], \~400MB for the build target
-[$BUILD_OUTPUT], \~35MB for the netboot files and \~350MB for the resulting ISO
-[$ISO_OUTPUT] plus some temporary files), if you plan to use GRML_FULL you
-should have at least 4GB of total free disk space
+* enough free disk space. At least 2GB are required for a minimal grml-live
+run (\~1GB for the chroot, \~400MB for the build target, \~35MB for the netboot
+files and \~350MB for the resulting ISO plus some temporary files).
+If you plan to build GRML_FULL you should have at least 4GB of total free disk
+space.
 
 * fast network access for retrieving the Debian packages used for creating the
 chroot (check out "local mirror" to workaround this problem as far as possible)
