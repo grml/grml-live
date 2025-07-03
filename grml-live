@@ -428,7 +428,7 @@ specify it on the command line using the -c option."
 specify it on the command line using the -o option."
 
 if [ "$ARCH" != "i386" ] && [ "$ARCH" != "amd64" ] && [ "$ARCH" != "arm64" ] ; then
-  eerror 'Error: Unsupported ARCH, sorry. Want to support it? Contribute!'
+  eerror "Error: Unsupported ARCH '$ARCH', sorry. Want to support it? Contribute!"
   eend 1
   bailout
 fi
