@@ -262,41 +262,11 @@ copy_file_logged() {
 
 # replace placeholders in template files with actual information
 adjust_boot_files() {
-  if [ -z "$1" ] ; then
-    echo "Usage: adjust_boot_files <template_file>" >&2
-    exit 1
-  fi
-
-  # ensure this has a specific length
-  local fixed_release_info
-  fixed_release_info="$(cut_string 68 "$release_info")"
-  fixed_release_info="$(extend_string_end 68 "$fixed_release_info")"
-
-  for file in "$@" ; do
-    if [ -r "${file}" ] && [ -f "${file}" ] ; then
-      sed -i "s/%ARCH%/$ARCH/g"                    "${file}"
-      sed -i "s/%DATE%/$DATE/g"                    "${file}"
-      sed -i "s/%DISTRI_INFO%/$DISTRI_INFO/g"      "${file}"
-      sed -i "s/%DISTRI_NAME%/$DISTRI_NAME/g"      "${file}"
-      sed -i "s/%DISTRI_SPLASH%/$DISTRI_SPLASH/g"  "${file}"
-      sed -i "s/%GRML_NAME%/$GRML_NAME/g"          "${file}"
-      sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/g"  "${file}"
-      sed -i "s/%RELEASE_INFO%/$RELEASE_INFO68/g"  "${file}"
-      sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
-      sed -i "s/%VERSION%/$VERSION/g"              "${file}"
-      if [ -n "${BOOT_FILE}" ] ; then
-        sed -i "s;%BOOT_FILE%;$BOOT_FILE;g"        "${file}"
-      fi
-
-      [ -n "$DEFAULT_BOOTOPTIONS" ] && sed -i "s; boot=live; boot=live $DEFAULT_BOOTOPTIONS;"  "${file}"
-
-      if [ -n "$NO_BOOTID" ] ; then
-        sed -i "s/ bootid=%BOOTID%//g" "${file}" # drop bootid bootoption
-      else
-        sed -i "s/%BOOTID%/$BOOTID/g" "${file}" # adjust bootid=... argument
-      fi
-    fi
-  done
+  # Stop gap until all boot code is moved into media-scripts.
+  local GRML_LIVE_CONFIG
+  export GRML_LIVE_CONFIG="$CONFIGDUMP"
+  "${GRML_FAI_CONFIG}"/tools/GRMLBASE/grml-live-adjust-boot-files "$@"
+  return $?
 }
 # }}}
 
@@ -667,7 +637,7 @@ einfo "Logging actions to logfile $LOGFILE"
 # dump config variables into file, for hooks/scripts access {{{
 CONFIGDUMP=$(mktemp)
 set | grep -E \
-  '^(GRML_NAME|SHORT_NAME|RELEASENAME|RELEASE_INFO|DATE|VERSION|SUITE|ARCH|DISTRI_NAME|TEMPLATE_DIRECTORY|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH|BOOTID|BOOT_FILE|SECURE_BOOT)=' \
+  '^(GRML_NAME|SHORT_NAME|RELEASENAME|RELEASE_INFO|RELEASE_INFO68|DATE|VERSION|SUITE|ARCH|DISTRI_INFO|DISTRI_NAME|DISTRI_SPLASH|SQUASHFS_NAME|TEMPLATE_DIRECTORY|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH|NO_BOOTID|BOOTID|BOOT_FILE|DEFAULT_BOOTOPTIONS|SECURE_BOOT)=' \
   > "${CONFIGDUMP}"
 # }}}
 
