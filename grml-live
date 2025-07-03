@@ -415,7 +415,6 @@ export SOURCE_DATE_EPOCH
 [ -n "$CHROOT_OUTPUT" ]    || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
 [ -n "$ISO_OUTPUT" ]       || ISO_OUTPUT="$OUTPUT/grml_isos"
 [ -n "$LOG_OUTPUT" ]       || LOG_OUTPUT="$OUTPUT/grml_logs"
-[ -n "$REPORTS" ]          || REPORTS="${LOG_OUTPUT}/reports"
 [ -n "$NETBOOT" ]          || NETBOOT="${OUTPUT}/netboot"
 # }}}
 
