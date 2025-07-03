@@ -303,7 +303,7 @@ The following files and directories are relevant for class GRMLBASE by default:
 
   ${GRML_FAI_CONFIG}/scripts/GRMLBASE/
   ${GRML_FAI_CONFIG}/debconf/GRMLBASE
-  ${GRML_FAI_CONFIG}/class/GRMLBASE.var
+  ${GRML_FAI_CONFIG}/env/GRMLBASE
   ${GRML_FAI_CONFIG}/hooks/instsoft.GRMLBASE
   ${GRML_FAI_CONFIG}/package_config/GRMLBASE
 
@@ -418,10 +418,10 @@ commandline.
 
 The main directory for configuration of grml-live. More details below.
 
-  ${GRML_FAI_CONFIG}/class/
+  ${GRML_FAI_CONFIG}/env/
 
-This directory contains files which specify main configuration variables for the
-classes.
+This directory contains files specifying environment variables for each
+class. The content of all (selected) files is merged.
 
   ${GRML_FAI_CONFIG}/debconf/
 

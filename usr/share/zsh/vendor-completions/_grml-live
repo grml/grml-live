@@ -40,7 +40,7 @@ _grmllive_classes() { #{{{
     compset -P '*,'
     already=(${(s<,>)IPREFIX})
     _wanted list expl 'classe(s)' compadd -S, -F already -q ${expl} -- \
-        /usr/share/grml-live/config/class/*(.N:t:r) ${static_classes}
+        /usr/share/grml-live/config/env/*(.N:t:r) ${static_classes}
 }
 #}}}
 _grmllive_suites() { #{{{
