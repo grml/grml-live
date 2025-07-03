@@ -352,9 +352,9 @@ classes, define your own CLASS file choosing the kernel package you want to use
 command line option).
 
 * GRML_FULL: full featured Grml, also known as the "normal", full grml as
-introduced in December 2011 (~750 ISO size).
+introduced in December 2011 (~1GB ISO size).
 
-* GRML_SMALL: minimum sized Grml version, known as grml-small (~360MB ISO
+* GRML_SMALL: minimum sized Grml version, known as grml-small (~600MB ISO
 size).
 
 * LATEX: LaTeX(-related) packages like auctex, texlive,...
