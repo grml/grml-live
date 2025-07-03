@@ -809,9 +809,6 @@ else
          mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
       fi
 
-      mkdir -p "${OUTPUT}"/grml_sources "${CHROOT_OUTPUT}"/grml-live/
-      mv "${OUTPUT}"/grml_sources "${CHROOT_OUTPUT}"/grml-live/
-
       log "Executed FAI command line:"
       log "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
       einfo "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
@@ -829,7 +826,6 @@ else
       fi
 
       mv "${CHROOT_OUTPUT}"/grml-live/grml_sources/ "${OUTPUT}"
-      rmdir "${CHROOT_OUTPUT}"/grml-live
 
       # provide inform fai about the ISO we build, needs to be provided
       # *after* FAI stage, otherwise FAI skips the debootstrap stage if
@@ -1413,6 +1409,8 @@ else
    # 1) leaking containerization supplied selinux attributes into the squashfs,
    # 2) prevents unpacking errors in a later build-only step in containers not supporting xattrs.
    SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -no-xattrs"
+   # Ignore build directory inside chroot.
+   SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -e grml-live/*"
 
    # support exclusion of files via exclude-file:
    if [ -n "$SQUASHFS_EXCLUDES_FILE" ] && [ "$SQUASHFS_EXCLUDES_FILE" ] ; then

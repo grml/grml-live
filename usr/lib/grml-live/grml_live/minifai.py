@@ -51,6 +51,17 @@ class CopyFilesArgs:
     paths: list[str]
 
 
+@dataclass(kw_only=True)
+class BuildDirectories:
+    # xxx_inside is always the path _inside_ the chroot ("relative", if chrooted).
+    build_dir_inside: str
+    build_dir: Path
+    log_dir_inside: str
+    log_dir: Path
+    sources_dir_inside: str
+    sources_dir: Path
+
+
 def now_for_log() -> str:
     return datetime.datetime.now().isoformat()
 
@@ -519,20 +530,6 @@ def policy_rcd(chroot_dir: Path):
             print(f"W: Failed cleaning up {program}")
 
 
-def create_logdir(chroot_dir: Path) -> Path:
-    log_dir = chroot_dir / "grml-live" / "log"
-    if log_dir.exists():
-        print(f"I: Deleting log directory from previous run: {log_dir}")
-        shutil.rmtree(log_dir)
-    print(f"I: Creating log directory: {log_dir}")
-    log_dir.mkdir()
-
-    # Create a file in there, so grml-live does not complain.
-    (log_dir / "minifai").write_text("This chroot was created by grml-live minifai. Not all features are supported.\n")
-
-    return log_dir
-
-
 def read_envvars_for_classes(conf_dir: Path, classes: list[str]) -> dict:
     """Read environment variable files"""
     env = {}
@@ -598,17 +595,53 @@ def task_updatebase(chroot_dir: Path, dynamic_state: DynamicState):
     run_chrooted(chroot_dir, ["apt", "-oapt::cmd::disable-script-warning=1", "--error-on=any", "update", "-q"])
 
 
+def _create_dirs(chroot_dir: Path) -> BuildDirectories:
+    """Create required directories _inside_ the chroot."""
+    # This code is as ugly as it looks.
+    build_dir_relative = "grml-live"
+    build_dir = chroot_dir / build_dir_relative
+    if build_dir.exists():
+        print(f'I: Deleting build directory "{build_dir_relative}" from previous run: {build_dir}')
+        shutil.rmtree(build_dir)
+    print(f"I: Creating build directory: {build_dir}")
+    build_dir.mkdir()
+
+    log_dir_name = "log"
+    log_dir = build_dir / log_dir_name
+    log_dir.mkdir()
+
+    sources_dir_name = "grml_sources"
+    sources_dir = build_dir / sources_dir_name
+    sources_dir.mkdir()
+
+    return BuildDirectories(
+        build_dir_inside=f"/{build_dir_relative}/",
+        build_dir=build_dir,
+        log_dir_inside=f"/{build_dir_relative}/{log_dir_name}/",
+        log_dir=log_dir,
+        sources_dir_inside=f"/{build_dir_relative}/{sources_dir_name}/",
+        sources_dir=sources_dir,
+    )
+
+
 def _run_tasks(
     conf_dir: Path, chroot_dir: Path, classes: list[str], grml_live_config: Path, fai_action: str, skip_tasks: list[str]
 ) -> int:
     dynamic_state = DynamicState()
-    logdir = create_logdir(chroot_dir)
+    directories = _create_dirs(chroot_dir)
+
+    # Create a file in there, so grml-live does not complain.
+    (directories.log_dir / "minifai").write_text(
+        "This chroot was created by grml-live minifai. Not all FAI features are supported.\n"
+    )
 
     do_skiptask(dynamic_state, skip_tasks)
 
     env = {
         "GRML_LIVE_CONFIG": str(grml_live_config),
-        "LOGDIR": str(logdir),
+        "GRML_LIVE_BUILDDIR": directories.build_dir_inside,
+        "GRML_LIVE_SOURCESDIR": directories.sources_dir_inside,
+        "LOGDIR": str(directories.log_dir),
     } | read_envvars_for_classes(conf_dir, classes)
     show_env("Merged class variables", env)
 
