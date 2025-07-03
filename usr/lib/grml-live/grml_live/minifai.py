@@ -635,10 +635,14 @@ def _run_tasks(
         "This chroot was created by grml-live minifai. Not all FAI features are supported.\n"
     )
 
+    # duplicate grml_live_config into the chroot, so chrooted scripts can use it.
+    grml_live_config_chroot = directories.build_dir / "config"
+    grml_live_config_chroot.write_bytes(grml_live_config.read_bytes())
+
     do_skiptask(dynamic_state, skip_tasks)
 
     env = {
-        "GRML_LIVE_CONFIG": str(grml_live_config),
+        "GRML_LIVE_CONFIG": str(grml_live_config_chroot),
         "GRML_LIVE_BUILDDIR": directories.build_dir_inside,
         "GRML_LIVE_SOURCESDIR": directories.sources_dir_inside,
         "LOGDIR": str(directories.log_dir),
