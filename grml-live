@@ -409,13 +409,17 @@ export SOURCE_DATE_EPOCH
 [ -n "$USERNAME" ]                || USERNAME='grml'
 [ -n "$VERSION" ]                 || VERSION='0.0.1'
 
-# output specific stuff, depends on $OUTPUT (iff not set):
+# output specific stuff, depends on $OUTPUT:
 [ -n "$OUTPUT" ]           || OUTPUT="$PWD/grml/"
+[ -n "$BUILD_OUTPUT" ]     && echo "W: setting BUILD_OUTPUT is deprecated, please remove it"
 [ -n "$BUILD_OUTPUT" ]     || BUILD_OUTPUT="$OUTPUT/grml_cd"
+[ -n "$CHROOT_OUTPUT" ]    && echo "W: setting CHROOT_OUTPUT is deprecated, please remove it"
 [ -n "$CHROOT_OUTPUT" ]    || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
+[ -n "$ISO_OUTPUT" ]       && echo "W: setting ISO_OUTPUT is deprecated, please remove it"
 [ -n "$ISO_OUTPUT" ]       || ISO_OUTPUT="$OUTPUT/grml_isos"
+[ -n "$LOG_OUTPUT" ]       && echo "W: setting LOG_OUTPUT is deprecated, please remove it"
 [ -n "$LOG_OUTPUT" ]       || LOG_OUTPUT="$OUTPUT/grml_logs"
-[ -n "$REPORTS" ]          || REPORTS="${LOG_OUTPUT}/reports"
+[ -n "$NETBOOT" ]          && echo "W: setting NETBOOT is deprecated, please remove it"
 [ -n "$NETBOOT" ]          || NETBOOT="${OUTPUT}/netboot"
 # }}}
 
@@ -517,11 +521,8 @@ echo
 echo "  FAI classes:       $CLASSES"
 [ -n "$LOCAL_CONFIG" ]        && echo "  Configuration:     $LOCAL_CONFIG"
 [ -n "$GRML_FAI_CONFIG" ]     && echo "  Config directory:  $GRML_FAI_CONFIG"
-echo "  main directory:    $OUTPUT"
+echo "  Output directory:  $OUTPUT"
 [ -n "$EXTRACT_ISO_NAME" ]    && echo "  Extract ISO:       $EXTRACT_ISO_NAME"
-[ -n "$CHROOT_OUTPUT" ]       && echo "  Chroot target:     $CHROOT_OUTPUT"
-[ -n "$BUILD_OUTPUT" ]        && echo "  Build target:      $BUILD_OUTPUT"
-[ -n "$ISO_OUTPUT" ]          && echo "  ISO target:        $ISO_OUTPUT"
 [ -n "$GRML_NAME" ]           && echo "  Grml name:         $GRML_NAME"
 [ -n "$RELEASENAME" ]         && echo "  Release name:      $RELEASENAME"
 [ -n "$DATE" ]                && echo "  Build date:        $DATE"
@@ -748,8 +749,6 @@ if [ -n "$BUILD_DIRTY" ]; then
    log   "Skipping stage 'fai' as requested via option -B"
    ewarn "Skipping stage 'fai' as requested via option -B" ; eend 0
 else
-   [ -n "$CHROOT_OUTPUT" ] || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
-
    if [ -n "$BOOTSTRAP_ONLY" ] ; then
       FAI_ACTION=bootstrap
    elif [ -n "$BUILD_ONLY" ] ; then
@@ -960,7 +959,6 @@ grub_setup() {
 # }}}
 
 # BUILD_OUTPUT - execute arch specific stuff and squashfs {{{
-[ -n "$BUILD_OUTPUT" ] || BUILD_OUTPUT="$OUTPUT/grml_cd"
 mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for stage ARCH"
 
 # prepare ISO
@@ -1505,7 +1503,6 @@ generate_build_info() {
 # }}}
 
 # ISO_OUTPUT - mkisofs {{{
-[ -n "$ISO_OUTPUT" ] || ISO_OUTPUT="$OUTPUT/grml_isos"
 [ -n "$ISO_NAME" ] || ISO_NAME="${GRML_NAME}_${VERSION}.iso"
 
 BOOT_ARGS="-no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat -isohybrid-mbr ${CHROOT_OUTPUT}/usr/lib/ISOLINUX/isohdpfx.bin"
