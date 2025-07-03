@@ -957,7 +957,6 @@ grub_setup() {
 # }}}
 
 # BUILD_OUTPUT - execute arch specific stuff and squashfs {{{
-[ -n "$BUILD_OUTPUT" ] || BUILD_OUTPUT="$OUTPUT/grml_cd"
 mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for stage ARCH"
 
 # prepare ISO
