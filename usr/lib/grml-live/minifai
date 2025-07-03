@@ -20,7 +20,8 @@ from enum import StrEnum
 from pathlib import Path
 from threading import Event, Thread
 
-from packages import PackageList, parse_class_packages, ClassFileParsingFailed
+from classes import ClassFileParsingFailed, parse_class_varfile
+from packages import PackageList, parse_class_packages
 
 
 APT_DEBUG_ACQUIRE = "Debug::Acquire::http=true"
@@ -511,41 +512,6 @@ def create_logdir(chroot_dir: Path) -> Path:
     return log_dir
 
 
-def parse_varfile(varfile: Path) -> dict:
-    env = {}
-    lines = varfile.read_text().splitlines()
-    for lineno, orig_line in enumerate(lines):
-        # strip off comments
-        line = orig_line.split("#", 1)
-        if len(line) == 2:
-            line = line[0].rstrip()
-        elif line[0] == "":
-            line = ""
-        else:
-            line = line[0]
-
-        if not line:
-            continue
-
-        line = line.split("=", 1)
-        if len(line) == 2:
-            k, v = line
-            v = v.lstrip()
-            if (v.startswith('"') and v.endswith('"')) or (v.startswith("'") and v.endswith("'")):
-                v = v[1:-1]
-
-            k = k.rstrip()
-            if not k.startswith(" "):
-                # TODO: should instead check if k starts with alphanumeric (or whatever is allowed)
-                env[k] = v
-                continue
-
-        print(f"E: Cannot understand line {lineno} in {varfile}: {orig_line}")
-        raise ClassFileParsingFailed()
-
-    return env
-
-
 def read_envvars_for_classes(conf_dir: Path, classes: list[str]) -> dict:
     """Read environment variable files"""
     env = {}
@@ -553,7 +519,7 @@ def read_envvars_for_classes(conf_dir: Path, classes: list[str]) -> dict:
     for class_name in classes:
         varfile = conf_dir / "env" / class_name
         if varfile.exists():
-            env.update(parse_varfile(varfile))
+            env.update(parse_class_varfile(varfile))
 
     return env
 
