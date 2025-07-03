@@ -411,12 +411,15 @@ fi
 [ -n "$ARCH" ]                    || ARCH="$("$DPKG_BINARY" --print-architecture)"
 [ -n "$CLASSES" ]                 || CLASSES="GRML_FULL,$(echo "${ARCH}" | tr '[:lower:]' '[:upper:]')"
 [ -n "$DATE" ]                    || DATE="$(date --utc -d "@${SOURCE_DATE_EPOCH}" +%Y-%m-%d)"
+[ -n "$DEFAULT_BOOTOPTIONS" ]     || DEFAULT_BOOTOPTIONS=''
 [ -n "$DISTRI_INFO" ]             || DISTRI_INFO='Grml - Live Linux for system administrators'
 [ -n "$DISTRI_NAME" ]             || DISTRI_NAME="grml"
 [ -n "$DISTRI_SPLASH" ]           || DISTRI_SPLASH='grml.png'
 [ -n "$GRML_FAI_CONFIG" ]         || GRML_FAI_CONFIG='/usr/share/grml-live/config'
 [ -n "$GRML_NAME" ]               || GRML_NAME='grml'
 [ -n "$HOSTNAME" ]                || HOSTNAME='grml'
+[ -n "$NO_ADDONS" ]               || NO_ADDONS=''
+[ -n "$NO_BOOTID" ]               || NO_BOOTID=''
 [ -n "$RELEASENAME" ]             || RELEASENAME='grml-live rocks'
 [ -n "$SECURE_BOOT" ]             || SECURE_BOOT='disable'
 [ -n "$SQUASHFS_EXCLUDES_FILE" ]  || SQUASHFS_EXCLUDES_FILE="${GRML_FAI_CONFIG}/grml/squashfs-excludes"
