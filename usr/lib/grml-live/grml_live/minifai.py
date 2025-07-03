@@ -140,10 +140,10 @@ def chrooted_debconf_set_selections(chroot_dir: Path, selections_file: Path):
         run_chrooted(chroot_dir, ["debconf-set-selections", "-v"], env=env, stdin=selections_fd)
 
 
-def run_script(chroot_dir: Path, script: Path, helper_tools_path: Path, env: dict[str, str]):
+def run_script(chroot_dir: Path, script: Path, helper_tools_paths: list[Path], env: dict[str, str]):
     """
     Run a FAI hook script or class script, if it exists.
-    PATH will include helper_tools_path.
+    PATH will include helper_tools_paths.
     Environment will include env.
     """
 
@@ -153,7 +153,7 @@ def run_script(chroot_dir: Path, script: Path, helper_tools_path: Path, env: dic
     env = {
         "target": str(chroot_dir),
         "ROOTCMD": f"chroot {chroot_dir!s} ",
-        "PATH": str(helper_tools_path) + ":" + os.environ["PATH"],
+        "PATH": ":".join([str(p) for p in helper_tools_paths] + [os.environ["PATH"]]),
     } | env
     print()
     print(f"I: *** Running script {script} ***")
@@ -169,7 +169,7 @@ def run_class_scripts(
     conf_dir: Path,
     chroot_dir: Path,
     class_name: str,
-    helper_tools_path: Path,
+    helper_tools_paths: list[Path],
     env: dict[str, str],
 ):
     print()
@@ -180,14 +180,14 @@ def run_class_scripts(
         if script.name.endswith(".dpkg-old") or script.name.endswith(".dpkg-new"):
             print(f"W: Skipping {script} due to name suffix, please delete it")
             continue
-        run_script(chroot_dir, script, helper_tools_path, env)
+        run_script(chroot_dir, script, helper_tools_paths, env)
 
 
 def install_packages_for_classes(
     conf_dir: Path,
     chroot_dir: Path,
     classes: list[str],
-    helper_tools_path: Path,
+    helper_tools_paths: list[Path],
     hook_env: dict,
     dynamic_state: DynamicState,
 ):
@@ -216,7 +216,7 @@ def install_packages_for_classes(
     for class_name in classes:
         chrooted_debconf_set_selections(chroot_dir, conf_dir / "debconf" / class_name)
 
-        run_script(chroot_dir, conf_dir / "hooks" / class_name / "instsoft", helper_tools_path, hook_env)
+        run_script(chroot_dir, conf_dir / "hooks" / class_name / "instsoft", helper_tools_paths, hook_env)
 
         # Use the previously parsed package list and apply final skip rules
         package_list = class_package_lists[class_name]
@@ -648,6 +648,24 @@ def _create_dirs(chroot_dir: Path) -> BuildDirectories:
     )
 
 
+def install_class_helper_tools(conf_dir: Path, build_dir: Path, classes: list[str]) -> Path:
+    """
+    Copy class-config helpers into chroot.
+
+    Later classes will overwrite earlier classes' files. This is intentional.
+    """
+
+    class_helper_tools_path = build_dir / "tools"
+    class_helper_tools_path.mkdir()
+    for class_name in classes:
+        class_path = conf_dir / "tools" / class_name
+        if not class_path.exists():
+            continue
+        shutil.copytree(class_path, class_helper_tools_path, symlinks=False, dirs_exist_ok=True)
+
+    return class_helper_tools_path
+
+
 def _run_tasks(
     conf_dir: Path, chroot_dir: Path, classes: list[str], grml_live_config: Path, fai_action: str, skip_tasks: list[str]
 ) -> int:
@@ -676,23 +694,27 @@ def _run_tasks(
     show_env("Merged class variables", env)
 
     with helper_tools(conf_dir, chroot_dir, classes, dynamic_state) as helper_tools_path:
+        class_helper_tools_path = install_class_helper_tools(conf_dir, directories.build_dir, classes)
+
+        helper_tools_paths = [helper_tools_path, class_helper_tools_path]
+
         hook_env = env | {"FAI_ACTION": fai_action}
         for class_name in classes:
-            run_script(chroot_dir, conf_dir / "hooks" / class_name / "updatebase", helper_tools_path, hook_env)
+            run_script(chroot_dir, conf_dir / "hooks" / class_name / "updatebase", helper_tools_paths, hook_env)
 
         with policy_rcd(chroot_dir):
             task_updatebase(chroot_dir, dynamic_state)
 
             if not should_skip_task(dynamic_state, "instsoft"):
-                install_packages_for_classes(conf_dir, chroot_dir, classes, helper_tools_path, hook_env, dynamic_state)
+                install_packages_for_classes(conf_dir, chroot_dir, classes, helper_tools_paths, hook_env, dynamic_state)
 
         if not should_skip_task(dynamic_state, "configure"):
             for class_name in classes:
-                run_class_scripts("scripts", conf_dir, chroot_dir, class_name, helper_tools_path, env)
+                run_class_scripts("scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
 
         if not should_skip_task(dynamic_state, "build"):
             for class_name in classes:
-                run_class_scripts("media-scripts", conf_dir, chroot_dir, class_name, helper_tools_path, env)
+                run_class_scripts("media-scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
 
     return 0
 

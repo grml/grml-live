@@ -455,6 +455,11 @@ build process.
 Scripts customising the ISO contents during the build process. The squashfs
 will not be available when these scripts run.
 
+  ${GRML_FAI_CONFIG}/tools/
+
+Tools available in PATH when scripts and media-scripts are run. Later classes
+overwrite tools from earlier classes, if they share names.
+
 [[log-files]]
 Available log files
 -------------------
