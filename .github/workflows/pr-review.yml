@@ -20,6 +20,8 @@ jobs:
         run: ruff format --line-length 120 --check build-driver/*.py
       - name: "grml_live: Check ruff formatting"
         run: cd usr/lib/grml-live && ruff format --line-length 120 --check .
+      - name: "grml_live: Check ruff lint"
+        run: cd usr/lib/grml-live && ruff check .
 
   autoconfig-tests:
     name: autoconfig tests

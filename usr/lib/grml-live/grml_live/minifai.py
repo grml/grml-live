@@ -39,7 +39,8 @@ class FaiAction(StrEnum):
 class DynamicState:
     """Holds state that can change in FAI hooks, for example by calling "skiptask"."""
 
-    skip_tasks = set()
+    def __init__(self):
+        self.skip_tasks = set()
 
 
 def now_for_log() -> str:
@@ -68,7 +69,7 @@ def run_chrooted(chroot_dir: Path, args, check: bool = True, **kwargs):
         "PATH": "/usr/sbin:/sbin:/usr/bin:/bin",
         "TERM": "dumb",
     } | kwargs.get("env", {})
-    return run_x(["chroot", chroot_dir] + args, check=check, **kwargs)
+    return run_x(["chroot", chroot_dir, *args], check=check, **kwargs)
 
 
 def chrooted_dpkg_print_architecture(chroot_dir: Path) -> str:
@@ -89,7 +90,8 @@ def chrooted_apt_install(chroot_dir: Path, install_list: list[str]):
         "-q",
         "-y",
         "--no-install-recommends",
-    ] + install_list
+        *install_list,
+    ]
     if os.environ.get("GRML_LIVE_DEBUG_APT", "") != "":
         args.insert(1, f"-o{APT_DEBUG_ACQUIRE}")
     run_chrooted(
@@ -491,7 +493,7 @@ def policy_rcd(chroot_dir: Path):
                 program.unlink()
             else:
                 print(f"I: Not cleaning up {program} - our marker went missing")
-        except:
+        except Exception:
             print(f"W: Failed cleaning up {program}")
 
 
