@@ -561,7 +561,6 @@ Instructions
   # CHROOT_INSTALL="/srv/config/chroot_install"
   ## adjust if necessary (defaults to ./grml/):
   ## OUTPUT="/srv/grml-live"
-  FAI_DEBOOTSTRAP="bookworm http://deb.debian.org/debian/"
   # ARCH="amd64"
   CLASSES="GRMLBASE,GRML_FULL,AMD64"
   EOF
@@ -624,7 +623,7 @@ Can I use my own (local) Debian mirror?
 
 Yes. Set up an according sources.list configuration as class file in
 ${GRML_FAI_CONFIG}/files/${CLASS}/etc/apt/sources.list.d/ and adjust the variable
-FAI_DEBOOTSTRAP in /etc/grml/grml-live.conf[.local]. If you're setting up
+BOOTSTRAP_MIRROR in /etc/grml/grml-live.conf[.local]. If you're setting up
 your own class file make sure to include the class name in the class list
 (grml-live -c ...).
 
@@ -674,13 +673,13 @@ Set up apt-cacher-ng for use with grml-live
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Make sure /etc/grml/grml-live.local provides according APT_PROXY and
-FAI_DEBOOTSTRAP:
+BOOTSTRAP_MIRROR:
 
   # cat /etc/grml/grml-live.local
   [...]
   APT_PROXY="http://localhost:3142/"
   [...]
-  FAI_DEBOOTSTRAP="bookworm http://localhost:3142/deb.debian.org/debian bookworm main contrib non-free"
+  BOOTSTRAP_MIRROR="http://localhost:3142/deb.debian.org/debian"
 
 Make sure apt-cacher-ng is running ('/etc/init.d/apt-cacher-ng restart').
 That's it.  All downloaded files will be cached in /var/cache/apt-cacher-ng then.
