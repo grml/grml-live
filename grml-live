@@ -448,6 +448,13 @@ if [ -n "$FAI_ARGS" ] ; then
   bailout
 fi
 
+if [ -n "$FAI_DEBOOTSTRAP" ] ; then
+  ewarn "The variable \$FAI_DEBOOTSTRAP is set, but it is deprecated." ; eend 1
+  ewarn "If you want to specify a mirror, please set BOOTSTRAP_MIRROR." ; eend 1
+  ewarn "Current value: \$FAI_DEBOOTSTRAP=${FAI_DEBOOTSTRAP}" ; eend 1
+  BOOTSTRAP_MIRROR="${FAI_DEBOOTSTRAP#* }"
+fi
+
 if [ -n "$FAI_DEBOOTSTRAP_OPTS" ] ; then
   eerror "The variable \$FAI_DEBOOTSTRAP_OPTS is set, but it is unsupported." ; eend 1
   eerror "Current value: \$FAI_DEBOOTSTRAP_OPTS=${FAI_DEBOOTSTRAP_OPTS}" ; eend 1
@@ -733,12 +740,11 @@ if [[ -n "${BOOT_METHOD:-}" ]] && [[ "${BOOT_METHOD}" != "isolinux" ]] ; then
   bailout
 fi
 
-# continue to support $FAI_DEBOOTSTRAP to specify the Debian suite and mirror URL.
-if [ -z "$FAI_DEBOOTSTRAP" ] ; then
+if [ -z "$BOOTSTRAP_MIRROR" ] ; then
   if [ -n "$WAYBACK_DATE" ] ; then
-    FAI_DEBOOTSTRAP="$SUITE http://snapshot.debian.org/archive/debian/$WAYBACK_DATE/"
+    BOOTSTRAP_MIRROR="http://snapshot.debian.org/archive/debian/$WAYBACK_DATE/"
   else
-    FAI_DEBOOTSTRAP="$SUITE http://deb.debian.org/debian"
+    BOOTSTRAP_MIRROR="http://deb.debian.org/debian"
   fi
 fi
 # }}}
@@ -784,10 +790,9 @@ else
       mv "${OUTPUT}"/grml_sources "${CHROOT_OUTPUT}"/grml-live/
 
       log "Executed FAI command line:"
-      log "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${CONFIGDUMP} ${FAI_DEBOOTSTRAP}"
-      einfo "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${CONFIGDUMP} ${FAI_DEBOOTSTRAP}"
-      # shellcheck disable=SC2086 # $FAI_DEBOOTSTRAP needs splitting
-      "${FAI_PROGRAM}" "${GRML_FAI_CONFIG}" "${CLASSES}" "${FAI_ACTION}" "${CHROOT_OUTPUT}" "${CONFIGDUMP}" ${FAI_DEBOOTSTRAP} 2>&1 | tee -a "${LOGFILE}"
+      log "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
+      einfo "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
+      "${FAI_PROGRAM}" "${GRML_FAI_CONFIG}" "${CLASSES}" "${FAI_ACTION}" "${CHROOT_OUTPUT}" "${CONFIGDUMP}" "${SUITE}" "${BOOTSTRAP_MIRROR}" 2>&1 | tee -a "${LOGFILE}"
       RC="${PIPESTATUS[0]}" # notice: bash-only
 
       # Fetches logs from "${CHROOT_OUTPUT}"/grml-live/log.
@@ -1463,7 +1468,7 @@ generate_build_info() {
     distri_info="${DISTRI_INFO}" \
     distri_name="${DISTRI_NAME}" \
     extract_iso_name="${EXTRACT_ISO_NAME}" \
-    fai_cmdline="${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${configdump_placeholder} ${FAI_DEBOOTSTRAP}" \
+    fai_cmdline="${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${configdump_placeholder} ${SUITE} ${BOOTSTRAP_MIRROR}" \
     fai_version="minifai" \
     grml_architecture="${ARCH}" \
     grml_bootid="${BOOTID}" \
