@@ -267,14 +267,6 @@ adjust_boot_files() {
     exit 1
   fi
 
-  local release_info
-  if [ -n "${RELEASE_INFO:-}" ] ; then
-    release_info="${RELEASE_INFO}"
-  else
-    ewarn "Variable RELEASE_INFO is unset, applying fallback for usage in adjust_boot_files." ; eend 1
-    release_info="$GRML_NAME $VERSION - Release Codename $RELEASENAME"
-  fi
-
   # ensure this has a specific length
   local fixed_release_info
   fixed_release_info="$(cut_string 68 "$release_info")"
@@ -289,7 +281,7 @@ adjust_boot_files() {
       sed -i "s/%DISTRI_SPLASH%/$DISTRI_SPLASH/g"  "${file}"
       sed -i "s/%GRML_NAME%/$GRML_NAME/g"          "${file}"
       sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/g"  "${file}"
-      sed -i "s/%RELEASE_INFO%/$fixed_release_info/g" "${file}"
+      sed -i "s/%RELEASE_INFO%/$RELEASE_INFO68/g"  "${file}"
       sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
       sed -i "s/%VERSION%/$VERSION/g"              "${file}"
       if [ -n "${BOOT_FILE}" ] ; then
@@ -506,10 +498,6 @@ if [ -e "$GRML_FAI_CONFIG"/config ] ; then
   eerror "Either set \$GRML_FAI_CONFIG=${GRML_FAI_CONFIG}/config or delete ${GRML_FAI_CONFIG}/config." ; eend 1
   bailout
 fi
-
-# trim characters that are known to cause problems inside $GRML_NAME;
-# for example isolinux does not like '-' inside the directory name
-[ -n "$GRML_NAME" ] && SHORT_NAME="$(echo "$GRML_NAME" | tr -d ',./;\- ')"
 # }}}
 
 # automatic classes {{{
@@ -600,6 +588,27 @@ if [ -z "$FORCE" ] ; then
 fi
 # }}}
 
+# setup derived variables {{{
+# trim characters that are known to cause problems inside $GRML_NAME;
+# for example isolinux does not like '-' inside the directory name
+SHORT_NAME="$(echo "$GRML_NAME" | tr -d ',./;\- ')"
+
+RELEASE_INFO="$GRML_NAME $VERSION - Release Codename $RELEASENAME"
+# ensure this has a specific length
+RELEASE_INFO68="$(cut_string 68 "$RELEASE_INFO")"
+RELEASE_INFO68="$(extend_string_end 68 "$RELEASE_INFO68")"
+
+SQUASHFS_NAME="$GRML_NAME.squashfs"
+
+if [ -n "$NO_BOOTID" ] ; then
+  BOOTID=""
+else
+  if [ -z "$BOOTID" ] ; then
+    BOOTID=$(echo "${GRML_NAME}${VERSION}" | tr -d ',./;\- ')
+  fi
+fi
+# }}}
+
 # clean up before start {{{
 if [ -n "${CLEAN_ARTIFACTS}" ]; then
   echo "Wiping old artifacts"
@@ -652,7 +661,7 @@ einfo "Logging actions to logfile $LOGFILE"
 # dump config variables into file, for hooks/scripts access {{{
 CONFIGDUMP=$(mktemp)
 set | grep -E \
-  '^(GRML_NAME|RELEASENAME|DATE|VERSION|SUITE|ARCH|DISTRI_NAME|TEMPLATE_DIRECTORY|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH)=' \
+  '^(GRML_NAME|SHORT_NAME|RELEASENAME|RELEASE_INFO|DATE|VERSION|SUITE|ARCH|DISTRI_NAME|TEMPLATE_DIRECTORY|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH|BOOTID|SECURE_BOOT)=' \
   > "${CONFIGDUMP}"
 # }}}
 
@@ -1002,10 +1011,6 @@ else
   # Install boot code
   mkdir -p "$BUILD_OUTPUT"/boot/"${SHORT_NAME}"
 
-  # this is a variable we're using for adjusting boot templates, not only in
-  # adjust_boot_files though, so set here
-  RELEASE_INFO="$GRML_NAME $VERSION - Release Codename $RELEASENAME"
-
   # if we don't have an initrd we a) can't boot and b) there was an error
   # during build, so check for the file:
   # shellcheck disable=SC2010 disable=SC2012 # We do not expect fancy characters here.
@@ -1053,7 +1058,6 @@ else
     log   "Skipping bootid feature as requested via \$NO_BOOTID."
     einfo "Skipping bootid feature as requested via \$NO_BOOTID."
   else
-    [ -n "$BOOTID" ] || BOOTID=$(echo "${GRML_NAME}${VERSION}" | tr -d ',./;\- ')
     mkdir -p "$BUILD_OUTPUT"/conf
     einfo "Generating /conf/bootid.txt with entry ${BOOTID}."
     log   "Generating /conf/bootid.txt with entry ${BOOTID}."
@@ -1260,8 +1264,6 @@ else
     sed -i "s/%DATE%/$DATE/"                 "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version
   fi
 
-  # make sure the squashfs filename is set accordingly:
-  SQUASHFS_NAME="$GRML_NAME.squashfs"
   # adjust bootsplash accordingly but make sure the string has the according length
   fixed_squashfs_name="$(cut_string 20 "$SQUASHFS_NAME")"
   fixed_squashfs_name="$(extend_string_end 20 "$fixed_squashfs_name")"
