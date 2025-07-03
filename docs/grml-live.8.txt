@@ -448,11 +448,6 @@ reasonable package configuration.
 
 Scripts for customising the ISO within the build process.
 
-  ${GRML_FAI_CONFIG}/live-initramfs/
-
-This directory provides the files used for building the initramfs/initrd via
-live-initramfs(8).
-
 [[log-files]]
 Available log files
 -------------------
