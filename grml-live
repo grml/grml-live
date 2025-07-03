@@ -388,8 +388,35 @@ fi
 export SOURCE_DATE_EPOCH
 # }}}
 
+# find programs
+[ -n "$DPKG_BINARY" ]             || DPKG_BINARY='dpkg'
+if ! type "$DPKG_BINARY" >/dev/null 2>&1 ; then
+  eerror "Error: $DPKG_BINARY not available - cannot determine architecture." ; eend 1
+  bailout
+fi
+[ -n "$MKSQUASHFS_BINARY" ]       || MKSQUASHFS_BINARY='mksquashfs'
+if [ -z "$SKIP_MKSQUASHFS" ] && ! type "$MKSQUASHFS_BINARY" >/dev/null 2>&1 ; then
+  eerror "Error: $MKSQUASHFS_BINARY not available - cannot build squashfs." ; eend 1
+  bailout
+fi
+[ -n "$OSIRROX_BINARY" ]          || OSIRROX_BINARY='osirrox'
+if [ -n "$EXTRACT_ISO_NAME" ] && ! type "$OSIRROX_BINARY" >/dev/null 2>&1 ; then
+  eerror "Error: $OSIRROX_BINARY not available - cannot extract ISO." ; eend 1
+  bailout
+fi
+[ -n "$UNSQUASHFS_BINARY" ]       || UNSQUASHFS_BINARY='unsquashfs'
+if [ -n "$EXTRACT_ISO_NAME" ] && ! type "$UNSQUASHFS_BINARY" >/dev/null 2>&1 ; then
+  eerror "Error: $UNSQUASHFS_BINARY not available - cannot extract ISO." ; eend 1
+  bailout
+fi
+[ -n "$XORRISO_BINARY" ]          || XORRISO_BINARY='xorriso'
+if [ -z "$SKIP_MKISOFS" ] && ! type "$XORRISO_BINARY" >/dev/null 2>&1 ; then
+  eerror "Error: $XORRISO_BINARY not available - cannot build ISO." ; eend 1
+  bailout
+fi
+
 # assume sane defaults (if not set already) {{{
-[ -n "$ARCH" ]                    || ARCH="$(dpkg --print-architecture)"
+[ -n "$ARCH" ]                    || ARCH="$("$DPKG_BINARY" --print-architecture)"
 [ -n "$CLASSES" ]                 || CLASSES="GRML_FULL,$(echo "${ARCH}" | tr '[:lower:]' '[:upper:]')"
 [ -n "$DATE" ]                    || DATE="$(date --utc -d "@${SOURCE_DATE_EPOCH}" +%Y-%m-%d)"
 [ -n "$DISTRI_INFO" ]             || DISTRI_INFO='Grml - Live Linux for system administrators'
@@ -400,7 +427,6 @@ export SOURCE_DATE_EPOCH
 [ -n "$HOSTNAME" ]                || HOSTNAME='grml'
 [ -n "$RELEASENAME" ]             || RELEASENAME='grml-live rocks'
 [ -n "$SECURE_BOOT" ]             || SECURE_BOOT='disable'
-[ -n "$SQUASHFS_BINARY" ]         || SQUASHFS_BINARY='mksquashfs'
 [ -n "$SQUASHFS_EXCLUDES_FILE" ]  || SQUASHFS_EXCLUDES_FILE="${GRML_FAI_CONFIG}/grml/squashfs-excludes"
 [ -n "$SUITE" ]                   || SUITE='testing'
 [ -n "$TEMPLATE_DIRECTORY" ]      || TEMPLATE_DIRECTORY='/usr/share/grml-live/templates'
@@ -639,7 +665,7 @@ if [ -n "$EXTRACT_ISO_NAME" ]; then
   local tempdir
   tempdir=$(mktemp -d)
   mkdir -p "${tempdir}/live/"
-  osirrox -indev "${EXTRACT_ISO_NAME}" -extract live "${tempdir}/live/" ; rc=$?
+  "$OSIRROX_BINARY" -indev "${EXTRACT_ISO_NAME}" -extract live "${tempdir}/live/" ; rc=$?
   if [ "$rc" != 0 ]; then
     rm -rf "$tempdir"
     log "osirrox failed"
@@ -651,8 +677,8 @@ if [ -n "$EXTRACT_ISO_NAME" ]; then
   local squashfs
   squashfs=( "${tempdir}"/live/*/*.squashfs )
   if (( ${#squashfs[@]} != 0 )) && [ -r "${squashfs[0]}" ]; then
-    log "Will unsquashfs ${squashfs[0]}"
-    unsquashfs -d "${CHROOT_OUTPUT}" "${squashfs[0]}" ; rc=$?
+    log "Will $UNSQUASHFS_BINARY ${squashfs[0]}"
+    "$UNSQUASHFS_BINARY" -d "${CHROOT_OUTPUT}" "${squashfs[0]}" ; rc=$?
   else
     log "Error: Could not find any *.squashfs files on the ISO"
     eerror "Error: Could not find any *.squashfs files on the ISO"
@@ -1372,15 +1398,6 @@ else
    # make sure we don't leave (even an empty) base.tgz:
    [ -f "$CHROOT_OUTPUT/base.tgz" ] && rm -f "$CHROOT_OUTPUT/base.tgz"
 
-   if which "$SQUASHFS_BINARY" >/dev/null 2>&1 ; then
-      log    "Using mksquashfs binary ${SQUASHFS_BINARY}"
-      einfo  "Using mksquashfs binary ${SQUASHFS_BINARY}" ; eend 0
-   else
-      log    "Error: mksquashfs binary ($SQUASHFS_BINARY) not found. Exiting."
-      eerror "Error: mksquashfs binary ($SQUASHFS_BINARY) not found. Exiting." ; eend 1
-      bailout
-   fi
-
    # use sane defaults if $SQUASHFS_OPTIONS isn't set
    if [ -z "$SQUASHFS_OPTIONS" ] ; then
      # use block size 1m as this gives good result with regards to time + compression
@@ -1410,11 +1427,11 @@ else
    # informational stuff
    [ -n "$SQUASHFS_OPTIONS" ]  && SQUASHFS_INFO_MSG="$SQUASHFS_OPTIONS"
    [ -n "$SQUASHFS_INFO_MSG" ] && SQUASHFS_INFO_MSG="using options: $SQUASHFS_INFO_MSG"
-   einfo "Squashfs build information: running binary $SQUASHFS_BINARY $SQUASHFS_INFO_MSG"
+   einfo "Squashfs build information: running $MKSQUASHFS_BINARY $SQUASHFS_INFO_MSG"
 
-   log "$SQUASHFS_BINARY $CHROOT_OUTPUT/ $BUILD_OUTPUT/live/${GRML_NAME}/${GRML_NAME}.squashfs -noappend $SQUASHFS_OPTIONS"
+   log "$MKSQUASHFS_BINARY $CHROOT_OUTPUT/ $BUILD_OUTPUT/live/${GRML_NAME}/${GRML_NAME}.squashfs -noappend $SQUASHFS_OPTIONS"
    # shellcheck disable=SC2086 # $SQUASHFS_OPTIONS needs splitting
-   if "$SQUASHFS_BINARY" "$CHROOT_OUTPUT/" "$BUILD_OUTPUT"/live/"${GRML_NAME}"/"${GRML_NAME}".squashfs \
+   if "$MKSQUASHFS_BINARY" "$CHROOT_OUTPUT/" "$BUILD_OUTPUT"/live/"${GRML_NAME}"/"${GRML_NAME}".squashfs \
       -noappend $SQUASHFS_OPTIONS 2>"${SQUASHFS_STDERR}" ; then
       echo "${GRML_NAME}.squashfs" > "$BUILD_OUTPUT"/live/"${GRML_NAME}"/filesystem.module
       log "Finished execution of stage 'squashfs' [$(date)]"
@@ -1473,10 +1490,10 @@ generate_build_info() {
     grml_username="${USERNAME}" \
     grml_version="${VERSION}" \
     host_architecture="$(dpkg --print-architecture || true)" \
-    mkisofs_cmdline="${MKISOFS} -V ${GRML_NAME} ${VERSION} -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o ${ISO_OUTPUT}/${ISO_NAME}" \
-    mkisofs_version="$(${MKISOFS} --version 2>/dev/null | head -1 || true)" \
-    mksquashfs_cmdline="${SQUASHFS_BINARY} ${CHROOT_OUTPUT}/ ${BUILD_OUTPUT}/live/${GRML_NAME}/${GRML_NAME}.squashfs -noappend ${SQUASHFS_OPTIONS}" \
-    mksquashfs_version="$(${SQUASHFS_BINARY} -version | head -1 || true)" \
+    mkisofs_cmdline="${XORRISO_BINARY} -as mkisofs -V ${GRML_NAME} ${VERSION} -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o ${ISO_OUTPUT}/${ISO_NAME}" \
+    mkisofs_version="$(${XORRISO_BINARY} --version 2>/dev/null | head -1 || true)" \
+    mksquashfs_cmdline="${MKSQUASHFS_BINARY} ${CHROOT_OUTPUT}/ ${BUILD_OUTPUT}/live/${GRML_NAME}/${GRML_NAME}.squashfs -noappend ${SQUASHFS_OPTIONS}" \
+    mksquashfs_version="$(${MKSQUASHFS_BINARY} -version | head -1 || true)" \
     output_owner="${CHOWN_USER}" \
     release_info="${RELEASE_INFO}" \
     release_name="${RELEASENAME}" \
@@ -1494,7 +1511,7 @@ generate_build_info() {
 }
 # }}}
 
-# ISO_OUTPUT - mkisofs {{{
+# ISO_OUTPUT - iso build {{{
 [ -n "$ISO_NAME" ] || ISO_NAME="${GRML_NAME}_${VERSION}.iso"
 
 BOOT_ARGS="-no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat -isohybrid-mbr ${CHROOT_OUTPUT}/usr/lib/ISOLINUX/isohdpfx.bin"
@@ -1510,14 +1527,6 @@ if [ -n "$SKIP_MKISOFS" ] ; then
 else
    mkdir -p "$ISO_OUTPUT" || bailout 6 "Problem with creating $ISO_OUTPUT for stage 'iso build'"
 
-   if which xorriso >/dev/null 2>&1 ; then
-      MKISOFS='xorriso -as mkisofs'
-   else
-      log    "Error: xorriso not available - can not create ISO."
-      eerror "Error: xorriso not available - can not create ISO." ; eend 1
-      bailout
-   fi
-
    log   "Generating build information in conf/buildinfo.json"
    einfo "Generating build information in conf/buildinfo.json"
    mkdir -p "$BUILD_OUTPUT"/conf/
@@ -1526,11 +1535,11 @@ else
 
    cap_timestamps "$BUILD_OUTPUT"
 
-   log "$MKISOFS -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS $EFI_ARGS -o ${ISO_OUTPUT}/${ISO_NAME} ."
+   log "$XORRISO_BINARY -as mkisofs -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS $EFI_ARGS -o ${ISO_OUTPUT}/${ISO_NAME} ."
    einfo "Generating ISO file..."
    touch -d @"$SOURCE_DATE_EPOCH" "$BUILD_OUTPUT"/
    # shellcheck disable=SC2086 # BOOT_ARGS and EFI_ARGS need splitting
-   $MKISOFS -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
+   "$XORRISO_BINARY" -as mkisofs -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
            -l -r -J $BOOT_ARGS $EFI_ARGS \
            -o "${ISO_OUTPUT}/${ISO_NAME}" "$BUILD_OUTPUT"/ ; RC=$?
    eend $RC
