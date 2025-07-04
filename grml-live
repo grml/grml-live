@@ -133,8 +133,6 @@ else
    eerror() { echo "  [!] $*">&2 ;}
    ewarn()  { echo "  [x] $*" ;}
    eend()   { return 0 ;}
-   eindent()  { return 0 ;}
-   eoutdent() { return 0 ;}
 fi
 
 # source main configuration file:
