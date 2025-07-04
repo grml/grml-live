@@ -1,0 +1,141 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/30-syslinux
+# Purpose:       Install syslinux program files and configuration
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# No syslinux on arm64.
+if ifclass ARM64 ; then
+  exit 0
+fi
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+media_dir="${target}/${GRML_LIVE_MEDIADIR}"
+tftpboot_dir="${target}/${GRML_LIVE_NETBOOTDIR}"/tftpboot
+mkdir -p "${media_dir}"/boot/addons "${media_dir}"/boot/isolinux "${tftpboot_dir}"
+
+# copy _required_ isolinux files
+grml-live-copy-file-logged "${media_dir}"/boot/isolinux/isolinux.bin "${target}" /usr/lib/ISOLINUX/isolinux.bin
+
+for file in "${target}"/usr/lib/syslinux/modules/bios/*.c32 ; do
+  file_basename=$(basename "$file")
+  # Skip "big" files we do not use.
+  if [ "$file_basename" != "zzjson.c32" ] && \
+     [ "$file_basename" != "lua.c32" ] && \
+     [ "$file_basename" != "liblua.c32" ] && \
+     [[ "$file_basename" != *test.c32 ]] ; then
+    grml-live-copy-file-logged "${media_dir}"/boot/isolinux/"$file_basename" "${target}" /usr/lib/syslinux/modules/bios/"${file_basename}"
+  fi
+done
+
+# *always* copy files to output directory so the variables
+# get adjusted according to the build.
+cp --preserve=timestamp "${TEMPLATE_DIRECTORY}"/boot/isolinux/* "${media_dir}"/boot/isolinux/
+
+# only for syslinux hdt.
+grml-live-copy-file-logged "${media_dir}"/boot/addons/pci.ids "${target}" /usr/share/misc/pci.ids || true
+
+# adjust all variables in the templates with the according distribution information
+grml-live-adjust-boot-files \
+  "${media_dir}"/boot/isolinux/*.cfg \
+  "${media_dir}"/boot/isolinux/*.msg
+
+# adjust bootsplash accordingly but make sure the string has the according length
+for file in f4 f5 ; do
+  if [ -r "${media_dir}/boot/isolinux/${file}" ] ; then
+    sed -i "s/%SQUASHFS_NAME%/${SQUASHFS_NAME20}/" "${media_dir}/boot/isolinux/${file}"
+    sed -i "s/%SQUASHFS_NAME%/${SQUASHFS_NAME20}/" "${media_dir}/boot/isolinux/${file}"
+  fi
+done
+
+# generate isolinux addon list
+ADDONS_LIST_FILE='/boot/isolinux/addons_list.cfg'
+rm -f "${media_dir}/${ADDONS_LIST_FILE}"
+for name in "${media_dir}"/boot/isolinux/addon_*.cfg ; do
+  include_name=$(basename "$name")
+  echo "include $include_name"  >> "${media_dir}/${ADDONS_LIST_FILE}"
+done
+
+if ! [ -r "${media_dir}/boot/isolinux/${DISTRI_NAME}.cfg" ] || [ "$DISTRI_NAME" = "grml" ] ; then
+  echo "I: including grmlmain.cfg in ${media_dir}/boot/isolinux/distri.cfg"
+  echo "include grmlmain.cfg"    >  "${media_dir}/boot/isolinux/distri.cfg"
+
+  # Generate grmlmain.cfg
+  {
+    echo "include default.cfg"
+    echo "include menuoptions.cfg"
+    echo "include grml.cfg"
+    for f in "${media_dir}"/boot/isolinux/submenu*.cfg ; do
+      echo "include $(basename "$f")"
+    done
+    echo "include options.cfg"
+    if [ -z "$NO_ADDONS" ] ; then
+      echo "include addons.cfg"
+    fi
+    echo "include isoprompt.cfg"
+    echo "include hd.cfg"
+    echo "include hidden.cfg"
+  } > "${media_dir}/boot/isolinux/grmlmain.cfg"
+else # assume we are building a custom distribution:
+  echo "I: File ${media_dir}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
+  if grep -q "^include ${DISTRI_NAME}.cfg" "${media_dir}/boot/isolinux/distri.cfg" ; then
+    echo "I: include for ${DISTRI_NAME}.cfg already present, nothing to do."
+  else
+    echo "I: including ${DISTRI_NAME}.cfg in ${media_dir}/boot/isolinux/distri.cfg"
+    if [ -z "$NO_ADDONS" ] ; then
+      echo "include addons.cfg" >> "${media_dir}/boot/isolinux/distri.cfg"
+    fi
+  fi
+fi
+
+# use old style console based isolinux method only if requested:
+if [[ "${ISOLINUX_METHOD}" == "console" ]] ; then
+  echo "I: Using console based isolinux method as requested via \$ISOLINUX_METHOD."
+  if grep -q '^include console.cfg' "${media_dir}/boot/isolinux/distri.cfg" ; then
+    echo "I: include for console.cfg already found, nothing to do."
+  else
+    echo "I: including console.cfg in ${media_dir}/boot/isolinux/isolinux.cfg"
+    echo "include console.cfg" >> "${media_dir}/boot/isolinux/isolinux.cfg"
+  fi
+else
+  echo 'I: Using graphical boot menu.'
+  if grep -q '^include vesamenu.cfg' "${media_dir}/boot/isolinux/isolinux.cfg" ; then
+    echo "I: include for vesamenu.cfg already found, nothing to do."
+  else
+    echo "I: including vesamenu.cfg in ${media_dir}/boot/isolinux/isolinux.cfg"
+    echo "include vesamenu.cfg" >> "${media_dir}/boot/isolinux/isolinux.cfg"
+  fi
+fi
+
+
+if ! [ -r "${target}/usr/lib/PXELINUX/pxelinux.0" ] ; then
+  echo "W: File /usr/lib/PXELINUX/pxelinux.0 not found in build chroot." >&2
+  echo "W: Install syslinux[-common]/pxelinux package in chroot to get a netboot package." >&2
+  exit 0
+fi
+
+cp --preserve=timestamp "${target}/usr/lib/PXELINUX/pxelinux.0" "${tftpboot_dir}/pxelinux.0"
+
+if [ -r "${target}"/usr/lib/syslinux/modules/bios/ldlinux.c32 ] ; then
+  cp --preserve=timestamp "${target}"/usr/lib/syslinux/modules/bios/ldlinux.c32 "${tftpboot_dir}"/
+fi
+
+mkdir -p "${tftpboot_dir}/pxelinux.cfg"
+if [ -r "${media_dir}/boot/isolinux/netboot.cfg" ] ; then
+  cp --preserve=timestamp "${media_dir}/boot/isolinux/netboot.cfg" "${tftpboot_dir}/pxelinux.cfg/default"
+else
+  echo "W: File /boot/isolinux/netboot.cfg not found." >&2
+  echo "I: Are you using custom templates which do not provide netboot.cfg?" >&2
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

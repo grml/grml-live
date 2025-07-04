@@ -369,6 +369,7 @@ fi
 [ -n "$GRML_FAI_CONFIG" ]         || GRML_FAI_CONFIG='/usr/share/grml-live/config'
 [ -n "$GRML_NAME" ]               || GRML_NAME='grml'
 [ -n "$HOSTNAME" ]                || HOSTNAME='grml'
+[ -n "$ISOLINUX_METHOD" ]         || ISOLINUX_METHOD=''
 [ -n "$NO_ADDONS" ]               || NO_ADDONS=''
 [ -n "$NO_BOOTID" ]               || NO_BOOTID=''
 [ -n "$RELEASENAME" ]             || RELEASENAME='grml-live rocks'
@@ -553,6 +554,9 @@ RELEASE_INFO68="$(cut_string 68 "$RELEASE_INFO")"
 RELEASE_INFO68="$(extend_string_end 68 "$RELEASE_INFO68")"
 
 SQUASHFS_NAME="$GRML_NAME.squashfs"
+# ensure this has a specific length
+SQUASHFS_NAME20="$(cut_string 20 "$SQUASHFS_NAME")"
+SQUASHFS_NAME20="$(extend_string_end 20 "$SQUASHFS_NAME20")"
 
 # shellcheck disable=SC2034 # Calculated just to write it into CONFIGDUMP.
 BOOT_FILE="/conf/bootfile_${SHORT_NAME}_${SOURCE_DATE_EPOCH}"
@@ -618,7 +622,7 @@ einfo "Logging actions to logfile $LOGFILE"
 # dump config variables into file, for hooks/scripts access {{{
 CONFIGDUMP=$(mktemp)
 set | grep -E \
-  '^(GRML_NAME|SHORT_NAME|RELEASENAME|RELEASE_INFO|RELEASE_INFO68|DATE|VERSION|SUITE|ARCH|DISTRI_INFO|DISTRI_NAME|DISTRI_SPLASH|SQUASHFS_NAME|TEMPLATE_DIRECTORY|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH|NO_BOOTID|BOOTID|BOOT_FILE|DEFAULT_BOOTOPTIONS|SECURE_BOOT)=' \
+  '^(GRML_NAME|SHORT_NAME|RELEASENAME|RELEASE_INFO|RELEASE_INFO68|DATE|VERSION|SUITE|ARCH|DISTRI_INFO|DISTRI_NAME|DISTRI_SPLASH|SQUASHFS_NAME|SQUASHFS_NAME20|TEMPLATE_DIRECTORY|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH|NO_BOOTID|BOOTID|BOOT_FILE|DEFAULT_BOOTOPTIONS|ISOLINUX_METHOD|SECURE_BOOT)=' \
   > "${CONFIGDUMP}"
 # }}}
 
@@ -823,29 +827,6 @@ else
 
   mkdir -p "${BUILD_OUTPUT}"/boot/addons
 
-  if [ "$ARCH" != "arm64" ] ; then
-    # copy _required_ isolinux files
-    mkdir -p "${BUILD_OUTPUT}"/boot/isolinux
-    copy_file_logged "${BUILD_OUTPUT}"/boot/isolinux/isolinux.bin "${CHROOT_OUTPUT}" /usr/lib/ISOLINUX/isolinux.bin
-    for file in "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/*.c32 ; do
-      file_basename=$(basename "$file")
-      # Skip "big" files we do not use.
-      if [ "$file_basename" != "zzjson.c32" ] && \
-         [ "$file_basename" != "lua.c32" ] && \
-         [ "$file_basename" != "liblua.c32" ] && \
-         [[ "$file_basename" != *test.c32 ]] ; then
-        copy_file_logged "${BUILD_OUTPUT}"/boot/isolinux/"$file_basename" "${CHROOT_OUTPUT}" /usr/lib/syslinux/modules/bios/"$file_basename"
-      fi
-    done
-
-    # *always* copy files to output directory so the variables
-    # get adjusted according to the build.
-    cp --preserve=timestamp "${TEMPLATE_DIRECTORY}"/boot/isolinux/* "${BUILD_OUTPUT}"/boot/isolinux/
-
-    # only for syslinux hdt.
-    copy_file_logged "${BUILD_OUTPUT}"/boot/addons/pci.ids "${CHROOT_OUTPUT}" /usr/share/misc/pci.ids
-  fi
-
   mkdir -p "${BUILD_OUTPUT}/boot/grub"
   cp -a "${TEMPLATE_DIRECTORY}"/boot/grub/* "$BUILD_OUTPUT"/boot/grub/
 
@@ -964,19 +945,8 @@ else
     sed -i "s/%DATE%/$DATE/"                 "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version
   fi
 
-  # adjust bootsplash accordingly but make sure the string has the according length
-  fixed_squashfs_name="$(cut_string 20 "$SQUASHFS_NAME")"
-  fixed_squashfs_name="$(extend_string_end 20 "$fixed_squashfs_name")"
-  for file in f4 f5 ; do
-    if [ -r "${BUILD_OUTPUT}/boot/isolinux/${file}" ] ; then
-      sed -i "s/%SQUASHFS_NAME%/${fixed_squashfs_name}/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
-      sed -i "s/%SQUASHFS_NAME%/${fixed_squashfs_name}/" "${BUILD_OUTPUT}/boot/isolinux/${file}"
-    fi
-  done
-
   # adjust all variables in the templates with the according distribution information
-  adjust_boot_files "${BUILD_OUTPUT}"/boot/isolinux/*.cfg \
-    "${BUILD_OUTPUT}"/boot/isolinux/*.msg \
+  adjust_boot_files \
     "${BUILD_OUTPUT}"/boot/grub/*
 
   for param in ARCH DATE DISTRI_INFO DISTRI_NAME DISTRI_SPLASH GRML_NAME SQUASHFS_NAME \
@@ -986,77 +956,6 @@ else
       mv "${file}" "${file/\%${param}\%/$value}"
     done < <(find "${BUILD_OUTPUT}" -name "*%$param%*" -print0)
   done
-
-  if [ "${ARCH}" = "amd64" ] || [ "${ARCH}" = "i386" ] ; then
-    # generate isolinux addon list
-    ADDONS_LIST_FILE='/boot/isolinux/addons_list.cfg'
-    rm -f "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
-    for name in "${BUILD_OUTPUT}"/boot/isolinux/addon_*.cfg ; do
-      include_name=$(basename "$name")
-      echo "include $include_name"  >> "${BUILD_OUTPUT}/${ADDONS_LIST_FILE}"
-    done
-
-    if ! [ -r "${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg" ] || [ "$DISTRI_NAME" = "grml" ] ; then
-      log "including grmlmain.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-      echo "include grmlmain.cfg"    >  "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-
-      # Generate grmlmain.cfg
-      {
-        echo "include default.cfg"
-        echo "include menuoptions.cfg"
-        echo "include grml.cfg"
-        for f in "${BUILD_OUTPUT}"/boot/isolinux/submenu*.cfg ; do
-          echo "include $(basename "$f")"
-        done
-        echo "include options.cfg"
-        if [ -z "$NO_ADDONS" ] ; then
-          echo "include addons.cfg"
-        fi
-        echo "include isoprompt.cfg"
-        echo "include hd.cfg"
-        echo "include hidden.cfg"
-      } > "${BUILD_OUTPUT}/boot/isolinux/grmlmain.cfg"
-    else # assume we are building a custom distribution:
-      log "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
-      einfo "File ${BUILD_OUTPUT}/boot/isolinux/${DISTRI_NAME}.cfg found, using it."
-      if grep -q "^include ${DISTRI_NAME}.cfg" "${BUILD_OUTPUT}/boot/isolinux/distri.cfg" ; then
-        log "include for ${DISTRI_NAME}.cfg already present, nothing to do."
-        eindent
-        einfo "include for ${DISTRI_NAME}.cfg already present, nothing to do."
-        eoutdent
-        eend $?
-      else
-        log "including ${DISTRI_NAME}.cfg in ${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-        echo "include ${DISTRI_NAME}.cfg" > "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-        if [ -z "$NO_ADDONS" ] ; then
-          echo "include addons.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/distri.cfg"
-        fi
-      fi
-    fi
-
-    # use old style console based isolinux method only if requested:
-    if [[ "${ISOLINUX_METHOD}" == "console" ]] ; then
-      log "Using console based isolinux method as requested via \$ISOLINUX_METHOD."
-      einfo "Using console based isolinux method as requested via \$ISOLINUX_METHOD."
-      if grep -q '^include console.cfg' "${BUILD_OUTPUT}/boot/isolinux/distri.cfg" ; then
-        einfo "include for console.cfg already found, nothing to do."
-        eend 0
-      else
-        log "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-        einfo "including console.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-        echo "include console.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-        eend 0
-      fi
-    else
-      log 'Using graphical boot menu.'
-      if grep -q '^include vesamenu.cfg' "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg" ; then
-        log "include for vesamenu.cfg already found, nothing to do."
-      else
-        log "including vesamenu.cfg in ${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-        echo "include vesamenu.cfg" >> "${BUILD_OUTPUT}/boot/isolinux/isolinux.cfg"
-      fi
-    fi
-  fi # amd64 or i386
 
   # the dpkg --list output of the chroot
   DPKG_LIST=$LOG_OUTPUT/fai/dpkg.list
@@ -1300,34 +1199,6 @@ create_netbootpackage() {
   local WORKING_DIR="${OUTPUTDIR}/${OUTPUT_NAME}/"
   mkdir -p "$WORKING_DIR"
   cp --preserve=timestamp -r "$CHROOT_OUTPUT/grml-live/netboot/." "$WORKING_DIR/"
-
-  if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "i386" ] ; then
-    if ! [ -r "${CHROOT_OUTPUT}/usr/lib/PXELINUX/pxelinux.0" ] ; then
-      ewarn "File /usr/lib/PXELINUX/pxelinux.0 not found in build chroot." ; eend 0
-      eindent
-      einfo "Install syslinux[-common]/pxelinux package in chroot to get a netboot package."
-      eoutdent
-      return 0
-    fi
-
-    cp --preserve=timestamp "${CHROOT_OUTPUT}/usr/lib/PXELINUX/pxelinux.0" "${WORKING_DIR}/pxelinux.0"
-
-    if [ -r "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/ldlinux.c32 ] ; then
-      cp --preserve=timestamp "${CHROOT_OUTPUT}"/usr/lib/syslinux/modules/bios/ldlinux.c32 "${WORKING_DIR}"/
-    fi
-
-    mkdir -p "${WORKING_DIR}/pxelinux.cfg"
-    if [ -r "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" ] ; then
-      cp --preserve=timestamp "${BUILD_OUTPUT}/boot/isolinux/netboot.cfg" "${WORKING_DIR}/pxelinux.cfg/default"
-    else
-      log   "File ${BUILD_OUTPUT}/boot/isolinux/netboot.cfg not found."
-      ewarn "File ${BUILD_OUTPUT}/boot/isolinux/netboot.cfg not found."
-      eindent
-      log   "Hint: Are you using custom templates which do not provide netboot.cfg?"
-      ewarn "Hint: Are you using custom templates which do not provide netboot.cfg?" ; eend 0
-      eoutdent
-    fi
-  fi # amd64 or i386
 
   # don't include shim + grubnetx64 + grub files in i386 netboot packages,
   # as those don't make much sense there
