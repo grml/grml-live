@@ -305,11 +305,14 @@ def parse_fcopy_args(fcopy_args: list[str]) -> CopyFilesArgs:
             user, group, mode = arg.split(",")
             mode = int(mode, 8)
             parse_m = False
-        elif arg in ["-M", "-B", "-v"]:
+        elif arg in ["-B", "-v"]:
             # defaulted / ignored
             pass
         elif arg == "-m":
             parse_m = True
+        elif arg == "-M":
+            user, group = "root", "root"
+            mode = 0o644
         elif arg == "-r":
             recursive = True
         elif arg == "-i":
