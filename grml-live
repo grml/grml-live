@@ -847,11 +847,6 @@ else
     eend $?
   fi
 
-  # autostart for Windows:
-  if [ -d "${TEMPLATE_DIRECTORY}/windows/autostart/" ] ; then
-    cp -a "${TEMPLATE_DIRECTORY}"/windows/autostart/* "$BUILD_OUTPUT"/
-  fi
-
   einfo "Finished execution of stage 'boot'" ; eend 0
 fi # BOOTSTRAP_ONLY
 

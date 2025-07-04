@@ -1,0 +1,25 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/80-autostart
+# Purpose:       Install Windows autostart files
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+media_dir="${target}/${GRML_LIVE_MEDIADIR}"
+
+# autostart for Windows:
+if [ -d "${TEMPLATE_DIRECTORY}/windows/autostart/" ] ; then
+  cp -a "${TEMPLATE_DIRECTORY}"/windows/autostart/* "${media_dir}"/
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
