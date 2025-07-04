@@ -232,21 +232,6 @@ hasclass() {
   case $CLASSES in ${expected_class},*) return 0 ;; esac
   return 1
 }
-
-copy_file_logged() {
-  # Stop gap until all boot code is moved into media-scripts.
-  "${GRML_FAI_CONFIG}"/tools/GRMLBASE/grml-live-copy-file-logged "$@"
-  return $?
-}
-
-# replace placeholders in template files with actual information
-adjust_boot_files() {
-  # Stop gap until all boot code is moved into media-scripts.
-  local GRML_LIVE_CONFIG
-  export GRML_LIVE_CONFIG="$CONFIGDUMP"
-  "${GRML_FAI_CONFIG}"/tools/GRMLBASE/grml-live-adjust-boot-files "$@"
-  return $?
-}
 # }}}
 
 # command line parsing {{{
