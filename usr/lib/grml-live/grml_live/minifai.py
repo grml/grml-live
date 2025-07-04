@@ -260,7 +260,12 @@ def do_fcopy_file(to_copy: Path, dest_root: Path, path: str, mode: int):
     dest_path.parent.mkdir(exist_ok=True, parents=True)
 
     shutil.copy2(to_copy, dest_path, follow_symlinks=False)
-    dest_path.chmod(mode)
+
+    try:
+        dest_path.chmod(mode, follow_symlinks=False)
+    except NotImplementedError:
+        pass
+
     os.chown(dest_path, 0, 0, follow_symlinks=False)
 
     return True
