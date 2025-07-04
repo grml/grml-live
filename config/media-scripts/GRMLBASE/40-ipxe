@@ -1,0 +1,36 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/40-ipxe
+# Purpose:       Install ipxe program files
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+if [ -n "$NO_ADDONS" ] ; then
+  echo "I: skipping ipxe installation as \$NO_ADDONS is set."
+  exit 0
+fi
+
+echo "I: installing ipxe."
+
+media_dir="${target}/${GRML_LIVE_MEDIADIR}"
+mkdir -p "${media_dir}/boot/addons"
+
+# ipxe >= 1.21.1+git20220113.fbbdc3926+dfsg-3
+if ifclass AMD64 ; then
+  grml-live-copy-file-logged "${media_dir}"/boot/addons/ipxe.lkrn "${target}" /usr/lib/ipxe/ipxe.lkrn || true
+  grml-live-copy-file-logged "${media_dir}"/boot/addons/ipxe.efi "${target}" /usr/lib/ipxe/ipxe-amd64.efi || true
+elif ifclass ARM64 ; then
+  grml-live-copy-file-logged "${media_dir}"/boot/addons/ipxe.efi "${target}" /usr/lib/ipxe/ipxe-arm64.efi || true
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

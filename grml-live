@@ -620,7 +620,7 @@ einfo "Logging actions to logfile $LOGFILE"
 # dump config variables into file, for hooks/scripts access {{{
 CONFIGDUMP=$(mktemp)
 set | grep -E \
-  '^(GRML_NAME|SHORT_NAME|RELEASENAME|RELEASE_INFO|RELEASE_INFO68|DATE|VERSION|SUITE|ARCH|DISTRI_INFO|DISTRI_NAME|DISTRI_SPLASH|SQUASHFS_NAME|SQUASHFS_NAME20|TEMPLATE_DIRECTORY|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH|NO_BOOTID|BOOTID|BOOT_FILE|DEFAULT_BOOTOPTIONS|ISOLINUX_METHOD|SECURE_BOOT)=' \
+  '^(GRML_NAME|SHORT_NAME|RELEASENAME|RELEASE_INFO|RELEASE_INFO68|DATE|VERSION|SUITE|ARCH|DISTRI_INFO|DISTRI_NAME|DISTRI_SPLASH|SQUASHFS_NAME|SQUASHFS_NAME20|TEMPLATE_DIRECTORY|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH|NO_BOOTID|BOOTID|BOOT_FILE|DEFAULT_BOOTOPTIONS|ISOLINUX_METHOD|SECURE_BOOT|NO_ADDONS)=' \
   > "${CONFIGDUMP}"
 # }}}
 
@@ -833,14 +833,6 @@ else
     einfo "Installing boot addons."
 
     # copy from chroot-installed packages
-
-    # ipxe >= 1.21.1+git20220113.fbbdc3926+dfsg-3
-    if [[ "$ARCH" == "amd64" ]] ; then
-      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/ipxe.lkrn "${CHROOT_OUTPUT}" /usr/lib/ipxe/ipxe.lkrn
-      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/ipxe.efi "${CHROOT_OUTPUT}" /usr/lib/ipxe/ipxe-amd64.efi
-    elif [[ "$ARCH" == "arm64" ]] ; then
-      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/ipxe.efi "${CHROOT_OUTPUT}" /usr/lib/ipxe/ipxe-arm64.efi
-    fi
 
     # memtest86+ >=6.00-1
     if [[ "$ARCH" == "amd64" ]] ; then
