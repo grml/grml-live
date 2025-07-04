@@ -817,12 +817,6 @@ else
   cp --preserve=timestamp -r "$CHROOT_OUTPUT/grml-live/media/." "$BUILD_OUTPUT/"
   eend 0
 
-  if ! [ -d "${TEMPLATE_DIRECTORY}"/boot ] ; then
-    log    "Error: ${TEMPLATE_DIRECTORY}/boot does not exist. Exiting."
-    eerror "Error: ${TEMPLATE_DIRECTORY}/boot does not exist. Exiting." ; eend 1
-    bailout 8
-  fi
-
   einfo "Finished execution of stage 'boot'" ; eend 0
 fi # BOOTSTRAP_ONLY
 
