@@ -823,20 +823,6 @@ else
     bailout 8
   fi
 
-  if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
-    log    "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
-    eerror "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting." ; eend 1
-    bailout 9
-  fi
-
-  mkdir -p "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/
-  cp -a "${TEMPLATE_DIRECTORY}"/GRML/* "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/
-
-  if [ -r "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version ] ; then
-    sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version
-    sed -i "s/%DATE%/$DATE/"                 "$BUILD_OUTPUT"/GRML/"${GRML_NAME}"/grml-version
-  fi
-
   # the dpkg --list output of the chroot
   DPKG_LIST=$LOG_OUTPUT/fai/dpkg.list
   if ! [ -r "$DPKG_LIST" ] ; then

@@ -1,0 +1,33 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/90-branding
+# Purpose:       Install GRML branding files
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+media_dir="${target}/${GRML_LIVE_MEDIADIR}"
+
+if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
+  echo "E: ${TEMPLATE_DIRECTORY}/GRML does not exist. Aborting." >&2
+  exit 9
+fi
+
+mkdir -p "$media_dir"/GRML/"${GRML_NAME}"/
+cp -a "${TEMPLATE_DIRECTORY}"/GRML/* "$media_dir"/GRML/"${GRML_NAME}"/
+
+if [ -r "$media_dir"/GRML/"${GRML_NAME}"/grml-version ] ; then
+  sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$media_dir"/GRML/"${GRML_NAME}"/grml-version
+  sed -i "s/%DATE%/$DATE/"                 "$media_dir"/GRML/"${GRML_NAME}"/grml-version
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
