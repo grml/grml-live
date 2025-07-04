@@ -350,16 +350,21 @@ def do_fcopy(conf_dir: Path, chroot_dir: Path, classes: list[str], remaining_arg
     rc = 0
     files_dir = conf_dir / "files"
 
-    if copy_args.recursive:
-        for path in copy_args.paths:
-            do_fcopy_recursive(files_dir, chroot_dir, classes, path, copy_args.mode)
+    try:
+        if copy_args.recursive:
+            for path in copy_args.paths:
+                do_fcopy_recursive(files_dir, chroot_dir, classes, path, copy_args.mode)
 
-    else:
-        for path in copy_args.paths:
-            found = do_fcopy_path(files_dir, chroot_dir, classes, path, copy_args.mode)
-            if not found and not copy_args.ignore_missing:
-                print(f"E: Source {path=} is missing for fcopy")
-                rc = 1
+        else:
+            for path in copy_args.paths:
+                found = do_fcopy_path(files_dir, chroot_dir, classes, path, copy_args.mode)
+                if not found and not copy_args.ignore_missing:
+                    print(f"E: Source {path=} is missing for fcopy")
+                    rc = 1
+
+    except Exception as except_inst:
+        print(f"E: fcopy failed: {except_inst} - returning with exit code 130", flush=True)
+        rc = 130
 
     return rc
 
