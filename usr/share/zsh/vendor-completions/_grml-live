@@ -34,14 +34,13 @@ _grmllive_classes() { #{{{
 
     static_classes=(
         DEBORPHAN FRESHCLAM
-        GRMLBASE GRML_FULL GRML_SMALL
-        LATEX LATEX_CLEANUP LOCALES NO_ONLINE RELEASE REMOVE_DOCS SOURCES XORG ZFS
-        I386 AMD64 ARM64
+        GRML_FULL GRML_SMALL
+        LATEX LATEX_CLEANUP LOCALES NO_ONLINE REMOVE_DOCS SOURCES XORG ZFS
     )
     compset -P '*,'
     already=(${(s<,>)IPREFIX})
     _wanted list expl 'classe(s)' compadd -S, -F already -q ${expl} -- \
-        /usr/share/grml-live/config/class/*(.N:t:r) ${static_classes}
+        /usr/share/grml-live/config/env/*(.N:t:r) ${static_classes}
 }
 #}}}
 _grmllive_suites() { #{{{

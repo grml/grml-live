@@ -1,6 +1,6 @@
-# default values for installation. You can override them in your *.var files
+# Environment variables. You can override these in your own class files.
 
-# allow installation of packages from unsigned repositories
+# Allow installation of packages from unsigned repositories:
 # FAI_ALLOW_UNSIGNED=1
 
 TIMEZONE=Etc/UTC
