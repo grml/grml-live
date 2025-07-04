@@ -1,0 +1,45 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/50-addons
+# Purpose:       Install "addons" files
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+if [ -n "$NO_ADDONS" ] ; then
+  echo "I: skipping addons installation as \$NO_ADDONS is set."
+  exit 0
+fi
+
+echo "I: installing addons."
+
+media_dir="${target}/${GRML_LIVE_MEDIADIR}"
+mkdir -p "${media_dir}/boot/addons"
+
+# copy files and report which ones get installed
+if [ -d "${TEMPLATE_DIRECTORY}/arch/${ARCH}/boot/addons" ] ; then
+  for file in "${TEMPLATE_DIRECTORY}/arch/${ARCH}/boot/addons/"* ; do
+    if [ -f "$file" ] ; then
+      echo "I: Installing $file in /boot/addons."
+      cp --preserve=timestamp "$file" "$media_dir"/boot/addons/
+    fi
+  done
+else # legacy path (before https://github.com/grml/grml-live-grml/pull/11):
+  for file in "${TEMPLATE_DIRECTORY}"/boot/addons/* ; do
+    if [ -f "$file" ] ; then
+      echo "I: Installing $file in /boot/addons. (Legacy support)"
+      cp --preserve=timestamp "$file" "$media_dir"/boot/addons/
+    fi
+  done
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

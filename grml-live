@@ -823,37 +823,6 @@ else
     bailout 8
   fi
 
-  mkdir -p "${BUILD_OUTPUT}"/boot/addons
-
-  if [ -n "$NO_ADDONS" ] ; then
-    log   "Skipping installation of boot addons as \$NO_ADDONS=${NO_ADDONS}."
-    einfo "Skipping installation of boot addons as \$NO_ADDONS=${NO_ADDONS}."; eend 0
-  else
-    log   "Installing boot addons."
-    einfo "Installing boot addons."
-
-    # copy only files and report which ones are installed
-    if [ -d "${TEMPLATE_DIRECTORY}/arch/${ARCH}/boot/addons" ] ; then
-      for file in "${TEMPLATE_DIRECTORY}/arch/${ARCH}/boot/addons/"* ; do
-        if [ -f "$file" ] ; then
-          log   "Installing $file in /boot/addons."
-          einfo "Installing $file in /boot/addons."; eend 0
-          cp --preserve=timestamp "$file" "$BUILD_OUTPUT"/boot/addons/
-        fi
-      done
-    else # legacy path (before https://github.com/grml/grml-live-grml/pull/11):
-      for file in "${TEMPLATE_DIRECTORY}"/boot/addons/* ; do
-        if [ -f "$file" ] ; then
-          log   "Installing $file in /boot/addons. (Legacy support)"
-          einfo "Installing $file in /boot/addons. (Legacy support)"; eend 0
-          cp --preserve=timestamp "$file" "$BUILD_OUTPUT"/boot/addons/
-        fi
-      done
-    fi
-    eend 0
-
-  fi # NO_ADDONS
-
   if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
     log    "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting."
     eerror "Error: ${TEMPLATE_DIRECTORY}/GRML does not exist. Exiting." ; eend 1
