@@ -458,37 +458,28 @@ def helper_tools(conf_dir: Path, chroot_dir: Path, classes: list[str], dynamic_s
 
     write_helper_tool(
         tempdir,
-        "fcopy",
+        "grml-live-command",
         f"""#!/bin/sh
-echo "D: minifai fcopy: $(date +%FT%T) requesting $@"
-RC=$(echo fcopy "$@" | socat -t3600 - UNIX-CONNECT:{tempdir}/sock,forever)
+PN=$(basename "$0")
+if [ "$PN" = "grml-live-command" ]; then
+  PN="$1"
+  shift
+fi
+echo "D: minifai $PN: $(date +%FT%T) requesting $@"
+RC=$(echo $PN "$@" | socat -t3600 - UNIX-CONNECT:{tempdir}/sock,forever)
 if [ -z "$RC" ]; then
-  echo "E: minifai fcopy: $(date +%FT%T) got no reply from server"
+  echo "E: minifai $PN: $(date +%FT%T) got no reply from server"
   exit 119
 elif [ "$RC" != "0" ]; then
-  echo "E: minifai fcopy: server sent error code $RC"
+  echo "E: minifai $PN: server sent error code $RC"
   exit "$RC"
 fi
 exit 0
 """,
     )
 
-    write_helper_tool(
-        tempdir,
-        "skiptask",
-        f"""#!/bin/sh
-echo "D: minifai skiptask: $(date +%FT%T) requesting $@"
-RC=$(echo skiptask "$@" | socat -t3600 - UNIX-CONNECT:{tempdir}/sock,forever)
-if [ -z "$RC" ]; then
-  echo "E: minifai skiptask: $(date +%FT%T) got no reply from server"
-  exit 119
-elif [ "$RC" != "0" ]; then
-  echo "E: minifai skiptask: server sent error code $RC"
-  exit "$RC"
-fi
-exit 0
-    """,
-    )
+    (tempdir / "fcopy").symlink_to(tempdir / "grml-live-command")
+    (tempdir / "skiptask").symlink_to(tempdir / "grml-live-command")
 
     write_helper_tool(
         tempdir,
