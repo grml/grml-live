@@ -52,6 +52,10 @@ Configuration Scripts::
   Scripts in `config/scripts/` are executed in the same manner, with the same environment
   variables and execution order.
 
+Media build Scripts::
+  Scripts in `config/media-scripts/` are similarly executed, but are run to build the
+  media (ISO) contents. They have access to the same environment variables.
+
 Hooks::
   Hook scripts in `config/hooks/` (updatebase, instsoft) are executed at the same points
   in the build process.

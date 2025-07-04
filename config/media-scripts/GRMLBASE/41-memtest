@@ -1,0 +1,50 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/41-memtest
+# Purpose:       Install memtest86+ program files
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+if [ -n "$NO_ADDONS" ] ; then
+  echo "I: skipping memtest86+ installation as \$NO_ADDONS is set."
+  exit 0
+fi
+
+echo "I: installing memtest86+."
+
+media_dir="${target}/${GRML_LIVE_MEDIADIR}"
+mkdir -p "${media_dir}/boot/addons"
+
+# memtest86+ >=6.00-1
+if ifclass AMD64 ; then
+  grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest86+x64.efi "${target}" /boot/memtest86+x64.efi || true
+elif ifclass I386 ; then
+  grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest86+ia32.efi "${target}" /boot/memtest86+ia32.efi || true
+fi
+
+# provide memtest86+ >=6.00-1 files as "memtest" file
+# for BIOS boot in isolinux/syslinux
+if ifclass AMD64 ; then
+  grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest "${target}" /boot/memtest86+x64.bin || true
+elif ifclass I386 ; then
+  grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest "${target}" /boot/memtest86+ia32.bin || true
+fi
+
+# fallback: if we still don't have /boot/addons/memtest available, we
+# might have an older memtest86+ version (<=5.01-3.1) which ships
+# file "memtest86+.bin" instead
+if ! [ -r "${media_dir}/boot/addons/memtest" ] ; then
+  grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest "${target}" /boot/memtest86+.bin || true
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

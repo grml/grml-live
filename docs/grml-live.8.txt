@@ -12,7 +12,7 @@ Synopsis
 grml-live [-a <architecture>] [-c <classe[s]>] [-C <configfile>] [
 -e <extract_iso_name>] [-g <grml_name>] [-i <iso_name>] [
 -o <output_directory>] [-r <release_name>] [-s <suite>] [
--t <template_directory>] [-v <version_number>] [-U <username>] [
+-t <arg>] [-v <version_number>] [-U <username>] [
 -w <date>] [-AbBFnNqQRuVz]
 
 Description
@@ -210,10 +210,9 @@ suites might require a recent base.tgz
 (${GRML_FAI_CONFIG}/basefiles/$CLASSNAME.tar.gz) or a recent version of
 debootstrap.
 
-  -t **TEMPLATE_DIRECTORY**::
+  -t **arg**::
 
-Specify place of the templates used for building the ISO. By default
-(and if not manually specified) this is /usr/share/grml-live/templates/.
+Deprecated. Will be removed in a future release of grml-live.
 
   -u::
 
@@ -302,6 +301,7 @@ The GRML_SMALL and GRML_FULL classes define the official ISO builds.
 The following files and directories are relevant for class GRMLBASE by default:
 
   ${GRML_FAI_CONFIG}/scripts/GRMLBASE/
+  ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/
   ${GRML_FAI_CONFIG}/debconf/GRMLBASE
   ${GRML_FAI_CONFIG}/env/GRMLBASE
   ${GRML_FAI_CONFIG}/hooks/instsoft.GRMLBASE
@@ -446,7 +446,18 @@ reasonable package configuration.
 
   ${GRML_FAI_CONFIG}/scripts/
 
-Scripts for customising the ISO within the build process.
+Scripts customising the chroot (the future squashfs contents) during the
+build process.
+
+  ${GRML_FAI_CONFIG}/media-scripts/
+
+Scripts customising the ISO contents during the build process. The squashfs
+will not be available when these scripts run.
+
+  ${GRML_FAI_CONFIG}/tools/
+
+Tools available in PATH when scripts and media-scripts are run. Later classes
+overwrite tools from earlier classes, if they share names.
 
 [[log-files]]
 Available log files
@@ -762,7 +773,6 @@ b) does not use the config files of an possibly installed `grml-live` package.
 Usage example:
 
     # export GRML_FAI_CONFIG=$(pwd)/config
-    # export TEMPLATE_DIRECTORY=$(pwd)/templates
     # ./grml-live -s sid -a amd64 -c GRML_FULL
 
 [[source]]

@@ -1,0 +1,31 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/91-info
+# Purpose:       Install informational files
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+media_dir="${target}/${GRML_LIVE_MEDIADIR}"
+
+# the dpkg --list output of the chroot.
+# Gets created by ${GRML_FAI_CONFIG}/scripts/GRMLBASE/95-package-information.
+DPKG_LIST="${LOGDIR}"/dpkg.list
+if ! [ -r "$DPKG_LIST" ] ; then
+  echo "W: $DPKG_LIST could not be read, ignoring to store package information on ISO therefore." >&2
+else
+  echo "I: Storing package list information as /GRML/${GRML_NAME}/packages.txt on ISO."
+  mkdir -p "${media_dir}"/GRML/"${GRML_NAME}"
+  cp --preserve=timestamp "$DPKG_LIST" "${media_dir}"/GRML/"${GRML_NAME}"/packages.txt
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

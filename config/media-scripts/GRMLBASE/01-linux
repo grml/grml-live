@@ -1,0 +1,69 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/01-linux
+# Purpose:       Install Linux kernel, initramfs and DTBs
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+boot_name_dir="${GRML_LIVE_MEDIADIR}"/boot/"${SHORT_NAME}"
+tftpboot_dir="${GRML_LIVE_NETBOOTDIR}"/tftpboot
+$ROOTCMD mkdir -p "${boot_name_dir}" "${tftpboot_dir}"
+
+# if we don't have an initrd we a) can't boot and b) there was an error
+# during build, so check for the file:
+# shellcheck disable=SC2010 disable=SC2012 # We do not expect fancy characters here.
+INITRD=$($ROOTCMD find /boot -maxdepth 1 -type f -name 'initrd*' 2>/dev/null | grep -v '.bak$' | sort -r | head -1)
+if [ -n "$INITRD" ] ; then
+  $ROOTCMD cp --preserve=timestamp "$INITRD" "${boot_name_dir}"/initrd.img
+  $ROOTCMD cp --preserve=timestamp "$INITRD" "${tftpboot_dir}"/initrd.img
+else
+  echo "E: No initrd found inside /boot/ - aborting" >&2
+  $ROOTCMD ls /boot/initrd* || true
+  exit 1
+fi
+
+# shellcheck disable=SC2010 disable=SC2012 # We do not expect fancy characters here.
+KERNEL_IMAGE=$($ROOTCMD find /boot -maxdepth 1 -type f -name 'vmlinuz*' 2>/dev/null | sort -r | head -1)
+if [ -n "$KERNEL_IMAGE" ] ; then
+  $ROOTCMD cp --preserve=timestamp "$KERNEL_IMAGE" "${boot_name_dir}"/vmlinuz
+  $ROOTCMD cp --preserve=timestamp "$KERNEL_IMAGE" "${tftpboot_dir}"/vmlinuz
+else
+  echo "E: No kernel found inside ${target}/boot/ - aborting" >&2
+  $ROOTCMD ls /boot/vmlinuz* || true
+  exit 1
+fi
+
+# If something in the chroot installed dtbs into /boot/dtbs, then we probably will
+# need them outside, on the actual boot media, too.
+# Assume the DTBs are in /boot/dtbs/<kernel-version>/. If the directory exists,
+# copy it entirely (but igoring the <kernel-version> part).
+DTBS=$($ROOTCMD find /boot/dtbs/ -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort -r | head -1)
+if [ -z "$DTBS" ] ; then
+  echo "I: No DTBs found inside /boot/dtbs - Skipping"
+else
+  echo "I: Copying DTBs from $DTBS into ISO path..."
+  $ROOTCMD mkdir -p "${boot_name_dir}"/dtbs
+  rsync -a -q "${target}/$DTBS/" "${target}"/"${boot_name_dir}"/dtbs/ ; RC=$?
+  if [ "$RC" != "0" ]; then
+    echo "E: rsync failed with exit code $RC" >&2
+    exit 1
+  fi
+  $ROOTCMD mkdir -p "${tftpboot_dir}"/dtbs
+  rsync -a -q "${target}/$DTBS/" "${target}/${tftpboot_dir}"/dtbs/ ; RC=$?
+  if [ "$RC" != "0" ]; then
+    echo "E: rsync into tftpboot failed with exit code $RC" >&2
+    exit 1
+  fi
+fi
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

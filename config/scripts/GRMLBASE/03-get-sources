@@ -22,13 +22,10 @@ fi
 set -u
 
 ERRORS_LOG=$(mktemp)
-SOURCES_PATH=/grml-live/grml_sources/
 
 bailout() {
   rm -f "$ERRORS_LOG"
 }
-
-mkdir -p "${target}${SOURCES_PATH}"
 
 $ROOTCMD apt-get update
 
@@ -40,7 +37,7 @@ fi
 # Collect *source* package names
 # shellcheck disable=SC2016 # Embedded $ is correct.
 $ROOTCMD dpkg-query -W -f='${Source} ${Package}\n' | sed -e 's/^ //' | awk '{ print $1 }' | sort -u | \
-  chroot "${target}" /bin/bash -c "cd \"${SOURCES_PATH}\" && xargs --max-args=32 --max-procs=12 apt-get $apt_debug_option --download-only source" 2> "${ERRORS_LOG}"
+  $ROOTCMD /bin/bash -c "cd \"${GRML_LIVE_SOURCESDIR}\" && xargs --max-args=32 --max-procs=12 apt-get $apt_debug_option --download-only source" 2> "${ERRORS_LOG}"
 
 if grep -q '^E:' "${ERRORS_LOG}" ; then
   echo "Errors noticed while retrieving sources:" >&2

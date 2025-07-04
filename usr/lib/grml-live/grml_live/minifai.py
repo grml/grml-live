@@ -33,6 +33,7 @@ class FaiAction(StrEnum):
     DIRINSTALL = "dirinstall"
     SOFTUPDATE = "softupdate"
     RECONFIGURE = "reconfigure"
+    REBUILD = "rebuild"
 
 
 @dataclass
@@ -49,6 +50,21 @@ class CopyFilesArgs:
     recursive: bool
     ignore_missing: bool
     paths: list[str]
+
+
+@dataclass(kw_only=True)
+class BuildDirectories:
+    # xxx_inside is always the path _inside_ the chroot ("relative", if chrooted).
+    build_dir_inside: str
+    build_dir: Path
+    log_dir_inside: str
+    log_dir: Path
+    netboot_dir_inside: str
+    netboot_dir: Path
+    media_dir_inside: str
+    media_dir: Path
+    sources_dir_inside: str
+    sources_dir: Path
 
 
 def now_for_log() -> str:
@@ -124,10 +140,10 @@ def chrooted_debconf_set_selections(chroot_dir: Path, selections_file: Path):
         run_chrooted(chroot_dir, ["debconf-set-selections", "-v"], env=env, stdin=selections_fd)
 
 
-def run_script(chroot_dir: Path, script: Path, helper_tools_path: Path, env: dict[str, str]):
+def run_script(chroot_dir: Path, script: Path, helper_tools_paths: list[Path], env: dict[str, str]):
     """
     Run a FAI hook script or class script, if it exists.
-    PATH will include helper_tools_path.
+    PATH will include helper_tools_paths.
     Environment will include env.
     """
 
@@ -137,7 +153,7 @@ def run_script(chroot_dir: Path, script: Path, helper_tools_path: Path, env: dic
     env = {
         "target": str(chroot_dir),
         "ROOTCMD": f"chroot {chroot_dir!s} ",
-        "PATH": str(helper_tools_path) + ":" + os.environ["PATH"],
+        "PATH": ":".join([str(p) for p in helper_tools_paths] + [os.environ["PATH"]]),
     } | env
     print()
     print(f"I: *** Running script {script} ***")
@@ -148,23 +164,30 @@ def run_script(chroot_dir: Path, script: Path, helper_tools_path: Path, env: dic
     print(f"I: Finished script {script}.")
 
 
-def run_class_scripts(conf_dir: Path, chroot_dir: Path, class_name: str, helper_tools_path: Path, env: dict[str, str]):
+def run_class_scripts(
+    script_type: str,
+    conf_dir: Path,
+    chroot_dir: Path,
+    class_name: str,
+    helper_tools_paths: list[Path],
+    env: dict[str, str],
+):
     print()
-    print(f'I: Running "scripts" for class {class_name}...')
+    print(f'I: Running "{script_type}" for class {class_name}...')
     print()
-    scripts_dir = conf_dir / "scripts" / class_name
+    scripts_dir = conf_dir / script_type / class_name
     for script in sorted(scripts_dir.glob("*")):
         if script.name.endswith(".dpkg-old") or script.name.endswith(".dpkg-new"):
             print(f"W: Skipping {script} due to name suffix, please delete it")
             continue
-        run_script(chroot_dir, script, helper_tools_path, env)
+        run_script(chroot_dir, script, helper_tools_paths, env)
 
 
 def install_packages_for_classes(
     conf_dir: Path,
     chroot_dir: Path,
     classes: list[str],
-    helper_tools_path: Path,
+    helper_tools_paths: list[Path],
     hook_env: dict,
     dynamic_state: DynamicState,
 ):
@@ -193,7 +216,7 @@ def install_packages_for_classes(
     for class_name in classes:
         chrooted_debconf_set_selections(chroot_dir, conf_dir / "debconf" / class_name)
 
-        run_script(chroot_dir, conf_dir / "hooks" / class_name / "instsoft", helper_tools_path, hook_env)
+        run_script(chroot_dir, conf_dir / "hooks" / class_name / "instsoft", helper_tools_paths, hook_env)
 
         # Use the previously parsed package list and apply final skip rules
         package_list = class_package_lists[class_name]
@@ -219,8 +242,8 @@ def show_env(log_text: str, env):
     print()
 
 
-def do_fcopy_file(to_copy: Path, chroot_dir: Path, path: str, mode: int):
-    dest_path = chroot_dir / path
+def do_fcopy_file(to_copy: Path, dest_root: Path, path: str, mode: int):
+    dest_path = dest_root / path
 
     print(f"I: fcopy: Installing {to_copy} as {dest_path}.")
     try:
@@ -237,13 +260,18 @@ def do_fcopy_file(to_copy: Path, chroot_dir: Path, path: str, mode: int):
     dest_path.parent.mkdir(exist_ok=True, parents=True)
 
     shutil.copy2(to_copy, dest_path, follow_symlinks=False)
-    dest_path.chmod(mode)
+
+    try:
+        dest_path.chmod(mode, follow_symlinks=False)
+    except NotImplementedError:
+        pass
+
     os.chown(dest_path, 0, 0, follow_symlinks=False)
 
     return True
 
 
-def do_fcopy_path(files_dir: Path, chroot_dir: Path, classes: list[str], path: str, mode: int) -> bool:
+def do_fcopy_path(files_dir: Path, dest_root: Path, classes: list[str], path: str, mode: int) -> bool:
     to_copy = None
     for class_name in classes:
         class_path = files_dir / class_name / path
@@ -251,13 +279,13 @@ def do_fcopy_path(files_dir: Path, chroot_dir: Path, classes: list[str], path: s
             to_copy = class_path
 
     if to_copy:
-        do_fcopy_file(to_copy, chroot_dir, path, mode)
+        do_fcopy_file(to_copy, dest_root, path, mode)
         return True
     else:
         return False
 
 
-def do_fcopy_recursive(files_dir: Path, chroot_dir: Path, classes: list[str], path_root: str, mode: int):
+def do_fcopy_recursive(files_dir: Path, dest_root: Path, classes: list[str], path_root: str, mode: int):
     tree = {}
 
     for class_name in classes:
@@ -274,10 +302,36 @@ def do_fcopy_recursive(files_dir: Path, chroot_dir: Path, classes: list[str], pa
             tree[file] = class_name
 
     for path, class_name in tree.items():
-        do_fcopy_file(files_dir / class_name / path, chroot_dir, path, mode)
+        do_fcopy_file(files_dir / class_name / path, dest_root, path, mode)
 
 
-def parse_fcopy_args(fcopy_args: list[str]) -> CopyFilesArgs:
+def do_copy_files(
+    conf_dir: Path, dest_root: Path, classes: list[str], files_name: str, copy_args: CopyFilesArgs
+) -> int:
+    print(f"D: copy_files {copy_args.recursive=} {copy_args.ignore_missing=} {copy_args.mode=} {copy_args.paths=}")
+    rc = 0
+    files_dir = conf_dir / files_name
+
+    try:
+        if copy_args.recursive:
+            for path in copy_args.paths:
+                do_fcopy_recursive(files_dir, dest_root, classes, path, copy_args.mode)
+
+        else:
+            for path in copy_args.paths:
+                found = do_fcopy_path(files_dir, dest_root, classes, path, copy_args.mode)
+                if not found and not copy_args.ignore_missing:
+                    print(f"E: Source {path=} is missing")
+                    rc = 1
+
+    except Exception as except_inst:
+        print(f"E: copy_files failed: {except_inst} - returning with exit code 130", flush=True)
+        rc = 130
+
+    return rc
+
+
+def _parse_fcopy_args(fcopy_args: list[str]) -> CopyFilesArgs:
     user = "root"
     group = "root"
     mode = 0o644
@@ -341,32 +395,74 @@ def parse_fcopy_args(fcopy_args: list[str]) -> CopyFilesArgs:
 
 def do_fcopy(conf_dir: Path, chroot_dir: Path, classes: list[str], remaining_args: list[str]) -> int:
     try:
-        copy_args = parse_fcopy_args(remaining_args)
+        copy_args = _parse_fcopy_args(remaining_args)
     except Exception as except_inst:
         print(f"E: Parsing fcopy_args {remaining_args!r} failed: {except_inst}")
         return 1
 
-    print(f"D: fcopy {copy_args.recursive=} {copy_args.ignore_missing=} {copy_args.mode=} {copy_args.paths=}")
-    rc = 0
-    files_dir = conf_dir / "files"
+    return do_copy_files(conf_dir, chroot_dir, classes, "files", copy_args)
+
+
+def _parse_copy_media_files_args(args: list[str]) -> CopyFilesArgs:
+    mode = 0o644
+    recursive = False
+    ignore_missing = False
+    paths = []
+
+    # Supported parameters:
+    # -r Copy recursively (traverse down the tree). Copy all files below SOURCE.
+    #    These are all subdirectory leaves in the SOURCE tree.
+    # -i Ignore warnings about no matching class and non-existing source directories.
+    #    These warnings will not set the exit code to 1.
+    # -m mode Set mode for all copied files (mode as octal number).
+
+    parse_m = False
+    for index, arg in enumerate(args):
+        if parse_m:
+            mode = int(arg, 8)
+            parse_m = False
+        elif arg == "-m":
+            parse_m = True
+        elif arg == "-r":
+            recursive = True
+        elif arg == "-i":
+            ignore_missing = True
+        elif not arg.startswith("-"):
+            paths = args[index:]
+            break
+        else:
+            raise ValueError(f"copy-media-files: param {arg} not understood")
+
+    if not paths:
+        raise ValueError("copy-media-files: no paths given")
+
+    paths = [path.lstrip("/") for path in paths]
+
+    return CopyFilesArgs(
+        mode=mode,
+        recursive=recursive,
+        ignore_missing=ignore_missing,
+        paths=paths,
+    )
+
+
+def do_copy_media_files(conf_dir: Path, chroot_dir: Path, classes: list[str], remaining_args: list[str]) -> int:
+    if not remaining_args:
+        raise ValueError("copy-media-files: need 2 or more parameters")
+
+    target = remaining_args.pop(0)
+    if target not in ("media", "netboot"):
+        raise ValueError(f"copy-media-files: target {target} not understood")
 
     try:
-        if copy_args.recursive:
-            for path in copy_args.paths:
-                do_fcopy_recursive(files_dir, chroot_dir, classes, path, copy_args.mode)
-
-        else:
-            for path in copy_args.paths:
-                found = do_fcopy_path(files_dir, chroot_dir, classes, path, copy_args.mode)
-                if not found and not copy_args.ignore_missing:
-                    print(f"E: Source {path=} is missing for fcopy")
-                    rc = 1
-
+        copy_args = _parse_copy_media_files_args(remaining_args)
     except Exception as except_inst:
-        print(f"E: fcopy failed: {except_inst} - returning with exit code 130", flush=True)
-        rc = 130
+        print(f"E: Parsing fcopy_args {remaining_args!r} failed: {except_inst}")
+        return 1
 
-    return rc
+    dest_dir = chroot_dir / "grml-live" / target
+
+    return do_copy_files(conf_dir, dest_dir, classes, "media-files", copy_args)
 
 
 def do_skiptask(dynamic_state: DynamicState, skiptask_args: list[str]) -> int:
@@ -407,6 +503,8 @@ def helper_socket_thread(
                 req = req[0].split(" ")
                 if req[0] == "fcopy":
                     rc = do_fcopy(conf_dir, chroot_dir, classes, req[1:])
+                elif req[0] == "copy-media-files":
+                    rc = do_copy_media_files(conf_dir, chroot_dir, classes, req[1:])
                 elif req[0] == "skiptask":
                     rc = do_skiptask(dynamic_state, req[1:])
                 else:
@@ -435,37 +533,28 @@ def helper_tools(conf_dir: Path, chroot_dir: Path, classes: list[str], dynamic_s
 
     write_helper_tool(
         tempdir,
-        "fcopy",
+        "grml-live-command",
         f"""#!/bin/sh
-echo "D: minifai fcopy: $(date +%FT%T) requesting $@"
-RC=$(echo fcopy "$@" | socat -t3600 - UNIX-CONNECT:{tempdir}/sock,forever)
+PN=$(basename "$0")
+if [ "$PN" = "grml-live-command" ]; then
+  PN="$1"
+  shift
+fi
+echo "D: minifai $PN: $(date +%FT%T) requesting $@"
+RC=$(echo $PN "$@" | socat -t3600 - UNIX-CONNECT:{tempdir}/sock,forever)
 if [ -z "$RC" ]; then
-  echo "E: minifai fcopy: $(date +%FT%T) got no reply from server"
+  echo "E: minifai $PN: $(date +%FT%T) got no reply from server"
   exit 119
 elif [ "$RC" != "0" ]; then
-  echo "E: minifai fcopy: server sent error code $RC"
+  echo "E: minifai $PN: server sent error code $RC"
   exit "$RC"
 fi
 exit 0
 """,
     )
 
-    write_helper_tool(
-        tempdir,
-        "skiptask",
-        f"""#!/bin/sh
-echo "D: minifai skiptask: $(date +%FT%T) requesting $@"
-RC=$(echo skiptask "$@" | socat -t3600 - UNIX-CONNECT:{tempdir}/sock,forever)
-if [ -z "$RC" ]; then
-  echo "E: minifai skiptask: $(date +%FT%T) got no reply from server"
-  exit 119
-elif [ "$RC" != "0" ]; then
-  echo "E: minifai skiptask: server sent error code $RC"
-  exit "$RC"
-fi
-exit 0
-    """,
-    )
+    (tempdir / "fcopy").symlink_to(tempdir / "grml-live-command")
+    (tempdir / "skiptask").symlink_to(tempdir / "grml-live-command")
 
     write_helper_tool(
         tempdir,
@@ -517,20 +606,6 @@ def policy_rcd(chroot_dir: Path):
                 print(f"I: Not cleaning up {program} - our marker went missing")
         except Exception:
             print(f"W: Failed cleaning up {program}")
-
-
-def create_logdir(chroot_dir: Path) -> Path:
-    log_dir = chroot_dir / "grml-live" / "log"
-    if log_dir.exists():
-        print(f"I: Deleting log directory from previous run: {log_dir}")
-        shutil.rmtree(log_dir)
-    print(f"I: Creating log directory: {log_dir}")
-    log_dir.mkdir()
-
-    # Create a file in there, so grml-live does not complain.
-    (log_dir / "minifai").write_text("This chroot was created by grml-live minifai. Not all features are supported.\n")
-
-    return log_dir
 
 
 def read_envvars_for_classes(conf_dir: Path, classes: list[str]) -> dict:
@@ -598,34 +673,114 @@ def task_updatebase(chroot_dir: Path, dynamic_state: DynamicState):
     run_chrooted(chroot_dir, ["apt", "-oapt::cmd::disable-script-warning=1", "--error-on=any", "update", "-q"])
 
 
+def _create_dirs(chroot_dir: Path) -> BuildDirectories:
+    """Create required directories _inside_ the chroot."""
+    # This code is as ugly as it looks.
+    build_dir_relative = "grml-live"
+    build_dir = chroot_dir / build_dir_relative
+    if build_dir.exists():
+        print(f'I: Deleting build directory "{build_dir_relative}" from previous run: {build_dir}')
+        shutil.rmtree(build_dir)
+    print(f"I: Creating build directory: {build_dir}")
+    build_dir.mkdir()
+
+    log_dir_name = "log"
+    log_dir = build_dir / log_dir_name
+    log_dir.mkdir()
+
+    media_dir_name = "media"
+    media_dir = build_dir / media_dir_name
+    media_dir.mkdir()
+
+    netboot_dir_name = "netboot"
+    netboot_dir = build_dir / netboot_dir_name
+    netboot_dir.mkdir()
+
+    sources_dir_name = "grml_sources"
+    sources_dir = build_dir / sources_dir_name
+    sources_dir.mkdir()
+
+    return BuildDirectories(
+        build_dir_inside=f"/{build_dir_relative}/",
+        build_dir=build_dir,
+        log_dir_inside=f"/{build_dir_relative}/{log_dir_name}/",
+        log_dir=log_dir,
+        media_dir_inside=f"/{build_dir_relative}/{media_dir_name}/",
+        media_dir=media_dir,
+        netboot_dir_inside=f"/{build_dir_relative}/{netboot_dir_name}/",
+        netboot_dir=media_dir,
+        sources_dir_inside=f"/{build_dir_relative}/{sources_dir_name}/",
+        sources_dir=sources_dir,
+    )
+
+
+def install_class_helper_tools(conf_dir: Path, build_dir: Path, classes: list[str]) -> Path:
+    """
+    Copy class-config helpers into chroot.
+
+    Later classes will overwrite earlier classes' files. This is intentional.
+    """
+
+    class_helper_tools_path = build_dir / "tools"
+    class_helper_tools_path.mkdir()
+    for class_name in classes:
+        class_path = conf_dir / "tools" / class_name
+        if not class_path.exists():
+            continue
+        shutil.copytree(class_path, class_helper_tools_path, symlinks=False, dirs_exist_ok=True)
+
+    return class_helper_tools_path
+
+
 def _run_tasks(
     conf_dir: Path, chroot_dir: Path, classes: list[str], grml_live_config: Path, fai_action: str, skip_tasks: list[str]
 ) -> int:
     dynamic_state = DynamicState()
-    logdir = create_logdir(chroot_dir)
+    directories = _create_dirs(chroot_dir)
+
+    # Create a file in there, so grml-live does not complain.
+    (directories.log_dir / "minifai").write_text(
+        "This chroot was created by grml-live minifai. Not all FAI features are supported.\n"
+    )
+
+    # duplicate grml_live_config into the chroot, so chrooted scripts can use it.
+    grml_live_config_chroot = directories.build_dir / "config"
+    grml_live_config_chroot.write_bytes(grml_live_config.read_bytes())
 
     do_skiptask(dynamic_state, skip_tasks)
 
     env = {
-        "GRML_LIVE_CONFIG": str(grml_live_config),
-        "LOGDIR": str(logdir),
+        "GRML_LIVE_CONFIG": str(grml_live_config_chroot),
+        "GRML_LIVE_BUILDDIR": directories.build_dir_inside,
+        "GRML_LIVE_MEDIADIR": directories.media_dir_inside,
+        "GRML_LIVE_NETBOOTDIR": directories.netboot_dir_inside,
+        "GRML_LIVE_SOURCESDIR": directories.sources_dir_inside,
+        "LOGDIR": str(directories.log_dir),
     } | read_envvars_for_classes(conf_dir, classes)
     show_env("Merged class variables", env)
 
     with helper_tools(conf_dir, chroot_dir, classes, dynamic_state) as helper_tools_path:
+        class_helper_tools_path = install_class_helper_tools(conf_dir, directories.build_dir, classes)
+
+        helper_tools_paths = [helper_tools_path, class_helper_tools_path]
+
         hook_env = env | {"FAI_ACTION": fai_action}
         for class_name in classes:
-            run_script(chroot_dir, conf_dir / "hooks" / class_name / "updatebase", helper_tools_path, hook_env)
+            run_script(chroot_dir, conf_dir / "hooks" / class_name / "updatebase", helper_tools_paths, hook_env)
 
         with policy_rcd(chroot_dir):
             task_updatebase(chroot_dir, dynamic_state)
 
             if not should_skip_task(dynamic_state, "instsoft"):
-                install_packages_for_classes(conf_dir, chroot_dir, classes, helper_tools_path, hook_env, dynamic_state)
+                install_packages_for_classes(conf_dir, chroot_dir, classes, helper_tools_paths, hook_env, dynamic_state)
 
         if not should_skip_task(dynamic_state, "configure"):
             for class_name in classes:
-                run_class_scripts(conf_dir, chroot_dir, class_name, helper_tools_path, env)
+                run_class_scripts("scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
+
+        if not should_skip_task(dynamic_state, "build"):
+            for class_name in classes:
+                run_class_scripts("media-scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
 
     return 0
 
@@ -676,6 +831,15 @@ def _main(program_name: str, argv: list[str]) -> int:
         elif args.action == FaiAction.RECONFIGURE:
             rc = _run_tasks(
                 conf_dir, chroot_dir, classes, args.grml_live_config, args.action, ["updatebase", "instsoft"]
+            )
+        elif args.action == FaiAction.REBUILD:
+            rc = _run_tasks(
+                conf_dir,
+                chroot_dir,
+                classes,
+                args.grml_live_config,
+                args.action,
+                ["updatebase", "instsoft", "configure"],
             )
         else:
             print(f"E: minifai: Unknown fai action: {args.action!r}")

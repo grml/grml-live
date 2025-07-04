@@ -1,6 +1,7 @@
-grml-live (0.53.2) unstable; urgency=medium
+grml-live (0.53.3) unstable; urgency=medium
 
-  Class (option -c) handling has changed:
+  Class (option -c) handling has changed
+  ======================================
 
   - GRMLBASE and architecture-specific classes are now enabled by
     default and should be removed from your grml-live invocation.
@@ -14,6 +15,19 @@ grml-live (0.53.2) unstable; urgency=medium
 
   You should still specify GRML_SMALL or GRML_FULL and/or your custom
   classes.
+
+
+  Boot templates as class-based config
+  ====================================
+
+  Boot template files, previously a directory passed as option -t
+  or TEMPLATES_DIRECTORY, have been turned into class-based
+  configuration.
+
+  If you have customised the boot templates, you need to migrate
+  them. Basically put your changes into files in ${GRML_FAI_CONFIG}/
+  config/media-files/${YOUR_CLASS_NAME}. Preferably delete any files
+  you did not customise.
 
  -- Chris Hofstaedtler <ch@grml.org>  Tue, 01 Jul 2025 00:42:50 +0200
 

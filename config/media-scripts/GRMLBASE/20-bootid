@@ -1,0 +1,41 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/20-bootid
+# Purpose:       Install bootid and bootfile files
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+media_dir="${target}/${GRML_LIVE_MEDIADIR}"
+mkdir -p "${media_dir}"/conf
+
+# we need to set "$BOOTID" before we invoke adjust_boot_files for the
+# first time, being inside grub_setup below
+if [ -n "$NO_BOOTID" ] ; then
+  echo "I: Skipping bootid feature as requested via \$NO_BOOTID."
+else
+  echo "I: Generating /conf/bootid.txt with content ${BOOTID}."
+  echo "$BOOTID" > "${media_dir}"/conf/bootid.txt
+fi
+
+# every recent Grml ISO ships a /conf/bootid.txt, though GRUB might find
+# the /conf/bootid.txt of a different (Grml) ISO than the one that's
+# supposed to be running. To mitigate this, we create a unique filename
+# and place that on the ISO.
+
+echo "I: Generating /conf/bootfile* files"
+rm -f "${media_dir}"/conf/bootfile*  # ensure we don't leave any old(er) files behind
+echo "# This file is relevant for GRUB boot with the Grml ISO." > "${media_dir}/${BOOT_FILE}"
+# save information about the random filename inside /conf/bootfile.txt
+echo "${BOOT_FILE}" > "${media_dir}"/conf/bootfile.txt
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

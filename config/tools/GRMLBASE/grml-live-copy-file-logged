@@ -1,0 +1,24 @@
+#!/bin/bash
+# Usage:
+#   grml-live-copy-file-logged /destination/filename /tree /src1 /src2 ...
+# This copies one of the given files /src1 *or* /src2 or ..., which
+# should exist inside /tree. The first matching file will be copied
+# and be named /destination/filename.
+# If none of the source files are found, 1 will be returned. Callers
+# may opt into checking that.
+
+dest="$1"
+shift
+source_root="$1"
+shift
+
+for source in "$@" ; do
+  if [ -r "${source_root}${source}" ] ; then
+    echo "I: Installing ${source} as ${dest}"
+    cp --preserve=timestamp "${source_root}${source}" "${dest}"
+    exit 0
+  fi
+done
+
+echo "W: Not installing ${dest}, no source files found" >&2
+exit 1
