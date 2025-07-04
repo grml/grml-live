@@ -235,29 +235,10 @@ hasclass() {
   return 1
 }
 
-# Usage:
-#   copy_file_logged /destination/filename /tree /src1 /src2 ...
-# This copies one of the given files /src1 *or* /src2 or ..., which
-# should exist inside /tree. The first matching file will be copied
-# and be named /destination/filename.
-# If none of the source files are found, 1 will be returned. Callers
-# may opt into checking that.
 copy_file_logged() {
-  local dest="$1"
-  shift
-  local source_root="$1"
-  shift
-  local source
-
-  for source in "$@" ; do
-    if [ -r "${source_root}${source}" ] ; then
-      log "Installing ${source} as ${dest}"
-      cp --preserve=timestamp "${source_root}${source}" "${dest}"
-      return 0
-    fi
-  done
-  log "Not installing ${dest}, no source files found"
-  return 1
+  # Stop gap until all boot code is moved into media-scripts.
+  "${GRML_FAI_CONFIG}"/tools/GRMLBASE/grml-live-copy-file-logged "$@"
+  return $?
 }
 
 # replace placeholders in template files with actual information
