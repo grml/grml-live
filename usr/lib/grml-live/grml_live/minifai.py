@@ -43,6 +43,14 @@ class DynamicState:
         self.skip_tasks = set()
 
 
+@dataclass(kw_only=True)
+class CopyFilesArgs:
+    mode: int
+    recursive: bool
+    ignore_missing: bool
+    paths: list[str]
+
+
 def now_for_log() -> str:
     return datetime.datetime.now().isoformat()
 
@@ -211,7 +219,7 @@ def show_env(log_text: str, env):
     print()
 
 
-def do_fcopy_file(to_copy: Path, chroot_dir: Path, path: str, mode):
+def do_fcopy_file(to_copy: Path, chroot_dir: Path, path: str, mode: int):
     dest_path = chroot_dir / path
 
     print(f"I: fcopy: Installing {to_copy} as {dest_path}.")
@@ -269,7 +277,7 @@ def do_fcopy_recursive(files_dir: Path, chroot_dir: Path, classes: list[str], pa
         do_fcopy_file(files_dir / class_name / path, chroot_dir, path, mode)
 
 
-def parse_fcopy_args(fcopy_args: list[str]) -> tuple[str, str, int, bool, bool, list[str]]:
+def parse_fcopy_args(fcopy_args: list[str]) -> CopyFilesArgs:
     user = "root"
     group = "root"
     mode = 0o644
@@ -297,11 +305,14 @@ def parse_fcopy_args(fcopy_args: list[str]) -> tuple[str, str, int, bool, bool, 
             user, group, mode = arg.split(",")
             mode = int(mode, 8)
             parse_m = False
-        elif arg in ["-M", "-B", "-v"]:
+        elif arg in ["-B", "-v"]:
             # defaulted / ignored
             pass
         elif arg == "-m":
             parse_m = True
+        elif arg == "-M":
+            user, group = "root", "root"
+            mode = 0o644
         elif arg == "-r":
             recursive = True
         elif arg == "-i":
@@ -310,39 +321,50 @@ def parse_fcopy_args(fcopy_args: list[str]) -> tuple[str, str, int, bool, bool, 
             paths = fcopy_args[index:]
             break
         else:
-            raise ValueError(f"do_fcopy: param {arg} not understood")
+            raise ValueError(f"fcopy: param {arg} not understood")
 
     if not paths:
-        raise ValueError("do_fcopy: no paths given")
+        raise ValueError("fcopy: no paths given")
 
     paths = [path.lstrip("/") for path in paths]
 
-    return user, group, mode, recursive, ignore_missing, paths
+    if user != "root" or group != "root":
+        raise ValueError("E: When copying files, user/group must be root/root")
+
+    return CopyFilesArgs(
+        mode=mode,
+        recursive=recursive,
+        ignore_missing=ignore_missing,
+        paths=paths,
+    )
 
 
-def do_fcopy(conf_dir: Path, chroot_dir: Path, classes: list[str], fcopy_args: list[str]) -> int:
+def do_fcopy(conf_dir: Path, chroot_dir: Path, classes: list[str], remaining_args: list[str]) -> int:
     try:
-        user, group, mode, recursive, ignore_missing, paths = parse_fcopy_args(fcopy_args)
-        if user != "root" or group != "root":
-            raise ValueError("E: In fcopy, user/group must be root/root")
+        copy_args = parse_fcopy_args(remaining_args)
     except Exception as except_inst:
-        print(f"E: Parsing fcopy_args {fcopy_args!r} failed: {except_inst}")
+        print(f"E: Parsing fcopy_args {remaining_args!r} failed: {except_inst}")
         return 1
 
-    print(f"D: fcopy {recursive=} {ignore_missing=} {user=} {group=} {mode=} {paths=}")
+    print(f"D: fcopy {copy_args.recursive=} {copy_args.ignore_missing=} {copy_args.mode=} {copy_args.paths=}")
     rc = 0
     files_dir = conf_dir / "files"
 
-    if recursive:
-        for path in paths:
-            do_fcopy_recursive(files_dir, chroot_dir, classes, path, mode)
+    try:
+        if copy_args.recursive:
+            for path in copy_args.paths:
+                do_fcopy_recursive(files_dir, chroot_dir, classes, path, copy_args.mode)
 
-    else:
-        for path in paths:
-            found = do_fcopy_path(files_dir, chroot_dir, classes, path, mode)
-            if not found and not ignore_missing:
-                print(f"E: Source {path=} is missing for fcopy")
-                rc = 1
+        else:
+            for path in copy_args.paths:
+                found = do_fcopy_path(files_dir, chroot_dir, classes, path, copy_args.mode)
+                if not found and not copy_args.ignore_missing:
+                    print(f"E: Source {path=} is missing for fcopy")
+                    rc = 1
+
+    except Exception as except_inst:
+        print(f"E: fcopy failed: {except_inst} - returning with exit code 130", flush=True)
+        rc = 130
 
     return rc
 
