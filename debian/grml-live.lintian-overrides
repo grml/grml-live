@@ -1,6 +1,6 @@
 grml-live: bugs-field-does-not-refer-to-debian-infrastructure mailto:bugs@grml.org
-grml-live: executable-not-elf-or-script [usr/share/grml-live/templates/windows/autostart/autorun.inf]
-grml-live: privacy-breach-generic [<link rel="home" href="http://grml.org/" title="grml.org" />] (http://grml.org/) [usr/share/grml-live/templates/GRML/index.html]
+grml-live: executable-not-elf-or-script [config/media-files/GRMLBASE/autorun.inf]
+grml-live: privacy-breach-generic [<link rel="home" href="http://grml.org/" title="grml.org" />] (http://grml.org/) [config/media-files/GRMLBASE/GRML/GRML_NAME/index.html]
 grml-live: unknown-section grml
 grml-live: uses-dpkg-database-directly [usr/share/grml-live/config/hooks/instsoft.GRMLBASE]
 grml-live: uses-dpkg-database-directly [usr/share/grml-live/config/scripts/GRMLBASE/98-clean-chroot]

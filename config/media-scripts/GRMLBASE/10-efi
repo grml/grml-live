@@ -33,7 +33,7 @@ grub_setup() {
   if [[ "${SECURE_BOOT:-}" == "disable" ]] || [[ "${ARCH:-}" == "i386" ]] ; then
     efi_size='4M'
   else
-    # e.g. templates/EFI/debian for Secure Boot has >4MB and needs more space
+    # e.g. EFI/debian for Secure Boot has >4MB and needs more space
     efi_size='8M'
   fi
 
@@ -92,37 +92,24 @@ grub_setup() {
         debian|ubuntu)
           echo "I: Secure Boot is enabled [mode: ${SECURE_BOOT}]"
 
-          local GRUBCFG_TEMPLATE="${TEMPLATE_DIRECTORY}/secureboot/grub.cfg"
-          local GRUBCFG_TMP
-          GRUBCFG_TMP=$(mktemp)
+          grml-live-command copy-media-files media /secureboot/grub.cfg
+          $ROOTCMD mv "${GRML_LIVE_MEDIADIR}"/secureboot/grub.cfg /tmp
 
-          if ! [ -r "${GRUBCFG_TEMPLATE}" ] ; then
-            echo "E: Secure Boot template for GRUB [${GRUBCFG_TEMPLATE}] not found." >&2
-            exit 54
-          fi
-
-          cp "${GRUBCFG_TEMPLATE}" "${GRUBCFG_TMP}"
-          grml-live-adjust-boot-files "${GRUBCFG_TMP}"
+          grml-live-adjust-boot-files "${target}"/tmp/grub.cfg
 
           mmd -i "${target}/${EFI_IMG}" ::boot      || exit 55
           mmd -i "${target}/${EFI_IMG}" ::boot/grub || exit 55
-          mcopy -i "${target}/${EFI_IMG}" "${GRUBCFG_TMP}" ::boot/grub/grub.cfg || exit 56
+          mcopy -i "${target}/${EFI_IMG}" "${target}"/tmp/grub.cfg ::boot/grub/grub.cfg || exit 56
 
-          rm "${GRUBCFG_TMP}"
+          rm "${target}"/tmp/grub.cfg
 
-          if [ -r "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed" ] ; then
-            mcopy -i "${target}/${EFI_IMG}" "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed" ::EFI/BOOT/grubx64.efi >/dev/null || exit 57
-          else
-            echo "E: Secure Boot GRUB binary '${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed' not found." >&2
-            exit 57
-          fi
+          grml-live-command copy-media-files media /EFI/"${SECURE_BOOT}"/BOOT/grubx64.efi.signed
+          mcopy -i "${target}/${EFI_IMG}" "${target}/${GRML_LIVE_MEDIADIR}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed" ::EFI/BOOT/grubx64.efi >/dev/null || exit 57
+          $ROOTCMD rm -f "/${GRML_LIVE_MEDIADIR}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed"
 
-          if [ -r "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed" ] ; then
-            mcopy -i "${target}/${EFI_IMG}" "${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed" ::EFI/BOOT/bootx64.efi >/dev/null || exit 58
-          else
-            echo "E: Secure Boot GRUB binary '${TEMPLATE_DIRECTORY}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed' not found." >&2
-            exit 57
-          fi
+          grml-live-command copy-media-files media /EFI/"${SECURE_BOOT}"/BOOT/shimx64.efi.signed
+          mcopy -i "${target}/${EFI_IMG}" "${target}/${GRML_LIVE_MEDIADIR}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed" ::EFI/BOOT/bootx64.efi >/dev/null || exit 58
+          $ROOTCMD rm -f "/${GRML_LIVE_MEDIADIR}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed"
 
           echo "I: Created Secure Boot (${SECURE_BOOT}) UEFI image ${target}/${EFI_IMG}"
           ;;

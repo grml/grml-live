@@ -25,20 +25,13 @@ media_dir="${target}/${GRML_LIVE_MEDIADIR}"
 mkdir -p "${media_dir}/boot/addons"
 
 # copy files and report which ones get installed
-if [ -d "${TEMPLATE_DIRECTORY}/arch/${ARCH}/boot/addons" ] ; then
-  for file in "${TEMPLATE_DIRECTORY}/arch/${ARCH}/boot/addons/"* ; do
-    if [ -f "$file" ] ; then
-      echo "I: Installing $file in /boot/addons."
-      cp --preserve=timestamp "$file" "$media_dir"/boot/addons/
-    fi
-  done
-else # legacy path (before https://github.com/grml/grml-live-grml/pull/11):
-  for file in "${TEMPLATE_DIRECTORY}"/boot/addons/* ; do
-    if [ -f "$file" ] ; then
-      echo "I: Installing $file in /boot/addons. (Legacy support)"
-      cp --preserve=timestamp "$file" "$media_dir"/boot/addons/
-    fi
-  done
+if grml-live-command copy-media-files media -r "/arch/${ARCH}/boot/addons" && $ROOTCMD test -d "${GRML_LIVE_MEDIADIR}/arch" ; then
+  $ROOTCMD mv "${GRML_LIVE_MEDIADIR}/arch/${ARCH}/*" "${GRML_LIVE_MEDIADIR}/"
+  $ROOTCMD rmdir "${GRML_LIVE_MEDIADIR}/arch/${ARCH}" "${GRML_LIVE_MEDIADIR}/arch"
+else
+  # legacy path (before https://github.com/grml/grml-live-grml/pull/11):
+  echo "I: trying to install legacy path /boot/addons"
+  grml-live-command copy-media-files media -r -i "/boot/addons"
 fi
 
 ## END OF FILE #################################################################

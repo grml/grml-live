@@ -14,20 +14,21 @@ target=${target:?}
 # shellcheck source=/dev/null
 . "$GRML_LIVE_CONFIG"
 
-media_dir="${target}/${GRML_LIVE_MEDIADIR}"
+# Remove files from a previous run.
+$ROOTCMD rm -rf "${GRML_LIVE_MEDIADIR}/GRML/${GRML_NAME}"
+$ROOTCMD mkdir -p "${GRML_LIVE_MEDIADIR}/GRML"
 
-if ! [ -d "${TEMPLATE_DIRECTORY}"/GRML ] ; then
-  echo "E: ${TEMPLATE_DIRECTORY}/GRML does not exist. Aborting." >&2
-  exit 9
+grml-live-command copy-media-files media -r "/GRML/GRML_NAME"
+
+if $ROOTCMD test -r "${GRML_LIVE_MEDIADIR}"/GRML/GRML_NAME/grml-version ; then
+  $ROOTCMD sed -i \
+    -e "s/%RELEASE_INFO%/$RELEASE_INFO/" \
+    -e "s/%DATE%/$DATE/" \
+    "${GRML_LIVE_MEDIADIR}"/GRML/GRML_NAME/grml-version
 fi
 
-mkdir -p "$media_dir"/GRML/"${GRML_NAME}"/
-cp -a "${TEMPLATE_DIRECTORY}"/GRML/* "$media_dir"/GRML/"${GRML_NAME}"/
-
-if [ -r "$media_dir"/GRML/"${GRML_NAME}"/grml-version ] ; then
-  sed -i "s/%RELEASE_INFO%/$RELEASE_INFO/" "$media_dir"/GRML/"${GRML_NAME}"/grml-version
-  sed -i "s/%DATE%/$DATE/"                 "$media_dir"/GRML/"${GRML_NAME}"/grml-version
-fi
+# Now rename to the correct ${GRML_NAME} name.
+$ROOTCMD mv "${GRML_LIVE_MEDIADIR}"/GRML/GRML_NAME/ "${GRML_LIVE_MEDIADIR}/GRML/${GRML_NAME}"
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

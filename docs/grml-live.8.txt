@@ -12,7 +12,7 @@ Synopsis
 grml-live [-a <architecture>] [-c <classe[s]>] [-C <configfile>] [
 -e <extract_iso_name>] [-g <grml_name>] [-i <iso_name>] [
 -o <output_directory>] [-r <release_name>] [-s <suite>] [
--t <template_directory>] [-v <version_number>] [-U <username>] [
+-t <arg>] [-v <version_number>] [-U <username>] [
 -w <date>] [-AbBFnNqQRuVz]
 
 Description
@@ -210,10 +210,9 @@ suites might require a recent base.tgz
 (${GRML_FAI_CONFIG}/basefiles/$CLASSNAME.tar.gz) or a recent version of
 debootstrap.
 
-  -t **TEMPLATE_DIRECTORY**::
+  -t **arg**::
 
-Specify place of the templates used for building the ISO. By default
-(and if not manually specified) this is /usr/share/grml-live/templates/.
+Deprecated. Will be removed in a future release of grml-live.
 
   -u::
 
@@ -774,7 +773,6 @@ b) does not use the config files of an possibly installed `grml-live` package.
 Usage example:
 
     # export GRML_FAI_CONFIG=$(pwd)/config
-    # export TEMPLATE_DIRECTORY=$(pwd)/templates
     # ./grml-live -s sid -a amd64 -c GRML_FULL
 
 [[source]]

@@ -18,7 +18,7 @@ media_dir="${target}/${GRML_LIVE_MEDIADIR}"
 tftpboot_dir="${target}/${GRML_LIVE_NETBOOTDIR}"/tftpboot
 mkdir -p "${media_dir}/boot/grub" "${tftpboot_dir}"
 
-cp -a "${TEMPLATE_DIRECTORY}"/boot/grub/* "${media_dir}"/boot/grub/
+grml-live-command copy-media-files media -r /boot/grub
 
 # generate loopback.cfg config file without depending on grub's regexp module
 # which isn't available in Debian/squeeze
@@ -76,7 +76,7 @@ done
 if ifclass AMD64 || ifclass ARM64 ; then
   if ! [ -r "${media_dir}/boot/grub/netboot.cfg" ] ; then
     echo "W: File /boot/grub/netboot.cfg not found." >&2
-    echo "I: Are you using custom templates which do not provide netboot.cfg?" >&2
+    echo "W: Are you using custom media-files which do not provide netboot.cfg?" >&2
   else
     cp --preserve=timestamp "${media_dir}/boot/grub/netboot.cfg" "${tftpboot_dir}/grub.cfg"
 

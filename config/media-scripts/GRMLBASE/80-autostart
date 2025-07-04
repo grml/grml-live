@@ -14,12 +14,8 @@ target=${target:?}
 # shellcheck source=/dev/null
 . "$GRML_LIVE_CONFIG"
 
-media_dir="${target}/${GRML_LIVE_MEDIADIR}"
-
-# autostart for Windows:
-if [ -d "${TEMPLATE_DIRECTORY}/windows/autostart/" ] ; then
-  cp -a "${TEMPLATE_DIRECTORY}"/windows/autostart/* "${media_dir}"/
-fi
+grml-live-command copy-media-files media -i "/autorun.inf"
+grml-live-command copy-media-files media -i "/cdrom.ico"
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

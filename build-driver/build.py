@@ -107,7 +107,6 @@ def run_grml_live(
         {
             "GRML_FAI_CONFIG": str(grml_fai_config),
             "LIVE_CONF": str(grml_live_path / "etc" / "grml" / "grml-live.conf"),
-            "TEMPLATE_DIRECTORY": str(grml_live_path / "templates"),
             "SOURCE_DATE_EPOCH": str(int(source_date_epoch.timestamp())),
         }
     )

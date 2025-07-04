@@ -39,7 +39,7 @@ done
 
 # *always* copy files to output directory so the variables
 # get adjusted according to the build.
-cp --preserve=timestamp "${TEMPLATE_DIRECTORY}"/boot/isolinux/* "${media_dir}"/boot/isolinux/
+grml-live-command copy-media-files media -r /boot/isolinux
 
 # only for syslinux hdt.
 grml-live-copy-file-logged "${media_dir}"/boot/addons/pci.ids "${target}" /usr/share/misc/pci.ids || true
@@ -134,7 +134,7 @@ if [ -r "${media_dir}/boot/isolinux/netboot.cfg" ] ; then
   cp --preserve=timestamp "${media_dir}/boot/isolinux/netboot.cfg" "${tftpboot_dir}/pxelinux.cfg/default"
 else
   echo "W: File /boot/isolinux/netboot.cfg not found." >&2
-  echo "I: Are you using custom templates which do not provide netboot.cfg?" >&2
+  echo "W: Are you using custom media-files which do not provide netboot.cfg?" >&2
 fi
 
 ## END OF FILE #################################################################
