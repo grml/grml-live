@@ -6,6 +6,9 @@
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
+set -e
+set -u
+
 # FAI sets $target, but shellcheck does not know that.
 target=${target:?}
 
