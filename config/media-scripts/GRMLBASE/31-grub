@@ -1,0 +1,134 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/31-grub
+# Purpose:       Install grub program files and configuration
+# Authors:       grml-team (grml.org)
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+media_dir="${target}/${GRML_LIVE_MEDIADIR}"
+tftpboot_dir="${target}/${GRML_LIVE_NETBOOTDIR}"/tftpboot
+mkdir -p "${media_dir}/boot/grub" "${tftpboot_dir}"
+
+cp -a "${TEMPLATE_DIRECTORY}"/boot/grub/* "${media_dir}"/boot/grub/
+
+# generate loopback.cfg config file without depending on grub's regexp module
+# which isn't available in Debian/squeeze
+echo "## grub2 loopback configuration" > "${media_dir}"/boot/grub/loopback.cfg
+echo "source /boot/grub/header.cfg" >> "${media_dir}"/boot/grub/loopback.cfg
+for config in "${media_dir}"/boot/grub/*_default.cfg "${media_dir}"/boot/grub/*_options.cfg ; do
+  [ -r "$config" ] || continue
+  echo "source ${config##"$media_dir"}" >> "${media_dir}"/boot/grub/loopback.cfg
+done
+if [ -z "$NO_ADDONS" ] ; then
+  echo "source /boot/grub/addons.cfg" >> "${media_dir}"/boot/grub/loopback.cfg
+else
+  rm -f "${media_dir}"/boot/grub/addons.cfg
+fi
+echo "source /boot/grub/footer.cfg" >> "${media_dir}"/boot/grub/loopback.cfg
+
+# copy modules for GRUB
+if [ "${ARCH}" = "arm64" ] ; then
+  mkdir -p "${media_dir}"/boot/grub/arm64-efi/
+  cp -a "${target}"/usr/lib/grub/arm64-efi/*.mod "${media_dir}"/boot/grub/arm64-efi/
+  cp -a "${target}"/usr/lib/grub/arm64-efi/*.lst "${media_dir}"/boot/grub/arm64-efi/
+elif [ "${ARCH}" = "amd64" ] || [ "${ARCH}" = "i386" ] ; then
+  # grub-pc-bin
+  mkdir -p "${media_dir}"/boot/grub/i386-pc/
+  cp -a "${target}"/usr/lib/grub/*-pc/*.mod  "${media_dir}"/boot/grub/i386-pc/
+  cp -a "${target}"/usr/lib/grub/*-pc/*.o    "${media_dir}"/boot/grub/i386-pc/
+  cp -a "${target}"/usr/lib/grub/*-pc/*.lst  "${media_dir}"/boot/grub/i386-pc/
+
+  # grub-efi-amd64-bin
+  mkdir -p "${media_dir}"/boot/grub/x86_64-efi/
+  cp -a "${target}"/usr/lib/grub/x86_64-efi/*.{mod,lst} "${media_dir}"/boot/grub/x86_64-efi/
+
+  # grub-efi-ia32-bin
+  mkdir -p "${media_dir}"/boot/grub/i386-efi/
+  cp -a "${target}"/usr/lib/grub/i386-efi/*.{mod,lst} "${media_dir}"/boot/grub/i386-efi/
+fi
+
+# arch independent files
+cp -a "${target}"/usr/share/grub/unicode.pf2   "${media_dir}"/boot/grub/
+
+# adjust all variables in the templates with the according distribution information
+grml-live-adjust-boot-files "${media_dir}"/boot/grub/*
+
+for param in ARCH DATE DISTRI_INFO DISTRI_NAME DISTRI_SPLASH GRML_NAME SQUASHFS_NAME \
+  RELEASE_INFO SHORT_NAME VERSION ; do
+  while IFS= read -r -d '' file ; do
+    value=$(eval echo '$'"$param")
+    mv "${file}" "${file/\%${param}\%/$value}"
+  done < <(find "${media_dir}"/boot/grub -name "*%$param%*" -print0)
+done
+
+
+# don't include shim + grubnetx64 + grub files in i386 netboot packages,
+# as those don't make much sense there
+if ifclass AMD64 || ifclass ARM64 ; then
+  if ! [ -r "${media_dir}/boot/grub/netboot.cfg" ] ; then
+    echo "W: File /boot/grub/netboot.cfg not found." >&2
+    echo "I: Are you using custom templates which do not provide netboot.cfg?" >&2
+  else
+    cp --preserve=timestamp "${media_dir}/boot/grub/netboot.cfg" "${tftpboot_dir}/grub.cfg"
+
+    if [ "$ARCH" = "amd64" ] ; then
+      if ! grml-live-copy-file-logged "${tftpboot_dir}"/shim.efi "${target}" \
+        /usr/lib/shim/shimx64.efi.signed \
+        /usr/lib/shim/shimx64.efi
+      then
+        echo "W: No shimx64.efi for usage with PXE boot found (shim-signed not present?)" >&2
+      fi
+
+      if ! grml-live-copy-file-logged "${tftpboot_dir}"/grubx64.efi "${target}" \
+        /usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed \
+        /usr/lib/grub/x86_64-efi/monolithic/grubnetx64.efi
+      then
+        echo "W: No grubnetx64.efi for usage with PXE boot found (grub-efi-amd64-signed not present?)." >&2
+      fi
+
+      # UEFI 32bit boot
+      if ! grml-live-copy-file-logged "${tftpboot_dir}"/grubia32.efi "${target}" \
+        /usr/lib/grub/i386-efi-signed/grubnetia32.efi.signed \
+        /usr/lib/grub/i386-efi/monolithic/grubnetia32.efi
+      then
+        echo "W: No grubnetia32.efi for usage with PXE boot found (grub-efi-ia32-unsigned present?)." >&2
+      fi
+    fi
+
+    if [ "$ARCH" = "arm64" ] ; then
+      if ! grml-live-copy-file-logged "${tftpboot_dir}"/shim.efi "${target}" \
+        /usr/lib/shim/shimaa64.efi.signed \
+        /usr/lib/shim/shimaa64.efi
+      then
+        echo "W: No shimaa64.efi for usage with PXE boot found (shim-signed not present?)" >&2
+      fi
+
+      if ! grml-live-copy-file-logged "${tftpboot_dir}"/grubaa64.efi "${target}" \
+        /usr/lib/grub/arm64-efi-signed/grubnetaa64.efi.signed \
+        /usr/lib/grub/arm64-efi/monolithic/grubnetaa64.efi
+      then
+        echo "W: No grubnetaa64.efi for usage with PXE boot found (grub-efi-arm64-signed not present?)." >&2
+      fi
+    fi
+
+    if [ -r "${target}"/usr/share/grub/unicode.pf2 ] ; then
+      echo "I: Installing ${target}/usr/share/grub/unicode.pf2 as grub/fonts/unicode.pf2 in netboot package"
+      mkdir -p "${tftpboot_dir}"/grub/fonts/
+      cp --preserve=timestamp "${target}"/usr/share/grub/unicode.pf2 "${tftpboot_dir}"/grub/fonts/
+    else
+      echo "W: No unicode.pf2 for usage with PXE boot found (grub-common not present?)" >&2
+    fi
+  fi
+fi # amd64 or arm64
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
