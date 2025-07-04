@@ -832,32 +832,6 @@ else
     log   "Installing boot addons."
     einfo "Installing boot addons."
 
-    # copy from chroot-installed packages
-
-    # memtest86+ >=6.00-1
-    if [[ "$ARCH" == "amd64" ]] ; then
-      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest86+x64.efi "${CHROOT_OUTPUT}" /boot/memtest86+x64.efi
-    elif [[ "$ARCH" == "i386" ]] ; then
-      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest86+ia32.efi "${CHROOT_OUTPUT}" /boot/memtest86+ia32.efi
-    fi
-
-    # provide memtest86+ >=6.00-1 files as "memtest" file
-    # for BIOS boot in isolinux/syslinux
-    if ! [ -r "${BUILD_OUTPUT}/boot/addons/memtest" ] ; then
-      if [[ "$ARCH" == "amd64" ]] ; then
-        copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest "${CHROOT_OUTPUT}" /boot/memtest86+x64.bin
-      elif [[ "$ARCH" == "i386" ]] ; then
-        copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest "${CHROOT_OUTPUT}" /boot/memtest86+ia32.bin
-      fi
-    fi
-
-    # fallback: if we still don't have /boot/addons/memtest available, we
-    # might have an older memtest86+ version (<=5.01-3.1) which ships
-    # file "memtest86+.bin" instead
-    if ! [ -r "${BUILD_OUTPUT}/boot/addons/memtest" ] ; then
-      copy_file_logged "${BUILD_OUTPUT}"/boot/addons/memtest "${CHROOT_OUTPUT}" /boot/memtest86+.bin
-    fi
-
     # copy only files and report which ones are installed
     if [ -d "${TEMPLATE_DIRECTORY}/arch/${ARCH}/boot/addons" ] ; then
       for file in "${TEMPLATE_DIRECTORY}/arch/${ARCH}/boot/addons/"* ; do
