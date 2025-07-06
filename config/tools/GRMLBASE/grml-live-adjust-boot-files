@@ -1,0 +1,42 @@
+#!/bin/bash
+# replace placeholders in template files with actual information
+set -eu
+
+if [ -z "$1" ] ; then
+  echo "Usage: adjust_boot_files <template_files>" >&2
+  exit 1
+fi
+
+if [ -z "${GRML_LIVE_CONFIG:-}" ] ; then
+  echo "E: GRML_LIVE_CONFIG is unset. This script must run from within grml-live." >&2
+  exit 2
+fi
+
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+for file in "$@" ; do
+  if [ -r "${file}" ] && [ -f "${file}" ] ; then
+    sed -i "s/%ARCH%/$ARCH/g"                    "${file}"
+    sed -i "s/%DATE%/$DATE/g"                    "${file}"
+    sed -i "s/%DISTRI_INFO%/$DISTRI_INFO/g"      "${file}"
+    sed -i "s/%DISTRI_NAME%/$DISTRI_NAME/g"      "${file}"
+    sed -i "s/%DISTRI_SPLASH%/$DISTRI_SPLASH/g"  "${file}"
+    sed -i "s/%GRML_NAME%/$GRML_NAME/g"          "${file}"
+    sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/g"  "${file}"
+    sed -i "s/%RELEASE_INFO%/$RELEASE_INFO68/g"  "${file}"
+    sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
+    sed -i "s/%VERSION%/$VERSION/g"              "${file}"
+    if [ -n "${BOOT_FILE}" ] ; then
+      sed -i "s;%BOOT_FILE%;$BOOT_FILE;g"        "${file}"
+    fi
+
+    [ -n "$DEFAULT_BOOTOPTIONS" ] && sed -i "s; boot=live; boot=live $DEFAULT_BOOTOPTIONS;"  "${file}"
+
+    if [ -n "$NO_BOOTID" ] ; then
+      sed -i "s/ bootid=%BOOTID%//g" "${file}" # drop bootid bootoption
+    else
+      sed -i "s/%BOOTID%/$BOOTID/g" "${file}" # adjust bootid=... argument
+    fi
+  fi
+done

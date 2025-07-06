@@ -6,6 +6,9 @@
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
+set -e
+set -u
+
 # FAI sets $target, but shellcheck does not know that.
 target=${target:?}
 
@@ -16,8 +19,9 @@ TITLE_FONTSIZE=${TITLE_FONTSIZE:-200}
 VERSION_FONTSIZE=${VERSION_FONTSIZE:-100}
 GRML_WALLPAPER=${GRML_WALLPAPER:-"$target"/usr/share/grml/desktop.jpg}
 
-FONTFILE="$TEMPLATE_DIRECTORY"/wallpaper/font.otf
-GRML_BG="$TEMPLATE_DIRECTORY"/wallpaper/input.png
+fcopy -M -i -r /usr/share/grml-wallpaper
+FONTFILE="${target}/usr/share/grml-wallpaper/font.otf"
+GRML_BG="${target}/usr/share/grml-wallpaper/input.png"
 
 echo "Creating GRMLBASE wallpaper"
 
@@ -42,3 +46,5 @@ convert "$GRML_BG" -gravity center \
     -draw "text 0,0 \"$GRML_NAME\"" \
     -pointsize "$VERSION_FONTSIZE" \
     -draw "text 0,$((TITLE_FONTSIZE+50)) \"$VERSION\"" "$GRML_WALLPAPER"
+
+rm -rf "${target}/usr/share/grml-wallpaper"
