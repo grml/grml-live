@@ -110,9 +110,10 @@ nuke(){
 
 # set all files in the given directories to a length of zero
 zero(){
+  find "$@" -type f -size +0 -not -name \*.ini -print0 2>/dev/null | \
   while IFS= read -r -d '' file ; do
     :> "$file"
-  done < <(find "$@" -type f -size +0 -not -name \*.ini -print0 2>/dev/null)
+  done
 }
 
 echo "Removing possible leftovers from update-pciids runs"
