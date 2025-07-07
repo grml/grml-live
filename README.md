@@ -21,5 +21,5 @@ does not use the config files of an installed `grml-live` package:
 
     # export GRML_FAI_CONFIG=$(pwd)/config
     # export LIVE_CONF=$(pwd)/etc/grml/grml-live.conf
-    # ln -s ../../../grml-live-grml/templates/boot/addons templates/boot/  # optional
+    # ln -s ../../../grml-live-grml/templates/arch config/media-files/GRMLBASE/  # optional
     # ./grml-live -s sid -a amd64 -c GRML_FULL
