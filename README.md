@@ -23,3 +23,5 @@ does not use the config files of an installed `grml-live` package:
     # export LIVE_CONF=$(pwd)/etc/grml/grml-live.conf
     # ln -s ../../../grml-live-grml/templates/arch config/media-files/GRMLBASE/  # optional
     # ./grml-live -s sid -a amd64 -c GRML_FULL
+
+[CLICK TO VISUALISE AND QUERY REPO](https://repomapr.com/grml/grml-live)
