@@ -586,6 +586,8 @@ if [ -n "$CONFIG" ] ; then
       log "Sourcing $CONFIG"
       # shellcheck source=/dev/null
       . "$CONFIG"
+    # Clear NO_ADDONS if set to '0'
+    [ "$NO_ADDONS" -eq 0 ] && NO_ADDONS=''
    fi
 fi
 
