@@ -659,9 +659,6 @@ cap_timestamps() {
 # on-the-fly configuration {{{
 
 case "${SUITE}" in
-  # /usr/share/debootstrap/scripts/unstable does not exist, so use 'sid'
-  # for bootstrapping, but DEBIAN_UNSTABLE elsewhere:
-   unstable) SUITE='sid' ; CLASSES="DEBIAN_UNSTABLE,$CLASSES" ;;
   # avoid having to maintain DEBIAN_UNSTABLE *and* DEBIAN_SID class files:
         sid)               CLASSES="DEBIAN_UNSTABLE,$CLASSES" ;;
   # otherwise map e.g. bookworm to DEBIAN_BOOKWORM:
