@@ -18,7 +18,6 @@ jobs:
         host_release:
           - unstable
           - trixie
-          - bookworm
 
     # We want a working shell, qemu, python and docker. Specific version should not matter (much).
     runs-on: ubuntu-latest
@@ -44,7 +43,6 @@ jobs:
       fail-fast: false
       matrix:
         host_release:
-          - bookworm
           - trixie
         extra_classes:
           - ""
@@ -52,13 +50,6 @@ jobs:
         arch:
           - amd64
           - arm64
-        exclude:
-          - host_release: bookworm
-            extra_classes: "GRML_GHACI_CLOUD"
-          - arch: arm64
-            host_release: bookworm
-          - arch: arm64
-            extra_classes: "GRML_GHACI_CLOUD"
 
     runs-on: ${{ matrix.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     steps:
