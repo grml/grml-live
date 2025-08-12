@@ -638,13 +638,19 @@ def install_base(conf_dir: Path, chroot_dir: Path, classes, debian_suite: str, m
         if (keyring_dir / class_name).exists():
             keyring_file = keyring_dir / class_name
 
+    # Should use delete_on_close=False, but needs Python >= 3.12
+    with tempfile.NamedTemporaryFile(delete=False, dir=chroot_dir) as keyring_tempfile:
+        keyring_tempfile.write(keyring_file.read_bytes())
+    os.chmod(keyring_tempfile.name, 0o644)
+    run_x(["ls", "-la", keyring_tempfile.name])
+
     args = [
         "mmdebstrap",
         "--format=directory",
         "--variant=required",
         "--verbose",
         "--skip=check/empty",  # grml-live pre-creates directories in chroot, skip emptyness check.
-        f"--keyring={keyring_file}",
+        f"--keyring={keyring_tempfile.name}",
         f"--include={','.join(included_packages)}",
         debian_suite,
         chroot_dir,
@@ -656,6 +662,8 @@ def install_base(conf_dir: Path, chroot_dir: Path, classes, debian_suite: str, m
         args.insert(1, "--chrooted-customize-hook=rm /etc/apt/apt.conf.d/99mmdebstrap")
 
     run_x(args)
+    os.unlink(keyring_tempfile.name)
+
     # Mark most leaf packages as automatically installed, so autoremove could remove them if possible.
     run_chrooted(chroot_dir, ["apt-mark", "auto", "~i ?not(~prequired) ?not(~pimportant) ?not(~pstandard)"])
 
