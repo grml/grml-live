@@ -1,0 +1,29 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/SYSTEMD_NETWORKD/05-enable-networkd
+# Purpose:       configure systemd-networkd for the live-system
+# Authors:       (c) Christopher Bock <christopher@bocki.com>
+#                <christopher@bocki.com>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+systemd_setup() {
+  fcopy -M -i -B -v -r /etc/systemd
+
+  $ROOTCMD systemctl enable systemd-networkd
+
+}
+
+systemd_setup
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
