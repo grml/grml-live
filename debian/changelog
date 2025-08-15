@@ -1,3 +1,25 @@
+grml-live (0.54.1) grml-testing; urgency=medium
+
+  [ Christopher Bock ]
+  * [6468a75] completion/waybackdate replace py/urllib with zsh/datetime
+
+  [ Chris Hofstaedtler ]
+  * [6387f35] GRMLBASE: install extlinux.conf on ARM64
+  * [70b98cb] buildinfo.json: remove extra _ from skip_mksquashfs
+  * [f994044] grml-lang: workaround XKBVARIANT bug in X11
+
+  [ Michael Prokop ]
+  * [b85f2f7] grml-docs/startpage.html: drop Piwik tracking code
+  * [845ba73] grml-docs/startpage.html: drop grml.org/news URL and grml-x
+    quicktip
+  * Software related changes:
+    - [334068a] add tio to GRML_SMALL + GRML_FULL.
+      Thanks to Martin Karresand for the suggestion
+    - [605adb0] No longer ship clamav with GRML_FULL, provide separate
+      class FRESHCLAM instead
+
+ -- Michael Prokop <mika@grml.org>  Fri, 15 Aug 2025 16:10:30 +0200
+
 grml-live (0.54.0) grml-testing; urgency=medium
 
   This release merges previously separate git repositories:
