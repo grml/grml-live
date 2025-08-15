@@ -298,9 +298,7 @@ zerofree
 curl
 firefox-esr
 irssi
-links2
-lynx
-w3m
+links
 wget
 
 # X
