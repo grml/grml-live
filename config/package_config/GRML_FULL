@@ -261,6 +261,7 @@ cu
 minicom
 setserial
 statserial
+tio
 
 # shell
 bash

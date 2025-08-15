@@ -124,6 +124,7 @@ zstd
 cu
 setserial
 statserial
+tio
 
 # shell
 bash
