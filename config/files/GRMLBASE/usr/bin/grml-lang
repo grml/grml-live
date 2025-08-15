@@ -64,7 +64,11 @@ fi
 configure_keyboard
 
 eindent
-einfo "Configured Keyboard Layout: $XKBLAYOUT $XKBVARIANT."
+new_layout="$XKBLAYOUT"
+if [ -n "$XKBVARIANT" ] && [ "$XKBVARIANT" != "," ]; then
+  new_layout="$new_layout $XKBVARIANT"
+fi
+einfo "Configured Keyboard Layout: $new_layout."
 eend 0
 
 ## END OF FILE #################################################################

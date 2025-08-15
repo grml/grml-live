@@ -6,7 +6,7 @@
 ################################################################################
 
 # Defaults. XKBLAYOUT is not defaulted, so caller can determine unhandled values.
-XKBVARIANT=""
+XKBVARIANT=","  # comma is necessary to avoid bug in Xorg server when switching from nodeadkeys to "".
 XKBOPTIONS=""
 LC_COLLATE=""
 LC_TIME=""
