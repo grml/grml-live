@@ -17,6 +17,7 @@ jobs:
       matrix:
         host_release:
           - unstable
+          - forky
           - trixie
 
     # We want a working shell, qemu, python and docker. Specific version should not matter (much).
@@ -43,6 +44,7 @@ jobs:
       fail-fast: false
       matrix:
         host_release:
+          - forky
           - trixie
         extra_classes:
           - ""
