@@ -156,20 +156,6 @@ else
   $ROOTCMD man doesnotexist >/dev/null 2>&1 || true
 fi
 
-if ! [ -d "$target"/var/lib/clamav/ ] ; then
-  echo "Warning: clamav[-freshclam] not installed"
-else
-  echo "Cleaning /var/lib/clamav/"
-  $ROOTCMD rm -rf /var/lib/clamav/clamav-*
-
-  echo "Setting up daily.cvd and main.cvd symlinks"
-  if [ -f "$target"/var/lib/clamav/daily.cvd ] ; then
-    mkdir -p "$target"/usr/share/doc/clamav-freshclam/examples/
-    ln -sf /var/lib/clamav/daily.cvd "$target"/usr/share/doc/clamav-freshclam/examples/
-    ln -sf /var/lib/clamav/main.cvd  "$target"/usr/share/doc/clamav-freshclam/examples/
-  fi
-fi
-
 if ! [ -r "$target"/etc/ld.so.nohwcap ] ; then
    echo "Creating /etc/ld.so.nohwcap"
    touch "$target"/etc/ld.so.nohwcap

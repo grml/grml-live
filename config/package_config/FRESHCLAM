@@ -1,0 +1,5 @@
+PACKAGES install
+
+clamav
+clamav-base
+clamav-freshclam
