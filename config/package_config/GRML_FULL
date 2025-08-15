@@ -110,9 +110,6 @@ xorriso
 
 # foreign os support/recovery
 chntpw
-clamav
-clamav-base
-clamav-freshclam
 mtools
 
 # generic tools

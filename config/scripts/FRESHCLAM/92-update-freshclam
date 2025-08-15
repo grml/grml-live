@@ -1,0 +1,30 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/FRESHCLAM/92-update-freshclam
+# Purpose:       update freshclam database
+# Authors:       (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+set -u
+set -e
+
+if ifclass NO_ONLINE ; then
+  echo "Ignoring script 92-update-freshclam as NO_ONLINE is set."
+  exit 0
+fi
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+if ! [ -x "${target}"/usr/bin/freshclam ] ; then
+  echo "Error: FRESHCLAM class is enabled, but freshclam is not installed, exiting." >&2
+  exit 1
+fi
+
+echo "Updating clamav database via running freshclam"
+$ROOTCMD /usr/bin/freshclam
+exit $?
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

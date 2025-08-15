@@ -336,9 +336,8 @@ selected. The following classes are predefined:
 While deborphan itself is not available anymore, the name of the class was kept
 for backwards compatibility reasons.
 
-* FRESHCLAM: execute freshclam (if it's present) to update clamav definitions
-(increases resulting ISO size ~70MB). By default it's skipped to avoid bigger
-ISO size.
+* FRESHCLAM: include clamav packages and execute freshclam to get a current
+clamav database
 
 * GRMLBASE: the main class responsible for getting a minimal subset of what's
 defining a Grml system. Important parts of the buildprocess are specified in
