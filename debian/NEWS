@@ -1,4 +1,4 @@
-grml-live (0.53.3) unstable; urgency=medium
+grml-live (0.54.0) unstable; urgency=medium
 
   Class (option -c) handling has changed
   ======================================
@@ -29,7 +29,16 @@ grml-live (0.53.3) unstable; urgency=medium
   config/media-files/${YOUR_CLASS_NAME}. Preferably delete any files
   you did not customise.
 
- -- Chris Hofstaedtler <ch@grml.org>  Tue, 01 Jul 2025 00:42:50 +0200
+
+  Merged packages
+  ===============
+
+  The previously separate packages grml-autoconfig, grml-etc and
+  grml-udev-config were merged into the default grml-live config
+  space. It is hoped this provides better integration and easier
+  customization.
+
+ -- Chris Hofstaedtler <ch@grml.org>  Fri, 15 Aug 2025 10:45:00 +0200
 
 grml-live (0.52.0) unstable; urgency=medium
 

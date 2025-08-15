@@ -1,3 +1,194 @@
+grml-live (0.54.0) grml-testing; urgency=medium
+
+  This release merges previously separate git repositories:
+    * grml-autoconfig (last released version 0.23.7)
+    * grml-etc (last released version 1.9.2)
+    * grml-udev-config (last released version 0.6.3)
+
+  [ Chris Hofstaedtler ]
+  * [06f5b5d] Move grml-autoconfig files into grml-live layout
+  * [88de357] Fully deprecate HYBRID_METHOD
+  * [9791214] Move isohybrid-mbr option to BOOT_ARGS
+  * [d8bc106] amd64: remove duplicated ElTorito data for UEFI boot
+  * [ea39a32] Let xorriso pad the ISO
+  * [66e10ae] Redefine minifai actions
+  * [94ff81d] Move autoconfig files into /usr
+  * [0afef82] Import grml-lang, grml-setlang from grml-scripts
+  * [8968343] Fix two spelling issues
+  * [5c0fb15] Import run-welcome from grml-scripts
+  * [d15c563] run-welcome: fix daily build version check
+  * [a391360] run-welcome: use script-functions instead of sh-lib
+  * [426c0d7] Import grml-lang zsh completion from grml-etc-core
+  * [edc1eb1] Create GRML_GHACI class as normal file
+  * [e8e9dcf] Fix lang=/keyboard=
+  * [663fa97] language-functions: remove non-UTF-8 locales
+  * [eab3c86] language-functions: update French Canadian to UTF-8
+  * [5af60cd] Fix symlink preservation in language configuration tools
+  * [e851952] Move sudo package from GRML_SMALL and GRML_FULL to GRMLBASE
+  * [cfb8cf2] Add Hungarian (hu) keyboard layout support
+  * [d283bef] grml-cheatcodes: remove misleading "utf8" text
+  * [841af9f] grml-setlang: update texts
+  * [40df8e3] autoconfig: simplify language setup
+  * [b8342cc] grml-cheatcodes: clarify supported codes for keyboard=
+  * [54fe57a] grml-lang: abort if no valid language is given
+  * [984631c] language-functions: move into /usr/share/grml-autoconfig
+  * [ce07128] grml-lang: remove "nodeadkeys" when switching from de to us layout
+  * [0e5d7bd] grml-lang: rework setupcon handling once more
+  * [9f6f968] Refactor language configuration
+  * [5bc216a] grml-setlang: update man page
+  * [02e220e] grml-lang: create man page
+  * [cd79e3e] grml-lang, grml-setlang: update/install completion
+  * [46a0c70] Import /etc/network/interfaces.examples from grml-etc-core
+  * [0608d7f] interfaces.examples: sync with interfaces file
+  * [7ed8c95] Add de-neo language variant
+  * [0f5f66e] {restore,save}-config: stop using grml-shlib
+  * [f02a28b] save-config: better error message when tar is missing
+  * [4a54a96] GRMLBASE: explicitly install virt-what for autoconfig
+  * [3782b00] Remove /etc/grml/modules
+  * [a8626fb] skel/.screenrc: remove another GRML_XL leftover
+  * [33ebb6b] autoconfig.function: drop unused hasfb function
+  * [bc411ad] autoconfig.function: drop unused checkgrmlsmall function
+  * [132bb75] cheatcodes: update link to brltty upstream
+  * [7b65055] autoconfig: remove brltty start, done by initramfs
+  * [cf6546c] GRMLBASE: add beep
+  * [0b77f2c] Add Debug::Acquire::http=true to apt if GRML_LIVE_DEBUG_APT is set
+  * [5a1036d] GitHub Actions: add PR comments with ISO build artifact links
+  * [574db33] GitHub Actions: fix PR comment workflow for fork contributions
+  * [8c7ea1f] minifai: apply ruff format --line-length 120
+  * [1da286c] pr-review.yml: add ruff format check for minifai tool
+  * [388fe97] Pass through GRML_LIVE_DEBUG_APT to 03-get-sources
+  * [be1b0d4] minifai: set Debug::Acquire::http=true for mmdebstrap too
+  * [9769d09] minifai: consistently use "args" as argument list
+  * [f9a5545] docs: add grml-live-fai.5.txt explaining FAI to minifai migration
+  * [7c98164] minifai: extract PackageList and parsing code to packages.py
+  * [b67405f] minifai: add "PACKAGE skip"
+  * [bc3c8ae] Re-apply ruff format to build-driver/*
+  * [1bef2e7] build-driver: remove obsolete DEBORPHAN class
+  * [2f3de0d] GHA CI: sort artifact names for consistent ordering
+  * [51817e1] minifai: run apt-get update step with --error-on=any
+  * [40c053f] GRMLBASE: drop grml-scripts-core
+  * [def663d] GHA CI: add arm64 matrix variant for build-iso job
+  * [9614272] grml-live: remove bzip2 dependency
+  * [5bae378] grml-live: remove bc dependency
+  * [473cc37] config: convert grml-autoconfig system from zsh to bash
+  * [c3f54f6] save-config: initialize DEBUG variable
+  * [66f929d] config: fix shellcheck issues across all autoconfig scripts
+  * [77efbd3] autoconfig.functions: drop start of obsolete haveged, rmnologin
+    services
+  * [65ce71a] autoconfig.functions: remove unreachable startx code block
+  * [88b943c] autoconfig.functions: appease shellcheck
+  * [9249e40] brltty.sh: appease shellcheck
+  * [abd7f93] ZFS/instsoft: appease shellcheck
+  * [7704fa9] GRMLBASE/26-console-setup: appease shellcheck
+  * [572e9cd] grml-udev-rebuildfstab: appease shellcheck
+  * [7c2be6b] forensic-mark-readonly: appease shellcheck
+  * [92bea24] init-top/grml: appease shellcheck
+  * [e60dc02] grml-setlang: appease shellcheck
+  * [0afe0b4] grml-autoconfig: appease shellcheck
+  * [5789a17] workflows: simplify shellcheck with directory-based execution
+  * [55967a9] Enable grml-autoconfig shunit2 tests
+  * [2f581cf] grml-live: expose GRML_FAI_CONFIG to FAI scripts
+  * [0215752] Enable predictable network device names
+  * [8e7678e] build-driver: add --force-confnew
+  * [2d99afc] 98-clean-chroot: stop deleting LILO logs
+  * [af820bb] 52-mdadm: make mdadm.conf reproducible
+  * [d858e26] 91-update-pciids: remove backup file
+  * [a5086af] minifai: preserve file timestamps during fcopy
+  * [0fda6f8] minifai: pass-through SOURCE_DATE_EPOCH
+  * [1440b38] Reproducible: stop recording host kernel/debian version
+  * [37fe548] Reproducible: delete dynamic linker auxiliary cache
+  * [146c45e] Reproducible: strip build dirs
+  * [b262fea] Reproducible: introduce SOURCE_DATE_EPOCH
+  * [546887f] Reproducible: remove zsh_history files
+  * [9a18a72] Reproducible: make efi.img reproducible
+  * [8c2f89d] Reproducible: cap timestamps to SOURCE_DATE_EPOCH
+  * [91d5071] RELEASE/98-clean-chroot: stop removing apt-show-versions cache
+  * [865e08a] RELEASE/98-clean-chroot: Run apt distclean on trixie+
+  * [e0e7de5] grml-live: copy /boot/dtbs out
+  * [504da5c] Drop IGNORE class
+  * [5b1302a] build-driver: remove deprecated grml-live option -V
+  * [117b307] Move automatic classes from build-driver to grml-live
+  * [a7c9a5f] minifai: split varfile parsing out
+  * [e732481] Turn minifai into a python project
+  * [9017252] minifai: fix ruff check complaints
+  * [7747795] grml-live: deprecate FAI_DEBOOTSTRAP
+  * [2200cc7] DEBORPHAN: remove deborphan invocation
+  * [1d6aed4] grml-live: deprecate -S/SCRIPTS_DIRECTORY
+  * [d7dd20a] grml-live: always build squashfs, iso, netboot package
+  * [c74de63] grml-live: remove $REPORTS
+  * [4dd808c] grml-live: stop defaulting CHROOT_OUTPUT twice
+  * [51296e0] grml-live: stop defaulting BUILD_OUTPUT twice
+  * [7ce6848] grml-live: stop defaulting ISO_OUTPUT twice
+  * [43f4a3f] grml-live: deprecate setting individual *_OUTPUT vars
+  * [4c87dd3] docs: update expected ISO sizes
+  * [49ff4ea] zsh-completion: do not suggest automatic classes
+  * [fbb9b28] docs: follow class -> env rename
+  * [f602723] Update examples for grml-live -c usage
+  * [af9004d] docs: remove live-initramfs leftover
+  * [3f73fbf] grml-live: show ARCH value when unsupported
+  * [d657b04] grml-live: stop advertising SQUASHFS_BINARY
+  * [1c7f8e5] grml-live: detect dpkg, mksquashfs, osirrox, unsquashfs, xorriso
+    in one place
+  * [420beac] grml-live: remove base.tgz cleanup code
+  * [5c80e6f] grml-live: remove "sid" hack for debootstrap
+  * [382e0ff] minifai: fcopy: put parsed args into an object
+  * [d12ebda] minifai: fcopy: explicitly parse -M
+  * [e3ca68b] grml-live: let minifai create /grml-live
+  * [c6174db] minifai: duplicate GRML_LIVE_CONFIG into the chroot
+  * [d46f91b] grml-live: introduce media-scripts
+  * [e58a11d] grml-live: derive BOOTID, RELEASE_INFO, RELASE_INFO68,
+    SHORT_NAME, SQUASHFS_NAME early
+  * [7554895] grml-live: simplify BOOT_FILE creation
+  * [3d8e165] grml-live: init NO_ADDONS, NO_BOOTID, DEFAULT_BOOTOPTIONS to empty
+  * [8714901] grml-live: introduce GRML_FAI_CONFIG/tools
+  * [7f9c504] minifai: avoid hard crash on FileNotFoundError
+  * [eb8374e] grml-live: split adjust_boot_files into a tool
+  * [d2c9124] grml-live: split copy_file_logged into a tool
+  * [1320942] grml-live: move kernel/initrd/dtb install into
+    media-scripts/01-linux
+  * [eef7cfa] grml-live: move grub/EFI setup into media-scripts/10-efi
+  * [0e39df0] grml-live: move bootid/bootfile creation into
+    media-scripts/20-bootid
+  * [07b48bd] grml-live: move isolinux installation into
+    media-scripts/30-syslinux
+  * [3a24773] grml-live: move grub installation into media-scripts/31-grub
+  * [78a571f] grml-live: remove now unused eindent/eoutdent
+  * [752b448] grml-live: move ipxe install into media-scripts/40-ipxe
+  * [c50df4a] grml-live: move memtest86+ install into media-scripts/41-memtest
+  * [f90c626] grml-live: move addons install into media-scripts/50-addons
+  * [994d499] grml-live: move autostart files install into
+    media-scripts/80-autostart
+  * [c18a595] grml-live: move install of GRML files into
+    media-scripts/90-branding
+  * [b16f901] grml-live: move dpkg.list install into media-scripts/91-info
+  * [92105ac] grml-live: remove now pointless $TEMPLATE_DIRECTORY/boot
+    existence check
+  * [022ff89] grml-live: remove now unused functions
+  * [bda089c] minifai: merge fcopy, skiptask into one grml-live-command tool
+  * [ca0a694] minifai: introduce copy-media-files command
+  * [f0480b9] Move templates/ into class-based layout
+  * [ed997c7] grml-live: unindent if false blocks
+  * [659940b] d/NEWS: correct version number
+  * [b2b052e] d/NEWS: add entry for boot templates as class-based config
+  * [030a712] scripts/{47,99}-update-wallpaper: do not ignore fcopy failure
+  * [042c28e] minifai: avoid chmod on symlinks on Linux
+  * [c8ba086] GRMLBASE/98-clean-chroot: avoid relying on /dev/fd
+  * [2592e52] grml-live-adjust-boot-files: fix program name in usage text
+  * [b3adc2e] README: correct addon symlink example
+  * [0cd9620] GRMLBASE/50-addons: fix installing arch-specific addons
+  * [01f1f42] GRMLBASE/50-addons: fix merging addons directory
+  * [a6c3f5c] Stop building on oldstable
+  * [865170a] Copy keyring for bootstrap into publicly-accessible dir
+
+  [ Christopher Bock ]
+  * [8429703] config/hooks/GRMLBASE/updatebase: wayback
+  * [c780351] debian.sources: remove trailing / from URIs
+  * [4e79232] config/scripts/GRMLBASE/33-aptsetup fix snapshot handling
+  * [87eec47] minifai: use apt exclusively & remove scriptwarnings
+  * [c2228d1] Introducing Forky the spork.
+
+ -- Chris Hofstaedtler <ch@grml.org>  Fri, 15 Aug 2025 10:45:00 +0200
+
 grml-live (0.53.2) grml-testing; urgency=medium
 
   [ Michael Prokop ]
