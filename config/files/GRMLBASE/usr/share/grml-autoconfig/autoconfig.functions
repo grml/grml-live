@@ -430,7 +430,7 @@ if [ -z "$INSTALLED" ] ; then
         case "$f" in swap)
           eindent
           if [ -n "$NOSWAP" ]; then
-             ewarn "Ignoring swap partition ${WHITE}$p${NORMAL}. (Force usage via boot option 'swap', or execute grml-swapon)"
+             ewarn "Ignoring swap partition ${WHITE}$p${NORMAL}. (Force usage via boot option 'swap', or use swapon)"
              eend 0
           else
              case "$(dd if="$p" bs=1 count=6 skip=4086 2>/dev/null)" in
