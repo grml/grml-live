@@ -919,7 +919,7 @@ generate_build_info() {
     release_name="${RELEASENAME}" \
     secure_boot="${SECURE_BOOT}" \
     skip_mkisofs="${SKIP_MKISOFS}" \
-    skip_mksquashfs_="${SKIP_MKSQUASHFS}" \
+    skip_mksquashfs="${SKIP_MKSQUASHFS}" \
     skip_netboot="${SKIP_NETBOOT}" \
     squashfs_name="${SQUASHFS_NAME}" \
     timestamp="${SOURCE_DATE_EPOCH}" \
