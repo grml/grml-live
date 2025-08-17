@@ -1,0 +1,211 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push:
+    strategy:
+      matrix:
+        platform:
+          - runner: ubuntu-latest
+            arch: amd64
+          - runner: ubuntu-24.04-arm
+            arch: arm64
+    runs-on: ${{ matrix.platform.runner }}
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Determine version
+      id: version
+      run: |
+        # Check if this is a tag build
+        if [[ $GITHUB_REF == refs/tags/v* ]]; then
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+        else
+          # Get last tag and commit hash
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0")
+          COMMIT_HASH=$(git rev-parse --short HEAD)
+          VERSION="${LAST_TAG}+git${COMMIT_HASH}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+        fi
+        echo "Git commit: $GITHUB_SHA"
+        echo "Version: $VERSION"
+
+    - name: Build Debian package for dependency extraction
+      id: deps
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential devscripts equivs
+
+        # Use mk-build-deps to install build dependencies
+        sudo mk-build-deps -ir -t 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y' debian/control
+
+        # Build source package and extract to /tmp
+        cd /tmp
+        dpkg-source -b "$GITHUB_WORKSPACE"
+        dpkg-source -x ./*.dsc builddir
+        cd builddir
+
+        # Build binary package
+        dpkg-buildpackage -b --no-sign
+
+        # Extract dependencies from built package
+        DEPENDS=$(dpkg-deb -f ../grml-live_*.deb Depends)
+        RECOMMENDS=$(dpkg-deb -f ../grml-live_*.deb Recommends || echo "")
+
+        echo "depends=$DEPENDS" >> "$GITHUB_OUTPUT"
+        echo "recommends=$RECOMMENDS" >> "$GITHUB_OUTPUT"
+        echo "Dependencies: $DEPENDS"
+        echo "Recommends: $RECOMMENDS"
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch,suffix=-${{ matrix.platform.arch }}
+          type=ref,event=pr,suffix=-${{ matrix.platform.arch }}
+          type=raw,value=latest-${{ matrix.platform.arch }},enable={{is_default_branch}}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: |
+          ${{ steps.meta.outputs.labels }}
+          org.opencontainers.image.revision=${{ github.sha }}
+          grml-live.version=${{ steps.version.outputs.version }}
+        build-args: |
+          GRML_LIVE_VERSION=${{ steps.version.outputs.version }}
+          GIT_COMMIT=${{ github.sha }}
+          DEPENDS=${{ steps.deps.outputs.depends }}
+          RECOMMENDS=${{ steps.deps.outputs.recommends }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        platforms: linux/${{ matrix.platform.arch }}
+
+  create-manifest:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create multi-platform manifest
+      env:
+        REGISTRY: ${{ env.REGISTRY }}
+        IMAGE_NAME: ${{ env.IMAGE_NAME }}
+      run: |
+        # Determine image tags without architecture suffix
+        if [[ $GITHUB_REF == refs/tags/v* ]]; then
+          TAG="${GITHUB_REF#refs/tags/v}"
+          docker buildx imagetools create \
+            --tag "$REGISTRY/$IMAGE_NAME:$TAG" \
+            "$REGISTRY/$IMAGE_NAME:$TAG-amd64" \
+            "$REGISTRY/$IMAGE_NAME:$TAG-arm64"
+        elif [[ $GITHUB_REF == refs/heads/master ]]; then
+          docker buildx imagetools create \
+            --tag "$REGISTRY/$IMAGE_NAME:latest" \
+            "$REGISTRY/$IMAGE_NAME:latest-amd64" \
+            "$REGISTRY/$IMAGE_NAME:latest-arm64"
+        elif [[ $GITHUB_REF == refs/pull/* ]]; then
+          PR_NUMBER=$(echo "$GITHUB_REF" | sed 's|refs/pull/||' | sed 's|/merge||')
+          docker buildx imagetools create \
+            --tag "$REGISTRY/$IMAGE_NAME:pr-$PR_NUMBER" \
+            "$REGISTRY/$IMAGE_NAME:pr-$PR_NUMBER-amd64" \
+            "$REGISTRY/$IMAGE_NAME:pr-$PR_NUMBER-arm64"
+        else
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          docker buildx imagetools create \
+            --tag "$REGISTRY/$IMAGE_NAME:$BRANCH_NAME" \
+            "$REGISTRY/$IMAGE_NAME:$BRANCH_NAME-amd64" \
+            "$REGISTRY/$IMAGE_NAME:$BRANCH_NAME-arm64"
+        fi
+
+
+  comment-pr:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    needs: create-manifest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+    - name: Comment PR with docker pull command
+      run: |
+        # Check if comment already exists
+        EXISTING_COMMENT=$(gh api repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --jq '.[] | select(.body | contains("Docker image for this PR is available")) | .id' || echo "")
+
+        if [ -z "$EXISTING_COMMENT" ]; then
+          gh api repos/${{ github.repository }}/issues/${{ github.event.number }}/comments \
+            --method POST \
+            --field body='🐳 Docker image for this PR is available:
+
+        ```bash
+        docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-${{ github.event.number }}
+        ```'
+        else
+          echo "Comment already exists, skipping"
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  cleanup-pr-images:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && (github.event.action == 'closed' || github.event.action == 'merged')
+    permissions:
+      packages: write
+
+    steps:
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Delete PR image
+      run: |
+        # Delete the PR-specific image when PR is closed/merged
+        gh api --method DELETE \
+          "/orgs/${{ github.repository_owner }}/packages/container/${{ github.event.repository.name }}/versions" \
+          -f name="pr-${{ github.event.number }}" || true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
