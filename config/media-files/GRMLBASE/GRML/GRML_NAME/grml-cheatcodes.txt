@@ -65,7 +65,6 @@ grml persistence                      Enable persistency feature, more details a
                                       http://wiki.grml.org/doku.php?id=persistency
 grml hostname=...                     Set hostname to given argument
 grml hostname                         Set a random hostname
-                                      [Note: only available with releases newer than 2010.04]
 grml nonetworking                     Do not create/overwrite /etc/network/interface during startup
 grml distri=...                       Set distribution name to given argument. If a jpg file named like the
                                       given distri name can be found in directory desktop on the ISO
@@ -133,11 +132,10 @@ grml findiso=/grml_2010.12.iso        Look for the specified ISO file on all dis
                                       looks for the .squashfs file (so you don't have to know the device name
                                       as in isofrom=....).
 grml fetch=$IP/filename.squashfs      Download a squashfs image from a given url, copying to ram and booting it.
-                                      [Note: releases before 2011.05 didn't support DNS but IP only.]
 grml live-media-path=/live/grml...    Sets the path to the live filesystem on the medium
                                       By default, it is set to /live/$GRML_FLAVOUR/ (where $GRML_FLAVOUR
                                       is corresponding to grml64-full, grml32-full, grml64-small,...
-                                      [Note: this option is mandatory since release 2011.12]
+                                      [Note: this parameter is mandatory]
 grml module=grml                      Instead of using the default "$name.module" another file can
                                       be specified without the extension ".module"; it should be placed
                                       on "/live" directory of the live medium
@@ -145,9 +143,7 @@ grml module=grml                      Instead of using the default "$name.module
                                       http://wiki.grml.org/doku.php?id=tips#multiboot_usb_pen
 grml bootid=mybootid                  Use specified argument as identifier for the ISO.
                                       mybootid is specified in /conf/bootid.txt on the ISO.
-                                      [Note: only available since release 2010.04]
 grml ignore_bootid                    Disable bootid verification.
-                                      [Note: only available since release 2010.04]
 
 
 Debugging related settings:
