@@ -39,12 +39,5 @@ elif ifclass I386 ; then
   grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest "${target}" /boot/memtest86+ia32.bin || true
 fi
 
-# fallback: if we still don't have /boot/addons/memtest available, we
-# might have an older memtest86+ version (<=5.01-3.1) which ships
-# file "memtest86+.bin" instead
-if ! [ -r "${media_dir}/boot/addons/memtest" ] ; then
-  grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest "${target}" /boot/memtest86+.bin || true
-fi
-
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
