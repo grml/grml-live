@@ -128,7 +128,7 @@ grml isofrom=[fs:][/device]/grml.iso  Use specified ISO image for booting.
                                       NOTE: you can can also use isofrom=/dev/disk/by-label/yourlabel
                                       (adjust yourlabel as needed), which should prevent choosing the
                                       wrong block device (e.g. if more than one disk is present).
-grml findiso=/grml_2010.12.iso        Look for the specified ISO file on all disks where it usually
+grml findiso=/grml-....iso            Look for the specified ISO file on all disks where it usually
                                       looks for the .squashfs file (so you don't have to know the device name
                                       as in isofrom=....).
 grml fetch=$IP/filename.squashfs      Download a squashfs image from a given url, copying to ram and booting it.
