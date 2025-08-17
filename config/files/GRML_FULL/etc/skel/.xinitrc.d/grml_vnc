@@ -11,10 +11,10 @@ if [ "$XINIT_GRML_VNC" = "false" ] ; then
 fi
 
 # if the vnc bootoption sets up the password let's start the vnc server
-if [ -e $HOME/.vnc/passwd ]; then
-   test -f $HOME/.vnc/options && OPTIONS=$(cat $HOME/.vnc/options)
-   /usr/bin/x11vnc -bg -forever -noxdamage -o $HOME/.vnc/x11vnc.log -rfbauth \
-                   $HOME/.vnc/passwd -auth $HOME/.Xauthority -display $DISPLAY $OPTIONS
+if [ -e "$HOME"/.vnc/passwd ]; then
+   test -f "$HOME"/.vnc/options && OPTIONS=$(cat "$HOME"/.vnc/options)
+   /usr/bin/x11vnc -bg -forever -noxdamage -o "$HOME"/.vnc/x11vnc.log -rfbauth \
+                   "$HOME"/.vnc/passwd -auth "$HOME"/.Xauthority -display "$DISPLAY" "$OPTIONS"
 fi
 
 ## END OF FILE #################################################################

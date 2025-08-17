@@ -6,11 +6,16 @@
 # License:       This file is licensed under the GPL v2 or any later version.
 ################################################################################
 
+# $distri is supposed to be set already
+distri=${distri:-}
+
 # configuration: by default all scripts from ~/.xinitrc.d are executed,
 # but it's possible to configure this through a configuration file
 if [ -r "$HOME/.config/${distri}/xinitrc" ] ; then
+  # shellcheck source=/dev/null
   . "$HOME/.config/${distri}/xinitrc"
 elif [ -r "$HOME/.config/grml/xinitrc" ] ; then
+  # shellcheck source=/dev/null
   . "$HOME/.config/grml/xinitrc"
 fi
 

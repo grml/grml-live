@@ -29,6 +29,6 @@ fi
 # xset -dpms
 
 # xresources
-  [ -r $HOME/.Xresources ] && xrdb -merge $HOME/.Xresources
+  [ -r "$HOME"/.Xresources ] && xrdb -merge "$HOME"/.Xresources
 
 ## END OF FILE #################################################################
