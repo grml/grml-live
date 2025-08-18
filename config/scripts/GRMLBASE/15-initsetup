@@ -34,7 +34,8 @@ $ROOTCMD systemctl mask ldconfig.service
 # systemd-journal-catalog-update.service updates the journald catalog
 # cache. Do this once here, and not on each live OS image boot.
 $ROOTCMD systemctl mask systemd-journal-catalog-update.service
-$ROOTCMD journalctl --update-catalog
+# Ignore errors as systemd upstream does not support containers: https://github.com/systemd/systemd/issues/38632
+$ROOTCMD journalctl --update-catalog || true
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
