@@ -1,0 +1,59 @@
+#!/bin/sh
+# Filename:      ~/.xinitrc.d/grml_keyboard
+# Purpose:       configuration of keyboard layout
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+if [ "${XINIT_GRML_KEYBOARD}" = "false" ] ; then
+   exit 0
+fi
+
+# Ctrl+Alt+Backspace killing xserver
+setxkbmap -option terminate:ctrl_alt_bksp
+
+apply_xmodmap_settings() {
+  if [ -r "${HOME}"/.Xmodmap ] ; then
+    xmodmap "${HOME}"/.Xmodmap || setxkbmap us
+  else
+    setxkbmap us
+  fi
+}
+
+if [ -r /etc/default/keyboard ] ; then # Grml >=2018.12
+  XKBLAYOUT="us" # assume as default
+
+  # shellcheck source=/dev/null
+  . /etc/default/keyboard
+
+  if [ "${XKBLAYOUT}" = "us" ] ; then
+    apply_xmodmap_settings
+  else
+    if [ -n "${XKBMODEL}" ] && [ -n "${XKBVARIANT}" ] ; then
+      setxkbmap -model "${XKEYMODEL}" -variant "${XKBVARIANT}" -layout "${XKBLAYOUT}"
+    elif [ -n "${XKBMODEL}" ] ; then
+      setxkbmap -model "${XKEYMODEL}" -layout "${XKBLAYOUT}"
+    elif [ -n "${XKBVARIANT}" ] ; then
+      setxkbmap -variant "${XKBVARIANT}" -layout "${XKBLAYOUT}"
+    else
+      setxkbmap "${XKBLAYOUT}"
+    fi
+  fi
+elif [ -r /etc/sysconfig/keyboard ] ; then  # older Grml releases
+  # shellcheck source=/dev/null
+  . /etc/sysconfig/keyboard
+  if [ "${XKEYBOARD}" = "us" ] ; then
+    apply_xmodmap_settings
+  else
+    if [ -n "${XKEYMODEL}" ] ; then
+      setxkbmap -model "${XKEYMODEL}" -layout "${XKEYBOARD}"
+    else
+      setxkbmap "${XKEYBOARD}"
+    fi
+  fi
+else  # last ressort fallback
+  apply_xmodmap_settings
+fi
+
+## END OF FILE #################################################################

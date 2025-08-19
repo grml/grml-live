@@ -303,7 +303,6 @@ wget
 
 # X
 fluxbox
-grml-desktop
 grml-x
 x11vnc
 xauth

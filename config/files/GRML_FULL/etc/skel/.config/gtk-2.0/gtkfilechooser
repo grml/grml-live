@@ -1,0 +1,5 @@
+<gtkfilechooser>
+  <location mode="path-bar"/>
+  <show_hidden value="false"/>
+  <expand_folders value="true"/>
+</gtkfilechooser>

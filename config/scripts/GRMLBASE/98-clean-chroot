@@ -20,6 +20,13 @@ fi
 echo "Installing files into /etc/skel"
 fcopy -M -i -B -v -r /etc/skel
 
+# deliver files which need to be executable as such.
+for file in /etc/skel/.xinitrc /etc/skel/.xsession /etc/skel/.xinitrc.d ; do
+  if [ -e "${target}/${file}" ] ; then
+    $ROOTCMD chmod -R a+rx "${file}"
+  fi
+done
+
 echo "Creating ~/.zshrc"
 touch "$target"/root/.zshrc
 

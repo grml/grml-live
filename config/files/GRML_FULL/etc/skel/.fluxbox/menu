@@ -1,0 +1,22 @@
+[begin] (Fluxbox) {} <>
+    [exec] (xterm) {x-terminal-emulator} <>
+    [exec] (Firefox) {firefox} <>
+    [exec] (Run ...) {fbrun} <>
+    [exec] (configure network) {sudo x-terminal-emulator -T "grml-network" -e /usr/sbin/grml-network} <>
+    [exec] (configure and run terminalserver) {grml-exec-wrapper -p grml-terminalserver sudo x-terminal-emulator -T "grml-terminalserver" -e /usr/sbin/grml-terminalserver} <>
+    [separator]
+    [submenu] (Applications) {} <>
+        [include] (/etc/X11/fluxbox/menudefs.hook) {} <>
+    [end]
+    [submenu] (Fluxbox) {} <>
+        [config] (Configure) {} <>
+        [submenu] (Styles) {Choose a style...} <>
+            [stylesdir] (/usr/share/fluxbox/styles) {} <>
+            [stylesdir] (~/.fluxbox/styles) {} <>
+        [end]
+        [reconfig] (Reload config) {} <>
+        [restart] (Restart) {} <>
+    [end]
+    [workspaces] (Workspace List) {} <>
+    [exit] (Exit) {} <>
+[end]

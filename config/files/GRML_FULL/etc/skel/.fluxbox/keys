@@ -1,0 +1,105 @@
+# Filename:      .fluxbox/keys
+# Purpose:       configuration file for keybindings for fluxbox
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+# Enable resizing - taken from Debian's fluxbox
+# package (patch titled restore-old-keybindings.patch),
+# without this config the left mouse button does not work
+# as expected, see #592904 in Debian's BTS for details
+OnLeftGrip Move1 :StartResizing bottomleft
+OnRightGrip Move1 :StartResizing bottomright
+OnTitlebar Move1 :StartMoving
+
+# Mod1 = Alt key
+# Control = Ctrl Key
+# plus = +,*,~ key (german keyboard)
+# numbersign = #,' key (german keyboard)
+
+OnDesktop Mouse1 :hideMenus
+OnDesktop Mouse2 :workspaceMenu
+OnDesktop Mouse3 :rootMenu
+OnDesktop Mouse4 :nextWorkspace
+OnDesktop Mouse5 :prevWorkspace
+
+Mod1 Tab  	 :NextWindow
+Mod4 j		 :NextWindow
+
+Mod1 Shift Tab	 :PrevWindow
+Mod4 k	       	 :PrevWindow
+
+Control Right		:NextWorkspace
+Mod1 Shift Right	:NextWorkspace
+Mod4 Right		:NextWorkspace
+
+Control Left		:PrevWorkspace
+Mod1 Shift Left	:PrevWorkspace
+Mod4 Left		:PrevWorkspace
+
+Mod1 q   :PrevWindow
+Mod1 w   :NextWindow
+Mod1 a   :PrevTab
+Mod1 s   :NextTab
+
+Mod1 F1 :Workspace 1
+Mod1 F2 :Workspace 2
+Mod1 F3 :Workspace 3
+Mod1 F4 :Workspace 4
+Mod1 F5 :Workspace 5
+Mod1 F6 :Workspace 6
+Mod1 F7 :Workspace 7
+Mod1 F8 :Workspace 8
+Mod1 F9 :Workspace 9
+Mod1 F10 :Workspace 10
+Mod1 F11 :Workspace 11
+Mod1 F12 :Workspace 12
+
+
+Mod4 1 :Workspace 1
+Mod4 2 :Workspace 2
+Mod4 3 :Workspace 3
+Mod4 4 :Workspace 4
+Mod4 5 :Workspace 5
+Mod4 6 :Workspace 6
+Mod4 7 :Workspace 7
+Mod4 8 :Workspace 8
+Mod4 9 :Workspace 9
+Mod4 0 :Workspace 10
+
+Mod1 Shift F1  :SendToWorkspace 1
+Mod1 Shift F2  :SendToWorkspace 2
+Mod1 Shift F3  :SendToWorkspace 3
+Mod1 Shift F4  :SendToWorkspace 4
+Mod1 Shift F5  :SendToWorkspace 5
+Mod1 Shift F6  :SendToWorkspace 6
+Mod1 Shift F7  :SendToWorkspace 7
+Mod1 Shift F8  :SendToWorkspace 8
+Mod1 Shift F9  :SendToWorkspace 9
+Mod1 Shift F10 :SendToWorkspace 10
+Mod1 Shift F11 :SendToWorkspace 11
+Mod1 Shift F12 :SendToWorkspace 12
+
+Mod1 plus       :MaximizeWindow
+Mod1 numbersign :Minimize
+Mod1 space      :RootMenu
+Control Mod1 a  :ArrangeWindows
+
+# keymappings for programs
+Control Mod1 l :ExecCommand xlock
+Control Mod1 f :ExecCommand firefox
+
+# screenshot
+Control Shift s :ExecCommand import -window root `date +shot-%Y-%m-%d-%H%M%S.jpg`
+
+Mod1 c         :ExecCommand fbrun
+Mod4 space     :ExecCommand fbrun
+
+# terminals:
+Mod1 Escape    :ExecCommand x-terminal-emulator
+Mod1 t         :ExecCommand x-terminal-emulator
+Control Mod1 t :ExecCommand x-terminal-emulator
+Control Mod1 i :ExecCommand LANG=en_US.iso885915 x-terminal-emulator
+Mod4 Return    :ExecCommand x-terminal-emulator
+## END OF FILE #################################################################
