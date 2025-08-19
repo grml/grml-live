@@ -15,30 +15,27 @@ target=${target:?}
 # shellcheck source=/dev/null
 . "$GRML_LIVE_CONFIG"
 
-systemd_setup() {
-  fcopy -M -i -B -v -r /etc/systemd
+fcopy -M -i -B -v -r /etc/systemd
 
-  echo "Enabling user '$USERNAME' for autologin"
-  sed -i "s/\$USERNAME/$USERNAME/" "$target"/etc/systemd/system/getty@tty*.service.d/override.conf
+echo "Enabling user '$USERNAME' for autologin"
+sed -i "s/\$USERNAME/$USERNAME/" "$target"/etc/systemd/system/getty@tty*.service.d/override.conf
 
-  # workaround for #992847 to workaround /lib/systemd -> /usr/lib/systemd transition
-  $ROOTCMD rm -f /etc/systemd/system/syslog.service
+# workaround for #992847 to workaround /lib/systemd -> /usr/lib/systemd transition
+$ROOTCMD rm -f /etc/systemd/system/syslog.service
 
-  $ROOTCMD systemctl preset-all
-  $ROOTCMD systemctl set-default grml-boot.target
+$ROOTCMD systemctl preset-all
+$ROOTCMD systemctl set-default grml-boot.target
 
-  # ldconfig.service updates the dynamic linker cache. This is not really
-  # useful on a live OS image, where the installed packages do not change
-  # on startup. As this is quite costly, disable it.
-  $ROOTCMD systemctl mask ldconfig.service
+# ldconfig.service updates the dynamic linker cache. This is not really
+# useful on a live OS image, where the installed packages do not change
+# on startup. As this is quite costly, disable it.
+$ROOTCMD systemctl mask ldconfig.service
 
-  # systemd-journal-catalog-update.service updates the journald catalog
-  # cache. Do this once here, and not on each live OS image boot.
-  $ROOTCMD systemctl mask systemd-journal-catalog-update.service
-  $ROOTCMD journalctl --update-catalog
-}
-
-systemd_setup
+# systemd-journal-catalog-update.service updates the journald catalog
+# cache. Do this once here, and not on each live OS image boot.
+$ROOTCMD systemctl mask systemd-journal-catalog-update.service
+# Ignore errors as systemd upstream does not support containers: https://github.com/systemd/systemd/issues/38632
+$ROOTCMD journalctl --update-catalog || true
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
