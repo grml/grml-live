@@ -24,7 +24,6 @@ apply_xmodmap_settings() {
 if [ -r /etc/default/keyboard ] ; then # Grml >=2018.12
   XKBLAYOUT="us" # assume as default
 
-  # shellcheck source=/dev/null
   . /etc/default/keyboard
 
   if [ "${XKBLAYOUT}" = "us" ] ; then
@@ -41,7 +40,6 @@ if [ -r /etc/default/keyboard ] ; then # Grml >=2018.12
     fi
   fi
 elif [ -r /etc/sysconfig/keyboard ] ; then  # older Grml releases
-  # shellcheck source=/dev/null
   . /etc/sysconfig/keyboard
   if [ "${XKEYBOARD}" = "us" ] ; then
     apply_xmodmap_settings
