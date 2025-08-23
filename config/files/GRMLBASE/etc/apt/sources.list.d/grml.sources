@@ -3,4 +3,5 @@ URIs: http://deb.grml.org
 Suites: grml-stable grml-live grml-testing
 Components: main
 Enabled: yes
+Snapshot: disable
 Signed-By: /usr/share/keyrings/grml-archive-keyring.gpg
