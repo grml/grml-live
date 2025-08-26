@@ -7,16 +7,16 @@ doc: doc_man doc_html
 doc_html: $(addsuffix .html, $(MANPAGES))
 doc_man: $(addsuffix .gz, $(MANPAGES))
 
-%.html : %.txt ;
+%.html : %.adoc ;
 	asciidoc -b xhtml11 -a icons $^
 
-%.gz : %.txt ;
+%.gz : %.adoc ;
 	asciidoc -d manpage -b docbook $^
-	#sed -i 's/<emphasis role="strong">/<emphasis role="bold">/g' `echo $^ |sed -e 's/.txt/.xml/'`
-	xsltproc -nonet /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl `echo $^ |sed -e 's/.txt/.xml/'` > /dev/null 2>&1
-	gzip -f --best `echo $^ |sed -e 's/.txt//'`
+	#sed -i 's/<emphasis role="strong">/<emphasis role="bold">/g' `echo $^ |sed -e 's/.adoc/.xml/'`
+	xsltproc -nonet /usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl `echo $^ |sed -e 's/.adoc/.xml/'` > /dev/null 2>&1
+	gzip -f --best `echo $^ |sed -e 's/.adoc//'`
 
-grml-live.8.html: grml-live.8.txt
+grml-live.8.html: grml-live.8.adoc
 	asciidoc -b xhtml11 -a icons -a toc -a numbered $^
 
 icons:
@@ -29,13 +29,13 @@ icons:
 doc_epub: epub-stamp
 
 epub-stamp:
-	a2x --icons -a toc -a toclevels=3 -a docinfo -f epub grml-live.8.txt
+	a2x --icons -a toc -a toclevels=3 -a docinfo -f epub grml-live.8.adoc
 	touch epub-stamp
 
 doc_pdf: pdf-stamp
 
 pdf-stamp:
-	a2x --icons -a toc -a toclevels=3 -a docinfo -f pdf grml-live.8.txt
+	a2x --icons -a toc -a toclevels=3 -a docinfo -f pdf grml-live.8.adoc
 	touch pdf-stamp
 
 clean:
@@ -43,4 +43,3 @@ clean:
 	for i in $(MANPAGES); do \
 		rm -f $$i.html $$i.xml $$i.gz $$i.pdf $$i.epub $$i; done
 	rm -f html-stamp man-stamp epub-stamp pdf-stamp
-
