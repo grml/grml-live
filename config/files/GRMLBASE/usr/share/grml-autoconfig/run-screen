@@ -1,0 +1,23 @@
+#!/bin/sh
+# Filename:      /usr/share/grml-autoconfig/run-screen
+# Purpose:       wrapper for screen to start with appropriate configuration
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+export SHELL=/bin/zsh
+# try to mitigate raceconditions from screen
+SCREENDIR_="/var/run/screen"
+mkdir -m 700 "${SCREENDIR_}/S-$USER" >/dev/null 2>&1
+
+# now run screen with config
+if [ "$(id -u)" = 0 ] ; then
+  exec screen -U -c /etc/grml/screenrc -s "-$SHELL"
+elif [ -r "$HOME/.screenrc" ] ; then
+  exec screen -U -c "$HOME/.screenrc" -s "-$SHELL"
+else
+  exec screen -U -c /etc/grml/screenrc_generic -s "-$SHELL"
+fi
+
+## END OF FILE #################################################################
