@@ -30,7 +30,6 @@ set -u
 
    # restore *empty* directories because otherwise installation/upgrade of packages might fail
    [ -d "$target"/usr/share/locale ] || mkdir "$target"/usr/share/locale
-   $ROOTCMD ln -s /etc/locale.alias /usr/share/locale/locale.alias
 
    # make sure the directories of removed locales exist; ugly hack but no other solution present :(
    echo 'Creating empty /usr/share/locale/*/LC_MESSAGES directories'
