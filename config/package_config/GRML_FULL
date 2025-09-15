@@ -74,6 +74,7 @@ kpartx
 mbr
 partclone
 parted
+systemd-boot-tools
 
 # disk wiping
 nwipe

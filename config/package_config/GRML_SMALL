@@ -41,6 +41,7 @@ smartmontools
 kpartx
 mbr
 parted
+systemd-boot-tools
 
 # disk wiping
 nwipe
