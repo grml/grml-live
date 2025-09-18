@@ -38,7 +38,11 @@ if [ -n "${WAYBACK_DATE:-}" ] ; then
     s#^(URIs:)\s+(.*://deb.debian.org/)(.*)\/?$#$1 http://snapshot.debian.org/archive/$3/$d#' \
     "${target}"/etc/apt/sources.list.d/debian.sources
 
-  sed -i '/^Types:/a Check-Valid-Until: no' "${target}"/etc/apt/sources.list.d/debian.sources
+  # config/scripts/GRMLBASE/33-aptsetup will already apply this when class
+  # RELEASE is enabled (default).
+  if ! ifclass RELEASE; then
+    sed -i '/^Types:/a Check-Valid-Until: no' "${target}"/etc/apt/sources.list.d/debian.sources
+  fi
 fi
 
 ## END OF FILE #################################################################
