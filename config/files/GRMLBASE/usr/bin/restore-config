@@ -10,7 +10,6 @@
 # shellcheck source=/dev/null
 {
   . /etc/grml/lsb-functions
-  . /etc/grml/script-functions
 }
 
 # set variables  {{{
