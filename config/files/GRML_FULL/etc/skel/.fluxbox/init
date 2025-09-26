@@ -65,12 +65,13 @@ session.screen0.rootCommand:
 session.screen0.menuAlpha:	200
 session.screen0.windowMenu:	
 session.screen0.reversewheeling:	false
-session.screen0.edgeSnapThreshold:	0
+session.screen0.edgeSnapThreshold:	15
+session.screen0.edgeResizeSnapThreshold:	15
 session.screen0.workspacewarping:	true
 session.screen0.allowRemoteActions:	false
 session.screen0.menuDelayClose:	0
 session.screen0.imageDither:	false
-session.screen0.strftimeFormat:	%H:%M
+session.screen0.strftimeFormat: %a, %d %b %02k:%M:%S
 session.screen0.antialias:	false
 session.screen0.focusModel:	ClickFocus
 session.screen0.workspaceNames:	Workspace 1,Workspace 2,Workspace 3,Workspace 4,
