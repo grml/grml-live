@@ -358,7 +358,7 @@ def main(program_name: str, argv: list[str]) -> int:
             flavor = argv.pop(0)
             arch = argv.pop(0)
             debian_suite = ""  # filled from config
-            classes_for_mode = ["SNAPSHOT", "NO_ONLINE"]
+            classes_for_mode = ["NO_ONLINE"]
             upload_to_daily = False
 
         elif build_mode == "daily":
