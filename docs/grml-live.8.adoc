@@ -599,19 +599,14 @@ the error happened.
 How do I install further files into the chroot/ISO?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Just point the configuration variable CHROOT_INSTALL to the directory which
+Just point the configuration variable CHROOT_INSTALL (`-I`) to the directory which
 provides the files you would like to install. Note that the files are installed
 under '/' in the chroot - so you have to create the rootfs structure on your
 own. Usage example:
 
-  GRML_FAI_CONFIG=/srv/config
-  echo "GRML_FAI_CONFIG=$GRML_FAI_CONFIG" >> /etc/grml/grml-live.local
-  echo "CHROOT_INSTALL=\$GRML_FAI_CONFIG/chroot_install" >> /etc/grml/grml-live.local
-  mkdir -p $GRML_FAI_CONFIG/chroot_install/usr/src/
-  cp -rv /usr/share/grml-live/config/* $GRML_FAI_CONFIG
-  wget example.org/foo.tar.gz
-  mv foo.tar.gz $GRML_FAI_CONFIG/chroot_install/usr/src/
-  grml-live ...
+  mkdir -p chroot_install/etc
+  echo 'this is a motd' > chroot_install/etc/motd
+  grml-live -I chroot_install ...
 
 [[local-debian-mirror]]
 Can I use my own (local) Debian mirror?
