@@ -389,7 +389,8 @@ placed in the output directory under grml_sources.
   added at build time in `/etc/grml/grml-live.local` to ensure SSH
   starts. The `netconfig=` and/or `encpasswd=...` boot options should
   also be used to tell GRML to download SSH keys or set a known
-  password.
+  password, or use the `-I` or `CHROOT_INSTALL` parameters to inject
+  those public keys directly at build time.
 
 * XORG: providing important packages for use with a base grml-featured X.org
 setup
