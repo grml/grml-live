@@ -39,9 +39,7 @@ Please notice that you should have a fast network connection as all the Debian
 packages will be downloaded and installed via network. If you want to use a
 local mirror (strongly recommended if you plan to use grml-live more than once)
 checkout debmirror(1), reprepro(1) (see /usr/share/doc/grml-live/examples/reprepro/ for a
-sample configuration), apt-cacher(1) and approx(8). To avoid downloading the
-base system again and again check out <<create-a-base-tgz,the base tar.gz
-feature>>.
+sample configuration), apt-cacher(1) and approx(8).
 
 Options
 -------
@@ -205,10 +203,7 @@ the class "RELEASE".
 
 Specify the Debian suite you want to use for your live-system. If unset defaults
 to "testing". Supported values are: stable, testing, unstable (or their
-corresponding release names like "bookworm"). Please be aware that recent Debian
-suites might require a recent base.tgz
-(${GRML_FAI_CONFIG}/basefiles/$CLASSNAME.tar.gz) or a recent version of
-debootstrap.
+corresponding release names like "bookworm").
 
   -t **arg**::
 
@@ -537,12 +532,6 @@ Instructions
   apt-get --allow-unauthenticated install grml-keyring
 
   cp -rv /usr/share/grml-live/config /srv
-  # optionally(!) install basefile so we don't have to build basic
-  # chroot from scratch. best build them with mmdebstrap.
-  # mkdir -p /srv/config/basefiles/
-  # mv I386.tar.gz /srv/config/basefiles/
-  # mv AMD64.tar.gz /srv/config/basefiles/
-  # mv ARM64.tar.gz /srv/config/basefiles/
 
   # install relevant tools
   apt-get --no-install-recommends install grml-live
