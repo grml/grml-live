@@ -373,6 +373,20 @@ official grml release
 * SOURCES: retrieve Debian source packages after installation. Files will be
 placed in the output directory under grml_sources.
 
+* TOR: generates a Tor onion service at build time. This makes the
+  booted system available even if behind NAT or some firewall that is
+  broken or unknown, and you need to get a rescue shell on the
+  host. Note that the Tor private keys are persisted in the ISO, which
+  makes the build artifacts contain secret material and should be
+  handled accordingly (although the consequence of disclosure is
+  simply access to the onion service, which is not necessarily a
+  problem). The `DEFAULT_BOOTOPTIONS="ssh"` settings should also be
+  added at build time in `/etc/grml/grml-live.local` to ensure SSH
+  starts. The `netconfig=` and/or `encpasswd=...` boot options should
+  also be used to tell GRML to download SSH keys or set a known
+  password, or use the `-I` or `CHROOT_INSTALL` parameters to inject
+  those public keys directly at build time.
+
 * XORG: providing important packages for use with a base grml-featured X.org
 setup
 
