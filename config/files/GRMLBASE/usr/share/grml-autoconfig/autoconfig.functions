@@ -123,8 +123,8 @@ _detect_virtual() {
   virt_what_result=$(virt-what 2>/dev/null)
   case "$virt_what_result" in
     *vmware*) VIRTUAL=true; VMWARE=true; VIRTUAL_ENV='VMware' ;;
-    *kvm*) VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM' ;;
     *virtualbox*) VIRTUAL=true; VIRTUALBOX=true; VIRTUAL_ENV='VirtualBox' ;;
+    *kvm*) VIRTUAL=true; KVM=true; VIRTUAL_ENV='KVM' ;;
   esac
   if [ -z "$VIRTUAL" ]; then
     # imvirt is slow. do not use it, if virt-what already found the hypervisor.

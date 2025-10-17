@@ -39,9 +39,7 @@ Please notice that you should have a fast network connection as all the Debian
 packages will be downloaded and installed via network. If you want to use a
 local mirror (strongly recommended if you plan to use grml-live more than once)
 checkout debmirror(1), reprepro(1) (see /usr/share/doc/grml-live/examples/reprepro/ for a
-sample configuration), apt-cacher(1) and approx(8). To avoid downloading the
-base system again and again check out <<create-a-base-tgz,the base tar.gz
-feature>>.
+sample configuration), apt-cacher(1) and approx(8).
 
 Options
 -------
@@ -205,10 +203,7 @@ the class "RELEASE".
 
 Specify the Debian suite you want to use for your live-system. If unset defaults
 to "testing". Supported values are: stable, testing, unstable (or their
-corresponding release names like "bookworm"). Please be aware that recent Debian
-suites might require a recent base.tgz
-(${GRML_FAI_CONFIG}/basefiles/$CLASSNAME.tar.gz) or a recent version of
-debootstrap.
+corresponding release names like "bookworm").
 
   -t **arg**::
 
@@ -378,6 +373,20 @@ official grml release
 * SOURCES: retrieve Debian source packages after installation. Files will be
 placed in the output directory under grml_sources.
 
+* TOR: generates a Tor onion service at build time. This makes the
+  booted system available even if behind NAT or some firewall that is
+  broken or unknown, and you need to get a rescue shell on the
+  host. Note that the Tor private keys are persisted in the ISO, which
+  makes the build artifacts contain secret material and should be
+  handled accordingly (although the consequence of disclosure is
+  simply access to the onion service, which is not necessarily a
+  problem). The `DEFAULT_BOOTOPTIONS="ssh"` settings should also be
+  added at build time in `/etc/grml/grml-live.local` to ensure SSH
+  starts. The `netconfig=` and/or `encpasswd=...` boot options should
+  also be used to tell GRML to download SSH keys or set a known
+  password, or use the `-I` or `CHROOT_INSTALL` parameters to inject
+  those public keys directly at build time.
+
 * XORG: providing important packages for use with a base grml-featured X.org
 setup
 
@@ -463,7 +472,8 @@ Available log files
 -------------------
 
 Starting with grml-live version 0.17.0 you should find log files in a directory
-named 'grml_logs' in the output directory (next to grml_isos, grml_chroot,...).
+named `grml_logs` in the output directory (next to `grml_isos`,
+`grml_chroot`, etc). 
 
 grml-live versions before 0.17.0 used to log into /var/log/grml-live.log
 and /var/log/fai/grml.
@@ -472,8 +482,8 @@ and /var/log/fai/grml.
 Requirements for the build system
 ---------------------------------
 
-* any Debian based system should be sufficient (if it doesn't work it's a bug,
-please send us a bug report then). Check out <<deploy-on-debian,How do I deploy
+* Debian GNU/Linux, bookworm or newer. If this doesn't work, please send us a bug
+report. Check out <<deploy-on-debian,How do I deploy
 grml-live on a plain Debian installation>> for details how to set up grml-live
 on a plain, original Debian system.
 
@@ -491,14 +501,6 @@ or "nosuid" mount options. (/tmp typically is at least "nodev" and "nosuid" on
 most systems.)
 
 For further information see next section.
-
-[[X8]]
-[[current_state]]
-Current state of grml-live with squashfs-tools and kernel
----------------------------------------------------------
-
-Use squashfs-tools >=4.2-1 to build Grml (based) ISOs featuring kernel version
-2.6.38-grml[64] or newer.
 
 [[faq]]
 FAQ
@@ -537,12 +539,6 @@ Instructions
   apt-get --allow-unauthenticated install grml-keyring
 
   cp -rv /usr/share/grml-live/config /srv
-  # optionally(!) install basefile so we don't have to build basic
-  # chroot from scratch. best build them with mmdebstrap.
-  # mkdir -p /srv/config/basefiles/
-  # mv I386.tar.gz /srv/config/basefiles/
-  # mv AMD64.tar.gz /srv/config/basefiles/
-  # mv ARM64.tar.gz /srv/config/basefiles/
 
   # install relevant tools
   apt-get --no-install-recommends install grml-live
@@ -599,19 +595,14 @@ the error happened.
 How do I install further files into the chroot/ISO?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Just point the configuration variable CHROOT_INSTALL to the directory which
+Just point the configuration variable CHROOT_INSTALL (`-I`) to the directory which
 provides the files you would like to install. Note that the files are installed
 under '/' in the chroot - so you have to create the rootfs structure on your
 own. Usage example:
 
-  GRML_FAI_CONFIG=/srv/config
-  echo "GRML_FAI_CONFIG=$GRML_FAI_CONFIG" >> /etc/grml/grml-live.local
-  echo "CHROOT_INSTALL=\$GRML_FAI_CONFIG/chroot_install" >> /etc/grml/grml-live.local
-  mkdir -p $GRML_FAI_CONFIG/chroot_install/usr/src/
-  cp -rv /usr/share/grml-live/config/* $GRML_FAI_CONFIG
-  wget example.org/foo.tar.gz
-  mv foo.tar.gz $GRML_FAI_CONFIG/chroot_install/usr/src/
-  grml-live ...
+  mkdir -p chroot_install/etc
+  echo 'this is a motd' > chroot_install/etc/motd
+  grml-live -I chroot_install ...
 
 [[local-debian-mirror]]
 Can I use my own (local) Debian mirror?
