@@ -177,6 +177,7 @@ nethogs
 netsniff-ng
 nmap
 openssh-client-ssh1
+oping
 radvd
 rdnssd
 rfkill
