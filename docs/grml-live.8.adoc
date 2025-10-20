@@ -248,7 +248,7 @@ the wayback machine).
 
   -z::
 
-Use ZLIB instead of LZMA/XZ compression in mksquashfs part of the build process.
+Compress squashfs using `gzip` method, instead of `zstd`.
 
 [[usage-examples]]
 Usage examples

@@ -72,7 +72,7 @@ Usage: $PN [options, see as follows]
    -V                      deprecated - will be removed from grml-live
    -w <date>               wayback machine, build system using Debian archives
                            from specified date
-   -z                      use ZLIB instead of LZMA/XZ compression
+   -z                      use gzip instead of zstd compression
 
 Usage examples:
 
@@ -494,7 +494,7 @@ echo "  SOURCE_DATE_EPOCH: $SOURCE_DATE_EPOCH"
 [ -n "$CHOWN_USER" ]          && echo "  Output owner:      $CHOWN_USER"
 [ -n "$DEFAULT_BOOTOPTIONS" ] && echo "  Adding default bootoptions: \"$DEFAULT_BOOTOPTIONS\""
 [ -n "$LOGFILE" ]             && echo "  Logging to file:   $LOGFILE"
-[ -n "$SQUASHFS_ZLIB" ]       && echo "  Using ZLIB (instead of LZMA/XZ) compression."
+[ -n "$SQUASHFS_ZLIB" ]       && echo "  Using gzip (instead of zstd) compression."
 [ -n "$SQUASHFS_OPTIONS" ]    && echo "  Using SQUASHFS_OPTIONS ${SQUASHFS_OPTIONS}"
 [ -n "$CLEAN_ARTIFACTS" ]     && echo "  Will clean output before and after running."
 [ -n "$UPDATE" ]              && echo "  Executing UPDATE instead of fresh installation."
@@ -822,9 +822,9 @@ else
      # use block size 1m as this gives good result with regards to time + compression
      SQUASHFS_OPTIONS="-b 1m"
 
-     # set lzma/xz compression by default, unless -z option has been specified on command line
+     # use zstd compression by default, unless -z option has been specified on command line
      if [ -z "$SQUASHFS_ZLIB" ] ; then
-        SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -comp xz"
+        SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -comp zstd"
      else
         SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -comp gzip"
      fi
