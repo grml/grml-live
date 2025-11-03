@@ -56,7 +56,6 @@ fio
 gdisk
 iotop
 lsscsi
-mpt-status
 multipath-tools
 ncdu
 nocache
