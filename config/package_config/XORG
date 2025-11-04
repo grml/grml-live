@@ -12,8 +12,6 @@ xserver-xorg-video-all
 fluxbox
 # generate X configuration:
 grml-x
-# configuration for several window managers:
-grml-desktop
 # osd_cat:
 xosd-bin
 # Esetroot:
