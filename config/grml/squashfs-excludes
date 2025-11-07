@@ -3,3 +3,4 @@ run/*
 var/run/*
 var/lock/*
 var/lib/dkms/*
+grml-live/*
