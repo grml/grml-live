@@ -65,6 +65,7 @@ firmware-libertas
 firmware-linux
 firmware-linux-free
 firmware-linux-nonfree
+firmware-mediatek
 firmware-misc-nonfree
 firmware-myricom
 firmware-netxen
