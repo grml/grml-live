@@ -252,7 +252,7 @@ while getopts "a:C:c:d:D:e:g:i:I:o:r:s:S:t:U:v:w:AbBFhnNqQRuVz" opt; do
     I) CHROOT_INSTALL="$OPTARG" ;;
     n) SKIP_MKISOFS=1 ;;
     N) BOOTSTRAP_ONLY=1; SKIP_MKISOFS=1; SKIP_MKSQUASHFS=1 ;;
-    o) OUTPUT="$(readlink -f "$OPTARG")" ;;
+    o) OUTPUT="$(readlink -m "$OPTARG")" ;;
     q) SKIP_MKSQUASHFS=1 ;;
     Q) SKIP_NETBOOT=1 ;;
     r) RELEASENAME="$OPTARG" ;;
