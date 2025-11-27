@@ -1,3 +1,67 @@
+grml-live (0.55.0) grml-testing; urgency=medium
+
+  This release merges another previously separate git repository:
+    * grml-desktop (last released version 0.9.0)
+
+  [ Michael Prokop ]
+  * [62a7d5f] grml-autoconfig _detect_virtual: prefer Virtualbox
+    over KVM in virt-what
+  * [6c64ec5] Fix squashfs exclude usage for grml-live directory
+  * [7ebdc43] Fix output directory handling if base directory
+    doesn't exist
+  * Software related changes:
+    - [c233f26] add systemd-boot-tools to GRML_SMALL + GRML_FULL
+    - [04593ba] drop grml-desktop from XORG
+    - [523de64] add firmware-mediatek to GRMLBASE. Thanks to Helmut
+      Grohne for bringing this to our attention
+
+  [ Chris Hofstaedtler ]
+  * [5568587] autoconfig: remove reference to grml-swapon
+  * [0d65b58] grml-desktop: move files into grml-live layout
+  * [8a0756d] 41-memtest: drop support for memtest86+ from bullseye
+  * [8257f7f] cheatcodes: drop info about releases older than 10 years
+  * [5945ee7] cheatcodes: remove mention of release 2010.12 in example
+  * [f53cf46] grml-desktop: appease shellcheck
+  * [18bd18a] Build Docker images and publish to GitHub Package Registry
+  * [bda9366] config: drop DEBIAN_BULLSEYE class
+  * [5324bf4] 98-clean-chroot: install xinit files as executable
+  * [e5b0e7e] 15-initsetup: un-function-ify
+  * [49421fd] cheatcodes: drop wondershaper option
+  * [ae2a318] cheatcodes: drop noconsolefont option
+  * [4fe5b0e] cheatcodes: drop nosyslog option
+  * [d04e239] 15-initsetup: Ignore errors as systemd upstream does not
+    support containers
+  * [80a4a71] Restrict Docker image pushes to branches from upstream repo
+  * [bd281f8] config: getty@tty12: inline run-journalctl
+  * [cfe71db] config: import run-screen from grml-scripts
+  * [ebe9b2e] Rename asciidoc files to *.adoc
+  * [acf7575] Stop symlinking /etc/locale.alias
+  * [5a79060] restore-config: do not read unused /etc/grml/script-
+    functions
+  * [af5b4c6] build-driver: remove SNAPSHOT
+  * [4c85eae] doc: remove outdated base tarball instructions
+  * [9112501] doc: remove squashfs version info
+  * [ac4dfbb] doc: specify bookworm as minimum host Debian
+  * [d1f8ad1] doc: stylize the output directories consistently
+  * Software related changes:
+    - [6a50e2d] drop lynx, w3m from GRML_FULL
+    - [79cb009] use links on both GRML_FULL and GRML_SMALL
+    - [8a10809] drop grml-desktop
+    - [7c01014] GRML_FULL: remove mpt-status
+
+  [ Antoine Beaupré ]
+  * [911a66e] TOR class to allow remote SSH access over deep networks
+  * [345e1b9] doc: simplify "local-files" example with -I option
+  * [c4ab37f] add TOR class to the grml-live(8) manual
+  * [2cd9a14] explain operators how to complete the TOR configuration
+  * [b7c7c20] also mention -I/CHROOT_INSTALL as a possible ssh key
+    injection point
+
+  [ Christopher Bock ]
+  * [00322e7] ZFS remove /proc workaround
+
+ -- Michael Prokop <mika@grml.org>  Thu, 27 Nov 2025 08:07:19 +0100
+
 grml-live (0.54.1) grml-testing; urgency=medium
 
   [ Christopher Bock ]
