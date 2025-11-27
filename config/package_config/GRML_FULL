@@ -280,7 +280,6 @@ zsh
 
 # system info/mgmt
 augeas-tools
-flashrom
 inxi
 memtester
 stressant
