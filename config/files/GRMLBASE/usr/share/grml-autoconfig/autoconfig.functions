@@ -37,7 +37,7 @@ if [ -z "$CMDLINE" ]; then
   CMDLINE="$(< /proc/cmdline)"
   [ -d "${LIVECD_PATH}/bootparams/" ] && CMDLINE="$CMDLINE $(cat "${LIVECD_PATH}"/bootparams/* | tr '\n' ' ')"
   TAG="grml-parameters"
-  if grep -q "$TAG" /sys/bus/virtio/devices/*/mount_tag 2>/dev/null ; then
+  if grep -q "$TAG" /sys/bus/virtio/devices/*/mount_tag &>/dev/null ; then
     MOUNTDIR="$(mktemp -d)"
     mount -t 9p -o trans=virtio,ro "$TAG" "$MOUNTDIR"
     CMDLINE="$CMDLINE $(cat "$MOUNTDIR"/* 2>/dev/null | tr '\n' ' ')"
