@@ -92,17 +92,26 @@ checkvalue(){
   esac
 }
 
-# if no password is set return a random password
-set_passwd() {
-  [ -n "$PASSWD" ] && return 0
-
+# output a random password on stdout
+get_random_password() {
   if [ -x /usr/bin/xkcdpass ] ; then
-    PASSWD="$(xkcdpass)"
-  elif [ -x /usr/bin/diceware ] ; then
-    PASSWD="$(diceware)"
-  else
-    PASSWD="$(tr -dc '[:alnum:]' < /dev/urandom | head -c 28)"
+    xkcdpass
+    return 0
   fi
+
+  # try to get a good ratio between entropy + writable
+  if [ -x /usr/bin/diceware ] ; then
+    local words
+    words=$(diceware -n3 -d' ')
+    local special_chars="$%&/-:,.-!"
+    local random_char1="${special_chars:RANDOM % ${#special_chars}:1}"
+    local random_char2="${special_chars:RANDOM % ${#special_chars}:1}"
+    echo "${words}${random_char1}${random_char2}"
+    return 0
+  fi
+
+  # try to get a somewhat useful random password
+  tr -dc '[:alnum:]' < /dev/urandom 2>/dev/null | head -c 14
 }
 
 ### }}}
@@ -559,7 +568,7 @@ if checkbootparam 'ssh' ; then
 
    eindent
    if [ -z "$PASSWD" ] ; then
-     set_passwd && ewarn "No given password for found. Using random password: $PASSWD" && eend 0
+     PASSWD=$(get_random_password) && ewarn "No given password for found. Using random password: $PASSWD" && eend 0
    fi
    eoutdent
 
@@ -610,25 +619,8 @@ if checkbootparam 'vnc' ; then
    einfo "Bootoption vnc found, trying to set password for user $localuser."
    eindent
    if [ -z "$VNC_PASSWD" ] ; then
-      if [ -x /usr/bin/apg ] ; then
-         VNC_PASSWD="$(apg -M NL -a 0 -m 8 -x 12 -n 1)"
-      elif [ -x /usr/bin/gpw ] ; then
-         VNC_PASSWD="$(gpw 1)"
-      elif [ -x /usr/bin/pwgen ] ; then
-         VNC_PASSWD="$(pwgen -1 8)"
-      elif [ -x /usr/bin/hexdump ] ; then
-         VNC_PASSWD="$(dd if=/dev/urandom bs=14 count=1 2>/dev/null | hexdump | awk '{print $3 $4}')"
-      elif [ -n "$RANDOM" ] ; then
-         VNC_PASSWD="${localuser}${RANDOM}"
-      else
-         VNC_PASSWD=''
-         eerror "Empty passphrase and neither pwgen nor hexdump nor \$RANDOM found. Skipping."
-         eend 1
-      fi
-
-      if [ -n "$VNC_PASSWD" ] ; then
-         ewarn "No given password for vnc found. Using random password: $VNC_PASSWD" ; eend 0
-      fi
+     VNC_PASSWD=$(get_random_password)
+     ewarn "No given password for vnc found. Using random password: $VNC_PASSWD" ; eend 0
    fi
    eoutdent
 
@@ -671,7 +663,7 @@ if checkbootparam 'passwd' >>$DEBUG 2>&1; then
 
   eindent
   if [ -z "$PASSWD" ] ; then
-    set_passwd && ewarn "No given password for found. Using random password: $PASSWD" && eend 0
+    PASSWD=$(get_random_password) && ewarn "No given password for found. Using random password: $PASSWD" && eend 0
   fi
   eoutdent
 
