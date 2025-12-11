@@ -26,5 +26,7 @@ if [ -e "$target"/usr/bin/speaker-test ] ; then
   fcopy -m root,root,0755 -v /usr/bin/grml-soundtest
 fi
 
+fcopy -m root,root,0755 -v /usr/bin/grml-lock
+
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
