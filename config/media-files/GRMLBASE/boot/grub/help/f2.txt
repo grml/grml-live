@@ -1,0 +1,21 @@
+Grml - Linux for sysadmins and users of texttools
+
+  Overview of bootsplashes on Grml (Help Menu)
+
+  F1   main bootsplash
+  F2   this overview page
+  F3   main Grml bootoptions
+  F4   main cheatcodes for Grml [1/2]
+  F5   main cheatcodes for Grml [2/2]
+  F6   troubleshooting on Grml
+  F7   kernel cheatcodes
+  F8   Grml configuration options
+  F10  problems with Grml?           _
+                 __ _ _ __ _ __ ___ | |  ___  _ __ __ _
+                / _` | '__| '_ ` _ \| | / _ \| '__/ _` |
+               | (_| | |  | | | | | | || (_) | | | (_| |
+                \__, |_|  |_| |_| |_|_(_)___/|_|  \__, |
+                |___/                             |___/
+
+ Problems? Some more information is accessible via the Help menu.
+ See F6 for troubleshooting information.
