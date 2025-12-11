@@ -134,6 +134,7 @@ buffer
 coreutils
 diffutils
 mawk
+ncurses-term
 patch
 qrencode
 screen
