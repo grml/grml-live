@@ -101,7 +101,7 @@ set_passwd() {
   elif [ -x /usr/bin/diceware ] ; then
     PASSWD="$(diceware)"
   else
-    PASSWD="$(tr -dc '[:alnum:]' < /dev/urandom | head -c 28)"
+    PASSWD="$(tr -dc '[:alnum:]' < /dev/urandom 2>/dev/null | head -c 28)"
   fi
 }
 
