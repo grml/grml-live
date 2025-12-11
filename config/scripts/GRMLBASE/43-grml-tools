@@ -9,6 +9,9 @@
 set -u
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
 fcopy -m root,root,0755 -v /usr/bin/random-hostname
 fcopy -m root,root,0644 /usr/share/man/man1/random-hostname.1
 
@@ -17,6 +20,11 @@ fcopy -m root,root,0644 /usr/share/man/man8/grml2ram.8
 
 fcopy -m root,root,0755 -v /usr/sbin/blacklist
 fcopy -m root,root,0755 -v /usr/sbin/unblacklist
+
+if [ -e "$target"/usr/bin/speaker-test ] ; then
+  # requires speaker-test from alsa-utils
+  fcopy -m root,root,0755 -v /usr/bin/grml-soundtest
+fi
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
