@@ -231,7 +231,7 @@ def get_grml_package_changes(gitpath: Path, range: str) -> tuple[list[str], list
     for trailer in trailers:
         git_format += f"%(trailers:key={trailer})%n"
 
-    git_log = run_x(["git", "log", git_format, range], cwd=gitpath, capture_output=True)
+    git_log = run_x(["git", "log", "--no-merges", git_format, range], cwd=gitpath, capture_output=True)
 
     changes = []
     people = []
