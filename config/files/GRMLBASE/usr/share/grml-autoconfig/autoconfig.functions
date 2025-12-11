@@ -98,11 +98,22 @@ set_passwd() {
 
   if [ -x /usr/bin/xkcdpass ] ; then
     PASSWD="$(xkcdpass)"
-  elif [ -x /usr/bin/diceware ] ; then
-    PASSWD="$(diceware)"
-  else
-    PASSWD="$(tr -dc '[:alnum:]' < /dev/urandom 2>/dev/null | head -c 28)"
+    return 0
   fi
+
+  # try to get a good ratio between entropy + writable
+  if [ -x /usr/bin/diceware ] ; then
+    local words
+    words=$(diceware -n3 -d' ')
+    local special_chars="$%&/-:,.-!"
+    local random_char1="${special_chars:RANDOM % ${#special_chars}:1}"
+    local random_char2="${special_chars:RANDOM % ${#special_chars}:1}"
+    PASSWD="${words}${random_char1}${random_char2}"
+    return 0
+  fi
+
+  # try to get a somewhat useful random password
+  PASSWD="$(tr -dc '[:alnum:]' < /dev/urandom 2>/dev/null | head -c 14)"
 }
 
 ### }}}
