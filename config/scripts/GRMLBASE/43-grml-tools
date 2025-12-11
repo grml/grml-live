@@ -12,5 +12,8 @@ set -e
 fcopy -m root,root,0755 -v /usr/bin/random-hostname
 fcopy -m root,root,0644 /usr/share/man/man1/random-hostname.1
 
+fcopy -m root,root,0755 -v /usr/sbin/grml2ram
+fcopy -m root,root,0644 /usr/share/man/man8/grml2ram.8
+
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

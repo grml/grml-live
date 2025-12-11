@@ -1,0 +1,111 @@
+#!/bin/bash
+# Filename:      grml2ram
+# Purpose:       copy compressed GRML image to RAM
+# Authors:       (c) Michael Schierl <schierlm-public@gmx.de>, (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+set -e
+
+# shellcheck disable=SC1091
+. /etc/grml/lsb-functions
+# shellcheck disable=SC1091
+. /etc/grml/script-functions
+
+check4root || exit 1
+check4progs rsync gawk || exit 2
+
+if ! isgrmlcd ; then
+   eerror "Not running grml in live-cd mode. Nothing to be done, exiting." ; eend 1
+   exit 1
+fi
+
+# initramfs layout since December 2012, backwards compatibility:
+[ -d /lib/live/mount/medium ] && export LIVECD_PATH='/lib/live/mount/medium'
+# initramfs layout since December 2018:
+[ -d /run/live/medium ] && export LIVECD_PATH='/run/live/medium'
+
+if [ -z "$CMDLINE" ]; then
+  # if CMDLINE was set from the outside, we're debugging.
+  # otherwise, take CMDLINE from Kernel and config files.
+  CMDLINE="$(cat /proc/cmdline)"
+  [ -d "${LIVECD_PATH}"/bootparams/ ] && CMDLINE="$CMDLINE $(cat "${LIVECD_PATH}"/bootparams/* | tr '\n' ' ')"
+fi
+
+getbootparam(){
+  local line
+  local ws
+  ws='	 '
+  line=" $CMDLINE "
+  case "$line" in
+    *[${ws}]"$1="*)
+      result="${line##*["$ws"]"$1"=}"
+      result="${result%%["$ws"]*}"
+      echo "$result"
+      return 0 ;;
+    *) # no match?
+      return 1 ;;
+  esac
+}
+
+MEDIA_PATH="$(getbootparam live-media-path)"
+MEDIA_PATH="${MEDIA_PATH:-.}"
+
+IMAGE=$(find "${LIVECD_PATH}/${MEDIA_PATH}/" -name "*.squashfs" 2>/dev/null | head -1)
+if ! [ -r "$IMAGE" ] ; then
+   if [ -r /cdrom/GRML/GRML ] ; then
+      IMAGE='/cdrom/GRML/GRML'
+   else
+      eerror "Can not access grml squashfs file."
+      eerror "Looks like you did run grml2ram already?" ; eend 1
+      exit 1
+   fi
+fi
+
+GRMLSIZE="$(du "$IMAGE" | awk '{print $1}')"
+RAM=$(/usr/bin/gawk '/MemFree/{print $2}' /proc/meminfo)
+LOOPDEV=$(/sbin/losetup -j "${IMAGE}" -n -O NAME)
+
+case "$*" in -f|--force)
+  ewarn "Forcing copy process for grml-image (${GRMLSIZE}kB) as requested via force option." ; eend 0
+   ;;
+  *)
+   if test "$RAM" -lt "$GRMLSIZE" ; then
+      eerror "Sorry, not enough free RAM (${RAM}kB) available for grml-image (${GRMLSIZE}kB)." ; eend 1
+      exit 1
+   fi
+   ;;
+esac
+
+einfo "Copying $IMAGE to RAM, this might take a while."
+rsync -a --progress "$IMAGE" /tmp/GRML
+LANGUAGE=C LANG=C LC_ALL=C perl << EOF
+open LOOP, '<${LOOPDEV}' or die $!;
+open DEST, '</tmp/GRML' or die $!;
+ioctl(LOOP, 0x4C06, fileno(DEST)) or die $!;
+close LOOP;
+close DEST;
+EOF
+
+# identify cd-rom:
+GRMLDEV=$(awk '{if ($2 ~ /^\/lib\/live\/mount\/medium$/ ) print $1}' /etc/mtab)
+if [ -z "$GRMLDEV" ]; then
+  GRMLDEV=$(awk '{if ($2 ~ /^\/live\/image$/ ) print $1}' /etc/mtab)
+fi
+if [ -z "$GRMLDEV" ]; then
+   GRMLDEV=$(awk '{if ($2 ~ /^\/cdrom$/ ) print $1}' /etc/mtab)
+fi
+[ -n "$GRMLDEV" ] || GRMLDEV='/dev/cdrom'
+
+einfo "Unmounting cdrom"
+if [ -d "$LIVECD_PATH" ] ;
+then
+  umount "$LIVECD_PATH"
+else
+  umount /cdrom
+fi
+eend $?
+einfo "Now you can eject your grml-cd (e.g. run 'eject $GRMLDEV')." ; eend 0
+
+## END OF FILE #################################################################
