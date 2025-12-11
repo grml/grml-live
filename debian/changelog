@@ -1,3 +1,19 @@
+grml-live (0.55.1) grml-testing; urgency=medium
+
+  The "2025.12 release is nearly here" release
+
+  [ Christopher Bock ]
+  * [64f6ec4] grml.sources snapshot: disable
+
+  [ Michael Prokop ]
+  * [0b6b8db] SW: drop flashrom package from GRML_FULL
+  * [94f956a] 9p virtio: do not complain if mount_tag doesn't exist
+
+  [ Chris Hofstaedtler ]
+  * [7e3e30d] SW: add ncurses-term to GRML_FULL,GRML_SMALL
+
+ -- Chris Hofstaedtler <ch@grml.org>  Thu, 11 Dec 2025 18:40:22 +0100
+
 grml-live (0.55.0) grml-testing; urgency=medium
 
   This release merges another previously separate git repository:
