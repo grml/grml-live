@@ -1,0 +1,39 @@
+#!/bin/zsh
+# Filename:      grml-info
+# Purpose:       start browser with documentation for Grml (based) system
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+# allow customisation
+[ -n "$distri" ] || distri=grml
+
+if [ -r "/usr/share/doc/${distri}-docs/index.html" ] ; then
+  # support easy customisation, file doesn't exist
+  # by default on mainline Grml
+  local PAGE="/usr/share/doc/${distri}-docs/index.html"
+else
+  local PAGE='/usr/share/doc/grml-docs/startpage.html'
+fi
+
+. /etc/grml/script-functions
+
+# do we have X?
+if [ -n "$DISPLAY" ] && check4progs x-www-browser &>/dev/null ; then
+  exec x-www-browser $PAGE
+else
+  # no X: (or no x-www-browser)
+  if check4progs links2 &>/dev/null ; then
+    links2 $PAGE
+  elif check4progs w3m &>/dev/null; then
+    w3m $PAGE
+  elif check4progs links &>/dev/null ; then
+    links $PAGE
+  else
+    echo "Sorry, neither links2 nor w3m nor links available. Exiting.">&2
+    exit 1
+  fi
+fi
+
+## END OF FILE #################################################################

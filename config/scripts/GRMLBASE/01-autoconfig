@@ -37,5 +37,7 @@ fcopy -m root,root,0755 /usr/sbin/grml-setlang
 fcopy -m root,root,0644 /usr/share/man/man8/grml-setlang.8
 fcopy -m root,root,0644 /usr/share/zsh/vendor-completions/_grml-setlang
 
+fcopy -m root,root,0755 /usr/bin/grml-info
+
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
