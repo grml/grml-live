@@ -16,6 +16,7 @@ fcopy -m root,root,0755 -v /usr/sbin/grml2ram
 fcopy -m root,root,0644 /usr/share/man/man8/grml2ram.8
 
 fcopy -m root,root,0755 -v /usr/sbin/blacklist
+fcopy -m root,root,0755 -v /usr/sbin/unblacklist
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
