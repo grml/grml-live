@@ -46,6 +46,7 @@ elif [ "${ARCH}" = "amd64" ] || [ "${ARCH}" = "i386" ] ; then
   cp -a "${target}"/usr/lib/grub/*-pc/*.mod  "${media_dir}"/boot/grub/i386-pc/
   cp -a "${target}"/usr/lib/grub/*-pc/*.o    "${media_dir}"/boot/grub/i386-pc/
   cp -a "${target}"/usr/lib/grub/*-pc/*.lst  "${media_dir}"/boot/grub/i386-pc/
+  cp -a "${target}"/usr/lib/grub/*-pc/cdboot.img "${media_dir}"/boot/grub/i386-pc/
 
   # grub-efi-amd64-bin
   mkdir -p "${media_dir}"/boot/grub/x86_64-efi/
@@ -62,8 +63,9 @@ cp -a "${target}"/usr/share/grub/unicode.pf2   "${media_dir}"/boot/grub/fonts/
 
 # adjust all variables in the templates with the according distribution information
 grml-live-adjust-boot-files "${media_dir}"/boot/grub/*
+grml-live-adjust-boot-files "${media_dir}"/boot/grub/help/*.txt
 
-for param in ARCH DATE DISTRI_INFO DISTRI_NAME DISTRI_SPLASH GRML_NAME SQUASHFS_NAME \
+for param in ARCH DATE DISTRI_INFO DISTRI_NAME GRML_NAME SQUASHFS_NAME \
   RELEASE_INFO SHORT_NAME VERSION ; do
   while IFS= read -r -d '' file ; do
     value=$(eval echo '$'"$param")
@@ -130,6 +132,26 @@ if ifclass AMD64 || ifclass ARM64 ; then
     fi
   fi
 fi # amd64 or arm64
+
+if ifclass AMD64 ; then
+  echo "I: Copying GRUB i386-pc modules to ISO"
+  mkdir -p "${media_dir}"/boot/grub/i386-pc
+
+  # Copy core.img created by 45-grub-images
+  echo "I: Copying GRUB core.img for BIOS boot"
+  cp --preserve=timestamp "${target}"/boot/grub/i386-pc/core.img "${media_dir}"/boot/grub/i386-pc/
+
+  # Create El Torito boot image for BIOS
+  # This is a bootable image that will be embedded in the ISO
+  echo "I: Creating GRUB El Torito boot image for BIOS"
+
+  # The eltorito.img needs to contain:
+  # 1. boot.img (first 512 bytes - MBR boot sector)
+  # 2. core.img (GRUB core with modules)
+  # Create the El Torito boot image by concatenating cdboot.img and core.img
+  cat "${target}"/usr/lib/grub/i386-pc/cdboot.img "${media_dir}"/boot/grub/i386-pc/core.img > "${media_dir}"/boot/grub/i386-pc/eltorito.img
+  echo "I: Created eltorito.img ($(stat -c%s "${media_dir}"/boot/grub/i386-pc/eltorito.img) bytes)"
+fi
 
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

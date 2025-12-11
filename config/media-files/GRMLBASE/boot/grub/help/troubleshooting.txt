@@ -1,0 +1,20 @@
+Troubleshooting options
+═══════════════════════
+
+If you experience lockups or other hardware failures, disable buggy APIC interrupt routing:
+
+    noapic nolapic
+
+Disable ACPI for PCI maps (some HP servers and Via-based machines):
+
+    pci=noacpi
+
+Deactivate SMP-kernel:
+
+    nosmp
+
+Or use only one processor:
+
+    maxcpus=1
+
+Press ENTER to return to the menu...

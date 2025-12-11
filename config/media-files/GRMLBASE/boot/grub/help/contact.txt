@@ -1,0 +1,26 @@
+╔═══════════════════════════════════════════════════╗
+║ Grml - Linux for sysadmins and users of texttools ║
+║                                                   ║
+║              Problems with Grml?                  ║
+╚═══════════════════════════════════════════════════╝
+
+If you can't boot the Grml system, don't despair! The Grml team is ready
+to help you! We are especially interested in hearing about startup
+problems, because in general they don't happen to only one person.
+We've either already heard about your particular problem and can
+dispense a quick fix, or we would like to hear about it and work through
+it with you, and the next user who comes up with the same problem will
+profit from your experience!
+
+Contact us:
+    Web:  https://grml.org/contact/
+    IRC:  #grml on irc.oftc.net
+    Mail: contact (at) grml.org
+    Bugs: https://grml.org/bugs/
+
+See the FAQ for more information:
+    https://grml.org/faq/
+
+    Thank you for helping us to improve Grml!
+
+Press ENTER to return to the menu...

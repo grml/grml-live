@@ -60,6 +60,15 @@ if ifclass I386 || ifclass AMD64 ; then
     echo "/usr/lib/grub/i386-efi/moddep.lst could not be found, skipping."
     echo "NOTE: grub-efi-ia32 not installed?"
   fi
+
+  # i386-pc for BIOS boot
+  if [ -r "${target}"/usr/lib/grub/i386-pc/moddep.lst ] ; then
+    ARCHS+=(i386-pc)
+    ADDITIONAL_MODULES[i386-pc]="biosdisk"
+  else
+    echo "ERROR: /usr/lib/grub/i386-pc/moddep.lst could not be found. grub-pc-bin not installed?" >&2
+    exit 1
+  fi
 fi
 
 for arch in "${ARCHS[@]}" ; do
@@ -68,7 +77,13 @@ for arch in "${ARCHS[@]}" ; do
     x86_64-efi) filename=/boot/bootx64.efi   ;;
     i386-efi)   filename=/boot/bootia32.efi  ;;
     arm64-efi)  filename=/boot/bootaa64.efi  ;;
+    i386-pc)    filename=/boot/grub/i386-pc/core.img  ;;
   esac
+
+  # Create directory for i386-pc if needed
+  if [ "$arch" = "i386-pc" ] ; then
+    mkdir -p "${target}/boot/grub/i386-pc"
+  fi
 
   read -r -a modules <<< "${ADDITIONAL_MODULES[$arch]}"
   $ROOTCMD grub-mkimage -O "$arch" -o "$filename" --prefix=/boot/grub/ --config="$TMP_CONFIG" \
