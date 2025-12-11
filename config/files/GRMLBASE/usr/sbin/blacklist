@@ -1,0 +1,40 @@
+#!/bin/sh
+# Filename:      blacklist
+# Purpose:       blacklist module via module-init-tools
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+[ -n "$MODPROBEFILE" ] || MODPROBEFILE=/etc/modprobe.d/grml.conf
+# shellcheck disable=SC1091
+[ -r /etc/grml/lsb-functions ] && . /etc/grml/lsb-functions
+
+if [ -z "$1" ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
+  echo "Usage: blacklist <module>"
+  echo "blacklists module via $MODPROBEFILE"
+  exit 1
+fi
+
+if [ "$(id -ru)" != "0" ] ; then
+  echo "Error: become root before starting $0" >& 2
+  exit 100
+fi
+
+[ -f "$MODPROBEFILE" ] || touch "$MODPROBEFILE"
+
+if grep -q "^blacklist $1\$" "$MODPROBEFILE" ; then
+  eerror "Module $1 already on blacklist in $MODPROBEFILE" ; eend 1
+else
+  einfo "Adding module $1 to blacklist $MODPROBEFILE"
+
+  if ! modinfo "${1}" >/dev/null 2>&1 ; then
+    ewarn "Notice: module $1 does not seem to exist. Adding anyway."
+    eend 0
+  fi
+
+  echo "blacklist $1" >> "$MODPROBEFILE"
+  echo "alias $1 off" >> "$MODPROBEFILE" ; eend 0
+fi
+
+## END OF FILE #################################################################

@@ -1,0 +1,32 @@
+#!/bin/bash
+# Filename:      ${GRML_FAI_CONFIG}/scripts/GRMLBASE/43-grml-tools
+# Purpose:       install grml tools
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2 or any later version.
+################################################################################
+
+set -u
+set -e
+
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+fcopy -m root,root,0755 -v /usr/bin/random-hostname
+fcopy -m root,root,0644 /usr/share/man/man1/random-hostname.1
+
+fcopy -m root,root,0755 -v /usr/sbin/grml2ram
+fcopy -m root,root,0644 /usr/share/man/man8/grml2ram.8
+
+fcopy -m root,root,0755 -v /usr/sbin/blacklist
+fcopy -m root,root,0755 -v /usr/sbin/unblacklist
+
+if [ -e "$target"/usr/bin/speaker-test ] ; then
+  # requires speaker-test from alsa-utils
+  fcopy -m root,root,0755 -v /usr/bin/grml-soundtest
+fi
+
+fcopy -m root,root,0755 -v /usr/bin/grml-lock
+
+## END OF FILE #################################################################
+# vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
