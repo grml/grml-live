@@ -270,6 +270,7 @@ jq
 mawk
 mbuffer
 mc
+ncurses-term
 patch
 pv
 qrencode
