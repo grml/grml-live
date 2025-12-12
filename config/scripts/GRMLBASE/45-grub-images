@@ -74,7 +74,7 @@ for arch in "${ARCHS[@]}" ; do
   read -r -a modules <<< "${ADDITIONAL_MODULES[$arch]}"
   $ROOTCMD grub-mkimage -O "$arch" -o "$filename" --prefix=/boot/grub/ --config="$TMP_CONFIG" \
     echo iso9660 part_msdos search_fs_file test \
-    fat ext2 reiserfs xfs btrfs squash4 part_gpt lvm \
+    fat ext2 xfs btrfs zfs zfscrypt squash4 part_gpt lvm \
     "${modules[@]}"
 done
 
