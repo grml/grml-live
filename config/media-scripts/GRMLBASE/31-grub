@@ -60,6 +60,23 @@ fi
 # arch independent files
 cp -a "${target}"/usr/share/grub/unicode.pf2   "${media_dir}"/boot/grub/
 
+# Generate larger fonts for HiDPI displays
+if $ROOTCMD which grub-mkfont >/dev/null 2>&1 ; then
+  if [ -r "${target}"/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf ] ; then
+    echo "I: Generating larger fonts for HiDPI display support"
+    $ROOTCMD grub-mkfont -s 24 -o /boot/grub/unicode-24.pf2 \
+      /usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf 2>/dev/null || true
+    $ROOTCMD grub-mkfont -s 32 -o /boot/grub/unicode-32.pf2 \
+      /usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf 2>/dev/null || true
+
+    # Copy generated fonts to media directory
+    [ -r "${target}"/boot/grub/unicode-24.pf2 ] && \
+      cp -a "${target}"/boot/grub/unicode-24.pf2 "${media_dir}"/boot/grub/
+    [ -r "${target}"/boot/grub/unicode-32.pf2 ] && \
+      cp -a "${target}"/boot/grub/unicode-32.pf2 "${media_dir}"/boot/grub/
+  fi
+fi
+
 # adjust all variables in the templates with the according distribution information
 grml-live-adjust-boot-files "${media_dir}"/boot/grub/*
 grml-live-adjust-boot-files "${media_dir}"/boot/grub/help/*.txt
