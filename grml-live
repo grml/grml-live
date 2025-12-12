@@ -931,11 +931,14 @@ generate_build_info() {
 # ISO_OUTPUT - iso build {{{
 [ -n "$ISO_NAME" ] || ISO_NAME="${GRML_NAME}_${VERSION}.iso"
 
-BOOT_ARGS="-no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat -isohybrid-mbr ${CHROOT_OUTPUT}/usr/lib/ISOLINUX/isohdpfx.bin"
 EFI_ARGS="-eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
+
 if [ "$ARCH" = "arm64" ]; then
-  # No isolinux on arm64.
+  # No BIOS boot on arm64, only UEFI
   BOOT_ARGS=""
+else
+  # Use GRUB for BIOS boot via El Torito
+  BOOT_ARGS="-b boot/grub/i386-pc/eltorito.img -no-emul-boot -boot-load-size 4 -boot-info-table --grub2-boot-info --grub2-mbr ${CHROOT_OUTPUT}/usr/lib/grub/i386-pc/boot_hybrid.img"
 fi
 
 if [ -n "$SKIP_MKISOFS" ] ; then

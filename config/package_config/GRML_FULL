@@ -352,8 +352,6 @@ cpuid
 memtest86+
 # broken userland debugging
 ltrace
-# disk partitioning/boot
-grub-pc-bin
 
 # PXE boot
 grml-terminalserver
@@ -376,8 +374,6 @@ cpuid
 memtest86+
 # broken userland debugging
 ltrace
-# disk partitioning/boot
-grub-pc-bin
 
 # PXE boot
 grml-terminalserver
