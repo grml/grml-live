@@ -1,5 +1,7 @@
 grml-live source: absolute-symbolic-link-target-in-source /usr/share/keyrings/debian-archive-keyring.gpg [config/bootstrap-keyring/*]
+grml-live source: source-contains-prebuilt-windows-binary [config/media-files/GRMLBASE/EFI/debian/BOOT/grubaa64.efi.signed]
 grml-live source: source-contains-prebuilt-windows-binary [config/media-files/GRMLBASE/EFI/debian/BOOT/grubx64.efi.signed]
+grml-live source: source-contains-prebuilt-windows-binary [config/media-files/GRMLBASE/EFI/debian/BOOT/shimaa64.efi.signed]
 grml-live source: source-contains-prebuilt-windows-binary [config/media-files/GRMLBASE/EFI/debian/BOOT/shimx64.efi.signed]
 grml-live source: source-contains-prebuilt-windows-binary [config/media-files/GRMLBASE/EFI/ubuntu/BOOT/grubx64.efi.signed]
 grml-live source: source-contains-prebuilt-windows-binary [config/media-files/GRMLBASE/EFI/ubuntu/BOOT/shimx64.efi.signed]
