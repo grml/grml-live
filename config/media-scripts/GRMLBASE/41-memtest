@@ -24,18 +24,21 @@ echo "I: installing memtest86+."
 media_dir="${target}/${GRML_LIVE_MEDIADIR}"
 mkdir -p "${media_dir}/boot/addons"
 
-# memtest86+ >=6.00-1
+# memtest86+ >=8.00-1. The binary can be booted in UEFI or BIOS mode.
 if ifclass AMD64 ; then
-  grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest86+x64.efi "${target}" /boot/memtest86+x64.efi || true
+  grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest86+x64.efi "${target}" /boot/mt86+x64 || true
+  grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest "${target}" /boot/mt86+x64 || true
 elif ifclass I386 ; then
-  grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest86+ia32.efi "${target}" /boot/memtest86+ia32.efi || true
+  grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest86+ia32.efi "${target}" /boot/mt86+ia32 || true
+  grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest "${target}" /boot/mt86+ia32 || true
 fi
 
-# provide memtest86+ >=6.00-1 files as "memtest" file
-# for BIOS boot in isolinux/syslinux
+# memtest86+ >=6.00-1. Separate binaries for UEFI and BIOS mode.
 if ifclass AMD64 ; then
+  grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest86+x64.efi "${target}" /boot/memtest86+x64.efi || true
   grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest "${target}" /boot/memtest86+x64.bin || true
 elif ifclass I386 ; then
+  grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest86+ia32.efi "${target}" /boot/memtest86+ia32.efi || true
   grml-live-copy-file-logged "${media_dir}"/boot/addons/memtest "${target}" /boot/memtest86+ia32.bin || true
 fi
 
