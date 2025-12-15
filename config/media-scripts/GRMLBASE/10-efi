@@ -89,7 +89,7 @@ grub_setup() {
         disable*)
           echo "I: Secure Boot is disabled [mode: ${SECURE_BOOT}]"
           ;;
-        debian|ubuntu)
+        debian)
           echo "I: Secure Boot is enabled [mode: ${SECURE_BOOT}]"
 
           grml-live-command copy-media-files media /secureboot/grub.cfg
