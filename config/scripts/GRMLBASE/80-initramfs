@@ -14,6 +14,8 @@ target=${target:?}
 
 fcopy -M -v /etc/initramfs-tools/conf.d/xz-compress
 
+fcopy -m root,root,0755 -v /usr/share/initramfs-tools/hooks/virtio-gpu
+
 if ! [ -f "$target"/usr/share/initramfs-tools/scripts/live ] ; then
   echo "Error: live-boot/-initramfs does not seem to be present, can not create initramfs. Exiting.">&2
   exit 1
