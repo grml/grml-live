@@ -1,7 +1,7 @@
 # debian approach:
-shimx64.efi.signed  = /usr/lib/shim/shimx64.efi.signed                   from https://deb.debian.org/debian/pool/main/s/shim-signed/shim-signed_1.44+15.8-1_amd64.deb
+shimx64.efi.signed  = /usr/lib/shim/shimx64.efi.signed                   from https://deb.debian.org/debian/pool/main/s/shim-signed/shim-signed_1.47+15.8-1_amd64.deb
 shimaa64.efi.signed = /usr/lib/shim/shimaa64.efi.signed                  from https://deb.debian.org/debian/pool/main/s/shim-signed/shim-signed_1.47+15.8-1_arm64.deb
-grubx64.efi.signed  = /usr/lib/grub/x86_64-efi-signed/gcdx64.efi.signed  from https://deb.debian.org/debian/pool/main/g/grub-efi-amd64-signed/grub-efi-amd64-signed_1+2.12+5_amd64.deb
+grubx64.efi.signed  = /usr/lib/grub/x86_64-efi-signed/gcdx64.efi.signed  from https://deb.debian.org/debian/pool/main/g/grub-efi-amd64-signed/grub-efi-amd64-signed_1+2.14~git20250718.0e36779+2_amd64.deb
 grubaa64.efi.signed = /usr/lib/grub/arm64-efi-signed/gcdaa64.efi.signed  from https://deb.debian.org/debian/pool/main/g/grub-efi-arm64-signed/grub-efi-arm64-signed_1+2.14~git20250718.0e36779+2_arm64.deb
 # NOTE:
 # shimx64.efi.signed ends up as /EFI/BOOT/bootx64.efi inside [grml_cd]/boot/efi.img, and
