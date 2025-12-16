@@ -103,13 +103,17 @@ grub_setup() {
 
           rm "${target}"/tmp/grub.cfg
 
-          grml-live-command copy-media-files media /EFI/"${SECURE_BOOT}"/BOOT/grubx64.efi.signed
-          mcopy -i "${target}/${EFI_IMG}" "${target}/${GRML_LIVE_MEDIADIR}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed" ::EFI/BOOT/grubx64.efi >/dev/null || exit 57
-          $ROOTCMD rm -f "/${GRML_LIVE_MEDIADIR}/EFI/${SECURE_BOOT}/BOOT/grubx64.efi.signed"
-
-          grml-live-command copy-media-files media /EFI/"${SECURE_BOOT}"/BOOT/shimx64.efi.signed
-          mcopy -i "${target}/${EFI_IMG}" "${target}/${GRML_LIVE_MEDIADIR}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed" ::EFI/BOOT/bootx64.efi >/dev/null || exit 58
-          $ROOTCMD rm -f "/${GRML_LIVE_MEDIADIR}/EFI/${SECURE_BOOT}/BOOT/shimx64.efi.signed"
+          # Architecture-specific Secure Boot files
+          case "$ARCH" in
+            arm64)
+              mcopy -i "${target}/${EFI_IMG}" "${target}/usr/lib/grub/arm64-efi-signed/gcdaa64.efi.signed" ::EFI/BOOT/grubaa64.efi >/dev/null || exit 57
+              mcopy -i "${target}/${EFI_IMG}" "${target}/usr/lib/shim/shimaa64.efi.signed" ::EFI/BOOT/bootaa64.efi >/dev/null || exit 58
+              ;;
+            amd64)
+              mcopy -i "${target}/${EFI_IMG}" "${target}/usr/lib/grub/x86_64-efi-signed/gcdx64.efi.signed" ::EFI/BOOT/grubx64.efi >/dev/null || exit 57
+              mcopy -i "${target}/${EFI_IMG}" "${target}/usr/lib/shim/shimx64.efi.signed" ::EFI/BOOT/bootx64.efi >/dev/null || exit 58
+              ;;
+          esac
 
           echo "I: Created Secure Boot (${SECURE_BOOT}) UEFI image ${target}/${EFI_IMG}"
           ;;

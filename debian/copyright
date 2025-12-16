@@ -11,18 +11,6 @@ Files: config/files/GRMLBASE/usr/share/grml-wallpaper/graphicoreBitmapFont0-Ligh
 Copyright: 2010, Lasse Fister lasse@graphicore.de
 License: SIL
 
-Files: config/media-files/GRMLBASE/EFI/debian/BOOT/grubx64.efi.signed
-Copyright: 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc
-           2009-2012 Intel Corporation
-Comment: see https://metadata.ftp-master.debian.org/changelogs/main/g/grub2/unstable_copyright
-License: GPL-3+
-
-Files: config/media-files/GRMLBASE/EFI/debian/BOOT/shimx64.efi.signed
-Copyright: 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc
-           2012 Canonical Ltd.
-Comment: see https://metadata.ftp-master.debian.org/changelogs/main/s/shim-signed/unstable_copyright
-License: BSD-2-Clause
-
 License: GPL-2+
  On Debian systems the full text of the GNU General Public License can be
  found in the `/usr/share/common-licenses/GPL-2' file.
