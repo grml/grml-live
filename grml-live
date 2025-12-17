@@ -443,6 +443,11 @@ if hasclass GRMLBASE ; then
 else
   CLASSES="GRMLBASE,${CLASSES}"
 fi
+if hasclass SECURE_BOOT ; then
+  ewarn "Class SECURE_BOOT explicitly requested. This is unsupported, please remove it."; eend 1
+elif [[ "$SECURE_BOOT" == "debian" ]]; then
+  CLASSES="${CLASSES},SECURE_BOOT"
+fi
 if hasclass RELEASE ; then
   ewarn "Class RELEASE explicitly requested. This is now automatic, please remove it."; eend 1
   if [[ "$SKIP_RELEASE" == "1" ]]; then

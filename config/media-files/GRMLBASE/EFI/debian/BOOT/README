@@ -1,7 +1,0 @@
-# debian approach:
-shimx64.efi.signed = /usr/lib/shim/shimx64.efi.signed                  from https://deb.debian.org/debian/pool/main/s/shim-signed/shim-signed_1.44+15.8-1_amd64.deb
-grubx64.efi.signed = /usr/lib/grub/x86_64-efi-signed/gcdx64.efi.signed from https://deb.debian.org/debian/pool/main/g/grub-efi-amd64-signed/grub-efi-amd64-signed_1+2.12+5_amd64.deb
-# NOTE:
-# shimx64.efi.signed ends up as /EFI/BOOT/bootx64.efi inside [grml_cd]/boot/efi.img, and
-# grubx64.efi.signed ends up as /EFI/BOOT/grubx64.efi inside [grml_cd]/boot/efi.img, whereas
-# [grml_cd]/boot/efi.img is used as `boot/efi.img` inside `xorriso -as mkisofs [...] -e boot/efi.img -no-emul-boot [...]` ISO generation [inside grml_cd directory]
