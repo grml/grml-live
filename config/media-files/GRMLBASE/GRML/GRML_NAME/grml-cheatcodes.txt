@@ -198,9 +198,6 @@ Hardware related settings:
 grml swap                             Activate present/detected swap partitions
 grml noswraid                         Disable scanning for software raid arrays (creates /etc/mdadm/mdadm.conf)
 grml swraid                           Enable automatic assembling of software raid arrays
-grml nodmraid                         Do not enable present dmraid devices (deprecated as of releases in 2024)
-grml dmraid=on                        Automatically enable any present dmraid devices (deprecated as of releases in 2024)
-grml dmraid=off                       Actively try to stop any present dmraid devices (deprecated as of releases in 2024)
 grml nolvm                            Disable scanning for Logical Volumes (LVM)
 grml lvm                              Automatically activate Logival Volumes (LVM) during boot
 grml read-only                        Make sure all harddisk devices (/dev/hd* /dev/sd*) are forced to read-only mode
