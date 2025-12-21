@@ -21,7 +21,6 @@ hd0 / fd0                             Chainload MBR from first harddisk / floppy
 debug                                 Be verbose during the process of booting for debugging
 forensic                              Do not touch any harddisks during hardware recognition
 serial                                Activate ttyS0 and start a getty
-grub                                  Boot Grub bootloader
 hdt                                   Boot Hardware Detection Tool (from syslinux project)
 
 Further documentation regarding the boot process can be found at:
