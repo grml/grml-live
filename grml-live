@@ -699,10 +699,9 @@ elif hasclass ARM64 ; then
    fi
 fi
 
-if [[ -n "${BOOT_METHOD:-}" ]] && [[ "${BOOT_METHOD}" != "isolinux" ]] ; then
-  log    "Error: You specified unsupported BOOT_METHOD '${BOOT_METHOD:-}', though only isolinux is supported."
-  eerror "Error: You specified unsupported BOOT_METHOD '${BOOT_METHOD:-}', though only isolinux is supported."
-  eerror "NOTE:  The BOOT_METHOD configuration is deprecated, please consider unsetting it. Exiting."
+if [[ -n "${BOOT_METHOD:-}" ]] ; then
+  log    "Error: You specified the unsupported BOOT_METHOD option. Please unset it."
+  eerror "Error: You specified the unsupported BOOT_METHOD option. Please unset it."
   eend 1
   bailout
 fi
