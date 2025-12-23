@@ -65,11 +65,6 @@ if $ROOTCMD update-alternatives --list www-browser 2>/dev/null | grep -q '/w3m' 
   $ROOTCMD update-alternatives --set www-browser /usr/bin/w3m
 fi
 
-if $ROOTCMD update-alternatives --list x-window-manager 2>/dev/null | grep -q '/wm-ng' ; then
-  echo "Setting wm-ng as x-window-manager using update-alternatives."
-  $ROOTCMD update-alternatives --set x-window-manager /usr/bin/wm-ng
-fi
-
 # sadly isn't available via update-alternates, anyway - use
 # ntfs-3g (if available) as default for ntfs
 if [ -r "$target"/sbin/mount.ntfs-3g ] || [ -L "$target"/sbin/mount.ntfs-3g ] ; then

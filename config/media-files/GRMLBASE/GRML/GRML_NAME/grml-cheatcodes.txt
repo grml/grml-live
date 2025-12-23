@@ -171,7 +171,6 @@ grml welcome                          Welcome message via soundoutput
 grml noeject                          Do NOT eject CD after halt/reboot
 grml noprompt                         Do NOT prompt to remove the CD when halting/rebooting the system
 grml startx{=windowmanager}           Start X window system automatically
-                                      Default window manager (if not provided): wm-ng (wrapper around fluxbox)
 grml nostartx                         If using startx as default bootoption the nostartx *disables* automatic
                                       startup of X again. (This bootoption is relevant for grml based derivatives
                                       which decide to enable startx by default only, plain grml does not use
