@@ -71,7 +71,7 @@ if [ -n "${SYS_DIR}" ] && [ -n "${base_device}" ] ; then
       if is_ro "${parent_devices}" || findmnt -n -o OPTIONS --target "${backingfile}" | grep -qE '^ro,|,ro,|,ro$'; then
         blockdev --setro "${BLOCK_DEVICE}"
         logger -t forensic-mark-readonly "setting '${BLOCK_DEVICE}' with backing file (${backingfile}) (parent devices: '${parent_devices}') to read-only as its parent is present or mount point ($(findmnt -n -o TARGET --target "${backingfile}")) is read-only"
-      elif [ "$(blockdev --getro "${BLOCK_DEVICE}")" == 0 ]; then
+      elif [ "$(blockdev --getro "${BLOCK_DEVICE}")" = 0 ]; then
         blockdev --setrw "${BLOCK_DEVICE}"
         logger -t forensic-mark-readonly "setting '${BLOCK_DEVICE}' with backing file (${backingfile}) (parent devices: '${parent_devices}') to read-write because it is already set as read-only, but should be read-write"
       fi
