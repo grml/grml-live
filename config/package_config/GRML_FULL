@@ -1,7 +1,6 @@
 PACKAGES install
 
 grml-live
-grml-paste
 grml-quickconfig-standard
 
 # base os
