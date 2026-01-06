@@ -258,9 +258,11 @@ the configuration framework of grml.
 *) If you wish to remaster the CD, please don't forget to specify
 
         -no-emul-boot -boot-load-size 4 -boot-info-table \
-        -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat
+        -b boot/grub/i386-pc/eltorito.img \
+        --grub2-boot-info --grub2-mbr \
+        /chroot/usr/lib/grub/i386-pc/boot_hybrid.img
 
-as option to mkisofs. Otherwise your CD won't be bootable. The
+as option to mkisofs/xorriso. Otherwise your CD won't be bootable. The
 directory live, containing the squashfs compressed filesystem file,
 must be located in the top level directory of the CD.
 
