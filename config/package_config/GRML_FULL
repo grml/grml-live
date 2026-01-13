@@ -389,5 +389,12 @@ PACKAGES install ARM64
 linux-image-arm64
 linux-cpupower
 
+# PXE boot
+grml-terminalserver
+
+# EFI PXE boot support in grml-terminalserver
+grub-efi-arm64-signed
+shim-signed
+
 # firmware updates
 fwupd-arm64-signed
