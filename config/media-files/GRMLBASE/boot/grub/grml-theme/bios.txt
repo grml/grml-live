@@ -1,0 +1,55 @@
+title-text: ""
+title-color: "#FFF"
+desktop-image: "black.png"
+
++ image {
+  file = "logo.png"
+  left = 4%
+  top = 4%
+}
++ image {
+  file = "bios.png"
+  left = 96%-250
+  top = 4%
+}
++ boot_menu {
+  left = 4%+90
+  width = 92%-180
+  top = 25%
+  height = 55%
+  item_color = #FFF
+  selected_item_color = #000
+  item_spacing = 4
+  item_padding = 10
+  item_height = 20
+  menu_pixmap_style = "menu_*.png"
+  item_pixmap_style = "item_*.png"
+  selected_item_pixmap_style = "sel_*.png"
+  item_icon_space = 0
+  icon_width = 0
+  icon_height = 0
+  scrollbar_frame = "scbf_*.png"
+  scrollbar_thumb = "scbt_*.png"
+  scrollbar_width = 2
+}
++ vbox {
+  left = 4%+100
+  width = 80%
+  top = 90%
+  + label {text = "Press ENTER to boot" color = "white" align = "left" }
+  + label {text = "Press E to edit menu entry" color = "white" align = "left" }
+  + label {text = "Press C to enter the GRUB commandline" color = "white" }
+}
++ progress_bar {
+  id = "__timeout__"
+  top = 90%+26
+  left = 96%-300
+  width = 190
+  height = 16
+  text_color = #000
+  fg_color = "#F47820"
+  bg_color = #FFF
+  border_color = #000
+  #border_color = "#F47820"
+  text = "@TIMEOUT_NOTIFICATION_MIDDLE@"
+}
