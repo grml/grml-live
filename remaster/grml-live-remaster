@@ -125,40 +125,20 @@ for i in "${LIVE_PATH_MAIN}"/*; do
     fi
 done
 
-if [ -r /remaster/iso/boot/isolinux/boot.msg ] ; then
-   rm /remaster/iso/boot/isolinux/boot.msg
-fi
-
-# make sure we support usb sticks as well:
-if [ -d ${LIVE_PATH_BOOT}/isolinux ] ; then
-   BOOTSTUFF=${LIVE_PATH_BOOT}/isolinux
-else
-   BOOTSTUFF=${LIVE_PATH_MAIN}
-fi
-
-[ -d /remaster/iso/boot/isolinux ] || mkdir -p /remaster/iso/boot/isolinux
-
-sed 3,4d "${BOOTSTUFF}"/boot.msg \
-        >/remaster/iso/boot/isolinux/boot.msg
-sed 1,2d /remaster/msg >>/remaster/iso/boot/isolinux/boot.msg
-
 SQUASHFS_FQNAME=/remaster/iso/${SQUASHFS_FILE##"$LIVE_PATH_MAIN"}
 mkdir -p "$(dirname "$SQUASHFS_FQNAME")"
 # the next line is necessary for grml2usb to work on the destination image
 basename "$SQUASHFS_FQNAME" > "$(dirname "$SQUASHFS_FQNAME")/filesystem.module"
 $MKSQUASHFS /remaster/chroot "$SQUASHFS_FQNAME"
+
+cp /remaster/cdrom/usr/lib/grub/i386-pc/boot_hybrid.img /remaster/tmp/
+
 umount /remaster/chroot /remaster/cdrom
 
-if [ -f /remaster/iso/boot/isolinux/isolinux.bin ] ; then
-   ISOLINUX=boot/isolinux/isolinux.bin
-   ISOLINUX_BOOTCAT=boot/isolinux/boot.cat
-else
-   ISOLINUX=isolinux.bin
-   ISOLINUX_BOOTCAT=boot.cat
-fi
-
-$MKISO -b $ISOLINUX -no-emul-boot -c $ISOLINUX_BOOTCAT \
-        -boot-info-table -boot-load-size 4 -no-pad \
+$MKISO -b boot/grub/i386-pc/eltorito.img -no-emul-boot \
+        -boot-load-size 4 -boot-info-table \
+        --grub2-boot-info --grub2-mbr /remaster/tmp/boot_hybrid.img \
+        -no-pad \
         -l -r -J -o "$1" /remaster/iso
 # pad for partition table
 siz=$($getfilesize "$1")

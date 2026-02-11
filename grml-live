@@ -348,11 +348,9 @@ fi
 [ -n "$DEFAULT_BOOTOPTIONS" ]     || DEFAULT_BOOTOPTIONS=''
 [ -n "$DISTRI_INFO" ]             || DISTRI_INFO='Grml - Live Linux for system administrators'
 [ -n "$DISTRI_NAME" ]             || DISTRI_NAME="grml"
-[ -n "$DISTRI_SPLASH" ]           || DISTRI_SPLASH='grml.png'
 [ -n "$GRML_FAI_CONFIG" ]         || GRML_FAI_CONFIG='/usr/share/grml-live/config'
 [ -n "$GRML_NAME" ]               || GRML_NAME='grml'
 [ -n "$HOSTNAME" ]                || HOSTNAME='grml'
-[ -n "$ISOLINUX_METHOD" ]         || ISOLINUX_METHOD=''
 [ -n "$NO_ADDONS" ]               || NO_ADDONS=''
 [ -n "$NO_BOOTID" ]               || NO_BOOTID=''
 [ -n "$RELEASENAME" ]             || RELEASENAME='grml-live rocks'
@@ -608,7 +606,7 @@ einfo "Logging actions to logfile $LOGFILE"
 # dump config variables into file, for hooks/scripts access {{{
 CONFIGDUMP=$(mktemp)
 set | grep -E \
-  '^(GRML_NAME|SHORT_NAME|RELEASENAME|RELEASE_INFO|RELEASE_INFO68|DATE|VERSION|SUITE|ARCH|DISTRI_INFO|DISTRI_NAME|DISTRI_SPLASH|SQUASHFS_NAME|SQUASHFS_NAME20|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH|NO_BOOTID|BOOTID|BOOT_FILE|DEFAULT_BOOTOPTIONS|ISOLINUX_METHOD|SECURE_BOOT|NO_ADDONS)=' \
+  '^(GRML_NAME|SHORT_NAME|RELEASENAME|RELEASE_INFO|RELEASE_INFO68|DATE|VERSION|SUITE|ARCH|DISTRI_INFO|DISTRI_NAME|SQUASHFS_NAME|SQUASHFS_NAME20|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH|NO_BOOTID|BOOTID|BOOT_FILE|DEFAULT_BOOTOPTIONS|SECURE_BOOT|NO_ADDONS)=' \
   > "${CONFIGDUMP}"
 # }}}
 
@@ -873,7 +871,7 @@ fi
 if [ -z "$BOOTSTRAP_ONLY" ] ; then
   # shellcheck disable=SC2094 # find execution ignores written file
   ( cd "$BUILD_OUTPUT"/GRML/"${GRML_NAME}" &&
-  find ../.. -type f -not -name md5sums -not -name isolinux.bin -exec md5sum {} \; > md5sums )
+  find ../.. -type f -not -name md5sums -exec md5sum {} \; > md5sums )
 fi
 # }}}
 
@@ -935,11 +933,14 @@ generate_build_info() {
 # ISO_OUTPUT - iso build {{{
 [ -n "$ISO_NAME" ] || ISO_NAME="${GRML_NAME}_${VERSION}.iso"
 
-BOOT_ARGS="-no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat -isohybrid-mbr ${CHROOT_OUTPUT}/usr/lib/ISOLINUX/isohdpfx.bin"
 EFI_ARGS="-eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
+
 if [ "$ARCH" = "arm64" ]; then
-  # No isolinux on arm64.
+  # No BIOS boot on arm64, only UEFI
   BOOT_ARGS=""
+else
+  # Use GRUB for BIOS boot via El Torito
+  BOOT_ARGS="-b boot/grub/i386-pc/eltorito.img -no-emul-boot -boot-load-size 4 -boot-info-table --grub2-boot-info --grub2-mbr ${CHROOT_OUTPUT}/usr/lib/grub/i386-pc/boot_hybrid.img"
 fi
 
 if [ -n "$SKIP_MKISOFS" ] ; then

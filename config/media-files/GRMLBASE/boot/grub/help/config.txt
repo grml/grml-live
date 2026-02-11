@@ -1,0 +1,22 @@
+Grml configuration options
+══════════════════════════
+
+myconfig=/dev/ice   -> search for config.tbz and grml.sh on this device
+extract=/directory  -> extract only this directory of config archive
+netconfig=server.tld/path/to/config.tbz -> download config archive and
+                                           extract it
+noautoconfig        -> do not automount device labeled with GRMLCFG
+file=configname.tbz -> use specified filename as configuration archive
+partconf=/dev/sdx#  -> copy files specified in /etc/grml/partconf from
+                       /dev/sdx# to the Grml system
+
+Usage examples:
+
+grml myconfig=/dev/sda1    -> mount usb device and extract config.tbz
+                            and execute grml.sh if present
+grml netconfig=grml.org/config.tar.gz -> download file and extract it
+grml myconfig=/dev/fd0 file=foobar.tbz -> extract archive from floppy
+grml partconf=/dev/hda2    -> mount partition read-only and get files
+                            specified in  /etc/grml/partconf
+
+Press ENTER to return to the menu...
