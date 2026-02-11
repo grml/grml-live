@@ -131,12 +131,11 @@ case "$LANGUAGE" in
                 XKBVARIANT="dvorak"
                 ;;
         en|en-utf8)
-                # English in Austria [see us + uk for american and english version!]
+                # "Grml english" AKA defaults (see us + uk for plain american and english versions)
                 LANG="en_US.UTF-8"
                 LANGUAGE="en"
                 XKBLAYOUT="us"
-                LC_COLLATE="de_AT.UTF-8"
-                LC_TIME="de_AT.UTF-8"
+                LC_TIME="en_DK.UTF-8"
                 ;;
         el|el-utf8)
                 # Greek
