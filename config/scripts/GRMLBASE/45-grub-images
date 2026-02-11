@@ -34,8 +34,7 @@ declare -A ADDITIONAL_MODULES
 if ifclass ARM64 ; then
   if [ -r "${target}"/usr/lib/grub/arm64-efi/moddep.lst ] ; then
     ARCHS=(arm64-efi)
-    # NOTE: efi_uga (EFI Universal Graphics Adapter) is deprecated + unavailable on arm64
-    ADDITIONAL_MODULES[arm64-efi]="efi_gop"  # no efi_uga available
+    ADDITIONAL_MODULES[arm64-efi]="efi_gop"
   else
     echo "/usr/lib/grub/arm64-efi/moddep.lst could not be found, skipping."
     echo "NOTE: grub-efi-arm64-bin not installed?"
@@ -45,7 +44,7 @@ fi
 if ifclass AMD64 ; then
   if [ -r "${target}"/usr/lib/grub/x86_64-efi/moddep.lst ] ; then
     ARCHS+=(x86_64-efi)
-    ADDITIONAL_MODULES[x86_64-efi]="efi_gop efi_uga"
+    ADDITIONAL_MODULES[x86_64-efi]="efi_gop"
   else
     echo "/usr/lib/grub/x86_64-efi/moddep.lst could not be found, skipping."
     echo "NOTE: grub-efi-amd64-bin not installed?"
@@ -56,7 +55,7 @@ fi
 if ifclass I386 || ifclass AMD64 ; then
   if [ -r "${target}"/usr/lib/grub/i386-efi/moddep.lst ] ; then
     ARCHS+=(i386-efi)
-    ADDITIONAL_MODULES[i386-efi]="efi_gop efi_uga"
+    ADDITIONAL_MODULES[i386-efi]="efi_gop"
   else
     echo "/usr/lib/grub/i386-efi/moddep.lst could not be found, skipping."
     echo "NOTE: grub-efi-ia32 not installed?"
