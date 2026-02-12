@@ -292,6 +292,8 @@ def install_debian_dependencies():
             git ,
             curl ,
             dosfstools ,
+            e2fsprogs ,
+            fdisk ,
             jo ,
             mmdebstrap ,
             moreutils ,
