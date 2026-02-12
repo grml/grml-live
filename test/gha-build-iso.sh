@@ -26,7 +26,7 @@ run_build() {
     local results_directory
     results_directory=$3
 
-    docker run -i --rm --volume "${PWD}:/source" -e SKIP_SOURCES=1 -e DO_DAILY_UPLOAD=0 -e EXTRA_CLASSES="${EXTRA_CLASSES:-}" -w /source debian:"$HOST_RELEASE" \
+    docker run -i --rm --volume "${PWD}:/source" -e SKIP_SOURCES=1 -e DO_DAILY_UPLOAD=0 -e EXTRA_CLASSES="${EXTRA_CLASSES:-}" -e GITHUB_PR_NUMBER="${GITHUB_PR_NUMBER:-}" -w /source debian:"$HOST_RELEASE" \
         bash -c \
         "apt-get update -qq && apt-get satisfy -q -y --no-install-recommends 'git, ca-certificates' \
         && git config --global --add safe.directory /source \
@@ -50,8 +50,8 @@ elif [ "$MODE" = "build-only-twice" ]; then
 ---
 last_release: "2024.12"
 debian_suite: testing
-release_version: "ci-bo-first"
-release_name: CI1
+release_version: "${GITHUB_PR_NUMBER:+pr$GITHUB_PR_NUMBER-}ci1"
+release_name: "${GITHUB_PR_NUMBER:+PR$GITHUB_PR_NUMBER }CI1"
 base_iso:
     ghaci:
         $ARCH: "file:///source/$INPUT_ISO"
@@ -64,8 +64,8 @@ EOT
 ---
 last_release: "2024.12"
 debian_suite: testing
-release_version: "ci-bo-second"
-release_name: CI2
+release_version: "${GITHUB_PR_NUMBER:+pr$GITHUB_PR_NUMBER-}ci2"
+release_name: "${GITHUB_PR_NUMBER:+PR$GITHUB_PR_NUMBER }CI2"
 base_iso:
     ghaci:
         $ARCH: "file:///source/$INPUT_ISO"
