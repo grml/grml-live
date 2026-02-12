@@ -6,10 +6,10 @@
 # License:       This file is licensed under the GPL v2.
 ################################################################################
 
-# shellcheck disable=SC1091
-. /etc/grml/script-functions
-
-check4root || exit 1
+if [ "$(id -u 2>/dev/null)" != 0 ] ; then
+  echo 1>&2 "Error: please run this script with uid 0 (root)."
+  exit 1
+fi
 
 [ -n "$SUDO_USER" ] && RUNASUSER=$SUDO_USER || RUNASUSER=grml
 
