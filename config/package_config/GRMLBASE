@@ -21,7 +21,6 @@ grml-hwinfo
 grml-keyring
 grml-network
 grml-quickconfig
-grml-scripts
 grml-tips
 hdparm
 hwinfo
