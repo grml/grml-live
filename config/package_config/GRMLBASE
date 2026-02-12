@@ -38,7 +38,6 @@ openssh-client
 openssh-server
 pciutils
 physlock
-resolvconf
 rsync
 strace
 sudo
