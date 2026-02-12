@@ -41,6 +41,7 @@ physlock
 rsync
 strace
 sudo
+systemd-resolved
 udev
 usbutils
 uuid-runtime
