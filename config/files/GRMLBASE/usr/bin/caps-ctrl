@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 # Filename:      caps-ctrl
 # Purpose:       switch caps to control key and vice versa for linux console and X
 # Authors:       grml-team (grml.org),  (c) Matthias Kopfermann <maddi@grml.org>
@@ -18,8 +18,6 @@ else
 	eend() { echo "$*" ; }
 fi
 
-emulate zsh
-
 if [[ -z $DISPLAY  ]] ; then # test if X is not running when calling us
          if [ $(id -u) != 0 ] ; then # test if user root did invoke this command
             eerror "As of Linux 2.6.15 you need root permissions for changing"
@@ -31,8 +29,8 @@ if [[ -z $DISPLAY  ]] ; then # test if X is not running when calling us
          ( einfo "caps-ctrl - switching caps lock and control key."
 
            loadkeys <<- EOT
-           keycode 58 = $(repeat 15 echo -n 'Control ')
-           keycode 29 = $(repeat 7 echo -n 'Caps_Lock ')
+           keycode 58 = $(printf 'Control %.0s' {1..15})
+           keycode 29 = $(printf 'Caps_Lock %.0s' {1..7})
 		EOT
            eend $?
 
@@ -40,8 +38,8 @@ if [[ -z $DISPLAY  ]] ; then # test if X is not running when calling us
           einfo "caps-ctrl - switching caps lock and control key."
 
            loadkeys <<- EOT
-           keycode 58 = $(repeat 15 echo -n 'Caps_Lock ')
-           keycode 29 = $(repeat 7 echo -n 'Control ')
+           keycode 58 = $(printf 'Caps_Lock %.0s' {1..15})
+           keycode 29 = $(printf 'Control %.0s' {1..7})
 		EOT
            eend $?
          )
