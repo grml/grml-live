@@ -25,7 +25,6 @@ grml-scripts
 grml-tips
 hdparm
 hwinfo
-ifupdown
 initramfs-tools
 iputils-ping
 iwd
