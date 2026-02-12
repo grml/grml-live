@@ -1,6 +1,6 @@
 #!/bin/bash
 # Filename:      ${GRML_FAI_CONFIG}/scripts/GRMLBASE/35-network
-# Purpose:       set up /etc/network/interfaces of live-system
+# Purpose:       set up networking of the live system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
@@ -9,7 +9,18 @@
 set -u
 set -e
 
-fcopy -M -v /etc/dhcpcd.conf
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+# install files and replace $HOSTNAME with the real hostname
+for filename in /etc/hosts /etc/dhcpcd.conf ; do
+  fcopy -M -v "$filename"
+  sed -i "s/\$HOSTNAME/$HOSTNAME/" "$target$filename"
+done
+
 fcopy -M -v /etc/exports.grml
 fcopy -M -v /etc/network/interfaces
 fcopy -M -v /etc/network/interfaces.examples

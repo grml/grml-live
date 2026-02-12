@@ -1,5 +1,5 @@
 # This file was deployed via grml-live's
-# ${GRML_FAI_CONFIG}/scripts/GRMLBASE/34-hosts script, using
+# ${GRML_FAI_CONFIG}/scripts/GRMLBASE/35-network script, using
 # ${GRML_FAI_CONFIG}/files/GRMLBASE/etc/hosts
 
 127.0.0.1       $HOSTNAME    localhost
