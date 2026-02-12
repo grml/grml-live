@@ -15,10 +15,11 @@
 # change this file without affecting the use of debconf, however, since it
 # does read in your changes.
 
-# Locales for languages supported by grml-lang
+# Locales for languages supported by grml-lang or used on live system
 de_AT.UTF-8 UTF-8
 de_CH.UTF-8 UTF-8
 de_DE.UTF-8 UTF-8
+en_DK.UTF-8 UTF-8
 en_GB.UTF-8 UTF-8
 en_US.UTF-8 UTF-8
 es_ES.UTF-8 UTF-8
