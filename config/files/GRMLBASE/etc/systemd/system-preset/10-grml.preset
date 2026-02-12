@@ -14,6 +14,7 @@ enable cloud-final.service
 enable cloud-init-local.service
 enable cloud-init-main.service
 enable cloud-init-network.service
+enable cloud-init.target
 enable systemd-networkd.service
 enable systemd-resolved.service
 
