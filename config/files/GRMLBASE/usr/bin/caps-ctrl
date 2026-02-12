@@ -6,10 +6,36 @@
 # License:       This file is licensed under the GPL v2.
 ################################################################################
 
-if [[ -f /etc/grml/script-functions ]] ; then
-	source /etc/grml/script-functions && \
-   	check4progs xmodmap loadkeys dumpkeys || exit 1
-fi
+check4progs() {
+	local RTN=0
+	local oldifs="${IFS}"
+	local ARG d found
+
+	while [ $# -gt 0 ]; do
+		ARG="$1"
+		shift
+
+		found=0
+		IFS=:
+		for d in $PATH; do
+			if [ -x "${d}/${ARG}" ]; then
+				found=1
+				break
+			fi
+		done
+		IFS="${oldifs}"
+
+		if [ ${found} -eq 0 ]; then
+			printf "%s: binary not found\n" "${ARG}" >&2
+			RTN=1
+		fi
+	done
+
+	return $RTN
+}
+
+check4progs xmodmap loadkeys dumpkeys || exit 1
+
 if [[ -f /etc/grml/lsb-functions ]] ; then
 	source /etc/grml/lsb-functions
 else
