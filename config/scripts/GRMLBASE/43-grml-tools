@@ -15,6 +15,9 @@ target=${target:?}
 fcopy -m root,root,0755 -v /usr/bin/random-hostname
 fcopy -m root,root,0644 /usr/share/man/man1/random-hostname.1
 
+fcopy -m root,root,0755 -v /usr/bin/caps-ctrl
+fcopy -m root,root,0644 /usr/share/man/man1/caps-ctrl.1
+
 fcopy -m root,root,0755 -v /usr/sbin/grml2ram
 fcopy -m root,root,0644 /usr/share/man/man8/grml2ram.8
 
