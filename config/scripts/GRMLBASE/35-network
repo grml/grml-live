@@ -9,6 +9,7 @@
 set -u
 set -e
 
+fcopy -M -v /etc/dhcpcd.conf
 fcopy -M -v /etc/exports.grml
 fcopy -M -v /etc/network/interfaces
 fcopy -M -v /etc/network/interfaces.examples
