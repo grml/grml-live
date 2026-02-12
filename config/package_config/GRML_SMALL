@@ -77,7 +77,6 @@ atftp
 bridge-utils
 ethtool
 ifenslave
-ifupdown
 iperf3
 iproute2
 iptstate
