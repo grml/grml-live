@@ -63,12 +63,13 @@ jobs:
           HOST_RELEASE: ${{matrix.host_release}}
           EXTRA_CLASSES: ${{matrix.extra_classes}}
           ARCH: ${{matrix.arch}}
+          GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
 
       - name: Archive built ISO
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: grml-live-build-result-initial-${{matrix.host_release}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
+          name: grml-live-build-result-initial-${{github.event.pull_request.number && format('pr{0}-', github.event.pull_request.number) || ''}}${{matrix.host_release}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
           if-no-files-found: error
           retention-days: 15
           path: |
@@ -80,12 +81,13 @@ jobs:
           HOST_RELEASE: ${{matrix.host_release}}
           EXTRA_CLASSES: ${{matrix.extra_classes}}
           ARCH: ${{matrix.arch}}
+          GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
 
       - name: Archive repacked ISO
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: grml-live-build-result-repack-${{matrix.host_release}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
+          name: grml-live-build-result-repack-${{github.event.pull_request.number && format('pr{0}-', github.event.pull_request.number) || ''}}${{matrix.host_release}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
           if-no-files-found: error
           retention-days: 15
           path: |
