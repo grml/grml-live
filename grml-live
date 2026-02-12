@@ -27,6 +27,9 @@ GRML_LIVE_INSTALL_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/
 if [ -e "${GRML_LIVE_INSTALL_PREFIX}"/usr/lib/grml-live ]; then
     # assume source checkout
     GRML_LIVE_LIB_DIR="${GRML_LIVE_INSTALL_PREFIX}"/usr/lib/grml-live
+    if command -v git &>/dev/null; then
+        GRML_LIVE_VERSION=$(git describe --always)
+    fi
 else
     GRML_LIVE_INSTALL_PREFIX=${GRML_LIVE_INSTALL_PREFIX}/../
     GRML_LIVE_LIB_DIR=${GRML_LIVE_INSTALL_PREFIX}/lib/grml-live
