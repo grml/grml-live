@@ -102,7 +102,7 @@ rm -rf --one-file-system "$target"/etc/sysconfig/* \
        "$target"/halt "$target"/reboot "$target"/ash.static \
        "$target"/etc/dhcpc/*.info "$target"/etc/dhcpc/resolv* \
        "$target"/etc/*passwd- "$target"/etc/*shadow- \
-       "$target"/etc/*group- "$target"/var/spool/postfix/maildrop/* \
+       "$target"/etc/*group- \
        "$target"/etc/*.old "$target"/etc/*.original \
        "$target"/etc/lvm/.cache "$target"/etc/lvm/cache/.cache \
        "$target"/etc/lvm/backup/* "$target"/tmp/* \

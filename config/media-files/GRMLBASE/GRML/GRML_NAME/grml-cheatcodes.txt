@@ -166,7 +166,7 @@ grml startup=script                   Start $script instead of grml-quickconfig 
 grml nogpm                            Disable GPM daemon
 grml noblank                          Disable console blanking
 grml noquick                          Disable grml-quickconfig startup script
-grml services={postfix,mysql,...}     Start service(s) which have an init-script (/etc/init.d/)
+grml services={espeakup,mysql,...}    Start system service(s)
 grml welcome                          Welcome message via soundoutput
 grml noeject                          Do NOT eject CD after halt/reboot
 grml noprompt                         Do NOT prompt to remove the CD when halting/rebooting the system
