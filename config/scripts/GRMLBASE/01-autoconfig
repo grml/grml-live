@@ -28,6 +28,7 @@ fcopy -m root,root,0755 /usr/share/grml-autoconfig/run-welcome
 fcopy -m root,root,0755 -v /usr/bin/restore-config
 fcopy -m root,root,0755 -v /usr/bin/save-config
 fcopy -m root,root,0755 -v /usr/sbin/grml-autoconfig
+fcopy -m root,root,0755 -v /usr/sbin/grml-hostname
 
 fcopy -m root,root,0755 /usr/bin/grml-lang
 fcopy -m root,root,0644 /usr/share/man/man1/grml-lang.1
