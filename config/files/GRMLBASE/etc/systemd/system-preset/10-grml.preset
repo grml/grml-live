@@ -9,10 +9,12 @@ enable grml-autoconfig.service
 enable debug-shell.service
 enable avahi-daemon.service
 enable avahi-ssh.service
-#enable cloud-config.service
-#enable cloud-final.service
-#enable cloud-init-local.service
-#enable cloud-init-main.service
-#enable cloud-init-network.service
+enable cloud-config.service
+enable cloud-final.service
+enable cloud-init-local.service
+enable cloud-init-main.service
+enable cloud-init-network.service
+enable systemd-networkd.service
+enable systemd-resolved.service
 
 disable *
