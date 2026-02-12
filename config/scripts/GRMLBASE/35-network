@@ -15,12 +15,12 @@ target=${target:?}
 # shellcheck source=/dev/null
 . "$GRML_LIVE_CONFIG"
 
-fcopy -M -v /etc/hosts
+# install files and replace $HOSTNAME with the real hostname
+for filename in /etc/hosts /etc/dhcpcd.conf ; do
+  fcopy -M -v "$filename"
+  sed -i "s/\$HOSTNAME/$HOSTNAME/" "$target$filename"
+done
 
-# replace $HOSTNAME with the real hostname:
-sed -i "s/\$HOSTNAME/$HOSTNAME/" "$target"/etc/hosts
-
-fcopy -M -v /etc/dhcpcd.conf
 fcopy -M -v /etc/exports.grml
 fcopy -M -v /etc/network/interfaces
 fcopy -M -v /etc/network/interfaces.examples
