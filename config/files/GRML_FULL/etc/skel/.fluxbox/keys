@@ -13,30 +13,38 @@ OnLeftGrip Move1 :StartResizing bottomleft
 OnRightGrip Move1 :StartResizing bottomright
 OnTitlebar Move1 :StartMoving
 
+# Dynamically switch between two key mappings
+# It is advisable to map this in both files to the same key combo. 
+Control Mod1 Shift g :Exec ~/.fluxbox/toggle_keys.sh
+
 # Mod1 = Alt key
+# Mod4 = Logo key
 # Control = Ctrl Key
 # plus = +,*,~ key (german keyboard)
 # numbersign = #,' key (german keyboard)
 
-OnDesktop Mouse1 :hideMenus
-OnDesktop Mouse2 :workspaceMenu
-OnDesktop Mouse3 :rootMenu
-OnDesktop Mouse4 :nextWorkspace
-OnDesktop Mouse5 :prevWorkspace
+# click on the desktop to get menus
+OnDesktop Mouse1 :HideMenus
+OnDesktop Mouse2 :WorkspaceMenu
+OnDesktop Mouse3 :RootMenu
 
-Mod1 Tab  	 :NextWindow
-Mod4 j		 :NextWindow
+# scroll on the desktop to change workspaces
+OnDesktop Mouse4 :PrevWorkspace
+OnDesktop Mouse5 :NextWorkspace
 
-Mod1 Shift Tab	 :PrevWindow
-Mod4 k	       	 :PrevWindow
+Mod1 Tab         :NextWindow
+Mod4 j           :NextWindow
 
-Control Right		:NextWorkspace
-Mod1 Shift Right	:NextWorkspace
-Mod4 Right		:NextWorkspace
+Mod1 Shift Tab   :PrevWindow
+Mod4 k           :PrevWindow
 
-Control Left		:PrevWorkspace
-Mod1 Shift Left	:PrevWorkspace
-Mod4 Left		:PrevWorkspace
+Control Right           :NextWorkspace
+Mod1 Shift Right        :NextWorkspace
+Mod4 Right              :NextWorkspace
+
+Control Left            :PrevWorkspace
+Mod1 Shift Left :PrevWorkspace
+Mod4 Left               :PrevWorkspace
 
 Mod1 q   :PrevWindow
 Mod1 w   :NextWindow
@@ -88,7 +96,7 @@ Control Mod1 a  :ArrangeWindows
 
 # keymappings for programs
 Control Mod1 l :ExecCommand xlock
-Control Mod1 f :ExecCommand firefox
+Control Mod1 f :ExecCommand x-www-browser
 
 # screenshot
 Control Shift s :ExecCommand import -window root `date +shot-%Y-%m-%d-%H%M%S.jpg`
