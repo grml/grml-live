@@ -37,7 +37,6 @@ Additional kernel and initramfs boot options:
 acpi={force|off|ht|strict}                         Define ACPI-settings
 apic={quiet(default)|verbose|debug} Set output verbosity whilst booting
 noirqbalance                               Disable kernel irq balancing
-ide?=   config (iomem/irq), tuning (serialize,reset,no{dma,tune,probe})
 initcall_debug  trace initcalls, see where kernel is dying during start
 lapic                    enable the local APIC even if BIOS disabled it
 max_loop=[1-256] Maximum number of loopback devices that can be mounted
