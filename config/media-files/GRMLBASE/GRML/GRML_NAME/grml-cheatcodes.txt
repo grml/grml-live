@@ -158,7 +158,7 @@ Security / login related settings:
 grml ssh=password                     Set password for root & grml user and start ssh-server
 grml passwd=...                       Set password for root & grml user
 grml encpasswd=....                   Set specified hash as password for root & grml user, use e.g.
-                                      'mkpasswd -H md5' to generate such a hash (available in Grml >=2013.09)
+                                      'mkpasswd -m sha-512' to generate such a hash
 
 Service related settings:
 -------------------------
