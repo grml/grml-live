@@ -119,7 +119,7 @@ grml isofrom=[fs:][/device]/grml.iso  Use specified ISO image for booting.
                                       Internally, the initrd will mount the given device, automatically detecting
                                       the file system.
                                       If needed, prefix the file system separated with a colon character to
-                                      override the automatic detection, like in "reiserfs:/dev/sda1/grml.iso".
+                                      override the automatic detection, like in "ext4:/dev/sda1/grml.iso".
                                       As an example, boot the according grml kernel and initrd using the
                                       bootoptions "boot=live isofrom=btrfs:/dev/vda40/path/to/grml.iso"
                                       NOTE: "fromiso" does the same as "isofrom", it's just there
