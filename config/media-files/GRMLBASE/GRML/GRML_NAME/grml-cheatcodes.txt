@@ -61,7 +61,7 @@ grml file=foobar.tbz                  Use specified file as name for configurati
 grml extract=/etc                     Extract only /etc from configuration archive,
                                       use it in combination with myconfig or netconfig
 grml persistence                      Enable persistency feature, more details available at
-                                      http://wiki.grml.org/doku.php?id=persistency
+                                      https://wiki.grml.org/doku.php?id=persistency
 grml hostname=...                     Set hostname to given argument
 grml hostname                         Set a random hostname
 grml nonetworking                     Do not create/overwrite /etc/network/interface during startup
@@ -93,7 +93,7 @@ grml config=path-name                 Unpack archive that path-name points to
 grml noautoconfig                     Disable searching for device labeled GRMLCFG
 grml nobeep                           Disable welcome chime, sounded before grml-quickconfig starts.
 
-Notice: Take a look at http://grml.org/config/ and 'man 1 grml-autoconfig'
+Notice: Take a look at https://grml.org/config/ and 'man 1 grml-autoconfig'
 for more information regarding the configuration framework of Grml.
 
 Booting related options:
@@ -139,7 +139,7 @@ grml module=grml                      Instead of using the default "$name.module
                                       be specified without the extension ".module"; it should be placed
                                       on "/live" directory of the live medium
                                       Useful for Multiboot USB pen, see
-                                      http://wiki.grml.org/doku.php?id=tips#multiboot_usb_pen
+                                      https://wiki.grml.org/doku.php?id=tips#multiboot_usb_pen
 grml bootid=mybootid                  Use specified argument as identifier for the ISO.
                                       mybootid is specified in /conf/bootid.txt on the ISO.
 grml ignore_bootid                    Disable bootid verification.
@@ -252,7 +252,7 @@ to skip some critical parts of the autodetection system.
 system after autoconfiguration by running a bourne shell script called
 "grml.sh" and/or extracting configuration files from a file named
 config.tbz from the root directory on the given device (or floppy).
-Take a look at http://grml.org/config/ for more information regarding
+Take a look at https://grml.org/config/ for more information regarding
 the configuration framework of grml.
 
 *) If you wish to remaster the CD, please don't forget to specify
