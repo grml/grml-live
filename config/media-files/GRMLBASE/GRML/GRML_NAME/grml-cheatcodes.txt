@@ -61,7 +61,7 @@ grml file=foobar.tbz                  Use specified file as name for configurati
 grml extract=/etc                     Extract only /etc from configuration archive,
                                       use it in combination with myconfig or netconfig
 grml persistence                      Enable persistency feature, more details available at
-                                      http://wiki.grml.org/doku.php?id=persistency
+                                      https://wiki.grml.org/doku.php?id=persistency
 grml hostname=...                     Set hostname to given argument
 grml hostname                         Set a random hostname
 grml nonetworking                     Do not create/overwrite /etc/network/interface during startup
@@ -93,7 +93,7 @@ grml config=path-name                 Unpack archive that path-name points to
 grml noautoconfig                     Disable searching for device labeled GRMLCFG
 grml nobeep                           Disable welcome chime, sounded before grml-quickconfig starts.
 
-Notice: Take a look at http://grml.org/config/ and 'man 1 grml-autoconfig'
+Notice: Take a look at https://grml.org/config/ and 'man 1 grml-autoconfig'
 for more information regarding the configuration framework of Grml.
 
 Booting related options:
@@ -119,7 +119,7 @@ grml isofrom=[fs:][/device]/grml.iso  Use specified ISO image for booting.
                                       Internally, the initrd will mount the given device, automatically detecting
                                       the file system.
                                       If needed, prefix the file system separated with a colon character to
-                                      override the automatic detection, like in "reiserfs:/dev/sda1/grml.iso".
+                                      override the automatic detection, like in "ext4:/dev/sda1/grml.iso".
                                       As an example, boot the according grml kernel and initrd using the
                                       bootoptions "boot=live isofrom=btrfs:/dev/vda40/path/to/grml.iso"
                                       NOTE: "fromiso" does the same as "isofrom", it's just there
@@ -139,7 +139,7 @@ grml module=grml                      Instead of using the default "$name.module
                                       be specified without the extension ".module"; it should be placed
                                       on "/live" directory of the live medium
                                       Useful for Multiboot USB pen, see
-                                      http://wiki.grml.org/doku.php?id=tips#multiboot_usb_pen
+                                      https://wiki.grml.org/doku.php?id=tips#multiboot_usb_pen
 grml bootid=mybootid                  Use specified argument as identifier for the ISO.
                                       mybootid is specified in /conf/bootid.txt on the ISO.
 grml ignore_bootid                    Disable bootid verification.
@@ -158,7 +158,7 @@ Security / login related settings:
 grml ssh=password                     Set password for root & grml user and start ssh-server
 grml passwd=...                       Set password for root & grml user
 grml encpasswd=....                   Set specified hash as password for root & grml user, use e.g.
-                                      'mkpasswd -H md5' to generate such a hash (available in Grml >=2013.09)
+                                      'mkpasswd -m sha-512' to generate such a hash
 
 Service related settings:
 -------------------------
@@ -166,7 +166,7 @@ grml startup=script                   Start $script instead of grml-quickconfig 
 grml nogpm                            Disable GPM daemon
 grml noblank                          Disable console blanking
 grml noquick                          Disable grml-quickconfig startup script
-grml services={espeakup,portmap,...}  Start system service(s)
+grml services={espeakup,rpcbind,...}  Start system service(s)
 grml welcome                          Welcome message via soundoutput
 grml noeject                          Do NOT eject CD after halt/reboot
 grml noprompt                         Do NOT prompt to remove the CD when halting/rebooting the system
@@ -198,8 +198,8 @@ grml swap                             Activate present/detected swap partitions
 grml noswraid                         Disable scanning for software raid arrays (creates /etc/mdadm/mdadm.conf)
 grml swraid                           Enable automatic assembling of software raid arrays
 grml nolvm                            Disable scanning for Logical Volumes (LVM)
-grml lvm                              Automatically activate Logival Volumes (LVM) during boot
-grml read-only                        Make sure all harddisk devices (/dev/hd* /dev/sd*) are forced to read-only mode
+grml lvm                              Automatically activate Logical Volumes (LVM) during boot
+grml read-only                        Make sure all harddisk devices (/dev/sd*) are forced to read-only mode
 grml ethdevice=...                    Use specified network device for network boot instead of default (eth0)
 grml ethdevice-timeout=...            Use specified network configuration timeout instead of default (15sec)
 grml xmodule=ati|fbdev|i810|mga       Use specified X.org-Module (1)
@@ -252,7 +252,7 @@ to skip some critical parts of the autodetection system.
 system after autoconfiguration by running a bourne shell script called
 "grml.sh" and/or extracting configuration files from a file named
 config.tbz from the root directory on the given device (or floppy).
-Take a look at http://grml.org/config/ for more information regarding
+Take a look at https://grml.org/config/ for more information regarding
 the configuration framework of grml.
 
 *) If you wish to remaster the CD, please don't forget to specify
