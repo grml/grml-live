@@ -198,7 +198,7 @@ grml swap                             Activate present/detected swap partitions
 grml noswraid                         Disable scanning for software raid arrays (creates /etc/mdadm/mdadm.conf)
 grml swraid                           Enable automatic assembling of software raid arrays
 grml nolvm                            Disable scanning for Logical Volumes (LVM)
-grml lvm                              Automatically activate Logival Volumes (LVM) during boot
+grml lvm                              Automatically activate Logical Volumes (LVM) during boot
 grml read-only                        Make sure all harddisk devices (/dev/hd* /dev/sd*) are forced to read-only mode
 grml ethdevice=...                    Use specified network device for network boot instead of default (eth0)
 grml ethdevice-timeout=...            Use specified network configuration timeout instead of default (15sec)
