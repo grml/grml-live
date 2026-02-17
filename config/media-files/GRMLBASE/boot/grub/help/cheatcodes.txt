@@ -3,8 +3,7 @@ Grml - Linux for sysadmins and users of texttools
 
 The following options can added to any selected menu item.
 
-blacklist=firewire-core               disable new (Juju) firewire stack
-blacklist=ieee1394                           disable old firewire stack
+blacklist=firewire-core                          disable firewire stack
 blacklist=ipw3945,prism54                     disable specified drivers
 blacklist=module1[,module2]  disable loading of specified module, e.g.:
 blacklist=usbcore                                   disable USB drivers
