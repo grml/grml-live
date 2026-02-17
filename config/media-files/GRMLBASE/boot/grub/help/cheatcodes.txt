@@ -22,7 +22,7 @@ nolvm                          disable search for Logical Volumes (LVM)
 noquick                         disable grml-quickconfig startup script
 noswraid                       disable search for software RAID devices
 noudev                disable startup of udev (disables module loading)
-services=foo1[,foo2] start specified service(s) [/etc/init.d/name foo1]
+services=foo1[,foo2]           start specified service(s) [foo1, ...]
 ssh=password     set password for user grml + root and start ssh-server
 startx[=windowmanager]                     autostart X.org using grml-x
 swap                                   activate present swap partitions
