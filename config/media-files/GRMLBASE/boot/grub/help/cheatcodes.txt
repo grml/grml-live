@@ -11,7 +11,6 @@ debnet        search local partitions for file /etc/network/interfaces,
           copy /etc/network then to local system and restart networking
 localtime                   assume Hardware Clock (RTC) is in localtime
 tz=Europe/Vienna                         set timezone (default: tz=UTC)
-home=/dev/sda1                   use specified device as home directory
 keyboard=de                                                set keyboard
 lang=[at|ch|da|de|es|fr|it|...|us]              set keyboard + language
 myconfig=/dev/fd0              load configuration from specified device
