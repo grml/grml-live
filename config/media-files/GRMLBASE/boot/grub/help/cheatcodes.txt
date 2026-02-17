@@ -39,7 +39,7 @@ noirqbalance                               Disable kernel irq balancing
 initcall_debug  trace initcalls, see where kernel is dying during start
 lapic                    enable the local APIC even if BIOS disabled it
 max_loop=[1-256] Maximum number of loopback devices that can be mounted
-md= / raid=[noautodetect]        RAID options, see Documentation/md.txt
+md= / raid=[noautodetect]  RAID options, see Documentation/admin-guide/md.rst
 mem=nn[KMG]                  Force usage of a specific amount of memory
 nfsroot=                        NFS root filesystem for disk-less boxes
 noapic      Ignore all APIC hardware which may be present on the system
