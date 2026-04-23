@@ -65,7 +65,7 @@ mapfile -t zfs_packages < <($ROOTCMD \
 	zfs-dkms \
 	| sed -e '0,/The following NEW packages will be installed/d;/^[^ ]/,$d' -e 's/\s/\n/g' | sed '/^$/d')
 extra_packages=("${extra_packages[@]}" "${zfs_packages[@]}")
-$ROOTCMD apt-get --yes --mark-auto -u install zfs-dkms
+$ROOTCMD apt-get --yes --mark-auto -u install zfs-dkms zfsutils-linux
 
 # Now invoke the dkms kernel postinst script for the only kernel that's left
 # -- normally the zfs-dkms postinst script should do this, but maybe it
