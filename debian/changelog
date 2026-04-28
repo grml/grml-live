@@ -1,3 +1,93 @@
+grml-live (0.56.0) grml-testing; urgency=medium
+
+  [ Michael Prokop ]
+  * [929e275] Random password generation: improve password usage
+  * [cacea3d] Rework password handling to unify random password generation
+  * [2a13a02] Add virtio_gpu to initramfs for proper console on arm64 in
+    libvirt/qemu
+  * [791a98c] Drop deprecated ubuntu approach for Secure Boot
+  * [da51d6b] GRUB: adjust loadfont usage for Secure Boot mode
+  * [3bf80f2] scripts/forensic-mark-readonly: fix POSIX issue reported by
+    shellcheck
+  * [b4bfd61] Use en_DK.UTF-8 as new default for LC_TIME
+  * [c26633e] /etc/locale.gen: add en_DK.UTF-8 as used within our default
+    locales
+
+  [ Darshaka Pathirana ]
+  * [6813a6a] generate-changes-list: Do not list merge commits in
+    changelog
+
+  [ Glenn Washburn ]
+  * [1a94f95] scripts/forensic-mark-readonly: Fix not setting to readonly
+    when no parent
+  * [817d404] scripts/forensic-mark-readonly: Fix not checking for block
+    device in READONLY_IGNORE
+  * [4c945ef] scripts/forensic-mark-readonly: Do not depend on printf
+  * [d3611ff] scripts/forensic-mark-readonly: Fix properly finding the
+    parent of a device-mapper device
+  * [1352ed8] scripts/forensic-mark-readonly: Add support for devices with
+    multiple parents
+  * [7f73470] scripts/forensic-mark-readonly: Add support for loop devices
+
+  [ Chris Hofstaedtler ]
+  * [16e403f] Import grml-info from grml-scripts
+  * [b1d8565] grml-info: convert to bash, drop script-functions usage
+  * [b6b749e] Import grml-resolution from grml-scripts
+  * [1f09cd8] Import random-hostname from grml-scripts
+  * [9c80a72] Import grml2ram from grml-scripts
+  * [c10e9d7] Import blacklist from grml-scripts
+  * [04f2db8] Split "blacklist" program into "blacklist" and "unblacklist"
+  * [2eca5e9] Import grml-soundtest from grml-scripts
+  * [614d030] Import grml-lock from grml-scripts
+  * [bf7ef99] GRMLBASE: follow rename of binaries in memtest+ 8.00
+  * [f1cac02] Use Debian packages for Secure Boot
+  * [9588407] grub core.img: add zfs modules, drop reiserfs
+  * [f9aa6bd] grub/header.cfg: clean up theme init
+  * [b901628] grml-live: fully remove BOOT_METHOD option. We are preparing
+    to switch from isolinux to grub2. Have grml-live fail when
+    BOOT_METHOD=isolinux is specified.
+  * [0cfabe1] grub: install unicode2.pf into correct place
+  * [a3f5c83] cheatcodes: drop "grub" option
+  * [5c75940] cheatcodes: drop "dmraid" and "nodmraid" options
+  * [3d138ca] Remove wm-ng (fluxbox wrapper) leftovers
+  * [1c45680] 45-grub-images: drop efi_uga
+  * [3e4c53a] Use GRUB 2 for BIOS boot instead of ISOLINUX
+  * [86abd4b] grub: drop loading of efi_uga module
+  * [74585e4] DHCP client: use hardware/ethernet address as identification
+  * [d9c8761] grub: merge Disable Framebuffer and Disable Video Kernel
+    Mode Setting options
+  * [acb3985] grub: load video modules only on platforms where they exist
+  * [8df5b30] DHCP client: remove isc-dhcp-client hostname hook script
+  * [e2dc473] grub: limit default max resolution
+  * [7b9bdae] DHCP client: set hostname_default=grml
+  * [510eb8b] GRMLBASE: merge 34-hosts and 35-network
+  * [a3812da] DHCP client: support $HOSTNAME in dhcpcd.conf
+  * [d12595b] Drop leftover postfix support
+  * [dbc2fee] Drop leftover mysql support
+  * [4a59346] grml-hostname: inline check4root from script-functions
+  * [8c6ece9] GRMLBASE: install grml-hostname
+  * [bb3f822] grml-hostname: fix shellcheck issues
+  * [5bde106] grml-live: set GRML_LIVE_VERSION to git info when running
+    from source
+  * [42e8007] CI: rename artifacts for PRs
+  * [ab43de1] Import caps-ctrl script from grml-scripts
+  * [7a485c8] caps-ctrl: switch from zsh to bash
+  * [98481d9] caps-ctrl: inline check4progs from script-functions
+  * [46d83be] caps-ctrl: replace einfo/error/eend
+  * [92b6611] caps-ctrl: fix shellcheck issues
+  * [695bfb2] grub: do not load bochs driver on UEFI platform
+  * Software related changes:
+    - [2dcbbd4] remove duplicated grub-pc-bin from GRML_FULL
+    - [d0f622e] drop grml-paste
+    - [39770c6] add grml-terminalserver (and deps) on ARM64
+    - [e4b2aa3] remove grml-scripts from GRMLBASE
+    - [8547ebc] Revert "SW: drop grml-paste"
+
+  [ Christopher Bock ]
+  * [f1e1411] build-driver/build disable apt script warning
+
+ -- Michael Prokop <mika@grml.org>  Tue, 28 Apr 2026 16:53:41 +0200
+
 grml-live (0.55.1) grml-testing; urgency=medium
 
   The "2025.12 release is nearly here" release
