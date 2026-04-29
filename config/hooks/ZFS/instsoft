@@ -22,11 +22,18 @@ target=${target:?}
 # TODO: convert this into a framework for other classes to ship dkms
 # modules: have a hook/script that installs the build-related packages,
 # another that builds whatever must be built, and a third that does the cleanup.
-#
-# TODO: support other architectures grml and grml-live supports (PRs
-# welcome, I'm sure).
 
 arch=$($ROOTCMD dpkg --print-architecture)
+
+# Kernel objtool needs /proc/self/maps; see https://lkml.org/lkml/2025/12/2/1445
+if ! [ -d "$target/proc/self" ]; then
+    $ROOTCMD mkdir -p /proc/self
+    ZFS_instsoft_created_proc_self=1
+fi
+if ! [ -s "$target/proc/self/maps" ]; then
+   cat /proc/self/maps >"$target/proc/self/maps"
+   ZFS_instsoft_created_proc_self_maps=1
+fi
 
 echo "$0: Installing latest kernel and its headers, as well as build-essential."
 # For some reason, apt's autoremove function doesn't pick up some of the
@@ -89,3 +96,9 @@ $ROOTCMD tar xf - <"$tempfile"
 rm "$tempfile"
 $ROOTCMD depmod -a "$kernelversion"
 echo "$0: Completed successfully. Enjoy your zfs."
+if [ "$ZFS_instsoft_created_proc_self_maps" = 1 ]; then
+    rm -f "$target/proc/self/maps" || :
+    if [ "$ZFS_instsoft_created_proc_self" = 1 ]; then
+        rmdir "$target/proc/self" || :
+    fi
+fi
