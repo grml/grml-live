@@ -551,7 +551,17 @@ config_cpu(){
   cpu_info="$(lscpu | sed -n '/^Model name:/s/[^:]*:\s*//p')"
   num_cpus=$(grep -c processor /proc/cpuinfo)
 
-  einfo "Found ${num_cpus} CPU(s): ${cpu_info}"
+  # QEMU VMs on arm64 can report "Model name: -"
+  if [ -n "$cpu_info" ] && [ "$cpu_info" != "-" ]; then
+    cpu_info=": ${cpu_info}"
+  else
+    cpu_info=""
+  fi
+  if [ "$num_cpus" = "1" ]; then
+    einfo "Found 1 CPU${cpu_info}"
+  else
+    einfo "Found ${num_cpus} CPUs${cpu_info}"
+  fi
   eend 0
 }
 # }}}
