@@ -176,6 +176,7 @@ def generate_changes_list(
         run_x(
             [
                 TOOL_DIR / "generate-changes-list.py",
+                "build",
                 output_file,
                 new_dpkg_list,
                 old_dpkg_list,
