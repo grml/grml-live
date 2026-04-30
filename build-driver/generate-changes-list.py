@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+import argparse
 import os
+import re
 import subprocess
 import sys
-import re
 from pathlib import Path
 
 IGNORED_PEOPLE = set(
@@ -178,25 +179,38 @@ People:
 
 
 def main() -> int:
-    if len(sys.argv) != 9:
-        print(
-            f"Usage: {sys.argv[0]} output_filename dpkg_list_new dpkg_list_old package_prefix git_url_base git_repo_workspace job_name build_id"
-        )
-        return 2
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(dest="mode", required=True)
 
+    p_build = subparsers.add_parser(
+        "build",
+        help="generate per-package CI report based on dpkg lists",
+    )
+    p_build.add_argument("output_filename")
+    p_build.add_argument("dpkg_list_new")
+    p_build.add_argument("dpkg_list_old")
+    p_build.add_argument("package_prefix")
+    p_build.add_argument("git_url_base")
+    p_build.add_argument("git_repo_workspace")
+    p_build.add_argument("job_name")
+    p_build.add_argument("build_id")
+
+    args = parser.parse_args()
     listener = CliListener()
+
     try:
-        build_changes(
-            Path(sys.argv[1]),
-            Path(sys.argv[2]),
-            Path(sys.argv[3]),
-            sys.argv[4],
-            sys.argv[5],
-            Path(sys.argv[6]),
-            sys.argv[7],
-            sys.argv[8],
-            listener,
-        )
+        if args.mode == "build":
+            build_changes(
+                Path(args.output_filename),
+                Path(args.dpkg_list_new),
+                Path(args.dpkg_list_old),
+                args.package_prefix,
+                args.git_url_base,
+                Path(args.git_repo_workspace),
+                args.job_name,
+                args.build_id,
+                listener,
+            )
     except Exception as except_inst:
         listener.error(f"Uncaught exception: {except_inst}")
 
