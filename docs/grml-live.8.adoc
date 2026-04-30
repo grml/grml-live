@@ -295,12 +295,13 @@ The GRML_SMALL and GRML_FULL classes define the official ISO builds.
 
 The following files and directories are relevant for class GRMLBASE by default:
 
-  ${GRML_FAI_CONFIG}/scripts/GRMLBASE/
-  ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/
-  ${GRML_FAI_CONFIG}/debconf/GRMLBASE
   ${GRML_FAI_CONFIG}/env/GRMLBASE
+  ${GRML_FAI_CONFIG}/hooks/updatebase.GRMLBASE
+  ${GRML_FAI_CONFIG}/debconf/GRMLBASE
   ${GRML_FAI_CONFIG}/hooks/instsoft.GRMLBASE
   ${GRML_FAI_CONFIG}/package_config/GRMLBASE
+  ${GRML_FAI_CONFIG}/scripts/GRMLBASE/
+  ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/
 
 Take a look at the next section for information about the concept of those
 files/directories.
