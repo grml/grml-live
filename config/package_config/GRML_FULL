@@ -182,7 +182,6 @@ ser2net
 sipcalc
 snmp
 socat
-speedtest-cli
 ssmping
 tcpdump
 tcptraceroute
