@@ -1,0 +1,6 @@
+# This file is installed by grml-live in 80-initramfs.
+# Its purpose is to always include the following modules in the initramfs,
+# and load them early in the boot process, see initramfs.conf(5)
+
+# useful for USB boot
+exfat
