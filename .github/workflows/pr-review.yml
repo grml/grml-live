@@ -10,8 +10,8 @@ jobs:
     name: ruff format check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
       - name: Install ruff
@@ -27,7 +27,7 @@ jobs:
     name: autoconfig tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: run_tests
         run: |
           # Install lsb-functions, etc.
@@ -40,7 +40,7 @@ jobs:
     name: shellcheck all scripts
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: shellcheck
         run: |
           echo "Running shellcheck on all shell scripts..."
