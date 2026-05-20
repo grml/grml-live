@@ -3,8 +3,7 @@ Grml - Linux for sysadmins and users of texttools
 
 The following options can added to any selected menu item.
 
-blacklist=firewire-core               disable new (Juju) firewire stack
-blacklist=ieee1394                           disable old firewire stack
+blacklist=firewire-core                          disable firewire stack
 blacklist=ipw3945,prism54                     disable specified drivers
 blacklist=module1[,module2]  disable loading of specified module, e.g.:
 blacklist=usbcore                                   disable USB drivers
@@ -38,7 +37,6 @@ Additional kernel and initramfs boot options:
 acpi={force|off|ht|strict}                         Define ACPI-settings
 apic={quiet(default)|verbose|debug} Set output verbosity whilst booting
 noirqbalance                               Disable kernel irq balancing
-ide?=   config (iomem/irq), tuning (serialize,reset,no{dma,tune,probe})
 initcall_debug  trace initcalls, see where kernel is dying during start
 lapic                    enable the local APIC even if BIOS disabled it
 max_loop=[1-256] Maximum number of loopback devices that can be mounted
