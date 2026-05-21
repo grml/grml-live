@@ -956,6 +956,7 @@ else
    einfo "Generating build information in conf/buildinfo.json"
    mkdir -p "$BUILD_OUTPUT"/conf/
    generate_build_info > "$BUILD_OUTPUT"/conf/buildinfo.json
+   cp "$BUILD_OUTPUT"/conf/buildinfo.json "$LOG_OUTPUT"/buildinfo.json
    eend $?
 
    cap_timestamps "$BUILD_OUTPUT"
