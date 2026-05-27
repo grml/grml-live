@@ -207,6 +207,16 @@ trap umount_all EXIT
 # usage: log "string to log"
 log() { [ -n "$LOGFILE" ] && echo "$*" >> "$LOGFILE" ; }
 
+# Format an argv list as a shell-pasteable command line, using bash %q quoting.
+# Outputs nothing (not '') when called with zero args.
+# usage: format_cmdline cmd arg1 arg2 ...
+format_cmdline() {
+  [ $# -eq 0 ] && return 0
+  local out
+  printf -v out '%q ' "$@"
+  printf '%s' "${out% }"
+}
+
 # cut string at character number int = $1
 # usage: cut_string 5 "1234567890" will output "12345"
 cut_string() {
@@ -853,10 +863,17 @@ else
    [ -n "$SQUASHFS_INFO_MSG" ] && SQUASHFS_INFO_MSG="using options: $SQUASHFS_INFO_MSG"
    einfo "Squashfs build information: running $MKSQUASHFS_BINARY $SQUASHFS_INFO_MSG"
 
-   log "$MKSQUASHFS_BINARY $CHROOT_OUTPUT/ $BUILD_OUTPUT/live/${GRML_NAME}/${GRML_NAME}.squashfs -noappend $SQUASHFS_OPTIONS"
-   # shellcheck disable=SC2086 # $SQUASHFS_OPTIONS needs splitting
-   if "$MKSQUASHFS_BINARY" "$CHROOT_OUTPUT/" "$BUILD_OUTPUT"/live/"${GRML_NAME}"/"${GRML_NAME}".squashfs \
-      -noappend $SQUASHFS_OPTIONS 2>"${SQUASHFS_STDERR}" ; then
+   # shellcheck disable=SC2206 # $SQUASHFS_OPTIONS needs splitting
+   MKSQUASHFS_CMD=(
+     "${MKSQUASHFS_BINARY}"
+     "${CHROOT_OUTPUT}/"
+     "${BUILD_OUTPUT}/live/${GRML_NAME}/${GRML_NAME}.squashfs"
+     -noappend
+     ${SQUASHFS_OPTIONS}
+   )
+
+   log "$(format_cmdline "${MKSQUASHFS_CMD[@]}")"
+   if "${MKSQUASHFS_CMD[@]}" 2>"${SQUASHFS_STDERR}" ; then
       echo "${GRML_NAME}.squashfs" > "$BUILD_OUTPUT"/live/"${GRML_NAME}"/filesystem.module
       log "Finished execution of stage 'squashfs' [$(date)]"
       einfo "Finished execution of stage 'squashfs'" ; eend 0
@@ -913,9 +930,9 @@ generate_build_info() {
     grml_username="${USERNAME}" \
     grml_version="${VERSION}" \
     host_architecture="$(dpkg --print-architecture || true)" \
-    mkisofs_cmdline="${XORRISO_BINARY} -as mkisofs -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o ${ISO_OUTPUT}/${ISO_NAME}" \
+    mkisofs_cmdline="$(format_cmdline "${MKISOFS_CMD[@]}")" \
     mkisofs_version="$(${XORRISO_BINARY} --version 2>/dev/null | head -1 || true)" \
-    mksquashfs_cmdline="${MKSQUASHFS_BINARY} ${CHROOT_OUTPUT}/ ${BUILD_OUTPUT}/live/${GRML_NAME}/${GRML_NAME}.squashfs -noappend ${SQUASHFS_OPTIONS}" \
+    mksquashfs_cmdline="$(format_cmdline "${MKSQUASHFS_CMD[@]}")" \
     mksquashfs_version="$(${MKSQUASHFS_BINARY} -version | head -1 || true)" \
     output_owner="${CHOWN_USER}" \
     release_info="${RELEASE_INFO}" \
@@ -952,6 +969,17 @@ if [ -n "$SKIP_MKISOFS" ] ; then
 else
    mkdir -p "$ISO_OUTPUT" || bailout 6 "Problem with creating $ISO_OUTPUT for stage 'iso build'"
 
+   # shellcheck disable=SC2206 # BOOT_ARGS and EFI_ARGS need splitting
+   MKISOFS_CMD=(
+     "${XORRISO_BINARY}" -as mkisofs
+     -V "${GRML_NAME} ${VERSION}"
+     -publisher 'grml-live | grml.org'
+     -l -r -J
+     ${BOOT_ARGS} ${EFI_ARGS}
+     -o "${ISO_OUTPUT}/${ISO_NAME}"
+     "${BUILD_OUTPUT}/"
+   )
+
    log   "Generating build information in conf/buildinfo.json"
    einfo "Generating build information in conf/buildinfo.json"
    mkdir -p "$BUILD_OUTPUT"/conf/
@@ -961,11 +989,10 @@ else
 
    cap_timestamps "$BUILD_OUTPUT"
 
-   log "${XORRISO_BINARY} -as mkisofs -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o ${ISO_OUTPUT}/${ISO_NAME}"
+   log "$(format_cmdline "${MKISOFS_CMD[@]}")"
    einfo "Generating ISO file..."
    touch -d @"$SOURCE_DATE_EPOCH" "$BUILD_OUTPUT"/
-   # shellcheck disable=SC2086 # BOOT_ARGS and EFI_ARGS need splitting
-   "${XORRISO_BINARY}" -as mkisofs -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o "${ISO_OUTPUT}/${ISO_NAME}" "$BUILD_OUTPUT"/
+   "${MKISOFS_CMD[@]}"
    RC=$?
    eend $RC
 
