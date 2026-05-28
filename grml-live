@@ -744,7 +744,8 @@ mkdir -p "$CHROOT_OUTPUT" || bailout 5 "Problem with creating $CHROOT_OUTPUT"
 
 if [ -n "${MIRROR_DIRECTORY}" ] ; then
   mkdir -p "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
-  mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
+  # -o rbind needs util-linux >= 2.39
+  mount -o rbind,ro=recursive "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}" || bailout 5 "Failed to bind-mount ${MIRROR_DIRECTORY}"
 fi
 
 log "Executed FAI command line:"
