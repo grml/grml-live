@@ -913,7 +913,7 @@ generate_build_info() {
     grml_username="${USERNAME}" \
     grml_version="${VERSION}" \
     host_architecture="$(dpkg --print-architecture || true)" \
-    mkisofs_cmdline="${XORRISO_BINARY} -as mkisofs -V ${GRML_NAME} ${VERSION} -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o ${ISO_OUTPUT}/${ISO_NAME}" \
+    mkisofs_cmdline="${XORRISO_BINARY} -as mkisofs -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o ${ISO_OUTPUT}/${ISO_NAME}" \
     mkisofs_version="$(${XORRISO_BINARY} --version 2>/dev/null | head -1 || true)" \
     mksquashfs_cmdline="${MKSQUASHFS_BINARY} ${CHROOT_OUTPUT}/ ${BUILD_OUTPUT}/live/${GRML_NAME}/${GRML_NAME}.squashfs -noappend ${SQUASHFS_OPTIONS}" \
     mksquashfs_version="$(${MKSQUASHFS_BINARY} -version | head -1 || true)" \
@@ -961,13 +961,12 @@ else
 
    cap_timestamps "$BUILD_OUTPUT"
 
-   log "$XORRISO_BINARY -as mkisofs -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J $BOOT_ARGS $EFI_ARGS -o ${ISO_OUTPUT}/${ISO_NAME} ."
+   log "${XORRISO_BINARY} -as mkisofs -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o ${ISO_OUTPUT}/${ISO_NAME}"
    einfo "Generating ISO file..."
    touch -d @"$SOURCE_DATE_EPOCH" "$BUILD_OUTPUT"/
    # shellcheck disable=SC2086 # BOOT_ARGS and EFI_ARGS need splitting
-   "$XORRISO_BINARY" -as mkisofs -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' \
-           -l -r -J $BOOT_ARGS $EFI_ARGS \
-           -o "${ISO_OUTPUT}/${ISO_NAME}" "$BUILD_OUTPUT"/ ; RC=$?
+   "${XORRISO_BINARY}" -as mkisofs -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o "${ISO_OUTPUT}/${ISO_NAME}" "$BUILD_OUTPUT"/
+   RC=$?
    eend $RC
 
    # do not continue on errors, otherwise we might generate/overwrite the ISO with dd if=... stuff
