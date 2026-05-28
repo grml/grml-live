@@ -9,6 +9,10 @@ on:
 concurrency:
   group: "${{ github.ref }}"
   cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   build-debian:
     strategy:
@@ -24,7 +28,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6
+        with:
+          persist-credentials: false
 
       - run: ./test/gha-build-deb.sh
         name: "Build .deb for ${{matrix.host_release}}"
@@ -32,7 +38,7 @@ jobs:
           HOST_RELEASE: ${{matrix.host_release}}
 
       - name: Archive built .deb
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7
         with:
           name: deb-${{matrix.host_release}}
           if-no-files-found: error
@@ -55,7 +61,9 @@ jobs:
 
     runs-on: ${{ matrix.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6
+        with:
+          persist-credentials: false
 
       - run: ./test/gha-build-iso.sh initial
         name: "Build ISO on ${{matrix.host_release}} ${{matrix.arch}}${{matrix.extra_classes && format(' with {0}', matrix.extra_classes) || ''}}"
@@ -67,7 +75,7 @@ jobs:
 
       - name: Archive built ISO
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7
         with:
           name: grml-live-build-result-initial-${{github.event.pull_request.number && format('pr{0}-', github.event.pull_request.number) || ''}}${{matrix.host_release}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
           if-no-files-found: error
@@ -85,7 +93,7 @@ jobs:
 
       - name: Archive repacked ISO
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7
         with:
           name: grml-live-build-result-repack-${{github.event.pull_request.number && format('pr{0}-', github.event.pull_request.number) || ''}}${{matrix.host_release}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
           if-no-files-found: error
