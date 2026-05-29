@@ -209,7 +209,7 @@ the class "RELEASE".
 
 Specify the Debian suite you want to use for your live-system. If unset defaults
 to "testing". Supported values are: stable, testing, unstable (or their
-corresponding release names like "bookworm").
+corresponding release names like "trixie").
 
   -t **arg**::
 
@@ -473,7 +473,7 @@ Versions before 0.17.0 used to log into `/var/log/grml-live.log` and
 Requirements for the build system
 ---------------------------------
 
-* Debian GNU/Linux 12 ("bookworm") or newer. If this doesn't work, please send us
+* Debian GNU/Linux 13 ("trixie") or newer. If this doesn't work, please send us
 a bug report. Check out <<deploy-on-debian,How do I deploy
 grml-live on a plain Debian installation>> for details how to set up grml-live
 on a plain, original Debian system.
@@ -504,9 +504,9 @@ How do I deploy grml-live on a plain Debian installation?
 grml-live runs on a plain <<requirements,Debian installation>>.
 It is recommended to <<run-from-git,run from source>>.
 
-What we have: plain, original Debian bookworm (v12).
+What we have: plain, original Debian trixie (13).
 
-What we want: build a Grml ISO based on Debian/bookworm for the amd64
+What we want: build a Grml ISO based on Debian/trixie for the amd64
 architecture using grml-live.
 
 Install git and clone grml-live:
