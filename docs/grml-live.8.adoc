@@ -297,8 +297,7 @@ The following files and directories are relevant for class GRMLBASE by default:
   ${GRML_FAI_CONFIG}/scripts/GRMLBASE/
   ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/
 
-Take a look at the next section for information about the concept of those
-files/directories.
+See <<files,Files>> for details about these files and directories.
 
 If you want to use your own configuration, extend an existing configuration
 and/or add additional packages to your ISO just invent a new class (or extend an
