@@ -732,24 +732,10 @@ dpkg-dev is a simple and easy approach.
 Finally invoke grml-live with your class name (`CUSTOM` in this example) added
 to the list of classes on the command line (see grml-live option `-c`).
 
-[[download]]
-Download / install grml-live as a Debian package
-------------------------------------------------
-
-Stable Debian packages are available through the grml-repository at
-link:http://deb.grml.org/pool/main/g/grml-live/[deb.grml.org] and the latest
-Git commits are available as Debian packages from
-link:http://jenkins.grml.org/job/grml-live-binaries/[jenkins.grml.org].
-If you want to build a Debian package on your own (using for example a specific
-version or the current development tree), just execute:
-
-  git clone git://git.grml.org/grml-live
-  cd grml-live
-  debuild -us -uc
-
 [[run-from-git]]
 Obtaining and running grml-live
 -------------------------------
+[[download]]
 
 The best option for running grml-live is to run it directly from a git
 repository checkout. The file `debian/control` lists all required dependencies.
@@ -765,6 +751,21 @@ Usage example:
     $ cd grml-live
     $ sudo apt install <packages>  # see debian/control
     $ sudo GRML_FAI_CONFIG=$PWD/config ./grml-live -s sid -a amd64 -c GRML_FULL
+
+
+Debian package
+~~~~~~~~~~~~~~
+
+If your workflow requires a Debian package of grml-live, you can build one from
+the git checkout.
+
+Example:
+
+    $ sudo apt install git sbuild
+    $ git clone https://github.com/grml/grml-live
+    $ cd grml-live
+    $ sbuild
+
 
 [[source]]
 Source
