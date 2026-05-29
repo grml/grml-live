@@ -748,17 +748,23 @@ version or the current development tree), just execute:
   debuild -us -uc
 
 [[run-from-git]]
-Run grml-live directly from git
+Obtaining and running grml-live
 -------------------------------
 
-In case you want to run grml-live directly from the git repository checkout
-(after making sure all dependencies are installed), you should set
-`GRML_FAI_CONFIG` so that a) it finds its class-based configuration files and
-b) does not use the config files of an possibly installed `grml-live` package.
+The best option for running grml-live is to run it directly from a git
+repository checkout. The file `debian/control` lists all required dependencies.
+
+The variable `GRML_FAI_CONFIG` should be set so `grml-live` can find the
+class-based configuration files.
+This is especially important to avoid re-using the config files of a previously
+installed `grml-live` Debian package.
+
 Usage example:
 
-    # export GRML_FAI_CONFIG=$(pwd)/config
-    # ./grml-live -s sid -a amd64 -c GRML_FULL
+    $ git clone --depth 1 https://github.com/grml/grml-live
+    $ cd grml-live
+    $ sudo apt install <packages>  # see debian/control
+    $ sudo GRML_FAI_CONFIG=$PWD/config ./grml-live -s sid -a amd64 -c GRML_FULL
 
 [[source]]
 Source
