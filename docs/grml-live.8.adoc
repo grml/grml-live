@@ -501,42 +501,27 @@ FAQ
 How do I deploy grml-live on a plain Debian installation?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The easiest way to get a running grml-live setup is to just use Grml.
-Of course using grml-live on a plain, original Debian installation is supported
-as well. So there we go.
+grml-live runs on a plain <<requirements,Debian installation>>.
+It is recommended to <<run-from-git,run from source>>.
 
 What we have: plain, original Debian bookworm (v12).
 
-What we want: build a Grml ISO based on Debian/bookworm for the amd64 architecture
-using grml-live.
+What we want: build a Grml ISO based on Debian/bookworm for the amd64
+architecture using grml-live.
 
-Instructions
-^^^^^^^^^^^^
+Install git and clone grml-live:
 
-  # adjust sources.list:
-  cat >> /etc/apt/sources.list << EOF
+  $ apt install git
+  $ git clone --depth 1 https://github.com/grml/grml-live
+  $ cd grml-live
 
-  # grml stable repository:
-    deb     http://deb.grml.org/ grml-stable  main
-  # deb-src http://deb.grml.org/ grml-stable  main
+Make a branch for your customizations:
 
-  # grml testing/development repository:
-    deb     http://deb.grml.org/ grml-testing main
-  # deb-src http://deb.grml.org/ grml-testing main
-  EOF
+  $ git switch -c mywork
 
-  # get keyring for apt:
-  apt-get -o Acquire::AllowInsecureRepositories=true update
-  apt-get --allow-unauthenticated install grml-keyring
+Adjust grml-live configuration for our needs:
 
-  cp -rv /usr/share/grml-live/config /srv
-
-  # install relevant tools
-  apt-get --no-install-recommends install grml-live
-
-  # adjust grml-live configuration for our needs:
-  cat > /etc/grml/grml-live.local << EOF
-  GRML_LIVE_CONFIG=/srv/config
+  cat > ./etc/grml/grml-live.local << EOF
   ## want a faster build process and don't need smaller ISOs?
   ## if so use zlib compression
   # SQUASHFS_OPTIONS="-comp gzip -b 256k"
@@ -548,12 +533,17 @@ Instructions
   CLASSES="GRML_FULL"
   EOF
 
-That's it. Now invoking 'grml-live -V' should build the ISO.  If everything
-worked as expected the last line of the shell output should look like:
+Invoke the ISO build process:
+
+  $ sudo ./grml-live -C ./etc/grml/grml-live.local
+
+This will take a while to download the Debian packages, install them and build
+the final ISO. If everything worked as expected the last line of the
+shell output should look like:
 
   [*] Successfully finished execution of grml-live [running 687 seconds]
 
-and the ISO can be found inside /grml-live/grml-live/grml_isos/ then.
+The resulting ISO can then be found in `./grml/grml_isos/`.
 
 [[grml_fai_config_variable]]
 What is $GRML_FAI_CONFIG?
