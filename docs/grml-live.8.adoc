@@ -307,9 +307,12 @@ or invoke grml-live using the classes option:
 "grml-live -c GRML_SMALL,FOOBAR ...".
 
 More details regarding the class concept can be found in the documentation of
-FAI (being available at /usr/share/doc/fai-doc/ if you install fai-doc).
+FAI (installed by the `fai-doc` Debian package in /usr/share/doc/fai-doc/).
+Examples can be found in /usr/share/doc/fai-doc/examples/simple/ .
 In the past, grml-live directly used FAI. Nowadays, it uses an internal
-implementation of the class concept.
+implementation of the class concept - not all FAI features are necessarily
+available.
+
 
 [[X7]]
 [[classes]]
@@ -390,17 +393,11 @@ setup
 Files
 -----
 
-To understand the class-based configuration concept, please refer to the
-FAI documentation (provided by the Debian package fai-doc). Examples can
-be found in /usr/share/doc/fai-doc/examples/simple/ . Furthermore
-/usr/share/doc/fai-doc/fai-guide.html/ch-config.html provides documentation
-regarding configuration possibilities. Note that grml-live uses its own
-implementation of the class-based concept, so not all FAI features are
-available.
+Overview of all files relevant to grml-live and the config area.
 
   /usr/sbin/grml-live
 
-Script for the main build process. Requires root permissions for execution.
+Main program driving the build process. Requires root permissions for execution.
 
   /etc/grml/grml-live.conf
 
@@ -418,7 +415,8 @@ commandline.
 
   ${GRML_FAI_CONFIG}/
 
-The main directory for configuration of grml-live. More details below.
+The <<grml_fai_config_variable,main directory>> for configuration of grml-live.
+More details on individual files below.
 Each subdirectory will have files or directories per "class". You can pick
 a single or multiple classes when invoking grml-live. Only the classes you
 selected (plus automatic classes) will influence the build result.
