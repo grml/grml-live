@@ -41,12 +41,11 @@ CAUTION: grml-live no longer uses FAI. This means you are free to use FAI
 separately in any way you like, but also you no longer need to have FAI installed.
 
 [NOTE]
-
-Please note that you should have a fast network connection as all the Debian
-packages will be downloaded and installed via network. If you want to use a
-local mirror (strongly recommended if you plan to use grml-live more than once)
-checkout debmirror(1), reprepro(1) (see /usr/share/doc/grml-live/examples/reprepro/ for a
-sample configuration), apt-cacher(1) and approx(8).
+You should have a fast network connection as all the Debian packages will be
+downloaded and installed via network. It is strongly recommended to use a local
+mirror - if you plan to use grml-live more than once.
+See debmirror(1), reprepro(1), apt-cacher-ng(1) and approx(8). A reprepro sample
+configuration is available in the source in examples/reprepro/.
 
 Options
 -------
