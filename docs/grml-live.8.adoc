@@ -472,12 +472,12 @@ overwrite tools from earlier classes, if they share names.
 Available log files
 -------------------
 
-Starting with grml-live version 0.17.0 you should find log files in a directory
-named `grml_logs` in the output directory (next to `grml_isos`,
-`grml_chroot`, etc). 
+Log files are written into a directory named `grml_logs` in the output directory
+- next to `grml_isos`, `grml_chroot`, etc.
 
-grml-live versions before 0.17.0 used to log into /var/log/grml-live.log
-and /var/log/fai/grml.
+Versions before 0.17.0 used to log into `/var/log/grml-live.log` and
+`/var/log/fai/grml` instead.
+
 
 [[requirements]]
 Requirements for the build system
