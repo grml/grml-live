@@ -21,6 +21,13 @@ Description
 grml-live is the build system for the Grml Live Linux system. You can also
 use it to adapt a Grml release to your own needs.
 
+Foundational ideas:
+
+* single command to build a Grml-/Debian-based Linux Live-CD
+* class based concept, providing a maximum of flexibility
+* support integration of custom hooks, scripts and configuration
+* support integration of own Software and/or Kernels using Debian repositories
+
 The build system is based on the class concept of link:http://fai-project.org/[FAI]
 (Fully Automatic Installation). While older versions directly used FAI, the
 current version of grml-live supports the same class-based configuration concept
@@ -35,7 +42,7 @@ separately in any way you like, but also you no longer need to have FAI installe
 
 [NOTE]
 
-Please notice that you should have a fast network connection as all the Debian
+Please note that you should have a fast network connection as all the Debian
 packages will be downloaded and installed via network. If you want to use a
 local mirror (strongly recommended if you plan to use grml-live more than once)
 checkout debmirror(1), reprepro(1) (see /usr/share/doc/grml-live/examples/reprepro/ for a
@@ -266,19 +273,6 @@ If you have enough RAM, just run "mount -t tmpfs none /media/ramdisk" to get a
 tmpfs ("RAMDISK"), and use /media/ramdisk as build and output directory - this
 results in a very fast build process. Note that these files will be gone when
 rebooting.
-
-[[main-features]]
-Main features of grml-live
---------------------------
-
-* create a Grml-/Debian-based Linux Live-CD with one single command
-
-* class based concept, providing a maximum of flexibility
-
-* supports integration of own hooks, scripts and configuration
-
-* supports use and integration of own Software and/or Kernels via simple use of
-Debian repositories
 
 [[class-concept]]
 The class concept
