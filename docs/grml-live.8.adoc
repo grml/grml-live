@@ -779,11 +779,7 @@ Documentation
 -------------
 
 The most recent grml-live documentation is available online at
-http://grml.org/grml-live/ and for offline reading also available
-in different formats:
-
-* http://grml.org/grml-live/grml-live.epub
-* http://grml.org/grml-live/grml-live.pdf
+https://grml.org/grml-live/ .
 
 [[authors]]
 Authors
