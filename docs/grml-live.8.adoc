@@ -483,8 +483,8 @@ and /var/log/fai/grml.
 Requirements for the build system
 ---------------------------------
 
-* Debian GNU/Linux, bookworm or newer. If this doesn't work, please send us a bug
-report. Check out <<deploy-on-debian,How do I deploy
+* Debian GNU/Linux 12 ("bookworm") or newer. If this doesn't work, please send us
+a bug report. Check out <<deploy-on-debian,How do I deploy
 grml-live on a plain Debian installation>> for details how to set up grml-live
 on a plain, original Debian system.
 
