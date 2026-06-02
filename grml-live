@@ -150,9 +150,17 @@ else
 fi
 # }}}
 
-# umount all directories {{{
+# umount all directories beneath CHROOT_OUTPUT {{{
+_UMOUNT_ALL_ATTEMPTED=""
 umount_all() {
-   [ -n "$MIRROR_DIRECTORY" ] && umount "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
+  [ -n "${CHROOT_OUTPUT}" ] && [ -d "${CHROOT_OUTPUT}" ] || return 0
+  [ -z "${_UMOUNT_ALL_ATTEMPTED}" ] || return 0
+  _UMOUNT_ALL_ATTEMPTED=1
+  local mountpoint
+  while IFS= read -r mountpoint; do
+    einfo "Unmounting ${mountpoint} ..."
+    umount -R "${mountpoint}" ; eend $?
+  done < <(findmnt -k -l -n -o TARGET | awk -v path="${CHROOT_OUTPUT%/}/" 'index($0, path) == 1' | sort -r)
 }
 # }}}
 
