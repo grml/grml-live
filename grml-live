@@ -589,7 +589,6 @@ fi
 [ -n "$LOGFILE" ] || LOGFILE=${LOG_OUTPUT}/grml-live.log
 mkdir -p "$(dirname "${LOGFILE}")"
 touch "$LOGFILE"
-chown root:adm "$LOGFILE"
 chmod 664 "$LOGFILE"
 if [ -n "$PRESERVE_LOGFILE" ] ; then
    echo "Preserving logfile $LOGFILE as requested via \$PRESERVE_LOGFILE"
