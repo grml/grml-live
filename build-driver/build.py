@@ -407,7 +407,7 @@ def _main(program_name: str, argv: list[str]) -> int:
 
     if not is_ci():
         print("I: No CI variable found, assuming local test build")
-        if not is_docker():
+        if not is_docker() and os.getuid() == 0:
             return bail("E: Not running inside docker, exiting to avoid data damage")
 
     build_config = load_config(build_config_file)
