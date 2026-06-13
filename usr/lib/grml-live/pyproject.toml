@@ -39,3 +39,8 @@ lint.select = [
     "UP",
     "RUF",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.17",
+]
