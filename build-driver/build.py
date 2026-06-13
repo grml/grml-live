@@ -498,7 +498,9 @@ def _main(program_name: str, argv: list[str]) -> int:
     # avoid building on mounted volume
     tmp_root = Path(tempfile.gettempdir())
     tmp_dir = Path(tempfile.mkdtemp(dir=tmp_root))
+    tmp_dir.chmod(0o775)
     build_dir = Path(tempfile.mkdtemp(dir=tmp_root))
+    build_dir.chmod(0o775)
 
     # Do it now, as the next block needs curl installed.
     install_debian_dependencies()
