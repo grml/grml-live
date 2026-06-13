@@ -423,6 +423,8 @@ def install_base(conf_dir: Path, chroot_dir: Path, classes, debian_suite: str, m
         "--verbose",
         "--skip=check/empty",  # grml-live pre-creates directories in chroot, skip emptyness check.
         f"--keyring={keyring_tempfile.name}",
+        # Delete keyring_tempfile from within mmdebstrap's userns.
+        f"--chrooted-customize-hook=rm /{Path(keyring_tempfile.name).name}",
         f"--include={','.join(included_packages)}",
         debian_suite,
         chroot_dir,
@@ -436,7 +438,6 @@ def install_base(conf_dir: Path, chroot_dir: Path, classes, debian_suite: str, m
         args.insert(1, "--aptopt='Acquire::http { Proxy \"" + os.environ["APT_PROXY"] + '"; }')
 
     run_x(args)
-    os.unlink(keyring_tempfile.name)
 
     # Mark most leaf packages as automatically installed, so autoremove could remove them if possible.
     run_chrooted(chroot_dir, ["apt-mark", "auto", "~i ?not(~prequired) ?not(~pimportant) ?not(~pstandard)"])
