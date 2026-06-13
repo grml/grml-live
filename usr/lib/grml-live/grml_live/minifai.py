@@ -115,6 +115,7 @@ def chrooted_apt_install(chroot_dir: Path, install_list: list[str]):
     args = [
         "apt",
         "-oapt::cmd::disable-script-warning=1",
+        "-oAPT::Sandbox::User=root",
         "install",
         "-q",
         "-y",
@@ -683,7 +684,15 @@ def should_skip_task(dynamic_state: DynamicState, task: str) -> bool:
 def task_updatebase(chroot_dir: Path, dynamic_state: DynamicState):
     if should_skip_task(dynamic_state, "updatebase"):
         return
-    run_chrooted(chroot_dir, ["apt", "-oapt::cmd::disable-script-warning=1", "--error-on=any", "update", "-q"])
+    args = [
+        "apt",
+        "-oapt::cmd::disable-script-warning=1",
+        "-oAPT::Sandbox::User=root",
+        "--error-on=any",
+        "update",
+        "-q",
+    ]
+    run_chrooted(chroot_dir, args)
 
 
 def _create_dirs(chroot_dir: Path) -> BuildDirectories:
