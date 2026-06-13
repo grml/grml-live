@@ -1,0 +1,8 @@
+#!/bin/bash
+# Wrapper around chroot, to also bind-mount /proc.
+# Called by minifai inside a new userns.
+set -e
+CHROOT_DIR="$1"
+shift
+mount --rbind /proc "$CHROOT_DIR"/proc
+exec chroot "$CHROOT_DIR" "$@"

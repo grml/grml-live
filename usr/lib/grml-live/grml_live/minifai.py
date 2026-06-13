@@ -22,6 +22,7 @@ from .classes import ClassFileParsingFailed, parse_class_varfile
 from .packages import PackageList, parse_class_packages
 
 APT_DEBUG_ACQUIRE = "Debug::Acquire::http=true"
+CHROOT_HELPER = Path(__file__).parent / "chroot_helper"
 
 
 class FaiScriptFailed(Exception):
@@ -93,7 +94,11 @@ def run_chrooted(chroot_dir: Path, args, check: bool = True, **kwargs):
         "PATH": "/usr/sbin:/sbin:/usr/bin:/bin",
         "TERM": "dumb",
     } | kwargs.get("env", {})
-    return run_x(["chroot", chroot_dir, *args], check=check, **kwargs)
+    return run_x(
+        ["unshare", "--user", "--mount", "--map-root", CHROOT_HELPER, chroot_dir, *args],
+        check=check,
+        **kwargs,
+    )
 
 
 def chrooted_dpkg_print_architecture(chroot_dir: Path) -> str:
