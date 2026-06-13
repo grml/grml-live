@@ -501,7 +501,6 @@ NETBOOT="${OUTPUT}/netboot"
 rm -f "$LOGFILE"
 mkdir -p "$(dirname "${LOGFILE}")"
 touch "$LOGFILE"
-chown root:adm "$LOGFILE"
 chmod 664 "$LOGFILE"
 # }}}
 
