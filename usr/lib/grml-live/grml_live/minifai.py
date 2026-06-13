@@ -18,7 +18,7 @@ from enum import StrEnum
 from pathlib import Path
 from threading import Event, Thread
 
-from . import intarget_tools
+from . import unshared_helper
 from .classes import ClassFileParsingFailed, parse_class_varfile
 from .packages import PackageList, parse_class_packages
 
@@ -60,13 +60,28 @@ class BuildDirectories:
     sources_dir: Path
 
 
+@dataclass
+class UnsharedService:
+    request_socket: socket.socket
+
+    def run(self, op: dict, check=True) -> int:
+        res = unshared_helper.send_ops_to_server(self.request_socket, [op])
+        if check and res:
+            raise RuntimeError(f"E: unshared operation failed with rc={res}, op: {op}")
+        return res
+
+    def batch(self, ops: list[dict], check=True) -> int:
+        res = unshared_helper.send_ops_to_server(self.request_socket, ops)
+        if check and res:
+            raise RuntimeError(f"E: unshared operations failed with rc={res}, ops: {ops}")
+        return res
+
+
 def now_for_log() -> str:
     return datetime.datetime.now().isoformat()
 
 
-def run_x(args, check: bool = True, **kwargs):
-    """Run program. Output goes to stdout/stderr."""
-    # str-ify Paths, not necessary, but for readability in logs.
+def _prepare_subprocess_args(args, *, unshared: bool, chroot_dir: Path | None, **kwargs):
     args = [arg if isinstance(arg, str) else str(arg) for arg in args]
     args_str = '" "'.join(args)
     if "env" in kwargs:
@@ -76,17 +91,62 @@ def run_x(args, check: bool = True, **kwargs):
             env["SOURCE_DATE_EPOCH"] = os.environ["SOURCE_DATE_EPOCH"]
         kwargs["env"] = env | kwargs["env"]  # do not update original dict
 
-    print(f'D: Running "{args_str}"', flush=True)
-    return subprocess.run(args, check=check, **kwargs)
+    prefix_args = []
+    hint = ""
+    if unshared:
+        unshare = [
+            "unshare",
+            "--user",
+            "--map-auto",
+            "--map-user=65536",
+            "--map-group=65536",
+            "--pid",
+            "--mount-proc",
+            "--uts",
+            "--fork",
+            "--kill-child",
+            "--setuid",
+            "0",
+            "--setgid",
+            "0",
+        ]
+        hint = "unshared"
+        if chroot_dir:
+            unshare = [*unshare, "--root", str(chroot_dir)]
+            hint = f"{hint} in chroot {chroot_dir}"
+        prefix_args = [*unshare, "--"]
+    elif chroot_dir:
+        prefix_args = ["chroot", str(chroot_dir)]
+
+    print(f'D: Running{" " + hint if hint else ""} "{args_str}"', flush=True)
+    return prefix_args, args, kwargs
 
 
-def run_chrooted(chroot_dir: Path, args, check: bool = True, **kwargs):
+def run_x(args, check: bool = True, unshared: bool = False, chroot_dir: Path | None = None, **kwargs):
+    """Run program. Output goes to stdout/stderr."""
+    prefix_args, args, kwargs = _prepare_subprocess_args(args, unshared=unshared, chroot_dir=chroot_dir, **kwargs)
+
+    return subprocess.run(prefix_args + args, check=check, **kwargs)
+
+
+def popen(args, unshared: bool = False, chroot_dir: Path | None = None, **kwargs):
+    prefix_args, args, kwargs = _prepare_subprocess_args(args, unshared=unshared, chroot_dir=chroot_dir, **kwargs)
+    return subprocess.Popen(prefix_args + args, **kwargs)
+
+
+def run_chrooted(chroot_dir: Path, args, check: bool = True, unshared: bool = True, **kwargs):
     """Run program with arguments in chroot chroot_dir."""
     kwargs["env"] = {
         "PATH": "/usr/sbin:/sbin:/usr/bin:/bin",
         "TERM": "dumb",
     } | kwargs.get("env", {})
-    return run_x(["chroot", chroot_dir, *args], check=check, **kwargs)
+    return run_x(
+        args,
+        check=check,
+        unshared=unshared,
+        chroot_dir=chroot_dir,
+        **kwargs,
+    )
 
 
 def chrooted_dpkg_print_architecture(chroot_dir: Path) -> str:
@@ -145,12 +205,12 @@ def run_script(chroot_dir: Path, script: Path, helper_tools_paths: list[Path], e
 
     env = {
         "target": str(chroot_dir),
-        "ROOTCMD": f"chroot {chroot_dir!s} ",
+        "ROOTCMD": "grml-live-chroot",
         "PATH": ":".join([str(p) for p in helper_tools_paths] + [os.environ["PATH"]]),
     } | env
     print()
     print(f"I: *** Running script {script} ***")
-    proc = run_x([script], check=False, env=env, stdin=subprocess.DEVNULL)
+    proc = run_x([script], check=False, unshared=True, env=env, stdin=subprocess.DEVNULL)
     if proc.returncode != 0:
         print(f"E: Script {script} failed with exitcode {proc.returncode} - aborting.")
         raise FaiScriptFailed()
@@ -183,6 +243,7 @@ def install_packages_for_classes(
     helper_tools_paths: list[Path],
     hook_env: dict,
     dynamic_state: DynamicState,
+    unshared_service: UnsharedService,
 ):
     """Run equivalent of "instsoft" task: set debconf selections and install packages listed in package lists."""
 
@@ -221,11 +282,16 @@ def install_packages_for_classes(
     print()
     print("I: Installing all packages together to detect relationship errors")
     chrooted_apt_install(chroot_dir, full_package_list.as_apt_params(restrict_to_arch=dpkg_architecture))
-
-    with (chroot_dir / "grml-live" / "log" / "install_packages.list").open("wt") as file:
-        file.write("# List of packages installed by minifai\n")
-        file.write("\n".join(full_package_list.list_for_arch(dpkg_architecture)))
-        file.write("\n")
+    unshared_service.run(
+        unshared_helper.write_file_text(
+            (chroot_dir / "grml-live" / "log" / "install_packages.list"),
+            (
+                "# List of packages installed by minifai\n"
+                + ("\n".join(full_package_list.list_for_arch(dpkg_architecture)))
+                + "\n"
+            ),
+        )
+    )
 
 
 def show_env(log_text: str, env):
@@ -244,7 +310,13 @@ def do_skiptask(dynamic_state: DynamicState, skiptask_args: list[str]) -> int:
 
 
 def helper_socket_thread(
-    tempdir: Path, conf_dir: Path, chroot_dir: Path, classes: list[str], exit_event: Event, dynamic_state: DynamicState
+    tempdir: Path,
+    conf_dir: Path,
+    chroot_dir: Path,
+    classes: list[str],
+    exit_event: Event,
+    dynamic_state: DynamicState,
+    unshared_service: UnsharedService,
 ):
     address_family = socket.AF_UNIX
     socket_type = socket.SOCK_STREAM
@@ -272,9 +344,13 @@ def helper_socket_thread(
             else:
                 req = req[0].split(" ")
                 if req[0] == "fcopy":
-                    rc = intarget_tools.do_fcopy(conf_dir, chroot_dir, classes, req[1:])
+                    rc = unshared_service.run(
+                        unshared_helper.fcopy(conf_dir, chroot_dir, " ".join(classes), " ".join(req[1:]))
+                    )
                 elif req[0] == "copy-media-files":
-                    rc = intarget_tools.do_copy_media_files(conf_dir, chroot_dir, classes, req[1:])
+                    rc = unshared_service.run(
+                        unshared_helper.copy_media_files(conf_dir, chroot_dir, " ".join(classes), " ".join(req[1:]))
+                    )
                 elif req[0] == "skiptask":
                     rc = do_skiptask(dynamic_state, req[1:])
                 else:
@@ -298,7 +374,9 @@ def write_helper_tool(tools_path: Path, tool_name: str, body: str):
 
 
 @contextlib.contextmanager
-def helper_tools(conf_dir: Path, chroot_dir: Path, classes: list[str], dynamic_state: DynamicState):
+def helper_tools(
+    conf_dir: Path, chroot_dir: Path, classes: list[str], dynamic_state: DynamicState, unshared_service: UnsharedService
+):
     tempdir = Path(tempfile.mkdtemp())
 
     write_helper_tool(
@@ -341,10 +419,35 @@ fi
 """,
     )
 
+    # Tool to provide $ROOTCMD. Will be invoked from scripts, which run in an
+    # unshared context. Usually each script gets its own unshared context,
+    # therefore each script gets a new mount namespace, and so on.
+    # However, each script can run $ROOTCMD multiple times, so we should also
+    # avoid mounting one /proc per $ROOTCMD invocation.
+    write_helper_tool(
+        tempdir,
+        "grml-live-chroot",
+        f"""#!/bin/bash
+set -e
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+CHROOT_DIR="{chroot_dir}"
+test -d "$CHROOT_DIR"/proc/self || mount --rbind /proc "$CHROOT_DIR"/proc
+for filename in null full tty ; do
+  if ! test -c "$CHROOT_DIR"/dev/$filename ; then
+    rm -f "$CHROOT_DIR"/dev/$filename
+    touch "$CHROOT_DIR"/dev/$filename
+    mount --bind /dev/$filename "$CHROOT_DIR"/dev/$filename
+  fi
+done
+set +e
+exec chroot "$CHROOT_DIR" "$@"
+""",
+    )
+
     exit_event = Event()
     thread = Thread(
         target=helper_socket_thread,
-        args=(tempdir, conf_dir, chroot_dir, classes, exit_event, dynamic_state),
+        args=(tempdir, conf_dir, chroot_dir, classes, exit_event, dynamic_state, unshared_service),
         daemon=False,
     )
     thread.start()
@@ -357,13 +460,12 @@ fi
 
 
 @contextlib.contextmanager
-def policy_rcd(chroot_dir: Path):
+def policy_rcd(chroot_dir: Path, unshared_service: UnsharedService):
     marker = "!MINIFAI!"
     print("I: Installing temporary policy-rc.d")
     program = chroot_dir / "usr" / "sbin" / "policy-rc.d"
-    with program.open("wt") as file:
-        file.write(f"#!/bin/sh\n# Installed by grml-live minifai {marker}\nexit 101\n")
-        os.fchmod(file.fileno(), 0o755)
+    contents = f"#!/bin/sh\n# Installed by grml-live minifai {marker}\nexit 101\n"
+    unshared_service.run(unshared_helper.write_file_text(program, contents, executable=True))
 
     try:
         yield
@@ -376,6 +478,31 @@ def policy_rcd(chroot_dir: Path):
                 print(f"I: Not cleaning up {program} - our marker went missing")
         except Exception:
             print(f"W: Failed cleaning up {program}")
+
+
+@contextlib.contextmanager
+def start_unshared_service():
+    tempdir = Path(tempfile.mkdtemp())
+
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as listen_socket:
+        socket_path = f"{tempdir}/sock"
+        listen_socket.bind(socket_path)
+        listen_socket.listen(1)  # queue size
+
+        args = unshared_helper.make_server_command(socket_path)
+        subproc = popen(args, unshared=True)
+
+        listen_socket.settimeout(120)
+        try:
+            request_socket, _ = listen_socket.accept()
+        except TimeoutError:
+            print("E: unshared helper service did not connect")
+            subproc.kill()
+            raise
+
+        yield UnsharedService(request_socket)
+
+    subproc.kill()
 
 
 def read_envvars_for_classes(conf_dir: Path, classes: list[str]) -> dict:
@@ -456,32 +583,32 @@ def task_updatebase(chroot_dir: Path, dynamic_state: DynamicState):
     run_chrooted(chroot_dir, ["apt", "-oapt::cmd::disable-script-warning=1", "--error-on=any", "update", "-q"])
 
 
-def _create_dirs(chroot_dir: Path) -> BuildDirectories:
+def _create_dirs(chroot_dir: Path, unshared_service: UnsharedService) -> BuildDirectories:
     """Create required directories _inside_ the chroot."""
+
     # This code is as ugly as it looks.
     build_dir_relative = "grml-live"
     build_dir = chroot_dir / build_dir_relative
-    if build_dir.exists():
-        print(f'I: Deleting build directory "{build_dir_relative}" from previous run: {build_dir}')
-        shutil.rmtree(build_dir)
-    print(f"I: Creating build directory: {build_dir}")
-    build_dir.mkdir()
 
     log_dir_name = "log"
     log_dir = build_dir / log_dir_name
-    log_dir.mkdir()
 
     media_dir_name = "media"
     media_dir = build_dir / media_dir_name
-    media_dir.mkdir()
 
     netboot_dir_name = "netboot"
     netboot_dir = build_dir / netboot_dir_name
-    netboot_dir.mkdir()
 
     sources_dir_name = "grml_sources"
     sources_dir = build_dir / sources_dir_name
-    sources_dir.mkdir()
+
+    print(f"I: Creating build directory and subdirs: {build_dir}")
+    unshared_service.batch(
+        [
+            unshared_helper.ensure_empty_dir(absolute_dir)
+            for absolute_dir in [build_dir, log_dir, netboot_dir, media_dir, sources_dir]
+        ]
+    )
 
     return BuildDirectories(
         build_dir_inside=f"/{build_dir_relative}/",
@@ -497,7 +624,12 @@ def _create_dirs(chroot_dir: Path) -> BuildDirectories:
     )
 
 
-def install_class_helper_tools(conf_dir: Path, build_dir: Path, classes: list[str]) -> Path:
+def install_class_helper_tools(
+    conf_dir: Path,
+    build_dir: Path,
+    classes: list[str],
+    unshared_service: UnsharedService,
+) -> Path:
     """
     Copy class-config helpers into chroot.
 
@@ -505,30 +637,48 @@ def install_class_helper_tools(conf_dir: Path, build_dir: Path, classes: list[st
     """
 
     class_helper_tools_path = build_dir / "tools"
-    class_helper_tools_path.mkdir()
+    unshared_service.run(unshared_helper.ensure_empty_dir(class_helper_tools_path))
     for class_name in classes:
         class_path = conf_dir / "tools" / class_name
         if not class_path.exists():
             continue
-        shutil.copytree(class_path, class_helper_tools_path, symlinks=False, dirs_exist_ok=True)
+        for helper in class_path.glob("*"):
+            if not helper.is_file():
+                continue
+            unshared_service.run(
+                unshared_helper.write_file_text(
+                    class_helper_tools_path / helper.name,
+                    helper.read_text(),
+                    executable=True,
+                )
+            )
 
     return class_helper_tools_path
 
 
 def _run_tasks(
-    conf_dir: Path, chroot_dir: Path, classes: list[str], grml_live_config: Path, fai_action: str, skip_tasks: list[str]
+    conf_dir: Path,
+    chroot_dir: Path,
+    classes: list[str],
+    grml_live_config: Path,
+    fai_action: str,
+    skip_tasks: list[str],
+    unshared_service: UnsharedService,
 ) -> int:
     dynamic_state = DynamicState()
-    directories = _create_dirs(chroot_dir)
+    directories = _create_dirs(chroot_dir, unshared_service)
 
-    # Create a file in there, so grml-live does not complain.
-    (directories.log_dir / "minifai").write_text(
-        "This chroot was created by grml-live minifai. Not all FAI features are supported.\n"
+    # Create a file in log_dir, so grml-live does not complain.
+    unshared_service.run(
+        unshared_helper.write_file_text(
+            (directories.log_dir / "minifai"),
+            ("This chroot was created by grml-live minifai. Not all FAI features are supported.\n"),
+        )
     )
 
     # duplicate grml_live_config into the chroot, so chrooted scripts can use it.
     grml_live_config_chroot = directories.build_dir / "config"
-    grml_live_config_chroot.write_bytes(grml_live_config.read_bytes())
+    unshared_service.run(unshared_helper.write_file_text(grml_live_config_chroot, grml_live_config.read_text()))
 
     do_skiptask(dynamic_state, skip_tasks)
 
@@ -542,8 +692,11 @@ def _run_tasks(
     } | read_envvars_for_classes(conf_dir, classes)
     show_env("Merged class variables", env)
 
-    with helper_tools(conf_dir, chroot_dir, classes, dynamic_state) as helper_tools_path:
-        class_helper_tools_path = install_class_helper_tools(conf_dir, directories.build_dir, classes)
+    # Setup /proc, /sys inside chroot_dir, so future chroot calls will have these mounts.
+    unshared_service.run(unshared_helper.bindmount_proc_sys_into(chroot_dir))
+
+    with helper_tools(conf_dir, chroot_dir, classes, dynamic_state, unshared_service) as helper_tools_path:
+        class_helper_tools_path = install_class_helper_tools(conf_dir, directories.build_dir, classes, unshared_service)
 
         helper_tools_paths = [helper_tools_path, class_helper_tools_path]
 
@@ -551,11 +704,13 @@ def _run_tasks(
         for class_name in classes:
             run_script(chroot_dir, conf_dir / "hooks" / class_name / "updatebase", helper_tools_paths, hook_env)
 
-        with policy_rcd(chroot_dir):
+        with policy_rcd(chroot_dir, unshared_service):
             task_updatebase(chroot_dir, dynamic_state)
 
             if not should_skip_task(dynamic_state, "instsoft"):
-                install_packages_for_classes(conf_dir, chroot_dir, classes, helper_tools_paths, hook_env, dynamic_state)
+                install_packages_for_classes(
+                    conf_dir, chroot_dir, classes, helper_tools_paths, hook_env, dynamic_state, unshared_service
+                )
 
         if not should_skip_task(dynamic_state, "configure"):
             for class_name in classes:
@@ -602,34 +757,45 @@ def _main(program_name: str, argv: list[str]) -> int:
     if not chroot_dir.exists():
         raise ValueError(f"Chroot directory {chroot_dir} does not exist")
 
-    skiptasks = []
-    rc = 0
+    with start_unshared_service() as unshared_service:
+        unshared_service.run(unshared_helper.hello_world())
 
-    try:
-        if args.action == FaiAction.BOOTSTRAP:
-            install_base(conf_dir, chroot_dir, classes, args.debian_suite, args.mirror_url)
-            skiptasks = ["configure"]
-        elif args.action == FaiAction.DIRINSTALL:
-            install_base(conf_dir, chroot_dir, classes, args.debian_suite, args.mirror_url)
-        elif args.action == FaiAction.SOFTUPDATE:
-            pass
-        elif args.action == FaiAction.RECONFIGURE:
-            skiptasks = ["updatebase", "instsoft"]
-        elif args.action == FaiAction.REBUILD:
-            skiptasks = ["updatebase", "instsoft", "configure"]
-        else:
-            print(f"E: minifai: Unknown fai action: {args.action!r}")
-            rc = 1
+        skiptasks = []
+        rc = 0
 
-        if not rc:
-            rc = _run_tasks(conf_dir, chroot_dir, classes, args.grml_live_config, args.action, skiptasks)
-    except (ClassFileParsingFailed, FaiScriptFailed):
-        # assume exception site already printed relevant info
-        rc = 3
-    except Exception:
-        print(f"E: {now_for_log()} minifai main caught fatal exception")
-        traceback.print_exc()
-        rc = 2
+        try:
+            if args.action == FaiAction.BOOTSTRAP:
+                install_base(conf_dir, chroot_dir, classes, args.debian_suite, args.mirror_url)
+                skiptasks = ["configure"]
+            elif args.action == FaiAction.DIRINSTALL:
+                install_base(conf_dir, chroot_dir, classes, args.debian_suite, args.mirror_url)
+            elif args.action == FaiAction.SOFTUPDATE:
+                pass
+            elif args.action == FaiAction.RECONFIGURE:
+                skiptasks = ["updatebase", "instsoft"]
+            elif args.action == FaiAction.REBUILD:
+                skiptasks = ["updatebase", "instsoft", "configure"]
+            else:
+                print(f"E: minifai: Unknown fai action: {args.action!r}")
+                rc = 1
+
+            if not rc:
+                rc = _run_tasks(
+                    conf_dir,
+                    chroot_dir,
+                    classes,
+                    args.grml_live_config,
+                    args.action,
+                    skiptasks,
+                    unshared_service,
+                )
+        except (ClassFileParsingFailed, FaiScriptFailed):
+            # assume exception site already printed relevant info
+            rc = 3
+        except Exception:
+            print(f"E: {now_for_log()} minifai main caught fatal exception")
+            traceback.print_exc()
+            rc = 2
 
     print(f"I: minifai exiting with exit code {rc}")
     return rc
