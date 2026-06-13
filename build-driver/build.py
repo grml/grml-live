@@ -92,8 +92,11 @@ def is_ci():
 
 
 def apt_satisfy(deps: str):
+    args = ["apt-get", "satisfy", "-q", "-y", "--no-install-recommends", deps.strip()]
+    if os.getuid() != 0:
+        args = ["sudo", "-n", "--preserve-env=DEBIAN_FRONTEND", "--", *args]
     run_x(
-        ["apt-get", "satisfy", "-q", "-y", "--no-install-recommends", deps.strip()],
+        args,
         env=dict(os.environ) | {"DEBIAN_FRONTEND": "noninteractive"},
     )
 
