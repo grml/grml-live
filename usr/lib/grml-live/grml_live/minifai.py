@@ -827,31 +827,27 @@ def _main(program_name: str, argv: list[str]) -> int:
     if not chroot_dir.exists():
         raise ValueError(f"Chroot directory {chroot_dir} does not exist")
 
+    skiptasks = []
+    rc = 0
+
     try:
         if args.action == FaiAction.BOOTSTRAP:
             install_base(conf_dir, chroot_dir, classes, args.debian_suite, args.mirror_url)
-            rc = _run_tasks(conf_dir, chroot_dir, classes, args.grml_live_config, args.action, ["configure"])
+            skiptasks = ["configure"]
         elif args.action == FaiAction.DIRINSTALL:
             install_base(conf_dir, chroot_dir, classes, args.debian_suite, args.mirror_url)
-            rc = _run_tasks(conf_dir, chroot_dir, classes, args.grml_live_config, args.action, [])
         elif args.action == FaiAction.SOFTUPDATE:
-            rc = _run_tasks(conf_dir, chroot_dir, classes, args.grml_live_config, args.action, [])
+            pass
         elif args.action == FaiAction.RECONFIGURE:
-            rc = _run_tasks(
-                conf_dir, chroot_dir, classes, args.grml_live_config, args.action, ["updatebase", "instsoft"]
-            )
+            skiptasks = ["updatebase", "instsoft"]
         elif args.action == FaiAction.REBUILD:
-            rc = _run_tasks(
-                conf_dir,
-                chroot_dir,
-                classes,
-                args.grml_live_config,
-                args.action,
-                ["updatebase", "instsoft", "configure"],
-            )
+            skiptasks = ["updatebase", "instsoft", "configure"]
         else:
             print(f"E: minifai: Unknown fai action: {args.action!r}")
             rc = 1
+
+        if not rc:
+            rc = _run_tasks(conf_dir, chroot_dir, classes, args.grml_live_config, args.action, skiptasks)
     except (ClassFileParsingFailed, FaiScriptFailed):
         # assume exception site already printed relevant info
         rc = 3
