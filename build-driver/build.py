@@ -496,11 +496,12 @@ def _main(program_name: str, argv: list[str]) -> int:
     print(f"I: {output_dir=}")
 
     # avoid building on mounted volume
-    tmp_root = Path(tempfile.gettempdir())
-    tmp_dir = Path(tempfile.mkdtemp(dir=tmp_root))
+    tmp_dir = Path(tempfile.mkdtemp(prefix="gltmp"))
     tmp_dir.chmod(0o775)
-    build_dir = Path(tempfile.mkdtemp(dir=tmp_root))
+    print(f"I: {tmp_dir=}")
+    build_dir = Path(tempfile.mkdtemp(prefix="glbuild"))
     build_dir.chmod(0o775)
+    print(f"I: {build_dir=}")
 
     # Do it now, as the next block needs curl installed.
     install_debian_dependencies()
