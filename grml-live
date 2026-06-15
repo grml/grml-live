@@ -780,6 +780,13 @@ if [ "$RC" != 0 ] ; then
 fi
 
 mv "${CHROOT_OUTPUT}"/grml-live/grml_sources/ "${OUTPUT}"
+RC=$?
+if [ "$RC" != 0 ] ; then
+  log    "Error: failed to move grml_sources [exit code ${RC}]. Exiting."
+  eerror "Error: failed to move grml_sources [exit code ${RC}]. Exiting." ; eend 1
+  bailout 1
+fi
+
 
 # provide inform fai about the ISO we build, needs to be provided
 # *after* FAI stage, otherwise FAI skips the debootstrap stage if
