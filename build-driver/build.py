@@ -46,6 +46,22 @@ Examples:
     print(message.strip(), file=sys.stderr)
 
 
+class DelegatedProgramFailed(Exception):
+    program_name: str
+    returncode: str
+    cmd: list[str]
+
+    def __init__(self, program_name, returncode, cmd):
+        self.program_name = program_name
+        self.returncode = returncode
+        self.cmd = cmd
+
+    def message(self):
+        return f"{self.program_name} failed with exit code {self.returncode}, command was: " + (
+            " ".join(['"' + arg + '"' for arg in self.cmd])
+        )
+
+
 def run_x(args, check: bool = True, **kwargs):
     # str-ify Paths, not necessary, but for readability in logs.
     args = [arg if isinstance(arg, str) else str(arg) for arg in args]
@@ -135,7 +151,10 @@ def run_grml_live(
     if old_iso_path:
         grml_live_cmd += ["-b", "-e", old_iso_path]
     with ci_section("Building with grml-live", collapsed=False):
-        run_x(grml_live_cmd, env=env)
+        try:
+            run_x(grml_live_cmd, env=env)
+        except subprocess.CalledProcessError as except_inst:
+            raise DelegatedProgramFailed("grml-live", except_inst.returncode, except_inst.cmd)
 
 
 def upload_daily(job_name: str, build_dir: Path, job_timestamp: datetime.datetime):
@@ -349,7 +368,7 @@ def download_old_sources(tmp_dir: Path, old_iso_url: str) -> Path | None:
     return path
 
 
-def main(program_name: str, argv: list[str]) -> int:
+def _main(program_name: str, argv: list[str]) -> int:
     print(f"I: {program_name} started with {argv=}")
     try:
         grml_live_path = Path(argv.pop(0))
@@ -520,6 +539,13 @@ def main(program_name: str, argv: list[str]) -> int:
     print("I: Success.")
 
     return 0
+
+
+def main(program_name: str, argv: list[str]) -> int:
+    try:
+        return _main(program_name, argv)
+    except DelegatedProgramFailed as except_inst:
+        return bail(except_inst.message())
 
 
 if __name__ == "__main__":
