@@ -638,6 +638,9 @@ def install_base(conf_dir: Path, chroot_dir: Path, classes, debian_suite: str, m
         if (keyring_dir / class_name).exists():
             keyring_file = keyring_dir / class_name
 
+    if keyring_file is None:
+        raise RuntimeError("No bootstrap-keyring found for any class, cannot build chroot")
+
     # Should use delete_on_close=False, but needs Python >= 3.12
     with tempfile.NamedTemporaryFile(delete=False, dir=chroot_dir) as keyring_tempfile:
         keyring_tempfile.write(keyring_file.read_bytes())
