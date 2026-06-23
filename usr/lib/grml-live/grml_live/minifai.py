@@ -754,6 +754,18 @@ def _run_tasks(
                 for class_name in classes:
                     run_class_scripts("media-scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
 
+                print("I: installing media files from chroot build")
+                run_x(
+                    [
+                        "/bin/cp",
+                        "--no-preserve=all",
+                        "--preserve=timestamp",
+                        "-rv",
+                        str(chroot_directories.media_dir) + "/.",
+                        grml_cd_dir,
+                    ],
+                )
+
     finally:
         copy_directory_out(grml_logs_dir / "fai", chroot_directories.log_dir)
 
