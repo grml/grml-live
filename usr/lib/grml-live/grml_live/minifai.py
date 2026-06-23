@@ -753,6 +753,14 @@ def _run_tasks(
     finally:
         copy_directory_out(grml_logs_dir / "fai", chroot_directories.log_dir)
 
+            print("I: installing media files from chroot build")
+            run_x(
+                ["/bin/cp", "--preserve=timestamp", "-rv", str(chroot_directories.media_dir) + "/.", grml_cd_dir],
+                check=True,
+                unshared=True,
+                stdin=subprocess.DEVNULL,
+            )
+
     return 0
 
 

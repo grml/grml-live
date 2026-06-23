@@ -781,19 +781,6 @@ einfo "Finished execution of stage 'fai $FAI_ACTION'"
 # BUILD_OUTPUT - execute arch specific stuff and squashfs {{{
 mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for stage ARCH"
 
-# prepare ISO
-if [ -n "$BOOTSTRAP_ONLY" ] ; then
-  log   "Skipping stage 'boot' as building with bootstrap only."
-  ewarn "Skipping stage 'boot' as building with bootstrap only." ; eend 0
-else
-  einfo "Installing media files from chroot build"
-  log   "Installing media files from chroot build"
-  cp --preserve=timestamp -r "$CHROOT_OUTPUT/grml-live/media/." "$BUILD_OUTPUT/"
-  eend 0
-
-  einfo "Finished execution of stage 'boot'" ; eend 0
-fi # BOOTSTRAP_ONLY
-
 # support installation of local files into the chroot/ISO
 if [ -n "$CHROOT_INSTALL" ] ; then
   if ! [ -d "$CHROOT_INSTALL" ] ; then
