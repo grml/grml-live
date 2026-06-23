@@ -678,6 +678,23 @@ def copy_directory_out(
     )
 
 
+def cleanup_dyld_cache(
+    chroot_dir: Path,
+    unshared_service: UnsharedService,
+):
+    # The dynamic linker auxiliary cache is not reproducible and is always
+    # invalid at boot (see Debian bug #845034). Unfortunately this must be
+    # done from outside the chroot, as *any* program invocation inside will
+    # recreate the file.
+    print("I: Cleaning ldconfig cache")
+    unshared_service.batch(
+        [
+            unshared_helper.unlink(chroot_dir / "var/cache/ldconfig/aux-cache"),
+            unshared_helper.rmdir(chroot_dir / "var/cache/ldconfig"),
+        ]
+    )
+
+
 def _run_tasks(
     conf_dir: Path,
     output_dir: Path,
@@ -750,16 +767,22 @@ def _run_tasks(
                 for class_name in classes:
                     run_class_scripts("media-scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
 
+                cleanup_dyld_cache(chroot_dir, unshared_service)
+
+                print("I: installing media files from chroot build")
+                run_x(
+                    [
+                        "/bin/cp",
+                        "--no-preserve=all",
+                        "--preserve=timestamp",
+                        "-rv",
+                        str(chroot_directories.media_dir) + "/.",
+                        grml_cd_dir,
+                    ],
+                )
+
     finally:
         copy_directory_out(grml_logs_dir / "fai", chroot_directories.log_dir)
-
-            print("I: installing media files from chroot build")
-            run_x(
-                ["/bin/cp", "--preserve=timestamp", "-rv", str(chroot_directories.media_dir) + "/.", grml_cd_dir],
-                check=True,
-                unshared=True,
-                stdin=subprocess.DEVNULL,
-            )
 
     return 0
 

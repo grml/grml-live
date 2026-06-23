@@ -104,6 +104,12 @@ def unlink(path: Path | str):
 
 
 @_operation
+def rmdir(path: Path | str):
+    path = Path(path)
+    path.rmdir()
+
+
+@_operation
 def run_program(args, **kwargs):
     """Run program. Output goes to stdout/stderr. Caller needs to check returncode."""
     kwargs["stdin"] = subprocess.DEVNULL

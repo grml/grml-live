@@ -794,13 +794,6 @@ if [ -n "$CHROOT_INSTALL" ] ; then
   fi
 fi
 
-# The dynamic linker auxiliary cache is not reproducible and is always
-# invalid at boot (see Debian bug #845034). Unfortunately this must be
-# done from outside the chroot, as *any* program invocation inside will
-# recreate the file.
-rm -f "$CHROOT_OUTPUT"/var/cache/ldconfig/aux-cache
-rmdir --ignore-fail-on-non-empty "$CHROOT_OUTPUT"/var/cache/ldconfig
-
 cap_timestamps "$CHROOT_OUTPUT"
 
 if [ -n "$SKIP_MKSQUASHFS" ] ; then
