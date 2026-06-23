@@ -46,7 +46,7 @@ class DynamicState:
 
 
 @dataclass(kw_only=True)
-class BuildDirectories:
+class ChrootBuildDirectories:
     # xxx_inside is always the path _inside_ the chroot ("relative", if chrooted).
     build_dir_inside: str
     build_dir: Path
@@ -583,7 +583,7 @@ def task_updatebase(chroot_dir: Path, dynamic_state: DynamicState):
     run_chrooted(chroot_dir, ["apt", "-oapt::cmd::disable-script-warning=1", "--error-on=any", "update", "-q"])
 
 
-def _create_dirs(chroot_dir: Path, unshared_service: UnsharedService) -> BuildDirectories:
+def _create_chroot_dirs(chroot_dir: Path, unshared_service: UnsharedService) -> ChrootBuildDirectories:
     """Create required directories _inside_ the chroot."""
 
     # This code is as ugly as it looks.
@@ -610,7 +610,7 @@ def _create_dirs(chroot_dir: Path, unshared_service: UnsharedService) -> BuildDi
         ]
     )
 
-    return BuildDirectories(
+    return ChrootBuildDirectories(
         build_dir_inside=f"/{build_dir_relative}/",
         build_dir=build_dir,
         log_dir_inside=f"/{build_dir_relative}/{log_dir_name}/",
@@ -658,6 +658,7 @@ def install_class_helper_tools(
 
 def _run_tasks(
     conf_dir: Path,
+    output_dir: Path,
     chroot_dir: Path,
     classes: list[str],
     grml_live_config: Path,
@@ -666,29 +667,31 @@ def _run_tasks(
     unshared_service: UnsharedService,
 ) -> int:
     dynamic_state = DynamicState()
-    directories = _create_dirs(chroot_dir, unshared_service)
+    chroot_directories = _create_chroot_dirs(chroot_dir, unshared_service)
+    grml_cd_dir = output_dir / "grml_cd"
+    grml_cd_dir.mkdir()
 
     # Create a file in log_dir, so grml-live does not complain.
     unshared_service.run(
         unshared_helper.write_file_text(
-            (directories.log_dir / "minifai"),
+            (chroot_directories.log_dir / "minifai"),
             ("This chroot was created by grml-live minifai. Not all FAI features are supported.\n"),
         )
     )
 
     # duplicate grml_live_config into the chroot, so chrooted scripts can use it.
-    grml_live_config_chroot = directories.build_dir / "config"
+    grml_live_config_chroot = chroot_directories.build_dir / "config"
     unshared_service.run(unshared_helper.write_file_text(grml_live_config_chroot, grml_live_config.read_text()))
 
     do_skiptask(dynamic_state, skip_tasks)
 
     env = {
         "GRML_LIVE_CONFIG": str(grml_live_config_chroot),
-        "GRML_LIVE_BUILDDIR": directories.build_dir_inside,
-        "GRML_LIVE_MEDIADIR": directories.media_dir_inside,
-        "GRML_LIVE_NETBOOTDIR": directories.netboot_dir_inside,
-        "GRML_LIVE_SOURCESDIR": directories.sources_dir_inside,
-        "LOGDIR": str(directories.log_dir),
+        "GRML_LIVE_BUILDDIR": chroot_directories.build_dir_inside,
+        "GRML_LIVE_MEDIADIR": chroot_directories.media_dir_inside,
+        "GRML_LIVE_NETBOOTDIR": chroot_directories.netboot_dir_inside,
+        "GRML_LIVE_SOURCESDIR": chroot_directories.sources_dir_inside,
+        "LOGDIR": str(chroot_directories.log_dir),
     } | read_envvars_for_classes(conf_dir, classes)
     show_env("Merged class variables", env)
 
@@ -696,7 +699,9 @@ def _run_tasks(
     unshared_service.run(unshared_helper.bindmount_proc_sys_into(chroot_dir))
 
     with helper_tools(conf_dir, chroot_dir, classes, dynamic_state, unshared_service) as helper_tools_path:
-        class_helper_tools_path = install_class_helper_tools(conf_dir, directories.build_dir, classes, unshared_service)
+        class_helper_tools_path = install_class_helper_tools(
+            conf_dir, chroot_directories.build_dir, classes, unshared_service
+        )
 
         helper_tools_paths = [helper_tools_path, class_helper_tools_path]
 
@@ -734,7 +739,7 @@ def create_argparser() -> argparse.ArgumentParser:
         metavar="ACTION",
         help="FAI action to execute (choices: %(choices)s)",
     )
-    parser.add_argument("chroot_dir", type=Path)
+    parser.add_argument("output_dir", type=Path)
     parser.add_argument("grml_live_config", type=Path)
     parser.add_argument("debian_suite", type=str)
     parser.add_argument("mirror_url", type=str)
@@ -749,13 +754,18 @@ def _main(program_name: str, argv: list[str]) -> int:
     print(f"I: Using classes: {classes}")
     conf_dir = args.config.absolute()
     print(f"I: Using conf_dir: {conf_dir}")
-    chroot_dir: Path = args.chroot_dir.absolute()
-    print(f"I: Using chroot_dir: {args.chroot_dir}")
+    output_dir: Path = args.output_dir.absolute()
+    print(f"I: Using output_dir: {args.output_dir}")
 
     if not conf_dir.exists():
         raise ValueError(f"Config directory {conf_dir} does not exist")
-    if not chroot_dir.exists():
-        raise ValueError(f"Chroot directory {chroot_dir} does not exist")
+    if not output_dir.exists():
+        raise ValueError(f"Output directory {output_dir} does not exist")
+
+    chroot_dir = output_dir / "grml_chroot"
+    chroot_dir.mkdir(
+        exist_ok=True  # for now, as grml_live has to mount the mirror
+    )
 
     with start_unshared_service() as unshared_service:
         unshared_service.run(unshared_helper.hello_world())
@@ -782,6 +792,7 @@ def _main(program_name: str, argv: list[str]) -> int:
             if not rc:
                 rc = _run_tasks(
                     conf_dir,
+                    output_dir,
                     chroot_dir,
                     classes,
                     args.grml_live_config,

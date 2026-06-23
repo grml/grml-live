@@ -764,9 +764,9 @@ if [ -n "${MIRROR_DIRECTORY}" ] ; then
 fi
 
 log "Executed FAI command line:"
-log "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
-einfo "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
-"${FAI_PROGRAM}" "${GRML_FAI_CONFIG}" "${CLASSES}" "${FAI_ACTION}" "${CHROOT_OUTPUT}" "${CONFIGDUMP}" "${SUITE}" "${BOOTSTRAP_MIRROR}" 2>&1 | tee -a "${LOGFILE}"
+log "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
+einfo "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
+"${FAI_PROGRAM}" "${GRML_FAI_CONFIG}" "${CLASSES}" "${FAI_ACTION}" "${OUTPUT}" "${CONFIGDUMP}" "${SUITE}" "${BOOTSTRAP_MIRROR}" 2>&1 | tee -a "${LOGFILE}"
 RC="${PIPESTATUS[0]}" # notice: bash-only
 
 # Fetches logs from "${CHROOT_OUTPUT}"/grml-live/log.
@@ -911,7 +911,7 @@ generate_build_info() {
     distri_info="${DISTRI_INFO}" \
     distri_name="${DISTRI_NAME}" \
     extract_iso_name="${EXTRACT_ISO_NAME}" \
-    fai_cmdline="${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${configdump_placeholder} ${SUITE} ${BOOTSTRAP_MIRROR}" \
+    fai_cmdline="${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${OUTPUT} ${configdump_placeholder} ${SUITE} ${BOOTSTRAP_MIRROR}" \
     fai_version="minifai" \
     grml_architecture="${ARCH}" \
     grml_bootid="${BOOTID}" \
