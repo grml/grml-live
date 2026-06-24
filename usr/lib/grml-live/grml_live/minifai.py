@@ -764,6 +764,25 @@ def mksquashfs(
     )
 
 
+def create_on_media_md5sums(grml_cd_dir: Path, grml_name: str):
+    print("I: preparing md5sums file")
+
+    grml_dir = grml_cd_dir / "GRML"
+    grml_dir.mkdir(exist_ok=True)  # media-scripts may have created it
+    named_grml_dir = grml_dir / grml_name
+    named_grml_dir.mkdir(exist_ok=True)  # media-scripts may have created it
+    md5sums_file = named_grml_dir / "md5sums"
+
+    filenames = [
+        filename.relative_to(grml_cd_dir) for filename in sorted(grml_cd_dir.rglob("*")) if not filename.is_dir()
+    ]
+
+    with md5sums_file.open("wb") as output:
+        run_x(["/bin/md5sum", *filenames], cwd=grml_cd_dir, stdout=output)
+
+    run_x(["/bin/ls", "-la", md5sums_file])
+
+
 def _run_tasks(
     conf_dir: Path,
     output_dir: Path,
@@ -858,6 +877,8 @@ def _run_tasks(
                         grml_cd_dir,
                     ],
                 )
+
+                create_on_media_md5sums(grml_cd_dir, grml_name)
 
     finally:
         copy_directory_out(grml_logs_dir / "fai", chroot_directories.log_dir)

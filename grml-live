@@ -676,12 +676,6 @@ if [ -n "$CHROOT_INSTALL" ] ; then
   fi
 fi
 
-# create md5sum file:
-# shellcheck disable=SC2094 # find execution ignores written file
-( cd "$BUILD_OUTPUT"/GRML/"${GRML_NAME}" &&
-find ../.. -type f -not -name md5sums -exec md5sum {} \; > md5sums )
-# }}}
-
 # information how the ISO was generated {{{
 # shellcheck disable=SC2034
 generate_build_info() {
