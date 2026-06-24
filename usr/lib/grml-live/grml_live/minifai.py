@@ -25,6 +25,10 @@ from .packages import PackageList, parse_class_packages
 
 APT_DEBUG_ACQUIRE = "Debug::Acquire::http=true"
 
+# UID/GID *inside* the userns that is mapped to the executing user.
+UNSHARE_UID = 65536
+UNSHARE_GID = 65536
+
 
 class FaiScriptFailed(Exception):
     pass
@@ -132,8 +136,8 @@ def _prepare_subprocess_args(args, *, unshared: bool, chroot_dir: Path | None, *
             "unshare",
             "--user",
             "--map-auto",
-            "--map-user=65536",
-            "--map-group=65536",
+            f"--map-user={UNSHARE_UID}",
+            f"--map-group={UNSHARE_GID}",
             "--pid",
             "--mount-proc",
             "--uts",
