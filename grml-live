@@ -344,6 +344,32 @@ if [ -z "$SKIP_MKISOFS" ] && ! type "$XORRISO_BINARY" >/dev/null 2>&1 ; then
   bailout
 fi
 
+if [ -n "$BUILD_OUTPUT" ] ; then
+  eerror "The variable \$BUILD_OUTPUT is set, but it is unsupported." ; eend 1
+  eerror "Please unset it. Current value: \$BUILD_OUTPUT=${BUILD_OUTPUT}" ; eend 1
+  bailout
+fi
+if [ -n "$CHROOT_OUTPUT" ] ; then
+  eerror "The variable \$CHROOT_OUTPUT is set, but it is unsupported." ; eend 1
+  eerror "Please unset it. Current value: \$CHROOT_OUTPUT=${CHROOT_OUTPUT}" ; eend 1
+  bailout
+fi
+if [ -n "$ISO_OUTPUT" ] ; then
+  eerror "The variable \$ISO_OUTPUT is set, but it is unsupported." ; eend 1
+  eerror "Please unset it. Current value: \$ISO_OUTPUT=${ISO_OUTPUT}" ; eend 1
+  bailout
+fi
+if [ -n "$LOG_OUTPUT" ] ; then
+  eerror "The variable \$LOG_OUTPUT is set, but it is unsupported." ; eend 1
+  eerror "Please unset it. Current value: \$LOG_OUTPUT=${LOG_OUTPUT}" ; eend 1
+  bailout
+fi
+if [ -n "$NETBOOT" ] ; then
+  eerror "The variable \$NETBOOT is set, but it is unsupported." ; eend 1
+  eerror "Please unset it. Current value: \$NETBOOT=${NETBOOT}" ; eend 1
+  bailout
+fi
+
 # assume sane defaults (if not set already) {{{
 [ -n "$ARCH" ]                    || ARCH="$("$DPKG_BINARY" --print-architecture)"
 [ -n "$CLASSES" ]                 || CLASSES="GRML_FULL,$(echo "${ARCH}" | tr '[:lower:]' '[:upper:]')"
@@ -356,25 +382,13 @@ fi
 [ -n "$HOSTNAME" ]                || HOSTNAME='grml'
 [ -n "$NO_ADDONS" ]               || NO_ADDONS=''
 [ -n "$NO_BOOTID" ]               || NO_BOOTID=''
+[ -n "$OUTPUT" ]                  || OUTPUT="$PWD/grml/"
 [ -n "$RELEASENAME" ]             || RELEASENAME='grml-live rocks'
 [ -n "$SECURE_BOOT" ]             || SECURE_BOOT='disable'
 [ -n "$SQUASHFS_EXCLUDES_FILE" ]  || SQUASHFS_EXCLUDES_FILE="${GRML_FAI_CONFIG}/grml/squashfs-excludes"
 [ -n "$SUITE" ]                   || SUITE='testing'
 [ -n "$USERNAME" ]                || USERNAME='grml'
 [ -n "$VERSION" ]                 || VERSION='0.0.1'
-
-# output specific stuff, depends on $OUTPUT:
-[ -n "$OUTPUT" ]           || OUTPUT="$PWD/grml/"
-[ -n "$BUILD_OUTPUT" ]     && echo "W: setting BUILD_OUTPUT is deprecated, please remove it"
-[ -n "$BUILD_OUTPUT" ]     || BUILD_OUTPUT="$OUTPUT/grml_cd"
-[ -n "$CHROOT_OUTPUT" ]    && echo "W: setting CHROOT_OUTPUT is deprecated, please remove it"
-[ -n "$CHROOT_OUTPUT" ]    || CHROOT_OUTPUT="$OUTPUT/grml_chroot"
-[ -n "$ISO_OUTPUT" ]       && echo "W: setting ISO_OUTPUT is deprecated, please remove it"
-[ -n "$ISO_OUTPUT" ]       || ISO_OUTPUT="$OUTPUT/grml_isos"
-[ -n "$LOG_OUTPUT" ]       && echo "W: setting LOG_OUTPUT is deprecated, please remove it"
-[ -n "$LOG_OUTPUT" ]       || LOG_OUTPUT="$OUTPUT/grml_logs"
-[ -n "$NETBOOT" ]          && echo "W: setting NETBOOT is deprecated, please remove it"
-[ -n "$NETBOOT" ]          || NETBOOT="${OUTPUT}/netboot"
 # }}}
 
 # some misc checks before doing work {{{
@@ -555,6 +569,12 @@ else
     BOOTID=$(echo "${GRML_NAME}${VERSION}" | tr -d ',./;\- ')
   fi
 fi
+
+BUILD_OUTPUT="${OUTPUT}/grml_cd"
+CHROOT_OUTPUT="${OUTPUT}/grml_chroot"
+ISO_OUTPUT="${OUTPUT}/grml_isos"
+LOG_OUTPUT="${OUTPUT}/grml_logs"
+NETBOOT="${OUTPUT}/netboot"
 # }}}
 
 # clean up before start {{{
