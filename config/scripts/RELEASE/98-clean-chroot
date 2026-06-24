@@ -46,10 +46,10 @@ mkdir -m 0755 "$target"/root
 echo "Removing all files inside /home/${USERNAME}"
 rm -rf "${target}/home/${USERNAME:?}"
 mkdir -m 0755 "${target}/home/${USERNAME}"
-$ROOTCMD chown "${USERNAME}:${USERNAME}" "/home/${USERNAME}"
 
 echo "Syncing /home/${USERNAME}/ with data from /etc/skel/:"
-$ROOTCMD su -s /bin/sh "${USERNAME}" -c "rsync -Hav /etc/skel/ /home/${USERNAME}/"
+$ROOTCMD rsync -Hav /etc/skel/ /home/"${USERNAME}"/
+$ROOTCMD chown -R "${USERNAME}:${USERNAME}" "/home/${USERNAME}"
 
 
 # Initialize zsh caches so first startup on Live CD is faster.
