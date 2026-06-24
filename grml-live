@@ -751,6 +751,12 @@ if [ -n "${MIRROR_DIRECTORY}" ] ; then
   mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
 fi
 
+# minifai now needs to see these
+export MKSQUASHFS_BINARY
+export SQUASHFS_OPTIONS
+export SQUASHFS_ZLIB
+export SQUASHFS_EXCLUDES_FILE
+
 log "Executed FAI command line:"
 log "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
 einfo "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
@@ -795,66 +801,10 @@ if [ -n "$CHROOT_INSTALL" ] ; then
 fi
 
 if [ -n "$SKIP_MKSQUASHFS" ] ; then
+   # FIXME: minifai needs to skip mksquashfs when requested
    log   "Skipping stage 'squashfs' as requested via option -q or -N"
    ewarn "Skipping stage 'squashfs' as requested via option -q or -N" ; eend 0
-else
-   mkdir -p "$BUILD_OUTPUT"/live/"${GRML_NAME}"/
-
-   # use sane defaults if $SQUASHFS_OPTIONS isn't set
-   if [ -z "$SQUASHFS_OPTIONS" ] ; then
-     # use block size 1m as this gives good result with regards to time + compression
-     SQUASHFS_OPTIONS="-b 1m"
-
-     # set lzma/xz compression by default, unless -z option has been specified on command line
-     if [ -z "$SQUASHFS_ZLIB" ] ; then
-        SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -comp xz"
-     else
-        SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -comp gzip"
-     fi
-   fi
-
-   # Ignore all extended attributes. This avoids:
-   # 1) leaking containerization supplied selinux attributes into the squashfs,
-   # 2) prevents unpacking errors in a later build-only step in containers not supporting xattrs.
-   SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -no-xattrs"
-
-   # support exclusion of files via exclude-file:
-   if [ -n "${SQUASHFS_EXCLUDES_FILE}" ] && [ -r "${SQUASHFS_EXCLUDES_FILE}" ] ; then
-     SQUASHFS_OPTIONS="${SQUASHFS_OPTIONS} -wildcards -ef ${SQUASHFS_EXCLUDES_FILE}"
-   fi
-
-   # log stuff
-   SQUASHFS_STDERR="$(mktemp -t grml-live.XXXXXX)"
-
-   # informational stuff
-   [ -n "$SQUASHFS_OPTIONS" ]  && SQUASHFS_INFO_MSG="$SQUASHFS_OPTIONS"
-   [ -n "$SQUASHFS_INFO_MSG" ] && SQUASHFS_INFO_MSG="using options: $SQUASHFS_INFO_MSG"
-   einfo "Squashfs build information: running $MKSQUASHFS_BINARY $SQUASHFS_INFO_MSG"
-
-   log "$MKSQUASHFS_BINARY $CHROOT_OUTPUT/ $BUILD_OUTPUT/live/${GRML_NAME}/${GRML_NAME}.squashfs -noappend $SQUASHFS_OPTIONS"
-   # shellcheck disable=SC2086 # $SQUASHFS_OPTIONS needs splitting
-   if "$MKSQUASHFS_BINARY" "$CHROOT_OUTPUT/" "$BUILD_OUTPUT"/live/"${GRML_NAME}"/"${GRML_NAME}".squashfs \
-      -noappend $SQUASHFS_OPTIONS 2>"${SQUASHFS_STDERR}" ; then
-      echo "${GRML_NAME}.squashfs" > "$BUILD_OUTPUT"/live/"${GRML_NAME}"/filesystem.module
-      log "Finished execution of stage 'squashfs' [$(date)]"
-      einfo "Finished execution of stage 'squashfs'" ; eend 0
-   else
-      log    "Error: there was a critical error executing stage 'squashfs' [$(date)]:"
-      log    "$(cat "$SQUASHFS_STDERR")"
-      eerror "Error: there was a critical error executing stage 'squashfs':"
-      cat    "${SQUASHFS_STDERR}"
-      eend 1
-      bailout
-   fi
 fi
-
-# create md5sum file:
-if [ -z "$BOOTSTRAP_ONLY" ] ; then
-  # shellcheck disable=SC2094 # find execution ignores written file
-  ( cd "$BUILD_OUTPUT"/GRML/"${GRML_NAME}" &&
-  find ../.. -type f -not -name md5sums -exec md5sum {} \; > md5sums )
-fi
-# }}}
 
 # information how the ISO was generated {{{
 # shellcheck disable=SC2034
@@ -936,8 +886,6 @@ else
    generate_build_info > "$BUILD_OUTPUT"/conf/buildinfo.json
    cp "$BUILD_OUTPUT"/conf/buildinfo.json "$LOG_OUTPUT"/buildinfo.json
    eend $?
-
-   cap_timestamps "$BUILD_OUTPUT"
 
    log "${XORRISO_BINARY} -as mkisofs -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o ${ISO_OUTPUT}/${ISO_NAME}"
    einfo "Generating ISO file..."

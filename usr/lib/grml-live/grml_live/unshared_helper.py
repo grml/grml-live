@@ -61,6 +61,11 @@ def mkdir(path: Path | str):
 
 
 @_operation
+def ensure_dir(path: Path | str):
+    Path(path).mkdir(exist_ok=True)
+
+
+@_operation
 def ensure_empty_dir(path: Path | str):
     path = Path(path)
     if path.exists():

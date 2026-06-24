@@ -773,8 +773,6 @@ def mksquashfs(
     args = [mksquashfs_binary, str(chroot_dir) + "/", squashfs_file, *options]
 
     run_x(args, check=True, unshared=True, stdin=subprocess.DEVNULL)
-    run_x(["/bin/cat", "/proc/self/uid_map"], unshared=True)
-    run_x(["/bin/ls", "-la", squashfs_file])
 
 
 def create_on_media_md5sums(
@@ -795,9 +793,7 @@ def create_on_media_md5sums(
         [
             unshared_helper.ensure_dir(grml_dir),
             unshared_helper.ensure_dir(named_grml_dir),
-            unshared_helper.write_file_text(md5sums_file,
-                "TODO\n"
-            )
+            unshared_helper.write_file_text(md5sums_file, "TODO\n"),
         ]
     )
     run_x(["/bin/ls", "-la", md5sums_file])
@@ -835,6 +831,8 @@ def _run_tasks(
             grml_live_config_chroot, "\n".join(f"{k}={shlex.quote(v)}" for k, v in grml_live_config.items())
         )
     )
+    grml_name = grml_live_config["GRML_NAME"]
+    print(f"I: GRML_NAME: {grml_name!r}")
 
     do_skiptask(dynamic_state, skip_tasks)
 
@@ -897,6 +895,14 @@ def _run_tasks(
                         grml_cd_dir,
                     ],
                 )
+
+            if not should_skip_task(dynamic_state, "squashfs"):
+                mksquashfs(grml_cd_dir, chroot_dir, grml_name, unshared_service)
+                create_on_media_md5sums(grml_cd_dir, grml_name, unshared_service)
+                epoch = os.getenv("SOURCE_DATE_EPOCH")
+                if epoch:
+                    print(f"I: Clamping mtimes to {epoch}")
+                    unshared_service.run(unshared_helper.clamp_to_source_date(grml_cd_dir, epoch))
 
     finally:
         copy_directory_out(grml_logs_dir / "fai", chroot_directories.log_dir)
