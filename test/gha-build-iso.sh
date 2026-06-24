@@ -26,11 +26,24 @@ run_build() {
     local results_directory
     results_directory=$3
 
-    docker run -i --rm --volume "${PWD}:/source" -e SKIP_SOURCES=1 -e DO_DAILY_UPLOAD=0 -e EXTRA_CLASSES="${EXTRA_CLASSES:-}" -e GITHUB_PR_NUMBER="${GITHUB_PR_NUMBER:-}" -w /source debian:"$HOST_RELEASE" \
-        bash -c \
-        "apt-get update -qq && apt-get satisfy -q -y --no-install-recommends 'git, ca-certificates' \
-        && git config --global --add safe.directory /source \
-        && /source/build-driver/build /source ${build_mode} /source/${config_filename} ghaci $ARCH testing"
+    export SKIP_SOURCES=1
+    export DO_DAILY_UPLOAD=0
+    export EXTRA_CLASSES="${EXTRA_CLASSES:-}"
+    export GITHUB_PR_NUMBER="${GITHUB_PR_NUMBER:-}"
+    sudo apt-get update -qq
+    sudo apt-get satisfy -q -y --no-install-recommends 'git, ca-certificates, debian-archive-keyring'
+    if [ "$(cat /proc/sys/kernel/apparmor_restrict_unprivileged_userns || true)" == "1" ]; then
+        # workaround unshare restrictions on Ubuntu 24.04. Symptom seen:
+        # "unshare: cannot change root filesystem propagation: Permission denied"
+        echo "W: turning off apparmor_restrict_unprivileged_usern to avoid unshare failure"
+        echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
+    fi
+
+    # Processes in usernamespace must be able to chdir() to all parent directories
+    # so they can read the files in grml-live/config.
+    sudo chmod a+rX /home/runner
+
+    ./build-driver/build "${PWD}" "${build_mode}" "${PWD}"/"${config_filename}" ghaci "${ARCH}" testing
 
     sudo chmod -R a+rX results
     sudo mv results "${results_directory}"
@@ -54,7 +67,7 @@ release_version: "${GITHUB_PR_NUMBER:+pr$GITHUB_PR_NUMBER-}ci1"
 release_name: "${GITHUB_PR_NUMBER:+PR$GITHUB_PR_NUMBER }CI1"
 base_iso:
     ghaci:
-        $ARCH: "file:///source/$INPUT_ISO"
+        $ARCH: "file://${PWD}/${INPUT_ISO}"
 EOT
 
     run_build build-gha-ci-test-config-build-only-first release results-build-only-first
@@ -68,7 +81,7 @@ release_version: "${GITHUB_PR_NUMBER:+pr$GITHUB_PR_NUMBER-}ci2"
 release_name: "${GITHUB_PR_NUMBER:+PR$GITHUB_PR_NUMBER }CI2"
 base_iso:
     ghaci:
-        $ARCH: "file:///source/$INPUT_ISO"
+        $ARCH: "file://${PWD}/${INPUT_ISO}"
 EOT
 
     run_build build-gha-ci-test-config-build-only-second release results-build-only-second
