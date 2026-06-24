@@ -153,18 +153,6 @@ umount_all() {
 }
 # }}}
 
-# store logfiles {{{
-store_logfiles() {
-  # move minifai logs into grml_logs directory
-  mkdir -p "$LOG_OUTPUT"/fai/
-  cp --preserve=timestamp -r "$CHROOT_OUTPUT"/grml-live/log/* "$LOG_OUTPUT"/fai/
-  rm -rf "$CHROOT_OUTPUT"/grml-live/log
-
-  # ensure files are readable.
-  chmod a+rX "$LOG_OUTPUT"/fai/
-}
-# }}}
-
 # clean exit {{{
 bailout() {
   [ -n "$CONFIGDUMP"      ]  && rm -f  "$CONFIGDUMP"
@@ -768,10 +756,6 @@ log "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${OUTPUT} ${CONF
 einfo "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
 "${FAI_PROGRAM}" "${GRML_FAI_CONFIG}" "${CLASSES}" "${FAI_ACTION}" "${OUTPUT}" "${CONFIGDUMP}" "${SUITE}" "${BOOTSTRAP_MIRROR}" 2>&1 | tee -a "${LOGFILE}"
 RC="${PIPESTATUS[0]}" # notice: bash-only
-
-# Fetches logs from "${CHROOT_OUTPUT}"/grml-live/log.
-# Also run this on failure.
-store_logfiles
 
 if [ "$RC" != 0 ] ; then
   log    "Error: critical error while executing fai [exit code ${RC}]. Exiting."

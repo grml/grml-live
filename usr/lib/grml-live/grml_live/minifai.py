@@ -656,6 +656,28 @@ def install_class_helper_tools(
     return class_helper_tools_path
 
 
+def copy_directory_out(
+    target_dir: Path,
+    source_dir: Path,
+):
+    """
+    Copy contents of a directory from A (source_dir) to B (target_dir).
+    Intended to be used when copying from unshared context to the "outside".
+    Does not preserve file modes, ownership, etc.
+    """
+    target_dir.mkdir(exist_ok=True)
+    run_x(
+        [
+            "/bin/cp",
+            "--no-preserve=all",
+            "--preserve=timestamp",
+            "-r",
+            str(source_dir) + "/.",
+            str(target_dir) + "/",
+        ]
+    )
+
+
 def _run_tasks(
     conf_dir: Path,
     output_dir: Path,
@@ -670,6 +692,8 @@ def _run_tasks(
     chroot_directories = _create_chroot_dirs(chroot_dir, unshared_service)
     grml_cd_dir = output_dir / "grml_cd"
     grml_cd_dir.mkdir()
+    grml_logs_dir = output_dir / "grml_logs"
+    grml_logs_dir.mkdir(exist_ok=True)
 
     # Create a file in log_dir, so grml-live does not complain.
     unshared_service.run(
@@ -698,32 +722,36 @@ def _run_tasks(
     # Setup /proc, /sys inside chroot_dir, so future chroot calls will have these mounts.
     unshared_service.run(unshared_helper.bindmount_proc_sys_into(chroot_dir))
 
-    with helper_tools(conf_dir, chroot_dir, classes, dynamic_state, unshared_service) as helper_tools_path:
-        class_helper_tools_path = install_class_helper_tools(
-            conf_dir, chroot_directories.build_dir, classes, unshared_service
-        )
+    try:
+        with helper_tools(conf_dir, chroot_dir, classes, dynamic_state, unshared_service) as helper_tools_path:
+            class_helper_tools_path = install_class_helper_tools(
+                conf_dir, chroot_directories.build_dir, classes, unshared_service
+            )
 
-        helper_tools_paths = [helper_tools_path, class_helper_tools_path]
+            helper_tools_paths = [helper_tools_path, class_helper_tools_path]
 
-        hook_env = env | {"FAI_ACTION": fai_action}
-        for class_name in classes:
-            run_script(chroot_dir, conf_dir / "hooks" / class_name / "updatebase", helper_tools_paths, hook_env)
-
-        with policy_rcd(chroot_dir, unshared_service):
-            task_updatebase(chroot_dir, dynamic_state)
-
-            if not should_skip_task(dynamic_state, "instsoft"):
-                install_packages_for_classes(
-                    conf_dir, chroot_dir, classes, helper_tools_paths, hook_env, dynamic_state, unshared_service
-                )
-
-        if not should_skip_task(dynamic_state, "configure"):
+            hook_env = env | {"FAI_ACTION": fai_action}
             for class_name in classes:
-                run_class_scripts("scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
+                run_script(chroot_dir, conf_dir / "hooks" / class_name / "updatebase", helper_tools_paths, hook_env)
 
-        if not should_skip_task(dynamic_state, "build"):
-            for class_name in classes:
-                run_class_scripts("media-scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
+            with policy_rcd(chroot_dir, unshared_service):
+                task_updatebase(chroot_dir, dynamic_state)
+
+                if not should_skip_task(dynamic_state, "instsoft"):
+                    install_packages_for_classes(
+                        conf_dir, chroot_dir, classes, helper_tools_paths, hook_env, dynamic_state, unshared_service
+                    )
+
+            if not should_skip_task(dynamic_state, "configure"):
+                for class_name in classes:
+                    run_class_scripts("scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
+
+            if not should_skip_task(dynamic_state, "build"):
+                for class_name in classes:
+                    run_class_scripts("media-scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
+
+    finally:
+        copy_directory_out(grml_logs_dir / "fai", chroot_directories.log_dir)
 
     return 0
 
