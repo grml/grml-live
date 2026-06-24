@@ -62,6 +62,11 @@ def mkdir(path: Path | str):
 
 
 @_operation
+def ensure_dir(path: Path | str):
+    Path(path).mkdir(exist_ok=True)
+
+
+@_operation
 def ensure_empty_dir(path: Path | str):
     path = Path(path)
     if path.exists():
@@ -103,6 +108,12 @@ def have_text_in_file(path: Path | str, text: str):
 def unlink(path: Path | str):
     path = Path(path)
     path.unlink()
+
+
+@_operation
+def chown(path: Path | str, numeric_owner: str, numeric_group: str):
+    path = Path(path)
+    os.chown(str(path), int(numeric_owner), int(numeric_group), follow_symlinks=False)
 
 
 @_operation

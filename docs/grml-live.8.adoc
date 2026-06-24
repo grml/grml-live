@@ -158,7 +158,7 @@ chroot system) and grml_isos (where the resulting ISO is stored).
 
 Build the ISO without (re-)creating the squashfs compressed file using mksquashfs.
 This option is useful if you just want to update parts outside the chroot in the ISO.
-Consider combining this option with the build-only option '-b'.
+The media-scripts are still run.
 
   -r **RELEASENAME**::
 

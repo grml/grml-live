@@ -39,6 +39,7 @@ class FaiAction(StrEnum):
     SOFTUPDATE = "softupdate"
     RECONFIGURE = "reconfigure"
     REBUILD = "rebuild"
+    REBUILD_MEDIA = "rebuild_media"
 
 
 @dataclass
@@ -712,6 +713,57 @@ def copy_directory_out(
     )
 
 
+def _build_mksquashfs_options(conf_dir: Path) -> list[str]:
+    squashfs_excludes_file = conf_dir / "grml" / "squashfs-excludes"
+    options = [
+        "-noappend",
+        # use block size 1m as this gives good result with regards to time + compression
+        "-b",
+        "1m",
+        "-comp",
+        "xz",
+        # Ignore all extended attributes. This avoids:
+        # 1) leaking containerization supplied selinux attributes into the squashfs,
+        # 2) prevents unpacking errors in a later build-only step in containers not supporting xattrs.
+        "-no-xattrs",
+        # Static file exclusion list.
+        "-wildcards",
+        "-ef",
+        str(squashfs_excludes_file),
+        "-one-file-system",
+    ]
+    return options
+
+
+def mksquashfs(
+    conf_dir: Path,
+    grml_cd_dir: Path,
+    chroot_dir: Path,
+    grml_name: str,
+    unshared_service: UnsharedService,
+):
+    live_dir = grml_cd_dir / "live"
+    squashfs_dir = live_dir / grml_name
+    squashfs_file = squashfs_dir / f"{grml_name}.squashfs"
+
+    mksquashfs_binary = os.environ["MKSQUASHFS_BINARY"]
+    options = _build_mksquashfs_options(conf_dir)
+    args = [mksquashfs_binary, str(chroot_dir) + "/", squashfs_file, *options]
+
+    # We must run mksquashfs inside the userns so it sees the correct ownership info,
+    # but we want the resulting file to be owned by the user outside of the userns.
+    unshared_service.batch(
+        [
+            unshared_helper.ensure_dir(live_dir),
+            unshared_helper.ensure_dir(squashfs_dir),
+            unshared_helper.run_program(args),
+            unshared_helper.chown(squashfs_file, str(UNSHARE_UID), str(UNSHARE_GID)),
+            unshared_helper.chown(squashfs_dir, str(UNSHARE_UID), str(UNSHARE_GID)),
+            unshared_helper.chown(live_dir, str(UNSHARE_UID), str(UNSHARE_GID)),
+        ]
+    )
+
+
 def _run_tasks(
     conf_dir: Path,
     output_dir: Path,
@@ -744,6 +796,9 @@ def _run_tasks(
             grml_live_config_chroot, "\n".join(f"{k}={shlex.quote(v)}" for k, v in grml_live_config.items())
         )
     )
+
+    grml_name = os.environ["GRML_NAME"]
+    print(f"I: GRML_NAME: {grml_name!r}")
 
     do_skiptask(dynamic_state, skip_tasks)
 
@@ -783,6 +838,10 @@ def _run_tasks(
             if not should_skip_task(dynamic_state, "configure"):
                 for class_name in classes:
                     run_class_scripts("scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
+
+            if not should_skip_task(dynamic_state, "squashfs"):
+                # mksquashfs is the last thing that should need the userns.
+                mksquashfs(conf_dir, grml_cd_dir, chroot_dir, grml_name, unshared_service)
 
             if not should_skip_task(dynamic_state, "build"):
                 for class_name in classes:
@@ -863,6 +922,8 @@ def _main(program_name: str, argv: list[str]) -> int:
                 skiptasks = ["updatebase", "instsoft"]
             elif args.action == FaiAction.REBUILD:
                 skiptasks = ["updatebase", "instsoft", "configure"]
+            elif args.action == FaiAction.REBUILD_MEDIA:
+                skiptasks = ["updatebase", "instsoft", "configure", "squashfs"]
             else:
                 print(f"E: minifai: Unknown fai action: {args.action!r}")
                 rc = 1
