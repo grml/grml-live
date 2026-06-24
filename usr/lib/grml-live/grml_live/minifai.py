@@ -1009,6 +1009,9 @@ def _main(program_name: str, argv: list[str]) -> int:
         print(f"E: {now_for_log()} minifai main caught fatal exception")
         traceback.print_exc()
         rc = 2
+    finally:
+        print(f"I: removing {chroot_dir}")
+        run_x(["rm", "-rf", chroot_dir], unshared=True)
 
     print(f"I: minifai exiting with exit code {rc}")
     return rc
