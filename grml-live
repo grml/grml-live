@@ -748,8 +748,6 @@ generate_build_info > "$BUILD_OUTPUT"/conf/buildinfo.json
 cp "$BUILD_OUTPUT"/conf/buildinfo.json "$LOG_OUTPUT"/buildinfo.json
 eend $?
 
-cap_timestamps "$BUILD_OUTPUT"
-
 log "${XORRISO_BINARY} -as mkisofs -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o ${ISO_OUTPUT}/${ISO_NAME}"
 einfo "Generating ISO file..."
 touch -d @"$SOURCE_DATE_EPOCH" "$BUILD_OUTPUT"/
