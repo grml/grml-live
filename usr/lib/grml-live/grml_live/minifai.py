@@ -767,6 +767,11 @@ def _run_tasks(
                 for class_name in classes:
                     run_class_scripts("media-scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
 
+                epoch = os.getenv("SOURCE_DATE_EPOCH")
+                if epoch:
+                    print(f"I: Clamping mtimes to {epoch}")
+                    unshared_service.run(unshared_helper.clamp_to_source_date(chroot_dir, epoch))
+
                 cleanup_dyld_cache(chroot_dir, unshared_service)
 
                 print("I: installing media files from chroot build")

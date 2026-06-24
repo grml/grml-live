@@ -794,8 +794,6 @@ if [ -n "$CHROOT_INSTALL" ] ; then
   fi
 fi
 
-cap_timestamps "$CHROOT_OUTPUT"
-
 if [ -n "$SKIP_MKSQUASHFS" ] ; then
    log   "Skipping stage 'squashfs' as requested via option -q or -N"
    ewarn "Skipping stage 'squashfs' as requested via option -q or -N" ; eend 0
