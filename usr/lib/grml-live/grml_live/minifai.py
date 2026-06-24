@@ -7,6 +7,7 @@ import argparse
 import contextlib
 import datetime
 import os
+import shlex
 import shutil
 import socket
 import subprocess
@@ -79,6 +80,35 @@ class UnsharedService:
 
 def now_for_log() -> str:
     return datetime.datetime.now().isoformat()
+
+
+def _unquote_bash_single(s: str):
+    out, i, n = [], 0, len(s)
+    while i < n:
+        c = s[i]
+        if c == "'":
+            j = s.index("'", i + 1)
+            out.append(s[i + 1 : j])
+            i = j + 1
+        elif c == "\\" and i + 1 < n:
+            out.append(s[i + 1])
+            i += 2
+        else:
+            out.append(c)
+            i += 1
+    return "".join(out)
+
+
+def _parse_bash_set(text: str) -> dict[str, str]:
+    """Parse output of bash set, when restricted to single line key=value pairs."""
+    env = {}
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        key, _, value = line.partition("=")
+        env[key] = _unquote_bash_single(value)
+    return env
 
 
 def _prepare_subprocess_args(args, *, unshared: bool, chroot_dir: Path | None, **kwargs):
@@ -695,12 +725,90 @@ def cleanup_dyld_cache(
     )
 
 
+def _build_mksquashfs_options(env: dict[str, str]) -> list[str]:
+    options = env.get("SQUASHFS_OPTIONS", "").split()
+    if not options:
+        # use block size 1m as this gives good result with regards to time + compression
+        options += ["-b", "1m"]
+
+        # set lzma/xz compression by default, unless -z option has been specified on grml-live command line
+        squashfs_zlib = env.get("SQUASHFS_ZLIB")
+        options += ["-comp", "gzip" if squashfs_zlib else "xz"]
+
+    options += ["-noappend"]
+
+    # Ignore all extended attributes. This avoids:
+    # 1) leaking containerization supplied selinux attributes into the squashfs,
+    # 2) prevents unpacking errors in a later build-only step in containers not supporting xattrs.
+    options += ["-no-xattrs"]
+
+    # support exclusion of files via exclude-file
+    squashfs_excludes_file = env.get("SQUASHFS_EXCLUDES_FILE")
+    if squashfs_excludes_file and os.access(squashfs_excludes_file, os.R_OK):
+        options += ["-wildcards", "-ef", squashfs_excludes_file]
+
+    return options
+
+
+def mksquashfs(
+    grml_cd_dir: Path,
+    chroot_dir: Path,
+    grml_name: str,
+    unshared_service: UnsharedService,
+):
+    print(f"I: GRML_NAME: {grml_name!r}")
+    live_dir = grml_cd_dir / "live"
+    squashfs_dir = live_dir / grml_name
+    squashfs_file = squashfs_dir / f"{grml_name}.squashfs"
+
+    unshared_service.batch(
+        [
+            unshared_helper.ensure_dir(live_dir),
+            unshared_helper.ensure_dir(squashfs_dir),
+        ]
+    )
+
+    mksquashfs_binary = os.environ["MKSQUASHFS_BINARY"]
+    options = _build_mksquashfs_options(dict(os.environ))
+    args = [mksquashfs_binary, str(chroot_dir) + "/", squashfs_file, *options]
+
+    run_x(args, check=True, unshared=True, stdin=subprocess.DEVNULL)
+    run_x(["/bin/cat", "/proc/self/uid_map"], unshared=True)
+    run_x(["/bin/ls", "-la", squashfs_file])
+
+
+def create_on_media_md5sums(
+    grml_cd_dir: Path,
+    grml_name: str,
+    unshared_service: UnsharedService,
+):
+    print("I: preparing md5sums file")
+
+    grml_dir = grml_cd_dir / "GRML"
+    named_grml_dir = grml_dir / grml_name
+    md5sums_file = named_grml_dir / "md5sums"
+
+    # FIXME: build sorted list of files and md5sum them
+    #   ( cd "$BUILD_OUTPUT"/GRML/"${GRML_NAME}" &&
+    # find ../.. -type f -not -name md5sums -exec md5sum {} \; > md5sums )
+    unshared_service.batch(
+        [
+            unshared_helper.ensure_dir(grml_dir),
+            unshared_helper.ensure_dir(named_grml_dir),
+            unshared_helper.write_file_text(md5sums_file,
+                "TODO\n"
+            )
+        ]
+    )
+    run_x(["/bin/ls", "-la", md5sums_file])
+
+
 def _run_tasks(
     conf_dir: Path,
     output_dir: Path,
     chroot_dir: Path,
     classes: list[str],
-    grml_live_config: Path,
+    grml_live_config: dict[str, str],
     fai_action: str,
     skip_tasks: list[str],
     unshared_service: UnsharedService,
@@ -722,7 +830,11 @@ def _run_tasks(
 
     # duplicate grml_live_config into the chroot, so chrooted scripts can use it.
     grml_live_config_chroot = chroot_directories.build_dir / "config"
-    unshared_service.run(unshared_helper.write_file_text(grml_live_config_chroot, grml_live_config.read_text()))
+    unshared_service.run(
+        unshared_helper.write_file_text(
+            grml_live_config_chroot, "\n".join(f"{k}={shlex.quote(v)}" for k, v in grml_live_config.items())
+        )
+    )
 
     do_skiptask(dynamic_state, skip_tasks)
 
@@ -831,6 +943,9 @@ def _main(program_name: str, argv: list[str]) -> int:
         exist_ok=True  # for now, as grml_live has to mount the mirror
     )
 
+    grml_live_config = _parse_bash_set(args.grml_live_config.read_text())
+    show_env("configdump", grml_live_config)
+
     with start_unshared_service() as unshared_service:
         unshared_service.run(unshared_helper.hello_world())
 
@@ -859,7 +974,7 @@ def _main(program_name: str, argv: list[str]) -> int:
                     output_dir,
                     chroot_dir,
                     classes,
-                    args.grml_live_config,
+                    grml_live_config,
                     args.action,
                     skiptasks,
                     unshared_service,
