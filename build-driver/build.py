@@ -94,7 +94,11 @@ def is_ci():
 def apt_satisfy(deps: str):
     args = ["apt-get", "satisfy", "-q", "-y", "--no-install-recommends", deps.strip()]
     if os.getuid() != 0:
-        args = ["sudo", "-n", "--preserve-env=DEBIAN_FRONTEND", "--", *args]
+        if os.getenv("CI", "") == "":
+            print(f"I: Skipping apt install, set CI=true to force. Would install: {deps.strip()}")
+            return
+        else:
+            args = ["sudo", "-n", "--preserve-env=DEBIAN_FRONTEND", "--", *args]
     run_x(
         args,
         env=dict(os.environ) | {"DEBIAN_FRONTEND": "noninteractive"},
