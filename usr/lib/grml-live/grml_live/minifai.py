@@ -34,6 +34,10 @@ class FaiScriptFailed(Exception):
     pass
 
 
+class ProgramStartFailed(Exception):
+    pass
+
+
 class FaiAction(StrEnum):
     DIRINSTALL = "dirinstall"
     SOFTUPDATE = "softupdate"
@@ -526,13 +530,24 @@ def start_unshared_service():
         args = unshared_helper.make_server_command(socket_path)
         subproc = popen(args, unshared=True)
 
-        listen_socket.settimeout(120)
-        try:
-            request_socket, _ = listen_socket.accept()
-        except TimeoutError:
-            print("E: unshared helper service did not connect")
+        request_socket = None
+        # 12 sec total timeout
+        listen_socket.settimeout(1)
+        for _ in range(12):
+            try:
+                request_socket, _ = listen_socket.accept()
+            except TimeoutError:
+                if subproc.poll() is not None:
+                    print(f"E: unshared helper service exited with rc={subproc.returncode} before connecting")
+                    raise ProgramStartFailed() from None
+                continue
+
+            break
+
+        if request_socket is None:
+            print("E: unshared helper service did not connect after timeout")
             subproc.kill()
-            raise
+            raise ProgramStartFailed()
 
         yield UnsharedService(request_socket)
 
@@ -935,13 +950,13 @@ def _main(program_name: str, argv: list[str]) -> int:
     grml_live_config = _parse_bash_set(args.grml_live_config.read_text())
     show_env("configdump", grml_live_config)
 
-    with start_unshared_service() as unshared_service:
-        unshared_service.run(unshared_helper.hello_world())
+    rc = 0
 
-        skiptasks = []
-        rc = 0
+    try:
+        with start_unshared_service() as unshared_service:
+            unshared_service.run(unshared_helper.hello_world())
+            skiptasks = []
 
-        try:
             if args.action == FaiAction.DIRINSTALL:
                 install_base(conf_dir, chroot_dir, classes, args.debian_suite, args.mirror_url)
             elif args.action == FaiAction.SOFTUPDATE:
@@ -967,13 +982,13 @@ def _main(program_name: str, argv: list[str]) -> int:
                     skiptasks,
                     unshared_service,
                 )
-        except (ClassFileParsingFailed, FaiScriptFailed):
-            # assume exception site already printed relevant info
-            rc = 3
-        except Exception:
-            print(f"E: {now_for_log()} minifai main caught fatal exception")
-            traceback.print_exc()
-            rc = 2
+    except (ClassFileParsingFailed, FaiScriptFailed, ProgramStartFailed):
+        # assume exception site already printed relevant info
+        rc = 3
+    except Exception:
+        print(f"E: {now_for_log()} minifai main caught fatal exception")
+        traceback.print_exc()
+        rc = 2
 
     print(f"I: minifai exiting with exit code {rc}")
     return rc
