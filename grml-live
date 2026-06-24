@@ -163,8 +163,8 @@ bailout() {
   if [ -n "$CLEAN_ARTIFACTS" ]; then
     log "Cleaning up"
     einfo "Cleaning up"
-    [ -n "${BUILD_OUTPUT}"  ] && [ -d "${BUILD_OUTPUT}"  ] && rm -r "${BUILD_OUTPUT}"
     [ -n "${CHROOT_OUTPUT}" ] && [ -d "${CHROOT_OUTPUT}" ] && unshare --user --map-auto --map-root rm -rf "${CHROOT_OUTPUT}"
+    [ -n "${BUILD_OUTPUT}"  ] && [ -d "${BUILD_OUTPUT}"  ] && rm -rf "${BUILD_OUTPUT}"
     eend 0
   fi
 
