@@ -7,6 +7,7 @@ import argparse
 import contextlib
 import datetime
 import os
+import shlex
 import shutil
 import socket
 import subprocess
@@ -82,6 +83,35 @@ class UnsharedService:
 
 def now_for_log() -> str:
     return datetime.datetime.now().isoformat()
+
+
+def _unquote_bash_single(s: str):
+    out, i, n = [], 0, len(s)
+    while i < n:
+        c = s[i]
+        if c == "'":
+            j = s.index("'", i + 1)
+            out.append(s[i + 1 : j])
+            i = j + 1
+        elif c == "\\" and i + 1 < n:
+            out.append(s[i + 1])
+            i += 2
+        else:
+            out.append(c)
+            i += 1
+    return "".join(out)
+
+
+def _parse_bash_set(text: str) -> dict[str, str]:
+    """Parse output of bash set, when restricted to single line key=value pairs."""
+    env = {}
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        key, _, value = line.partition("=")
+        env[key] = _unquote_bash_single(value)
+    return env
 
 
 def _prepare_subprocess_args(args, *, unshared: bool, chroot_dir: Path | None, **kwargs):
@@ -687,7 +717,7 @@ def _run_tasks(
     output_dir: Path,
     chroot_dir: Path,
     classes: list[str],
-    grml_live_config: Path,
+    grml_live_config: dict[str, str],
     fai_action: str,
     skip_tasks: list[str],
     unshared_service: UnsharedService,
@@ -709,7 +739,11 @@ def _run_tasks(
 
     # duplicate grml_live_config into the chroot, so chrooted scripts can use it.
     grml_live_config_chroot = chroot_directories.build_dir / "config"
-    unshared_service.run(unshared_helper.write_file_text(grml_live_config_chroot, grml_live_config.read_text()))
+    unshared_service.run(
+        unshared_helper.write_file_text(
+            grml_live_config_chroot, "\n".join(f"{k}={shlex.quote(v)}" for k, v in grml_live_config.items())
+        )
+    )
 
     do_skiptask(dynamic_state, skip_tasks)
 
@@ -811,6 +845,9 @@ def _main(program_name: str, argv: list[str]) -> int:
         exist_ok=True  # for now, as grml_live has to mount the mirror
     )
 
+    grml_live_config = _parse_bash_set(args.grml_live_config.read_text())
+    show_env("configdump", grml_live_config)
+
     with start_unshared_service() as unshared_service:
         unshared_service.run(unshared_helper.hello_world())
 
@@ -836,7 +873,7 @@ def _main(program_name: str, argv: list[str]) -> int:
                     output_dir,
                     chroot_dir,
                     classes,
-                    args.grml_live_config,
+                    grml_live_config,
                     args.action,
                     skiptasks,
                     unshared_service,
