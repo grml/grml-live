@@ -851,6 +851,39 @@ def create_netboot_package(
         run_x(["sha256sum", output_name.name], cwd=output_name.parent, stdout=checksum_file_handle)
 
 
+def create_sources_package(
+    output_dir: Path,
+    chroot_sources_dir: str,
+    iso_name: str,
+):
+    """
+    Create sources tar package.
+    Filename is derived from the iso_name, and its toplevel directory matches the tar filename.
+    """
+    output_basename = iso_name.rpartition(".iso")[0] + "-sources"
+    output_name = output_dir / (output_basename + ".tar")
+    print(f"I: building sources tar: {output_name.name}")
+
+    run_x(
+        [
+            "tar",
+            "-C",
+            chroot_sources_dir,
+            "-cf",
+            output_name,
+            "--owner=0",
+            "--group=0",
+            "--transform",
+            r"s|^./|" + output_basename + "/|",
+            ".",
+        ]
+    )
+
+    checksum_filename = Path(str(output_name) + ".sha256")
+    with checksum_filename.open("wt") as checksum_file_handle:
+        run_x(["sha256sum", output_name.name], cwd=output_name.parent, stdout=checksum_file_handle)
+
+
 def _run_tasks(
     conf_dir: Path,
     output_dir: Path,
@@ -954,6 +987,12 @@ def _run_tasks(
                     chroot_directories.netboot_dir,
                     iso_name,
                 )
+                if "SOURCES" in classes:
+                    create_sources_package(
+                        output_dir,
+                        chroot_directories.sources_dir,
+                        iso_name,
+                    )
 
             if not should_skip_task(dynamic_state, "squashfs"):
                 mksquashfs(grml_cd_dir, chroot_dir, grml_name, unshared_service)
