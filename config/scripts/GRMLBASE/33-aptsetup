@@ -16,7 +16,7 @@ set -u
 target=${target:?}
 
 # use snapshot.debian.org based on build date for release
-if ifclass RELEASE ; then
+if ifclass RELEASE; then
   current_date=$(date --utc -d "@${SOURCE_DATE_EPOCH}" +%Y%m%d)
   perl -pi -e 'BEGIN { $d="'"$current_date"'"; } \
     s#^(URIs:)\s+(.*://deb.debian.org/)(.*)\/?$#$1 http://snapshot.debian.org/archive/$3/$d#' \
@@ -24,6 +24,5 @@ if ifclass RELEASE ; then
 
   sed -i '/^Types:/a Check-Valid-Until: no' "${target}"/etc/apt/sources.list.d/debian.sources
 fi
-
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2
