@@ -721,7 +721,7 @@ def _create_dirs(chroot_dir: Path) -> BuildDirectories:
         media_dir_inside=f"/{build_dir_relative}/{media_dir_name}/",
         media_dir=media_dir,
         netboot_dir_inside=f"/{build_dir_relative}/{netboot_dir_name}/",
-        netboot_dir=media_dir,
+        netboot_dir=netboot_dir,
         sources_dir_inside=f"/{build_dir_relative}/{sources_dir_name}/",
         sources_dir=sources_dir,
     )
