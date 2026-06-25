@@ -816,6 +816,41 @@ def create_on_media_md5sums(
     run_x(["/bin/ls", "-la", md5sums_file])
 
 
+def create_netboot_package(
+    output_dir: Path,
+    chroot_netboot_dir: str,
+    iso_name: str,
+):
+    """
+    Create netboot tar package.
+    Filename is derived from the iso_name, and its toplevel directory matches the tar filename.
+    """
+    output_basename = iso_name.rpartition(".iso")[0] + "-netboot"
+    output_netboot_dir = output_dir / "netboot"
+    output_netboot_dir.mkdir()
+    output_name = output_netboot_dir / (output_basename + ".tar")
+    print(f"I: building netboot tar: {output_name.name}")
+
+    run_x(
+        [
+            "tar",
+            "-C",
+            chroot_netboot_dir,
+            "-cf",
+            output_name,
+            "--owner=0",
+            "--group=0",
+            "--transform",
+            r"s|^./|" + output_basename + "/|",
+            ".",
+        ]
+    )
+
+    checksum_filename = Path(str(output_name) + ".sha256")
+    with checksum_filename.open("wt") as checksum_file_handle:
+        run_x(["sha256sum", output_name.name], cwd=output_name.parent, stdout=checksum_file_handle)
+
+
 def _run_tasks(
     conf_dir: Path,
     output_dir: Path,
@@ -913,6 +948,11 @@ def _run_tasks(
                         str(chroot_directories.media_dir) + "/.",
                         grml_cd_dir,
                     ],
+                )
+                create_netboot_package(
+                    output_dir,
+                    chroot_directories.netboot_dir,
+                    iso_name,
                 )
 
             if not should_skip_task(dynamic_state, "squashfs"):

@@ -176,7 +176,6 @@ bailout() {
     [ -n "${CHROOT_OUTPUT}"  ] && [ -d "${CHROOT_OUTPUT}"  ] && chown -R "${CHOWN_USER}:" "${CHROOT_OUTPUT}"
     [ -n "${ISO_OUTPUT}"     ] && [ -d "${ISO_OUTPUT}"     ] && chown -R "${CHOWN_USER}:" "${ISO_OUTPUT}"
     [ -n "${LOG_OUTPUT}"     ] && [ -d "${LOG_OUTPUT}"     ] && chown -R "${CHOWN_USER}:" "${LOG_OUTPUT}"
-    [ -n "${NETBOOT}"        ] && [ -d "${NETBOOT}"        ] && chown -R "${CHOWN_USER}:" "${NETBOOT}"
     eend 0
   fi
   log "------------------------------------------------------------------------------"
@@ -559,7 +558,6 @@ BUILD_OUTPUT="${OUTPUT}/grml_cd"
 CHROOT_OUTPUT="${OUTPUT}/grml_chroot"
 ISO_OUTPUT="${OUTPUT}/grml_isos"
 LOG_OUTPUT="${OUTPUT}/grml_logs"
-NETBOOT="${OUTPUT}/netboot"
 # }}}
 
 # clean up before start {{{
@@ -569,7 +567,6 @@ if [ -n "${CLEAN_ARTIFACTS}" ]; then
   [ -n "${BUILD_OUTPUT}"   ] && [ -d "${BUILD_OUTPUT}"   ] && rm -r "${BUILD_OUTPUT}"
   [ -n "${ISO_OUTPUT}"     ] && [ -d "${ISO_OUTPUT}"     ] && rm -r "${ISO_OUTPUT}"
   [ -n "${LOG_OUTPUT}"     ] && [ -d "${LOG_OUTPUT}"     ] && rm -r "${LOG_OUTPUT}"
-  [ -n "${NETBOOT}"        ] && [ -d "${NETBOOT}"        ] && rm -r "${NETBOOT}"
 fi
 # }}}
 
@@ -922,46 +919,6 @@ else
       bailout "$RC"
    fi
 fi
-# }}}
-
-# netboot package {{{
-create_netbootpackage() {
-  local OUTPUT_NAME
-  local OUTPUT_FILE
-  OUTPUT_NAME=$(basename "${ISO_NAME}" .iso)-netboot
-  OUTPUT_FILE="${NETBOOT}/${OUTPUT_NAME}.tar"
-
-  if [ -n "$SKIP_NETBOOT" ] ; then
-    log   "Skipping stage 'netboot' as requested via option -Q"
-    ewarn "Skipping stage 'netboot' as requested via option -Q" ; eend 0
-    return 0
-  fi
-
-  mkdir -p "$NETBOOT"
-
-  local OUTPUTDIR="${NETBOOT}/build_tmp"
-
-  local WORKING_DIR="${OUTPUTDIR}/${OUTPUT_NAME}/"
-  mkdir -p "$WORKING_DIR"
-  cp --preserve=timestamp -r "$CHROOT_OUTPUT/grml-live/netboot/." "$WORKING_DIR/"
-
-  cap_timestamps "$OUTPUTDIR"
-  if tar -C "$OUTPUTDIR" -cf "${OUTPUT_FILE}" "${OUTPUT_NAME}" ; then
-    (
-      # shellcheck disable=SC2164 # We just wrote there. If it disappeared, too bad.
-      cd "$(dirname "${OUTPUT_FILE}")"
-      sha256sum "$(basename "${OUTPUT_FILE}")" > "${OUTPUT_FILE}.sha256"
-    )
-    einfo "Generated netboot package ${OUTPUT_FILE}" ; eend 0
-    rm -rf "${OUTPUTDIR}"
-  else
-    rm -rf "${OUTPUTDIR}"
-    eerror "Could not generate netboot package ${OUTPUT_FILE}" ; eend 1
-    bailout 21
-  fi
-}
-
-create_netbootpackage
 # }}}
 
 # {{{
