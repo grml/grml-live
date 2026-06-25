@@ -656,13 +656,6 @@ fi
 extract_iso
 # }}}
 
-# helper to cap mtime on all files in a folder {{{
-cap_timestamps() {
-  # ensure that no timestamps are newer than $SOURCE_DATE_EPOCH
-  find "$1" -newermt "@${SOURCE_DATE_EPOCH}" -print0 | TZ=UTC xargs -0r touch --no-dereference --date="@${SOURCE_DATE_EPOCH}"
-}
-# }}}
-
 # on-the-fly configuration {{{
 
 case "${SUITE}" in
