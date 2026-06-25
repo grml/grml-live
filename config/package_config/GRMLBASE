@@ -24,7 +24,6 @@ grml-quickconfig
 grml-tips
 hdparm
 hwinfo
-ifupdown
 initramfs-tools
 iputils-ping
 iwd
@@ -38,10 +37,10 @@ openssh-client
 openssh-server
 pciutils
 physlock
-resolvconf
 rsync
 strace
 sudo
+systemd-resolved
 udev
 usbutils
 uuid-runtime
