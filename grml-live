@@ -493,7 +493,6 @@ BUILD_OUTPUT="${OUTPUT}/grml_cd"
 CHROOT_OUTPUT="${OUTPUT}/grml_chroot"
 ISO_OUTPUT="${OUTPUT}/grml_isos"
 LOG_OUTPUT="${OUTPUT}/grml_logs"
-NETBOOT="${OUTPUT}/netboot"
 # }}}
 
 # create log file {{{
@@ -772,40 +771,6 @@ if hasclass RELEASE && [ "$RC" = 0 ] ; then
      fi
    )
 fi
-# }}}
-
-# netboot package {{{
-create_netbootpackage() {
-  local OUTPUT_NAME
-  local OUTPUT_FILE
-  OUTPUT_NAME=$(basename "${ISO_NAME}" .iso)-netboot
-  OUTPUT_FILE="${NETBOOT}/${OUTPUT_NAME}.tar"
-
-  mkdir -p "$NETBOOT"
-
-  local OUTPUTDIR="${NETBOOT}/build_tmp"
-
-  local WORKING_DIR="${OUTPUTDIR}/${OUTPUT_NAME}/"
-  mkdir -p "$WORKING_DIR"
-  cp --preserve=timestamp -r "$CHROOT_OUTPUT/grml-live/netboot/." "$WORKING_DIR/"
-
-  cap_timestamps "$OUTPUTDIR"
-  if tar -C "$OUTPUTDIR" -cf "${OUTPUT_FILE}" "${OUTPUT_NAME}" ; then
-    (
-      # shellcheck disable=SC2164 # We just wrote there. If it disappeared, too bad.
-      cd "$(dirname "${OUTPUT_FILE}")"
-      sha256sum "$(basename "${OUTPUT_FILE}")" > "${OUTPUT_FILE}.sha256"
-    )
-    einfo "Generated netboot package ${OUTPUT_FILE}" ; eend 0
-    rm -rf "${OUTPUTDIR}"
-  else
-    rm -rf "${OUTPUTDIR}"
-    eerror "Could not generate netboot package ${OUTPUT_FILE}" ; eend 1
-    bailout 21
-  fi
-}
-
-create_netbootpackage
 # }}}
 
 # {{{
