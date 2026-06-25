@@ -313,6 +313,7 @@ fi
 [ -n "$SUITE" ]                   || SUITE='testing'
 [ -n "$USERNAME" ]                || USERNAME='grml'
 [ -n "$VERSION" ]                 || VERSION='0.0.1'
+[ -n "$ISO_NAME" ]                || ISO_NAME="${GRML_NAME}_${VERSION}.iso"
 # }}}
 
 # some misc checks before doing work {{{
@@ -640,6 +641,7 @@ mkdir -p "$CHROOT_OUTPUT" || bailout 5 "Problem with creating $CHROOT_OUTPUT"
 
 # minifai needs to see these
 export GRML_NAME
+export ISO_NAME
 export MKSQUASHFS_BINARY
 
 log "Executed FAI command line:"
@@ -727,8 +729,6 @@ generate_build_info() {
 # }}}
 
 # ISO_OUTPUT - iso build {{{
-[ -n "$ISO_NAME" ] || ISO_NAME="${GRML_NAME}_${VERSION}.iso"
-
 EFI_ARGS="-eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
 
 if [ "$ARCH" = "arm64" ]; then

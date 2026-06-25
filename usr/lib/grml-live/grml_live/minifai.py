@@ -833,6 +833,8 @@ def _run_tasks(
 
     grml_name = os.environ["GRML_NAME"]
     print(f"I: GRML_NAME: {grml_name!r}")
+    iso_name = os.environ["ISO_NAME"]
+    print(f"I: ISO_NAME: {iso_name!r}")
 
     do_skiptask(dynamic_state, skip_tasks)
 
