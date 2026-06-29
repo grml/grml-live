@@ -89,23 +89,20 @@ More details: man grml-live + /usr/share/doc/grml-live/grml-live.html
 
 Please send your bug reports and feedback to the grml-team: http://grml.org/bugs/
 "
-   [ "$(id -u 2>/dev/null)" != 0 ] && echo "Please notice that this script requires root permissions."
 }
 
-# make sure it's possible to get usage information without being
-# root or actually executing the script
 if [ "$1" = '-h' ] || [ "$1" = '--help' ] ; then
    usage
    exit 0
 fi
 # }}}
 
-# some runtime checks {{{
-# we need root permissions for the build-process:
-if [ "$(id -u 2>/dev/null)" != 0 ] ; then
-   echo "Error: please run this script with uid 0 (root)." >&2
+# prevent running as root {{{
+if [ "$(id -u 2>/dev/null)" = 0 ] ; then
+   echo "Error: grml-live needs to run as non-root with working user namespaces." >&2
    exit 1
 fi
+# }}}
 
 # lsb-functions and configuration stuff {{{
 # make sure they are not set by default
@@ -156,18 +153,6 @@ umount_all() {
 }
 # }}}
 
-# store logfiles {{{
-store_logfiles() {
-  # move minifai logs into grml_logs directory
-  mkdir -p "$LOG_OUTPUT"/fai/
-  cp --preserve=timestamp -r "$CHROOT_OUTPUT"/grml-live/log/* "$LOG_OUTPUT"/fai/
-  rm -rf "$CHROOT_OUTPUT"/grml-live/log
-
-  # ensure files are readable.
-  chmod a+rX "$LOG_OUTPUT"/fai/
-}
-# }}}
-
 # clean exit {{{
 bailout() {
   [ -n "$CONFIGDUMP"      ]  && rm -f  "$CONFIGDUMP"
@@ -178,8 +163,8 @@ bailout() {
   if [ -n "$CLEAN_ARTIFACTS" ]; then
     log "Cleaning up"
     einfo "Cleaning up"
-    [ -n "${BUILD_OUTPUT}"  ] && [ -d "${BUILD_OUTPUT}"  ] && rm -r "${BUILD_OUTPUT}"
-    [ -n "${CHROOT_OUTPUT}" ] && [ -d "${CHROOT_OUTPUT}" ] && rm -r "${CHROOT_OUTPUT}"
+    [ -n "${CHROOT_OUTPUT}" ] && [ -d "${CHROOT_OUTPUT}" ] && unshare --user --map-auto --map-root rm -rf "${CHROOT_OUTPUT}"
+    [ -n "${BUILD_OUTPUT}"  ] && [ -d "${BUILD_OUTPUT}"  ] && rm -rf "${BUILD_OUTPUT}"
     eend 0
   fi
 
@@ -191,7 +176,6 @@ bailout() {
     [ -n "${CHROOT_OUTPUT}"  ] && [ -d "${CHROOT_OUTPUT}"  ] && chown -R "${CHOWN_USER}:" "${CHROOT_OUTPUT}"
     [ -n "${ISO_OUTPUT}"     ] && [ -d "${ISO_OUTPUT}"     ] && chown -R "${CHOWN_USER}:" "${ISO_OUTPUT}"
     [ -n "${LOG_OUTPUT}"     ] && [ -d "${LOG_OUTPUT}"     ] && chown -R "${CHOWN_USER}:" "${LOG_OUTPUT}"
-    [ -n "${NETBOOT}"        ] && [ -d "${NETBOOT}"        ] && chown -R "${CHOWN_USER}:" "${NETBOOT}"
     eend 0
   fi
   log "------------------------------------------------------------------------------"
@@ -574,7 +558,6 @@ BUILD_OUTPUT="${OUTPUT}/grml_cd"
 CHROOT_OUTPUT="${OUTPUT}/grml_chroot"
 ISO_OUTPUT="${OUTPUT}/grml_isos"
 LOG_OUTPUT="${OUTPUT}/grml_logs"
-NETBOOT="${OUTPUT}/netboot"
 # }}}
 
 # clean up before start {{{
@@ -584,7 +567,6 @@ if [ -n "${CLEAN_ARTIFACTS}" ]; then
   [ -n "${BUILD_OUTPUT}"   ] && [ -d "${BUILD_OUTPUT}"   ] && rm -r "${BUILD_OUTPUT}"
   [ -n "${ISO_OUTPUT}"     ] && [ -d "${ISO_OUTPUT}"     ] && rm -r "${ISO_OUTPUT}"
   [ -n "${LOG_OUTPUT}"     ] && [ -d "${LOG_OUTPUT}"     ] && rm -r "${LOG_OUTPUT}"
-  [ -n "${NETBOOT}"        ] && [ -d "${NETBOOT}"        ] && rm -r "${NETBOOT}"
 fi
 # }}}
 
@@ -592,7 +574,6 @@ fi
 [ -n "$LOGFILE" ] || LOGFILE=${LOG_OUTPUT}/grml-live.log
 mkdir -p "$(dirname "${LOGFILE}")"
 touch "$LOGFILE"
-chown root:adm "$LOGFILE"
 chmod 664 "$LOGFILE"
 if [ -n "$PRESERVE_LOGFILE" ] ; then
    echo "Preserving logfile $LOGFILE as requested via \$PRESERVE_LOGFILE"
@@ -629,7 +610,7 @@ einfo "Logging actions to logfile $LOGFILE"
 # dump config variables into file, for hooks/scripts access {{{
 CONFIGDUMP=$(mktemp)
 set | grep -E \
-  '^(GRML_NAME|SHORT_NAME|RELEASENAME|RELEASE_INFO|RELEASE_INFO68|DATE|VERSION|SUITE|ARCH|DISTRI_INFO|DISTRI_NAME|SQUASHFS_NAME|SQUASHFS_NAME20|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH|NO_BOOTID|BOOTID|BOOT_FILE|DEFAULT_BOOTOPTIONS|SECURE_BOOT|NO_ADDONS)=' \
+  '^(GRML_NAME|SHORT_NAME|RELEASENAME|RELEASE_INFO|RELEASE_INFO68|DATE|VERSION|SUITE|ARCH|DISTRI_INFO|DISTRI_NAME|SQUASHFS_NAME|SQUASHFS_NAME20|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|BOOTSTRAP_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH|NO_BOOTID|BOOTID|BOOT_FILE|DEFAULT_BOOTOPTIONS|SECURE_BOOT|NO_ADDONS|GRML_LIVE_VERSION)=' \
   > "${CONFIGDUMP}"
 # }}}
 
@@ -673,13 +654,6 @@ if [ -n "$EXTRACT_ISO_NAME" ]; then
 fi
 }
 extract_iso
-# }}}
-
-# helper to cap mtime on all files in a folder {{{
-cap_timestamps() {
-  # ensure that no timestamps are newer than $SOURCE_DATE_EPOCH
-  find "$1" -newermt "@${SOURCE_DATE_EPOCH}" -print0 | TZ=UTC xargs -0r touch --no-dereference --date="@${SOURCE_DATE_EPOCH}"
-}
 # }}}
 
 # on-the-fly configuration {{{
@@ -767,30 +741,24 @@ if [ -n "${MIRROR_DIRECTORY}" ] ; then
   mount --bind "${MIRROR_DIRECTORY}" "${CHROOT_OUTPUT}/${MIRROR_DIRECTORY}"
 fi
 
-log "Executed FAI command line:"
-log "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
-einfo "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
-"${FAI_PROGRAM}" "${GRML_FAI_CONFIG}" "${CLASSES}" "${FAI_ACTION}" "${CHROOT_OUTPUT}" "${CONFIGDUMP}" "${SUITE}" "${BOOTSTRAP_MIRROR}" 2>&1 | tee -a "${LOGFILE}"
-RC="${PIPESTATUS[0]}" # notice: bash-only
+# minifai now needs to see these
+export MKSQUASHFS_BINARY
+export SQUASHFS_OPTIONS
+export SQUASHFS_ZLIB
+export SQUASHFS_EXCLUDES_FILE
+export ISO_NAME
 
-# Fetches logs from "${CHROOT_OUTPUT}"/grml-live/log.
-# Also run this on failure.
-store_logfiles
+log "Executed FAI command line:"
+log "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
+einfo "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
+"${FAI_PROGRAM}" "${GRML_FAI_CONFIG}" "${CLASSES}" "${FAI_ACTION}" "${OUTPUT}" "${CONFIGDUMP}" "${SUITE}" "${BOOTSTRAP_MIRROR}" 2>&1 | tee -a "${LOGFILE}"
+RC="${PIPESTATUS[0]}" # notice: bash-only
 
 if [ "$RC" != 0 ] ; then
   log    "Error: critical error while executing fai [exit code ${RC}]. Exiting."
   eerror "Error: critical error while executing fai [exit code ${RC}]. Exiting." ; eend 1
   bailout 1
 fi
-
-mv "${CHROOT_OUTPUT}"/grml-live/grml_sources/ "${OUTPUT}"
-
-# provide inform fai about the ISO we build, needs to be provided
-# *after* FAI stage, otherwise FAI skips the debootstrap stage if
-# there is not BASEFILE (as it checks for presence of /etc) :(
-echo '# This file has been generated by grml-live.' > "$CHROOT_OUTPUT/etc/grml_live_version"
-[ -n "$GRML_LIVE_VERSION" ] && echo "GRML_LIVE_VERSION=$GRML_LIVE_VERSION" >> "$CHROOT_OUTPUT/etc/grml_live_version"
-[ -n "$SUITE" ] && echo "SUITE=$SUITE" >> "$CHROOT_OUTPUT/etc/grml_live_version"
 
 umount_all
 
@@ -800,19 +768,6 @@ einfo "Finished execution of stage 'fai $FAI_ACTION'"
 
 # BUILD_OUTPUT - execute arch specific stuff and squashfs {{{
 mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for stage ARCH"
-
-# prepare ISO
-if [ -n "$BOOTSTRAP_ONLY" ] ; then
-  log   "Skipping stage 'boot' as building with bootstrap only."
-  ewarn "Skipping stage 'boot' as building with bootstrap only." ; eend 0
-else
-  einfo "Installing media files from chroot build"
-  log   "Installing media files from chroot build"
-  cp --preserve=timestamp -r "$CHROOT_OUTPUT/grml-live/media/." "$BUILD_OUTPUT/"
-  eend 0
-
-  einfo "Finished execution of stage 'boot'" ; eend 0
-fi # BOOTSTRAP_ONLY
 
 # support installation of local files into the chroot/ISO
 if [ -n "$CHROOT_INSTALL" ] ; then
@@ -827,76 +782,11 @@ if [ -n "$CHROOT_INSTALL" ] ; then
   fi
 fi
 
-# The dynamic linker auxiliary cache is not reproducible and is always
-# invalid at boot (see Debian bug #845034). Unfortunately this must be
-# done from outside the chroot, as *any* program invocation inside will
-# recreate the file.
-rm -f "$CHROOT_OUTPUT"/var/cache/ldconfig/aux-cache
-rmdir --ignore-fail-on-non-empty "$CHROOT_OUTPUT"/var/cache/ldconfig
-
-cap_timestamps "$CHROOT_OUTPUT"
-
 if [ -n "$SKIP_MKSQUASHFS" ] ; then
+   # FIXME: minifai needs to skip mksquashfs when requested
    log   "Skipping stage 'squashfs' as requested via option -q or -N"
    ewarn "Skipping stage 'squashfs' as requested via option -q or -N" ; eend 0
-else
-   mkdir -p "$BUILD_OUTPUT"/live/"${GRML_NAME}"/
-
-   # use sane defaults if $SQUASHFS_OPTIONS isn't set
-   if [ -z "$SQUASHFS_OPTIONS" ] ; then
-     # use block size 1m as this gives good result with regards to time + compression
-     SQUASHFS_OPTIONS="-b 1m"
-
-     # set lzma/xz compression by default, unless -z option has been specified on command line
-     if [ -z "$SQUASHFS_ZLIB" ] ; then
-        SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -comp xz"
-     else
-        SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -comp gzip"
-     fi
-   fi
-
-   # Ignore all extended attributes. This avoids:
-   # 1) leaking containerization supplied selinux attributes into the squashfs,
-   # 2) prevents unpacking errors in a later build-only step in containers not supporting xattrs.
-   SQUASHFS_OPTIONS="$SQUASHFS_OPTIONS -no-xattrs"
-
-   # support exclusion of files via exclude-file:
-   if [ -n "${SQUASHFS_EXCLUDES_FILE}" ] && [ -r "${SQUASHFS_EXCLUDES_FILE}" ] ; then
-     SQUASHFS_OPTIONS="${SQUASHFS_OPTIONS} -wildcards -ef ${SQUASHFS_EXCLUDES_FILE}"
-   fi
-
-   # log stuff
-   SQUASHFS_STDERR="$(mktemp -t grml-live.XXXXXX)"
-
-   # informational stuff
-   [ -n "$SQUASHFS_OPTIONS" ]  && SQUASHFS_INFO_MSG="$SQUASHFS_OPTIONS"
-   [ -n "$SQUASHFS_INFO_MSG" ] && SQUASHFS_INFO_MSG="using options: $SQUASHFS_INFO_MSG"
-   einfo "Squashfs build information: running $MKSQUASHFS_BINARY $SQUASHFS_INFO_MSG"
-
-   log "$MKSQUASHFS_BINARY $CHROOT_OUTPUT/ $BUILD_OUTPUT/live/${GRML_NAME}/${GRML_NAME}.squashfs -noappend $SQUASHFS_OPTIONS"
-   # shellcheck disable=SC2086 # $SQUASHFS_OPTIONS needs splitting
-   if "$MKSQUASHFS_BINARY" "$CHROOT_OUTPUT/" "$BUILD_OUTPUT"/live/"${GRML_NAME}"/"${GRML_NAME}".squashfs \
-      -noappend $SQUASHFS_OPTIONS 2>"${SQUASHFS_STDERR}" ; then
-      echo "${GRML_NAME}.squashfs" > "$BUILD_OUTPUT"/live/"${GRML_NAME}"/filesystem.module
-      log "Finished execution of stage 'squashfs' [$(date)]"
-      einfo "Finished execution of stage 'squashfs'" ; eend 0
-   else
-      log    "Error: there was a critical error executing stage 'squashfs' [$(date)]:"
-      log    "$(cat "$SQUASHFS_STDERR")"
-      eerror "Error: there was a critical error executing stage 'squashfs':"
-      cat    "${SQUASHFS_STDERR}"
-      eend 1
-      bailout
-   fi
 fi
-
-# create md5sum file:
-if [ -z "$BOOTSTRAP_ONLY" ] ; then
-  # shellcheck disable=SC2094 # find execution ignores written file
-  ( cd "$BUILD_OUTPUT"/GRML/"${GRML_NAME}" &&
-  find ../.. -type f -not -name md5sums -exec md5sum {} \; > md5sums )
-fi
-# }}}
 
 # information how the ISO was generated {{{
 # shellcheck disable=SC2034
@@ -915,7 +805,7 @@ generate_build_info() {
     distri_info="${DISTRI_INFO}" \
     distri_name="${DISTRI_NAME}" \
     extract_iso_name="${EXTRACT_ISO_NAME}" \
-    fai_cmdline="${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${CHROOT_OUTPUT} ${configdump_placeholder} ${SUITE} ${BOOTSTRAP_MIRROR}" \
+    fai_cmdline="${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${OUTPUT} ${configdump_placeholder} ${SUITE} ${BOOTSTRAP_MIRROR}" \
     fai_version="minifai" \
     grml_architecture="${ARCH}" \
     grml_bootid="${BOOTID}" \
@@ -979,8 +869,6 @@ else
    cp "$BUILD_OUTPUT"/conf/buildinfo.json "$LOG_OUTPUT"/buildinfo.json
    eend $?
 
-   cap_timestamps "$BUILD_OUTPUT"
-
    log "${XORRISO_BINARY} -as mkisofs -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o ${ISO_OUTPUT}/${ISO_NAME}"
    einfo "Generating ISO file..."
    touch -d @"$SOURCE_DATE_EPOCH" "$BUILD_OUTPUT"/
@@ -1015,78 +903,6 @@ else
       bailout "$RC"
    fi
 fi
-# }}}
-
-# netboot package {{{
-create_netbootpackage() {
-  local OUTPUT_NAME
-  local OUTPUT_FILE
-  OUTPUT_NAME=$(basename "${ISO_NAME}" .iso)-netboot
-  OUTPUT_FILE="${NETBOOT}/${OUTPUT_NAME}.tar"
-
-  if [ -n "$SKIP_NETBOOT" ] ; then
-    log   "Skipping stage 'netboot' as requested via option -Q"
-    ewarn "Skipping stage 'netboot' as requested via option -Q" ; eend 0
-    return 0
-  fi
-
-  mkdir -p "$NETBOOT"
-
-  local OUTPUTDIR="${NETBOOT}/build_tmp"
-
-  local WORKING_DIR="${OUTPUTDIR}/${OUTPUT_NAME}/"
-  mkdir -p "$WORKING_DIR"
-  cp --preserve=timestamp -r "$CHROOT_OUTPUT/grml-live/netboot/." "$WORKING_DIR/"
-
-  cap_timestamps "$OUTPUTDIR"
-  if tar -C "$OUTPUTDIR" -cf "${OUTPUT_FILE}" "${OUTPUT_NAME}" ; then
-    (
-      # shellcheck disable=SC2164 # We just wrote there. If it disappeared, too bad.
-      cd "$(dirname "${OUTPUT_FILE}")"
-      sha256sum "$(basename "${OUTPUT_FILE}")" > "${OUTPUT_FILE}.sha256"
-    )
-    einfo "Generated netboot package ${OUTPUT_FILE}" ; eend 0
-    rm -rf "${OUTPUTDIR}"
-  else
-    rm -rf "${OUTPUTDIR}"
-    eerror "Could not generate netboot package ${OUTPUT_FILE}" ; eend 1
-    bailout 21
-  fi
-}
-
-create_netbootpackage
-# }}}
-
-# {{{
-create_sourcespackages() {
-  if ! hasclass SOURCES ; then
-    log "Skipping source package generation, only enabled with class SOURCES"
-    return 0
-  fi
-
-  local OUTPUT_FILE SOURCES_DIR
-  OUTPUT_FILE="${OUTPUT}/$(basename "${ISO_NAME}" .iso)-sources.tar"
-  SOURCES_DIR="${OUTPUT}/grml_sources/"
-
-  if ! [ -d "${SOURCES_DIR}" ] ; then
-    eerror "Base directory ${SOURCES_DIR} not present, can not generate source package" ; eend 1
-    bailout 22
-  fi
-
-  if tar -C "${OUTPUT}" -cf "${OUTPUT_FILE}" "$(basename "${SOURCES_DIR}")" ; then
-   (
-     # shellcheck disable=SC2164 # We just wrote there. If it disappeared, too bad.
-     cd "$(dirname "${OUTPUT_FILE}")"
-     sha256sum "$(basename "${OUTPUT_FILE}")" > "${OUTPUT_FILE}.sha256"
-   )
-   einfo "Generated source package ${OUTPUT_FILE}" ; eend 0
- else
-   eerror "Could not generate source package ${OUTPUT_FILE}" ; eend 1
-   bailout 22
- fi
-}
-
-create_sourcespackages
 # }}}
 
 # finalize {{{

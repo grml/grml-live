@@ -49,9 +49,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        host_release:
-          - forky
-          - trixie
         extra_classes:
           - ""
           - "GRML_GHACI_CLOUD"
@@ -66,9 +63,8 @@ jobs:
           persist-credentials: false
 
       - run: ./test/gha-build-iso.sh initial
-        name: "Build ISO on ${{matrix.host_release}} ${{matrix.arch}}${{matrix.extra_classes && format(' with {0}', matrix.extra_classes) || ''}}"
+        name: "Build ISO on ${{matrix.arch}}${{matrix.extra_classes && format(' with {0}', matrix.extra_classes) || ''}}"
         env:
-          HOST_RELEASE: ${{matrix.host_release}}
           EXTRA_CLASSES: ${{matrix.extra_classes}}
           ARCH: ${{matrix.arch}}
           GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
@@ -77,16 +73,15 @@ jobs:
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7
         with:
-          name: grml-live-build-result-initial-${{github.event.pull_request.number && format('pr{0}-', github.event.pull_request.number) || ''}}${{matrix.host_release}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
+          name: grml-live-build-result-initial-${{github.event.pull_request.number && format('pr{0}-', github.event.pull_request.number) || ''}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
           if-no-files-found: error
           retention-days: 15
           path: |
             results-initial/*
 
       - run: ./test/gha-build-iso.sh build-only-twice
-        name: "Repack ISO twice on ${{matrix.host_release}} ${{matrix.arch}}${{matrix.extra_classes && format(' with {0}', matrix.extra_classes) || ''}}"
+        name: "Repack ISO twice ${{matrix.arch}}${{matrix.extra_classes && format(' with {0}', matrix.extra_classes) || ''}}"
         env:
-          HOST_RELEASE: ${{matrix.host_release}}
           EXTRA_CLASSES: ${{matrix.extra_classes}}
           ARCH: ${{matrix.arch}}
           GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
@@ -95,7 +90,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7
         with:
-          name: grml-live-build-result-repack-${{github.event.pull_request.number && format('pr{0}-', github.event.pull_request.number) || ''}}${{matrix.host_release}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
+          name: grml-live-build-result-repack-${{github.event.pull_request.number && format('pr{0}-', github.event.pull_request.number) || ''}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
           if-no-files-found: error
           retention-days: 15
           path: |
