@@ -1,3 +1,85 @@
+grml-live (0.57.0) grml-testing; urgency=medium
+
+  [ Michael Prokop ]
+  * [eeea882] fluxbox menu: drop grml-exec-wrapper usage
+  * [43c7c26] initramfs: include exfat kernel module in initramfs by
+    default
+  * [736a60a] grub: use valid color name in menu_color_highlight
+  * [5c048ce] grub: use $prefix instead of hardcoding /boot/grub to
+    support PXE boot
+  * [5e6af32] grub: drop generation of loopback.cfg static file
+  * CI related changes:
+    - [14ea769] GHA: update actions to latest stable versions
+    - [1121b9b] GHA: enable dependabot for GitHub Actions
+  * Software related changes:
+    - [976f673] remove grml-live from GRML_FULL
+
+  [ Chris Hofstaedtler ]
+  * [744141d] autoconfig: improve "Found CPUs" message
+  * [9639959] generate-changes-list: add argparse subcommands
+  * [e413cc1] generate-changes-list.py: add single-repo mode
+  * [1ff7eae] generate-changes-list.py: skip commits from unrelated
+    histories
+  * [2f925f4] grml-live(8): resort GRMLBASE filelist
+  * [86c4917] minifai: disable python cache files
+  * [fd71682] grub: remove ieee1394 blacklist example and update firewire-
+    core
+  * [54b3114] grub: remove ide?= kernel option
+  * [c883c22] grml-live: extract buildinfo.json into logs output
+  * [2628165] grml-live: resync mkisofs_cmdline
+  * [4d5c64a] build-driver: hide build-driver traceback when grml-live
+    fails
+  * [83dadc9] minifai _main: deduplicate _run_tasks calls
+  * [7d7fd5e] minifai: add ruff to pyproject.toml
+  * [0ff7053] minifai: support APT_PROXY for mmdebstrap
+  * [73772a3] minifai: bootstrap-keyring must exist
+  * [7deb8b7] RELEASE/98-chroot: avoid su
+  * [c474703] GRMLBASE/18-timesetup: use ROOTCMD instead of chroot $target
+  * [266fbec] grml-live: de-support setting (BUILD|CHROOT|ISO|LOG)_OUTPUT
+    and NETBOOT
+  * [29e158d] minifai: fix netboot_dir value
+  * [eedb441] RELEASE/98-chroot: run ls -la in target, so ownership is
+    displayed correctly
+  * [fd370be] grub: make boot_hybrid.img available in ISO9660 filesystem
+  * CI related changes:
+    - [bdc3c00] ci: harden GitHub Actions workflows per zizmor audit
+    - [10a75a0] ci: simplify docker workflow
+    - [cf5d2a9] ci: docker login just before push, not before build
+  * Documentation related changes:
+    - [1c48df8] cheatcodes: fix "Logival" typo
+    - [dd654b6] cheatcodes: update HTTP URLs to HTTPS
+    - [d15a068] cheatcodes: replace portmap with rpcbind in services example
+    - [6ba5e47] cheatcodes: replace reiserfs with ext4 in isofrom example
+    - [ff038b7] cheatcodes: remove /dev/hd* from read-only description
+    - [e54a05a] grml-live.8: add debian version number
+    - [0f20fcd] grml-live.8: deemphasize historic log directories
+    - [cdf9ea5] grml-live.8: merge main-features into description
+    - [dd5f2da] grml-live.8: stop linking to not-maintained doc formats
+    - [a0e2038] grml-live.8: recommend git as source
+    - [68152d4] grml-live.8: rewrite grml-live.deb info
+    - [4c61ab2] grml-live.8: fix incorrect reference
+    - [a8ffe5e] grml-live.8: merge different class concept explanations
+    - [afa8578] grml-live.8: reword fast network note
+    - [dcf307c] grml-live.8: rewrite on-debian instructions
+    - [9ce616f] grml-live.8: bump Debian versions
+  * Software related changes:
+    - [886d139] remove speedtest-cli from GRML_FULL
+
+  [ Dr. András Korn ]
+  * [91c26e5] ZFS/instsoft: support building modules for kernels released
+    after December 2025
+
+  [ dependabot[bot] ]
+  * [b24266d] ci(deps): bump actions/checkout from 6.0.2 to 6.0.3
+  * [fe9ad8d] ci(deps): bump actions/checkout from 6.0.3 to 7.0.0
+  * [cc8409d] ci(deps): bump actions/setup-python from 6.2.0 to 6.3.0
+
+  [ Marc Haber ]
+  * [3f4b93f] Add various hooks to grub.cfg
+  * [be75e4b] Allow extra kernel opts ${extraopts}
+
+ -- Michael Prokop <mika@grml.org>  Sun, 12 Jul 2026 16:28:25 +0200
+
 grml-live (0.56.0) grml-testing; urgency=medium
 
   [ Michael Prokop ]
