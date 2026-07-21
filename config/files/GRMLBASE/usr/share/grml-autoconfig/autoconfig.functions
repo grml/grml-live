@@ -1021,6 +1021,50 @@ elif checkbootparam 'debs' || checkbootparam 'config' || checkbootparam 'scripts
 fi
 }
 
+# Execute grml/main.sh from ESP partition {{{
+config_find_grml_esp() {
+  if ! checkbootparam 'grmlesp' ; then
+    return 0
+  fi
+
+  local mntdir esp_devices
+  mntdir="$(mktemp -d)"
+  # sadly we can't rely on LABEL/PARTLABEL being set to EFI/ESP,
+  # so check for the GUID of an EFI system partition
+  esp_devices=$(lsblk -J -o PATH,PARTTYPE,FSTYPE,MOUNTPOINT | jq -r '.blockdevices[] | select(.parttype=="c12a7328-f81f-11d2-ba4b-00a0c93ec93b") | .path')
+
+  for esp_device in ${esp_devices} ; do
+    if findmnt "${esp_device}" &>/dev/null ; then
+      ewarn "Device ${esp_device} already mounted, skipping further execution" ; eend 0
+      continue
+    fi
+    if mount -o ro "${esp_device}" "${mntdir}" ; then
+      local grml_script="grml/main.sh"
+      einfo "Found ESP partition ${esp_device} - checking for ${grml_script}" ; eend 0
+      local grml_script="${mntdir}/${grml_script}"
+
+      if ! [ -r "${grml_script}" ] ; then
+        ewarn "Could not find ${grml_script}"
+        continue
+      fi
+
+      einfo "Executing ${grml_script}"
+      # shellcheck disable=SC1090
+      if "${grml_script}" ; then
+        einfo "Finished execution of ${grml_script}" ; eend 0
+        break
+      else
+        eerror "Error: execution of ${grml_script} failed" ; eend 1
+      fi
+    fi
+  done
+
+  if findmnt "${mntdir}" &>/dev/null ; then
+    umount "${mntdir}"
+  fi
+  rmdir "${mntdir}"
+}
+# }}}
 
 config_partconf() {
 if checkbootparam 'partconf' ; then
