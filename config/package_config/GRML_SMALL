@@ -133,6 +133,7 @@ binutils
 buffer
 coreutils
 diffutils
+jq
 mawk
 ncurses-term
 patch
