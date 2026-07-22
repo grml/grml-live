@@ -937,7 +937,16 @@ def _build_buildinfo_data(
         "grml_username": grml_live_config["USERNAME"],
         "grml_version": grml_live_config["VERSION"],
         "host_architecture": host_arch,
-        "mkisofs_cmdline": "...",
+        "mkisofs_cmdline": " ".join(
+            _build_xorriso_options(
+                output_dir / "grml_isos",
+                output_dir / "grml_cd",
+                grml_live_config["GRML_NAME"],
+                grml_live_config["VERSION"],
+                os.environ["ISO_NAME"],
+                os.environ["ARCH"],
+            )
+        ),
         "mkisofs_version": mkisofs_version,
         "mksquashfs_cmdline": " ".join(_build_mksquashfs_options(conf_dir)),
         "mksquashfs_version": mksquashfs_version,
@@ -969,6 +978,69 @@ def write_buildinfo_json(
     print(f"I: buildinfo data:\n{buildinfo!s}")
     (grml_cd_dir / "conf").mkdir(exist_ok=True)
     (grml_cd_dir / "conf" / "buildinfo.json").write_text(json.dumps(buildinfo))
+
+
+def _build_xorriso_options(
+    iso_dir: Path, grml_cd_dir: Path, grml_name: str, version: str, iso_name: str, arch: str
+) -> list[str]:
+
+    efi_args = ["-eltorito-alt-boot", "-e", "boot/efi.img", "-no-emul-boot", "-isohybrid-gpt-basdat"]
+
+    if arch == "arm64":
+        # No BIOS boot on arm64, only UEFI
+        boot_args = []
+    elif arch == "amd64":
+        # TODO: avoid the arch check and use the file existence instead
+        # Use GRUB for BIOS boot via El Torito
+        boot_args = [
+            "-b",
+            "boot/grub/i386-pc/eltorito.img",
+            "-no-emul-boot",
+            "-boot-load-size",
+            "4",
+            "-boot-info-table",
+            "--grub2-boot-info",
+            "--grub2-mbr",
+            str(grml_cd_dir / "boot" / "grub" / "i386-pc" / "boot_hybrid.img"),
+        ]
+    else:
+        raise NotImplementedError()
+
+    return [
+        "xorriso",
+        "-as",
+        "mkisofs",
+        "-V",
+        f"{grml_name} {version}",
+        "-publisher",
+        "grml-live | grml.org",
+        "-l",
+        "-r",
+        "-J",
+        *boot_args,
+        *efi_args,
+        "-o",
+        str(iso_dir / iso_name),
+        str(grml_cd_dir) + "/",
+    ]
+
+
+def create_media(
+    output_dir: Path,
+    grml_cd_dir: Path,
+    grml_name: str,
+    version: str,
+    iso_name: str,
+    arch: str,
+):
+    iso_dir = output_dir / "grml_isos"
+    iso_dir.mkdir()
+    print("I: Generating ISO file ...")
+    run_x(_build_xorriso_options(iso_dir, grml_cd_dir, grml_name, version, iso_name, arch))
+
+    checksum_filename = Path(str(iso_dir / iso_name) + ".sha256")
+    with checksum_filename.open("wt") as checksum_file_handle:
+        run_x(["sha256sum", iso_name], cwd=iso_dir, stdout=checksum_file_handle)
 
 
 def _run_tasks(
@@ -1004,12 +1076,16 @@ def _run_tasks(
         )
     )
 
+    arch = os.environ["ARCH"]
+    print(f"I: ARCH: {arch!r}")
     chroot_install = os.environ["CHROOT_INSTALL"]
     print(f"I: CHROOT_INSTALL: {chroot_install!r}")
     grml_name = os.environ["GRML_NAME"]
     print(f"I: GRML_NAME: {grml_name!r}")
     iso_name = os.environ["ISO_NAME"]
     print(f"I: ISO_NAME: {iso_name!r}")
+    version = os.environ["VERSION"]
+    print(f"I: VERSION: {version!r}")
 
     do_skiptask(dynamic_state, skip_tasks)
 
@@ -1094,6 +1170,8 @@ def _run_tasks(
                 if source_date_epoch:
                     print(f"I: Clamping mtimes to {source_date_epoch}")
                     unshared_service.run(unshared_helper.clamp_to_source_date(grml_cd_dir, source_date_epoch))
+
+                create_media(output_dir, grml_cd_dir, grml_name, version, iso_name, arch)
 
     finally:
         copy_directory_out(grml_logs_dir / "fai", chroot_directories.log_dir)

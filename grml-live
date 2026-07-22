@@ -492,9 +492,7 @@ if [ -z "$BOOTID" ] ; then
   BOOTID=$(echo "${GRML_NAME}${VERSION}" | tr -d ',./;\- ')
 fi
 
-BUILD_OUTPUT="${OUTPUT}/grml_cd"
 CHROOT_OUTPUT="${OUTPUT}/grml_chroot"
-ISO_OUTPUT="${OUTPUT}/grml_isos"
 LOG_OUTPUT="${OUTPUT}/grml_logs"
 # }}}
 
@@ -632,9 +630,8 @@ if [ "$FAI_ACTION" = dirinstall ] && [ -r "$CHROOT_OUTPUT/etc/debian_version" ] 
   bailout 20
 fi
 
-mkdir -p "$CHROOT_OUTPUT" || bailout 5 "Problem with creating $CHROOT_OUTPUT"
-
 # minifai needs to see these
+export ARCH
 export CHROOT_INSTALL
 export CMDLINE
 export EXTRACT_ISO_NAME
@@ -646,6 +643,7 @@ export LOCAL_CONFIG
 export MKSQUASHFS_BINARY
 export SECURE_BOOT
 export WAYBACK_DATE
+export VERSION
 
 log "Executed FAI command line:"
 log "${FAI_PROGRAM} ${GRML_FAI_CONFIG} ${CLASSES} ${FAI_ACTION} ${OUTPUT} ${CONFIGDUMP} ${SUITE} ${BOOTSTRAP_MIRROR}"
@@ -661,48 +659,6 @@ fi
 
 log "Finished execution of stage 'fai $FAI_ACTION' [$(date)]"
 einfo "Finished execution of stage 'fai $FAI_ACTION'"
-# }}}
-
-# BUILD_OUTPUT - execute arch specific stuff and squashfs {{{
-mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for stage ARCH"
-
-# ISO_OUTPUT - iso build {{{
-EFI_ARGS="-eltorito-alt-boot -e boot/efi.img -no-emul-boot -isohybrid-gpt-basdat"
-
-if [ "$ARCH" = "arm64" ]; then
-  # No BIOS boot on arm64, only UEFI
-  BOOT_ARGS=""
-else
-  # Use GRUB for BIOS boot via El Torito
-  BOOT_ARGS="-b boot/grub/i386-pc/eltorito.img -no-emul-boot -boot-load-size 4 -boot-info-table --grub2-boot-info --grub2-mbr ${BUILD_OUTPUT}/boot/grub/i386-pc/boot_hybrid.img"
-fi
-
-mkdir -p "$ISO_OUTPUT" || bailout 6 "Problem with creating $ISO_OUTPUT for stage 'iso build'"
-
-log "${XORRISO_BINARY} -as mkisofs -V '${GRML_NAME} ${VERSION}' -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o ${ISO_OUTPUT}/${ISO_NAME}"
-einfo "Generating ISO file..."
-touch -d @"$SOURCE_DATE_EPOCH" "$BUILD_OUTPUT"/
-# shellcheck disable=SC2086 # BOOT_ARGS and EFI_ARGS need splitting
-"${XORRISO_BINARY}" -as mkisofs -V "${GRML_NAME} ${VERSION}" -publisher 'grml-live | grml.org' -l -r -J ${BOOT_ARGS} ${EFI_ARGS} -o "${ISO_OUTPUT}/${ISO_NAME}" "$BUILD_OUTPUT"/
-RC=$?
-eend $RC
-
-# do not continue on errors, otherwise we might generate/overwrite the ISO with dd if=... stuff
-if [ "$RC" != 0 ] ; then
-  log    "Error: critical error while generating ISO [exit code ${RC}]. Exiting."
-  eerror "Error: critical error while generating ISO [exit code ${RC}]. Exiting." ; eend 1
-  bailout "$RC"
-fi
-
-# generate ISO checksums if we are using class 'RELEASE':
-if hasclass RELEASE && [ "$RC" = 0 ] ; then
-   (
-     if cd "$ISO_OUTPUT" ; then
-       sha256sum "${ISO_NAME}" > "${ISO_NAME}.sha256" && \
-       touch -r "${ISO_NAME}" "${ISO_NAME}.sha256"
-     fi
-   )
-fi
 # }}}
 
 # finalize {{{
