@@ -6,6 +6,7 @@
 import argparse
 import contextlib
 import datetime
+import json
 import os
 import shlex
 import shutil
@@ -892,6 +893,84 @@ def create_sources_package(
         run_x(["sha256sum", output_name.name], cwd=output_name.parent, stdout=checksum_file_handle)
 
 
+def _build_buildinfo_data(
+    conf_dir: Path,
+    output_dir: Path,
+    fai_action: str,
+    classes: list[str],
+    grml_live_config: dict[str, str],
+):
+    # TODO: collect the data in each step creating the data, instead of doing it all here.
+    proc = popen(["dpkg", "--print-architecture"], stdout=subprocess.PIPE, text=True)
+    stdout_data, _ = proc.communicate()
+    host_arch = stdout_data.strip()
+
+    proc = popen(["xorriso", "--version"], stdout=subprocess.PIPE, text=True)
+    stdout_data, _ = proc.communicate()
+    mkisofs_version = stdout_data.splitlines()[0].strip()
+
+    proc = popen(["mksquashfs", "-version"], stdout=subprocess.PIPE, text=True)
+    stdout_data, _ = proc.communicate()
+    mksquashfs_version = stdout_data.splitlines()[0].strip()
+
+    buildinfo = {
+        "build_date": grml_live_config["DATE"],
+        "fai_action": fai_action,
+        "chroot_install": os.environ["CHROOT_INSTALL"],
+        "classes": ",".join(classes),
+        "default_bootoptions": grml_live_config["DEFAULT_BOOTOPTIONS"],
+        "distri_info": grml_live_config["DISTRI_INFO"],
+        "distri_name": grml_live_config["DISTRI_NAME"],
+        "extract_iso_name": os.environ["EXTRACT_ISO_NAME"],
+        "fai_cmdline": " ".join(sys.argv[1:]),
+        "fai_version": "minifai",
+        "grml_architecture": os.environ["ARCH"],
+        "grml_bootid": grml_live_config["BOOTID"],
+        "grml_debian_version": os.environ["SUITE"],
+        "grml_iso_name": os.environ["ISO_NAME"],
+        "grml_live_cmdline": os.environ["CMDLINE"],
+        "grml_live_config_file": os.environ["LIVE_CONF"],
+        "grml_live_version": os.environ["GRML_LIVE_VERSION"],
+        "grml_local_config": os.environ["LOCAL_CONFIG"],
+        "grml_name": grml_live_config["GRML_NAME"],
+        "grml_short_name": grml_live_config["SHORT_NAME"],
+        "grml_username": grml_live_config["USERNAME"],
+        "grml_version": grml_live_config["VERSION"],
+        "host_architecture": host_arch,
+        "mkisofs_cmdline": "...",
+        "mkisofs_version": mkisofs_version,
+        "mksquashfs_cmdline": " ".join(_build_mksquashfs_options(conf_dir)),
+        "mksquashfs_version": mksquashfs_version,
+        "release_info": grml_live_config["RELEASE_INFO"],
+        "release_name": grml_live_config["RELEASENAME"],
+        "secure_boot": os.environ["SECURE_BOOT"],
+        "timestamp": os.environ["SOURCE_DATE_EPOCH"],
+        "wayback_date": os.environ["WAYBACK_DATE"],
+    }
+    buildinfo = {key: value.replace(str(output_dir), "<output_dir>") for key, value in buildinfo.items()}
+    return buildinfo
+
+
+def write_buildinfo_json(
+    conf_dir: Path,
+    output_dir: Path,
+    grml_cd_dir: Path,
+    fai_action: str,
+    classes: list[str],
+    grml_live_config: dict[str, str],
+):
+    buildinfo = _build_buildinfo_data(
+        conf_dir,
+        output_dir,
+        fai_action,
+        classes,
+        grml_live_config,
+    )
+    print(f"I: buildinfo data:\n{buildinfo!s}")
+    (grml_cd_dir / "conf").mkdir(exist_ok=True)
+    (grml_cd_dir / "conf" / "buildinfo.json").write_text(json.dumps(buildinfo))
+
+
 def _run_tasks(
     conf_dir: Path,
     output_dir: Path,
@@ -992,6 +1071,9 @@ def _run_tasks(
                         grml_cd_dir,
                     ],
                 )
+
+                write_buildinfo_json(conf_dir, output_dir, grml_cd_dir, fai_action, classes, grml_live_config)
+
                 create_netboot_package(
                     output_dir,
                     chroot_directories.netboot_dir,
