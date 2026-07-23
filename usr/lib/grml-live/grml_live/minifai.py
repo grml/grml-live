@@ -728,6 +728,32 @@ def copy_directory_out(
     )
 
 
+def install_extra_chroot_files(
+    chroot_dir: Path,
+    chroot_install: str,
+    unshared_service: UnsharedService,
+):
+    if not chroot_install:
+        return
+    chroot_install_source_dir = Path(chroot_install)
+    if not chroot_install_source_dir.exists() or not chroot_install_source_dir.is_dir():
+        print("W: Configuration variable $CHROOT_INSTALL is set but not a directory; ignoring")
+        return
+
+    print(f"I: Copying local files to chroot from {chroot_install_source_dir!s}")
+    unshared_service.run(
+        unshared_helper.run_program(
+            [
+                "rsync",
+                "-avz",
+                "--inplace",
+                str(chroot_install_source_dir) + "/",
+                str(chroot_dir) + "/",
+            ]
+        )
+    )
+
+
 def _build_mksquashfs_options(conf_dir: Path) -> list[str]:
     squashfs_excludes_file = conf_dir / "grml" / "squashfs-excludes"
     options = [
@@ -899,6 +925,8 @@ def _run_tasks(
         )
     )
 
+    chroot_install = os.environ["CHROOT_INSTALL"]
+    print(f"I: CHROOT_INSTALL: {chroot_install!r}")
     grml_name = os.environ["GRML_NAME"]
     print(f"I: GRML_NAME: {grml_name!r}")
     iso_name = os.environ["ISO_NAME"]
@@ -942,6 +970,8 @@ def _run_tasks(
             if not should_skip_task(dynamic_state, "configure"):
                 for class_name in classes:
                     run_class_scripts("scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
+
+                install_extra_chroot_files(chroot_dir, chroot_install, unshared_service)
 
             if not should_skip_task(dynamic_state, "squashfs"):
                 # mksquashfs is the last thing that should need the userns.

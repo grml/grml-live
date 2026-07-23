@@ -102,6 +102,7 @@ BUILD_ONLY=''
 BUILD_DIRTY=''
 HOSTNAME=''
 USERNAME=''
+CHROOT_INSTALL=''
 CONFIGDUMP=''
 FAI_PROGRAM=$GRML_LIVE_LIB_DIR/minifai
 # }}}
@@ -632,6 +633,7 @@ fi
 mkdir -p "$CHROOT_OUTPUT" || bailout 5 "Problem with creating $CHROOT_OUTPUT"
 
 # minifai needs to see these
+export CHROOT_INSTALL
 export GRML_NAME
 export ISO_NAME
 export MKSQUASHFS_BINARY
@@ -654,19 +656,6 @@ einfo "Finished execution of stage 'fai $FAI_ACTION'"
 
 # BUILD_OUTPUT - execute arch specific stuff and squashfs {{{
 mkdir -p "$BUILD_OUTPUT" || bailout 6 "Problem with creating $BUILD_OUTPUT for stage ARCH"
-
-# support installation of local files into the chroot/ISO
-if [ -n "$CHROOT_INSTALL" ] ; then
-  if ! [ -d "$CHROOT_INSTALL" ] ; then
-     log "Configuration variable \$CHROOT_INSTALL is set but not a directory; ignoring"
-     ewarn "Configuration variable \$CHROOT_INSTALL is set but not a directory; ignoring"
-  else
-     log "Copying local files to chroot as requested via \$CHROOT_INSTALL"
-     einfo "Copying local files to chroot as requested via \$CHROOT_INSTALL"
-     rsync -avz --inplace "$CHROOT_INSTALL"/ "$CHROOT_OUTPUT/"
-     eend $?
-  fi
-fi
 
 # information how the ISO was generated {{{
 # shellcheck disable=SC2034
