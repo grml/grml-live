@@ -621,6 +621,31 @@ def install_base(conf_dir: Path, chroot_dir: Path, classes, debian_suite: str, m
     run_x(args)
 
 
+def extract_iso(chroot_dir: Path, extract_iso_name: str):
+    """Unpack squashfs from an existing ISO to use it as the chroot_dir contents."""
+    print(f"I: Unpacking ISO from {extract_iso_name}")
+
+    try:
+        # Run unshared, so the unpacked chroot is owned by the correct uids.
+        run_x(["osirrox", "-indev", extract_iso_name, "-extract", "live", chroot_dir])
+        temp_files = sorted(chroot_dir.rglob("*"))
+        print(f"D: found extracted files: {temp_files!s}")
+
+        squashfs_files = sorted(chroot_dir.glob("*/*.squashfs"))
+        if not squashfs_files:
+            raise RuntimeError(f"Could not find any squashfs files in ISO {extract_iso_name}")
+        if len(squashfs_files) != 1:
+            raise RuntimeError(
+                f"Found more than one squashfs file in ISO {extract_iso_name}: {' '.join(squashfs_files)}"
+            )
+        run_x(["unsquashfs", "-f", "-d", chroot_dir, squashfs_files[0]], unshared=True)
+        run_x(["rm", "-rf", *temp_files], unshared=True)
+    except:
+        # This should be safe as chroot_dir is expected to be empty at first!
+        run_x(["rm", "-rf", chroot_dir], unshared=True)
+        raise
+
+
 def should_skip_task(dynamic_state: DynamicState, task: str) -> bool:
     if task in dynamic_state.skip_tasks:
         print(f'I: Skipping FAI task "{task}", as dynamically requested')
@@ -1214,9 +1239,6 @@ def _main(program_name: str, argv: list[str]) -> int:
         raise ValueError(f"Output directory {output_dir} does not exist")
 
     chroot_dir = output_dir / "grml_chroot"
-    chroot_dir.mkdir(
-        exist_ok=True  # for now, as grml_live has to mount the mirror
-    )
 
     grml_live_config = _parse_bash_set(args.grml_live_config.read_text())
     show_env("configdump", grml_live_config)
@@ -1227,6 +1249,18 @@ def _main(program_name: str, argv: list[str]) -> int:
         with start_unshared_service() as unshared_service:
             unshared_service.run(unshared_helper.hello_world())
             skiptasks = []
+
+            extract_iso_name = os.environ["EXTRACT_ISO_NAME"]
+            if extract_iso_name:
+                if args.action == FaiAction.DIRINSTALL:
+                    raise ValueError("Building a new chroot is incompatible with extracting an existing ISO")
+                extract_iso(chroot_dir, extract_iso_name)
+            else:
+                try:
+                    chroot_dir.mkdir()
+                except FileExistsError:
+                    if args.action == FaiAction.DIRINSTALL:
+                        raise ValueError(f"chroot directory {chroot_dir} unexpectedly already exists") from None
 
             if args.action == FaiAction.DIRINSTALL:
                 install_base(conf_dir, chroot_dir, classes, args.debian_suite, args.mirror_url)
