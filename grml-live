@@ -44,7 +44,6 @@ $PN - build process script for generating a (grml based) Linux Live-ISO
 
 Usage: $PN [options, see as follows]
 
-   -A                      clean build directories before and after running
    -b                      build from an existing chroot
    -B                      build from an existing chroot without running scripts
    -c <class[es]>          classes to be used for building the ISO
@@ -158,13 +157,6 @@ bailout() {
   [ -n "$SQUASHFS_STDERR" ]  && rm -rf "$SQUASHFS_STDERR"
   [ -n "$1" ] && EXIT="$1" || EXIT="1"
   [ -n "$2" ] && eerror "$2">&2
-  if [ -n "$CLEAN_ARTIFACTS" ]; then
-    log "Cleaning up"
-    einfo "Cleaning up"
-    [ -n "${BUILD_OUTPUT}"  ] && [ -d "${BUILD_OUTPUT}"  ] && rm -r "${BUILD_OUTPUT}"
-    [ -n "${CHROOT_OUTPUT}" ] && [ -d "${CHROOT_OUTPUT}" ] && rm -r "${CHROOT_OUTPUT}"
-    eend 0
-  fi
   log "------------------------------------------------------------------------------"
   exit "$EXIT"
 }
@@ -208,9 +200,8 @@ hasclass() {
 # }}}
 
 # command line parsing {{{
-while getopts "C:c:d:D:e:g:i:I:o:r:s:v:w:AbBFhqRu" opt; do
+while getopts "C:c:d:D:e:g:i:I:o:r:s:v:w:bBFhqRu" opt; do
   case "$opt" in
-    A) CLEAN_ARTIFACTS=1 ;;
     b) BUILD_ONLY=1 ;;
     B) BUILD_DIRTY=1; SKIP_RELEASE=1 ;;
     c) CLASSES="$OPTARG" ;;
@@ -485,7 +476,6 @@ echo "  Secure Boot:       $SECURE_BOOT"
 [ -n "$BOOTID" ]              && echo "  Boot identifier:   $BOOTID"
 [ -n "$DEFAULT_BOOTOPTIONS" ] && echo "  Adding default bootoptions: \"$DEFAULT_BOOTOPTIONS\""
 [ -n "$LOGFILE" ]             && echo "  Logging to file:   $LOGFILE"
-[ -n "$CLEAN_ARTIFACTS" ]     && echo "  Will clean output before and after running."
 [ -n "$UPDATE" ]              && echo "  Executing UPDATE instead of fresh installation."
 [ -n "$SKIP_MKSQUASHFS" ]     && echo "  Skipping creation of SQUASHFS file."
 [ -n "$BUILD_ONLY" ]          && echo "  Executing BUILD_ONLY instead of fresh installation."
@@ -498,7 +488,6 @@ if [ -z "$FORCE" ] ; then
    echo -n "Continue? [y/N] "
    read -r a
    if ! [ "$a" = 'y' ] || [ "$a" = 'Y' ] ; then
-      CLEAN_ARTIFACTS=0
       echo "Exiting as requested."
       exit 0
    fi
@@ -533,17 +522,6 @@ CHROOT_OUTPUT="${OUTPUT}/grml_chroot"
 ISO_OUTPUT="${OUTPUT}/grml_isos"
 LOG_OUTPUT="${OUTPUT}/grml_logs"
 NETBOOT="${OUTPUT}/netboot"
-# }}}
-
-# clean up before start {{{
-if [ -n "${CLEAN_ARTIFACTS}" ]; then
-  echo "Wiping old artifacts"
-  [ -n "${CHROOT_OUTPUT}"  ] && [ -d "${CHROOT_OUTPUT}"  ] && rm -r "${CHROOT_OUTPUT}"
-  [ -n "${BUILD_OUTPUT}"   ] && [ -d "${BUILD_OUTPUT}"   ] && rm -r "${BUILD_OUTPUT}"
-  [ -n "${ISO_OUTPUT}"     ] && [ -d "${ISO_OUTPUT}"     ] && rm -r "${ISO_OUTPUT}"
-  [ -n "${LOG_OUTPUT}"     ] && [ -d "${LOG_OUTPUT}"     ] && rm -r "${LOG_OUTPUT}"
-  [ -n "${NETBOOT}"        ] && [ -d "${NETBOOT}"        ] && rm -r "${NETBOOT}"
-fi
 # }}}
 
 # create log file {{{
@@ -789,7 +767,6 @@ generate_build_info() {
     build_only="${BUILD_ONLY}" \
     chroot_install="${CHROOT_INSTALL}" \
     classes="${CLASSES}" \
-    clean_artifacts="${CLEAN_ARTIFACTS}" \
     default_bootoptions="${DEFAULT_BOOTOPTIONS}" \
     distri_info="${DISTRI_INFO}" \
     distri_name="${DISTRI_NAME}" \

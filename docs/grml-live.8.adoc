@@ -12,7 +12,7 @@ Synopsis
 grml-live [-c <classe[s]>] [-C <configfile>] [
 -e <extract_iso_name>] [-g <grml_name>] [-i <iso_name>] [
 -o <output_directory>] [-r <release_name>] [-s <suite>] [
--v <version_number>] [-w <date>] [-AbBFqRu]
+-v <version_number>] [-w <date>] [-bBFqRu]
 
 Description
 -----------
@@ -48,11 +48,6 @@ configuration is available in the source in examples/reprepro/.
 
 Options
 -------
-
-  -A::
-
-Clean up all output directories before running the build process. After finishing,
-clean up the Chroot target and Build target directories.
 
   -b::
 
@@ -126,7 +121,7 @@ documentation.
   -e **EXTRACT_ISO_NAME**::
 
 The squashfs inside the specified ISO will be extracted and used as the chroot.
-This option is useful for remastering, in combination with -A and -b or -u.
+This option is useful for remastering, in combination with -b or -u.
 
   -F::
 
