@@ -28,6 +28,7 @@ Depends:
  rsync,
  socat,
  squashfs-tools,
+ util-linux (>= 2.39~),
  xorriso,
  ${misc:Depends},
 Recommends:
