@@ -39,7 +39,7 @@ to deal with this config framework. Visit
 link:http://wiki.grml.org/doku.php?id=persistency[] for further information.
 
 [[current-versions]]
-include::grml-autoconfig.current.txt[]
+include::grml-autoconfig.current.adoc[]
 
 [[X7]]
 Usage scenarios
