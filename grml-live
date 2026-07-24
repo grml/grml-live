@@ -481,11 +481,13 @@ fi
 # for example isolinux does not like '-' inside the directory name
 SHORT_NAME="$(echo "$GRML_NAME" | tr -d ',./;\- ')"
 
+# shellcheck disable=SC2034 # Calculated for CONFIGDUMP.
 RELEASE_INFO="$GRML_NAME $VERSION - Release Codename $RELEASENAME"
 
+# shellcheck disable=SC2034 # Calculated for CONFIGDUMP.
 SQUASHFS_NAME="$GRML_NAME.squashfs"
 
-# shellcheck disable=SC2034 # Calculated just to write it into CONFIGDUMP.
+# shellcheck disable=SC2034 # Calculated for CONFIGDUMP.
 BOOT_FILE="/conf/bootfile_${SHORT_NAME}_${SOURCE_DATE_EPOCH}"
 
 if [ -z "$BOOTID" ] ; then
