@@ -27,12 +27,14 @@ GRML_LIVE_INSTALL_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/
 if [ -e "${GRML_LIVE_INSTALL_PREFIX}"/usr/lib/grml-live ]; then
     # assume source checkout
     GRML_LIVE_LIB_DIR="${GRML_LIVE_INSTALL_PREFIX}"/usr/lib/grml-live
+    DEFAULT_GRML_FAI_CONFIG="$(readlink -f "${GRML_LIVE_INSTALL_PREFIX}"/config)"
     if command -v git &>/dev/null; then
         GRML_LIVE_VERSION=$(git describe --always)
     fi
 else
     GRML_LIVE_INSTALL_PREFIX=${GRML_LIVE_INSTALL_PREFIX}/../
     GRML_LIVE_LIB_DIR=${GRML_LIVE_INSTALL_PREFIX}/lib/grml-live
+    DEFAULT_GRML_FAI_CONFIG=/usr/share/grml-live/config
 fi
 # }}}
 
@@ -49,7 +51,7 @@ Usage: $PN [options, see as follows]
    -c <class[es]>          classes to be used for building the ISO
    -C <configfile>         configuration file for grml-live
    -d <date>               use specified date instead of build time as date of release
-   -D <configdir>          use specified configuration directory instead of /usr/share/grml-live/config
+   -D <configdir>          use specified configuration directory instead of ${DEFAULT_GRML_FAI_CONFIG}
    -e <iso_name>           extract ISO and squashfs contents from iso_name
    -F                      force execution without prompting
    -g <grml_name>          set the grml flavour name
@@ -307,7 +309,7 @@ fi
 [ -n "$DEFAULT_BOOTOPTIONS" ]     || DEFAULT_BOOTOPTIONS=''
 [ -n "$DISTRI_INFO" ]             || DISTRI_INFO='Grml - Live Linux for system administrators'
 [ -n "$DISTRI_NAME" ]             || DISTRI_NAME="grml"
-[ -n "$GRML_FAI_CONFIG" ]         || GRML_FAI_CONFIG='/usr/share/grml-live/config'
+[ -n "$GRML_FAI_CONFIG" ]         || GRML_FAI_CONFIG="${DEFAULT_GRML_FAI_CONFIG}"
 [ -n "$GRML_NAME" ]               || GRML_NAME='grml'
 [ -n "$HOSTNAME" ]                || HOSTNAME='grml'
 [ -n "$OUTPUT" ]                  || OUTPUT="$PWD/grml/"
