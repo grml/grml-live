@@ -126,8 +126,6 @@ def run_grml_live(
     grml_fai_config = grml_live_path / "config"
     env.update(
         {
-            "GRML_FAI_CONFIG": str(grml_fai_config),
-            "LIVE_CONF": str(grml_live_path / "etc" / "grml" / "grml-live.conf"),
             "SOURCE_DATE_EPOCH": str(int(source_date_epoch.timestamp())),
         }
     )
@@ -135,6 +133,10 @@ def run_grml_live(
     grml_live_cmd = [
         grml_live_path / "grml-live",
         "-F",  # do not prompt
+        "-C",
+        str(grml_live_path / "etc" / "grml" / "grml-live.conf"),
+        "-D",
+        str(grml_fai_config),
         "-c",
         ",".join(classes),
         "-s",
