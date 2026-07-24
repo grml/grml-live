@@ -177,25 +177,6 @@ trap bailout 1 2 3 3 6 14 15
 # usage: log "string to log"
 log() { [ -n "$LOGFILE" ] && echo "$*" >> "$LOGFILE" ; }
 
-# cut string at character number int = $1
-# usage: cut_string 5 "1234567890" will output "12345"
-cut_string() {
-  [ -n "$2" ] || return 1
-  echo "$2" | head -c "$1"; echo -ne "\n"
-}
-
-# append int = $1 spaces to string = $2
-# usage: extend_string_end 5 "123" will output "123  "
-extend_string_end() {
-  [ -n "$2" ] || return 1
-  local text
-  text=$(echo -n "$2" | head -c "$1")
-  while [ "$1" -gt "${#text}" ] ; do
-    text="${text} "
-  done
-  echo -n "${text}"
-}
-
 # Returns success if a given class was requested.
 # This is not called `ifclass`, as ifclass supports a broader syntax.
 hasclass() {
@@ -512,14 +493,8 @@ fi
 SHORT_NAME="$(echo "$GRML_NAME" | tr -d ',./;\- ')"
 
 RELEASE_INFO="$GRML_NAME $VERSION - Release Codename $RELEASENAME"
-# ensure this has a specific length
-RELEASE_INFO68="$(cut_string 68 "$RELEASE_INFO")"
-RELEASE_INFO68="$(extend_string_end 68 "$RELEASE_INFO68")"
 
 SQUASHFS_NAME="$GRML_NAME.squashfs"
-# ensure this has a specific length
-SQUASHFS_NAME20="$(cut_string 20 "$SQUASHFS_NAME")"
-SQUASHFS_NAME20="$(extend_string_end 20 "$SQUASHFS_NAME20")"
 
 # shellcheck disable=SC2034 # Calculated just to write it into CONFIGDUMP.
 BOOT_FILE="/conf/bootfile_${SHORT_NAME}_${SOURCE_DATE_EPOCH}"
@@ -582,7 +557,7 @@ einfo "Logging actions to logfile $LOGFILE"
 # dump config variables into file, for hooks/scripts access {{{
 CONFIGDUMP=$(mktemp)
 set | grep -E \
-  '^(GRML_NAME|SHORT_NAME|RELEASENAME|RELEASE_INFO|RELEASE_INFO68|DATE|VERSION|SUITE|ARCH|DISTRI_INFO|DISTRI_NAME|SQUASHFS_NAME|SQUASHFS_NAME20|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH|BOOTID|BOOT_FILE|DEFAULT_BOOTOPTIONS|SECURE_BOOT|GRML_LIVE_VERSION)=' \
+  '^(GRML_NAME|SHORT_NAME|RELEASENAME|RELEASE_INFO|DATE|VERSION|SUITE|ARCH|DISTRI_INFO|DISTRI_NAME|SQUASHFS_NAME|USERNAME|HOSTNAME|APT_PROXY|BUILD_ONLY|WAYBACK_DATE|GRML_LIVE_DEBUG_APT|GRML_FAI_CONFIG|SOURCE_DATE_EPOCH|BOOTID|BOOT_FILE|DEFAULT_BOOTOPTIONS|SECURE_BOOT|GRML_LIVE_VERSION)=' \
   > "${CONFIGDUMP}"
 # }}}
 
