@@ -1223,11 +1223,11 @@ def _main(program_name: str, argv: list[str]) -> int:
     args = create_argparser().parse_args(argv[1:])
     print(f"I: {program_name} parsed args: {args}")
     classes = args.classes.split(",")
-    print(f"I: Using classes: {classes}")
+    print(f"I: Using classes: {','.join(classes)}")
     conf_dir = args.config.absolute()
-    print(f"I: Using conf_dir: {conf_dir}")
+    print(f"I: Using conf_dir: {conf_dir!s}")
     output_dir: Path = args.output_dir.absolute()
-    print(f"I: Using output_dir: {args.output_dir}")
+    print(f"I: Using output_dir: {args.output_dir!s}")
 
     if not conf_dir.exists():
         raise ValueError(f"Config directory {conf_dir} does not exist")
