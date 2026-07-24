@@ -861,7 +861,7 @@ def create_netboot_package(
     """
     output_basename = iso_name.rpartition(".iso")[0] + "-netboot"
     output_netboot_dir = output_dir / "netboot"
-    output_netboot_dir.mkdir()
+    output_netboot_dir.mkdir(exist_ok=True)  # some workflows accept that this already exists
     output_name = output_netboot_dir / (output_basename + ".tar")
     print(f"I: building netboot tar: {output_name.name}")
 
@@ -1059,7 +1059,7 @@ def create_media(
     arch: str,
 ):
     iso_dir = output_dir / "grml_isos"
-    iso_dir.mkdir()
+    iso_dir.mkdir(exist_ok=True)  # some workflows accept that this already exists
     print("I: Generating ISO file ...")
     run_x(_build_xorriso_options(iso_dir, grml_cd_dir, grml_name, version, iso_name, arch))
 
