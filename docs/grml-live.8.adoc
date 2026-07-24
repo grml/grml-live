@@ -347,7 +347,7 @@ Overview of all files relevant to grml-live and the config area.
 
   /usr/sbin/grml-live
 
-Main program driving the build process. Requires root permissions for execution.
+Main program driving the build process.
 
   /etc/grml/grml-live.conf
 
