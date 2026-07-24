@@ -110,12 +110,14 @@ advance. Usage example: '-d 2009-10-30'
   -D **CONFIGURATION_DIRECTORY**::
 
 The specified directory is used as configuration directory for grml-live.
-By default /usr/share/grml-live/config is used as default configuration directory.
+By default, when running from source (git checkout), `config` from the source
+directory is used. When running from an installed package, the default is
+`/usr/share/grml-live/config`.
 If you want to have different configuration scripts, package definitions, etc.
 without messing with the global configuration under /usr/share/grml-live/config
 provided by grml-live this option provides you the option to use your own
 configuration directory.
-This directory is what's being referred to as ${GRML_FAI_CONFIG} throughout this
+This directory is what's being referred to as `$GRML_FAI_CONFIG` throughout this
 documentation.
 
   -e **EXTRACT_ISO_NAME**::
@@ -158,7 +160,7 @@ chroot system) and grml_isos (where the resulting ISO is stored).
 
 Build the ISO without (re-)creating the squashfs compressed file using mksquashfs.
 This option is useful if you just want to update parts outside the chroot in the ISO.
-Consider combining this option with the build-only option '-b'.
+The media-scripts are still run.
 
   -r **RELEASENAME**::
 
@@ -427,6 +429,9 @@ a bug report. Check out <<deploy-on-debian,How do I deploy
 grml-live on a plain Debian installation>> for details how to set up grml-live
 on a plain, original Debian system.
 
+* Linux user namespaces must work, and the executing user needs subuid and subgid
+ranges assigned. See the manual pages subuid(5) and subgid(5).
+
 * enough free disk space. At least 2GB are required for a minimal grml-live
 run (\~1GB for the chroot, \~400MB for the build target, \~35MB for the netboot
 files and \~350MB for the resulting ISO plus some temporary files).
@@ -436,7 +441,7 @@ space.
 * fast network access for retrieving the Debian packages used for creating the
 chroot (check out "local mirror" to workaround this problem as far as possible)
 
-* your output directory should not be mounted with any of the "nodev", "noexec"
+* your output directory must not be mounted with any of the "nodev", "noexec"
 or "nosuid" mount options. (/tmp typically is at least "nodev" and "nosuid" on
 most systems.)
 
@@ -494,14 +499,25 @@ The resulting ISO can then be found in `./grml/grml_isos/`.
 What is $GRML_FAI_CONFIG?
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The variable '$GRML_FAI_CONFIG' is pointing to the directory /usr/share/grml-live/config
-by default.
-To provide you a maximum of flexibility you can set up your own configuration directory
-(e.g. based on /usr/share/grml-live/config) and use
-this directory running grml-live with the '-D <config_dir>' option.
-Now '$GRML_FAI_CONFIG' points to the specified directory and all the
+`$GRML_FAI_CONFIG` is where grml-live looks for the configuration directory,
+which defines what ends up being part of your Grml build. See the section
+<<class-concept,The class concept>> for details.
+
+By default, `$GRML_FAI_CONFIG` points to the configuration shipped with
+grml-live. If you are running grml-live from a source (git) checkout,
+it defaults to using the `config` directory from that checkout.
+If you are running grml-live from an installed package, it defaults to
+`/usr/share/grml-live/config`.
+
+To provide you a maximum of flexibility you can set up your own configuration
+directory and use it with the `-D <config_dir>` option.
+Now `$GRML_FAI_CONFIG` points to the specified directory and all the
 configuration files, scripts and hooks will be taken from your
-'$GRML_FAI_CONFIG' directory.
+`$GRML_FAI_CONFIG` directory.
+
+We encourage you to fork grml-live.git and apply your changes to the `config`
+directory as git commits.
+
 
 [[how-to-debug]]
 I've problems with the build process. How to start debugging?
@@ -636,6 +652,18 @@ dpkg-dev is a simple and easy approach.
 
 Finally invoke grml-live with your class name (`CUSTOM` in this example) added
 to the list of classes on the command line (see grml-live option `-c`).
+
+[[userns]]
+Error: `unshare: no line matching ... in /etc/subuid`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+grml-live uses Linux user namespaces, instead of running everything as root on
+your host system. This requires that your user has "subuid" and "subgid" ranges
+assigned. See the manual pages subuid(5), subgid(5) and newuidmap(1).
+
+On Debian systems, when the `uidmap` package is installed, newly created users
+automatically get subuid and subgid ranges assigned by useradd(8).
+
 
 [[run-from-git]]
 Obtaining and running grml-live

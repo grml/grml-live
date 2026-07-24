@@ -91,8 +91,15 @@ def is_ci():
 
 
 def apt_satisfy(deps: str):
+    args = ["apt-get", "satisfy", "-q", "-y", "--no-install-recommends", deps.strip()]
+    if os.getuid() != 0:
+        if os.getenv("CI", "") == "":
+            print(f"I: Skipping apt install, set CI=true to force. Would install: {deps.strip()}")
+            return
+        else:
+            args = ["sudo", "-n", "--preserve-env=DEBIAN_FRONTEND", "--", *args]
     run_x(
-        ["apt-get", "satisfy", "-q", "-y", "--no-install-recommends", deps.strip()],
+        args,
         env=dict(os.environ) | {"DEBIAN_FRONTEND": "noninteractive"},
     )
 
@@ -119,8 +126,6 @@ def run_grml_live(
     grml_fai_config = grml_live_path / "config"
     env.update(
         {
-            "GRML_FAI_CONFIG": str(grml_fai_config),
-            "LIVE_CONF": str(grml_live_path / "etc" / "grml" / "grml-live.conf"),
             "SOURCE_DATE_EPOCH": str(int(source_date_epoch.timestamp())),
         }
     )
@@ -128,6 +133,10 @@ def run_grml_live(
     grml_live_cmd = [
         grml_live_path / "grml-live",
         "-F",  # do not prompt
+        "-C",
+        str(grml_live_path / "etc" / "grml" / "grml-live.conf"),
+        "-D",
+        str(grml_fai_config),
         "-c",
         ",".join(classes),
         "-s",
@@ -400,7 +409,7 @@ def _main(program_name: str, argv: list[str]) -> int:
 
     if not is_ci():
         print("I: No CI variable found, assuming local test build")
-        if not is_docker():
+        if not is_docker() and os.getuid() == 0:
             return bail("E: Not running inside docker, exiting to avoid data damage")
 
     build_config = load_config(build_config_file)
@@ -487,9 +496,12 @@ def _main(program_name: str, argv: list[str]) -> int:
     print(f"I: {output_dir=}")
 
     # avoid building on mounted volume
-    tmp_root = Path(tempfile.gettempdir())
-    tmp_dir = Path(tempfile.mkdtemp(dir=tmp_root))
-    build_dir = Path(tempfile.mkdtemp(dir=tmp_root))
+    tmp_dir = Path(tempfile.mkdtemp(prefix="gltmp"))
+    tmp_dir.chmod(0o775)
+    print(f"I: {tmp_dir=}")
+    build_dir = Path(tempfile.mkdtemp(prefix="glbuild"))
+    build_dir.chmod(0o775)
+    print(f"I: {build_dir=}")
 
     # Do it now, as the next block needs curl installed.
     install_debian_dependencies()

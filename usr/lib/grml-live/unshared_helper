@@ -1,0 +1,15 @@
+#!/usr/bin/env -S python3 -B
+"""
+Loader script for unshared_helper to allow running it without installing the grml_live package.
+"""
+import sys
+from pathlib import Path
+
+# Add the current directory to Python path so we can import grml_live
+grml_live_path = Path(__file__).parent
+sys.path.insert(0, str(grml_live_path))
+
+from grml_live import unshared_helper
+
+if __name__ == "__main__":
+    sys.exit(unshared_helper.main())

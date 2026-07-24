@@ -3,4 +3,5 @@
 /.venv
 /*.egg-info
 /dist
+/uv.lock
 __pycache__
