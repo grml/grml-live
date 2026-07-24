@@ -578,14 +578,14 @@ else
   FAI_ACTION=dirinstall
 fi
 
-if ! [ "$FAI_ACTION" = dirinstall ] && [ -z "$EXTRACT_ISO_NAME" ] && ! [ -r "$CHROOT_OUTPUT/etc/debian_version" ] ; then
+if ! [ "$FAI_ACTION" = dirinstall ] && [ -z "$EXTRACT_ISO_NAME" ] && ! [ -r "$CHROOT_OUTPUT/etc/os-release" ] ; then
   log    "Error: does not look like you have a working chroot. Updating/building not possible."
   eerror "Error: does not look like you have a working chroot. Updating/building not possible. (Drop -u/-b/-B option?)"
   eend 1
   bailout 20
 fi
 
-if [ "$FAI_ACTION" = dirinstall ] && [ -r "$CHROOT_OUTPUT/etc/debian_version" ] ; then
+if [ "$FAI_ACTION" = dirinstall ] && [ -r "$CHROOT_OUTPUT/etc/os-release" ] ; then
   log    "Error: the chroot already exists. Refusing to overwrite it."
   eerror "Error: the chroot already exists. Refusing to overwrite it. (Add -u/-b/-B option?)"
   eend 1
