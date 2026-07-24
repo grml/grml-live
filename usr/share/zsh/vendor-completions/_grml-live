@@ -59,7 +59,6 @@ _grmllive_apt_snapshot_dates() { #{{{
 #}}}
 
 arguments=( #{{{
-  '-A[clean build directories before and after running]'
   '-b[build the ISO without updating the chroot via FAI]'
   '-B[build the ISO without touching the chroot (skips cleanup)]'
   '-c[available grml-live classes]:classe(s):_grmllive_classes'
