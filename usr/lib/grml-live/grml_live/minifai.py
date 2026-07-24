@@ -20,7 +20,7 @@ from enum import StrEnum
 from pathlib import Path
 from threading import Event, Thread
 
-from . import unshared_helper
+from . import file_ops, unshared_helper
 from .classes import ClassFileParsingFailed, parse_class_varfile
 from .packages import PackageList, parse_class_packages
 
@@ -1190,11 +1190,7 @@ def _run_tasks(
                 # After this, no new files should appear.
                 create_on_media_md5sums(grml_cd_dir, grml_name)
 
-                # After this, no files should be touched any more.
-                source_date_epoch = os.getenv("SOURCE_DATE_EPOCH")
-                if source_date_epoch:
-                    print(f"I: Clamping mtimes to {source_date_epoch}")
-                    unshared_service.run(unshared_helper.clamp_to_source_date(grml_cd_dir, source_date_epoch))
+                file_ops.clamp_to_source_date_epoch(grml_cd_dir)
 
                 create_media(output_dir, grml_cd_dir, grml_name, version, iso_name, arch)
 
