@@ -91,17 +91,21 @@ def is_ci():
 
 
 def apt_satisfy(deps: str):
+    if os.getenv("CI", "") == "":
+        print(f"I: Skipping apt install, set CI=true to force. Would install: {deps.strip()}")
+        return
+    if os.getenv("ASSUME_DEPS_INSTALLED", "") != "":
+        print(f"I: Skipping apt install, unset ASSUME_DEPS_INSTALLED. Would install: {deps.strip()}")
+        return
+
     args = ["apt-get", "satisfy", "-q", "-y", "--no-install-recommends", deps.strip()]
     if os.getuid() != 0:
-        if os.getenv("CI", "") == "":
-            print(f"I: Skipping apt install, set CI=true to force. Would install: {deps.strip()}")
-            return
-        else:
-            args = ["sudo", "-n", "--preserve-env=DEBIAN_FRONTEND", "--", *args]
+        args = ["sudo", "-n", "--preserve-env=DEBIAN_FRONTEND", "--", *args]
     run_x(
         args,
         env=dict(os.environ) | {"DEBIAN_FRONTEND": "noninteractive"},
     )
+    return
 
 
 def print_grml_live_version(grml_live_path: Path):
