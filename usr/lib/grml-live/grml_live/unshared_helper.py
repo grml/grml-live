@@ -139,7 +139,6 @@ def _parse_and_run(ops_stream: list[dict], operations: dict) -> int:
         args = op["args"]
         kwargs = op["kwargs"]
         try:
-            print(f"I: unshared_helper executing {op_name} {' '.join(str(arg) for arg in args)} {kwargs}", flush=True)
             rc = operations[op_name](*args, **kwargs)
         except Exception as except_inst:
             print(f"E: {op_name} failed: {except_inst}", flush=True)
