@@ -1,38 +1,6 @@
       CHEATCODES AND HINTS FOR GRML
 ==============================================================================
 
-Isolinux bootprompt options:
-----------------------------
-
-These options work from the isolinux bootprompt of Grml based (live) systems.
-(Do NOT use them as 'grml $OPTION', use them as '$OPTION'!):
-
-grml                                  Use default settings (same as just pressing return)
-grml2ram                              Copy Grml's squashfs file to RAM and
-                                      run from there (compare with 'grml toram')
-memtest                               Run Memtest86+ instead of Linux
-fb1280x1024                           Use fixed framebuffer graphics (1)
-fb1024x768                            Use fixed framebuffer graphics (2) [notice: Grml's default]
-fb800x600                             Use fixed framebuffer graphics (3)
-nofb                                  Disable framebuffer
-floppy                                Boot from primary floppy drive
-hd / hd1 /hd2 / hd3                   Boot from first .. fourth primary partition of (local) harddisk
-hd0 / fd0                             Chainload MBR from first harddisk / floppy drive
-debug                                 Be verbose during the process of booting for debugging
-forensic                              Do not touch any harddisks during hardware recognition
-serial                                Activate ttyS0 and start a getty
-hdt                                   Boot Hardware Detection Tool (from syslinux project)
-
-Further documentation regarding the boot process can be found at:
-* https://manpages.debian.org/live-boot-doc/live-boot.7.en.html
-* https://manpages.debian.org/initramfs-tools-core/initramfs-tools.7.en.html
-* https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
-* https://wiki.syslinux.org/wiki/index.php?title=SYSLINUX
-* https://wiki.syslinux.org/wiki/index.php?title=Doc/chain + https://wiki.syslinux.org/wiki/index.php?title=Comboot/chain.c32
-
-Boot parameters
----------------
-
 The following boot parameters can be combined and should be given on the kernel command line.
 
 In the GRUB menu, press 'E' to edit the menu item, and then add your boot parameters to the line
@@ -40,6 +8,11 @@ starting with "linux".
 
 Not all boot parameters are available on grml-small, as it does not come with the necessary software.
 For example, the "startx" option does not work on grml-small.
+
+Further documentation regarding the boot process can be found at:
+* https://manpages.debian.org/live-boot-doc/live-boot.7.en.html
+* https://manpages.debian.org/initramfs-tools-core/initramfs-tools.7.en.html
+* https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
 
 Regional settings:
 ------------------
