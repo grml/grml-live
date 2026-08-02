@@ -3,7 +3,6 @@
 # Please beware that this implementation is an interim step, and we may or may not continue
 # with the FAI API.
 #
-import argparse
 import contextlib
 import datetime
 import json
@@ -15,11 +14,10 @@ import sys
 import tempfile
 import traceback
 from dataclasses import dataclass
-from enum import StrEnum
 from pathlib import Path
 from threading import Event, Thread
 
-from . import file_ops, unshared_helper
+from . import build_facts, file_ops, unshared_helper
 from .classes import ClassFileParsingFailed, parse_class_varfile
 from .packages import PackageList, parse_class_packages
 
@@ -36,14 +34,6 @@ class FaiScriptFailed(Exception):
 
 class ProgramStartFailed(Exception):
     pass
-
-
-class FaiAction(StrEnum):
-    DIRINSTALL = "dirinstall"
-    SOFTUPDATE = "softupdate"
-    RECONFIGURE = "reconfigure"
-    REBUILD = "rebuild"
-    REBUILD_MEDIA = "rebuild_media"
 
 
 @dataclass
@@ -626,7 +616,7 @@ def install_base(conf_dir: Path, chroot_dir: Path, classes, debian_suite: str, m
     run_x(args)
 
 
-def extract_iso(chroot_dir: Path, extract_iso_name: str):
+def extract_iso(chroot_dir: Path, extract_iso_name: Path):
     """Unpack squashfs from an existing ISO to use it as the chroot_dir contents."""
     print(f"I: Unpacking ISO from {extract_iso_name}")
 
@@ -816,6 +806,7 @@ def mksquashfs(
 ):
     live_dir = grml_cd_dir / "live"
     squashfs_dir = live_dir / grml_name
+    # TODO: read squashfs filename and mksquashfs_binary from BuildConfiguration
     squashfs_file = squashfs_dir / f"{grml_name}.squashfs"
     filesystem_module_file = squashfs_dir / "filesystem.module"
 
@@ -962,9 +953,7 @@ def _build_buildinfo_data(
         "grml_debian_version": os.environ["SUITE"],
         "grml_iso_name": os.environ["ISO_NAME"],
         "grml_live_cmdline": os.environ["CMDLINE"],
-        "grml_live_config_file": os.environ["LIVE_CONF"],
         "grml_live_version": os.environ["GRML_LIVE_VERSION"],
-        "grml_local_config": os.environ["LOCAL_CONFIG"],
         "grml_name": grml_live_config["GRML_NAME"],
         "grml_short_name": grml_live_config["SHORT_NAME"],
         "grml_username": grml_live_config["USERNAME"],
@@ -1080,6 +1069,8 @@ def _run_tasks(
     conf_dir: Path,
     output_dir: Path,
     chroot_dir: Path,
+    grml_cd_dir: Path,
+    grml_logs_dir: Path,
     classes: list[str],
     grml_live_config: dict[str, str],
     fai_action: str,
@@ -1088,10 +1079,7 @@ def _run_tasks(
 ) -> int:
     dynamic_state = DynamicState()
     chroot_directories = _create_chroot_dirs(chroot_dir, unshared_service)
-    grml_cd_dir = output_dir / "grml_cd"
-    grml_cd_dir.mkdir()
-    grml_logs_dir = output_dir / "grml_logs"
-    grml_logs_dir.mkdir(exist_ok=True)
+    file_ops.create_dir_useable_for_unshare(grml_cd_dir)
 
     # Create a file in log_dir, so grml-live does not complain.
     unshared_service.run(
@@ -1101,7 +1089,7 @@ def _run_tasks(
         )
     )
 
-    # duplicate grml_live_config into the chroot, so chrooted scripts can use it.
+    # write grml_live_config into the chroot, so chrooted scripts can use it.
     grml_live_config_chroot = chroot_directories.build_dir / "config"
     unshared_service.run(
         unshared_helper.write_file_text(
@@ -1208,41 +1196,44 @@ def _run_tasks(
     return 0
 
 
-def create_argparser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser()
-    # path to fai classes, scripts, ...
-    parser.add_argument("config", type=Path)
-    parser.add_argument("classes")
-    parser.add_argument(
-        "action",
-        choices=[value.value for value in FaiAction.__members__.values()],
-        metavar="ACTION",
-        help="FAI action to execute (choices: %(choices)s)",
-    )
-    parser.add_argument("output_dir", type=Path)
-    parser.add_argument("grml_live_config", type=Path)
-    parser.add_argument("debian_suite", type=str)
-    parser.add_argument("mirror_url", type=str)
-    return parser
+def build(config: build_facts.BuildConfiguration):
+    grml_live_config: dict[str, str] = {
+        "APT_PROXY": os.getenv("APT_PROXY", ""),
+        "ARCH": config.arch,
+        "BOOTID": config.bootid,
+        "BOOT_FILE": config.boot_file,
+        "DATE": config.date,
+        "DEFAULT_BOOTOPTIONS": config.default_bootoptions,
+        "DISTRI_INFO": config.distri_info,
+        "DISTRI_NAME": config.distri_name,
+        "GRML_FAI_CONFIG": str(config.config_dir),
+        "GRML_LIVE_DEBUG_APT": os.environ.get("GRML_LIVE_DEBUG_APT", ""),
+        "GRML_LIVE_VERSION": config.grml_live_version,
+        "GRML_NAME": config.grml_name,
+        "HOSTNAME": config.hostname,
+        "RELEASENAME": config.release_name,
+        "RELEASE_INFO": config.release_info,
+        "SECURE_BOOT": "debian" if config.secure_boot else "disable",
+        "SHORT_NAME": config.short_name,
+        "SOURCE_DATE_EPOCH": str(config.source_date_epoch),
+        "SQUASHFS_NAME": config.squashfs_name,
+        "SUITE": config.debian_suite,
+        "USERNAME": config.username,
+        "VERSION": config.grml_version,
+        "WAYBACK_DATE": config.wayback_date or "",
+    }
 
+    # TODO: stop doing this
+    for key in ["ARCH", "GRML_LIVE_VERSION", "GRML_NAME", "SECURE_BOOT", "SUITE", "VERSION", "WAYBACK_DATE"]:
+        os.environ[key] = grml_live_config[key]
 
-def _main(program_name: str, argv: list[str]) -> int:
-    print(f"I: {program_name} started with {argv=}")
-    args = create_argparser().parse_args(argv[1:])
-    print(f"I: {program_name} parsed args: {args}")
-    classes = args.classes.split(",")
-    print(f"I: Using classes: {','.join(classes)}")
-    conf_dir = args.config.absolute()
-    print(f"I: Using conf_dir: {conf_dir!s}")
-    output_dir: Path = args.output_dir.absolute()
-    print(f"I: Using output_dir: {args.output_dir!s}")
+    # TODO: stop doing this
+    os.environ["CHROOT_INSTALL"] = str(config.chroot_install_src_directory or "")
+    os.environ["CMDLINE"] = " ".join(config.cmdline)
+    os.environ["EXTRACT_ISO_NAME"] = str(config.extract_iso_name or "")
+    os.environ["ISO_NAME"] = str(config.iso_name)
+    os.environ["MKSQUASHFS_BINARY"] = str(config.builder_programs.mksquashfs)
 
-    file_ops.check_dir_usable_for_unshare(conf_dir)
-    file_ops.check_dir_usable_for_unshare(output_dir)
-
-    chroot_dir = output_dir / "grml_chroot"
-
-    grml_live_config = _parse_bash_set(args.grml_live_config.read_text())
     show_env("configdump", grml_live_config)
 
     rc = 0
@@ -1252,40 +1243,46 @@ def _main(program_name: str, argv: list[str]) -> int:
             unshared_service.run(unshared_helper.hello_world())
             skiptasks = []
 
-            extract_iso_name = os.environ["EXTRACT_ISO_NAME"]
+            extract_iso_name = config.extract_iso_name
             if extract_iso_name:
-                if args.action == FaiAction.DIRINSTALL:
+                if config.fai_action == build_facts.FaiAction.DIRINSTALL:
                     raise ValueError("Building a new chroot is incompatible with extracting an existing ISO")
-                extract_iso(chroot_dir, extract_iso_name)
+                extract_iso(config.grml_chroot_dir, extract_iso_name)
             else:
-                try:
-                    chroot_dir.mkdir()
-                except FileExistsError:
-                    if args.action == FaiAction.DIRINSTALL:
-                        raise ValueError(f"chroot directory {chroot_dir} unexpectedly already exists") from None
+                if config.fai_action == build_facts.FaiAction.DIRINSTALL and config.grml_chroot_dir.exists():
+                    raise ValueError(f"chroot {config.grml_chroot_dir} unexpectedly already exists")
+                file_ops.create_dir_useable_for_unshare(config.grml_chroot_dir)
 
-            if args.action == FaiAction.DIRINSTALL:
-                install_base(conf_dir, chroot_dir, classes, args.debian_suite, args.mirror_url)
-            elif args.action == FaiAction.SOFTUPDATE:
+            if config.fai_action == build_facts.FaiAction.DIRINSTALL:
+                install_base(
+                    config.config_dir,
+                    config.grml_chroot_dir,
+                    config.classes,
+                    config.debian_suite,
+                    config.bootstrap_mirror_url,
+                )
+            elif config.fai_action == build_facts.FaiAction.SOFTUPDATE:
                 pass
-            elif args.action == FaiAction.RECONFIGURE:
+            elif config.fai_action == build_facts.FaiAction.RECONFIGURE:
                 skiptasks = ["updatebase", "instsoft"]
-            elif args.action == FaiAction.REBUILD:
+            elif config.fai_action == build_facts.FaiAction.REBUILD:
                 skiptasks = ["updatebase", "instsoft", "configure"]
-            elif args.action == FaiAction.REBUILD_MEDIA:
+            elif config.fai_action == build_facts.FaiAction.REBUILD_MEDIA:
                 skiptasks = ["updatebase", "instsoft", "configure", "squashfs"]
             else:
-                print(f"E: minifai: Unknown fai action: {args.action!r}")
+                print(f"E: minifai: Unknown fai action: {config.fai_action!r}")
                 rc = 1
 
             if not rc:
                 rc = _run_tasks(
-                    conf_dir,
-                    output_dir,
-                    chroot_dir,
-                    classes,
+                    config.config_dir,
+                    config.output_directory,
+                    config.grml_chroot_dir,
+                    config.grml_cd_dir,
+                    config.grml_logs_dir,
+                    config.classes,
                     grml_live_config,
-                    args.action,
+                    config.fai_action,
                     skiptasks,
                     unshared_service,
                 )
@@ -1299,11 +1296,3 @@ def _main(program_name: str, argv: list[str]) -> int:
 
     print(f"I: minifai exiting with exit code {rc}")
     return rc
-
-
-def main() -> int:
-    return _main(sys.argv[0], sys.argv)
-
-
-if __name__ == "__main__":
-    sys.exit(main())

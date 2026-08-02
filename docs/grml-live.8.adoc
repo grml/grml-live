@@ -9,10 +9,11 @@ grml-live - build framework for the Grml Live Linux system
 Synopsis
 --------
 
-grml-live [-c <classe[s]>] [-C <configfile>] [
--e <extract_iso_name>] [-g <grml_name>] [-i <iso_name>] [
--o <output_directory>] [-r <release_name>] [-s <suite>] [
--v <version_number>] [-w <date>] [-bBFqRu]
+grml-live [-h] [--boot-options DEFAULT_BOOTOPTIONS] [-c CLASS1,CLASS2] [--distri-info DISTRI_INFO]
+          [--distri-name DISTRI_NAME] [--hostname HOSTNAME] [--username USERNAME] [-d DATE] [-D CONFIGDIR]
+          [-e EXTRACT_ISO_NAME] [-F] [-g GRML_NAME] [-i ISO_NAME] [-I CHROOT_INSTALL_DIRECTORY]
+          [-o OUTPUT_DIRECTORY] [-r RELEASE_NAME] [-R] [-s SUITE] [--secure-boot] [-v VERSION_NUMBER]
+          [--bootstrap-mirror-url BOOTSTRAP_MIRROR_URL | -w DATE] [-b | -B | -u | -q]
 
 Description
 -----------
@@ -63,39 +64,30 @@ you modified anything grml-live might adjust via the class-based configuration.
 It's like the '-b' option but even more advanced. Use only if you really know
 that you do not want to update the chroot.
 
-  -c **CLASSES**::
+  --boot-options **BOOT_OPTIONS**::
 
-Specify the CLASSES to be used for building the ISO.  By default only
-the class GRML_FULL is assumed.  Additionally you can specify a class providing a
-(grml-)kernel (see <<classes,the 'CLASSES' section in this document>> for
-details about available classes). So instead of GRML_FULL you can also use e.g.
-GRML_SMALL.
+Add given boot options to the default. A useful example is `ssh`, to autostart
+the SSH server.
 
-The classes GRMLBASE, RELEASE, and AMD64/ARM64 (depending on system
-architecture) are automatically added, and shall not be given on the
-command line.
+  --bootstrap-mirror-url **BOOTSTRAP_MIRROR_URL**::
 
-[IMPORTANT]
-All class names should be written in uppercase letters. Do not use a dash, use
-an underscore. So do not use "grml_small" but "GRML_SMALL", do not use "FOO BAR"
-but "FOO_BAR".
+Set a custom Debian mirror URL to use for creating the chroot.
 
+  -c **CLASS1,CLASS2**::
 
-  -C **CONFIGURATION_FILE**::
-
-The specified file is used as configuration file for grml-live. By default
-/etc/grml/grml-live.conf is used as default configuration. If a file named
-/etc/grml/grml-live.local exists it is used as well (sourced after reading
-/etc/grml/grml-live.conf meant as main file for local configuration). As a last
-option the specified configuration file is sourced so it is possible to override
-settings of /etc/grml/grml-live.conf as well as of /etc/grml/grml-live.local.
-Please notice that all configuration files have to be adjusted during execution
-of grml-live, so please make sure you use /etc/grml/grml-live.conf as a base for
-your own configuration file (usually /etc/grml/grml-live.local). Please also
-notice that the configuration file specified via this option is **not** (yet)
-supported inside the scripts/hooks/classes at ${GRML_FAI_CONFIG}. Instead use
-/etc/grml/grml-live.local for configuration stuff used inside
-${GRML_FAI_CONFIG}.
+Specify which classes are to be used for building the ISO.
+By default the class GRML_FULL is assumed.
+See <<classes,the 'CLASSES' section in this document>> for
+details about available classes.
+Multiple classes can be given using commas.
+ +
+The classes `DEBIAN_<suite>`, `GRMLBASE`, `RELEASE`, `SECURE_BOOT`, and `AMD64`/`ARM64`
+(depending on system architecture) are automatically added when necessary,
+and must not be specified. The old `I386` class is rejected. +
+For example, instead of `GRML_FULL` you could use `GRML_SMALL`. +
+Important: all class names should be written in uppercase letters.
+Do not use a dash, use an underscore. So do not use "grml_small" but "GRML_SMALL",
+do not use "FOO BAR", but "FOO_BAR". Whitespace is rejected.
 
   -d **DATE**::
 
@@ -112,13 +104,22 @@ advance. Usage example: '-d 2009-10-30'
 The specified directory is used as configuration directory for grml-live.
 By default, when running from source (git checkout), `config` from the source
 directory is used. When running from an installed package, the default is
-`/usr/share/grml-live/config`.
+`/usr/share/grml-live/config`. +
 If you want to have different configuration scripts, package definitions, etc.
 without messing with the global configuration under /usr/share/grml-live/config
 provided by grml-live this option provides you the option to use your own
-configuration directory.
+configuration directory. +
 This directory is what's being referred to as `$GRML_FAI_CONFIG` throughout this
 documentation.
+
+  --distri-info **DISTRI_INFO**::
+
+Set the `DISTRI_INFO` variable. A one-line string describing the operating system
+being built.
+
+  --distri-name **DISTRI_NAME**::
+
+Set the `DISTRI_NAME` variable.
 
   -e **EXTRACT_ISO_NAME**::
 
@@ -139,11 +140,15 @@ GRML_NAME, otherwise you might notice problems while booting.
 
 Display short usage information and exit.
 
+  --hostname **HOSTNAME**::
+
+Set the default hostname of the booted Live ISO.
+
   -i **ISO_NAME**::
 
 Specify name of ISO which will be available inside $OUTPUT_DIRECTORY/grml_isos.
 
-  -I **CHROOT_INSTALL**::
+  -I **CHROOT_INSTALL_DIRECTORY**::
 
 Specify name of source directory which provides files that should become part of
 the chroot/ISO. Not enabled by default. Note: the files are installed under '/'
@@ -177,9 +182,17 @@ Specify the Debian suite you want to use for your live-system. If unset defaults
 to "testing". Supported values are: stable, testing, unstable (or their
 corresponding release names like "trixie").
 
+  --secure-boot::
+
+Enable setup of Secure Boot for the built ISO.
+
   -u::
 
 Update existing chroot, and build the ISO.
+
+  --username **USERNAME**::
+
+Set the name of the created non-root user.
 
   -v **VERSION_NUMBER**::
 
@@ -192,7 +205,7 @@ date.  Valid date formats are yyyymmddThhmmssZ or simply yyyymmdd.  To learn
 which snapshots exist, i.e. which date strings are valid, simply browse the
 lists on http://snapshot.debian.org/.  If there is no import at the exact time
 you specified you will get the latest available timestamp which is before the
-time you specified.
+time you specified. +
 This option is useful especially for release and debugging builds - for example
 if you know that the Debian archive was in a good state on a specific date but
 you want to build it on another day in the future, where the archive might not
@@ -200,6 +213,15 @@ be as needed anymore. Please be aware that this is restricted to the plain
 Debian repositories only, as referred to in /etc/apt/sources.list.d/debian.list
 (so neither the Grml repositories nor any further custom ones are affected by
 the wayback machine).
+
+Environment variables
+---------------------
+
+The variables `APT_PROXY` and `SOURCE_DATE_EPOCH` are honored.
+
+In the past many configuration options could also be passed as environment variables
+or configuration file variables, but this support was removed.
+Please use the command line options.
 
 
 [[usage-examples]]
@@ -234,7 +256,7 @@ and strength without losing the simplicity in the build process.
 
 The main and base class provided by grml-live is named GRMLBASE. grml-live will
 automatically add it, together with the architecture-dependent class (being
-'AMD64' for x86_64 and 'ARM64' for arm64).
+`AMD64` for x86_64 and `ARM64` for arm64).
 The GRML_SMALL and GRML_FULL classes define the official ISO builds.
 
 The following files and directories are relevant for class GRMLBASE by default:
@@ -252,9 +274,8 @@ See <<files,Files>> for details about these files and directories.
 If you want to use your own configuration, extend an existing configuration
 and/or add additional packages to your ISO just invent a new class (or extend an
 existing one). For example if you want to use your own class named "FOOBAR" on
-your amd64 build, set CLASSES="GRML_SMALL,FOOBAR" in /etc/grml/grml-live.local
-or invoke grml-live using the classes option:
-"grml-live -c GRML_SMALL,FOOBAR ...".
+your amd64 build, invoke grml-live using the classes option:
+`grml-live -c GRML_SMALL,FOOBAR -D /path/to/config ...`.
 
 More details regarding the class concept can be found in the documentation of
 FAI (installed by the `fai-doc` Debian package in /usr/share/doc/fai-doc/).
@@ -274,14 +295,18 @@ ${GRML_FAI_CONFIG}/package_config whereas some further classes are defined for
 example in ${GRML_FAI_CONFIG}/scripts/ so specific feature sets can be
 selected. The following classes are predefined:
 
-* DEBORPHAN: purge autoremove-able and "removed-but-not-yet-purged" packages.
+* `DEBIAN_<suite>`: these classes manage the Debian keyring and
+Debian-version-specific packages, like the DHCP client. They are automatically
+added by grml-live.
+
+* `DEBORPHAN`: purge autoremove-able and "removed-but-not-yet-purged" packages.
 While deborphan itself is not available anymore, the name of the class was kept
 for backwards compatibility reasons.
 
-* FRESHCLAM: include clamav packages and execute freshclam to get a current
+* `FRESHCLAM`: include clamav packages and execute freshclam to get a current
 clamav database
 
-* GRMLBASE: the main class responsible for getting a minimal subset of what's
+* `GRMLBASE`: the main class responsible for getting a minimal subset of what's
 defining a Grml system. Important parts of the buildprocess are specified in
 this class as well, so unless you have a really good reason you should always
 use this class. Please be aware that using *just* the GRMLBASE class won't be
@@ -292,52 +317,55 @@ classes, define your own CLASS file choosing the kernel package you want to use
 (and don't forget to include your CLASS in the arguments of grml-live's `-c...`
 command line option).
 
-* GRML_FULL: full featured Grml, also known as the "normal", full grml as
+* `GRML_FULL`: fully featured Grml, also known as the "normal", full grml as
 introduced in December 2011 (~1GB ISO size).
 
-* GRML_SMALL: minimum sized Grml version, known as grml-small (~600MB ISO
+* `GRML_SMALL`: minimum sized Grml version, known as grml-small (~600MB ISO
 size).
 
-* LATEX: LaTeX(-related) packages like auctex, texlive,...
+* `LATEX`: LaTeX(-related) packages like auctex, texlive,...
 (which used to be shipped by grml before the LaTeX removal)
 
-* LATEX_CLEANUP: get rid of several very large LaTeX directories
+* `LATEX_CLEANUP`: get rid of several very large LaTeX directories
 (like some /usr/share/doc/texlive-*, /usr/share/doc/texmf,...)
 
-* LOCALES: use full featured locales setup (see /etc/locale.gen.grml). This
+* `LOCALES`: use full featured locales setup (see /etc/locale.gen.grml). This
 avoids to get rid of /usr/share/locale - which happens by default otherwise - as
 well.
 
-* NO_ONLINE: do not run scripts during the chroot build process which require a
+* `NO_ONLINE`: do not run scripts during the chroot build process which require a
 network connection
 
-* RELEASE: run some specific scripts and commands to provide the workflow for an
+* `RELEASE`: run some specific scripts and commands to provide the workflow for an
 official grml release
 
-* REMOVE_DOCS: get rid of documentation directories (like /usr/share/doc,
+* `REMOVE_DOCS`: get rid of documentation directories (like /usr/share/doc,
 /usr/share/man/, /usr/share/info,...)
 
-* SOURCES: retrieve Debian source packages after installation. Files will be
+* `SECURE_BOOT`: internal class to control secure boot setup.
+Automatically added with the `--secure-boot` option.
+
+* `SOURCES`: retrieve Debian source packages after installation. Files will be
 placed in the output directory under grml_sources.
 
-* TOR: generates a Tor onion service at build time. This makes the
+* `TOR`: generates a Tor onion service at build time. This makes the
   booted system available even if behind NAT or some firewall that is
   broken or unknown, and you need to get a rescue shell on the
   host. Note that the Tor private keys are persisted in the ISO, which
   makes the build artifacts contain secret material and should be
   handled accordingly (although the consequence of disclosure is
   simply access to the onion service, which is not necessarily a
-  problem). The `DEFAULT_BOOTOPTIONS="ssh"` settings should also be
-  added at build time in `/etc/grml/grml-live.local` to ensure SSH
-  starts. The `netconfig=` and/or `encpasswd=...` boot options should
+  problem).
+  The option `--boot-options=ssh` should also be added to the grml-live invocation to ensure SSH starts.
+  The `netconfig=` and/or `encpasswd=...` boot options should
   also be used to tell GRML to download SSH keys or set a known
-  password, or use the `-I` or `CHROOT_INSTALL` parameters to inject
+  password, or use the `-I` parameters to inject
   those public keys directly at build time.
 
-* XORG: providing important packages for use with a base grml-featured X.org
+* `XORG`: providing important packages for use with a base grml-featured X.org
 setup
 
-* ZFS: package selection to add support for OpenZFS/zfsonlinux
+* `ZFS`: package selection to add support for OpenZFS/zfsonlinux
 
 [[files]]
 Files
@@ -349,23 +377,10 @@ Overview of all files relevant to grml-live and the config area.
 
 Main program driving the build process.
 
-  /etc/grml/grml-live.conf
-
-Main configuration file for grml-live which should be considered as a reference
-configuration file only. Please use /etc/grml/grml-live.local for local
-configuration instead.
-
-  /etc/grml/grml-live.local
-
-All the local configuration should go to this file. This file overrides any
-defaults of grml-live. Configurations via /etc/grml/grml-live.local are preferred
-over the ones from /etc/grml/grml-live.conf. If you want to override settings
-from /etc/grml/grml-live.local as well you have to specify them on the grml-live
-commandline.
-
   ${GRML_FAI_CONFIG}/
 
 The <<grml_fai_config_variable,main directory>> for configuration of grml-live.
+To change this, pass `-D` to grml-live.
 More details on individual files below.
 Each subdirectory will have files or directories per "class". You can pick
 a single or multiple classes when invoking grml-live. Only the classes you
@@ -473,19 +488,9 @@ Make a branch for your customizations:
 
   $ git switch -c mywork
 
-Adjust grml-live configuration for our needs:
-
-  cat > ./etc/grml/grml-live.local << EOF
-  ## install local files into the chroot
-  # CHROOT_INSTALL="/srv/config/chroot_install"
-  ## adjust if necessary (defaults to ./grml/):
-  ## OUTPUT="/srv/grml-live"
-  CLASSES="GRML_FULL"
-  EOF
-
 Invoke the ISO build process:
 
-  $ sudo ./grml-live -C ./etc/grml/grml-live.local
+  $ ./grml-live -c GRML_FULL
 
 This will take a while to download the Debian packages, install them and build
 the final ISO. If everything worked as expected the last line of the
@@ -499,21 +504,21 @@ The resulting ISO can then be found in `./grml/grml_isos/`.
 What is $GRML_FAI_CONFIG?
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`$GRML_FAI_CONFIG` is where grml-live looks for the configuration directory,
-which defines what ends up being part of your Grml build. See the section
-<<class-concept,The class concept>> for details.
+This documentation uses `$GRML_FAI_CONFIG` to mean where grml-live looks
+for the configuration directory, which defines what ends up being part of
+your Grml build. See the section <<class-concept,The class concept>> for details.
 
-By default, `$GRML_FAI_CONFIG` points to the configuration shipped with
+By default, it points to the configuration shipped with
 grml-live. If you are running grml-live from a source (git) checkout,
 it defaults to using the `config` directory from that checkout.
 If you are running grml-live from an installed package, it defaults to
 `/usr/share/grml-live/config`.
 
-To provide you a maximum of flexibility you can set up your own configuration
-directory and use it with the `-D <config_dir>` option.
+To change `$GRML_FAI_CONFIG`, pass `-D <config_dir>` to grml-live.
 Now `$GRML_FAI_CONFIG` points to the specified directory and all the
 configuration files, scripts and hooks will be taken from your
 `$GRML_FAI_CONFIG` directory.
+This allows for a maximum of flexibility.
 
 We encourage you to fork grml-live.git and apply your changes to the `config`
 directory as git commits.
@@ -537,7 +542,7 @@ the error happened.
 How do I install further files into the chroot/ISO?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Just point the configuration variable CHROOT_INSTALL (`-I`) to the directory which
+Just point the `-I` parameter to the directory which
 provides the files you would like to install. Note that the files are installed
 under '/' in the chroot - so you have to create the rootfs structure on your
 own. Usage example:
@@ -551,8 +556,8 @@ Can I use my own (local) Debian mirror?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Yes. Set up an according sources.list configuration as class file in
-${GRML_FAI_CONFIG}/files/${CLASS}/etc/apt/sources.list.d/ and adjust the variable
-BOOTSTRAP_MIRROR in /etc/grml/grml-live.conf[.local]. If you're setting up
+${GRML_FAI_CONFIG}/files/${CLASS}/etc/apt/sources.list.d/ and pass
+`--bootstrap-mirror-url` to grml-live. If you're setting up
 your own class file make sure to include the class name in the class list
 (grml-live -c ...).
 
@@ -564,7 +569,8 @@ If you want to use a HTTP Proxy (like apt-cacher-ng), set APT_PROXY. Example:
 How do I add additional Debian package(s) to my CD/ISO?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Just create a new class (using the package_config directory):
+Define a new class. In this example we will use the name "MIKA".
+Create the `package_config` file for the class:
 
   # cat > $GRML_FAI_CONFIG/package_config/MIKA << EOF
   PACKAGES install
@@ -574,7 +580,7 @@ Just create a new class (using the package_config directory):
   and_another_one
   EOF
 
-and specify it when invoking grml-live then:
+And pass it as an **additional** class to grml-live:
 
   # grml-live -c GRML_SMALL,MIKA
 
@@ -583,7 +589,7 @@ I fscked up my grml-live configuration. How do I reset it to the defaults?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you make changes to the grml-live configuration files, it is recommended
-you copy them to a new directory, set GRML_FAI_CONFIG and modify them there.
+you copy them to a new directory, modify them there and pass `-D` to grml-live.
 
 If you modified them inside /usr/share/grml-live, you can just reinstall
 grml-live:
@@ -598,16 +604,12 @@ grml-live.
 Set up apt-cacher-ng for use with grml-live
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Make sure /etc/grml/grml-live.local provides according APT_PROXY and
-BOOTSTRAP_MIRROR:
-
-  # cat /etc/grml/grml-live.local
-  [...]
-  APT_PROXY="http://localhost:3142/"
-  [...]
-  BOOTSTRAP_MIRROR="http://localhost:3142/deb.debian.org/debian"
-
 Make sure apt-cacher-ng is running ('/etc/init.d/apt-cacher-ng restart').
+Then set the `APT_PROXY` environment variable before running grml-live:
+
+  export APT_PROXY="http://localhost:3142/"
+  grml-live ...
+
 That's it.  All downloaded files will be cached in /var/cache/apt-cacher-ng then.
 
 [[create-a-base-tgz]]
@@ -673,17 +675,16 @@ Obtaining and running grml-live
 The best option for running grml-live is to run it directly from a git
 repository checkout. The file `debian/control` lists all required dependencies.
 
-The variable `GRML_FAI_CONFIG` should be set so `grml-live` can find the
-class-based configuration files.
-This is especially important to avoid re-using the config files of a previously
-installed `grml-live` Debian package.
+When running from the git checkout, grml-live will automatically use the
+configuration space (aka `$GRML_FAI_CONFIG`) from the repository. If you want
+another directory, use the `-D` option.
 
 Usage example:
 
     $ git clone --depth 1 https://github.com/grml/grml-live
     $ cd grml-live
     $ sudo apt install <packages>  # see debian/control
-    $ sudo GRML_FAI_CONFIG=$PWD/config ./grml-live -s sid -c GRML_FULL
+    $ ./grml-live -D "$PWD/config"  -s sid -c GRML_FULL
 
 
 Debian package

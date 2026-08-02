@@ -1,18 +1,33 @@
 import itertools
 import os
+import stat
 from pathlib import Path
 
 
-def check_dir_usable_for_unshare(path: Path):
-    if not path.exists():
+def _self_and_parents(path: Path) -> tuple[Path, ...]:
+    """path followed by all of its parents, deepest first."""
+    return (path, *path.parents)
+
+
+def check_dir_usable_for_unshare(path: Path, missing_ok: bool = False):
+    if not missing_ok and not path.is_dir():
         raise ValueError(f"Directory {path} does not exist")
-    p = path
-    while True:
-        if not p.stat().st_mode & os.X_OK:
-            raise ValueError(f"Directory {p} (parent of {path}) must be world-executable")
-        if p == Path("/"):
-            break
-        p = p.parent
+    for p in _self_and_parents(path):
+        try:
+            mode = p.stat().st_mode
+        except FileNotFoundError:
+            continue
+        if not mode & stat.S_IXOTH:
+            where = f"{p}" if p == path else f"{p} (parent of {path})"
+            raise ValueError(f"Directory {where} must be world-executable")
+
+
+def create_dir_useable_for_unshare(path: Path):
+    for p in reversed(_self_and_parents(path)):
+        if not p.exists():
+            p.mkdir()
+            p.chmod(p.stat().st_mode | stat.S_IXOTH)
+    check_dir_usable_for_unshare(path)
 
 
 def clamp_to_source_date_epoch(root_dir: Path | str):

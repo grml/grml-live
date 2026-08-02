@@ -1,6 +1,6 @@
 #!/usr/bin/env -S python3 -B
 """
-Loader script for minifai to allow running it without installing the grml_live package.
+Loader script for grml_live.main to allow running it without installing the grml_live package.
 """
 import sys
 from pathlib import Path
@@ -9,7 +9,7 @@ from pathlib import Path
 grml_live_path = Path(__file__).parent
 sys.path.insert(0, str(grml_live_path))
 
-from grml_live import minifai
+from grml_live import main
 
 if __name__ == "__main__":
-    sys.exit(minifai.main())
+    sys.exit(main.main())

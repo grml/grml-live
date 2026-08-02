@@ -1,6 +1,5 @@
 config                      usr/share/grml-live/
 etc/cruft/filters/grml-live etc/cruft/filters
-etc/grml                    etc
 examples                    usr/share/doc/grml-live/
 grml-live                   usr/sbin/
 remaster/grml-live-remaster usr/sbin/
