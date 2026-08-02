@@ -519,8 +519,8 @@ def policy_rcd(chroot_dir: Path, unshared_service: UnsharedService):
                 unshared_service.run(unshared_helper.unlink(program))
             else:
                 print(f"I: Not cleaning up {program} - our marker went missing")
-        except Exception:
-            print(f"W: Failed cleaning up {program}")
+        except Exception as except_inst:
+            print(f"W: Failed cleaning up {program}: {except_inst}")
 
 
 @contextlib.contextmanager
