@@ -550,9 +550,10 @@ def start_unshared_service():
             subproc.kill()
             raise ProgramStartFailed()
 
-        yield UnsharedService(request_socket)
-
-    subproc.kill()
+        try:
+            yield UnsharedService(request_socket)
+        finally:
+            subproc.kill()
 
 
 def read_envvars_for_classes(conf_dir: Path, classes: list[str]) -> dict:
