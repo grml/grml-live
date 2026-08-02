@@ -154,24 +154,68 @@ def _parse_and_run(ops_stream: list[dict], operations: dict) -> int:
     return 0
 
 
+def _frame_message(message: str) -> bytes:
+    encoded = message.encode()
+    return struct.pack("<L", len(encoded)) + encoded
+
+
 def _reply(sock, jsonable_data):
-    encoded = json.dumps(jsonable_data).encode()
-    sock.send(encoded)
+    sock.sendall(_frame_message(json.dumps(jsonable_data)))
+
+
+def _socket_recv_exactly(sock, size: int) -> bytes:
+    buf = b""
+    while len(buf) < size:
+        chunk = sock.recv(size - len(buf))
+        if not chunk:
+            break  # peer closed
+        buf += chunk
+    return buf
+
+
+class RemoteCleanlyClosedConnection(Exception):
+    pass
+
+
+class RemoteUnexpectedlyClosedConnection(Exception):
+    pass
+
+
+class InvalidMessageReceived(Exception):
+    pass
+
+
+def _socket_read_framed_message(sock) -> str:
+    size = _socket_recv_exactly(sock, 4)
+    if not size:
+        raise RemoteCleanlyClosedConnection("disconnected")
+    if len(size) != 4:
+        raise RemoteUnexpectedlyClosedConnection(f"short size read, received {len(size)}")
+    (size,) = struct.unpack("<L", size)
+    if not size:
+        raise InvalidMessageReceived("size 0 message")
+
+    # read data
+    buf = _socket_recv_exactly(sock, size)
+    if len(buf) != size:
+        raise RemoteUnexpectedlyClosedConnection(f"short data read, received {len(buf)}, expected {size}")
+    return buf.decode()
 
 
 def _server(socket_path, operations) -> int:
     with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
         sock.connect(socket_path)
         while True:
-            size = sock.recv(4)
-            if not size:
-                return 0
-            (size,) = struct.unpack("<L", size)
-            if not size:
-                return 0
-            data = sock.recv(size).decode()
             try:
-                decoded = json.loads(data)
+                message = _socket_read_framed_message(sock)
+            except RemoteCleanlyClosedConnection:
+                return 0  # client closed cleanly
+            except (RemoteUnexpectedlyClosedConnection, InvalidMessageReceived) as except_inst:
+                print(f"E: {except_inst}")
+                return 1
+
+            try:
+                decoded = json.loads(message)
             except Exception as except_inst:
                 print(f"E: JSON decode failed: {except_inst}")
                 _reply(sock, {"error": "invalid_json"})
@@ -189,15 +233,16 @@ def send_ops_to_server(socket, ops: list[dict]):
     assert ops
     assert isinstance(ops[0]["op"], str)
     try:
-        encoded = json.dumps({"ops": ops}).encode()
+        message = json.dumps({"ops": ops})
     except TypeError:
         print(f"ops: {ops}", flush=True)
         raise
-    size = struct.pack("<L", len(encoded))
-    socket.send(size + encoded)
-    result = socket.recv(4096)
+    socket.sendall(_frame_message(message))
+    result = _socket_read_framed_message(socket)
     res = json.loads(result)
     sys.stdout.flush()
+    if "error" in res:
+        raise RuntimeError(f"unshared helper: {res['error']}")
     return res["returncode"]
 
 
