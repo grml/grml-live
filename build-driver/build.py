@@ -137,8 +137,6 @@ def run_grml_live(
     grml_live_cmd = [
         grml_live_path / "grml-live",
         "-F",  # do not prompt
-        "-C",
-        str(grml_live_path / "etc" / "grml" / "grml-live.conf"),
         "-D",
         str(grml_fai_config),
         "-c",
