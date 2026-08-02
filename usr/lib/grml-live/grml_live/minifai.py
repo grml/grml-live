@@ -510,9 +510,13 @@ def policy_rcd(chroot_dir: Path, unshared_service: UnsharedService):
         yield
     finally:
         try:
-            if marker in program.read_text():
+            have_marker = not bool(
+                unshared_service.run(unshared_helper.have_text_in_file(program, marker), check=False)
+            )
+
+            if have_marker:
                 print(f"I: Cleaning up {program}")
-                program.unlink()
+                unshared_service.run(unshared_helper.unlink(program))
             else:
                 print(f"I: Not cleaning up {program} - our marker went missing")
         except Exception:
