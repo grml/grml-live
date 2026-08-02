@@ -3,6 +3,18 @@ import os
 from pathlib import Path
 
 
+def check_dir_usable_for_unshare(path: Path):
+    if not path.exists():
+        raise ValueError(f"Directory {path} does not exist")
+    p = path
+    while True:
+        if not p.stat().st_mode & os.X_OK:
+            raise ValueError(f"Directory {p} (parent of {path}) must be world-executable")
+        if p == Path("/"):
+            break
+        p = p.parent
+
+
 def clamp_to_source_date_epoch(root_dir: Path | str):
     source_date_epoch = os.environ["SOURCE_DATE_EPOCH"]
     root_dir = Path(root_dir)

@@ -1208,18 +1208,6 @@ def _run_tasks(
     return 0
 
 
-def _check_dir_usable(path: Path):
-    if not path.exists():
-        raise ValueError(f"Directory {path} does not exist")
-    p = path
-    while True:
-        if not p.stat().st_mode & os.X_OK:
-            raise ValueError(f"Directory {p} (parent of {path}) must be world-executable")
-        if p == Path("/"):
-            break
-        p = p.parent
-
-
 def create_argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     # path to fai classes, scripts, ...
@@ -1249,8 +1237,8 @@ def _main(program_name: str, argv: list[str]) -> int:
     output_dir: Path = args.output_dir.absolute()
     print(f"I: Using output_dir: {args.output_dir!s}")
 
-    _check_dir_usable(conf_dir)
-    _check_dir_usable(output_dir)
+    file_ops.check_dir_usable_for_unshare(conf_dir)
+    file_ops.check_dir_usable_for_unshare(output_dir)
 
     chroot_dir = output_dir / "grml_chroot"
 
