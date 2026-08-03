@@ -395,7 +395,7 @@ def helper_socket_thread(
                 else:
                     print("W: socket thread: request not understood:", repr(orig_req))
 
-            request_socket.send(f"{rc!s}\n".encode())
+            request_socket.sendall(f"{rc!s}\n".encode())
             request_socket.close()
 
         except Exception:
@@ -554,9 +554,10 @@ def start_unshared_service():
             subproc.kill()
             raise ProgramStartFailed()
 
-        yield UnsharedService(request_socket)
-
-    subproc.kill()
+        try:
+            yield UnsharedService(request_socket)
+        finally:
+            subproc.kill()
 
 
 def read_envvars_for_classes(conf_dir: Path, classes: list[str]) -> dict:
