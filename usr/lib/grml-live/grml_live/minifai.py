@@ -616,28 +616,40 @@ def install_base(conf_dir: Path, chroot_dir: Path, classes, debian_suite: str, m
     run_x(args)
 
 
-def extract_iso(chroot_dir: Path, extract_iso_name: Path):
+def extract_iso(config: build_facts.BuildConfiguration):
     """Unpack squashfs from an existing ISO to use it as the chroot_dir contents."""
-    print(f"I: Unpacking ISO from {extract_iso_name}")
+    print(f"I: Unpacking ISO from {config.extract_iso_name}")
+    assert config.extract_programs is not None
 
     try:
         # Run unshared, so the unpacked chroot is owned by the correct uids.
-        run_x(["osirrox", "-indev", extract_iso_name, "-extract", "live", chroot_dir])
-        temp_files = sorted(chroot_dir.rglob("*"))
+        run_x(
+            [
+                config.extract_programs.osirrox,
+                "-indev",
+                config.extract_iso_name,
+                "-extract",
+                "live",
+                config.grml_chroot_dir,
+            ]
+        )
+        temp_files = sorted(config.grml_chroot_dir.rglob("*"))
         print(f"D: found extracted files: {temp_files!s}")
 
-        squashfs_files = sorted(chroot_dir.glob("*/*.squashfs"))
+        squashfs_files = sorted(config.grml_chroot_dir.glob("*/*.squashfs"))
         if not squashfs_files:
-            raise RuntimeError(f"Could not find any squashfs files in ISO {extract_iso_name}")
+            raise RuntimeError(f"Could not find any squashfs files in ISO {config.extract_iso_name}")
         if len(squashfs_files) != 1:
             raise RuntimeError(
-                f"Found more than one squashfs file in ISO {extract_iso_name}: {' '.join(squashfs_files)}"
+                f"Found more than one squashfs file in ISO {config.extract_iso_name}: {' '.join(squashfs_files)}"
             )
-        run_x(["unsquashfs", "-f", "-d", chroot_dir, squashfs_files[0]], unshared=True)
+        run_x(
+            [config.extract_programs.unsquashfs, "-f", "-d", config.grml_chroot_dir, squashfs_files[0]], unshared=True
+        )
         run_x(["rm", "-rf", *temp_files], unshared=True)
     except:
         # This should be safe as chroot_dir is expected to be empty at first!
-        run_x(["rm", "-rf", chroot_dir], unshared=True)
+        run_x(["rm", "-rf", config.grml_chroot_dir], unshared=True)
         raise
 
 
@@ -1247,7 +1259,7 @@ def build(config: build_facts.BuildConfiguration):
             if extract_iso_name:
                 if config.fai_action == build_facts.FaiAction.DIRINSTALL:
                     raise ValueError("Building a new chroot is incompatible with extracting an existing ISO")
-                extract_iso(config.grml_chroot_dir, extract_iso_name)
+                extract_iso(config)
             else:
                 if config.fai_action == build_facts.FaiAction.DIRINSTALL and config.grml_chroot_dir.exists():
                     raise ValueError(f"chroot {config.grml_chroot_dir} unexpectedly already exists")
