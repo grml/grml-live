@@ -762,7 +762,7 @@ def copy_directory_out(
 
 def install_extra_chroot_files(
     chroot_dir: Path,
-    chroot_install: str,
+    chroot_install: str | None,
     unshared_service: UnsharedService,
 ):
     if not chroot_install:
@@ -1077,20 +1077,14 @@ def create_media(
 
 
 def _run_tasks(
-    conf_dir: Path,
-    output_dir: Path,
-    chroot_dir: Path,
-    grml_cd_dir: Path,
-    grml_logs_dir: Path,
-    classes: list[str],
+    config: build_facts.BuildConfiguration,
     grml_live_config: dict[str, str],
-    fai_action: str,
     skip_tasks: list[str],
     unshared_service: UnsharedService,
 ) -> int:
     dynamic_state = DynamicState()
-    chroot_directories = _create_chroot_dirs(chroot_dir, unshared_service)
-    file_ops.create_dir_useable_for_unshare(grml_cd_dir)
+    chroot_directories = _create_chroot_dirs(config.grml_chroot_dir, unshared_service)
+    file_ops.create_dir_useable_for_unshare(config.grml_cd_dir)
 
     # Create a file in log_dir, so grml-live does not complain.
     unshared_service.run(
@@ -1108,17 +1102,6 @@ def _run_tasks(
         )
     )
 
-    arch = os.environ["ARCH"]
-    print(f"I: ARCH: {arch!r}")
-    chroot_install = os.environ["CHROOT_INSTALL"]
-    print(f"I: CHROOT_INSTALL: {chroot_install!r}")
-    grml_name = os.environ["GRML_NAME"]
-    print(f"I: GRML_NAME: {grml_name!r}")
-    iso_name = os.environ["ISO_NAME"]
-    print(f"I: ISO_NAME: {iso_name!r}")
-    version = os.environ["VERSION"]
-    print(f"I: VERSION: {version!r}")
-
     do_skiptask(dynamic_state, skip_tasks)
 
     env: dict[str, str] = {
@@ -1128,45 +1111,66 @@ def _run_tasks(
         "GRML_LIVE_NETBOOTDIR": chroot_directories.netboot_dir_inside,
         "GRML_LIVE_SOURCESDIR": chroot_directories.sources_dir_inside,
         "LOGDIR": str(chroot_directories.log_dir),
-    } | read_envvars_for_classes(conf_dir, classes)
+    } | read_envvars_for_classes(config.config_dir, config.classes)
     show_env("Merged class variables", env)
 
     # Setup /proc, /sys inside chroot_dir, so future chroot calls will have these mounts.
-    unshared_service.run(unshared_helper.bindmount_proc_sys_into(chroot_dir))
+    unshared_service.run(unshared_helper.bindmount_proc_sys_into(config.grml_chroot_dir))
 
     try:
-        with helper_tools(conf_dir, chroot_dir, classes, dynamic_state, unshared_service) as helper_tools_path:
+        with helper_tools(
+            config.config_dir, config.grml_chroot_dir, config.classes, dynamic_state, unshared_service
+        ) as helper_tools_path:
             class_helper_tools_path = install_class_helper_tools(
-                conf_dir, chroot_directories.build_dir, classes, unshared_service
+                config.config_dir, chroot_directories.build_dir, config.classes, unshared_service
             )
 
             helper_tools_paths = [helper_tools_path, class_helper_tools_path]
 
-            hook_env = env | {"FAI_ACTION": fai_action}
-            for class_name in classes:
-                run_script(chroot_dir, conf_dir / "hooks" / class_name / "updatebase", helper_tools_paths, hook_env)
+            hook_env: dict[str, str] = env | {"FAI_ACTION": str(config.fai_action)}
+            for class_name in config.classes:
+                run_script(
+                    config.grml_chroot_dir,
+                    config.config_dir / "hooks" / class_name / "updatebase",
+                    helper_tools_paths,
+                    hook_env,
+                )
 
-            with policy_rcd(chroot_dir, unshared_service):
-                task_updatebase(chroot_dir, dynamic_state)
+            with policy_rcd(config.grml_chroot_dir, unshared_service):
+                task_updatebase(config.grml_chroot_dir, dynamic_state)
 
                 if not should_skip_task(dynamic_state, "instsoft"):
                     install_packages_for_classes(
-                        conf_dir, chroot_dir, classes, helper_tools_paths, hook_env, dynamic_state, unshared_service
+                        config.config_dir,
+                        config.grml_chroot_dir,
+                        config.classes,
+                        helper_tools_paths,
+                        hook_env,
+                        dynamic_state,
+                        unshared_service,
                     )
 
             if not should_skip_task(dynamic_state, "configure"):
-                for class_name in classes:
-                    run_class_scripts("scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
+                for class_name in config.classes:
+                    run_class_scripts(
+                        "scripts", config.config_dir, config.grml_chroot_dir, class_name, helper_tools_paths, env
+                    )
 
-                install_extra_chroot_files(chroot_dir, chroot_install, unshared_service)
+                install_extra_chroot_files(
+                    config.grml_chroot_dir, config.chroot_install_src_directory, unshared_service
+                )
 
             if not should_skip_task(dynamic_state, "squashfs"):
                 # mksquashfs is the last thing that should need the userns.
-                mksquashfs(conf_dir, grml_cd_dir, chroot_dir, grml_name, unshared_service)
+                mksquashfs(
+                    config.config_dir, config.grml_cd_dir, config.grml_chroot_dir, config.grml_name, unshared_service
+                )
 
             if not should_skip_task(dynamic_state, "build"):
-                for class_name in classes:
-                    run_class_scripts("media-scripts", conf_dir, chroot_dir, class_name, helper_tools_paths, env)
+                for class_name in config.classes:
+                    run_class_scripts(
+                        "media-scripts", config.config_dir, config.grml_chroot_dir, class_name, helper_tools_paths, env
+                    )
 
                 print("I: installing media files from chroot build")
                 run_x(
@@ -1176,33 +1180,47 @@ def _run_tasks(
                         "--preserve=timestamp",
                         "-rv",
                         str(chroot_directories.media_dir) + "/.",
-                        grml_cd_dir,
+                        config.grml_cd_dir,
                     ],
                 )
 
-                write_buildinfo_json(conf_dir, output_dir, grml_cd_dir, fai_action, classes, grml_live_config)
+                write_buildinfo_json(
+                    config.config_dir,
+                    config.output_directory,
+                    config.grml_cd_dir,
+                    config.fai_action,
+                    config.classes,
+                    grml_live_config,
+                )
 
                 create_netboot_package(
-                    output_dir,
+                    config.output_directory,
                     chroot_directories.netboot_dir,
-                    iso_name,
+                    config.iso_name,
                 )
-                if "SOURCES" in classes:
+                if "SOURCES" in config.classes:
                     create_sources_package(
-                        output_dir,
+                        config.output_directory,
                         chroot_directories.sources_dir,
-                        iso_name,
+                        config.iso_name,
                     )
 
                 # After this, no new files should appear.
-                create_on_media_md5sums(grml_cd_dir, grml_name)
+                create_on_media_md5sums(config.grml_cd_dir, config.grml_name)
 
-                file_ops.clamp_to_source_date_epoch(grml_cd_dir)
+                file_ops.clamp_to_source_date_epoch(config.grml_cd_dir)
 
-                create_media(output_dir, grml_cd_dir, grml_name, version, iso_name, arch)
+                create_media(
+                    config.output_directory,
+                    config.grml_cd_dir,
+                    config.grml_name,
+                    config.grml_version,
+                    config.iso_name,
+                    config.arch,
+                )
 
     finally:
-        copy_directory_out(grml_logs_dir / "fai", chroot_directories.log_dir)
+        copy_directory_out(config.grml_logs_dir / "fai", chroot_directories.log_dir)
 
     return 0
 
@@ -1285,18 +1303,7 @@ def build(config: build_facts.BuildConfiguration):
                 rc = 1
 
             if not rc:
-                rc = _run_tasks(
-                    config.config_dir,
-                    config.output_directory,
-                    config.grml_chroot_dir,
-                    config.grml_cd_dir,
-                    config.grml_logs_dir,
-                    config.classes,
-                    grml_live_config,
-                    config.fai_action,
-                    skiptasks,
-                    unshared_service,
-                )
+                rc = _run_tasks(config, grml_live_config, skiptasks, unshared_service)
     except (ClassFileParsingFailed, FaiScriptFailed, ProgramStartFailed):
         # assume exception site already printed relevant info
         rc = 3
