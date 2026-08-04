@@ -10,7 +10,6 @@ import os
 import shlex
 import socket
 import subprocess
-import sys
 import tempfile
 import traceback
 from dataclasses import dataclass
@@ -762,16 +761,10 @@ def copy_directory_out(
 
 def install_extra_chroot_files(
     chroot_dir: Path,
-    chroot_install: str | None,
+    chroot_install_source_dir: Path,
     unshared_service: UnsharedService,
 ):
-    if not chroot_install:
-        return
-    chroot_install_source_dir = Path(chroot_install)
-    if not chroot_install_source_dir.exists() or not chroot_install_source_dir.is_dir():
-        print("W: Configuration variable $CHROOT_INSTALL is set but not a directory; ignoring")
-        return
-
+    # If chroot_install_source_dir is set, then grml_live.main checked its usable.
     print(f"I: Copying local files to chroot from {chroot_install_source_dir!s}")
     unshared_service.run(
         unshared_helper.run_program(
@@ -786,9 +779,12 @@ def install_extra_chroot_files(
     )
 
 
-def _build_mksquashfs_options(conf_dir: Path) -> list[str]:
-    squashfs_excludes_file = conf_dir / "grml" / "squashfs-excludes"
-    options = [
+def _build_mksquashfs_cmdline(config: build_facts.BuildConfiguration) -> list[str]:
+    squashfs_excludes_file = config.config_dir / "grml" / "squashfs-excludes"
+    cmdline = [
+        config.builder_programs.mksquashfs,
+        str(config.grml_chroot_dir) + "/",
+        config.grml_cd_squashfs_name,
         "-noappend",
         # use block size 1m as this gives good result with regards to time + compression
         "-b",
@@ -802,41 +798,31 @@ def _build_mksquashfs_options(conf_dir: Path) -> list[str]:
         # Static file exclusion list.
         "-wildcards",
         "-ef",
-        str(squashfs_excludes_file),
+        squashfs_excludes_file,
         "-one-file-system",
     ]
-    return options
+    return [str(value) for value in cmdline]
 
 
 def mksquashfs(
-    conf_dir: Path,
-    grml_cd_dir: Path,
-    chroot_dir: Path,
-    grml_name: str,
+    config: build_facts.BuildConfiguration,
     unshared_service: UnsharedService,
 ):
-    live_dir = grml_cd_dir / "live"
-    squashfs_dir = live_dir / grml_name
-    # TODO: read squashfs filename and mksquashfs_binary from BuildConfiguration
-    squashfs_file = squashfs_dir / f"{grml_name}.squashfs"
-    filesystem_module_file = squashfs_dir / "filesystem.module"
-
-    mksquashfs_binary = os.environ["MKSQUASHFS_BINARY"]
-    options = _build_mksquashfs_options(conf_dir)
-    args = [mksquashfs_binary, str(chroot_dir) + "/", squashfs_file, *options]
+    mksquashfs_cmdline = _build_mksquashfs_cmdline(config)
+    filesystem_module_file = config.grml_cd_squashfs_dir / "filesystem.module"
 
     # We must run mksquashfs inside the userns so it sees the correct ownership info,
     # but we want the resulting file to be owned by the user outside of the userns.
     unshared_service.batch(
         [
-            unshared_helper.ensure_dir(live_dir),
-            unshared_helper.ensure_dir(squashfs_dir),
-            unshared_helper.run_program(args),
-            unshared_helper.write_file_text(filesystem_module_file, squashfs_file.name),
+            unshared_helper.ensure_dir(config.grml_cd_live_dir),
+            unshared_helper.ensure_dir(config.grml_cd_squashfs_dir),
+            unshared_helper.run_program(mksquashfs_cmdline),
+            unshared_helper.write_file_text(filesystem_module_file, config.grml_cd_squashfs_name.name),
             unshared_helper.chown(filesystem_module_file, str(UNSHARE_UID), str(UNSHARE_GID)),
-            unshared_helper.chown(squashfs_file, str(UNSHARE_UID), str(UNSHARE_GID)),
-            unshared_helper.chown(squashfs_dir, str(UNSHARE_UID), str(UNSHARE_GID)),
-            unshared_helper.chown(live_dir, str(UNSHARE_UID), str(UNSHARE_GID)),
+            unshared_helper.chown(config.grml_cd_squashfs_name, str(UNSHARE_UID), str(UNSHARE_GID)),
+            unshared_helper.chown(config.grml_cd_squashfs_dir, str(UNSHARE_UID), str(UNSHARE_GID)),
+            unshared_helper.chown(config.grml_cd_live_dir, str(UNSHARE_UID), str(UNSHARE_GID)),
         ]
     )
 
@@ -929,100 +915,74 @@ def create_sources_package(
 
 
 def _build_buildinfo_data(
-    conf_dir: Path,
-    output_dir: Path,
-    fai_action: str,
-    classes: list[str],
-    grml_live_config: dict[str, str],
-):
+    config: build_facts.BuildConfiguration,
+) -> dict[str, str | None]:
     # TODO: collect the data in each step creating the data, instead of doing it all here.
-    proc = popen(["dpkg", "--print-architecture"], stdout=subprocess.PIPE, text=True)
+    proc = popen([config.builder_programs.xorriso, "--version"], stdout=subprocess.PIPE, text=True)
     stdout_data, _ = proc.communicate()
-    host_arch = stdout_data.strip()
+    xorriso_version = stdout_data.splitlines()[0].strip()
 
-    proc = popen(["xorriso", "--version"], stdout=subprocess.PIPE, text=True)
-    stdout_data, _ = proc.communicate()
-    mkisofs_version = stdout_data.splitlines()[0].strip()
-
-    proc = popen(["mksquashfs", "-version"], stdout=subprocess.PIPE, text=True)
+    proc = popen([config.builder_programs.mksquashfs, "-version"], stdout=subprocess.PIPE, text=True)
     stdout_data, _ = proc.communicate()
     mksquashfs_version = stdout_data.splitlines()[0].strip()
 
-    buildinfo = {
-        "build_date": grml_live_config["DATE"],
-        "fai_action": fai_action,
-        "chroot_install": os.environ["CHROOT_INSTALL"],
-        "classes": ",".join(classes),
-        "default_bootoptions": grml_live_config["DEFAULT_BOOTOPTIONS"],
-        "distri_info": grml_live_config["DISTRI_INFO"],
-        "distri_name": grml_live_config["DISTRI_NAME"],
-        "extract_iso_name": os.environ["EXTRACT_ISO_NAME"],
-        "fai_cmdline": " ".join(sys.argv[1:]),
-        "fai_version": "minifai",
-        "grml_architecture": os.environ["ARCH"],
-        "grml_bootid": grml_live_config["BOOTID"],
-        "grml_debian_version": os.environ["SUITE"],
-        "grml_iso_name": os.environ["ISO_NAME"],
-        "grml_live_cmdline": os.environ["CMDLINE"],
-        "grml_live_version": os.environ["GRML_LIVE_VERSION"],
-        "grml_name": grml_live_config["GRML_NAME"],
-        "grml_short_name": grml_live_config["SHORT_NAME"],
-        "grml_username": grml_live_config["USERNAME"],
-        "grml_version": grml_live_config["VERSION"],
-        "host_architecture": host_arch,
-        "mkisofs_cmdline": " ".join(
-            _build_xorriso_options(
-                output_dir / "grml_isos",
-                output_dir / "grml_cd",
-                grml_live_config["GRML_NAME"],
-                grml_live_config["VERSION"],
-                os.environ["ISO_NAME"],
-                os.environ["ARCH"],
-            )
-        ),
-        "mkisofs_version": mkisofs_version,
-        "mksquashfs_cmdline": " ".join(_build_mksquashfs_options(conf_dir)),
+    buildinfo: dict[str, str | Path | None] = {
+        "build_date": config.date,
+        "fai_action": str(config.fai_action),
+        "chroot_install": config.chroot_install_src_directory,
+        "classes": ",".join(config.classes),
+        "default_bootoptions": config.default_bootoptions,
+        "distri_info": config.distri_info,
+        "distri_name": config.distri_name,
+        "extract_iso_name": config.extract_iso_name,
+        "grml_architecture": config.arch,
+        "grml_bootid": config.bootid,
+        "grml_debian_version": config.debian_suite,
+        "grml_iso_name": config.iso_name,
+        "grml_live_cmdline": " ".join(config.cmdline),
+        "grml_live_version": config.grml_live_version,
+        "grml_name": config.grml_name,
+        "grml_short_name": config.short_name,
+        "grml_username": config.username,
+        "grml_version": config.grml_version,
+        "host_architecture": config.arch,
+        "mksquashfs_cmdline": " ".join(_build_mksquashfs_cmdline(config)),
         "mksquashfs_version": mksquashfs_version,
-        "release_info": grml_live_config["RELEASE_INFO"],
-        "release_name": grml_live_config["RELEASENAME"],
-        "secure_boot": os.environ["SECURE_BOOT"],
-        "timestamp": os.environ["SOURCE_DATE_EPOCH"],
-        "wayback_date": os.environ["WAYBACK_DATE"],
+        "release_info": config.release_info,
+        "release_name": config.release_name,
+        "secure_boot": "enable" if config.secure_boot else "disable",
+        "timestamp": str(config.source_date_epoch),
+        "wayback_date": config.wayback_date,
+        "xorriso_cmdline": " ".join(_build_xorriso_cmdline(config)),
+        "xorriso_version": xorriso_version,
     }
-    buildinfo = {key: value.replace(str(output_dir), "<output_dir>") for key, value in buildinfo.items()}
-    return buildinfo
+    clean_buildinfo: dict[str, str | None] = {
+        key: str(value).replace(str(config.output_directory), "<output_dir>") if value else value
+        for key, value in buildinfo.items()
+    }
+    return clean_buildinfo
 
 
 def write_buildinfo_json(
-    conf_dir: Path,
-    output_dir: Path,
-    grml_cd_dir: Path,
-    fai_action: str,
-    classes: list[str],
-    grml_live_config: dict[str, str],
+    config: build_facts.BuildConfiguration,
 ):
     buildinfo = _build_buildinfo_data(
-        conf_dir,
-        output_dir,
-        fai_action,
-        classes,
-        grml_live_config,
+        config,
     )
     print(f"I: buildinfo data:\n{buildinfo!s}")
-    (grml_cd_dir / "conf").mkdir(exist_ok=True)
-    (grml_cd_dir / "conf" / "buildinfo.json").write_text(json.dumps(buildinfo))
+    (config.grml_cd_dir / "conf").mkdir(exist_ok=True)
+    (config.grml_cd_dir / "conf" / "buildinfo.json").write_text(json.dumps(buildinfo))
 
 
-def _build_xorriso_options(
-    iso_dir: Path, grml_cd_dir: Path, grml_name: str, version: str, iso_name: str, arch: str
+def _build_xorriso_cmdline(
+    config: build_facts.BuildConfiguration,
 ) -> list[str]:
-
     efi_args = ["-eltorito-alt-boot", "-e", "boot/efi.img", "-no-emul-boot", "-isohybrid-gpt-basdat"]
 
-    if arch == "arm64":
+    if config.arch == "arm64":
         # No BIOS boot on arm64, only UEFI
         boot_args = []
-    elif arch == "amd64":
+    elif config.arch == "amd64":
         # TODO: avoid the arch check and use the file existence instead
         # Use GRUB for BIOS boot via El Torito
         boot_args = [
@@ -1034,17 +994,17 @@ def _build_xorriso_options(
             "-boot-info-table",
             "--grub2-boot-info",
             "--grub2-mbr",
-            str(grml_cd_dir / "boot" / "grub" / "i386-pc" / "boot_hybrid.img"),
+            config.grml_cd_dir / "boot" / "grub" / "i386-pc" / "boot_hybrid.img",
         ]
     else:
         raise NotImplementedError()
 
-    return [
-        "xorriso",
+    cmdline = [
+        config.builder_programs.xorriso,
         "-as",
         "mkisofs",
         "-V",
-        f"{grml_name} {version}",
+        f"{config.grml_name} {config.grml_version}",
         "-publisher",
         "grml-live | grml.org",
         "-l",
@@ -1053,27 +1013,22 @@ def _build_xorriso_options(
         *boot_args,
         *efi_args,
         "-o",
-        str(iso_dir / iso_name),
-        str(grml_cd_dir) + "/",
+        config.grml_isos_dir / config.iso_name,
+        str(config.grml_cd_dir) + "/",
     ]
+    return [str(value) for value in cmdline]
 
 
 def create_media(
-    output_dir: Path,
-    grml_cd_dir: Path,
-    grml_name: str,
-    version: str,
-    iso_name: str,
-    arch: str,
+    config: build_facts.BuildConfiguration,
 ):
-    iso_dir = output_dir / "grml_isos"
-    iso_dir.mkdir(exist_ok=True)  # some workflows accept that this already exists
+    config.grml_isos_dir.mkdir(exist_ok=True)  # some workflows accept that this already exists
     print("I: Generating ISO file ...")
-    run_x(_build_xorriso_options(iso_dir, grml_cd_dir, grml_name, version, iso_name, arch))
+    run_x(_build_xorriso_cmdline(config))
 
-    checksum_filename = Path(str(iso_dir / iso_name) + ".sha256")
+    checksum_filename = Path(str(config.grml_isos_dir / config.iso_name) + ".sha256")
     with checksum_filename.open("wt") as checksum_file_handle:
-        run_x(["sha256sum", iso_name], cwd=iso_dir, stdout=checksum_file_handle)
+        run_x(["sha256sum", config.iso_name], cwd=config.grml_isos_dir, stdout=checksum_file_handle)
 
 
 def _run_tasks(
@@ -1156,15 +1111,16 @@ def _run_tasks(
                         "scripts", config.config_dir, config.grml_chroot_dir, class_name, helper_tools_paths, env
                     )
 
-                install_extra_chroot_files(
-                    config.grml_chroot_dir, config.chroot_install_src_directory, unshared_service
-                )
+                if config.chroot_install_src_directory:
+                    install_extra_chroot_files(
+                        config.grml_chroot_dir,
+                        config.chroot_install_src_directory,
+                        unshared_service,
+                    )
 
             if not should_skip_task(dynamic_state, "squashfs"):
                 # mksquashfs is the last thing that should need the userns.
-                mksquashfs(
-                    config.config_dir, config.grml_cd_dir, config.grml_chroot_dir, config.grml_name, unshared_service
-                )
+                mksquashfs(config, unshared_service)
 
             if not should_skip_task(dynamic_state, "build"):
                 for class_name in config.classes:
@@ -1184,14 +1140,7 @@ def _run_tasks(
                     ],
                 )
 
-                write_buildinfo_json(
-                    config.config_dir,
-                    config.output_directory,
-                    config.grml_cd_dir,
-                    config.fai_action,
-                    config.classes,
-                    grml_live_config,
-                )
+                write_buildinfo_json(config)
 
                 create_netboot_package(
                     config.output_directory,
@@ -1210,14 +1159,7 @@ def _run_tasks(
 
                 file_ops.clamp_to_source_date_epoch(config.grml_cd_dir)
 
-                create_media(
-                    config.output_directory,
-                    config.grml_cd_dir,
-                    config.grml_name,
-                    config.grml_version,
-                    config.iso_name,
-                    config.arch,
-                )
+                create_media(config)
 
     finally:
         copy_directory_out(config.grml_logs_dir / "fai", chroot_directories.log_dir)
@@ -1251,17 +1193,6 @@ def build(config: build_facts.BuildConfiguration):
         "VERSION": config.grml_version,
         "WAYBACK_DATE": config.wayback_date or "",
     }
-
-    # TODO: stop doing this
-    for key in ["ARCH", "GRML_LIVE_VERSION", "GRML_NAME", "SECURE_BOOT", "SUITE", "VERSION", "WAYBACK_DATE"]:
-        os.environ[key] = grml_live_config[key]
-
-    # TODO: stop doing this
-    os.environ["CHROOT_INSTALL"] = str(config.chroot_install_src_directory or "")
-    os.environ["CMDLINE"] = " ".join(config.cmdline)
-    os.environ["EXTRACT_ISO_NAME"] = str(config.extract_iso_name or "")
-    os.environ["ISO_NAME"] = str(config.iso_name)
-    os.environ["MKSQUASHFS_BINARY"] = str(config.builder_programs.mksquashfs)
 
     show_env("configdump", grml_live_config)
 
