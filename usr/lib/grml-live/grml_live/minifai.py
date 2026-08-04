@@ -846,6 +846,12 @@ def create_on_media_md5sums(grml_cd_dir: Path, grml_name: str):
     run_x(["/bin/ls", "-la", md5sums_file])
 
 
+def create_sha256_checksum_file(file_to_checksum: Path):
+    checksum_filename = Path(str(file_to_checksum) + ".sha256")
+    with checksum_filename.open("wt") as checksum_file_handle:
+        run_x(["sha256sum", file_to_checksum.name], cwd=file_to_checksum.parent, stdout=checksum_file_handle)
+
+
 def create_netboot_package(
     output_dir: Path,
     chroot_netboot_dir: Path,
@@ -875,10 +881,7 @@ def create_netboot_package(
             ".",
         ]
     )
-
-    checksum_filename = Path(str(output_name) + ".sha256")
-    with checksum_filename.open("wt") as checksum_file_handle:
-        run_x(["sha256sum", output_name.name], cwd=output_name.parent, stdout=checksum_file_handle)
+    create_sha256_checksum_file(output_name)
 
 
 def create_sources_package(
@@ -908,10 +911,7 @@ def create_sources_package(
             ".",
         ]
     )
-
-    checksum_filename = Path(str(output_name) + ".sha256")
-    with checksum_filename.open("wt") as checksum_file_handle:
-        run_x(["sha256sum", output_name.name], cwd=output_name.parent, stdout=checksum_file_handle)
+    create_sha256_checksum_file(output_name)
 
 
 def _build_buildinfo_data(
@@ -1025,10 +1025,7 @@ def create_media(
     config.grml_isos_dir.mkdir(exist_ok=True)  # some workflows accept that this already exists
     print("I: Generating ISO file ...")
     run_x(_build_xorriso_cmdline(config))
-
-    checksum_filename = Path(str(config.grml_isos_dir / config.iso_name) + ".sha256")
-    with checksum_filename.open("wt") as checksum_file_handle:
-        run_x(["sha256sum", config.iso_name], cwd=config.grml_isos_dir, stdout=checksum_file_handle)
+    create_sha256_checksum_file(config.grml_isos_dir / config.iso_name)
 
 
 def _run_tasks(
