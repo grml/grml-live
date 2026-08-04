@@ -424,6 +424,7 @@ def _main(argv: list[str]) -> int:
     iso_name = args.iso_name
     if not iso_name:
         iso_name = f"{args.grml_name}_{args.grml_version}.iso"
+    squashfs_name = f"{args.grml_name}.squashfs"
 
     try:
         classes = automatic_classes(args.classes, arch, args.debian_suite, args.is_release, args.secure_boot)
@@ -442,7 +443,11 @@ def _main(argv: list[str]) -> int:
         config_dir=args.config_dir,
         output_directory=args.output_directory,
         grml_cd_dir=args.output_directory / "grml_cd",
+        grml_cd_live_dir=args.output_directory / "grml_cd" / "live",
+        grml_cd_squashfs_dir=args.output_directory / "grml_cd" / "live" / args.grml_name,
+        grml_cd_squashfs_name=args.output_directory / "grml_cd" / "live" / args.grml_name / squashfs_name,
         grml_chroot_dir=args.output_directory / "grml_chroot",
+        grml_isos_dir=args.output_directory / "grml_isos",
         grml_logs_dir=args.output_directory / "grml_logs",
         extract_iso_name=args.extract_iso_name,
         extract_programs=extract_programs,
@@ -456,7 +461,7 @@ def _main(argv: list[str]) -> int:
         release_info=f"{args.grml_name} {args.grml_version} - Release Codename {args.release_name}",
         hostname=args.hostname,
         username=args.username,
-        squashfs_name=f"{args.grml_name}.squashfs",
+        squashfs_name=squashfs_name,
         boot_file=f"/conf/bootfile_{short_name}_{source_date_epoch}",
         is_release=args.is_release,
         date=args.date,
@@ -482,6 +487,7 @@ def _main(argv: list[str]) -> int:
         file_ops.check_dir_usable_for_unshare(build_config.output_directory, missing_ok=True)
         if build_config.chroot_install_src_directory:
             file_ops.check_dir_usable_for_unshare(build_config.chroot_install_src_directory)
+
     except ValueError as except_inst:
         print(f"E: {except_inst}", file=sys.stderr)
         return 1

@@ -38,7 +38,11 @@ class BuildConfiguration:
     config_dir: Path
     output_directory: Path
     grml_cd_dir: Path
+    grml_cd_live_dir: Path
+    grml_cd_squashfs_dir: Path
+    grml_cd_squashfs_name: Path
     grml_chroot_dir: Path
+    grml_isos_dir: Path
     grml_logs_dir: Path
     extract_iso_name: Path | None
     extract_programs: ExtractPrograms | None
