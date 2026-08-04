@@ -550,7 +550,7 @@ def start_unshared_service():
             subproc.kill()
 
 
-def read_envvars_for_classes(conf_dir: Path, classes: list[str]) -> dict:
+def read_envvars_for_classes(conf_dir: Path, classes: list[str]) -> dict[str, str]:
     """Read environment variable files"""
     env = {}
 
@@ -562,7 +562,7 @@ def read_envvars_for_classes(conf_dir: Path, classes: list[str]) -> dict:
     return env
 
 
-def install_base(conf_dir: Path, chroot_dir: Path, classes, debian_suite: str, mirror_url: str):
+def install_base(conf_dir: Path, chroot_dir: Path, classes: list[str], debian_suite: str, mirror_url: str):
     """Install Debian base system from given mirror"""
     print(f'I: Installing Debian base system for suite "{debian_suite}" using mmdebstrap')
 
@@ -1121,7 +1121,7 @@ def _run_tasks(
 
     do_skiptask(dynamic_state, skip_tasks)
 
-    env = {
+    env: dict[str, str] = {
         "GRML_LIVE_CONFIG": str(grml_live_config_chroot),
         "GRML_LIVE_BUILDDIR": chroot_directories.build_dir_inside,
         "GRML_LIVE_MEDIADIR": chroot_directories.media_dir_inside,

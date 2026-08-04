@@ -7,7 +7,7 @@ class ClassFileParsingFailed(Exception):
     pass
 
 
-def parse_class_varfile(varfile: Path) -> dict:
+def parse_class_varfile(varfile: Path) -> dict[str, str]:
     env = {}
     lines = varfile.read_text().splitlines()
     for lineno, orig_line in enumerate(lines):
