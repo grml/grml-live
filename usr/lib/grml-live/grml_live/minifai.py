@@ -9,7 +9,6 @@ import datetime
 import json
 import os
 import shlex
-import shutil
 import socket
 import subprocess
 import sys
@@ -416,12 +415,13 @@ def write_helper_tool(tools_path: Path, tool_name: str, body: str):
 def helper_tools(
     conf_dir: Path, chroot_dir: Path, classes: list[str], dynamic_state: DynamicState, unshared_service: UnsharedService
 ):
-    tempdir = Path(tempfile.mkdtemp())
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tempdir_name:
+        tempdir = Path(tempdir_name)
 
-    write_helper_tool(
-        tempdir,
-        "grml-live-command",
-        f"""#!/bin/sh
+        write_helper_tool(
+            tempdir,
+            "grml-live-command",
+            f"""#!/bin/sh
 PN=$(basename "$0")
 if [ "$PN" = "grml-live-command" ]; then
   PN="$1"
@@ -438,15 +438,15 @@ elif [ "$RC" != "0" ]; then
 fi
 exit 0
 """,
-    )
+        )
 
-    (tempdir / "fcopy").symlink_to(tempdir / "grml-live-command")
-    (tempdir / "skiptask").symlink_to(tempdir / "grml-live-command")
+        (tempdir / "fcopy").symlink_to(tempdir / "grml-live-command")
+        (tempdir / "skiptask").symlink_to(tempdir / "grml-live-command")
 
-    write_helper_tool(
-        tempdir,
-        "ifclass",
-        f"""#!/bin/bash
+        write_helper_tool(
+            tempdir,
+            "ifclass",
+            f"""#!/bin/bash
 haystack=:{":".join(classes)}:
 if [[ ":$haystack:" = *:$1:* ]]; then
     echo "I: ifclass $1: yes."
@@ -456,17 +456,17 @@ else
     exit 1
 fi
 """,
-    )
+        )
 
-    # Tool to provide $ROOTCMD. Will be invoked from scripts, which run in an
-    # unshared context. Usually each script gets its own unshared context,
-    # therefore each script gets a new mount namespace, and so on.
-    # However, each script can run $ROOTCMD multiple times, so we should also
-    # avoid mounting one /proc per $ROOTCMD invocation.
-    write_helper_tool(
-        tempdir,
-        "grml-live-chroot",
-        f"""#!/bin/bash
+        # Tool to provide $ROOTCMD. Will be invoked from scripts, which run in an
+        # unshared context. Usually each script gets its own unshared context,
+        # therefore each script gets a new mount namespace, and so on.
+        # However, each script can run $ROOTCMD multiple times, so we should also
+        # avoid mounting one /proc per $ROOTCMD invocation.
+        write_helper_tool(
+            tempdir,
+            "grml-live-chroot",
+            f"""#!/bin/bash
 set -e
 export PATH=/usr/sbin:/usr/bin:/sbin:/bin
 CHROOT_DIR="{chroot_dir}"
@@ -481,21 +481,20 @@ done
 set +e
 exec chroot "$CHROOT_DIR" "$@"
 """,
-    )
+        )
 
-    exit_event = Event()
-    thread = Thread(
-        target=helper_socket_thread,
-        args=(tempdir, conf_dir, chroot_dir, classes, exit_event, dynamic_state, unshared_service),
-        daemon=False,
-    )
-    thread.start()
-    try:
-        yield tempdir
-    finally:
-        exit_event.set()
-        thread.join()
-        shutil.rmtree(tempdir, ignore_errors=True)
+        exit_event = Event()
+        thread = Thread(
+            target=helper_socket_thread,
+            args=(tempdir, conf_dir, chroot_dir, classes, exit_event, dynamic_state, unshared_service),
+            daemon=False,
+        )
+        thread.start()
+        try:
+            yield tempdir
+        finally:
+            exit_event.set()
+            thread.join()
 
 
 @contextlib.contextmanager
@@ -525,10 +524,11 @@ def policy_rcd(chroot_dir: Path, unshared_service: UnsharedService):
 
 @contextlib.contextmanager
 def start_unshared_service():
-    tempdir = Path(tempfile.mkdtemp())
-
-    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as listen_socket:
-        socket_path = f"{tempdir}/sock"
+    with (
+        tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tempdir,
+        socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as listen_socket,
+    ):
+        socket_path = str(Path(tempdir) / "sock")
         listen_socket.bind(socket_path)
         listen_socket.listen(1)  # queue size
 
