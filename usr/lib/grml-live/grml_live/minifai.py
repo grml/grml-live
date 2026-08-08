@@ -817,6 +817,7 @@ def mksquashfs(
     live_dir = grml_cd_dir / "live"
     squashfs_dir = live_dir / grml_name
     squashfs_file = squashfs_dir / f"{grml_name}.squashfs"
+    filesystem_module_file = squashfs_dir / "filesystem.module"
 
     mksquashfs_binary = os.environ["MKSQUASHFS_BINARY"]
     options = _build_mksquashfs_options(conf_dir)
@@ -829,6 +830,8 @@ def mksquashfs(
             unshared_helper.ensure_dir(live_dir),
             unshared_helper.ensure_dir(squashfs_dir),
             unshared_helper.run_program(args),
+            unshared_helper.write_file_text(filesystem_module_file, squashfs_file.name),
+            unshared_helper.chown(filesystem_module_file, str(UNSHARE_UID), str(UNSHARE_GID)),
             unshared_helper.chown(squashfs_file, str(UNSHARE_UID), str(UNSHARE_GID)),
             unshared_helper.chown(squashfs_dir, str(UNSHARE_UID), str(UNSHARE_GID)),
             unshared_helper.chown(live_dir, str(UNSHARE_UID), str(UNSHARE_GID)),
