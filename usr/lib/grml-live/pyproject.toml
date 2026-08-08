@@ -13,7 +13,7 @@ authors = [
 ]
 
 [project.scripts]
-minifai = "grml_live.minifai:main"
+grml-live-main = "grml_live.main:main"
 
 [project.urls]
 Homepage = "https://grml.org"
@@ -43,4 +43,5 @@ lint.select = [
 [dependency-groups]
 dev = [
     "ruff>=0.15.17",
+    "pytest>9",
 ]
