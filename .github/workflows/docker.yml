@@ -86,7 +86,7 @@ jobs:
           type=raw,value=latest-${{ matrix.platform.arch }},enable={{is_default_branch}}
 
     - name: Log in to Container Registry
-      uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c  # v4
+      uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4
       with:
         registry: ${{ env.REGISTRY }}
         username: ${{ github.actor }}
@@ -121,7 +121,7 @@ jobs:
 
     steps:
     - name: Log in to Container Registry
-      uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c  # v4
+      uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f  # v4
       with:
         registry: ${{ env.REGISTRY }}
         username: ${{ github.actor }}
