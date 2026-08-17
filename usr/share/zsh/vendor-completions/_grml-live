@@ -1,6 +1,6 @@
 #compdef grml-live
 # Filename:      /etc/zsh/completion.d/_grml-live
-# Purpose:       completion for command grml-live for zsh (z shell)
+# Purpose:       completion for command grml-live for zsh (Z shell)
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
@@ -25,7 +25,7 @@ _grmllive_classes() { #{{{
     static_classes=(
         DEBORPHAN FRESHCLAM
         GRML_FULL GRML_SMALL
-        LATEX LOCALES NO_ONLINE REMOVE_DOCS SOURCES XORG ZFS
+        LATEX LOCALES NO_ONLINE REMOVE_DOCS SOURCES TOR XORG ZFS
     )
     compset -P '*,'
     already=(${(s<,>)IPREFIX})
@@ -59,24 +59,32 @@ _grmllive_apt_snapshot_dates() { #{{{
 #}}}
 
 arguments=( #{{{
-  '-b[build the ISO without updating the chroot via FAI]'
-  '-B[build the ISO without touching the chroot (skips cleanup)]'
+  '(-w)--bootstrap-mirror-url[Debian mirror URL for creating chroot]:mirror URL:_urls'
+  '--boot-options[add these boot options to the defaults]:boot options:'
+  '--distri-info[set DISTRI_INFO, a one-line description of the built system]:distribution info:'
+  '--distri-name[set DISTRI_NAME]:distribution name:'
+  '--hostname[set the hostname of the booted live system]:hostname:'
+  '--secure-boot[enable Secure Boot using the Debian method]'
+  '--username[set the name of the created non-root user]:username:'
+  '(-b -B -u -q)-B[build the ISO without touching the chroot (skips cleanup)]'
+  '(-b -B -u -q)-b[build the ISO without updating the chroot via FAI]'
   '-c[available grml-live classes]:classe(s):_grmllive_classes'
-  '-C[configuration file for grml-live]:configuration file:_files'
+  '-D[use specified configuration directory instead of automatically chosen default]:directory:_path_files -/'
   '-d[use specified date instead of build time as date of release]:date:'
-  '-D[use specified configuration directory instead of /usr/share/grml-live/config]:directory:_path_files -/'
   '-e[extract ISO and squashfs contents from iso_name]:ISO file:'
   '-F[force execution without prompting for yes/no]'
   '-g[grml flavour to use]:grml flavour(s):_grmllive_flavours'
-  '-h[display usage information]'
-  '-i[iso name, ends up in $OUTPUT_DIRECTORY/grml_isos (also see -o)]:ISO name:_files'
+  '(-h --help)'{-h,--help}'[display usage information]'
   '-I[directory which provides files that should become part of the chroot/ISO]:directory to include:_path_files -/'
+  '-i[iso name, ends up in $OUTPUT_DIRECTORY/grml_isos (also see -o)]:ISO name:_files'
   '-o[output directory]:output directory:_path_files -/'
-  '-q[skip mksquashfs]'
+  '(-b -B -u -q)-q[skip mksquashfs]'
   '-r[release name]:release name:'
+  '-R[skip applying the RELEASE class and cleanup]'
   '-s[debian suite to be used for live-system]:Debian suite:_grmllive_suites'
-  '-u[update existing chroot instead of rebuilding it from scratch]'
-  '-w[wayback machine, build system using Debian archives from specified date]:wayback date(s):_grmllive_apt_snapshot_dates'
+  '(-b -B -u -q)-u[update existing chroot instead of rebuilding it from scratch]'
+  '-v[set the grml version number]:version number:'
+  '(--bootstrap-mirror-url)-w[wayback machine, build system using Debian archives from specified date]:wayback date(s):_grmllive_apt_snapshot_dates'
 )
 #}}}
 
