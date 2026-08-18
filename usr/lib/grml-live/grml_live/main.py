@@ -427,7 +427,7 @@ def _main(argv: list[str]) -> int:
     squashfs_name = f"{args.grml_name}.squashfs"
 
     try:
-        classes = automatic_classes(args.classes, arch, args.debian_suite, args.is_release, args.secure_boot)
+        classes = automatic_classes(args.classes.upper(), arch, args.debian_suite, args.is_release, args.secure_boot)
     except ValueError as except_inst:
         print(f"E: {except_inst}", file=sys.stderr)
         return 1
