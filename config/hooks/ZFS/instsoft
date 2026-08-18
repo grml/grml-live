@@ -26,13 +26,30 @@ target=${target:?}
 arch=$($ROOTCMD dpkg --print-architecture)
 
 # Kernel objtool needs /proc/self/maps; see https://lkml.org/lkml/2025/12/2/1445
-if ! [ -d "$target/proc/self" ]; then
-    $ROOTCMD mkdir -p /proc/self
+# Also see proc_pid_maps(5)
+ZFS_instsoft_created_proc_self=0
+ZFS_instsoft_created_proc_self_maps=0
+if [ ! -d "$target"/proc/self ] && [ ! -L "$target"/proc/self ]; then
+    $ROOTCMD mkdir -vp /proc/self
     ZFS_instsoft_created_proc_self=1
+    if [ ! -e "$target"/proc/self/maps ]; then
+        cat /proc/self/maps >"$target"/proc/self/maps
+        ZFS_instsoft_created_proc_self_maps=1
+    fi
 fi
-if ! [ -s "$target/proc/self/maps" ]; then
-   cat /proc/self/maps >"$target/proc/self/maps"
-   ZFS_instsoft_created_proc_self_maps=1
+
+if [ -e "$target"/proc/self/maps ]; then
+    if ! grep -q -E '[0-9a-f]+-[[0-9a-f]+ .* \[stack\]' "$target"/proc/self/maps; then
+        echo '7ffcd5a92000-7ffcd5ab4000 rw-p 00000000 00:00 0                          [stack]' >> \
+            "$target"/proc/self/maps || \
+            echo "$0: WARNING: Could not write a fake '[stack]' line to $target/proc/self/maps."
+    else
+        echo "$0: INFO: Detected '[stack]' in $target/proc/self/maps."
+    fi
+fi
+
+if ! grep -q -E '[0-9a-f]+-[[0-9a-f]+ .* \[stack\]' "$target"/proc/self/maps; then
+    echo "$0: WARNING: the build process of the zfs kernel module involves running objtool, which as of 2026 needs a '[stack]' line to be present in /proc/self/maps. The build environment doesn't have it and adding it failed. Building the zfs module will therefore likely also fail, but I'll try regardless."
 fi
 
 echo "$0: Installing latest kernel and its headers, as well as build-essential."
