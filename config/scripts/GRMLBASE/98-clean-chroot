@@ -12,11 +12,6 @@ set -e
 # FAI sets $target, but shellcheck does not know that.
 target=${target:?}
 
-if ! ls "$target"/boot/config-* &>/dev/null ; then
-  echo "No kernel config files (/boot/config-*) found. No kernel-image package installed?" >&2
-  exit 1
-fi
-
 echo "Installing files into /etc/skel"
 fcopy -M -i -B -v -r /etc/skel
 
