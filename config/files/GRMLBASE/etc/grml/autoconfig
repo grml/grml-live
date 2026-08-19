@@ -50,6 +50,7 @@ CONFIG_DISTRI='yes'           # support some customization via bootoption distri
 CONFIG_EASTEREGG='yes'        # easteregg
 CONFIG_EXTRACT='yes'          # specify which (only in combination with bootparam myconfig/netconfig useful)
 CONFIG_FINDDCSDIR='yes'       # search for a debs, config, scripts directory
+CONFIG_FIND_GRML_ESP='yes'    # execute grml/main.sh from ESP partition
 CONFIG_HOMEDIR='yes'          # check for persistent homedir option
 CONFIG_HOSTNAME='yes'         # set hostname to 'grml' on systems running from CD
 CONFIG_KERNEL='yes'           # display information on running kernel
