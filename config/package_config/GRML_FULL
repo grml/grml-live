@@ -268,6 +268,7 @@ jq
 mawk
 mbuffer
 mc
+moreutils
 ncurses-term
 patch
 pv
