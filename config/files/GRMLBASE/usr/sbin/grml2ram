@@ -87,7 +87,10 @@ close DEST;
 EOF
 
 # identify cd-rom:
-GRMLDEV=$(awk '{if ($2 ~ /^\/lib\/live\/mount\/medium$/ ) print $1}' /etc/mtab)
+GRMLDEV=$(awk '{if ($2 ~ /^\/usr\/lib\/live\/mount\/medium$/ ) print $1}' /etc/mtab)
+if [ -z "$GRMLDEV" ]; then
+   GRMLDEV=$(awk '{if ($2 ~ /^\/lib\/live\/mount\/medium$/ ) print $1}' /etc/mtab)
+fi
 if [ -z "$GRMLDEV" ]; then
    GRMLDEV=$(awk '{if ($2 ~ /^\/cdrom$/ ) print $1}' /etc/mtab)
 fi
