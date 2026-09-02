@@ -14,15 +14,13 @@ set -e
 . /etc/grml/script-functions
 
 check4root || exit 1
-check4progs rsync gawk || exit 2
+check4progs rsync awk || exit 2
 
 if ! isgrmlcd ; then
    eerror "Not running grml in live-cd mode. Nothing to be done, exiting." ; eend 1
    exit 1
 fi
 
-# initramfs layout since December 2012, backwards compatibility:
-[ -d /lib/live/mount/medium ] && export LIVECD_PATH='/lib/live/mount/medium'
 # initramfs layout since December 2018:
 [ -d /run/live/medium ] && export LIVECD_PATH='/run/live/medium'
 
@@ -64,7 +62,7 @@ if ! [ -r "$IMAGE" ] ; then
 fi
 
 GRMLSIZE="$(du "$IMAGE" | awk '{print $1}')"
-RAM=$(/usr/bin/gawk '/MemFree/{print $2}' /proc/meminfo)
+RAM=$(/usr/bin/awk '/MemFree/{print $2}' /proc/meminfo)
 LOOPDEV=$(/sbin/losetup -j "${IMAGE}" -n -O NAME)
 
 case "$*" in -f|--force)
@@ -89,12 +87,12 @@ close DEST;
 EOF
 
 # identify cd-rom:
-GRMLDEV=$(awk '{if ($2 ~ /^\/lib\/live\/mount\/medium$/ ) print $1}' /etc/mtab)
+GRMLDEV=$(awk '{if ($2 ~ /^\/usr\/lib\/live\/mount\/medium$/ ) print $1}' /proc/mounts)
 if [ -z "$GRMLDEV" ]; then
-  GRMLDEV=$(awk '{if ($2 ~ /^\/live\/image$/ ) print $1}' /etc/mtab)
+   GRMLDEV=$(awk '{if ($2 ~ /^\/lib\/live\/mount\/medium$/ ) print $1}' /proc/mounts)
 fi
 if [ -z "$GRMLDEV" ]; then
-   GRMLDEV=$(awk '{if ($2 ~ /^\/cdrom$/ ) print $1}' /etc/mtab)
+   GRMLDEV=$(awk '{if ($2 ~ /^\/cdrom$/ ) print $1}' /proc/mounts)
 fi
 [ -n "$GRMLDEV" ] || GRMLDEV='/dev/cdrom'
 
