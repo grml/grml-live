@@ -20,10 +20,6 @@ echo "I: installing addons."
 if grml-live-command copy-media-files media -r "/arch/${ARCH}/boot/addons" && $ROOTCMD test -d "${GRML_LIVE_MEDIADIR}/arch" ; then
   $ROOTCMD cp -rv "${GRML_LIVE_MEDIADIR}/arch/${ARCH}/boot/addons" "${GRML_LIVE_MEDIADIR}/boot/"
   $ROOTCMD rm -rf "${GRML_LIVE_MEDIADIR}/arch"
-else
-  # legacy path (before https://github.com/grml/grml-live-grml/pull/11):
-  echo "I: trying to install legacy path /boot/addons"
-  grml-live-command copy-media-files media -r -i "/boot/addons"
 fi
 
 ## END OF FILE #################################################################
