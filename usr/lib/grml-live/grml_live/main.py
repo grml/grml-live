@@ -356,6 +356,7 @@ def strip_unsafe_chars(s: str) -> str:
 def _main(argv: list[str]) -> int:
     global VERSION
     VERSION = os.getenv("GRML_LIVE_VERSION", "?")
+    tmpdir = os.getenv("TMPDIR", "/tmp")
     startup_dt = datetime.datetime.now(datetime.UTC)
     sanitize_env()
 
@@ -425,7 +426,7 @@ def _main(argv: list[str]) -> int:
     squashfs_name = f"{args.grml_name}.squashfs"
 
     output_directory: Path = args.output_directory
-    work_directory_tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
+    work_directory_tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True, dir=tmpdir)
     work_directory = Path(work_directory_tmp.name)
     work_directory.chmod(0o755)
     file_ops.create_dir_useable_for_unshare(work_directory)
