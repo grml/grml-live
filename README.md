@@ -20,4 +20,4 @@ all dependencies are installed (best see `debian/control` for a list).
 Example:
 
     $ ln -s ../../../grml-live-grml/templates/arch config/media-files/GRMLBASE/  # optional
-    $ ./grml-live -s sid -c GRML_FULL
+    $ ./grml-live -s sid -c GRML_FULL ./my-grml-build

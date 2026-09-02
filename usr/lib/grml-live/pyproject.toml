@@ -42,6 +42,6 @@ lint.select = [
 
 [dependency-groups]
 dev = [
-    "ruff>=0.15.17",
+    "ruff>=0.16.5",
     "pytest>9",
 ]

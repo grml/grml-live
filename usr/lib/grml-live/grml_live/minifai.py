@@ -617,7 +617,7 @@ def install_base(conf_dir: Path, chroot_dir: Path, classes: list[str], debian_su
 
 def extract_iso(config: build_facts.BuildConfiguration):
     """Unpack squashfs from an existing ISO to use it as the chroot_dir contents."""
-    print(f"I: Unpacking ISO from {config.extract_iso_name}")
+    print(f"I: Unpacking ISO from {config.source_image}")
     assert config.extract_programs is not None
 
     try:
@@ -626,7 +626,7 @@ def extract_iso(config: build_facts.BuildConfiguration):
             [
                 config.extract_programs.osirrox,
                 "-indev",
-                config.extract_iso_name,
+                config.source_image,
                 "-extract",
                 "live",
                 config.grml_chroot_dir,
@@ -934,7 +934,7 @@ def _build_buildinfo_data(
         "default_bootoptions": config.default_bootoptions,
         "distri_info": config.distri_info,
         "distri_name": config.distri_name,
-        "extract_iso_name": config.extract_iso_name,
+        "source_image": config.source_image,
         "grml_architecture": config.arch,
         "grml_bootid": config.bootid,
         "grml_debian_version": config.debian_suite,
@@ -1198,19 +1198,13 @@ def build(config: build_facts.BuildConfiguration):
     try:
         with start_unshared_service() as unshared_service:
             unshared_service.run(unshared_helper.hello_world())
-            skiptasks = []
+            skiptasks: list[str] = []
 
-            extract_iso_name = config.extract_iso_name
-            if extract_iso_name:
-                if config.fai_action == build_facts.FaiAction.DIRINSTALL:
-                    raise ValueError("Building a new chroot is incompatible with extracting an existing ISO")
-                extract_iso(config)
-            else:
-                if config.fai_action == build_facts.FaiAction.DIRINSTALL and config.grml_chroot_dir.exists():
+            if config.grml_live_action == build_facts.GrmlLiveAction.IMAGE_CREATE:
+                if config.grml_chroot_dir.exists():
                     raise ValueError(f"chroot {config.grml_chroot_dir} unexpectedly already exists")
                 file_ops.create_dir_useable_for_unshare(config.grml_chroot_dir)
 
-            if config.fai_action == build_facts.FaiAction.DIRINSTALL:
                 install_base(
                     config.config_dir,
                     config.grml_chroot_dir,
@@ -1218,17 +1212,13 @@ def build(config: build_facts.BuildConfiguration):
                     config.debian_suite,
                     config.bootstrap_mirror_url,
                 )
-            elif config.fai_action == build_facts.FaiAction.SOFTUPDATE:
-                pass
-            elif config.fai_action == build_facts.FaiAction.RECONFIGURE:
+
+            elif config.grml_live_action == build_facts.GrmlLiveAction.IMAGE_UPDATE:
                 skiptasks = ["updatebase", "instsoft"]
-            elif config.fai_action == build_facts.FaiAction.REBUILD:
-                skiptasks = ["updatebase", "instsoft", "configure"]
-            elif config.fai_action == build_facts.FaiAction.REBUILD_MEDIA:
-                skiptasks = ["updatebase", "instsoft", "configure", "squashfs"]
+                extract_iso(config)
             else:
-                print(f"E: minifai: Unknown fai action: {config.fai_action!r}")
                 rc = 1
+                raise NotImplementedError(f"Action {config.grml_live_action} is not implemented in minifai")
 
             if not rc:
                 rc = _run_tasks(config, grml_live_config, skiptasks, unshared_service)
@@ -1242,3 +1232,9 @@ def build(config: build_facts.BuildConfiguration):
 
     print(f"I: minifai exiting with exit code {rc}")
     return rc
+
+
+def chroot_delete(grml_chroot_dir: Path):
+    with start_unshared_service() as unshared_service:
+        unshared_service.run(unshared_helper.hello_world())
+        unshared_service.run(unshared_helper.run_program(["rm", "-rf", grml_chroot_dir]))

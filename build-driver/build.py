@@ -134,8 +134,7 @@ def run_grml_live(
         }
     )
 
-    grml_live_cmd = [
-        grml_live_path / "grml-live",
+    grml_live_shared_opts = [
         "-F",  # do not prompt
         "-D",
         str(grml_fai_config),
@@ -151,11 +150,13 @@ def run_grml_live(
         grml_name,
         "-i",
         iso_name,
-        "-o",
-        output_dir,
     ]
+
     if old_iso_path:
-        grml_live_cmd += ["-b", "-e", old_iso_path]
+        grml_live_cmd = [grml_live_path / "grml-live", "image-update", *grml_live_shared_opts, old_iso_path, output_dir]
+    else:
+        grml_live_cmd = [grml_live_path / "grml-live", "image-create", *grml_live_shared_opts, output_dir]
+
     with ci_section("Building with grml-live", collapsed=False):
         try:
             run_x(grml_live_cmd, env=env)
