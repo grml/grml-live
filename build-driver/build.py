@@ -194,7 +194,7 @@ def generate_changes_list(
 ):
     package_prefix = "grml"
     git_url_base = "https://github.com/grml"
-    git_workspace = Path("/tmp") / "changes-git-workspace"
+    git_workspace = Path(tempfile.mkdtemp(prefix="changes-git-workspace"))
     output_file = build_dir / "grml_logs" / output_filename
     new_dpkg_list = get_dpkg_list_path_for_build(build_dir)
 
