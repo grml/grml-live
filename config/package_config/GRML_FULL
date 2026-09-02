@@ -264,8 +264,8 @@ binutils
 buffer
 coreutils
 diffutils
+gawk
 jq
-mawk
 mbuffer
 mc
 moreutils
