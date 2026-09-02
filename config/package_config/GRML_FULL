@@ -281,6 +281,7 @@ zsh
 augeas-tools
 inxi
 memtester
+pydf
 stressant
 
 # virtualization support
