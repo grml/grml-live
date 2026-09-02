@@ -361,6 +361,9 @@ shim-signed
 # firmware updates
 fwupd-amd64-signed
 
+# QEMU EFI firmware
+ovmf
+
 PACKAGES install ARM64
 # kernel related
 linux-image-arm64
@@ -375,3 +378,6 @@ shim-signed
 
 # firmware updates
 fwupd-arm64-signed
+
+# QEMU EFI firmware
+qemu-efi-aarch64
