@@ -21,8 +21,6 @@ if ! isgrmlcd ; then
    exit 1
 fi
 
-# initramfs layout since December 2012, backwards compatibility:
-[ -d /lib/live/mount/medium ] && export LIVECD_PATH='/lib/live/mount/medium'
 # initramfs layout since December 2018:
 [ -d /run/live/medium ] && export LIVECD_PATH='/run/live/medium'
 
@@ -90,9 +88,6 @@ EOF
 
 # identify cd-rom:
 GRMLDEV=$(awk '{if ($2 ~ /^\/lib\/live\/mount\/medium$/ ) print $1}' /etc/mtab)
-if [ -z "$GRMLDEV" ]; then
-  GRMLDEV=$(awk '{if ($2 ~ /^\/live\/image$/ ) print $1}' /etc/mtab)
-fi
 if [ -z "$GRMLDEV" ]; then
    GRMLDEV=$(awk '{if ($2 ~ /^\/cdrom$/ ) print $1}' /etc/mtab)
 fi
