@@ -268,13 +268,15 @@ def show_build_config(build_config: build_facts.BuildConfiguration):
     FAI classes:       {",".join(build_config.classes)}
     Debian suite:      {build_config.debian_suite}
     Architecture:      {build_config.arch}
-    Output directory:  {build_config.output_directory}""")
+    Output directory:  {build_config.output_directory}
+    Work directory:    {build_config.work_directory}
+    """)
 
     print(f"""\n  Input:
     Config Space:      {build_config.config_dir}""")
     if build_config.grml_live_action == build_facts.GrmlLiveAction.IMAGE_CREATE:
         print(f"""    Bootstrap mirror:  {build_config.bootstrap_mirror_url}
-        Wayback date:      {build_config.wayback_date}""")
+    Wayback date:      {build_config.wayback_date}""")
     else:
         print(f"    Extract ISO:       {build_config.source_image}")
 
@@ -354,6 +356,7 @@ def strip_unsafe_chars(s: str) -> str:
 def _main(argv: list[str]) -> int:
     global VERSION
     VERSION = os.getenv("GRML_LIVE_VERSION", "?")
+    tmpdir = os.getenv("TMPDIR", "/tmp")
     startup_dt = datetime.datetime.now(datetime.UTC)
     sanitize_env()
 
@@ -423,7 +426,7 @@ def _main(argv: list[str]) -> int:
     squashfs_name = f"{args.grml_name}.squashfs"
 
     output_directory: Path = args.output_directory
-    work_directory_tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
+    work_directory_tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True, dir=tmpdir)
     work_directory = Path(work_directory_tmp.name)
     work_directory.chmod(0o755)
     file_ops.create_dir_useable_for_unshare(work_directory)
