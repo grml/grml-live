@@ -133,7 +133,7 @@ binutils
 buffer
 coreutils
 diffutils
-mawk
+gawk
 ncurses-term
 patch
 qrencode
