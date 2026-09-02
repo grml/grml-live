@@ -14,7 +14,7 @@ set -e
 . /etc/grml/script-functions
 
 check4root || exit 1
-check4progs rsync gawk || exit 2
+check4progs rsync awk || exit 2
 
 if ! isgrmlcd ; then
    eerror "Not running grml in live-cd mode. Nothing to be done, exiting." ; eend 1
@@ -62,7 +62,7 @@ if ! [ -r "$IMAGE" ] ; then
 fi
 
 GRMLSIZE="$(du "$IMAGE" | awk '{print $1}')"
-RAM=$(/usr/bin/gawk '/MemFree/{print $2}' /proc/meminfo)
+RAM=$(/usr/bin/awk '/MemFree/{print $2}' /proc/meminfo)
 LOOPDEV=$(/sbin/losetup -j "${IMAGE}" -n -O NAME)
 
 case "$*" in -f|--force)
