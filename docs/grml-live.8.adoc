@@ -9,11 +9,21 @@ grml-live - build framework for the Grml Live Linux system
 Synopsis
 --------
 
-grml-live [-h] [--boot-options DEFAULT_BOOTOPTIONS] [-c CLASS1,CLASS2] [--distri-info DISTRI_INFO]
-          [--distri-name DISTRI_NAME] [--hostname HOSTNAME] [--username USERNAME] [-d DATE] [-D CONFIGDIR]
-          [-e EXTRACT_ISO_NAME] [-F] [-g GRML_NAME] [-i ISO_NAME] [-I CHROOT_INSTALL_DIRECTORY]
-          [-o OUTPUT_DIRECTORY] [-r RELEASE_NAME] [-R] [-s SUITE] [--secure-boot] [-v VERSION_NUMBER]
-          [--bootstrap-mirror-url BOOTSTRAP_MIRROR_URL | -w DATE] [-b | -B | -u | -q]
+grml-live --help
+
+grml-live image-create [--boot-options DEFAULT_BOOTOPTIONS] [-c CLASS1,CLASS2]
+          [--distri-info DISTRI_INFO] [--distri-name DISTRI_NAME] [--hostname HOSTNAME]
+          [--username USERNAME] [-d DATE] [-D CONFIGDIR] [-F] [-g GRML_NAME] [-i ISO_NAME]
+          [-I CHROOT_INSTALL_DIRECTORY] [-r RELEASE_NAME] [-R] [-s SUITE] [--secure-boot]
+          [-v VERSION_NUMBER] [--bootstrap-mirror-url BOOTSTRAP_MIRROR_URL | -w DATE]
+          OUTPUT_DIRECTORY
+
+grml-live image-update [--boot-options DEFAULT_BOOTOPTIONS] [-c CLASS1,CLASS2]
+          [--distri-info DISTRI_INFO] [--distri-name DISTRI_NAME] [--hostname HOSTNAME]
+          [--username USERNAME] [-d DATE] [-D CONFIGDIR] [-F] [-g GRML_NAME] [-i ISO_NAME]
+          [-I CHROOT_INSTALL_DIRECTORY] [-r RELEASE_NAME] [-R] [-s SUITE] [--secure-boot]
+          [-v VERSION_NUMBER]
+          SOURCE_IMAGE OUTPUT_DIRECTORY
 
 Description
 -----------
@@ -47,22 +57,23 @@ mirror - if you plan to use grml-live more than once.
 See debmirror(1), reprepro(1), apt-cacher-ng(1) and approx(8). A reprepro sample
 configuration is available in the source in examples/reprepro/.
 
-Options
+Actions
 -------
 
-  -b::
+The `image-create` action builds a new Grml Live Linux image from scratch. +
+You must pass an **OUTPUT_DIRECTORY**.
+The resulting ISO, netboot images and logs will be created there.
 
-Build the ISO without installing package updates. This option is useful for
-example when working on stable releases: if you have a working base
-system/chroot and do not want to execute any further updates (via "-u" option)
-but intend to only build the ISO.
+The `image-update` action repacks an existing Grml Live Linux image.
+This is used to apply changes in the grml-live configuration and/or add additional classes, within limits.
+The options `-s`, `--hostname`, `--username` from the initial build must be given with their original values. +
+The existing ISO must be given as **SOURCE_IMAGE**.
+You must pass an **OUTPUT_DIRECTORY**.
+The resulting ISO, netboot images and logs will be created there.
 
-  -B::
 
-Build the ISO without touching the chroot at all. This option is useful if
-you modified anything grml-live might adjust via the class-based configuration.
-It's like the '-b' option but even more advanced. Use only if you really know
-that you do not want to update the chroot.
+Options
+-------
 
   --boot-options **BOOT_OPTIONS**::
 
@@ -121,11 +132,6 @@ being built.
 
 Set the `DISTRI_NAME` variable.
 
-  -e **EXTRACT_ISO_NAME**::
-
-The squashfs inside the specified ISO will be extracted and used as the chroot.
-This option is useful for remastering, in combination with -b or -u.
-
   -F::
 
 Force execution and do not prompt for acknowledgment of configuration.
@@ -154,19 +160,6 @@ Specify name of source directory which provides files that should become part of
 the chroot/ISO. Not enabled by default. Note: the files are installed under '/'
 in the chroot so you have to create the rootfs structure on your own.
 
-  -o **OUTPUT_DIRECTORY**::
-
-Main output directory of the build process.  Some directories are created
-inside this target directory, being: grml_cd (where the files for creating the
-ISO are located, including the compressed squashfs file), grml_chroot (the
-chroot system) and grml_isos (where the resulting ISO is stored).
-
-  -q::
-
-Build the ISO without (re-)creating the squashfs compressed file using mksquashfs.
-This option is useful if you just want to update parts outside the chroot in the ISO.
-The media-scripts are still run.
-
   -r **RELEASENAME**::
 
 Specify name of the release.
@@ -185,10 +178,6 @@ corresponding release names like "trixie").
   --secure-boot::
 
 Enable setup of Secure Boot for the built ISO.
-
-  -u::
-
-Update existing chroot, and build the ISO.
 
   --username **USERNAME**::
 
@@ -228,16 +217,23 @@ Please use the command line options.
 Usage examples
 --------------
 
-To get a Debian-stable and Grml-based Live-CD using ./grml
-as build and output directory just run:
+To get a Grml-based Live-CD based on Debian testing, created in `./my-grml` as output directory just run:
 
-  # grml-live
+  $ grml-live ./my-grml
 
 To get a 64bit Debian-testing and grml-small based Live-CD using /srv/grml-live
 as build and output directory use the following command line on your amd64
 system:
 
-  # grml-live -s testing -c GRML_SMALL -o /srv/grml-live
+  $ grml-live -s testing -c GRML_SMALL /srv/grml-live
+
+The default build directory is in your `TMPDIR`.
+To place the temporary files, which can become rather large, into another directory:
+
+  $ mkdir grml-tmp
+  $ chmod 0755 grml-tmp
+  $ export TMPDIR=$PWD/grml-tmp
+  $ grml-live ./my-grml
 
 [NOTE]
 
@@ -429,7 +425,7 @@ Available log files
 -------------------
 
 Log files are written into a directory named `grml_logs` in the output directory
-- next to `grml_isos`, `grml_chroot`, etc.
+- next to `grml_isos`, etc.
 
 Versions before 0.17.0 used to log into `/var/log/grml-live.log` and
 `/var/log/fai/grml` instead.
@@ -528,8 +524,7 @@ directory as git commits.
 I've problems with the build process. How to start debugging?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Check out the logs inside the directory 'grml_logs' next to your grml_chroot,
-grml_isos,... directories.
+Check out the logs inside the directory `grml_logs` in the output directory.
 
 If you need help with grml-live or would like to see new features as part of
 grml-live you can get commercial support via
@@ -582,7 +577,7 @@ Create the `package_config` file for the class:
 
 And pass it as an **additional** class to grml-live:
 
-  # grml-live -c GRML_SMALL,MIKA
+  $ grml-live -c GRML_SMALL,MIKA ./my-grml
 
 [[reset-grml-live-configuration]]
 I fscked up my grml-live configuration. How do I reset it to the defaults?
@@ -684,7 +679,7 @@ Usage example:
     $ git clone --depth 1 https://github.com/grml/grml-live
     $ cd grml-live
     $ sudo apt install <packages>  # see debian/control
-    $ ./grml-live -D "$PWD/config"  -s sid -c GRML_FULL
+    $ ./grml-live -D "$PWD/config" -s sid -c GRML_FULL ./my-grml
 
 
 Debian package

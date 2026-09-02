@@ -27,16 +27,24 @@ class FaiAction(StrEnum):
     REBUILD_MEDIA = "rebuild_media"
 
 
+class GrmlLiveAction(StrEnum):
+    # Further actions will be provided later.
+    IMAGE_CREATE = "image-create"
+    IMAGE_UPDATE = "image-update"
+
+
 @dataclass(kw_only=True, frozen=True)
 class BuildConfiguration:
     grml_live_version: str
     cmdline: list[str]
     fai_action: FaiAction
+    grml_live_action: GrmlLiveAction
     arch: str
     builder_programs: BuilderPrograms
     classes: list[str]
     config_dir: Path
     output_directory: Path
+    work_directory: Path
     grml_cd_dir: Path
     grml_cd_live_dir: Path
     grml_cd_squashfs_dir: Path
@@ -44,7 +52,7 @@ class BuildConfiguration:
     grml_chroot_dir: Path
     grml_isos_dir: Path
     grml_logs_dir: Path
-    extract_iso_name: Path | None
+    source_image: Path | None
     extract_programs: ExtractPrograms | None
     distri_name: str
     distri_info: str
@@ -63,7 +71,7 @@ class BuildConfiguration:
     source_date_epoch: int | None
     wayback_date: str | None
     debian_suite: str
-    bootstrap_mirror_url: str
+    bootstrap_mirror_url: str | None
     secure_boot: bool
     chroot_install_src_directory: Path | None
     bootid: str

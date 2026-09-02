@@ -5,6 +5,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 import traceback
 from pathlib import Path
 
@@ -41,6 +42,13 @@ def resolve_programs(programs_class):
 
 def arg_absolute_path(value: str) -> Path:
     return Path(value).resolve()
+
+
+def arg_existing_absolute_path(value: str) -> Path:
+    path = Path(value).resolve()
+    if not path.exists():
+        raise argparse.ArgumentTypeError("must exist")
+    return path
 
 
 def arg_key_str(value: str) -> str:
@@ -90,10 +98,10 @@ def create_argparser(
         epilog="""
 Usage examples:
 
-  %(prog)s
-  %(prog)s -c GRML_FULL -o /dev/shm/grml
-  %(prog)s -c GRML_FULL -i grml_0.0-1.iso -v 0.0-1
-  %(prog)s -c GRML_FULL -s stable -r 'grml-ftw'
+  %(prog)s image-create
+  %(prog)s image-create -c GRML_FULL my-grml-output-dir
+  %(prog)s image-create -c GRML_FULL -i grml_0.0-1.iso -v 0.0-1 my-grml-output-dir
+  %(prog)s image-create -c GRML_FULL -s stable -r 'grml-ftw' my-grml-output-dir
 
 More details:
 
@@ -109,117 +117,110 @@ Please send your bug reports and feedback to the grml-team: http://grml.org/bugs
         "-h", "--help", action="help", default=argparse.SUPPRESS, help="Show this help message and exit"
     )
 
-    parser.add_argument(
-        "--boot-options", type=str, dest="default_bootoptions", default="", help="Add these boot options"
-    )
-    parser.add_argument(
-        "-c",
-        type=arg_key_str,
-        dest="classes",
-        metavar="CLASS1,CLASS2",
-        default="GRML_FULL",
-        help="Classes to be used for building the ISO",
-    )
+    # TODO: the names are the old names and are not useful.
+    subparsers = parser.add_subparsers(required=True, help="subcommand help")
+    parser_image_create = subparsers.add_parser("image-create", help="Run a complete build from scratch")
+    parser_image_create.set_defaults(grml_live_action=build_facts.GrmlLiveAction.IMAGE_CREATE)
+    parser_image_update = subparsers.add_parser("image-update", help="Update an existing ISO")
+    parser_image_update.set_defaults(grml_live_action=build_facts.GrmlLiveAction.IMAGE_UPDATE)
 
-    parser.add_argument(
-        "--distri-info",
-        type=str,
-        dest="distri_info",
-        default="Grml - Live Linux for system administrators",
-        help="Set DISTRI_INFO",
-    )
-    parser.add_argument("--distri-name", type=arg_key_str, dest="distri_name", default="grml", help="Set DISTRI_NAME")
-    parser.add_argument("--hostname", type=arg_key_str, dest="hostname", default="grml", help="Set HOSTNAME")
-    parser.add_argument("--username", type=arg_key_str, dest="username", default="grml", help="Set USERNAME")
+    for subparser in (parser_image_create, parser_image_update):
+        subparser.add_argument(
+            "--boot-options", type=str, dest="default_bootoptions", default="", help="Add these boot options"
+        )
+        subparser.add_argument(
+            "-c",
+            type=arg_key_str,
+            dest="classes",
+            metavar="CLASS1,CLASS2",
+            default="GRML_FULL",
+            help="Classes to be used for building the ISO",
+        )
+        subparser.add_argument(
+            "--distri-info",
+            type=str,
+            dest="distri_info",
+            default="Grml - Live Linux for system administrators",
+            help="Set DISTRI_INFO",
+        )
+        subparser.add_argument(
+            "--distri-name", type=arg_key_str, dest="distri_name", default="grml", help="Set DISTRI_NAME"
+        )
+        subparser.add_argument("--hostname", type=arg_key_str, dest="hostname", default="grml", help="Set HOSTNAME")
+        subparser.add_argument("--username", type=arg_key_str, dest="username", default="grml", help="Set USERNAME")
+        subparser.add_argument(
+            "-d",
+            type=arg_key_str,
+            dest="date",
+            default=str(source_date_epoch_dt.strftime("%Y-%m-%d")),
+            metavar="DATE",
+            help="Use specified date instead of build time as date of release",
+        )
+        subparser.add_argument(
+            "-D",
+            type=arg_absolute_path,
+            dest="config_dir",
+            metavar="CONFIGDIR",
+            default=default_paths.config_dir,
+            help="Use specified configuration directory",
+        )
+        subparser.add_argument("-F", action="store_true", dest="force", help="Force execution without prompting")
+        subparser.add_argument(
+            "-g",
+            type=arg_key_str,
+            dest="grml_name",
+            metavar="GRML_NAME",
+            default="grml",
+            help="Set the grml flavour name",
+        )
+        subparser.add_argument(
+            "-i",
+            type=arg_key_str,
+            dest="iso_name",
+            metavar="ISO_NAME",
+            help="Set the name of the resulting ISO (and other build results)",
+        )
+        subparser.add_argument(
+            "-I",
+            type=arg_absolute_path,
+            dest="chroot_install_src_directory",
+            metavar="CHROOT_INSTALL_DIRECTORY",
+            help="Directory which provides files that should become part of the chroot/ISO",
+        )
+        subparser.add_argument(
+            "-r",
+            type=str,
+            dest="release_name",
+            metavar="RELEASE_NAME",
+            default="grml-live rocks",
+            help="Set the grml release name",
+        )
+        subparser.add_argument(
+            "-R",
+            dest="is_release",
+            action="store_false",
+            default=True,
+            help="Skip applying the RELEASE class and cleanup",
+        )
+        subparser.add_argument(
+            "-s",
+            type=arg_key_str,
+            dest="debian_suite",
+            metavar="SUITE",
+            default="testing",
+            help="Debian suite/release, like: stable, testing, unstable",
+        )
+        subparser.add_argument("--secure-boot", action="store_true", help="Enable Secure Boot using Debian method")
+        subparser.add_argument(
+            "-v",
+            type=arg_key_str,
+            dest="grml_version",
+            metavar="VERSION_NUMBER",
+            default="0.0.1",
+            help="Set the grml version number",
+        )
 
-    parser.add_argument(
-        "-d",
-        type=arg_key_str,
-        dest="date",
-        default=str(source_date_epoch_dt.strftime("%Y-%m-%d")),
-        metavar="DATE",
-        help="Use specified date instead of build time as date of release",
-    )
-    parser.add_argument(
-        "-D",
-        type=arg_absolute_path,
-        dest="config_dir",
-        metavar="CONFIGDIR",
-        default=default_paths.config_dir,
-        help="Use specified configuration directory",
-    )
-    parser.add_argument(
-        "-e",
-        type=arg_absolute_path,
-        dest="extract_iso_name",
-        metavar="EXTRACT_ISO_NAME",
-        help="Extract ISO and squashfs contents from EXTRACT_ISO_NAME",
-    )
-    parser.add_argument("-F", action="store_true", dest="force", help="Force execution without prompting")
-    parser.add_argument(
-        "-g",
-        type=arg_key_str,
-        dest="grml_name",
-        metavar="GRML_NAME",
-        default="grml",
-        help="Set the grml flavour name",
-    )
-    parser.add_argument(
-        "-i",
-        type=arg_key_str,
-        dest="iso_name",
-        metavar="ISO_NAME",
-        help="Set the name of the resulting ISO (and other build results)",
-    )
-    parser.add_argument(
-        "-I",
-        type=arg_absolute_path,
-        dest="chroot_install_src_directory",
-        metavar="CHROOT_INSTALL_DIRECTORY",
-        help="Directory which provides files that should become part of the chroot/ISO",
-    )
-    parser.add_argument(
-        "-o",
-        type=arg_absolute_path,
-        dest="output_directory",
-        metavar="OUTPUT_DIRECTORY",
-        default=str(Path.cwd() / "grml"),
-        help="Main output directory of the build process",
-    )
-    parser.add_argument(
-        "-r",
-        type=str,
-        dest="release_name",
-        metavar="RELEASE_NAME",
-        default="grml-live rocks",
-        help="Set the grml release name",
-    )
-    parser.add_argument(
-        "-R",
-        dest="is_release",
-        action="store_false",
-        default=True,
-        help="Skip applying the RELEASE class and cleanup",
-    )
-    parser.add_argument(
-        "-s",
-        type=arg_key_str,
-        dest="debian_suite",
-        metavar="SUITE",
-        default="testing",
-        help="Debian suite/release, like: stable, testing, unstable",
-    )
-    parser.add_argument("--secure-boot", action="store_true", help="Enable Secure Boot using Debian method")
-    parser.add_argument(
-        "-v",
-        type=arg_key_str,
-        dest="grml_version",
-        metavar="VERSION_NUMBER",
-        default="0.0.1",
-        help="Set the grml version number",
-    )
-
-    mirror_options = parser.add_mutually_exclusive_group()
+    mirror_options = parser_image_create.add_mutually_exclusive_group()
     mirror_options.add_argument(
         "--bootstrap-mirror-url",
         type=arg_key_str,
@@ -234,35 +235,26 @@ Please send your bug reports and feedback to the grml-team: http://grml.org/bugs
         help="Wayback machine, build system using Debian archives from specified date",
     )
 
-    build_type_options = parser.add_argument_group("build mode (expert only)").add_mutually_exclusive_group()
-    parser.set_defaults(fai_action=build_facts.FaiAction.DIRINSTALL)
-    build_type_options.add_argument(
-        "-b",
-        action="store_const",
-        dest="fai_action",
-        const=build_facts.FaiAction.RECONFIGURE,
-        help="Build from an existing chroot",
+    parser_image_create.add_argument(
+        "output_directory",
+        type=arg_absolute_path,
+        metavar="OUTPUT_DIRECTORY",
+        default=str(Path.cwd() / "grml"),
+        help="Build result will be stored in this directory",
     )
-    build_type_options.add_argument(
-        "-B",
-        action="store_const",
-        dest="fai_action",
-        const=build_facts.FaiAction.REBUILD,
-        help="Build from an existing chroot without running scripts",
+
+    parser_image_update.add_argument(
+        "source_image",
+        type=arg_absolute_path,
+        metavar="SOURCE_IMAGE",
+        help="Extract chroot contents from SOURCE_IMAGE ISO",
     )
-    build_type_options.add_argument(
-        "-u",
-        action="store_const",
-        dest="fai_action",
-        const=build_facts.FaiAction.SOFTUPDATE,
-        help="Update and build from an existing chroot",
-    )
-    build_type_options.add_argument(
-        "-q",
-        action="store_const",
-        dest="fai_action",
-        const=build_facts.FaiAction.REBUILD_MEDIA,
-        help="Build ISO from an existing squashfs",
+    parser_image_update.add_argument(
+        "output_directory",
+        type=arg_absolute_path,
+        metavar="OUTPUT_DIRECTORY",
+        default=str(Path.cwd() / "grml"),
+        help="Build result will be stored in this directory",
     )
 
     return parser
@@ -272,19 +264,19 @@ def show_build_config(build_config: build_facts.BuildConfiguration):
     print(f"""grml-live [{build_config.grml_live_version}] Build Configuration:
 
     SOURCE_DATE_EPOCH: {build_config.source_date_epoch}
+    Build mode:        {build_config.fai_action}
     FAI classes:       {",".join(build_config.classes)}
     Debian suite:      {build_config.debian_suite}
-    Bootstrap mirror:  {build_config.bootstrap_mirror_url}
-    Wayback date:      {build_config.wayback_date}
     Architecture:      {build_config.arch}
     Output directory:  {build_config.output_directory}""")
-    if build_config.fai_action != build_facts.FaiAction.DIRINSTALL:
-        print(f"    Build mode:        {build_config.fai_action}")
 
-    print(f"""\n  Input files:
+    print(f"""\n  Input:
     Config Space:      {build_config.config_dir}""")
-    if build_config.extract_iso_name:
-        print(f"    Extract ISO:       {build_config.extract_iso_name}")
+    if build_config.grml_live_action == build_facts.GrmlLiveAction.IMAGE_CREATE:
+        print(f"""    Bootstrap mirror:  {build_config.bootstrap_mirror_url}
+        Wayback date:      {build_config.wayback_date}""")
+    else:
+        print(f"    Extract ISO:       {build_config.source_image}")
 
     print(f"""\n  Output identification:
     Distri Name:       {build_config.distri_name}
@@ -388,9 +380,6 @@ def _main(argv: list[str]) -> int:
         default_paths = DefaultGrmlLivePaths.create_for_install()
 
     args = create_argparser(default_paths, source_date_epoch_dt).parse_args(argv[1:])
-    if args.fai_action in (build_facts.FaiAction.REBUILD, build_facts.FaiAction.REBUILD_MEDIA) and args.is_release:
-        print("I: turning off release build treatments")
-        args.is_release = False
 
     # after parse_args, so parse_args can handle --help.
     if os.geteuid() == 0:
@@ -402,7 +391,7 @@ def _main(argv: list[str]) -> int:
 
     try:
         builder_programs = resolve_programs(build_facts.BuilderPrograms)
-        if args.extract_iso_name:
+        if args.grml_live_action == build_facts.GrmlLiveAction.IMAGE_UPDATE:
             extract_programs = resolve_programs(build_facts.ExtractPrograms)
         else:
             extract_programs = None
@@ -417,14 +406,27 @@ def _main(argv: list[str]) -> int:
 
     short_name = strip_unsafe_chars(args.grml_name)
 
-    bootstrap_mirror_url = args.bootstrap_mirror_url
-    if args.wayback_date:
-        bootstrap_mirror_url = f"http://snapshot.debian.org/archive/debian/{args.wayback_date}/"
+    if args.grml_live_action == build_facts.GrmlLiveAction.IMAGE_CREATE:
+        bootstrap_mirror_url: str | None = args.bootstrap_mirror_url
+        if args.wayback_date:
+            bootstrap_mirror_url: str = f"http://snapshot.debian.org/archive/debian/{args.wayback_date}/"
+            wayback_date = args.wayback_date
+        else:
+            wayback_date = None
+    else:
+        bootstrap_mirror_url: str | None = None
+        wayback_date = None
 
     iso_name = args.iso_name
     if not iso_name:
         iso_name = f"{args.grml_name}_{args.grml_version}.iso"
     squashfs_name = f"{args.grml_name}.squashfs"
+
+    output_directory: Path = args.output_directory
+    work_directory_tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
+    work_directory = Path(work_directory_tmp.name)
+    work_directory.chmod(0o755)
+    file_ops.create_dir_useable_for_unshare(work_directory)
 
     try:
         classes = automatic_classes(args.classes, arch, args.debian_suite, args.is_release, args.secure_boot)
@@ -432,24 +434,33 @@ def _main(argv: list[str]) -> int:
         print(f"E: {except_inst}", file=sys.stderr)
         return 1
 
+    # TODO: need fixing/removal when there are other actions than image-create and image-update
+    fai_action = (
+        build_facts.FaiAction.DIRINSTALL
+        if args.grml_live_action == build_facts.GrmlLiveAction.IMAGE_CREATE
+        else build_facts.FaiAction.SOFTUPDATE
+    )
+
     # Once build_config exists, avoid reading anything directly from `args`.
     build_config = build_facts.BuildConfiguration(
         grml_live_version=VERSION,
         cmdline=argv,
-        fai_action=args.fai_action,
+        fai_action=fai_action,
+        grml_live_action=args.grml_live_action,
         arch=arch,
         builder_programs=builder_programs,
         classes=classes,
         config_dir=args.config_dir,
-        output_directory=args.output_directory,
-        grml_cd_dir=args.output_directory / "grml_cd",
-        grml_cd_live_dir=args.output_directory / "grml_cd" / "live",
-        grml_cd_squashfs_dir=args.output_directory / "grml_cd" / "live" / args.grml_name,
-        grml_cd_squashfs_name=args.output_directory / "grml_cd" / "live" / args.grml_name / squashfs_name,
-        grml_chroot_dir=args.output_directory / "grml_chroot",
-        grml_isos_dir=args.output_directory / "grml_isos",
-        grml_logs_dir=args.output_directory / "grml_logs",
-        extract_iso_name=args.extract_iso_name,
+        output_directory=output_directory,
+        work_directory=work_directory,
+        grml_cd_dir=work_directory / "grml_cd",
+        grml_cd_live_dir=work_directory / "grml_cd" / "live",
+        grml_cd_squashfs_dir=work_directory / "grml_cd" / "live" / args.grml_name,
+        grml_cd_squashfs_name=work_directory / "grml_cd" / "live" / args.grml_name / squashfs_name,
+        grml_chroot_dir=work_directory / "grml_chroot",
+        grml_isos_dir=output_directory / "grml_isos",
+        grml_logs_dir=output_directory / "grml_logs",
+        source_image=args.source_image if args.grml_live_action == build_facts.GrmlLiveAction.IMAGE_UPDATE else None,
         extract_programs=extract_programs,
         distri_name=args.distri_name,
         distri_info=args.distri_info,
@@ -466,7 +477,7 @@ def _main(argv: list[str]) -> int:
         is_release=args.is_release,
         date=args.date,
         source_date_epoch=source_date_epoch,
-        wayback_date=args.wayback_date,
+        wayback_date=wayback_date,
         debian_suite=args.debian_suite,
         bootstrap_mirror_url=bootstrap_mirror_url,
         secure_boot=args.secure_boot,
@@ -503,21 +514,23 @@ def _main(argv: list[str]) -> int:
         print('W: Class "NO_ONLINE" NOT requested. Output will NOT be reproducible.')
 
     # Last minute checks before confirmation.
+    # TODO: These checks should not trigger with the image-create/image-update actions;
+    # later when we introduce chroot-... actions, we need the checks again.
     chroot_os_release = Path(build_config.grml_chroot_dir / "etc" / "os-release")
     if build_config.fai_action == build_facts.FaiAction.DIRINSTALL:
         if chroot_os_release.exists():
             print("E: the chroot already exists. Refusing to overwrite it. (Add -u/-b/-B option?)", file=sys.stderr)
             return 20
-        if build_config.extract_iso_name:
+        if build_config.source_image:
             print("E: using an existing ISO precludes building a new chroot. (Add -u/-b/-B option?)", file=sys.stderr)
             return 20
-    elif not build_config.extract_iso_name and not chroot_os_release.exists():
+    elif not build_config.source_image and not chroot_os_release.exists():
         print(
             "E: does not look like you have a working chroot. Updating/building not possible. (Drop -u/-b/-B option?)",
             file=sys.stderr,
         )
         return 20
-    elif build_config.extract_iso_name and chroot_os_release.exists():
+    elif build_config.source_image and chroot_os_release.exists():
         print(
             "E: the chroot already exists. Refusing to overwrite it by extracting an ISO. (Remove -e option?)",
             file=sys.stderr,
@@ -559,6 +572,11 @@ def _main(argv: list[str]) -> int:
                 rc = 1
                 print(f"E: build failed with unhandled exception: {except_inst}", file=sys.stderr)
                 traceback.print_exc()
+            finally:
+                print(f"I: cleaning up chroot: {build_config.grml_chroot_dir}", flush=True)
+                minifai.chroot_delete(build_config.grml_chroot_dir)
+                print(f"I: cleaning up work_directory: {work_directory}", flush=True)
+                work_directory_tmp.cleanup()
 
         if rc == 0:
             print("Successfully finished execution.")
