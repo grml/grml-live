@@ -274,7 +274,7 @@ def show_build_config(build_config: build_facts.BuildConfiguration):
     Config Space:      {build_config.config_dir}""")
     if build_config.grml_live_action == build_facts.GrmlLiveAction.IMAGE_CREATE:
         print(f"""    Bootstrap mirror:  {build_config.bootstrap_mirror_url}
-        Wayback date:      {build_config.wayback_date}""")
+    Wayback date:      {build_config.wayback_date}""")
     else:
         print(f"    Extract ISO:       {build_config.source_image}")
 
