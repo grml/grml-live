@@ -952,7 +952,7 @@ def _build_xorriso_cmdline(
         "-as",
         "mkisofs",
         "-V",
-        f"{config.grml_name} {config.grml_version}",
+        config.iso_volid,
         "-publisher",
         "grml-live | grml.org",
         "-l",

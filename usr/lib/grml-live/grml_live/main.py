@@ -295,6 +295,8 @@ def show_build_config(build_config: build_facts.BuildConfiguration):
         print(f"    Extract ISO:       {build_config.source_image}")
 
     print(f"""\n  Output identification:
+    ISO Filename:      {build_config.iso_name}
+    ISO Volume Label:  {build_config.iso_volid}
     Distri Name:       {build_config.distri_name}
     Distri Info:       "{build_config.distri_info}"
     Grml Name:         {build_config.grml_name}
@@ -485,6 +487,7 @@ def _main(argv: list[str]) -> int:
         short_name=short_name,
         grml_version=args.grml_version,
         iso_name=iso_name,
+        iso_volid=f"{args.grml_name} {args.grml_version}",
         release_name=args.release_name,
         release_info=f"{args.grml_name} {args.grml_version} - Release Codename {args.release_name}",
         hostname=args.hostname,
