@@ -354,7 +354,7 @@ if checkbootparam 'testcd' ; then
     FOUND_FILE=true
     OLD_PWD=$(pwd)
     cd "${LIVECD_PATH}" || continue
-    md5sum -c "${md5}" 2>&1 | tee -a "${logfile}"
+    md5sum -c --quiet "${md5}" 2>&1 | tee -a "${logfile}"
     if [ "${PIPESTATUS[0]}" -eq 0 ] ; then
       ERROR=false
     fi
