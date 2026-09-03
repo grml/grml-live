@@ -1174,7 +1174,6 @@ def build(config: build_facts.BuildConfiguration):
         "DEFAULT_BOOTOPTIONS": config.default_bootoptions,
         "DISTRI_INFO": config.distri_info,
         "DISTRI_NAME": config.distri_name,
-        "GRML_FAI_CONFIG": str(config.config_dir),
         "GRML_LIVE_DEBUG_APT": os.environ.get("GRML_LIVE_DEBUG_APT", ""),
         "GRML_LIVE_VERSION": config.grml_live_version,
         "GRML_NAME": config.grml_name,

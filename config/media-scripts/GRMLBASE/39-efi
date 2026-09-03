@@ -48,10 +48,10 @@ grub_setup() {
         ;;
     esac
 
-    # important: this depends on execution of ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/31-grub
+    # important: this depends on execution of media-scripts/GRMLBASE/31-grub
     if ! [ -r "${target}/${BOOTX64}" ] ; then
       echo "E: Cannot access GRUB UEFI image ${target}/${BOOTX64}, required for Secure Boot support" >&2
-      echo "W: Possible reason is failure to run ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/31-grub" >&2
+      echo "W: Possible reason is failure to run media-scripts/GRMLBASE/31-grub" >&2
       exit 50
     fi
 
