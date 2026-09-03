@@ -14,15 +14,16 @@ grml-live --help
 grml-live image-create [--boot-options DEFAULT_BOOTOPTIONS] [-c CLASS1,CLASS2]
           [--distri-info DISTRI_INFO] [--distri-name DISTRI_NAME] [--hostname HOSTNAME]
           [--username USERNAME] [-d DATE] [-D CONFIGDIR] [-F] [-g GRML_NAME] [-i ISO_NAME]
-          [-I CHROOT_INSTALL_DIRECTORY] [-r RELEASE_NAME] [-R] [-s SUITE] [--secure-boot]
-          [-v VERSION_NUMBER] [--bootstrap-mirror-url BOOTSTRAP_MIRROR_URL | -w DATE]
+          [-I CHROOT_INSTALL_DIRECTORY] [--on-error-shell] [-r RELEASE_NAME] [-R] [-s SUITE]
+          [--secure-boot] [-v VERSION_NUMBER]
+          [--bootstrap-mirror-url BOOTSTRAP_MIRROR_URL | -w DATE]
           OUTPUT_DIRECTORY
 
 grml-live image-update [--boot-options DEFAULT_BOOTOPTIONS] [-c CLASS1,CLASS2]
           [--distri-info DISTRI_INFO] [--distri-name DISTRI_NAME] [--hostname HOSTNAME]
           [--username USERNAME] [-d DATE] [-D CONFIGDIR] [-F] [-g GRML_NAME] [-i ISO_NAME]
-          [-I CHROOT_INSTALL_DIRECTORY] [-r RELEASE_NAME] [-R] [-s SUITE] [--secure-boot]
-          [-v VERSION_NUMBER]
+          [-I CHROOT_INSTALL_DIRECTORY] [--on-error-shell] [-r RELEASE_NAME] [-R] [-s SUITE]
+          [--secure-boot] [-v VERSION_NUMBER]
           SOURCE_IMAGE OUTPUT_DIRECTORY
 
 Description
@@ -159,6 +160,11 @@ Specify name of ISO which will be available inside $OUTPUT_DIRECTORY/grml_isos.
 Specify name of source directory which provides files that should become part of
 the chroot/ISO. Not enabled by default. Note: the files are installed under '/'
 in the chroot so you have to create the rootfs structure on your own.
+
+  --on-error-shell::
+
+On a build failure, start an interactive shell inside the Linux user namespace.
+The shell can be used to inspect the current state of the build chroot, before it is cleaned up by grml-live.
 
   -r **RELEASENAME**::
 
