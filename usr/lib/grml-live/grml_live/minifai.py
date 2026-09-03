@@ -35,14 +35,6 @@ class ProgramStartFailed(Exception):
     pass
 
 
-@dataclass
-class DynamicState:
-    """Holds state that can change in FAI hooks, for example by calling "skiptask"."""
-
-    def __init__(self):
-        self.skip_tasks = set()
-
-
 @dataclass(kw_only=True)
 class ChrootBuildDirectories:
     # xxx_inside is always the path _inside_ the chroot ("relative", if chrooted).
@@ -269,7 +261,6 @@ def install_packages_for_classes(
     classes: list[str],
     helper_tools_paths: list[Path],
     hook_env: dict,
-    dynamic_state: DynamicState,
     unshared_service: UnsharedService,
 ):
     """Run equivalent of "instsoft" task: set debconf selections and install packages listed in package lists."""
@@ -328,21 +319,12 @@ def show_env(log_text: str, env):
     print()
 
 
-def do_skiptask(dynamic_state: DynamicState, skiptask_args: list[str]) -> int:
-    if not skiptask_args:
-        return 0
-    print(f"I: Requesting skipping of tasks: {' '.join(skiptask_args)}")
-    dynamic_state.skip_tasks.update(skiptask_args)
-    return 0
-
-
 def helper_socket_thread(
     tempdir: Path,
     conf_dir: Path,
     chroot_dir: Path,
     classes: list[str],
     exit_event: Event,
-    dynamic_state: DynamicState,
     unshared_service: UnsharedService,
 ):
     address_family = socket.AF_UNIX
@@ -378,8 +360,6 @@ def helper_socket_thread(
                     rc = unshared_service.run(
                         unshared_helper.copy_media_files(conf_dir, chroot_dir, " ".join(classes), " ".join(req[1:]))
                     )
-                elif req[0] == "skiptask":
-                    rc = do_skiptask(dynamic_state, req[1:])
                 else:
                     print("W: socket thread: request not understood:", repr(orig_req))
 
@@ -401,9 +381,7 @@ def write_helper_tool(tools_path: Path, tool_name: str, body: str):
 
 
 @contextlib.contextmanager
-def helper_tools(
-    conf_dir: Path, chroot_dir: Path, classes: list[str], dynamic_state: DynamicState, unshared_service: UnsharedService
-):
+def helper_tools(conf_dir: Path, chroot_dir: Path, classes: list[str], unshared_service: UnsharedService):
     with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tempdir_name:
         tempdir = Path(tempdir_name)
 
@@ -430,7 +408,6 @@ exit 0
         )
 
         (tempdir / "fcopy").symlink_to(tempdir / "grml-live-command")
-        (tempdir / "skiptask").symlink_to(tempdir / "grml-live-command")
 
         write_helper_tool(
             tempdir,
@@ -475,7 +452,7 @@ exec chroot "$CHROOT_DIR" "$@"
         exit_event = Event()
         thread = Thread(
             target=helper_socket_thread,
-            args=(tempdir, conf_dir, chroot_dir, classes, exit_event, dynamic_state, unshared_service),
+            args=(tempdir, conf_dir, chroot_dir, classes, exit_event, unshared_service),
             daemon=False,
         )
         thread.start()
@@ -651,16 +628,14 @@ def extract_iso(config: build_facts.BuildConfiguration):
         raise
 
 
-def should_skip_task(dynamic_state: DynamicState, task: str) -> bool:
-    if task in dynamic_state.skip_tasks:
-        print(f'I: Skipping FAI task "{task}", as dynamically requested')
+def should_skip_task(skip_tasks: list[str], task: str) -> bool:
+    if task in skip_tasks:
+        print(f'I: Skipping FAI task "{task}", as requested')
         return True
     return False
 
 
-def task_updatebase(chroot_dir: Path, dynamic_state: DynamicState):
-    if should_skip_task(dynamic_state, "updatebase"):
-        return
+def task_updatebase(chroot_dir: Path):
     run_chrooted(chroot_dir, ["apt", "-oapt::cmd::disable-script-warning=1", "--error-on=any", "update", "-q"])
 
 
@@ -1034,7 +1009,6 @@ def _run_tasks(
     skip_tasks: list[str],
     unshared_service: UnsharedService,
 ) -> int:
-    dynamic_state = DynamicState()
     chroot_directories = _create_chroot_dirs(config.grml_chroot_dir, unshared_service)
     file_ops.create_dir_useable_for_unshare(config.grml_cd_dir)
 
@@ -1054,8 +1028,6 @@ def _run_tasks(
         )
     )
 
-    do_skiptask(dynamic_state, skip_tasks)
-
     env: dict[str, str] = {
         "GRML_LIVE_CONFIG": str(grml_live_config_chroot),
         "GRML_LIVE_BUILDDIR": chroot_directories.build_dir_inside,
@@ -1071,7 +1043,7 @@ def _run_tasks(
 
     try:
         with helper_tools(
-            config.config_dir, config.grml_chroot_dir, config.classes, dynamic_state, unshared_service
+            config.config_dir, config.grml_chroot_dir, config.classes, unshared_service
         ) as helper_tools_path:
             class_helper_tools_path = install_class_helper_tools(
                 config.config_dir, chroot_directories.build_dir, config.classes, unshared_service
@@ -1089,20 +1061,20 @@ def _run_tasks(
                 )
 
             with policy_rcd(config.grml_chroot_dir, unshared_service):
-                task_updatebase(config.grml_chroot_dir, dynamic_state)
+                if not should_skip_task(skip_tasks, "updatebase"):
+                    task_updatebase(config.grml_chroot_dir)
 
-                if not should_skip_task(dynamic_state, "instsoft"):
+                if not should_skip_task(skip_tasks, "instsoft"):
                     install_packages_for_classes(
                         config.config_dir,
                         config.grml_chroot_dir,
                         config.classes,
                         helper_tools_paths,
                         hook_env,
-                        dynamic_state,
                         unshared_service,
                     )
 
-            if not should_skip_task(dynamic_state, "configure"):
+            if not should_skip_task(skip_tasks, "configure"):
                 for class_name in config.classes:
                     run_class_scripts(
                         "scripts", config.config_dir, config.grml_chroot_dir, class_name, helper_tools_paths, env
@@ -1115,11 +1087,11 @@ def _run_tasks(
                         unshared_service,
                     )
 
-            if not should_skip_task(dynamic_state, "squashfs"):
+            if not should_skip_task(skip_tasks, "squashfs"):
                 # mksquashfs is the last thing that should need the userns.
                 mksquashfs(config, unshared_service)
 
-            if not should_skip_task(dynamic_state, "build"):
+            if not should_skip_task(skip_tasks, "build"):
                 for class_name in config.classes:
                     run_class_scripts(
                         "media-scripts", config.config_dir, config.grml_chroot_dir, class_name, helper_tools_paths, env
