@@ -68,7 +68,7 @@ Debconf Preseeding::
   Debconf configurations in `config/debconf/` are applied before package installation.
 
 Helper Tools::
-  The `ifclass`, `fcopy`, and `skiptask` commands are available in scripts with the same
+  The `fcopy` and `ifclass` commands are available in scripts with the same
   basic functionality.
 
 Differences from FAI
