@@ -81,8 +81,6 @@ PACKAGES install AMD64
 grub-pc
 grub-efi-amd64-bin
 grub-efi-ia32-bin
-pxelinux
-syslinux syslinux-common syslinux-utils
 
 PACKAGES install ARM64
 grub-efi-arm64-bin
