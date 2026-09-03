@@ -12,7 +12,10 @@ DEBUG="/dev/null"
 KERNEL="$(uname -r)"
 umask 022
 
+# initramfs layout:
 [ -d /run/live/medium ] && export LIVECD_PATH='/run/live/medium'
+# dracut layout:
+[ -d /run/initramfs/live ] && export LIVECD_PATH='/run/initramfs/live'
 
 # Ignore these signals in non-interactive mode: INT, TERM, SEGV
 [ -z "$PS1" ] && trap "" INT TERM SEGV

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Filename:      ${GRML_FAI_CONFIG}/media-scripts/GRMLBASE/20-bootid
-# Purpose:       Install bootid and bootfile files
+# Purpose:       Install bootfile files
 # Authors:       grml-team (grml.org)
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2 or any later version.
@@ -16,14 +16,6 @@ target=${target:?}
 
 media_dir="${target}/${GRML_LIVE_MEDIADIR}"
 mkdir -p "${media_dir}"/conf
-
-echo "I: Generating /conf/bootid.txt with: ${BOOTID}"
-echo "$BOOTID" > "${media_dir}"/conf/bootid.txt
-
-# every recent Grml ISO ships a /conf/bootid.txt, though GRUB might find
-# the /conf/bootid.txt of a different (Grml) ISO than the one that's
-# supposed to be running. To mitigate this, we create a unique filename
-# and place that on the ISO.
 
 echo "I: Generating /conf/bootfile* files"
 rm -f "${media_dir}"/conf/bootfile*  # ensure we don't leave any old(er) files behind

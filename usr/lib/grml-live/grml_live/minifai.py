@@ -759,7 +759,6 @@ def mksquashfs(
     unshared_service: UnsharedService,
 ):
     mksquashfs_cmdline = _build_mksquashfs_cmdline(config)
-    filesystem_module_file = config.grml_cd_squashfs_dir / "filesystem.module"
 
     logkit.info(f"Building squashfs {config.grml_cd_squashfs_name} ...")
     # We must run mksquashfs inside the userns so it sees the correct ownership info,
@@ -769,8 +768,6 @@ def mksquashfs(
             unshared_helper.ensure_dir(config.grml_cd_live_dir),
             unshared_helper.ensure_dir(config.grml_cd_squashfs_dir),
             unshared_helper.run_program(mksquashfs_cmdline),
-            unshared_helper.write_file_text(filesystem_module_file, config.grml_cd_squashfs_name.name),
-            unshared_helper.chown(filesystem_module_file, str(UNSHARE_UID), str(UNSHARE_GID)),
             unshared_helper.chown(config.grml_cd_squashfs_name, str(UNSHARE_UID), str(UNSHARE_GID)),
             unshared_helper.chown(config.grml_cd_squashfs_dir, str(UNSHARE_UID), str(UNSHARE_GID)),
             unshared_helper.chown(config.grml_cd_live_dir, str(UNSHARE_UID), str(UNSHARE_GID)),
@@ -1140,6 +1137,7 @@ def build(config: build_facts.BuildConfiguration):
         "GRML_LIVE_VERSION": config.grml_live_version,
         "GRML_NAME": config.grml_name,
         "HOSTNAME": config.hostname,
+        "ISO_VOLID": config.iso_volid,
         "RELEASENAME": config.release_name,
         "RELEASE_INFO": config.release_info,
         "SECURE_BOOT": "debian" if config.secure_boot else "disable",
