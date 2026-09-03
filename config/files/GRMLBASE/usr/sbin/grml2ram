@@ -69,8 +69,13 @@ case "$*" in -f|--force)
   ewarn "Forcing copy process for grml-image (${GRMLSIZE}kB) as requested via force option." ; eend 0
    ;;
   *)
-   if test "$RAM" -lt "$GRMLSIZE" ; then
-      eerror "Sorry, not enough free RAM (${RAM}kB) available for grml-image (${GRMLSIZE}kB)." ; eend 1
+   if [ "${RAM}" -lt "${GRMLSIZE}" ]; then
+      eerror "Sorry, not enough free RAM (${RAM}kB) available for copying live system (${GRMLSIZE}kB)." ; eend 1
+      exit 1
+   fi
+   tmpfs_space=$(df --output=avail /tmp | tail -1)
+   if [ "${tmpfs_space}" -lt "${GRMLSIZE}" ] ; then
+      eerror "Sorry, not enough free space in /tmp (${tmpfs_space}kB) available for copying live system (${GRMLSIZE}kB)." ; eend 1
       exit 1
    fi
    ;;
