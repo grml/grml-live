@@ -152,6 +152,7 @@ def chrooted_apt_install(chroot_dir: Path, install_list: list[str]):
     args = [
         "apt",
         "-oapt::cmd::disable-script-warning=1",
+        "-oDpkg::Use-Pty=0",
         "install",
         "-q",
         "-y",
