@@ -578,6 +578,9 @@ def _main(argv: list[str]) -> int:
             finally:
                 if (rc != 0) and args.on_error_shell:
                     logkit.error("build failed, spawning unshared(!) bash for you to inspect build files")
+                    print(f"Work directory is: {build_config.work_directory}")
+                    print(f"Chroot directory is: {build_config.grml_chroot_dir}")
+                    print(f'Use "/usr/sbin/chroot {build_config.grml_chroot_dir}" to enter the chroot if needed')
                     try:
                         minifai.run_x(["/bin/bash", "-i"], unshared=True, cwd=work_directory)
                     except Exception as except_inst:
