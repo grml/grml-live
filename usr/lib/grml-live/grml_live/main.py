@@ -188,6 +188,12 @@ Please send your bug reports and feedback to the grml-team: http://grml.org/bugs
             help="Directory which provides files that should become part of the chroot/ISO",
         )
         subparser.add_argument(
+            "--on-error-shell",
+            action="store_true",
+            default=False,
+            help="Start a shell on build failure",
+        )
+        subparser.add_argument(
             "-r",
             type=str,
             dest="release_name",
@@ -576,6 +582,13 @@ def _main(argv: list[str]) -> int:
                 print(f"E: build failed with unhandled exception: {except_inst}", file=sys.stderr)
                 traceback.print_exc()
             finally:
+                if (rc != 0) and args.on_error_shell:
+                    print("E: build failed, spawning unshared(!) bash for you to inspect build files")
+                    try:
+                        minifai.run_x(["/bin/bash", "-i"], unshared=True, cwd=work_directory)
+                    except Exception as except_inst:
+                        print(f"I: Sorry, the shell failed: {except_inst}")
+                        traceback.print_exc()
                 print(f"I: cleaning up chroot: {build_config.grml_chroot_dir}", flush=True)
                 minifai.chroot_delete(build_config.grml_chroot_dir)
                 print(f"I: cleaning up work_directory: {work_directory}", flush=True)
