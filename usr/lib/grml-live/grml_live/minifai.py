@@ -540,7 +540,7 @@ def read_envvars_for_classes(conf_dir: Path, classes: list[str]) -> dict[str, st
 
 def install_base(conf_dir: Path, chroot_dir: Path, classes: list[str], debian_suite: str, mirror_url: str):
     """Install Debian base system from given mirror"""
-    print(f'I: Installing Debian base system for suite "{debian_suite}" using mmdebstrap')
+    print(f'I: Installing Debian base system for suite "{debian_suite}" using mmdebstrap ...')
 
     # Work around APT bug: http://bugs.debian.org/1092164
     included_packages = ["netbase"]
@@ -740,7 +740,7 @@ def install_extra_chroot_files(
     unshared_service: UnsharedService,
 ):
     # If chroot_install_source_dir is set, then grml_live.main checked its usable.
-    print(f"I: Copying local files to chroot from {chroot_install_source_dir!s}")
+    print(f"I: Copying local files to chroot from {chroot_install_source_dir!s} ...")
     unshared_service.run(
         unshared_helper.run_program(
             [
@@ -786,6 +786,7 @@ def mksquashfs(
     mksquashfs_cmdline = _build_mksquashfs_cmdline(config)
     filesystem_module_file = config.grml_cd_squashfs_dir / "filesystem.module"
 
+    print(f"I: Building squashfs {config.grml_cd_squashfs_name} ...")
     # We must run mksquashfs inside the userns so it sees the correct ownership info,
     # but we want the resulting file to be owned by the user outside of the userns.
     unshared_service.batch(
@@ -803,8 +804,6 @@ def mksquashfs(
 
 
 def create_on_media_md5sums(grml_cd_dir: Path, grml_name: str):
-    print("I: preparing md5sums file")
-
     grml_dir = grml_cd_dir / "GRML"
     grml_dir.mkdir(exist_ok=True)  # media-scripts may have created it
     named_grml_dir = grml_dir / grml_name
@@ -815,10 +814,9 @@ def create_on_media_md5sums(grml_cd_dir: Path, grml_name: str):
         filename.relative_to(grml_cd_dir) for filename in sorted(grml_cd_dir.rglob("*")) if not filename.is_dir()
     ]
 
+    print(f"I: Building testcd md5sums {md5sums_file} ...")
     with md5sums_file.open("wb") as output:
         run_x(["/bin/md5sum", *filenames], cwd=grml_cd_dir, stdout=output)
-
-    run_x(["/bin/ls", "-la", md5sums_file])
 
 
 def create_sha256_checksum_file(file_to_checksum: Path):
@@ -840,8 +838,8 @@ def create_netboot_package(
     output_netboot_dir = output_dir / "netboot"
     output_netboot_dir.mkdir(exist_ok=True)  # some workflows accept that this already exists
     output_name = output_netboot_dir / (output_basename + ".tar")
-    print(f"I: building netboot tar: {output_name.name}")
 
+    print(f"I: Building netboot package {output_name.name} ...")
     run_x(
         [
             "tar",
@@ -870,8 +868,8 @@ def create_sources_package(
     """
     output_basename = iso_name.rpartition(".iso")[0] + "-sources"
     output_name = output_dir / (output_basename + ".tar")
-    print(f"I: building sources tar: {output_name.name}")
 
+    print(f"I: Building sources tarball {output_name.name} ...")
     run_x(
         [
             "tar",
@@ -998,7 +996,7 @@ def create_media(
     config: build_facts.BuildConfiguration,
 ):
     config.grml_isos_dir.mkdir(exist_ok=True)  # some workflows accept that this already exists
-    print("I: Generating ISO file ...")
+    print(f"I: Building ISO image {config.grml_isos_dir / config.iso_name} ...")
     run_x(_build_xorriso_cmdline(config))
     create_sha256_checksum_file(config.grml_isos_dir / config.iso_name)
 
@@ -1097,7 +1095,7 @@ def _run_tasks(
                         "media-scripts", config.config_dir, config.grml_chroot_dir, class_name, helper_tools_paths, env
                     )
 
-                print("I: installing media files from chroot build")
+                print("I: Installing media files from chroot build ...")
                 run_x(
                     [
                         "/bin/cp",
