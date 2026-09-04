@@ -275,7 +275,7 @@ def install_packages_for_classes(
         unshared_helper.write_file_text(
             (chroot_dir / "grml-live" / "log" / "install_packages.list"),
             (
-                "# List of packages installed by minifai\n"
+                "# List of packages installed by grml-live\n"
                 + ("\n".join(full_package_list.list_for_arch(dpkg_architecture)))
                 + "\n"
             ),
@@ -365,13 +365,13 @@ if [ "$PN" = "grml-live-command" ]; then
   PN="$1"
   shift
 fi
-echo "D: minifai $PN: $(date +%FT%T) requesting $@"
+echo "D: grml-live $PN: $(date +%FT%T) requesting $@"
 RC=$(echo $PN "$@" | socat -t3600 - UNIX-CONNECT:{tempdir}/sock,forever)
 if [ -z "$RC" ]; then
-  echo "E: minifai $PN: $(date +%FT%T) got no reply from server"
+  echo "E: grml-live $PN: $(date +%FT%T) got no reply from server"
   exit 119
 elif [ "$RC" != "0" ]; then
-  echo "E: minifai $PN: server sent error code $RC"
+  echo "E: grml-live $PN: server sent error code $RC"
   exit "$RC"
 fi
 exit 0
@@ -436,10 +436,10 @@ exec chroot "$CHROOT_DIR" "$@"
 
 @contextlib.contextmanager
 def policy_rcd(chroot_dir: Path, unshared_service: UnsharedService):
-    marker = "!MINIFAI!"
+    marker = "!GRML-LIVE!"
     print("I: Installing temporary policy-rc.d")
     program = chroot_dir / "usr" / "sbin" / "policy-rc.d"
-    contents = f"#!/bin/sh\n# Installed by grml-live minifai {marker}\nexit 101\n"
+    contents = f"#!/bin/sh\n# Installed by grml-live {marker}\nexit 101\n"
     unshared_service.run(unshared_helper.write_file_text(program, contents, executable=True))
 
     try:
@@ -984,8 +984,8 @@ def _run_tasks(
     # Create a file in log_dir, so grml-live does not complain.
     unshared_service.run(
         unshared_helper.write_file_text(
-            (chroot_directories.log_dir / "minifai"),
-            ("This chroot was created by grml-live minifai. Not all FAI features are supported.\n"),
+            (chroot_directories.log_dir / "grml-live"),
+            ("This chroot was created by grml-live.\n"),
         )
     )
 
@@ -1158,7 +1158,7 @@ def build(config: build_facts.BuildConfiguration):
                 extract_iso(config)
             else:
                 rc = 1
-                raise NotImplementedError(f"Action {config.grml_live_action} is not implemented in minifai")
+                raise NotImplementedError(f"Action {config.grml_live_action} is not implemented")
 
             if not rc:
                 rc = _run_tasks(config, grml_live_config, skiptasks, unshared_service)
@@ -1166,11 +1166,11 @@ def build(config: build_facts.BuildConfiguration):
         # assume exception site already printed relevant info
         rc = 3
     except Exception:
-        print(f"E: {now_for_log()} minifai main caught fatal exception")
+        print(f"E: {now_for_log()} grml-live builder main caught fatal exception")
         traceback.print_exc()
         rc = 2
 
-    print(f"I: minifai exiting with exit code {rc}")
+    print(f"I: grml-live builder exiting with exit code {rc}")
     return rc
 
 
