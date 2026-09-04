@@ -587,7 +587,7 @@ def install_base(conf_dir: Path, chroot_dir: Path, classes: list[str], debian_su
         args.insert(1, f"--aptopt={APT_DEBUG_ACQUIRE}")
         args.insert(1, "--chrooted-customize-hook=rm /etc/apt/apt.conf.d/99mmdebstrap")
     if os.environ.get("APT_PROXY", "") != "":
-        args.insert(1, "--aptopt='Acquire::http { Proxy \"" + os.environ["APT_PROXY"] + "\"; }'")
+        args.insert(1, '--aptopt=Acquire::http { Proxy "' + os.environ["APT_PROXY"] + '"; }')
 
     run_x(args)
 
