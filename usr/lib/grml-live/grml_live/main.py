@@ -114,9 +114,7 @@ Please send your bug reports and feedback to the grml-team: https://grml.org/bug
 """,
     )
 
-    parser.add_argument(
-        "-h", "--help", action="help", default=argparse.SUPPRESS, help="Show this help message and exit"
-    )
+    parser.add_argument("-h", "--help", action="help", default=argparse.SUPPRESS, help=argparse.SUPPRESS)
 
     subparsers = parser.add_subparsers(required=True, help="subcommand help")
     parser_image_create = subparsers.add_parser("image-create", help="Run a complete build from scratch")
