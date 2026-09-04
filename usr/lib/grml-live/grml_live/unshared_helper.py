@@ -120,8 +120,14 @@ def chown(path: Path | str, numeric_owner: str, numeric_group: str):
 def run_program(args, **kwargs):
     """Run program. Output goes to stdout/stderr. Caller needs to check returncode."""
     kwargs["stdin"] = subprocess.DEVNULL
-    print(f"D: run_program: {args=}")
-    return subprocess.run(args, check=False, **kwargs).returncode
+    args_str = '" "'.join(args)
+    print(f'D: Running unshared: "{args_str}"', flush=True)
+    try:
+        returncode = subprocess.run(args, check=False, **kwargs).returncode
+    finally:
+        sys.stdout.flush()
+        sys.stderr.flush()
+    return returncode
 
 
 @_operation
@@ -138,8 +144,8 @@ def _parse_and_run(ops_stream: list[dict], operations: dict) -> int:
         op_name = op["op"]
         args = op["args"]
         kwargs = op["kwargs"]
+        sys.stdout.flush()
         try:
-            print(f"I: unshared_helper executing {op_name} {' '.join(str(arg) for arg in args)} {kwargs}", flush=True)
             rc = operations[op_name](*args, **kwargs)
         except Exception as except_inst:
             print(f"E: {op_name} failed: {except_inst}", flush=True)
@@ -203,7 +209,7 @@ def _socket_read_framed_message(sock) -> str:
 
 
 def _server(socket_path, operations) -> int:
-    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM | socket.SOCK_CLOEXEC) as sock:
         sock.connect(socket_path)
         while True:
             try:

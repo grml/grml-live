@@ -3,6 +3,8 @@ import os
 import stat
 from pathlib import Path
 
+from . import logkit
+
 
 def _self_and_parents(path: Path) -> tuple[Path, ...]:
     """path followed by all of its parents, deepest first."""
@@ -36,7 +38,7 @@ def clamp_to_source_date_epoch(root_dir: Path | str):
     epoch = int(source_date_epoch)
     dev0 = root_dir.lstat().st_dev
 
-    print(f"I: Clamping mtimes in {root_dir} to {epoch}")
+    logkit.info(f"Clamping mtimes in {root_dir} to {epoch}")
     os.utime(root_dir, (epoch, epoch), follow_symlinks=False)
 
     for dirpath, dirnames, filenames in os.walk(root_dir, followlinks=False):
