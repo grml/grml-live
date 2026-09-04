@@ -17,16 +17,17 @@ _TRANS_UNSAFE_CHARS = str.maketrans("", "", ",./;- ")
 
 @dataclasses.dataclass
 class DefaultGrmlLivePaths:
-    config_dir: Path  # fai space
+    config_dir: Path
+    local_help: Path
 
     @classmethod
     def create_for_install(cls):
-        return cls(Path("/usr/share/grml-live/config"))
+        return cls(Path("/usr/share/grml-live/config"), Path("/usr/share/doc/grml-live"))
 
     @classmethod
     def create_for_source_checkout(cls, source_dir: Path):
         source_dir = source_dir.resolve()
-        return cls(source_dir / "config")
+        return cls(source_dir / "config", source_dir / "docs")
 
 
 def resolve_programs(programs_class):
@@ -95,21 +96,21 @@ def create_argparser(
         formatter_class=GrmlLiveHelpFormatter,
         add_help=False,
         description="Build tool for Grml(-based) Linux Live-ISOs",
-        epilog="""
+        epilog=f"""
 Usage examples:
 
   %(prog)s image-create
   %(prog)s image-create -c GRML_FULL my-grml-output-dir
   %(prog)s image-create -c GRML_FULL -i grml_0.0-1.iso -v 0.0-1 my-grml-output-dir
-  %(prog)s image-create -c GRML_FULL -s stable -r 'grml-ftw' my-grml-output-dir
+  %(prog)s image-create -c GRML_FULL -s stable -r grml-ftw my-grml-output-dir
 
 More details:
 
-  man grml-live
-  /usr/share/doc/grml-live/grml-live.html
-  http://grml.org/grml-live/
+  https://grml.org/grml-live/
+  {default_paths.local_help}
 
-Please send your bug reports and feedback to the grml-team: http://grml.org/bugs/
+
+Please send your bug reports and feedback to the grml-team: https://grml.org/bugs/
 """,
     )
 
