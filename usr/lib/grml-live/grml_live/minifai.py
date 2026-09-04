@@ -584,10 +584,10 @@ def extract_iso(config: build_facts.BuildConfiguration):
 
         squashfs_files = sorted(config.grml_chroot_dir.glob("*/*.squashfs"))
         if not squashfs_files:
-            raise RuntimeError(f"Could not find any squashfs files in ISO {config.extract_iso_name}")
+            raise RuntimeError(f"Could not find any squashfs files in ISO {config.source_image}")
         if len(squashfs_files) != 1:
             found_files = " ".join([str(filename) for filename in squashfs_files])
-            raise RuntimeError(f"Found more than one squashfs file in ISO {config.extract_iso_name}: {found_files}")
+            raise RuntimeError(f"Found more than one squashfs file in ISO {config.source_image}: {found_files}")
         run_x(
             [config.extract_programs.unsquashfs, "-f", "-d", config.grml_chroot_dir, squashfs_files[0]], unshared=True
         )
