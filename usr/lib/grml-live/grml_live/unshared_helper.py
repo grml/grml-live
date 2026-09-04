@@ -120,8 +120,14 @@ def chown(path: Path | str, numeric_owner: str, numeric_group: str):
 def run_program(args, **kwargs):
     """Run program. Output goes to stdout/stderr. Caller needs to check returncode."""
     kwargs["stdin"] = subprocess.DEVNULL
-    print(f"D: run_program: {args=}")
-    return subprocess.run(args, check=False, **kwargs).returncode
+    args_str = '" "'.join(args)
+    print(f'D: Running unshared: "{args_str}"', flush=True)
+    try:
+        returncode = subprocess.run(args, check=False, **kwargs).returncode
+    finally:
+        sys.stdout.flush()
+        sys.stderr.flush()
+    return returncode
 
 
 @_operation
