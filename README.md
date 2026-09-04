@@ -7,7 +7,7 @@ The build system is based on the class concept of FAI ([Fully Automatic Installa
 
 Building a Debian based live system is as simple as running:
 
-    $ grml-live -s sid -c GRML_FULL
+    $ grml-live image-create -s sid -c GRML_FULL ./OUTPUT_DIRECTORY
 
 You can fully customize the build process, including adding
 additional software and your very own configuration files.
@@ -20,4 +20,4 @@ all dependencies are installed (best see `debian/control` for a list).
 Example:
 
     $ ln -s ../../../grml-live-grml/templates/arch config/media-files/GRMLBASE/  # optional
-    $ ./grml-live -s sid -c GRML_FULL ./my-grml-build
+    $ ./grml-live image-create -s sid -c GRML_FULL ./my-grml-build
