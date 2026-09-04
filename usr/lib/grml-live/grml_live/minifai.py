@@ -1,7 +1,6 @@
 # This is a spaghetti-code minimal reimplementation of the FAI API surface grml-live needs,
 # for building Grml Live Linux. If you have additional API surface needs, please contribute.
-# Please beware that this implementation is an interim step, and we may or may not continue
-# with the FAI API.
+# Please be aware that we will gradually move away from FAI compatibility.
 #
 import contextlib
 import datetime
@@ -27,7 +26,7 @@ UNSHARE_UID = 65536
 UNSHARE_GID = 65536
 
 
-class FaiScriptFailed(Exception):
+class ClassScriptFailed(Exception):
     pass
 
 
@@ -203,7 +202,7 @@ def run_script(chroot_dir: Path, script: Path, helper_tools_paths: list[Path], e
     proc = run_x([script], check=False, unshared=True, env=env, stdin=subprocess.DEVNULL)
     if proc.returncode != 0:
         print(f"E: Script {script} failed with exitcode {proc.returncode} - aborting.")
-        raise FaiScriptFailed()
+        raise ClassScriptFailed()
     print(f"I: Finished script {script}.")
 
 
@@ -601,7 +600,7 @@ def extract_iso(config: build_facts.BuildConfiguration):
 
 def should_skip_task(skip_tasks: list[str], task: str) -> bool:
     if task in skip_tasks:
-        print(f'I: Skipping FAI task "{task}", as requested')
+        print(f'I: Skipping grml-live task "{task}", as requested')
         return True
     return False
 
@@ -1162,7 +1161,7 @@ def build(config: build_facts.BuildConfiguration):
 
             if not rc:
                 rc = _run_tasks(config, grml_live_config, skiptasks, unshared_service)
-    except (ClassFileParsingFailed, FaiScriptFailed, ProgramStartFailed):
+    except (ClassFileParsingFailed, ClassScriptFailed, ProgramStartFailed):
         # assume exception site already printed relevant info
         rc = 3
     except Exception:
