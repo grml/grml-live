@@ -275,8 +275,7 @@ def show_build_config(build_config: build_facts.BuildConfiguration):
     Debian suite:      {build_config.debian_suite}
     Architecture:      {build_config.arch}
     Output directory:  {build_config.output_directory}
-    Work directory:    {build_config.work_directory}
-    """)
+    Work directory:    {build_config.work_directory}""")
 
     print(f"""\n  Input:
     Config Space:      {build_config.config_dir}""")
