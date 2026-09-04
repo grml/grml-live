@@ -290,7 +290,7 @@ def show_env(log_text: str, env):
 
 
 def helper_socket_thread(
-    tempdir: Path,
+    socket_path: Path,
     conf_dir: Path,
     chroot_dir: Path,
     classes: list[str],
@@ -302,7 +302,7 @@ def helper_socket_thread(
     request_queue_size = 5
 
     listen_socket = socket.socket(address_family, socket_type)
-    listen_socket.bind(f"{tempdir}/sock")
+    listen_socket.bind(socket_path)
     listen_socket.listen(request_queue_size)
     listen_socket.settimeout(1)
 
@@ -354,6 +354,7 @@ def write_helper_tool(tools_path: Path, tool_name: str, body: str):
 def helper_tools(conf_dir: Path, chroot_dir: Path, classes: list[str], unshared_service: UnsharedService):
     with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tempdir_name:
         tempdir = Path(tempdir_name)
+        socket_path = f"{tempdir}/glapisock"
 
         write_helper_tool(
             tempdir,
@@ -365,7 +366,7 @@ if [ "$PN" = "grml-live-command" ]; then
   shift
 fi
 echo "D: grml-live $PN: $(date +%FT%T) requesting $@"
-RC=$(echo $PN "$@" | socat -t3600 - UNIX-CONNECT:{tempdir}/sock,forever)
+RC=$(echo $PN "$@" | socat -t3600 - UNIX-CONNECT:{socket_path},forever)
 if [ -z "$RC" ]; then
   echo "E: grml-live $PN: $(date +%FT%T) got no reply from server"
   exit 119
@@ -422,7 +423,7 @@ exec chroot "$CHROOT_DIR" "$@"
         exit_event = Event()
         thread = Thread(
             target=helper_socket_thread,
-            args=(tempdir, conf_dir, chroot_dir, classes, exit_event, unshared_service),
+            args=(socket_path, conf_dir, chroot_dir, classes, exit_event, unshared_service),
             daemon=False,
         )
         thread.start()
@@ -464,7 +465,7 @@ def start_unshared_service():
         tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tempdir,
         socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as listen_socket,
     ):
-        socket_path = str(Path(tempdir) / "sock")
+        socket_path = str(Path(tempdir) / "glusnhsock")
         listen_socket.bind(socket_path)
         listen_socket.listen(1)  # queue size
 
