@@ -118,7 +118,6 @@ Please send your bug reports and feedback to the grml-team: https://grml.org/bug
         "-h", "--help", action="help", default=argparse.SUPPRESS, help="Show this help message and exit"
     )
 
-    # TODO: the names are the old names and are not useful.
     subparsers = parser.add_subparsers(required=True, help="subcommand help")
     parser_image_create = subparsers.add_parser("image-create", help="Run a complete build from scratch")
     parser_image_create.set_defaults(grml_live_action=build_facts.GrmlLiveAction.IMAGE_CREATE)
