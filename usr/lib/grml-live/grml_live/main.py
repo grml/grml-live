@@ -265,8 +265,9 @@ Please send your bug reports and feedback to the grml-team: https://grml.org/bug
 
 
 def show_build_config(build_config: build_facts.BuildConfiguration):
-    print(f"""grml-live [{build_config.grml_live_version}] Build Configuration:
+    logkit.info_header(f"grml-live [{build_config.grml_live_version}] Build Configuration:")
 
+    print(f"""
     SOURCE_DATE_EPOCH: {build_config.source_date_epoch}
     Build mode:        {build_config.fai_action}
     FAI classes:       {",".join(build_config.classes)}
@@ -389,10 +390,10 @@ def _main(argv: list[str]) -> int:
 
     # after parse_args, so parse_args can handle --help.
     if os.geteuid() == 0:
-        print("E: grml-live needs to run as non-root with working user namespaces", file=sys.stderr)
+        logkit.error("grml-live needs to run as non-root with working user namespaces")
         return 1
     if source_date_epoch_error:
-        print(f"E: {source_date_epoch_error}", file=sys.stderr)
+        logkit.error(source_date_epoch_error)
         return 1
 
     try:
@@ -402,12 +403,12 @@ def _main(argv: list[str]) -> int:
         else:
             extract_programs = None
     except ValueError as except_inst:
-        print(f"E: {except_inst!s}", file=sys.stderr)
+        logkit.error(f"{except_inst!s}")
         return 1
 
     arch = dpkg_architecture(builder_programs)
     if arch not in build_facts.SUPPORTED_ARCHS:
-        print(f"E: dpkg architecture {arch!s} not supported.", file=sys.stderr)
+        logkit.error(f"dpkg architecture {arch!s} not supported.")
         return 1
 
     short_name = strip_unsafe_chars(args.grml_name)
@@ -437,7 +438,7 @@ def _main(argv: list[str]) -> int:
     try:
         classes = automatic_classes(args.classes, arch, args.debian_suite, args.is_release, args.secure_boot)
     except ValueError as except_inst:
-        print(f"E: {except_inst}", file=sys.stderr)
+        logkit.error(f"{except_inst!s}")
         return 1
 
     # TODO: need fixing/removal when there are other actions than image-create and image-update
@@ -493,9 +494,8 @@ def _main(argv: list[str]) -> int:
     )
 
     if not build_config.config_dir.exists():
-        print(
-            f"E: Config directory {build_config.config_dir!s} does not exist. Set -D to a valid config directory.",
-            file=sys.stderr,
+        logkit.error(
+            f"Config directory {build_config.config_dir!s} does not exist. Set -D to a valid config directory.",
         )
         return 1
 
@@ -506,7 +506,7 @@ def _main(argv: list[str]) -> int:
             file_ops.check_dir_usable_for_unshare(build_config.chroot_install_src_directory)
 
     except ValueError as except_inst:
-        print(f"E: {except_inst}", file=sys.stderr)
+        logkit.error(f"{except_inst!s}")
         return 1
 
     if not args.force:
@@ -514,10 +514,10 @@ def _main(argv: list[str]) -> int:
 
     # Warnings go after build config printing, but before confirmation.
     if not (build_config.config_dir / "media-files" / "GRMLBASE" / "addons" / "arch").exists():
-        print('W: Boot addons not found. Consider installing package "grml-live-addons".')
+        logkit.warn('Boot addons not found. Consider installing package "grml-live-addons".')
 
     if "NO_ONLINE" not in build_config.classes:
-        print('W: Class "NO_ONLINE" NOT requested. Output will NOT be reproducible.')
+        logkit.warn('Class "NO_ONLINE" NOT requested. Output will NOT be reproducible.')
 
     # Last minute checks before confirmation.
     # TODO: These checks should not trigger with the image-create/image-update actions;
@@ -525,22 +525,18 @@ def _main(argv: list[str]) -> int:
     chroot_os_release = Path(build_config.grml_chroot_dir / "etc" / "os-release")
     if build_config.fai_action == build_facts.FaiAction.DIRINSTALL:
         if chroot_os_release.exists():
-            print("E: the chroot already exists. Refusing to overwrite it. (Add -u/-b/-B option?)", file=sys.stderr)
+            logkit.error("the chroot already exists. Refusing to overwrite it. (Add -u/-b/-B option?)")
             return 20
         if build_config.source_image:
-            print("E: using an existing ISO precludes building a new chroot. (Add -u/-b/-B option?)", file=sys.stderr)
+            logkit.error("using an existing ISO precludes building a new chroot. (Add -u/-b/-B option?)")
             return 20
     elif not build_config.source_image and not chroot_os_release.exists():
-        print(
-            "E: does not look like you have a working chroot. Updating/building not possible. (Drop -u/-b/-B option?)",
-            file=sys.stderr,
+        logkit.error(
+            "does not look like you have a working chroot. Updating/building not possible. (Drop -u/-b/-B option?)"
         )
         return 20
     elif build_config.source_image and chroot_os_release.exists():
-        print(
-            "E: the chroot already exists. Refusing to overwrite it by extracting an ISO. (Remove -e option?)",
-            file=sys.stderr,
-        )
+        logkit.error("the chroot already exists. Refusing to overwrite it by extracting an ISO. (Remove -e option?)")
         return 20
 
     if not args.force:
@@ -549,9 +545,9 @@ def _main(argv: list[str]) -> int:
             prompt_result = input("Check the build settings. (Use -F to skip this prompt.)\nContinue? [y/N] ")
         except EOFError:
             prompt_result = ""
-            print("E: EOF received", file=sys.stderr)
+            logkit.error("EOF received")
         if prompt_result.strip().upper() != "Y":
-            print("Exiting as requested.")
+            logkit.info("Exiting as requested.")
             return 1
 
     # Now run the build.
@@ -559,10 +555,11 @@ def _main(argv: list[str]) -> int:
     file_ops.create_dir_useable_for_unshare(build_config.grml_logs_dir)
     logfile = build_config.grml_logs_dir / "grml-live.log"
 
-    print(f"\nI: Starting build, writing log to {logfile}.\n")
+    logkit.info(f"Starting build, writing log to {logfile}.\n")
     with logkit.tee_output_to(logfile):
-        print(f"I: grml-live command line: {' '.join(build_config.cmdline)}")
-        print(f"I: grml-live started at: {startup_dt}")
+        logkit.info(f"grml-live command line: {' '.join(build_config.cmdline)}")
+        logkit.info(f"grml-live started at: {startup_dt}")
+        print()
         # write configuration into log
         show_build_config(build_config)
         os.environ["SOURCE_DATE_EPOCH"] = str(source_date_epoch)
@@ -572,30 +569,30 @@ def _main(argv: list[str]) -> int:
                 rc = minifai.build(build_config)
             except KeyboardInterrupt as except_inst:
                 rc = 130
-                print(f"E: build aborted: {except_inst}", file=sys.stderr)
+                logkit.error(f"build aborted: {except_inst}")
             except BaseException as except_inst:
                 # Need BaseException to catch all exceptions, so they end up in the log
                 rc = 1
-                print(f"E: build failed with unhandled exception: {except_inst}", file=sys.stderr)
+                logkit.error(f"build failed with unhandled exception: {except_inst}")
                 traceback.print_exc()
             finally:
                 if (rc != 0) and args.on_error_shell:
-                    print("E: build failed, spawning unshared(!) bash for you to inspect build files")
+                    logkit.error("build failed, spawning unshared(!) bash for you to inspect build files")
                     try:
                         minifai.run_x(["/bin/bash", "-i"], unshared=True, cwd=work_directory)
                     except Exception as except_inst:
-                        print(f"I: Sorry, the shell failed: {except_inst}")
+                        logkit.info(f"Sorry, the shell failed: {except_inst}")
                         traceback.print_exc()
-                print(f"I: cleaning up chroot: {build_config.grml_chroot_dir}", flush=True)
+                logkit.info(f"Cleaning up chroot: {build_config.grml_chroot_dir}")
                 minifai.chroot_delete(build_config.grml_chroot_dir)
-                print(f"I: cleaning up work_directory: {work_directory}", flush=True)
+                logkit.info(f"Cleaning up work_directory: {work_directory}")
                 work_directory_tmp.cleanup()
 
         if rc == 0:
-            print("Successfully finished execution.")
+            logkit.info("Successfully finished execution.")
         else:
             # Write final status to both stdout and stderr
-            print(f"E: Execution failed with rc={rc}", file=sys.stderr)
+            logkit.error(f"Execution failed with rc={rc}")
             print(f"E: Execution failed with rc={rc}")
 
     return rc

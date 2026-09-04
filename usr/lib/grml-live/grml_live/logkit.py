@@ -1,8 +1,81 @@
 import contextlib
+import functools
 import os
 import subprocess
 import sys
 from pathlib import Path
+from typing import IO
+
+try:
+    # Python 3.14 internal API with a plan to stabliziation.
+    # For now we treat this as an optional, possibly changing thing.
+    # Worst case we get no colors, but also nothing should break.
+    import _colorize
+except ImportError:
+    _colorize = None
+
+
+def _check_stdout_tty():
+    try:
+        return sys.stdout.isatty()
+    except NameError:
+        return False
+
+
+# We check this only at startup, as later one we tee our output into a log and
+# then stdout.isatty NEVER returns True.
+_STDOUT_IS_A_TTY = _check_stdout_tty()
+
+
+@functools.cache
+def _get_tty_color(colorname: str) -> str:
+    if not _colorize:
+        return ""
+    try:
+        colors = _colorize.get_colors()
+    except Exception as except_inst:
+        print(f"D: _colorize.get_colors failed: {except_inst}")
+        return ""
+    return getattr(colors, colorname, None) or ""
+
+
+def _get_stdio_color(colorname: str) -> str:
+    if not _STDOUT_IS_A_TTY:
+        return ""
+    return _get_tty_color(colorname)
+
+
+def _print_colored(colorname: str, file: IO, prefix: str, *message_parts: str):
+    start_color = _get_stdio_color(colorname)
+    if start_color:
+        end_color = _get_stdio_color("RESET")
+    else:
+        end_color = ""
+
+    first = message_parts[0]
+    if prefix:
+        prefix += " "
+    print(f"{start_color}{prefix}{first}", *message_parts[1:], file=file, end=f"\n{end_color}", flush=True)
+
+
+def debug(*message_parts: str):
+    _print_colored("RESET", sys.stdout, "D:", *message_parts)
+
+
+def info(*message_parts: str):
+    _print_colored("GREEN", sys.stdout, "I:", *message_parts)
+
+
+def info_header(*message_parts: str):
+    _print_colored("GREEN", sys.stdout, "", *message_parts)
+
+
+def warn(*message_parts: str):
+    _print_colored("BLUE", sys.stdout, "W:", *message_parts)
+
+
+def error(*message_parts: str):
+    _print_colored("RED", sys.stderr, "E:", *message_parts)
 
 
 @contextlib.contextmanager

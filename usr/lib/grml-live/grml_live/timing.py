@@ -2,6 +2,8 @@ import contextlib
 import datetime
 import time
 
+from . import logkit
+
 
 @contextlib.contextmanager
 def log_elapsed_time(label: str):
@@ -9,4 +11,4 @@ def log_elapsed_time(label: str):
     try:
         yield
     finally:
-        print(f"I: {label} took {datetime.timedelta(seconds=round(time.monotonic() - start))}", flush=True)
+        logkit.info(f"{label} took {datetime.timedelta(seconds=round(time.monotonic() - start))}")

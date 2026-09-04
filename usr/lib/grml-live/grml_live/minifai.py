@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from threading import Event, Thread
 
-from . import build_facts, file_ops, unshared_helper
+from . import build_facts, file_ops, logkit, unshared_helper
 from .classes import ClassFileParsingFailed, parse_class_varfile
 from .packages import PackageList, parse_class_packages
 
@@ -56,13 +56,13 @@ class UnsharedService:
     def run(self, op: dict, check=True) -> int:
         res = unshared_helper.send_ops_to_server(self.request_socket, [op])
         if check and res:
-            raise RuntimeError(f"E: unshared operation failed with rc={res}, op: {op}")
+            raise RuntimeError(f"unshared operation failed with rc={res}, op: {op}")
         return res
 
     def batch(self, ops: list[dict], check=True) -> int:
         res = unshared_helper.send_ops_to_server(self.request_socket, ops)
         if check and res:
-            raise RuntimeError(f"E: unshared operations failed with rc={res}, ops: {ops}")
+            raise RuntimeError(f"unshared operations failed with rc={res}, ops: {ops}")
         return res
 
 
@@ -177,7 +177,7 @@ def chrooted_debconf_set_selections(chroot_dir: Path, selections_file: Path):
     env = {
         "DEBIAN_FRONTEND": "noninteractive",
     }
-    print("I: Loading debconf selections from", selections_file)
+    logkit.info(f"Loading debconf selections from {selections_file}")
     with selections_file.open("r") as selections_fd:
         run_chrooted(chroot_dir, ["debconf-set-selections", "-v"], env=env, stdin=selections_fd)
 
@@ -198,12 +198,12 @@ def run_script(chroot_dir: Path, script: Path, helper_tools_paths: list[Path], e
         "PATH": ":".join([str(p) for p in helper_tools_paths] + [os.environ["PATH"]]),
     } | env
     print()
-    print(f"I: *** Running script {script} ***")
+    logkit.info(f"*** Running script {script} ***")
     proc = run_x([script], check=False, unshared=True, env=env, stdin=subprocess.DEVNULL)
     if proc.returncode != 0:
-        print(f"E: Script {script} failed with exitcode {proc.returncode} - aborting.")
+        logkit.error(f"Script {script} failed with exitcode {proc.returncode} - aborting.")
         raise ClassScriptFailed()
-    print(f"I: Finished script {script}.")
+    logkit.info(f"Finished script {script}.")
 
 
 def run_class_scripts(
@@ -214,13 +214,16 @@ def run_class_scripts(
     helper_tools_paths: list[Path],
     env: dict[str, str],
 ):
-    print()
-    print(f'I: Running "{script_type}" for class {class_name}...')
-    print()
     scripts_dir = conf_dir / script_type / class_name
-    for script in sorted(scripts_dir.glob("*")):
+    scripts = sorted(scripts_dir.glob("*"))
+    if not scripts:
+        logkit.info(f'No "{script_type}" to run for class {class_name}.')
+        return
+
+    logkit.info(f'Running "{script_type}" for class {class_name}...')
+    for script in scripts:
         if script.name.endswith(".dpkg-old") or script.name.endswith(".dpkg-new"):
-            print(f"W: Skipping {script} due to name suffix, please delete it")
+            logkit.warn(f"Skipping {script} due to name suffix, please delete it")
             continue
         run_script(chroot_dir, script, helper_tools_paths, env)
 
@@ -252,7 +255,7 @@ def install_packages_for_classes(
     # Show what packages will be skipped if any
     skip_packages = full_package_list.skip_list_for_arch(dpkg_architecture)
     if skip_packages:
-        print(f"I: Skipping {len(skip_packages)} packages: {', '.join(sorted(skip_packages))}")
+        logkit.info(f"Skipping {len(skip_packages)} packages: {', '.join(sorted(skip_packages))}")
 
     # Second pass: Install packages and run hooks for each class
     for class_name in classes:
@@ -264,11 +267,11 @@ def install_packages_for_classes(
         package_list = class_package_lists[class_name]
         install_args = package_list.as_apt_params(restrict_to_arch=dpkg_architecture, exclude_from=full_package_list)
         if install_args:
-            print(f"I: Installing packages for class {class_name}")
+            logkit.info(f"Installing packages for class {class_name}")
             chrooted_apt_install(chroot_dir, install_args)
 
     print()
-    print("I: Installing all packages together to detect relationship errors")
+    logkit.info("Installing all packages together to detect relationship errors")
     chrooted_apt_install(chroot_dir, full_package_list.as_apt_params(restrict_to_arch=dpkg_architecture))
     unshared_service.run(
         unshared_helper.write_file_text(
@@ -318,8 +321,8 @@ def helper_socket_thread(
             req = orig_req.split("\n")
             rc = 120
             if len(req) != 2 and req[1] != "":
-                print("W: socket thread: got message:", repr(orig_req))
-                print("W: socket thread: no newline, message truncated?")
+                logkit.warn("socket thread: got message:", repr(orig_req))
+                logkit.warn("socket thread: no newline, message truncated?")
             else:
                 req = req[0].split(" ")
                 if req[0] == "fcopy":
@@ -331,13 +334,13 @@ def helper_socket_thread(
                         unshared_helper.copy_media_files(conf_dir, chroot_dir, " ".join(classes), " ".join(req[1:]))
                     )
                 else:
-                    print("W: socket thread: request not understood:", repr(orig_req))
+                    logkit.warn("socket thread: request not understood:", repr(orig_req))
 
             request_socket.sendall(f"{rc!s}\n".encode())
             request_socket.close()
 
         except Exception:
-            print(f"E: {now_for_log()} helper_socket_thread caught fatal exception", flush=True)
+            logkit.error(f"{now_for_log()} helper_socket_thread caught fatal exception")
             traceback.print_exc()
             break
 
@@ -437,7 +440,7 @@ exec chroot "$CHROOT_DIR" "$@"
 @contextlib.contextmanager
 def policy_rcd(chroot_dir: Path, unshared_service: UnsharedService):
     marker = "!GRML-LIVE!"
-    print("I: Installing temporary policy-rc.d")
+    logkit.info("Installing temporary policy-rc.d")
     program = chroot_dir / "usr" / "sbin" / "policy-rc.d"
     contents = f"#!/bin/sh\n# Installed by grml-live {marker}\nexit 101\n"
     unshared_service.run(unshared_helper.write_file_text(program, contents, executable=True))
@@ -451,12 +454,12 @@ def policy_rcd(chroot_dir: Path, unshared_service: UnsharedService):
             )
 
             if have_marker:
-                print(f"I: Cleaning up {program}")
+                logkit.info(f" Cleaning up {program}")
                 unshared_service.run(unshared_helper.unlink(program))
             else:
-                print(f"I: Not cleaning up {program} - our marker went missing")
+                logkit.info(f"Not cleaning up {program} - our marker went missing")
         except Exception as except_inst:
-            print(f"W: Failed cleaning up {program}: {except_inst}")
+            logkit.warn(f"Failed cleaning up {program}: {except_inst}")
 
 
 @contextlib.contextmanager
@@ -480,14 +483,14 @@ def start_unshared_service():
                 request_socket, _ = listen_socket.accept()
             except TimeoutError:
                 if subproc.poll() is not None:
-                    print(f"E: unshared helper service exited with rc={subproc.returncode} before connecting")
+                    logkit.error(f"unshared helper service exited with rc={subproc.returncode} before connecting")
                     raise ProgramStartFailed() from None
                 continue
 
             break
 
         if request_socket is None:
-            print("E: unshared helper service did not connect after timeout")
+            logkit.error("unshared helper service did not connect after timeout")
             subproc.kill()
             raise ProgramStartFailed()
 
@@ -511,7 +514,7 @@ def read_envvars_for_classes(conf_dir: Path, classes: list[str]) -> dict[str, st
 
 def install_base(conf_dir: Path, chroot_dir: Path, classes: list[str], debian_suite: str, mirror_url: str):
     """Install Debian base system from given mirror"""
-    print(f'I: Installing Debian base system for suite "{debian_suite}" using mmdebstrap ...')
+    logkit.info(f'Installing Debian base system for suite "{debian_suite}" using mmdebstrap ...')
 
     # Work around APT bug: http://bugs.debian.org/1092164
     included_packages = ["netbase"]
@@ -565,7 +568,7 @@ def install_base(conf_dir: Path, chroot_dir: Path, classes: list[str], debian_su
 
 def extract_iso(config: build_facts.BuildConfiguration):
     """Unpack squashfs from an existing ISO to use it as the chroot_dir contents."""
-    print(f"I: Unpacking ISO from {config.source_image}")
+    logkit.info(f"Unpacking ISO from {config.source_image}")
     assert config.extract_programs is not None
 
     try:
@@ -601,7 +604,7 @@ def extract_iso(config: build_facts.BuildConfiguration):
 
 def should_skip_task(skip_tasks: list[str], task: str) -> bool:
     if task in skip_tasks:
-        print(f'I: Skipping grml-live task "{task}", as requested')
+        logkit.info(f'Skipping grml-live task "{task}", as requested')
         return True
     return False
 
@@ -629,7 +632,7 @@ def _create_chroot_dirs(chroot_dir: Path, unshared_service: UnsharedService) -> 
     sources_dir_name = "grml_sources"
     sources_dir = build_dir / sources_dir_name
 
-    print(f"I: Creating build directory and subdirs: {build_dir}")
+    logkit.info(f"Creating build directory and subdirs: {build_dir}")
     unshared_service.batch(
         [
             unshared_helper.ensure_empty_dir(absolute_dir)
@@ -711,7 +714,7 @@ def install_extra_chroot_files(
     unshared_service: UnsharedService,
 ):
     # If chroot_install_source_dir is set, then grml_live.main checked its usable.
-    print(f"I: Copying local files to chroot from {chroot_install_source_dir!s} ...")
+    logkit.info(f"Copying local files to chroot from {chroot_install_source_dir!s} ...")
     unshared_service.run(
         unshared_helper.run_program(
             [
@@ -757,7 +760,7 @@ def mksquashfs(
     mksquashfs_cmdline = _build_mksquashfs_cmdline(config)
     filesystem_module_file = config.grml_cd_squashfs_dir / "filesystem.module"
 
-    print(f"I: Building squashfs {config.grml_cd_squashfs_name} ...")
+    logkit.info(f"Building squashfs {config.grml_cd_squashfs_name} ...")
     # We must run mksquashfs inside the userns so it sees the correct ownership info,
     # but we want the resulting file to be owned by the user outside of the userns.
     unshared_service.batch(
@@ -785,7 +788,7 @@ def create_on_media_md5sums(grml_cd_dir: Path, grml_name: str):
         filename.relative_to(grml_cd_dir) for filename in sorted(grml_cd_dir.rglob("*")) if not filename.is_dir()
     ]
 
-    print(f"I: Building testcd md5sums {md5sums_file} ...")
+    logkit.info(f"Building testcd md5sums {md5sums_file} ...")
     with md5sums_file.open("wb") as output:
         run_x(["/bin/md5sum", *filenames], cwd=grml_cd_dir, stdout=output)
 
@@ -810,7 +813,7 @@ def create_netboot_package(
     output_netboot_dir.mkdir(exist_ok=True)  # some workflows accept that this already exists
     output_name = output_netboot_dir / (output_basename + ".tar")
 
-    print(f"I: Building netboot package {output_name.name} ...")
+    logkit.info(f"Building netboot package {output_name.name} ...")
     run_x(
         [
             "tar",
@@ -840,7 +843,7 @@ def create_sources_package(
     output_basename = iso_name.rpartition(".iso")[0] + "-sources"
     output_name = output_dir / (output_basename + ".tar")
 
-    print(f"I: Building sources tarball {output_name.name} ...")
+    logkit.info(f"Building sources tarball {output_name.name} ...")
     run_x(
         [
             "tar",
@@ -913,7 +916,7 @@ def write_buildinfo_json(
     buildinfo = _build_buildinfo_data(
         config,
     )
-    print(f"I: buildinfo data:\n{buildinfo!s}")
+    logkit.info(f"buildinfo data:\n{buildinfo!s}")
     (config.grml_cd_dir / "conf").mkdir(exist_ok=True)
     (config.grml_cd_dir / "conf" / "buildinfo.json").write_text(json.dumps(buildinfo))
 
@@ -967,7 +970,7 @@ def create_media(
     config: build_facts.BuildConfiguration,
 ):
     config.grml_isos_dir.mkdir(exist_ok=True)  # some workflows accept that this already exists
-    print(f"I: Building ISO image {config.grml_isos_dir / config.iso_name} ...")
+    logkit.info(f"Building ISO image {config.grml_isos_dir / config.iso_name} ...")
     run_x(_build_xorriso_cmdline(config))
     create_sha256_checksum_file(config.grml_isos_dir / config.iso_name)
 
@@ -1066,7 +1069,7 @@ def _run_tasks(
                         "media-scripts", config.config_dir, config.grml_chroot_dir, class_name, helper_tools_paths, env
                     )
 
-                print("I: Installing media files from chroot build ...")
+                logkit.info("Installing media files from chroot build ...")
                 run_x(
                     [
                         "/bin/cp",
@@ -1166,11 +1169,11 @@ def build(config: build_facts.BuildConfiguration):
         # assume exception site already printed relevant info
         rc = 3
     except Exception:
-        print(f"E: {now_for_log()} grml-live builder main caught fatal exception")
+        logkit.error(f"{now_for_log()} grml-live builder main caught fatal exception")
         traceback.print_exc()
         rc = 2
 
-    print(f"I: grml-live builder exiting with exit code {rc}")
+    logkit.info(f"grml-live builder exiting with exit code {rc}")
     return rc
 
 
