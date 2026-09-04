@@ -298,7 +298,7 @@ def helper_socket_thread(
     unshared_service: UnsharedService,
 ):
     address_family = socket.AF_UNIX
-    socket_type = socket.SOCK_STREAM
+    socket_type = socket.SOCK_STREAM | socket.SOCK_CLOEXEC
     request_queue_size = 5
 
     listen_socket = socket.socket(address_family, socket_type)

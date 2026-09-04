@@ -209,7 +209,7 @@ def _socket_read_framed_message(sock) -> str:
 
 
 def _server(socket_path, operations) -> int:
-    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM | socket.SOCK_CLOEXEC) as sock:
         sock.connect(socket_path)
         while True:
             try:
