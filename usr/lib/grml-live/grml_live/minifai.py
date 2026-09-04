@@ -71,35 +71,6 @@ def now_for_log() -> str:
     return datetime.datetime.now().isoformat()
 
 
-def _unquote_bash_single(s: str):
-    out, i, n = [], 0, len(s)
-    while i < n:
-        c = s[i]
-        if c == "'":
-            j = s.index("'", i + 1)
-            out.append(s[i + 1 : j])
-            i = j + 1
-        elif c == "\\" and i + 1 < n:
-            out.append(s[i + 1])
-            i += 2
-        else:
-            out.append(c)
-            i += 1
-    return "".join(out)
-
-
-def _parse_bash_set(text: str) -> dict[str, str]:
-    """Parse output of bash set, when restricted to single line key=value pairs."""
-    env = {}
-    for line in text.splitlines():
-        line = line.strip()
-        if not line:
-            continue
-        key, _, value = line.partition("=")
-        env[key] = _unquote_bash_single(value)
-    return env
-
-
 def _prepare_subprocess_args(args, *, unshared: bool, chroot_dir: Path | None, **kwargs):
     args = [arg if isinstance(arg, str) else str(arg) for arg in args]
     args_str = '" "'.join(args)
