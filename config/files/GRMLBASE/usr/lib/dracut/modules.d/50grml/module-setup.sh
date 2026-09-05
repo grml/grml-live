@@ -19,8 +19,6 @@ install() {
     # these are set by dracut, but shellcheck does not know that.
     moddir=${moddir:?}
 
-    inst_simple /etc/grml_version
-
     inst_hook cmdline "01" "$moddir/grml-cmdline.sh"
     inst_hook emergency "01" "$moddir"/grml-emergency.sh
 }
