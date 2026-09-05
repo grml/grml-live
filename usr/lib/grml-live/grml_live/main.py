@@ -61,6 +61,16 @@ def arg_key_str(value: str) -> str:
     return value
 
 
+def arg_isoname(value: str) -> str:
+    """argparse "type" function for isoname"""
+    value = arg_key_str(value)
+    if not value.endswith(".iso"):
+        raise argparse.ArgumentTypeError('must end in ".iso"')
+    if "/" in value:
+        raise argparse.ArgumentTypeError('must be a filename, not path (cannot contain "/")')
+    return value
+
+
 def source_date_epoch_datetime() -> datetime.datetime | None:
     env_value = os.getenv("SOURCE_DATE_EPOCH", "")
     if not env_value.strip():
@@ -173,7 +183,7 @@ Please send your bug reports and feedback to the grml-team: https://grml.org/bug
         )
         subparser.add_argument(
             "-i",
-            type=arg_key_str,
+            type=arg_isoname,
             dest="iso_name",
             metavar="ISO_NAME",
             help="Set the name of the resulting ISO (and other build results)",
