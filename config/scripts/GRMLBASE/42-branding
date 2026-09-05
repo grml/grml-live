@@ -9,6 +9,22 @@
 set -u
 set -e
 
+# FAI sets $target, but shellcheck does not know that.
+target=${target:?}
+
+# shellcheck source=/dev/null
+. "$GRML_LIVE_CONFIG"
+
+os_release_file="${target}"/etc/os-release
+rm -f "${os_release_file}"
+cat <<EOT > "${os_release_file}"
+PRETTY_NAME="${RELEASE_INFO}"
+NAME="${DISTRI_NAME}"
+VERSION="${VERSION}"
+ID="${DISTRI_INFO}"
+HOME_URL="https://grml.org/"
+EOT
+
 fcopy -m root,root,0755 -v /usr/share/initramfs-tools/scripts/init-top/grml
 fcopy -M -v /usr/share/doc/grml-docs/startpage.html
 
