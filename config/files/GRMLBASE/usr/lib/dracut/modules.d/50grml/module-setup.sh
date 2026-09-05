@@ -21,4 +21,7 @@ install() {
 
     inst_hook cmdline "01" "$moddir/grml-cmdline.sh"
     inst_hook emergency "01" "$moddir"/grml-emergency.sh
+
+    # Workaround for Debian bug #1146779.
+    inst_simple /etc/ssl/certs/ca-certificates.crt
 }

@@ -5,9 +5,11 @@ busybox
 bzip2
 console-data
 console-setup
+curl  # used by dracut livenet module
 dbus
 dmidecode
 dracut
+dracut-network
 efibootmgr
 eject
 fdisk
