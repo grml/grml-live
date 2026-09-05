@@ -21,8 +21,18 @@ fi
 
 set -e # exit on any error
 
-LIVE_PATH_MAIN='/run/live/medium/'
-LIVE_PATH_BOOT='/run/live/medium/boot/'
+LIVECD_PATH=""
+# initramfs layout:
+[ -d /run/live/medium ] && export LIVECD_PATH='/run/live/medium'
+# dracut layout:
+[ -d /run/initramfs/live ] && export LIVECD_PATH='/run/initramfs/live'
+if [ -z "$LIVECD_PATH" ] ; then
+  echo "Error: cannot find Live medium"
+  exit 1
+fi
+
+LIVE_PATH_MAIN="${LIVECD_PATH}"
+LIVE_PATH_BOOT="${LIVECD_PATH}/boot/"
 
 VERSION='0.0.5'
 GRML_LIVE_EDITOR=${VISUAL:-${EDITOR:-vi}}
@@ -91,11 +101,11 @@ mkdir -p /remaster/chroot /remaster/tmp /remaster/cdrom /remaster/work
 
 echo "#:# edit the following two lines to change the boot message" >/remaster/msg
 echo "#:#" >>/remaster/msg
-if [ -r ${LIVE_PATH_BOOT}/isolinux/boot.msg ] ; then
-  sed 1,2d ${LIVE_PATH_BOOT}/isolinux/boot.msg >>/remaster/msg
+if [ -r "${LIVE_PATH_BOOT}"/isolinux/boot.msg ] ; then
+  sed 1,2d "${LIVE_PATH_BOOT}"/isolinux/boot.msg >>/remaster/msg
 fi
 
-SQUASHFS_FILE="$(find ${LIVE_PATH_MAIN}/live -name \*.squashfs | head -1)"
+SQUASHFS_FILE="$(find "${LIVE_PATH_MAIN}"/live -name \*.squashfs | head -1)"
 if ! grep -q "/remaster/cdrom squashfs" /proc/mounts ;  then
    mount -t squashfs "$SQUASHFS_FILE" /remaster/cdrom -o ro,loop
 fi
@@ -120,7 +130,7 @@ ${GRML_LIVE_EDITOR} /remaster/msg
 [ -d /remaster/iso ] || mkdir /remaster/iso
 
 for i in "${LIVE_PATH_MAIN}"/*; do
-    if [ ! "$i" = ${LIVE_PATH_MAIN}/live ]; then
+    if [ ! "$i" = "${LIVE_PATH_MAIN}"/live ]; then
        cp -R "$i" /remaster/iso
     fi
 done

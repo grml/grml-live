@@ -2,6 +2,7 @@ import argparse
 import dataclasses
 import datetime
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -13,6 +14,10 @@ from . import build_facts, file_ops, logkit, minifai, timing
 
 VERSION = ""
 _TRANS_UNSAFE_CHARS = str.maketrans("", "", ",./;- ")
+# ECMA-119 demands [A-Z0-9_], but we also allow lowercase letters, '.' and '-'
+# as they seem widely supported.
+_RE_CD_LABEL_INVALID_CHARS = re.compile("[^A-Za-z0-9_\\-\\.]")
+_CD_LABEL_MAXLEN = 32
 
 
 @dataclasses.dataclass
@@ -58,6 +63,16 @@ def arg_key_str(value: str) -> str:
         raise argparse.ArgumentTypeError("must not be empty")
     if any(char.isspace() for char in value):
         raise argparse.ArgumentTypeError("must not contain whitespace")
+    return value
+
+
+def arg_isoname(value: str) -> str:
+    """argparse "type" function for isoname"""
+    value = arg_key_str(value)
+    if not value.endswith(".iso"):
+        raise argparse.ArgumentTypeError('must end in ".iso"')
+    if "/" in value:
+        raise argparse.ArgumentTypeError('must be a filename, not path (cannot contain "/")')
     return value
 
 
@@ -173,7 +188,7 @@ Please send your bug reports and feedback to the grml-team: https://grml.org/bug
         )
         subparser.add_argument(
             "-i",
-            type=arg_key_str,
+            type=arg_isoname,
             dest="iso_name",
             metavar="ISO_NAME",
             help="Set the name of the resulting ISO (and other build results)",
@@ -285,6 +300,8 @@ def show_build_config(build_config: build_facts.BuildConfiguration):
         print(f"    Extract ISO:       {build_config.source_image}")
 
     print(f"""\n  Output identification:
+    ISO Filename:      {build_config.iso_name}
+    ISO Volume Label:  {build_config.iso_volid}
     Distri Name:       {build_config.distri_name}
     Distri Info:       "{build_config.distri_info}"
     Grml Name:         {build_config.grml_name}
@@ -357,6 +374,21 @@ def strip_unsafe_chars(s: str) -> str:
     return s.translate(_TRANS_UNSAFE_CHARS)
 
 
+def _build_iso_volid(grml_name: str, grml_version: str) -> str:
+    # assumes grml_name and grml_version cannot contain whitespace,
+    # currently checked by argparser.
+    version = re.sub(_RE_CD_LABEL_INVALID_CHARS, "", grml_version)
+    name = re.sub(_RE_CD_LABEL_INVALID_CHARS, "", grml_name)
+    # build string in reversed order, so version gets to keep most of its
+    # characters.
+    base = f"{version} {name}"
+    # snip to maximum length
+    base = base[0:_CD_LABEL_MAXLEN]
+    # now split and reverse, so name is first
+    version, _, name = base.partition(" ")
+    return f"{name}_{version}"  # must still fit into _CD_LABEL_MAXLEN
+
+
 def _main(argv: list[str]) -> int:
     global VERSION
     VERSION = os.getenv("GRML_LIVE_VERSION", "?")
@@ -425,8 +457,13 @@ def _main(argv: list[str]) -> int:
         wayback_date = None
 
     iso_name = args.iso_name
-    if not iso_name:
+    if iso_name:
+        iso_volid, _, _ = iso_name.rpartition(".iso")
+        iso_volid = re.sub(_RE_CD_LABEL_INVALID_CHARS, "", iso_name)[0:_CD_LABEL_MAXLEN]
+    else:
         iso_name = f"{args.grml_name}_{args.grml_version}.iso"
+        iso_volid = _build_iso_volid(args.grml_name, args.grml_version)
+
     squashfs_name = f"{args.grml_name}.squashfs"
 
     output_directory: Path = args.output_directory
@@ -475,6 +512,7 @@ def _main(argv: list[str]) -> int:
         short_name=short_name,
         grml_version=args.grml_version,
         iso_name=iso_name,
+        iso_volid=iso_volid,
         release_name=args.release_name,
         release_info=f"{args.grml_name} {args.grml_version} - Release Codename {args.release_name}",
         hostname=args.hostname,

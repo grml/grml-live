@@ -60,6 +60,7 @@ class BuildConfiguration:
     short_name: str
     grml_version: str
     iso_name: str
+    iso_volid: str
     release_name: str
     release_info: str
     hostname: str
