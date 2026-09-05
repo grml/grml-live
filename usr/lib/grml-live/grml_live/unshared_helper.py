@@ -135,8 +135,14 @@ def bindmount_proc_sys_into(root_dir: Path | str):
     root_dir = Path(root_dir)
     for mount in ["proc", "sys"]:
         dest_dir = str(root_dir / mount)
-        print(f"I: Bind-mounting /{mount} into {dest_dir}")
+        print(f"I: Bind-mounting /{mount} into {dest_dir} ...")
         subprocess.run(["mount", "--rbind", f"/{mount}", dest_dir], check=True, stdin=subprocess.DEVNULL)
+
+    dev_fd_symlink = root_dir / "dev" / "fd"
+    if not dev_fd_symlink.exists(follow_symlinks=False):
+        print(f"I: Setting up {dev_fd_symlink} ...")
+        dev_fd_symlink.unlink(missing_ok=True)
+        subprocess.run(["ln", "-s", "/proc/self/fd", dev_fd_symlink], check=True, stdin=subprocess.DEVNULL)
 
 
 def _parse_and_run(ops_stream: list[dict], operations: dict) -> int:
