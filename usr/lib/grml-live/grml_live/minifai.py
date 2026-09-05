@@ -954,7 +954,7 @@ def _build_xorriso_cmdline(
         "-V",
         config.iso_volid,
         "-publisher",
-        "grml-live | grml.org",
+        "grml.org/grml-live/",
         "-l",
         "-r",
         "-J",
