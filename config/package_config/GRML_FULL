@@ -142,6 +142,7 @@ bridge-utils
 cdpr
 cifs-utils
 cloud-init
+clustershell
 dnsmasq
 ethstatus
 ethtool
