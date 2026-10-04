@@ -25,7 +25,6 @@ ID="${DISTRI_INFO}"
 HOME_URL="https://grml.org/"
 EOT
 
-fcopy -m root,root,0755 -v /usr/share/initramfs-tools/scripts/init-top/grml
 fcopy -M -v /usr/share/doc/grml-docs/startpage.html
 
 ## END OF FILE #################################################################

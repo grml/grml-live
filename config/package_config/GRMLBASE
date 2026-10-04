@@ -5,9 +5,11 @@ busybox
 bzip2
 console-data
 console-setup
-cryptsetup-initramfs
+curl  # used by dracut livenet module
 dbus
 dmidecode
+dracut
+dracut-network
 efibootmgr
 eject
 fdisk
@@ -25,12 +27,10 @@ grml-tips
 hdparm
 hwinfo
 ifupdown
-initramfs-tools
 iputils-ping
 iwd
 kbd
 less
-live-boot-grml live-boot-grml-doc
 lvm2
 mdadm
 nfs-common

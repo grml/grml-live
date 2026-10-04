@@ -12,31 +12,20 @@ set -e
 # FAI sets $target, but shellcheck does not know that.
 target=${target:?}
 
-fcopy -M -v /etc/initramfs-tools/conf.d/xz-compress
+fcopy -M -v /etc/dracut.conf.d/55-grml-live.conf
+# Set default "kernel" command line
+fcopy -M -v /etc/dracut.conf.d/55-grml-live-cmdline.conf
+grml-live-adjust-boot-files "${target}"/etc/dracut.conf.d/55-grml-live-cmdline.conf
+# write grml2ram.conf so it knows where the squashfs is
+fcopy -M -v /etc/grml/grml2ram.conf
+grml-live-adjust-boot-files "${target}"/etc/grml/grml2ram.conf
 
-fcopy -M -v /etc/initramfs-tools/modules
+fcopy -M -v -r /usr/lib/dracut
 
-fcopy -m root,root,0755 -v /usr/share/initramfs-tools/hooks/virtio-gpu
-
-if ! [ -f "$target"/usr/share/initramfs-tools/scripts/live ] ; then
-  echo "Error: live-boot/-initramfs does not seem to be present, can not create initramfs. Exiting.">&2
-  exit 1
-fi
-
-echo "Rebuilding initramfs"
-
-# Undo divert done in instsoft.
-if [ '/usr/sbin/update-initramfs' != "$($ROOTCMD dpkg-divert --truename '/usr/sbin/update-initramfs')" ]; then
-  echo "Undoing dpkg-divert of update-initramfs executable"
-  $ROOTCMD rm -f /usr/sbin/update-initramfs
-  $ROOTCMD dpkg-divert --rename --remove /usr/sbin/update-initramfs
-fi
-
-for initrd in $(basename "$target"/boot/vmlinuz-*) ; do
-    if ! $ROOTCMD update-initramfs -k "${initrd##vmlinuz-}" -c ; then
-        echo "Creating fresh initramfs did not work, trying update instead:"
-        $ROOTCMD update-initramfs -k "${initrd##vmlinuz-}" -u
-    fi
-done
+$ROOTCMD update-initramfs -k all -d
+$ROOTCMD update-initramfs -k all -c
 
 $ROOTCMD find /boot/ -name initrd\*.bak -exec rm {} \;
+
+# dracut makes the initrd images o-rx
+$ROOTCMD find /boot/ -name initrd.img* -exec chmod 0644 {} \;

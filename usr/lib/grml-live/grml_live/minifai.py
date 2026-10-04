@@ -1123,6 +1123,7 @@ def build(config: build_facts.BuildConfiguration):
         "GRML_LIVE_VERSION": config.grml_live_version,
         "GRML_NAME": config.grml_name,
         "HOSTNAME": config.hostname,
+        "ISO_VOLID": config.iso_volid,
         "RELEASENAME": config.release_name,
         "RELEASE_INFO": config.release_info,
         "SECURE_BOOT": "debian" if config.secure_boot else "disable",

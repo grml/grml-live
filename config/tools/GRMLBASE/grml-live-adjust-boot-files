@@ -22,6 +22,7 @@ for file in "$@" ; do
     sed -i "s/%DISTRI_INFO%/$DISTRI_INFO/g"      "${file}"
     sed -i "s/%DISTRI_NAME%/$DISTRI_NAME/g"      "${file}"
     sed -i "s/%GRML_NAME%/$GRML_NAME/g"          "${file}"
+    sed -i "s/%ISO_VOLID%/$ISO_VOLID/g"          "${file}"
     sed -i "s/%SQUASHFS_NAME%/$SQUASHFS_NAME/g"  "${file}"
     sed -i "s/%SHORT_NAME%/$SHORT_NAME/g"        "${file}"
     sed -i "s/%VERSION%/$VERSION/g"              "${file}"
