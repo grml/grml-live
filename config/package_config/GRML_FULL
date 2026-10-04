@@ -150,7 +150,6 @@ hostapd
 hping3
 ifenslave
 iftop
-ifupdown
 ipcalc
 iperf
 iperf3

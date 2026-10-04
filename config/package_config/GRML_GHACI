@@ -3,6 +3,7 @@
 # we do not want to test *Debian*.
 
 PACKAGES install
+cloud-init
 locales
 vim-tiny
 

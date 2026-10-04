@@ -1,0 +1,13 @@
+# We will match any ethernet adapter that is left unconfigured.
+[Match]
+Type=ether
+
+[Network]
+DHCP=yes
+
+[DHCPv4]
+# In our DHCP we trust
+UseDomains=true
+# Don't use duid
+ClientIdentifier=mac
+
