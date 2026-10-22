@@ -10,10 +10,10 @@
   source /etc/grml/screenrc
 
 # set status lines
-   caption always "%{+b bk}$USER@%{wk}%H | %{yk}(load: %l |%{rk} cpu: %1` | %{Gk}net: %2`)  %-21=%{wk}%D %d.%m.%Y %0c"
-# caption always "%{+b bk}$USER@%{wk}%H%{gk} | %c %{yk}%D %d.%m.%Y | %{rk}(load: %l | cpu: %1`) %-21=%{wk}%D %d.%m.%Y %0c"
-# caption always "%{+b bk}$USER@%{wk}%H%{gk} | %c %{yk}%D %d.%m.%Y | %{rk}(load: %l | cpu: %1` | acpi: %2`)"
-# caption always "%{+b bk}$USER%{wk}%H: screen%{gk} |%c %{yk}%d.%m.%Y | %{rk}(system load: %l)%-21=%{wk}%D %d.%m.%Y %0c"
-  hardstatus alwayslastline "%{wr}%n%f %t %{kw} | %?%-Lw%?%{wb}%n*%f %t%?(%u)%?%{kw}%?%+Lw%? %{wk}"
+  caption always "%{b4;0}$USER@%{b7;0}%H | %{b3;0}(load: %1` |%{b1;0} cpu: %2` | %{b2;0}net: %3`) %=%{b7;0}%D %Y-%m-%d %0c "
+# caption always "%{b4;0}$USER@%{b7;0}%H%{2;0} | %c %{b3;0}%D %d.%m.%Y | %{b1;0}(load: %1` | cpu: %2`) %=%{b7;0}%D %Y-%m-%d %0c "
+# caption always "%{b4;0}$USER@%{b7;0}%H%{2;0} | %c %{b3;0}%D %d.%m.%Y | %{b1;0}(load: %1` | cpu: %2` | acpi: %2`)"
+# caption always "%{b4;0}$USER%{b7;0}%H: screen%{2;0} |%c %{b3;0}%d.%m.%Y | %{b1;0}(system load: %1`) %=%{b7;0}%D %Y-%m-%d %0c "
+  hardstatus alwayslastline "%{1;7}%n%f %t %{7;0} | %-Lw%{4;7}%n%f %t%?(%u)%?%{7;0}%+Lw%="
 
 ## END OF FILE #################################################################
