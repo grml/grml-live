@@ -244,7 +244,6 @@ dump
 duplicity
 fsarchiver
 mtx
-restic
 
 # compressions for backup/restore
 lz4
