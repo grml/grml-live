@@ -12,13 +12,6 @@
 # this script currently lacks LOTS of error checking code... any help welcome...
 ################################################################################
 
-# define function getfilesize before "set -e"
-if stat --help >/dev/null 2>&1; then
-  getfilesize='stat -c %s'      # GNU stat
-else
-  getfilesize='stat -f %z'      # BSD stat
-fi
-
 set -e # exit on any error
 
 LIVE_PATH_MAIN='/run/live/medium/'
@@ -136,13 +129,11 @@ umount /remaster/chroot /remaster/cdrom
 $MKISO -b boot/grub/i386-pc/eltorito.img -no-emul-boot \
         -boot-load-size 4 -boot-info-table \
         --grub2-boot-info --grub2-mbr "${LIVE_PATH_BOOT}"/grub/i386-pc/boot_hybrid.img \
-        -no-pad \
+        -append_partition 2 0xef "${LIVE_PATH_BOOT}"/boot/efi.img -appended_part_as_gpt \
+        --mbr-force-bootable \
+        -eltorito-alt-boot -e --interval:appended_partition_2:all:: -no-emul-boot \
+        -partition_offset 16 \
         -l -r -J -o "$1" /remaster/iso
-# pad for partition table
-siz=$($getfilesize "$1")
-cyls=$((siz / 512 / 32 / 16 + 1))       # C=$cyls H=16 S=32 (= 256 KiB units)
-siz=$((cyls * 16 * 32 * 512))           # size after padding
-dd if=/dev/zero bs=1 count=1 seek=$((siz - 1)) of="$1" 2>/dev/null
 rm -R /remaster/iso
 
 echo ""

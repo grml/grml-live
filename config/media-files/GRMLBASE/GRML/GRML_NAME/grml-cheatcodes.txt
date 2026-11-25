@@ -227,16 +227,8 @@ config.tbz from the root directory on the given device (or floppy).
 Take a look at https://grml.org/config/ for more information regarding
 the configuration framework of grml.
 
-*) If you wish to remaster the CD, please don't forget to specify
-
-        -no-emul-boot -boot-load-size 4 -boot-info-table \
-        -b boot/grub/i386-pc/eltorito.img \
-        --grub2-boot-info --grub2-mbr \
-        grml_cd/boot/grub/i386-pc/boot_hybrid.img
-
-as option to mkisofs/xorriso. Otherwise your CD won't be bootable. The
-directory live, containing the squashfs compressed filesystem file,
-must be located in the top level directory of the CD.
+*) If you wish to remaster the CD, please check out our build tooling
+at https://grml.org/grml-live/ and https://github.com/grml/grml-live/ .
 
 *) Caution: screensavers: Don't start physlock or any other screensaver
 that requires a password manually. There are no default passwords on

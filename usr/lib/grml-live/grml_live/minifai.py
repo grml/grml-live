@@ -925,7 +925,24 @@ def write_buildinfo_json(
 def _build_xorriso_cmdline(
     config: build_facts.BuildConfiguration,
 ) -> list[str]:
-    efi_args = ["-eltorito-alt-boot", "-e", "boot/efi.img", "-no-emul-boot", "-isohybrid-gpt-basdat"]
+    efi_args = [
+        "-append_partition",
+        "2",
+        "0xef",
+        config.grml_cd_dir / "boot" / "efi.img",
+        "-appended_part_as_gpt",
+        # Some BIOSes ignore removable disks with no partitions marked bootable
+        # in the MBR.  Make sure our protective MBR partition is marked bootable.
+        "--mbr-force-bootable",
+        # Now put the EFI image into the El Torito boot catalog
+        "-eltorito-alt-boot",
+        "-e",
+        "--interval:appended_partition_2:all::",
+        "-no-emul-boot",
+        # Partition table entry for the iso9660 fs
+        "-partition_offset",
+        "16",
+    ]
 
     if config.arch == "arm64":
         # No BIOS boot on arm64, only UEFI
