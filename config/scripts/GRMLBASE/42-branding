@@ -22,6 +22,7 @@ PRETTY_NAME="${RELEASE_INFO}"
 NAME="${DISTRI_NAME}"
 VERSION="${VERSION}"
 ID="${DISTRI_INFO}"
+ID_LIKE="debian"
 HOME_URL="https://grml.org/"
 EOT
 
