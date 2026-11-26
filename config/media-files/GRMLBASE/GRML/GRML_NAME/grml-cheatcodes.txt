@@ -25,10 +25,9 @@ keyboard=us                      Use different keyboard layout (see list from la
 
 Configuration settings:
 -----------------------
-myconfig=/dev/fd0                Set the DCS dir (debs, config, scripts) to the root of this device
+myconfig=/dev/sda1               Set the DCS dir (debs, config, scripts) to the root of this device
                                  DCS dir defaults to the live image or a device labeled GRMLCFG
                                  If a file /config.tbz exists, it is extracted from there.
-                                 /dev/fd0  for floppy disk
                                  /dev/sda1 for USB-stick/first SCSI-device
 autoconfig=SOMELABEL             Set the DCS dir to the root of the device labeled with SOMELABEL.
                                  If undefined search for a device labeled with GRMLCFG.
@@ -138,7 +137,7 @@ Security / login related settings:
 ssh=password                     Set password for root & grml user and start ssh-server
 passwd=...                       Set password for root & grml user
 encpasswd=....                   Set specified hash as password for root & grml user, use e.g.
-                                 'mkpasswd -H md5' to generate such a hash (available in Grml >=2013.09)
+                                 'mkpasswd -H sha-512' to generate such a hash
 
 Service related settings:
 -------------------------
@@ -223,7 +222,7 @@ to skip some critical parts of the autodetection system.
 *) The "myconfig=/dev/partition" option allows you to reconfigure the
 system after autoconfiguration by running a bourne shell script called
 "grml.sh" and/or extracting configuration files from a file named
-config.tbz from the root directory on the given device (or floppy).
+config.tbz from the root directory on the given device.
 Take a look at https://grml.org/config/ for more information regarding
 the configuration framework of grml.
 
