@@ -13,8 +13,14 @@ fi
 # if the vnc bootoption sets up the password let's start the vnc server
 if [ -e "$HOME"/.vnc/passwd ]; then
    test -f "$HOME"/.vnc/options && OPTIONS=$(cat "$HOME"/.vnc/options)
-   /usr/bin/x11vnc -bg -forever -noxdamage -o "$HOME"/.vnc/x11vnc.log -rfbauth \
-                   "$HOME"/.vnc/passwd -auth "$HOME"/.Xauthority -display "$DISPLAY" "$OPTIONS"
+   # shellcheck disable=SC2086
+   # need word-splitting for OPTIONS
+   /usr/bin/x11vnc \
+     -bg -forever -noxdamage -o "$HOME"/.vnc/x11vnc.log \
+     -rfbauth "$HOME"/.vnc/passwd \
+     -auth "$HOME"/.Xauthority \
+     -display "$DISPLAY" \
+     $OPTIONS
 fi
 
 ## END OF FILE #################################################################
