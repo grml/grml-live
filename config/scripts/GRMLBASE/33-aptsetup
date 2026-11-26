@@ -17,7 +17,7 @@ target=${target:?}
 
 # use snapshot.debian.org based on build date for release
 if ifclass RELEASE ; then
-  current_date=$(date --utc -d "@${SOURCE_DATE_EPOCH}" +%Y%m%d)
+  current_date=$(date --utc -d "@${SOURCE_DATE_EPOCH}" +'%Y%m%dT%H%M%SZ')
   perl -pi -e 'BEGIN { $d="'"$current_date"'"; } \
     s#^(URIs:)\s+(.*://deb.debian.org/)(.*)\/?$#$1 http://snapshot.debian.org/archive/$3/$d#' \
     "${target}"/etc/apt/sources.list.d/debian.sources
