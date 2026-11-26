@@ -13,9 +13,7 @@
 #
 # usage example:
 # ==============
-# /etc/init.d/portmap start
-# /etc/init.d/nfs-common start
-# /etc/init.d/nfs-kernel-server start
+# systemctl start nfs-kernel-server
 # mount -t nfs 192.168.1.101:/ /mnt/test
 #
 # Notice: starting nfs-server fails if there is no entry in /etc/exports :-/
