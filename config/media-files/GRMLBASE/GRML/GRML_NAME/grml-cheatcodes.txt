@@ -39,8 +39,8 @@ file=foobar.tbz                  Use specified file as name for configuration ar
                                  instead of the default one (config.tbz)
 extract=/etc                     Extract only /etc from configuration archive,
                                  use it in combination with myconfig or netconfig
-persistence                      Enable persistency feature, more details available at
-                                 https://wiki.grml.org/doku.php?id=persistency
+rd.live.overlay=LABEL=dev/path   Use "path" on labelled device "dev" as persistent read-write overlay
+rd.live.overlay.overlayfs=1      Enable overlayfs for the persistent read-write overlay
 hostname=...                     Set hostname to given argument
 hostname                         Set a random hostname
 nonetworking                     Do not create/overwrite /etc/network/interface during startup
@@ -206,6 +206,15 @@ i915.modeset=0    nomodeset      Disable Kernel Mode Setting (KMS) for Intel dri
 nouveau.modeset=0 nomodeset      Disable Kernel Mode Setting (KMS) for Nouveau driver.
 cirrus.modeset=0  nomodeset      Disable Kernel Mode Setting (KMS) for Cirrus driver.
 mgag200.modeset=0 nomodeset      Disable Kernel Mode Setting (KMS) for MGAG200 driver.
+
+
+Settings valid up to Grml 2026.09:
+----------------------------------
+Grml 2026.XX switched the initramfs implementation from initramfs-tools to dracut.
+The following options are not supported going forward.
+
+persistence                      Enable persistency feature, more details available at
+                                 https://wiki.grml.org/doku.php?id=persistency
 
 
 Additional notes:
