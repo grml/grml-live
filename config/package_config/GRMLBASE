@@ -6,6 +6,7 @@ bzip2
 console-data
 console-setup
 cryptsetup-initramfs
+dialog
 dbus
 dmidecode
 efibootmgr
@@ -25,6 +26,7 @@ hdparm
 hwinfo
 ifupdown
 initramfs-tools
+iptables
 iputils-ping
 iwd
 kbd
