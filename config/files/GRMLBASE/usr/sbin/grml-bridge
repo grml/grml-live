@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Filename:      grml-bridge
 # Purpose:       set up your box as bridge
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
@@ -7,12 +7,15 @@
 ################################################################################
 
 CONFIG_FILE=/etc/grml/routersetup
+# shellcheck disable=SC1091
 . /etc/grml/lsb-functions
+# shellcheck disable=SC1091
 . /etc/grml/script-functions
 
 check4root || exit 1
 
 if [ -r "$CONFIG_FILE" ] ; then
+  # shellcheck source=../../etc/grml/routersetup
   . "$CONFIG_FILE"
 else
   ewarn "Could not read $CONFIG_FILE"
@@ -23,8 +26,10 @@ fi
 [ -n "$BRIDGE_STP"   ]   || BRIDGE_STP=on
 [ -n "$BRIDGE_NAME" ]    || BRIDGE_NAME=br0
 [ -n "$BRIDGE_DEVICES" ] || BRIDGE_DEVICES='eth0 eth1'
+[ -n "$BRIDGE_CONFIG" ]  || BRIDGE_CONFIG='NONE'
+[ -n "$BRIDGE_IP" ]      || BRIDGE_IP=''
 
-check4progs $BRCTL || exit 1
+check4progs "$BRCTL" || exit 1
 
 case "$1" in
     start)
@@ -63,7 +68,7 @@ case "$1" in
             eindent
             for i in $BRIDGE_DEVICES ; do
                 einfo "$i"
-                brctl addif "$BRIDGE_NAME" $i  ; eend $?
+                brctl addif "$BRIDGE_NAME" "$i"  ; eend $?
             done
             eoutdent
 
@@ -73,11 +78,11 @@ case "$1" in
                case $BRIDGE_CONFIG in
                        DHCP)
                          einfo "starting dhclient for $BRIDGE_NAME"
-                         dhclient -pf /var/run/dhclient.$BRIDGE_NAME.pid -lf /var/run/dhclient.$BRIDGE_NAME.leases $BRIDGE_NAME
+                         dhclient -pf "/var/run/dhclient.$BRIDGE_NAME.pid" -lf "/var/run/dhclient.$BRIDGE_NAME.leases" "$BRIDGE_NAME"
                        ;;
                        FIXED)
                          einfo "Setting IP for $BRIDGE_NAME to $BRIDGE_IP"
-                         ip a a $BRIDGE_IP dev $BRIDGE_NAME
+                         ip a a "$BRIDGE_IP" dev "$BRIDGE_NAME"
                        ;;
                        NONE)
                          einfo "Leaving $BRIDGE_NAME unconfigured"
@@ -90,10 +95,10 @@ case "$1" in
    stop)
         einfo "Stopping bridge"
         eindent
-            if [ $BRIDGE_CONFIG = DHCP ]; then
+            if [ "$BRIDGE_CONFIG" = DHCP ]; then
                einfo "Terminating dhclient for $BRIDGE_NAME"
                if [ -r "/var/run/dhclient.$BRIDGE_NAME.pid" ] ; then
-                 kill "$(cat /var/run/dhclient.$BRIDGE_NAME.pid)" || /bin/true
+                 kill "$(cat "/var/run/dhclient.$BRIDGE_NAME.pid")" || /bin/true
                fi
             fi
             einfo "Removing network devices from $BRIDGE_NAME: "
@@ -101,7 +106,7 @@ case "$1" in
             eindent
                for i in $BRIDGE_DEVICES ; do
                    einfo "$i "
-                   brctl delif "$BRIDGE_NAME" $i  ; eend $?
+                   brctl delif "$BRIDGE_NAME" "$i"  ; eend $?
                done
             eoutdent
 

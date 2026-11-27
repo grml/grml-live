@@ -9,7 +9,7 @@
 set -e
 #set -x
 
-PN_="`basename $0`"
+PN_="$(basename "$0")"
 OPT_DEL_='false'
 OPT_USER_=''
 OPT_GROUP_=''
@@ -54,6 +54,7 @@ function createTun()
     local args_=''
     if [[ $OPT_USER_ != '' ]]; then args_="$args_ user $OPT_USER_"; fi
     if [[ $OPT_GROUP_ != '' ]]; then args_="$args_ group $OPT_GROUP_"; fi
+    # shellcheck disable=SC2086
     ip tuntap add mode tap name "$1" $args_
     if [[ $OPT_BRIDGE_ != '' ]]; then
         ip link set dev "$1" master "$OPT_BRIDGE_"
@@ -87,9 +88,9 @@ while getopts "du:g:b:ah" opt; do
         ?) printUsage; exit 1 ;;
     esac
 done
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 
-if [[ $# < 1 ]]; then
+if [[ $# -lt 1 ]]; then
     echo "Error: Please give at least one device" >&2
     printUsage
     exit 1

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Filename:      grml-router
 # Purpose:       set up your box as NAT-router
 # Authors:       grml-team (grml.org), Ulrich Dangel <mru@grml.org>, Michael Prokop <mika@grml.org>
@@ -7,13 +7,17 @@
 ################################################################################
 
 CONFIG_FILE=/etc/grml/routersetup
+# shellcheck disable=SC1091
 . /etc/grml/lsb-functions
+# shellcheck source=../../etc/grml/net-functions
 . /etc/grml/net-functions
+# shellcheck disable=SC1091
 . /etc/grml/script-functions
 
 check4root || exit 1
 
 if [ -r "$CONFIG_FILE" ] ; then
+  # shellcheck source=../../etc/grml/routersetup
   . "$CONFIG_FILE"
 else
   ewarn "Could not read $CONFIG_FILE"
@@ -34,7 +38,7 @@ case "$OUTDEV" in
     ;;
 esac
 
-check4progs $IPTABLES || exit 1
+check4progs "$IPTABLES" || exit 1
 
 case "$1" in
     start)
@@ -47,7 +51,7 @@ case "$1" in
           eindent
 
             einfo "Adding masquarade rule"
-            $IPTABLES -t nat -A POSTROUTING -o $OUTDEV -j MASQUERADE
+            $IPTABLES -t nat -A POSTROUTING -o "$OUTDEV" -j MASQUERADE
             eend $?
           eoutdent
    ;;
@@ -59,7 +63,7 @@ case "$1" in
        eend $?
 
        einfo "Removing iptables rule"
-         $IPTABLES -t nat -D POSTROUTING -o $OUTDEV -j MASQUERADE
+         $IPTABLES -t nat -D POSTROUTING -o "$OUTDEV" -j MASQUERADE
        eend $?
    ;;
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Filename:      grml-sniff
 # Purpose:       script for configuring a network sniffing setup
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
@@ -7,7 +7,9 @@
 ################################################################################
 
 CONFIG_FILE=/etc/grml/routersetup
+# shellcheck disable=SC1091
 . /etc/grml/lsb-functions
+# shellcheck disable=SC1091
 . /etc/grml/script-functions
 
 usage_info()
@@ -17,6 +19,7 @@ usage_info()
 }
 
 if [ -r "$CONFIG_FILE" ] ; then
+  # shellcheck source=../../etc/grml/routersetup
   . "$CONFIG_FILE"
 else
   ewarn "Could not read $CONFIG_FILE"
@@ -38,7 +41,7 @@ if ! check_devs ; then
   exit 1
 fi
 
-check4progs $BRCTL || exit 1
+check4progs "$BRCTL" || exit 1
 
 case "$1" in
     start)
@@ -62,7 +65,7 @@ case "$1" in
             eindent
             for i in $BRIDGE_DEVICES ; do
                 einfo "$i"
-                brctl addif "$BRIDGE_NAME" $i  ; eend $?
+                brctl addif "$BRIDGE_NAME" "$i"  ; eend $?
             done
             eoutdent
 
@@ -80,7 +83,7 @@ case "$1" in
             eindent
                for i in $BRIDGE_DEVICES ; do
                    einfo "$i "
-                   brctl delif "$BRIDGE_NAME" $i  ; eend $?
+                   brctl delif "$BRIDGE_NAME" "$i"  ; eend $?
                done
             eoutdent
 

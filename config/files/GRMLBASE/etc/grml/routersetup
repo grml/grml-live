@@ -4,6 +4,7 @@
 # Bug-Reports:   see http://grml.org/bugs/
 # License:       This file is licensed under the GPL v2.
 ################################################################################
+# shellcheck shell=bash
 
 # configuration for grml-router:
 # IPTABLES=/sbin/iptables       # the iptables binary

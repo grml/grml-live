@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 # Filename:      debnet
 # Purpose:       scan for Debian-style network configs and enable it on the system
 # Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
@@ -6,9 +6,10 @@
 # License:       This file is licensed under GPL v2+.
 ################################################################################
 
+# shellcheck disable=SC1091
 . /etc/grml/lsb-functions
 
-if [ "$1" = "-h" -o "$1" = "--help" ] ; then
+if [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
    echo "Usage: debnet"
    echo "Looks for /etc/network/interfaces on all volumes and uses it to"
    echo "configure the running system."

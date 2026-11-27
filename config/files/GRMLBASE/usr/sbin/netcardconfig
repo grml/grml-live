@@ -14,6 +14,7 @@ PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 LANGUAGE=C LANG=C
 export PATH LANGUAGE LANG
 
+# shellcheck disable=SC1091
 . /etc/grml/script-functions
 check4root || exit 1
 
@@ -206,7 +207,7 @@ configiface() {
         [[ "$KEY" =~ ^~~~$ ]]      && KEY=""
 
         # shellcheck disable=SC2088
-        ESSID=$(echo $ESSID | tr '~' " " | sed 's/ *$//')
+        ESSID=$(echo "$ESSID" | tr '~' " " | sed 's/ *$//')
 
         if [ -z "$KEY" ]; then
           KEY=$(cat "/etc/network/wep.$DV" 2>/dev/null)
@@ -319,7 +320,7 @@ configiface() {
                     }
                     ' /etc/network/interfaces)
             FIRST_RUN=0  # show the wpasecret input box at least once
-            while ( [ -z "$WPASECRET" ] || [ "$FIRST_RUN" ] ) ; do
+            while [ -z "$WPASECRET" ] || [ "$FIRST_RUN" ] ; do
               $DIALOG --inputbox "$MESSAGEW23 $ESSID" 15 50 "$WPASECRET" 2>"$TMP" || bailout 1
               read -r WPASECRET <"$TMP"
               if [ -z "$WPASECRET" ] ; then
@@ -534,13 +535,16 @@ if [[ -n "${NET_DEV}" ]] && [[ -n "${METHOD}" ]]; then
 fi
 
 if [ -z "${WLAN[*]}" ] ; then
+  # shellcheck disable=SC2207
   WLAN_OLD=( $(tail -n +3 /proc/net/wireless 2>/dev/null|awk -F: '{print $1}') )
   # /proc/net/wireless does not work e.g. with iwl3945 on kernel 2.6.33 anymore
+  # shellcheck disable=SC2207,SC2235
   WLAN_NEW=( $(for i in /sys/class/net/* ; do ( [ -d "$i/wireless" ] || [ -d "$i/phy80211" ] ) && basename "$i" ; done) )
   set -a WLAN_IWCONFIG
   for DEV in $LAN ; do
     iwconfig "${DEV}" 2>/dev/null 1>&2 && WLAN_IWCONFIG+=("${DEV}")
   done
+  # shellcheck disable=SC2207
   WLAN=( $(echo "${WLAN_OLD[@]}" "${WLAN_NEW[@]}" "${WLAN_IWCONFIG[@]}" | tr ' ' '\n' | sort -u) )
 fi
 
@@ -554,15 +558,15 @@ while read -r dev mac; do
   driver=$(ethtool -i "$dev" 2>/dev/null|awk '/^driver:/{print $2}')
   if [ "$driver" ]; then
     if [ "$iswlan" ]; then
-      NETDEVICES[$NETDEVICESCOUNT]="$dev A::$isauto M::$mac D::$driver W::1 F::0"
+      NETDEVICES[NETDEVICESCOUNT]="$dev A::$isauto M::$mac D::$driver W::1 F::0"
     else
-      NETDEVICES[$NETDEVICESCOUNT]="$dev A::$isauto M::$mac D::$driver W::0 F::0"
+      NETDEVICES[NETDEVICESCOUNT]="$dev A::$isauto M::$mac D::$driver W::0 F::0"
     fi
   else
     if [ "$iswlan" ]; then
-      NETDEVICES[$NETDEVICESCOUNT]="$dev A::$isauto M::$mac W::1 F::0"
+      NETDEVICES[NETDEVICESCOUNT]="$dev A::$isauto M::$mac W::1 F::0"
     else
-      NETDEVICES[$NETDEVICESCOUNT]="$dev A::$isauto M::$mac W::0 F::0"
+      NETDEVICES[NETDEVICESCOUNT]="$dev A::$isauto M::$mac W::0 F::0"
     fi
   fi
 #echo "Made to ${NETDEVICES[$NETDEVICESCOUNT]}"
@@ -572,7 +576,7 @@ for dev in $LAN; do
   if [ "$(ethtool -i "${dev}" 2>/dev/null|awk '/^bus-info:/{print $2}')" == "ieee1394" ]; then
     isauto="0"
     grep auto /etc/network/interfaces | grep -q "${dev}" && isauto="1"
-    NETDEVICES[$NETDEVICESCOUNT]="${dev} A::${isauto} D::$(ethtool -i "${dev}" 2>/dev/null|awk '/^driver:/{print $2}') W::0 F::1"
+    NETDEVICES[NETDEVICESCOUNT]="${dev} A::${isauto} D::$(ethtool -i "${dev}" 2>/dev/null|awk '/^driver:/{print $2}') W::0 F::1"
     ((NETDEVICESCOUNT++))
   fi
 done
@@ -602,7 +606,7 @@ fi
 
 # To translate
 EXITKEY="E"
-EXITMENU=( $EXITKEY Exit )
+EXITMENU=( "$EXITKEY" Exit )
 
 # main program loop until they bailout
 while (true); do
@@ -611,7 +615,7 @@ while (true); do
     if "${INTERACTIVE}" ; then
 
       # Unblock possibly locked devices?
-      if [ $iswireless -gt 0 ] && check_for_blocked_devices; then
+      if [ "$iswireless" -gt 0 ] && check_for_blocked_devices; then
         RF_INFO=$(rfkill | sed 's/$/\\n/')  # ensure we have a proper newline layout within dialog
         if $DIALOG --yesno "Disabled wireless devices detected:\n\n${RF_INFO}\n\nPlease ensure that any possibly existing hardware switches are disabled.\nDo you want to unblock all of them?" 0 0; then
           rfkill unblock all
@@ -649,7 +653,7 @@ while (true); do
   IFACEDONE=""
   while [ -n "$DV" ] && [ -z "$IFACEDONE" ]; do
     configiface "${METHOD}" "${IPADDR}" "${NETMASK}" "${GATEWAY}" "${DNS}"
-    if ! ifup $DV; then
+    if ! ifup "$DV"; then
       if "${INTERACTIVE}" ; then
         $DIALOG --yesno "$MESSAGE14" 15 50 || IFACEDONE="DONE"
       else
