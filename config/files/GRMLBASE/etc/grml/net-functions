@@ -10,12 +10,6 @@ defaultGWDev() {
   route -en | awk '/^0.0.0.0/ {print $8}'
 }
 
-getLanDevices() {
-  ignore="vmnet lo sit $(brctl show | awk '{ if(NR >1 ) print  $1 }' | xargs)"
-  filter=$(for mask in $ignore; do echo -n '&& $1 !~ /^'$mask/; done)
-  awk 'FS=":" {gsub(" ", ""); if(NR>2 '"$filter"' )  print $1 | "sort" } ' /proc/net/dev
-}
-
 getWlanDevices() {
   awk 'FS=":" {gsub(" ", ""); if(NR>2 ) print $1 | "sort" } ' /proc/net/wireless
 }
