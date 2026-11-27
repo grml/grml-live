@@ -82,7 +82,6 @@ case "$LANGUAGE" in
     MESSAGE1="Bitte auswaehlen:"
     NETCARD="Netzwerkkarten (LAN/WLAN) Konfiguration"
     DSL="Einwahl per DSL-Modem"
-    ISDN="Einwahl per ISDN"
     EXIT="Beenden"
     ;;
   *)
@@ -91,18 +90,15 @@ case "$LANGUAGE" in
     MESSAGE1="Please select:"
     NETCARD="Configure network card (LAN/WLAN)"
     DSL="Dial via DSL-adapter"
-    ISDN="Dial via ISDN"
     EXIT="Quit"
    ;;
 esac
 
 # Shortcut description selected
 TYPES=(netcardconfig "$NETCARD" \
-pppoeconf "$DSL" \
-isdnconfig "$ISDN")
+pppoeconf "$DSL")
 
 type pppoeconf   >/dev/null 2>&1 || { unset 'TYPES[2]';  unset 'TYPES[3]';  }
-type isdnconfig  >/dev/null 2>&1 || { unset 'TYPES[4]';  unset 'TYPES[5]';  }
 
 rm -f "$TMP"
 
