@@ -1,4 +1,5 @@
 /etc/apt/
 /etc/ssh/
 /etc/network/
+/etc/systemd/network/
 /etc/grml/
