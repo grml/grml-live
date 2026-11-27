@@ -31,7 +31,6 @@ fi
 
 fcopy -m root,root,0755 -v /usr/bin/grml-lock
 
-fcopy -m root,root,0644 /etc/grml/net-functions
 fcopy -m root,root,0644 /etc/grml/routersetup
 
 fcopy -m root,root,0755 /usr/sbin/grml-ap

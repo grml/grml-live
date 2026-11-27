@@ -12,8 +12,6 @@ set -e
 CONFIG_FILE=/etc/grml/routersetup
 # shellcheck disable=SC1091
 . /etc/grml/lsb-functions
-# shellcheck source=../../etc/grml/net-functions
-. /etc/grml/net-functions
 # shellcheck disable=SC1091
 . /etc/grml/script-functions
 
@@ -59,6 +57,17 @@ set_ath_mode() {
           einfo "Setting $1 to mode $2"
           iwpriv "$1" mode "$2" ; eend $?
         eoutdent
+}
+
+getWlanDevices() {
+  awk 'FS=":" {gsub(" ", ""); if(NR>2 ) print $1 | "sort" } ' /proc/net/wireless
+}
+
+# getLanDriver deviceName
+getLanDriver() {
+    if [ -e "/sys/class/net/$1/device/driver" ] ; then
+        basename "$(readlink "/sys/class/net/$1/device/driver")"
+    fi
 }
 
 setupWifiDevice() {
@@ -140,8 +149,6 @@ setup_generic() {
 }
 
 detect_wl_cards() {
-        # If you want to extend this with a specific funtion for a
-        # special driver, please have a look at /etc/grml/net-functions
         for i in $AP_DEVICE $(getWlanDevices) ; do
                 DRIVER=$(getLanDriver "$i")
                 case $DRIVER in
