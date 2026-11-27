@@ -17,7 +17,7 @@ Copyright: 2004-2014, Michael Prokop <mika@grml.org>
            2004, Klaus Knopper
 License: GPL-2
 
-Files: sbin/grml-vnet
+Files: config/files/GRMLBASE/usr/sbin/grml-vnet
 Copyright: 2007-2010, Michael Gebetsroither <gebi@grml.org>
 License: GPL-2
 
