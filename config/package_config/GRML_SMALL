@@ -76,6 +76,7 @@ mmdebstrap
 # networking
 atftp
 bridge-utils
+cloud-init
 ethtool
 ifenslave
 ifupdown
