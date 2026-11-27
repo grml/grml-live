@@ -1447,5 +1447,25 @@ config_easteregg() {
 }
 # }}}
 
+# {{{ cloud-init support
+config_cloudinit() {
+  if echo "$CMDLINE" | grep -q 'cloud-init=disabled' ; then
+    ewarn "Skipping cloud-init setup as requested on boot commandline." ; eend 0
+    return 0
+  fi
+
+  if [ -x /usr/lib/cloud-init/ds-identify ] ; then
+    ewarn "No cloud-init present, skipping cloud-init configuration." ; eend 0
+    return 0
+  fi
+
+  if /usr/lib/cloud-init/ds-identify ; then
+    einfo "Identified cloud-init data source, starting cloud-init services..."
+    service_wrapper cloud-init.target start  # FIXME >>$DEBUG 2>>$DEBUG or logging?!
+    eend $?
+  fi
+}
+# }}}
+
 ## END OF FILE #################################################################
 # vim:foldmethod=marker expandtab ai ft=bash shiftwidth=2

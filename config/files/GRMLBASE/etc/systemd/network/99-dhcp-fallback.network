@@ -1,0 +1,14 @@
+# TODO / FIXME
+## Match on all physical ethernet links
+#[Match]
+#Kind=!*
+#Type=ether
+#
+#[Network]
+#DHCP=yes
+#
+#[DHCPv4]
+## In our DHCP we trust
+#UseDomains=true
+## Don't use duid
+#ClientIdentifier=mac
