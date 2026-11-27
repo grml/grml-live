@@ -1,0 +1,117 @@
+#!/bin/bash
+# Filename:      grml-vnet
+# Purpose:       program to create tun/tap devices and add them to a bridge
+# Authors:       Michael Gebetsroither <gebi@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+set -e
+#set -x
+
+PN_="`basename $0`"
+OPT_DEL_='false'
+OPT_USER_=''
+OPT_GROUP_=''
+OPT_BRIDGE_=''
+OPT_AUTO_='false'
+
+
+function printUsage()
+{
+    cat <<EOT
+Usage: "$PN_" [OPTIONS] <tun0> <tun1> ...
+
+$PN_ creates persistent tun/tap devices with bridge handling
+
+OPTIONS:
+   -d             delete the tun devices and remove them from the bridge if given
+   -u <user>      this user should be able to use the tun device
+   -g <group>     this group should be able to use the tun device
+   -b <bridge>    if given, all tun/tap devices are added/removed from the bridge
+   -a             enable auto mode, eg. create the bridge if not already existing and
+                  delete it when empty after removing given tun devices
+   -h             this help
+EOT
+}
+
+function fromCmdline()
+{
+    local action_="$1"
+    shift
+
+    while (( $# != 0 )); do
+        case "$1" in
+            "") continue ;;
+        esac
+        $action_ "$1"
+        shift
+    done
+}
+
+function createTun()
+{
+    local args_=''
+    if [[ $OPT_USER_ != '' ]]; then args_="$args_ user $OPT_USER_"; fi
+    if [[ $OPT_GROUP_ != '' ]]; then args_="$args_ group $OPT_GROUP_"; fi
+    ip tuntap add mode tap name "$1" $args_
+    if [[ $OPT_BRIDGE_ != '' ]]; then
+        ip link set dev "$1" master "$OPT_BRIDGE_"
+    fi
+    ip link set up dev "$1"
+}
+
+function trashTun()
+{
+    ip link del "$1"
+}
+
+function die()
+{
+    echo "$@" >&2
+    exit 1
+}
+
+##
+# MAIN
+##
+
+while getopts "du:g:b:ah" opt; do
+    case "$opt" in
+        d) OPT_DEL_='true' ;;
+        u) OPT_USER_="$OPTARG" ;;
+        g) OPT_GROUP_="$OPTARG" ;;
+        b) OPT_BRIDGE_="$OPTARG" ;;
+        a) OPT_AUTO_='true' ;;
+        h) printUsage; exit 0 ;;
+        ?) printUsage; exit 1 ;;
+    esac
+done
+shift $(($OPTIND - 1))
+
+if [[ $# < 1 ]]; then
+    echo "Error: Please give at least one device" >&2
+    printUsage
+    exit 1
+fi
+
+if [[ $OPT_DEL_ == 'false' ]]; then
+    if [[ $OPT_BRIDGE_ != '' && $OPT_AUTO_ == 'true' ]]; then
+        ip link ls type bridge dev "$OPT_BRIDGE_" &>/dev/null || ip link add name "$OPT_BRIDGE_" type bridge
+        ip link set up dev "$OPT_BRIDGE_"
+    fi
+    fromCmdline "createTun" "$@"
+else
+    fromCmdline "trashTun" "$@"
+    if [[ $OPT_BRIDGE_ != '' && $OPT_AUTO_ == 'true' ]]; then
+        tmp_=$(ip link ls master "$OPT_BRIDGE_")
+        if [[ -z "$tmp_" ]]; then
+            ip link set down dev "$OPT_BRIDGE_"
+            ip link del "$OPT_BRIDGE_"
+        else
+            die "E: bridge $OPT_BRIDGE_ not empty, not removing"
+        fi
+    fi
+fi
+
+## END OF FILE #################################################################

@@ -1,0 +1,84 @@
+#!/bin/sh
+# Filename:      grml-router
+# Purpose:       set up your box as NAT-router
+# Authors:       grml-team (grml.org), Ulrich Dangel <mru@grml.org>, Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+CONFIG_FILE=/etc/grml/routersetup
+. /etc/grml/lsb-functions
+. /etc/grml/net-functions
+. /etc/grml/script-functions
+
+check4root || exit 1
+
+if [ -r "$CONFIG_FILE" ] ; then
+  . "$CONFIG_FILE"
+else
+  ewarn "Could not read $CONFIG_FILE"
+fi
+
+# defaults if unconfigured
+[ -n "$OUTDEV" ]   || OUTDEV=auto
+[ -n "$IPTABLES" ] || IPTABLES=iptables
+
+case "$OUTDEV" in
+  auto|default)
+    OUTDEV=$(defaultGWDev)
+    if [ -z "$OUTDEV" ] ; then
+      eerror "The outgoing device could not be determined."
+      eerror "Please adjust OUTDEV in $CONFIG_FILE or set OUTDEV as environment variable"
+      exit 1
+    fi
+    ;;
+esac
+
+check4progs $IPTABLES || exit 1
+
+case "$1" in
+    start)
+        einfo "Adjusting kernel variables (net.ipv4.*)"
+          sysctl -w net.ipv4.conf.all.rp_filter=1    1>/dev/null && \
+          sysctl -w net.ipv4.conf.all.log_martians=1 1>/dev/null && \
+          sysctl -w net.ipv4.ip_forward=1            1>/dev/null
+        eend $?
+        einfo "Setting up iptables rule"
+          eindent
+
+            einfo "Adding masquarade rule"
+            $IPTABLES -t nat -A POSTROUTING -o $OUTDEV -j MASQUERADE
+            eend $?
+          eoutdent
+   ;;
+
+   stop)
+       einfo "Resetting kernel variables"
+         sysctl -w net.ipv4.ip_forward=0            1>/dev/null && \
+         sysctl -w net.ipv4.conf.all.log_martians=0 1>/dev/null
+       eend $?
+
+       einfo "Removing iptables rule"
+         $IPTABLES -t nat -D POSTROUTING -o $OUTDEV -j MASQUERADE
+       eend $?
+   ;;
+
+   restart)
+        $0 stop
+        sleep 1
+        $0 start
+   ;;
+
+   info)
+    einfo "$0 - script which turns on router capabilities (NAT)"
+    einfo "Configure it via $CONFIG_FILE" ; eend 0
+   ;;
+
+   *)
+    echo "Usage: $0 {start|stop|restart|info}"
+    exit 1
+   ;;
+esac
+
+## END OF FILE #################################################################
+# vim: ft=sh expandtab ai

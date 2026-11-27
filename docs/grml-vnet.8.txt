@@ -1,0 +1,70 @@
+GRML-VNET(8)
+============
+
+NAME
+----
+grml-vnet - creates persistent tun/tap devices with bridge handling
+
+
+SYNOPSIS
+--------
+*grml-vnet* [OPTIONS] <tun1> <tun2> ...
+
+
+DESCRIPTION
+-----------
+This manual page documents briefly the *grml-vnet* command.
+
+*grml-vnet* is a script to create persistent tun/tap devices with integrated
+bridge handling.
+
+
+OPTIONS
+-------
+*-d*::
+Delete the tun/tap devices and remove them from the bridge (if given with -b).
+
+*-u <user>*::
+Make tun devices useable from <user> without special permissions.
+
+*-g <group>*::
+Make tun devices useable from <group> without special permissions.
+
+*-b <bridge>*::
+Remove/delete given tun devices from <bridge>.
+
+*-a*::
+Automatic bridge handling, eg. create bridge if not existing and delete it if
+no more devices are part of it after removing the given tun/tap devices.
+
+*-h*::
+Show the help message.
+
+
+EXAMPLES
+--------
+
+Config sample file for /etc/network/interfaces with bridge and tun/tap devices.
+This creates tap0..tap3 which are part of the bridge vnet.
+
+-------------
+    auto vnet
+    iface vnet inet static
+        post-up  /usr/sbin/grml-vnet -u grml -b vnet tap{0..3}
+        pre-down /usr/sbin/grml-vnet -u grml -b vnet -d tap{0..3}
+        bridge_ports none
+        address 192.168.10.1
+        netmask 255.255.255.0
+-------------
+
+
+SEE ALSO
+--------
+grml-ap(8), grml-bridge(8), grml-router(8)
+
+
+AUTHOR
+------
+grml-vnet was written by Michael Gebetsroither <gebi@grml.org>
+
+This manual page was written by Michael Gebetsroither <gebi@grml.org>

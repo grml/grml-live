@@ -19,7 +19,6 @@ grml-debootstrap
 grml-etc-core
 grml-hwinfo
 grml-keyring
-grml-network
 grml-quickconfig
 grml-tips
 hdparm

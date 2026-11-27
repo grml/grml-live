@@ -1,0 +1,132 @@
+grml-sniff(8)
+============
+
+NAME
+----
+grml-sniff - script for configuring a network sniffing setup
+
+SYNOPSIS
+--------
+*grml-sniff* [OPTIONS]
+
+DESCRIPTION
+-----------
+This manual page documents briefly the *grml-sniff* command.
+*grml-sniff* is a script for configuring a network sniffing setup.
+It does NOT sniff on a hub/switch but instead sets up a man-in-the-middle (MITM)
+configuration using a bridge device with two network devices.
+
+OPTIONS
+-------
+
+  *start*::
+
+Start sniffing setup.
+
+  *stop*::
+
+Stop sniffing setup (set interfaces down and remove bridge device).
+
+  *restart*::
+
+Restart grml-sniff.
+
+  *status*::
+
+Display status of configuration.
+
+  *info*|*-h*|*--help*::
+
+Show usage information.
+
+Usage example
+-------------
+
+This section describes the setup and configuration for capturing network traffic
+on a setup like follows (assuming the 'Sniffing Computer' is the box where
+you are using Grml with grml-sniff):
+
+  Hub/Switch/Router
+         ^
+         |
+         | Interface known as 'eth0' in the documentation
+         |
+         |
+         v            Interface known as 'eth2'
+  Sniffing Computer <---------------------------> Control Computer (optional,
+         ^                                        providing GUI, Wireshark,
+         |                                        Backup of dumpfiles, etc)
+         |
+         | Interface known as 'eth1' in the documentation
+         |
+         v
+   Client System
+
+Disable DHCP
+~~~~~~~~~~~~
+
+Start with booting Grml using the 'nodhcp' bootoption. This makes sure that no
+network configuration is being executed automatically while booting. If you
+booted your Grml system without the nodhcp option by accident, just execute
+'killall pump; killall dhclient' after booting finished to make sure there
+aren’t any running DHCP clients anymore.
+
+After booting finished check out the available network interfaces:
+
+  ifconfig -a
+
+At least two interfaces should be present (usually named eth0 and eth1, that’s
+what we are using in this documentation as well). Make sure the network cards
+are connected with the hub/switch/router and the client accordingly! The third
+interface (known as eth2 in this documentation) is just optional and not
+necessary for sniffing itself.
+
+Simple (but not necessarily 100% reliable) check for network connection using a
+software command:
+
+  ethtool eth0
+  ethtool eth1
+  ethtool eth2
+
+Look for 'Advertised auto-negotiation: Yes' and 'Link detected: yes'.
+
+Configuration
+~~~~~~~~~~~~~
+
+Make sure the according network interfaces are configured as BRIDGE_DEVICES in
+/etc/grml/router-setup. If you are using eth0 and eth1 you don't have to do
+anything (the default is just fine)! Otherwise adjust BRIDGE_DEVICES in
+/etc/grml/router-setup accordingly. For example if the devices you would like to
+use within the sniffing bridge are named eth2 and eth4 use:
+
+  BRIDGE_DEVICES='eth2 eth4'
+
+Start sniffing setup
+~~~~~~~~~~~~~~~~~~~~
+
+Assuming you configured /etc/grml/router-setup as documented in the previous
+section, finally invoke grml-sniff:
+
+  grml-sniff start
+
+That's it. Now your system should be set up accordingly for capturing network
+traffic.
+
+Capturing traffic
+~~~~~~~~~~~~~~~~~
+
+Execute:
+
+  tcpdump -s0 -C 50 -v -w pcap -i br0
+
+to generate files named pcap, pcap1, pcap2,... each with a file size of ~50MB.
+Press CTRL-C to stop capturing traffic. You can analyse the generated pcap files
+for example using wireshark(1).
+
+See also
+--------
+grml-ap(8), grml-bridge(8), grml-router(8)
+
+AUTHOR
+------
+grml-sniff was written by Michael Prokop <mika@grml.org>.
