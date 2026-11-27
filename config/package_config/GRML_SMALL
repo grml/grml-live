@@ -26,7 +26,6 @@ util-linux
 
 # deploy on remote sites
 ppp
-pppoeconf
 
 # disk subsystems support/debugging
 cryptsetup
@@ -76,9 +75,8 @@ mmdebstrap
 # networking
 atftp
 bridge-utils
+cloud-init
 ethtool
-ifenslave
-ifupdown
 iperf3
 iproute2
 iptstate
