@@ -1,0 +1,22 @@
+.TH debnet 8
+.SH NAME
+debnet \- scan for Debian\-style network configs and enable it on the system
+.SH SYNOPSIS
+.B
+debnet
+.SH DESCRIPTION
+.B debnet
+is a script which scans partitions for Debian\-style network configs
+(/etc/network/interfaces) and enables it on the system.
+
+The feature was implemented as boot option for the Grml system but as you might
+want to use this feature standalone or within your own scripts the according
+code is provided as separate script nowadays.
+.SH OPTIONS
+.TP
+.B -h
+.RS 4
+Show the help message.
+.RE
+.SH AUTHOR
+debnet was written by Michael Prokop <mika@grml.org>.

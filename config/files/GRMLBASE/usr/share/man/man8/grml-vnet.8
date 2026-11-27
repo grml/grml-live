@@ -1,0 +1,57 @@
+.TH grml-vnet 8
+.SH NAME
+grml-vnet \- creates persistent tun/tap devices with bridge handling
+.SH SYNOPSIS
+\fBgrml\-vnet\fP [OPTIONS] <tun1> <tun2> .\|.\|.
+.SH DESCRIPTION
+This manual page documents briefly the \fBgrml\-vnet\fP command.
+
+\fBgrml\-vnet\fP is a script to create persistent tun/tap devices with integrated
+bridge handling.
+.SH OPTIONS
+.B -d
+.RS 4
+Delete the tun/tap devices and remove them from the bridge (if given with \-b).
+.RE
+.B -u <user>
+.RS 4
+Make tun devices useable from <user> without special permissions.
+.RE
+.B -g <group>
+.RS 4
+Make tun devices useable from <group> without special permissions.
+.RE
+.B -b <bridge>
+.RS 4
+Remove/delete given tun devices from <bridge>.
+.RE
+.B -a
+.RS 4
+Automatic bridge handling, eg. create bridge if not existing and delete it if
+no more devices are part of it after removing the given tun/tap devices.
+.RE
+.B -h
+.RS 4
+Show the help message.
+.RE
+.SH EXAMPLES
+Config sample file for /etc/network/interfaces with bridge and tun/tap devices.
+This creates tap0..tap3 which are part of the bridge vnet.
+.sp
+.if n .RS 4
+.nf
+.fam C
+    auto vnet
+    iface vnet inet static
+        post\-up\&  /usr/sbin/grml\-vnet \-u grml \-b vnet tap{0..3}
+        pre\-down /usr/sbin/grml\-vnet \-u grml \-b vnet \-d tap{0..3}
+        bridge_ports none
+        address 192.168.10.1
+        netmask 255.255.255.0
+.fam
+.fi
+.if n .RE
+.SH SEE ALSO
+grml\-ap(8), grml\-bridge(8), grml\-router(8)
+.SH AUTHOR
+grml\-vnet was written by Michael Gebetsroither <gebi@grml.org>.
