@@ -51,11 +51,10 @@ function fromCmdline()
 
 function createTun()
 {
-    local args_=''
-    if [[ $OPT_USER_ != '' ]]; then args_="$args_ user $OPT_USER_"; fi
-    if [[ $OPT_GROUP_ != '' ]]; then args_="$args_ group $OPT_GROUP_"; fi
-    # shellcheck disable=SC2086
-    ip tuntap add mode tap name "$1" $args_
+    local args_=()
+    if [[ $OPT_USER_ != '' ]]; then args_+=(user "$OPT_USER_"); fi
+    if [[ $OPT_GROUP_ != '' ]]; then args_+=(group "$OPT_GROUP_"); fi
+    ip tuntap add mode tap name "$1" "${args_[@]}"
     if [[ $OPT_BRIDGE_ != '' ]]; then
         ip link set dev "$1" master "$OPT_BRIDGE_"
     fi
