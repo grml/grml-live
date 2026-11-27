@@ -1,0 +1,678 @@
+#!/bin/bash
+# Filename:      grml-network
+# Purpose:       configuration script for network
+# Authors:       Michael Prokop <mika@grml.org>, Marcel Wichern 2006, Klaus Knopper 2002, Niall Walsh + Stefan Lippers-Hollmann 2004-2007
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+# Changes have been merged from Kanotix's and Sidux's netcardconfig:
+# http://kanotix.com/files/debian/pool/main/n/netcardconfig-kanotix/
+# http://svn.berlios.de/wsvn/fullstory/configure-networkcard/trunk/
+################################################################################
+
+PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+LANGUAGE=C LANG=C
+export PATH LANGUAGE LANG
+
+# shellcheck disable=SC1091
+. /etc/grml/script-functions
+check4root || exit 1
+
+TMP=$(mktemp)
+
+bailout() {
+  rm -f "$TMP"
+  exit "${1:-0}"
+}
+
+check_for_blocked_devices() {
+  if ! command -v rfkill &>/dev/null ; then
+    echo "Warning: rfkill executable not present, skipping check for blocked devices."
+    return 0
+  fi
+
+  # if we detect any blocked devices (SOFT or HARD) then report
+  if rfkill | grep -w 'blocked' ; then
+    return 0
+  fi
+
+  return 1
+}
+
+# This function produces the IWOURLINE for interfaces
+writeiwline() {
+  IWOURLINE=""
+
+  if [ -n "$KEY" ]; then
+    if [ "$PUBKEY" -eq 1 ]; then
+      # Store the key in interfaces in wireless-key
+      IWOURLINE="$IWOURLINE\twireless-key $KEY\n"
+    else
+      # Store the key in /etc/network/wep.$DV which is root readable only
+      # Use pre-up in interfaces to read and set it
+      echo "$KEY" > "/etc/network/wep.$DV" && chmod 600 "/etc/network/wep.$DV" && IWOURLINE="$IWOURLINE\tpre-up KEY=\$(cat /etc/network/wep.$DV) && iwconfig $DV key \$KEY\n"
+    fi
+  fi
+
+  for mod in /sys/module/rt2??0/ ; do
+    if [ -d "$mod" ]; then
+      IWPREUPLINE="$IWPREUPLINE\tpre-up ip link set $DV up\n"
+      break
+    fi
+  done
+
+  # execute ESSID last, but make sure that it is written as first option
+  if [ -n "$ESSID" ]; then
+    IWOURLINE="$IWOURLINE\twireless-essid $ESSID\n"
+  fi
+
+  if [ "$WPAON" -gt 0 ]; then
+    IWOURLINE="$IWOURLINE\twpa-ssid $ESSID\n\twpa-psk $WPASECRET\n"
+  fi
+
+  IWOURLINE="$IWOURLINE $IWPREUPLINE"
+  #echo "DEBUG: for interfaces $IWOURLINE"
+}
+
+generate_udev_entry() {
+  interface=''
+  mkdir -p /etc/udev/scripts
+  echo "# Auto generated script from netcardconfig on $(date)
+# Executing this script generates an entry in /etc/udev/rules.d/z25_persistent-net.rules
+# for you, please check z25_persistent-net.rules for existing entries before
+# running this script (once more)." > /etc/udev/scripts/netcardconfig
+  for interface in $(ip -oneline link | awk '!/ lo: / {print $2}' | sed 's/:$//; s/@.*//') ; do
+      echo -n "INTERFACE=$interface /lib/udev/write_net_rules " >> /etc/udev/scripts/netcardconfig && \
+      if which udevadm >/dev/null 2>&1; then
+        udevadm info -a -p "/sys/class/net/$interface" | awk -F'==' '/address/ {print $2}' >> /etc/udev/scripts/netcardconfig
+      else
+        udevinfo -a -p "/sys/class/net/$interface" | awk -F'==' '/address/ {print $2}' >> /etc/udev/scripts/netcardconfig
+      fi
+  done
+  # send errors to /dev/null as well because the sed line inside the /lib/udev/write_net_rules
+  # script outputs a sed warning which might unsettle users
+  chmod +x /etc/udev/scripts/netcardconfig && /etc/udev/scripts/netcardconfig 1>/dev/null 2>&1
+}
+
+disable_config_dhcp() {
+  if grep -q CONFIG_DHCP /etc/grml/autoconfig ; then
+     sed -i "s|^CONFIG_DHCP.*|CONFIG_DHCP='no'|" /etc/grml/autoconfig
+  fi
+}
+
+device2props() {
+  PARTCOUNT=0
+  isauto=0
+  isfirewire=0
+  iswireless=0
+  driver=""
+  mac=""
+  for PART in $DEVICE; do
+    if [ $PARTCOUNT -eq 0 ]; then
+      DEVICENAME=$PART
+    else
+      echo "$PART" | grep -q A::1 && isauto=1
+      echo "$PART" | grep -q F::1 && isfirewire=1
+      echo "$PART" | grep -q W::1 && iswireless=1
+      [ -z "$driver" ] && driver=$(echo "$PART"|awk 'BEGIN {FS="::"} /^D:/{print $2}')
+      [ -z "$mac" ] && mac=$(echo "$PART"|awk 'BEGIN {FS="::"} /^M:/{print $2}')
+    fi
+    ((PARTCOUNT++))
+  done
+}
+
+props2string() {
+  MY_DEVICE_NAME=""
+  [ $isfirewire -gt 0 ] && MY_DEVICE_NAME="$NET_DEVICE_NAME_FW"
+  [ -z "$MY_DEVICE_NAME" ] && [ $iswireless -gt 0 ] && MY_DEVICE_NAME="$NET_DEVICE_NAME_W"
+  [ -z "$MY_DEVICE_NAME" ] && MY_DEVICE_NAME="$NET_DEVICE_NAME"
+  MY_DEVICE_NAME="$DEVICENAME $MY_DEVICE_NAME $mac $driver"
+  [ $isauto -gt 0 ] && MY_DEVICE_NAME="$MY_DEVICE_NAME $NET_DEVICE_NAME_AUTO"
+  MY_DEVICE_NAME="${MY_DEVICE_NAME// /__}"
+}
+
+addauto() {
+  if ! grep -E "^auto .*$DV" /etc/network/interfaces >/dev/null; then
+    awk '{if(/^auto/){if(done==0){print $0 " '"$DV"'";done=1}else{print}}else{print}}END{if(done==0){print "auto '"$DV"'"}}' "/etc/network/interfaces" > "$TMP"
+    cat "$TMP" > /etc/network/interfaces
+  fi
+}
+
+remauto(){
+  if grep -e "^auto .*$DV" /etc/network/interfaces >/dev/null; then
+    perl -pi -e 's/^(auto.*)'"$DV"'(.*)$/$1$2/;' /etc/network/interfaces
+  fi
+}
+
+scanwlan(){
+  i=0
+  ip link set "$DV" up
+  iw dev "$DV" scan | awk '
+    /^BSS /       { if (ssid != "" && signal != "") print ssid "\t" signal; ssid=""; signal="" }
+    /^\t+SSID: ./ { s=$0; sub(/^[[:space:]]*SSID: /,"",s); ssid=s }
+    /^\t+signal:/  { s=$0; sub(/^[[:space:]]*/,"",s); signal=s }
+    END            { if (ssid != "" && signal != "") print ssid "\t" signal }
+  ' | sort | awk -F'\t' '{ print $1; print $2 }' > "$TMP"
+  while read -r line
+  do
+    WARRAY[i++]=$line
+  done < "$TMP"
+  unset i
+  rm -f "$TMP"
+}
+
+configiface() {
+  local METHOD
+  METHOD="${1,,}"
+  if [[ -n "${METHOD}" ]] && [[ "${METHOD}" != 'dhcp' ]]; then
+    local IP
+    IP="${2}"
+    local NM
+    NM="${3}"
+    local DG
+    DG="${4}"
+    local NS
+    NS="${5}"
+    local BC
+    BC="${IP%.*}.255"
+  fi
+
+  [ ! -r /etc/network/interfaces ] && touch /etc/network/interfaces
+  DEVICE=${NETDEVICES[$DV]}
+  device2props
+  DV=$DEVICENAME
+  ifdown "${DV}" --force
+  sleep 3
+  # INTERACTIVE=true
+  if "${INTERACTIVE}" ; then
+    # Setup wireless options?
+    if [ $iswireless -gt 0 ] && $DIALOG --yesno "$MESSAGE13" 8 45; then
+      WLDEVICECOUNT="$(LANG=C LC_MESSAGEWS=C iwconfig "$DV" 2>/dev/null | wc -l)"
+      ESSID=""
+      KEY=""
+
+      if [ -f /etc/network/interfaces ]; then
+        awk '/iface/{if(/'"$DV"'/){found=1}else{found=0}}
+          /essid/{if(found){for(i=NF;i>=2;i--)essid=$i "~" essid}}
+          /wireless[-_]key/{if(found){gsub(/^\W*wireless[-_]key\W*/,"");key=$0}}
+          END{
+            if (!(length(essid))){essid="~~~"}
+            if (!(length(key))){key="~~~"}
+            print essid" "key
+          }' /etc/network/interfaces >"$TMP"
+
+        read -r ESSID KEY<"$TMP"
+
+        [[ "$ESSID" =~ ^~~~$ ]]    && ESSID=""
+        [[ "$KEY" =~ ^~~~$ ]]      && KEY=""
+
+        # shellcheck disable=SC2088
+        ESSID=$(echo "$ESSID" | tr '~' " " | sed 's/ *$//')
+
+        if [ -z "$KEY" ]; then
+          KEY=$(cat "/etc/network/wep.$DV" 2>/dev/null)
+
+          if [ -z "$KEY" ]; then
+            PUBKEY=0
+          else
+            PUBKEY=-1
+          fi
+        else
+          PUBKEY=1
+        fi
+
+        #echo "DEBUG:E:$ESSID K:$KEY "
+        rm -f "$TMP"
+      fi
+
+      # ask to scan or manually set wireless network
+      if $DIALOG --yesno "$MESSAGEWSCAN1" 8 45 ; then
+        RESCAN=1
+
+        while [ $RESCAN -eq 1 ]
+        do
+          scanwlan
+          $DIALOG --extra-button --extra-label "Rescan" --menu "$MESSAGEWSCAN2" 20 70 15 "${WARRAY[@]}" 2>"$TMP"
+          case $? in
+            0)
+              RESCAN=0
+              ;;
+            3)
+              ;;
+            *)
+              bailout 1
+              ;;
+          esac
+        done
+
+        read -r ESSID <"$TMP" ; rm -f "$TMP"
+      else
+
+        $DIALOG --inputbox "$MESSAGEW4 $DEVICENAME $MESSAGEW5" 15 50 "$ESSID" 2>"$TMP" || bailout 1
+        read -r ESSID <"$TMP" ; rm -f "$TMP"
+        [ -z "$ESSID" ] && ESSID="any"
+      fi
+
+      WPAON=0
+      IWDRIVER=$driver
+
+      case $IWDRIVER in
+        ath_pci)
+          WPA_DEV="madwifi"
+          ;;
+        ipw2200|ipw2100|ipw3945)
+          WPA_DEV="wext"
+          ;;
+        hostap)
+          WPA_DEV="hostap"
+          ;;
+        *)
+          WPA_DEV="wext"
+          ;;
+      esac
+
+      if [ -z "$WPA_DEV" ]; then
+        if [ -d "/proc/net/ndiswrapper/$DV" ]; then
+          WPA_DEV=ndiswrapper
+        elif [ -d "/proc/net/hostap/$DV" ]; then
+          WPA_DEV=hostap
+        elif [ "$WLDEVICECOUNT" -eq 1 ]; then
+          if [ -e /proc/driver/atmel ]; then
+            WPA_DEV=atmel
+          fi
+        fi
+      fi
+
+      WPAON=-1
+
+      if [ -n "$WPA_DEV" ]; then
+         if $DIALOG --yesno "$MESSAGEW22" 15 50; then
+            # Other wpa options
+            # scan_ssid [0]|1
+            # bssid 00:11:22:33:44:55
+            # priority [0]|Integer
+            # proto [WPA RSN] WPA|RSN
+            # key_mgmt [WPA-PSK WPA-EAP]|NONE|WPA-PSK|WPA-EAP|IEEE8021X
+            # pairwise [CCMP TKIP]|CCMP|TKIP|NONE
+            # group [CCMP TKIP WEP105 WEP40]|CCMP|TKIP|WEP105|WEP40
+            # eapol_flags [3]|1|2
+
+            WPAON=1
+            KEY=""
+            WPASECRET=$(awk '
+                    /iface/{
+                            if(found){
+                                    found=0
+                            }
+                            else if (/'"$DV"'/){
+                                    found=1
+                            }
+                    }
+                    /wpa-psk/{
+                            if(found){
+                                    gsub(/\W*#.*$/,"");
+                                    if (gsub(/^\W*wpa-psk\W*/,"")){
+                                            gsub(/[[:space:]]*$/,"");
+                                            print;
+                                            exit;
+                                    }
+                            }
+                    }
+                    ' /etc/network/interfaces)
+            FIRST_RUN=0  # show the wpasecret input box at least once
+            while [ -z "$WPASECRET" ] || [ "$FIRST_RUN" ] ; do
+              $DIALOG --inputbox "$MESSAGEW23 $ESSID" 15 50 "$WPASECRET" 2>"$TMP" || bailout 1
+              read -r WPASECRET <"$TMP"
+              if [ -z "$WPASECRET" ] ; then
+                $DIALOG --msgbox "Sorry, empty password not allowed, please retry." 0 0 || bailout 1
+              fi
+              FIRST_RUN=""
+            done
+
+            rm -f "$TMP"
+         else
+            WPASECRET=""
+         fi
+      else
+         WPASECRET=""
+      fi
+
+      # No need for a wep key if we are using wpa
+      if [ ! $WPAON -eq 1 ]; then
+         $DIALOG --inputbox "$MESSAGEW14 $DEVICENAME $MESSAGEW15" 15 50 "$KEY" 2>"$TMP" || bailout 1
+         read -r KEY <"$TMP" ; rm -f "$TMP"
+
+         if [ -n "$KEY" ] && [ "$PUBKEY" -eq 0 ]; then
+            if ! $DIALOG --yesno "$MESSAGEW25 $DEVICENAME $MESSAGEW26" 15 50; then
+               PUBKEY=1
+            fi
+         fi
+      fi
+
+      unset IWOURLINE
+      if [ "$iswireless" = "1" ] ; then
+        writeiwline
+      fi
+
+    fi # Setup wireless options?
+
+    # Configure VLAN on this interface?
+    if $DIALOG --defaultno --yesno "$MESSAGE16" 8 45; then
+      $DIALOG --inputbox "$MESSAGE17 $DV" 10 45 2>"$TMP" || bailout 1
+      read -r VLAN <"$TMP" ; rm -f "$TMP"
+      if [ -n "$VLAN" ]; then
+        modprobe 8021q # avoid warning that VLAN support isn't present yet
+        PDV=$DV
+        DV="vlan$VLAN"
+      fi
+    fi
+  fi # INTERACTIVE=true
+
+  # Use DHCP broadcast?
+  if ("${INTERACTIVE}" && "${DIALOG}" --yesno "${MESSAGE2}" 8 45) || \
+    (! "${INTERACTIVE}" && [[ "${METHOD}" == 'dhcp' ]]) ; then
+    if [ -w /etc/network/interfaces ]; then
+      rm -f "$TMP"
+      awk '/iface/{if(/'"$DV"'/){found=1}else{found=0}}
+        /^\W$/{if(blank==0){lastblank=1}else{lastblank=0}{blank=1}}
+        /\w/{blank=0;lastblank=0}
+        {if(!(found+lastblank)){print}}
+        END{print "iface '"$DV"' inet dhcp";if("'"$PDV"'"!=""){print "\tvlan-raw-device '"$PDV"'"}}' \
+        /etc/network/interfaces >"$TMP"
+      case "$DV" in
+        "$WLAN")
+          # write wireless configuration only when we are dealing with a wireless device,
+          # it might be set from a previous configuration run of a wireless device
+          # while the currently configured network device isn't a wireless device
+          echo -e "$IWOURLINE" >> "$TMP"
+          ;;
+      esac
+      #echo -e "\n\n" >> $TMP
+      cat "$TMP" >/etc/network/interfaces
+      rm -f "$TMP"
+      # Add an "auto" entry
+      #addauto
+    fi
+  else
+    if "${INTERACTIVE}" ; then
+      if [ -f /etc/network/interfaces ]; then
+        awk '/iface/{if(/'"$DV"'/){found=1}else{found=0}}
+          /address/{if(found){address=$NF}}
+          /netmask/{if(found){netmask=$NF}}
+          /broadcast/{if(found){broadcast=$NF}}
+          /gateway/{if(found){gateway=$NF}}
+          /dns-nameservers/{if(found){dnsnameservers=$NF}}
+          END{print address" "netmask" "broadcast" "gateway" "dnsnameservers}' /etc/network/interfaces >"$TMP"
+        read -r IP NM BC DG NS <"$TMP"
+        rm -f "$TMP"
+      fi
+
+      $DIALOG --inputbox "$MESSAGE6 $DV" 10 45 "${IP:-192.168.0.1}" 2>"$TMP" || bailout 1
+      read -r IP <"$TMP" ; rm -f "$TMP"
+
+      $DIALOG --inputbox "$MESSAGE7 $DV" 10 45 "${NM:-255.255.255.0}" 2>"$TMP" || bailout 1
+      read -r NM <"$TMP" ; rm -f "$TMP"
+
+      $DIALOG --inputbox "$MESSAGE8 $DV" 10 45 "${BC:-${IP%.*}.255}" 2>"$TMP" || bailout 1
+      read -r BC <"$TMP" ; rm -f "$TMP"
+
+      # if we already have a default route, don't suggest to add another one as that might fail
+      __default_gw=""
+      if ! route -en | grep -q '^0.0.0.0' ; then
+        __default_gw="${DG:-${IP%.*}.1}"
+      fi
+      $DIALOG --inputbox "$MESSAGE9" 10 45 "${__default_gw}" 2>"$TMP"
+      read -r DG <"$TMP" ; rm -f "$TMP"
+
+      if [ -f "/etc/resolv.conf" ]; then
+        NS="$(awk '/^nameserver/{printf "%s ",$2}' /etc/resolv.conf)"
+      fi
+
+      $DIALOG --inputbox "$MESSAGE10" 10 45 "${NS:-$DG}" 2>"$TMP"
+      read -r NS <"$TMP" ; rm -f "$TMP"
+    fi
+
+    if [ -w /etc/network/interfaces ]; then
+      case "$DV" in
+        "$WLAN")
+          ;;
+        *)
+          # ensure we don't leak the IWOURLINE into the
+          # following awk command line, if we are configuring
+          # a device without wireless capabilities
+          unset IWOURLINE
+          ;;
+      esac
+
+      awk '/iface/{if(/'"$DV"'/){found=1}else{found=0}}
+        {if(!found){print}}
+        END{print "\niface '"$DV"' inet static\n\taddress '"$IP"'\n\tnetmask '"$NM"'\n\tnetwork '"${IP%.*}.0"'";if("'"$BC"'"!=""){print "\tbroadcast '"$BC"'"};if("'"$DG"'"!=""){print "\tgateway '"$DG"'"};if("'"$NS"'"!=""){print "\tdns-nameservers '"$NS"'"};if("'"$PDV"'"!=""){print "\tvlan-raw-device '"$PDV"'"};if("'"$IWOURLINE"'"!=""){print "'"$IWOURLINE"'"};print "\n"}' \
+        /etc/network/interfaces >"$TMP"
+
+      cat "$TMP" >/etc/network/interfaces
+      rm -f "$TMP"
+
+      # Add an "auto" entry
+      #addauto
+    fi
+
+  fi # Use DHCP broadcast?
+  echo "Done."
+}
+
+enable_auto_if () {
+  addauto
+  # get persistent interface names across reboots
+  generate_udev_entry
+  # make sure we don't run the dhcp stuff when using /etc/network/interfaces
+  disable_config_dhcp
+}
+
+DIALOG="dialog"
+
+NET_DEVICE_NAME="Network_device"
+NET_DEVICE_NAME_W="Wireless_device"
+NET_DEVICE_NAME_FW="Firewire_device"
+NET_DEVICE_NAME_AUTO="Auto"
+MESSAGE0="No supported network cards found."
+MESSAGE1="Please select network device"
+MESSAGE2="Use DHCP broadcast?"
+MESSAGE6="Please enter IP Address for"
+MESSAGE7="Please enter Network Mask for"
+MESSAGE8="Please enter Broadcast Address for"
+MESSAGE9="Please enter Default Gateway"
+MESSAGE10="Please enter Nameserver(s)"
+MESSAGE13="Setup wireless options?"
+MESSAGE14="Failed to bring up the interface, would you like to reconfigure it?"
+MESSAGE15="Interface enabled, do you want it auto enabled at boot?"
+MESSAGE16="Configure VLAN on this interface?"
+MESSAGE17="Please enter VLAN id for"
+MESSAGEW4="Enter the ESSID for"
+MESSAGEW5="\n(empty for 'any', not recommended!)\n"
+MESSAGEW14="Enter the encryption key\nfor"
+MESSAGEW15="\n\n(empty for cleartext, not recommended !!)"
+MESSAGEW22="Enable WPA support?"
+MESSAGEW23="Enter the WPA passphrase (passphrase must be 8..63 characters) for"
+MESSAGEW25="Would you like to store your wep key in it's own private file ("
+MESSAGEW26=")?   If you say no, your wep key will be stored in /etc/network/interfaces and will be readable by any account on your system.  You may want to 'chmod 600 /etc/network/interfaces' if you answer no to this question"
+MESSAGEWSCAN1="Scan for available wireless networks?"
+MESSAGEWSCAN2="Please choose a wireless network from below:"
+
+NET_DEV="${NET_DEV:-}"
+METHOD="${METHOD,,:-}"
+IPADDR="${IPADDR:-}"
+NETMASK="${NETMASK:-}"
+GATEWAY="${GATEWAY:-}"
+DNS="${DNS:-}"
+INTERACTIVE=true
+
+NETDEVICESCOUNT=0
+if [ -r /proc/net/dev ] ; then
+   LAN=$(tail -n +3 /proc/net/dev | awk -F: '{print $1}'| sed "s/\s*//" | grep -v -e ^lo -e ^vmnet | sort)
+else
+   LAN=""
+fi
+
+if [[ -n "${NET_DEV}" ]] && [[ -n "${METHOD}" ]]; then
+  if [[ "${METHOD}" != 'dhcp' ]]; then
+    missed=0
+    if [[ -z "${IPADDR}" ]]; then
+      echo "Mandatory parameter IPADDR for method ${METHOD} missing" >&2
+      ((missed++))
+    fi
+    if [[ -z "${NETMASK}" ]]; then
+      echo "Mandatory parameter NETMASK for method ${METHOD} missing" >&2
+      ((missed++))
+    fi
+    if [[ "${missed}" -gt 0 ]]; then
+      echo "Can not proceed, exiting..." >&2
+      bailout 1
+    fi
+    unset missed
+  fi
+  LAN="${NET_DEV}"
+  INTERACTIVE=false
+fi
+
+if [ -z "${WLAN[*]}" ] ; then
+  # shellcheck disable=SC2207
+  WLAN_OLD=( $(tail -n +3 /proc/net/wireless 2>/dev/null|awk -F: '{print $1}') )
+  # /proc/net/wireless does not work e.g. with iwl3945 on kernel 2.6.33 anymore
+  # shellcheck disable=SC2207,SC2235
+  WLAN_NEW=( $(for i in /sys/class/net/* ; do ( [ -d "$i/wireless" ] || [ -d "$i/phy80211" ] ) && basename "$i" ; done) )
+  set -a WLAN_IWCONFIG
+  for DEV in $LAN ; do
+    iwconfig "${DEV}" 2>/dev/null 1>&2 && WLAN_IWCONFIG+=("${DEV}")
+  done
+  # shellcheck disable=SC2207
+  WLAN=( $(echo "${WLAN_OLD[@]}" "${WLAN_NEW[@]}" "${WLAN_IWCONFIG[@]}" | tr ' ' '\n' | sort -u) )
+fi
+
+unset LAN_DEVICES WLAN_DEVICES FIREWIRE_DEVICES NETDEVICES WLAN_IWCONFIG
+
+while read -r dev mac; do
+#echo "Making NETDEVICES $NETDEVICESCOUNT $dev"
+  iswlan=$(echo "$dev" "${WLAN[@]}"|tr ' ' '\n'|sort|uniq -d)
+  isauto="0"
+  grep auto /etc/network/interfaces | grep -q "$dev" && isauto="1"
+  driver=$(ethtool -i "$dev" 2>/dev/null|awk '/^driver:/{print $2}')
+  if [ "$driver" ]; then
+    if [ "$iswlan" ]; then
+      NETDEVICES[NETDEVICESCOUNT]="$dev A::$isauto M::$mac D::$driver W::1 F::0"
+    else
+      NETDEVICES[NETDEVICESCOUNT]="$dev A::$isauto M::$mac D::$driver W::0 F::0"
+    fi
+  else
+    if [ "$iswlan" ]; then
+      NETDEVICES[NETDEVICESCOUNT]="$dev A::$isauto M::$mac W::1 F::0"
+    else
+      NETDEVICES[NETDEVICESCOUNT]="$dev A::$isauto M::$mac W::0 F::0"
+    fi
+  fi
+#echo "Made to ${NETDEVICES[$NETDEVICESCOUNT]}"
+  ((NETDEVICESCOUNT++))
+done < <(ip link show | awk ' !/^[[:space:]]/{sub(/:/,"",$2);IFACE=$2} /link.ether/{if (IFACE !~/^vmnet/) print IFACE" "$2}')
+for dev in $LAN; do
+  if [ "$(ethtool -i "${dev}" 2>/dev/null|awk '/^bus-info:/{print $2}')" == "ieee1394" ]; then
+    isauto="0"
+    grep auto /etc/network/interfaces | grep -q "${dev}" && isauto="1"
+    NETDEVICES[NETDEVICESCOUNT]="${dev} A::${isauto} D::$(ethtool -i "${dev}" 2>/dev/null|awk '/^driver:/{print $2}') W::0 F::1"
+    ((NETDEVICESCOUNT++))
+  fi
+done
+
+#NETDEVICES="$(cat /proc/net/dev | awk -F: '/eth.:|lan.:|tr.:|wlan.:|ath.:|ra.:/{print $1}')"
+
+if [ -z "${NETDEVICES[*]}" ]; then
+  $DIALOG --msgbox "$MESSAGE0" 15 45
+  bailout
+fi
+
+count="$NETDEVICESCOUNT"
+
+if [ "$count" -gt 1 ]; then
+  DEVICELIST=()
+  mycount=0
+  while [ $mycount -lt $count ]; do
+    DEVICE=${NETDEVICES[$mycount]}
+#echo "$mycount is $DEVICE"
+    device2props
+#echo "name: $DEVICENAME auto: $isauto fw: $isfirewire mac: $mac driver: $driver"
+    props2string
+    DEVICELIST=( "${DEVICELIST[@]}" "$mycount" "$MY_DEVICE_NAME" )
+    ((mycount++))
+  done
+fi
+
+# To translate
+EXITKEY="E"
+EXITMENU=( "$EXITKEY" Exit )
+
+# main program loop until they bailout
+while (true); do
+  # first get the device
+  if [ "$count" -gt 1 ]; then
+    if "${INTERACTIVE}" ; then
+
+      # Unblock possibly locked devices?
+      if [ "$iswireless" -gt 0 ] && check_for_blocked_devices; then
+        RF_INFO=$(rfkill | sed 's/$/\\n/')  # ensure we have a proper newline layout within dialog
+        if $DIALOG --yesno "Disabled wireless devices detected:\n\n${RF_INFO}\n\nPlease ensure that any possibly existing hardware switches are disabled.\nDo you want to unblock all of them?" 0 0; then
+          rfkill unblock all
+        fi
+      fi
+
+      rm -f "$TMP"
+      $DIALOG --menu "$MESSAGE1" 18 60 12 "${DEVICELIST[@]}" "${EXITMENU[@]}" 2>"$TMP" || bailout
+      read -r DV <"$TMP" ; rm -f "$TMP"
+    else
+      # we have interface name so we need to find its number in NETDEVICES
+      DV=0
+      found=false
+      for DV in "${!NETDEVICES[@]}"; do
+        if [[ "${NETDEVICES[$DV]}" =~ ^"${NET_DEV} " ]]; then
+          found=true
+          break
+        fi
+      done
+      if ! "${found}"; then
+        echo "There is no interface ${NET_DEV} in the system" >&2
+        bailout 1
+      fi
+
+      [[ -z "${IFACEDONE}" ]] || bailout
+    fi
+    [ "$DV" = "$EXITKEY" ] && bailout
+  else
+    # Only one device
+    DV=0
+    # they have asked to stop configuring the interface so exit
+    [ -z "$IFACEDONE" ] || bailout
+  fi
+  # device config loop
+  IFACEDONE=""
+  while [ -n "$DV" ] && [ -z "$IFACEDONE" ]; do
+    configiface "${METHOD}" "${IPADDR}" "${NETMASK}" "${GATEWAY}" "${DNS}"
+    if ! ifup "$DV"; then
+      if "${INTERACTIVE}" ; then
+        $DIALOG --yesno "$MESSAGE14" 15 50 || IFACEDONE="DONE"
+      else
+        echo "${MESSAGE14}" >&2
+        bailout 1
+      fi
+    else
+      if "${INTERACTIVE}" ; then
+        if $DIALOG --yesno "$MESSAGE15" 12 50 ; then
+          enable_auto_if
+        else
+          remauto
+        fi
+      else
+        enable_auto_if
+      fi
+      IFACEDONE="DONE"
+    fi
+  done
+done
+
+## END OF FILE #################################################################

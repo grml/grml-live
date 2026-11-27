@@ -31,5 +31,28 @@ fi
 
 fcopy -m root,root,0755 -v /usr/bin/grml-lock
 
+fcopy -m root,root,0644 /etc/grml/routersetup
+
+fcopy -m root,root,0755 /usr/sbin/grml-ap
+fcopy -m root,root,0644 /usr/share/man/man8/grml-ap.8
+
+fcopy -m root,root,0755 /usr/sbin/grml-bridge
+fcopy -m root,root,0644 /usr/share/man/man8/grml-bridge.8
+
+fcopy -m root,root,0755 /usr/sbin/grml-network
+
+fcopy -m root,root,0755 /usr/sbin/grml-router
+fcopy -m root,root,0644 /usr/share/man/man8/grml-router.8
+
+fcopy -m root,root,0755 /usr/sbin/grml-sniff
+fcopy -m root,root,0644 /usr/share/man/man8/grml-sniff.8
+
+fcopy -m root,root,0755 /usr/sbin/grml-vnet
+fcopy -m root,root,0644 /usr/share/man/man8/grml-vnet.8
+
+fcopy -m root,root,0755 /usr/sbin/debnet
+fcopy -m root,root,0644 /usr/share/man/man8/debnet.8
+fcopy -m root,root,0755 /usr/sbin/netcardconfig
+
 ## END OF FILE #################################################################
 # vim:ft=sh expandtab ai tw=80 tabstop=4 shiftwidth=2

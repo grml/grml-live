@@ -1,0 +1,152 @@
+.TH grml-sniff 8
+.SH NAME
+grml-sniff \- script for configuring a network sniffing setup
+.SH SYNOPSIS
+.B grml\-sniff
+[OPTIONS]
+.SH DESCRIPTION
+.sp
+This manual page documents briefly the \fBgrml\-sniff\fP command.
+\fBgrml\-sniff\fP is a script for configuring a network sniffing setup.
+It does NOT sniff on a hub/switch but instead sets up a man\-in\-the\-middle (MITM)
+configuration using a bridge device with two network devices.
+.SH OPTIONS
+.TP
+\fBstart\fP
+.RS 4
+Start sniffing setup.
+.RE
+.TP
+\fBstop\fP
+.RS 4
+Stop sniffing setup (set interfaces down and remove bridge device).
+.RE
+.TP
+\fBrestart\fP
+.RS 4
+Restart grml\-sniff.
+.RE
+.TP
+\fBstatus\fP
+.RS 4
+Display status of configuration.
+.RE
+.TP
+\fBinfo\fP|\fB\-h\fP|\fB\-\-help\fP
+.RS 4
+Show usage information.
+.RE
+.SH "USAGE EXAMPLE"
+This section describes the setup and configuration for capturing network traffic
+on a setup like follows (assuming the \fISniffing Computer\fP is the box where
+you are using Grml with grml\-sniff):
+.sp
+.if n .RS 4
+.nf
+.fam C
+Hub/Switch/Router
+       ^
+       |
+       | Interface known as \*(Aqeth0\*(Aq in the documentation
+       |
+       |
+       v\&            Interface known as \*(Aqeth2\*(Aq
+Sniffing Computer <\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-> Control Computer (optional,
+       ^\&                                        providing GUI, Wireshark,
+       |\&                                        Backup of dumpfiles, etc)
+       |
+       | Interface known as \*(Aqeth1\*(Aq in the documentation
+       |
+       v
+ Client System
+.fam
+.fi
+.if n .RE
+.SS "Disable DHCP"
+.sp
+Start with booting Grml using the \fInodhcp\fP bootoption. This makes sure that no
+network configuration is being executed automatically while booting. If you
+booted your Grml system without the nodhcp option by accident, just execute
+\fIkillall pump; killall dhclient\fP after booting finished to make sure there
+aren’t any running DHCP clients anymore.
+.sp
+After booting finished check out the available network interfaces:
+.sp
+.if n .RS 4
+.nf
+.fam C
+ifconfig \-a
+.fam
+.fi
+.if n .RE
+.sp
+At least two interfaces should be present (usually named eth0 and eth1, that’s
+what we are using in this documentation as well). Make sure the network cards
+are connected with the hub/switch/router and the client accordingly! The third
+interface (known as eth2 in this documentation) is just optional and not
+necessary for sniffing itself.
+.sp
+Simple (but not necessarily 100% reliable) check for network connection using a
+software command:
+.sp
+.if n .RS 4
+.nf
+.fam C
+ethtool eth0
+ethtool eth1
+ethtool eth2
+.fam
+.fi
+.if n .RE
+.sp
+Look for \fIAdvertised auto\-negotiation: Yes\fP and \fILink detected: yes\fP.
+.SS "Configuration"
+.sp
+Make sure the according network interfaces are configured as BRIDGE_DEVICES in
+/etc/grml/router\-setup. If you are using eth0 and eth1 you don\(cqt have to do
+anything (the default is just fine)! Otherwise adjust BRIDGE_DEVICES in
+/etc/grml/router\-setup accordingly. For example if the devices you would like to
+use within the sniffing bridge are named eth2 and eth4 use:
+.sp
+.if n .RS 4
+.nf
+.fam C
+BRIDGE_DEVICES=\*(Aqeth2 eth4\*(Aq
+.fam
+.fi
+.if n .RE
+.SS "Start sniffing setup"
+.sp
+Assuming you configured /etc/grml/router\-setup as documented in the previous
+section, finally invoke grml\-sniff:
+.sp
+.if n .RS 4
+.nf
+.fam C
+grml\-sniff start
+.fam
+.fi
+.if n .RE
+.sp
+That\(cqs it. Now your system should be set up accordingly for capturing network
+traffic.
+.SS "Capturing traffic"
+.sp
+Execute:
+.sp
+.if n .RS 4
+.nf
+.fam C
+tcpdump \-s0 \-C 50 \-v \-w pcap \-i br0
+.fam
+.fi
+.if n .RE
+.sp
+to generate files named pcap, pcap1, pcap2,.\|.\|. each with a file size of ~50MB.
+Press CTRL\-C to stop capturing traffic. You can analyse the generated pcap files
+for example using wireshark(1).
+.SH SEE ALSO
+.sp
+grml\-ap(8), grml\-bridge(8), grml\-router(8)
+.SH AUTHOR
+grml-sniff was written by Michael Prokop <mika@grml.org>.

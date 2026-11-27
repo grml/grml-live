@@ -6,6 +6,7 @@ bzip2
 console-data
 console-setup
 cryptsetup-initramfs
+dialog
 dbus
 dmidecode
 efibootmgr
@@ -19,13 +20,13 @@ grml-debootstrap
 grml-etc-core
 grml-hwinfo
 grml-keyring
-grml-network
 grml-quickconfig
 grml-tips
 hdparm
 hwinfo
 ifupdown
 initramfs-tools
+iptables
 iputils-ping
 iwd
 kbd

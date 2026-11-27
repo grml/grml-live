@@ -11,6 +11,25 @@ Files: config/files/GRMLBASE/usr/share/grml-wallpaper/graphicoreBitmapFont0-Ligh
 Copyright: 2010, Lasse Fister lasse@graphicore.de
 License: SIL
 
+Files: config/files/GRMLBASE/usr/sbin/grml-network
+Copyright: 2004-2014, Michael Prokop <mika@grml.org>
+           2020, Darshaka Pathirana <dpat@syn-net.org>
+           2004, Klaus Knopper
+License: GPL-2
+
+Files: config/files/GRMLBASE/usr/sbin/grml-vnet
+Copyright: 2007-2010, Michael Gebetsroither <gebi@grml.org>
+License: GPL-2
+
+Files: config/files/GRMLBASE/usr/sbin/netcardconfig
+Copyright: 2004-2021, Michael Prokop <mika@grml.org>
+           2018, Mykola Malkov <mmalkov@sipwise.com>
+           2013, frenbu <frenbu@yahoo.it>
+           2004-2007, Stefan Lippers-Hollmann
+           2004-2007, Niall Walsh
+           2002, Klaus Knopper
+License: GPL-2
+
 License: GPL-2+
  On Debian systems the full text of the GNU General Public License can be
  found in the `/usr/share/common-licenses/GPL-2' file.

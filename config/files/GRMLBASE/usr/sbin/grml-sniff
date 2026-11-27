@@ -1,0 +1,133 @@
+#!/bin/bash
+# Filename:      grml-sniff
+# Purpose:       script for configuring a network sniffing setup
+# Authors:       grml-team (grml.org), (c) Michael Prokop <mika@grml.org>
+# Bug-Reports:   see http://grml.org/bugs/
+# License:       This file is licensed under the GPL v2.
+################################################################################
+
+CONFIG_FILE=/etc/grml/routersetup
+# shellcheck disable=SC1091
+. /etc/grml/lsb-functions
+# shellcheck disable=SC1091
+. /etc/grml/script-functions
+
+usage_info()
+{
+   einfo "$0 - script for configuring a network sniffing setup"
+   einfo "Configure via $CONFIG_FILE - see man 8 grml-sniff" ; eend 0
+}
+
+if [ -r "$CONFIG_FILE" ] ; then
+  # shellcheck source=../../etc/grml/routersetup
+  . "$CONFIG_FILE"
+else
+  ewarn "Could not read $CONFIG_FILE"
+fi
+
+# defaults if unconfigured
+[ -n "$BRCTL" ]          || BRCTL='brctl'
+[ -n "$BRIDGE_NAME" ]    || BRIDGE_NAME='br0'
+[ -n "$BRIDGE_DEVICES" ] || BRIDGE_DEVICES='eth0 eth1'
+
+check_devs() {
+  for dev in $BRIDGE_DEVICES ; do
+    ip link show dev "$dev" >/dev/null 2>&1 || return 1
+ done
+}
+
+if ! check_devs ; then
+  eerror "BRIDGE_DEVICES $BRIDGE_DEVICES do not seem to exist." >&2
+  exit 1
+fi
+
+check4progs "$BRCTL" || exit 1
+
+case "$1" in
+    start)
+        check4root || exit 1
+        einfo "Starting sniffing setup"
+        eindent
+
+            einfo "Creating bridge device"
+            brctl addbr "$BRIDGE_NAME"
+            eend $?
+
+            einfo "Bringing network device in promiscuous mode up:"
+            eindent
+               for i in $BRIDGE_DEVICES ; do
+                   einfo "$i"
+                   ifconfig "$i" -arp promisc 0.0.0.0 up ; eend $?
+               done
+            eoutdent
+
+            einfo "Adding network devices to $BRIDGE_NAME:"
+            eindent
+            for i in $BRIDGE_DEVICES ; do
+                einfo "$i"
+                brctl addif "$BRIDGE_NAME" "$i"  ; eend $?
+            done
+            eoutdent
+
+            einfo "Bringing bridge $BRIDGE_NAME in promiscuous up"
+            ip link set "$BRIDGE_NAME" promisc on up ; eend $?
+        eoutdent
+   ;;
+
+   stop)
+        check4root || exit 1
+        einfo "Stopping sniffing setup"
+        eindent
+            einfo "Removing network devices from $BRIDGE_NAME: "
+
+            eindent
+               for i in $BRIDGE_DEVICES ; do
+                   einfo "$i "
+                   brctl delif "$BRIDGE_NAME" "$i"  ; eend $?
+               done
+            eoutdent
+
+            einfo "Disabling promiscuous mode on: "
+            eindent
+               for i in $BRIDGE_DEVICES ; do
+                   einfo "$i "
+                   ip link set "$i" promisc off ; eend $?
+               done
+            eoutdent
+
+            einfo "Bringing bridge $BRIDGE_NAME down"
+            ip link set "$BRIDGE_NAME" down; eend $?
+
+            einfo "Removing bridge device $BRIDGE_NAME"
+            ifconfig "$BRIDGE_NAME" down || /bin/true
+            brctl delbr "$BRIDGE_NAME"
+            eend $?
+
+        eoutdent
+   ;;
+
+   restart)
+        check4root || exit 1
+        $0 stop
+        sleep 1
+        $0 start
+   ;;
+
+   info|-h|--help)
+        usage_info
+   ;;
+
+   status)
+        check4root || exit 1
+        einfo "$0 - status:"
+        $BRCTL show ; eend $?
+   ;;
+
+   *)
+        echo "Usage: $0 {start|stop|restart|status|info}"
+        exit 1
+   ;;
+esac
+
+## END OF FILE #################################################################
+# vim: ft=sh expandtab ai
