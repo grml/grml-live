@@ -9,8 +9,6 @@
 CONFIG_FILE=/etc/grml/routersetup
 # shellcheck disable=SC1091
 . /etc/grml/lsb-functions
-# shellcheck source=../../etc/grml/net-functions
-. /etc/grml/net-functions
 # shellcheck disable=SC1091
 . /etc/grml/script-functions
 
@@ -26,6 +24,11 @@ fi
 # defaults if unconfigured
 [ -n "$OUTDEV" ]   || OUTDEV=auto
 [ -n "$IPTABLES" ] || IPTABLES=iptables
+
+defaultGWDev() {
+  # ip r s | awk '/^default/ {print $5}'
+  route -en | awk '/^0.0.0.0/ {print $8}'
+}
 
 case "$OUTDEV" in
   auto|default)

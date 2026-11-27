@@ -6,11 +6,6 @@
 ################################################################################
 # shellcheck shell=bash
 
-defaultGWDev() {
-  # ip r s | awk '/^default/ {print $5}'
-  route -en | awk '/^0.0.0.0/ {print $8}'
-}
-
 getWlanDevices() {
   awk 'FS=":" {gsub(" ", ""); if(NR>2 ) print $1 | "sort" } ' /proc/net/wireless
 }
