@@ -62,18 +62,22 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Determine commit hash
+        run: echo "COMMIT_HASH=$(git rev-parse --short=12 HEAD)" >> "$GITHUB_ENV"
+
       - run: ./test/gha-build-iso.sh initial
         name: "Build ISO on ${{matrix.arch}}${{matrix.extra_classes && format(' with {0}', matrix.extra_classes) || ''}}"
         env:
           EXTRA_CLASSES: ${{matrix.extra_classes}}
           ARCH: ${{matrix.arch}}
+          COMMIT_HASH: ${{env.COMMIT_HASH}}
           GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
 
       - name: Archive built ISO
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7
         with:
-          name: grml-live-build-result-initial-${{github.event.pull_request.number && format('pr{0}', github.event.pull_request.number) || 'unknown'}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
+          name: grml-live-build-result-initial-${{github.event.pull_request.number && format('pr{0}', github.event.pull_request.number) || 'unknown'}}-${{env.COMMIT_HASH}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
           if-no-files-found: error
           retention-days: 15
           path: |
@@ -84,13 +88,14 @@ jobs:
         env:
           EXTRA_CLASSES: ${{matrix.extra_classes}}
           ARCH: ${{matrix.arch}}
+          COMMIT_HASH: ${{env.COMMIT_HASH}}
           GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
 
       - name: Archive repacked ISO
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7
         with:
-          name: grml-live-build-result-repack-${{github.event.pull_request.number && format('pr{0}', github.event.pull_request.number) || 'unknown'}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
+          name: grml-live-build-result-repack-${{github.event.pull_request.number && format('pr{0}', github.event.pull_request.number) || 'unknown'}}-${{env.COMMIT_HASH}}-${{matrix.arch}}${{matrix.extra_classes && format('-{0}', matrix.extra_classes) || ''}}
           if-no-files-found: error
           retention-days: 15
           path: |
