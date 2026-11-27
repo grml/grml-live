@@ -99,9 +99,7 @@ partconf::
     This parameter mounts the specified device in read-only mode and tries to
     copy all files specified in /etc/grml/partconf to the Grml system. This
     provides the possibility to use the configuration of a harddisk
-    installation. For example using the network configuration (which is
-    specified in /etc/network) is possible using this boot parameter. Usage
-    example:
+    installation. Usage example:
 
   partconf=/dev/sda2 => try to mount /dev/sda2 and copy files specified
                         in /etc/grml/partconf to the booted Grml system
@@ -296,9 +294,9 @@ If the hard disk of the system is still available, you hopefully have saved a
 configuration file with IP address, netmask and default gateway somewhere on
 that hard disk. Grml can use the information found on a partition. Take a look
 at the 'partconf' boot parameter.  Usage example: 'grml partconf=/dev/sda2'
-copies files defined in /etc/grml/partconf from /dev/sda2 to the Grml system. As
-/etc/network is predefined in /etc/grml/partconf the configuration from
-/dev/sda2 will be taken.
+copies files defined in /etc/grml/partconf from /dev/sda2 to the Grml system.
+As common network directories are predefined in /etc/grml/partconf, the
+configuration from /dev/sda2 will be taken.
 
 Or you use a standard Grml medium and have grml read IP address, netmask and
 default gateway from another medium like a USB stick. Take a look at the script

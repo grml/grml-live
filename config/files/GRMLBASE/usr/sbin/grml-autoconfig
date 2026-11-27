@@ -72,7 +72,7 @@ you can edit the file manually as well.
 
 Please do not confuse these settings with plain Debian configuration.
 For example disabling dhcp here will NOT deactivate any configured network
-settings in /etc/network/interfaces, it just configures grml-autoconfig
+settings, it just configures grml-autoconfig
 " 0 0 0 \
 fstab "update /etc/fstab entries (check for devices)" "$FSTABSTATUS" \
 cpufreq "activate cpu frequency scaling" "$CPUSTATUS" \
