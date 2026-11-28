@@ -63,7 +63,7 @@ elif [ "$MODE" = "build-only-twice" ]; then
 ---
 last_release: "2024.12"
 debian_suite: testing
-release_version: "${GITHUB_PR_NUMBER:+pr$GITHUB_PR_NUMBER-}ci1"
+release_version: "${GITHUB_PR_NUMBER:+pr$GITHUB_PR_NUMBER-}${COMMIT_HASH:+$COMMIT_HASH-}ci1"
 release_name: "${GITHUB_PR_NUMBER:+PR$GITHUB_PR_NUMBER }CI1"
 base_iso:
     ghaci:
@@ -77,7 +77,7 @@ EOT
 ---
 last_release: "2024.12"
 debian_suite: testing
-release_version: "${GITHUB_PR_NUMBER:+pr$GITHUB_PR_NUMBER-}ci2"
+release_version: "${GITHUB_PR_NUMBER:+pr$GITHUB_PR_NUMBER-}${COMMIT_HASH:+$COMMIT_HASH-}ci2"
 release_name: "${GITHUB_PR_NUMBER:+PR$GITHUB_PR_NUMBER }CI2"
 base_iso:
     ghaci:
