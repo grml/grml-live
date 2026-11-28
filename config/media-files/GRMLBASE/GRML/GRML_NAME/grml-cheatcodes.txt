@@ -39,19 +39,16 @@ file=foobar.tbz                  Use specified file as name for configuration ar
                                  instead of the default one (config.tbz)
 extract=/etc                     Extract only /etc from configuration archive,
                                  use it in combination with myconfig or netconfig
-persistence                      Enable persistency feature, more details available at
-                                 https://wiki.grml.org/doku.php?id=persistency
+rd.live.overlay=LABEL=dev/path   Use "path" on labelled device "dev" as persistent read-write overlay
+rd.live.overlay.overlayfs=1      Enable overlayfs for the persistent read-write overlay
 hostname=...                     Set hostname to given argument
 hostname                         Set a random hostname
-nonetworking                     Do not create/overwrite /etc/network/interface during startup
 distri=...                       Set distribution name to given argument. If a jpg file named like the
                                  given distri name can be found in directory desktop on the ISO
                                  (/cdrom/desktop/"$DISTRI") it will be taken as wallpaper for grml
-debnet                           Search through local partitions for file /etc/network/interfaces,
-                                 copy /etc/network to local system and restart networking then
-dns=8.8.8.8,8.8.4.4              Set DNS resolvers during boot and for live system.
-ip=...                           Standard Linux kernel ip= boot option. Arguments:
-                                 clientip:nfsserverip:gwip:netmask:hostname:device:autoconf
+nameserver=8.8.8.8               Set DNS resolver. Can be specified multiple times.
+ip=...                           Set IP address. Arguments:
+                                 clientip:peer:gwip:netmask:hostname:device:autoconf
                                  Valid values for autoconf: off, on, dhcp, bootp, rarp, both.
                                  Almost everything is optional. Most common form: ip=dhcp
 mypath=...                       Add specified option into $PATH of Zsh
@@ -77,51 +74,12 @@ for more information regarding the configuration framework of Grml.
 
 Booting related options:
 ------------------------
-toram                            Copy the whole CD/medium to RAM and run from there
-toram=filename.squashfs          Copy the specified file to RAM and run from there
-                                 Usage example: grml toram=grml-medium.squashfs
-                                 Notice: grml2ram is an alias for this option which
-                                 corresponds with the grml flavour settings by default
-bootfrom=/dev/sda1               Use the squashfs file from directory 'live' of the specified device
-                                 Setup can be done by executing:
-                                   rsync -a --progress /run/live/medium/live /media/sda1/
-                                 NOTE: you can can also use bootfrom=/dev/disk/by-label/yourlabel
-                                 (adjust yourlabel as needed), which should prevent choosing the
-                                 wrong block device (e.g. if more than one disk is present).
-bootfrom=removable               Restrict search for the live media to removable type only.
-bootfrom=removable-usb           Restrict search for the live media to usb mass storage only.
-isofrom=[fs:][/device]/grml.iso  Use specified ISO image for booting.
-                                 Useful when booting as a rescue system from a different device.
-                                 If you want to load the image from a device different from the root device
-                                 specified through the bootloader, prefix its device path to the path, like
-                                 in "/dev/sda1/grml.iso".
-                                 Internally, the initrd will mount the given device, automatically detecting
-                                 the file system.
-                                 If needed, prefix the file system separated with a colon character to
-                                 override the automatic detection, like in "ext4:/dev/sda1/grml.iso".
-                                 As an example, boot the according grml kernel and initrd using the
-                                 bootoptions "boot=live isofrom=btrfs:/dev/vda40/path/to/grml.iso"
-                                 NOTE: "fromiso" does the same as "isofrom", it's just there
-                                 to prevent any typing errors
-                                 NOTE: you can can also use isofrom=/dev/disk/by-label/yourlabel
-                                 (adjust yourlabel as needed), which should prevent choosing the
-                                 wrong block device (e.g. if more than one disk is present).
-findiso=/grml-....iso            Look for the specified ISO file on all disks where it usually
-                                 looks for the .squashfs file (so you don't have to know the device name
-                                 as in isofrom=....).
-fetch=$IP/filename.squashfs      Download a squashfs image from a given url, copying to ram and booting it.
-live-media-path=/live/grml...    Sets the path to the live filesystem on the medium
-                                 By default, it is set to /live/$GRML_FLAVOUR/ (where $GRML_FLAVOUR
-                                 is corresponding to grml64-full, grml32-full, grml64-small,...
-                                 [Note: this parameter is mandatory]
-module=grml                      Instead of using the default "$name.module" another file can
-                                 be specified without the extension ".module"; it should be placed
-                                 on "/live" directory of the live medium
-                                 Useful for Multiboot USB pen, see
-                                 https://wiki.grml.org/doku.php?id=tips#multiboot_usb_pen
-bootid=mybootid                  Use specified argument as identifier for the ISO.
-                                 mybootid is specified in /conf/bootid.txt on the ISO.
-ignore_bootid                    Disable bootid verification.
+
+rd.live.ram=1                    Load squashfs from ISO into RAM.
+iso-scan/filename=/grml-....iso  Look for the specified ISO file on all disks/media, then mount squashfs
+                                 from within that ISO.
+root=live:http://.../grml.squashfs
+                                 Load squashfs from given HTTP Server.
 
 
 Debugging related settings:
@@ -184,7 +142,7 @@ ethdevice-timeout=...            Use specified network configuration timeout ins
 xmodule=ati|fbdev|i810|mga       Use specified X.org-Module (1)
 xmodule=nv|radeon|savage|s3      Use specified X.org-Module (2)
 xmodule=radeon|svga|i810         Use specified X.org-Module (3)
-no{acpi,cpu,dhcp,fstab,swap}     Skip parts of HW-detection
+no{acpi,cpu,fstab,swap}          Skip parts of HW-detection
 blacklist=modulename[,module2]   Completely disable loading of specified module(s) via
                                  blacklisting through udev's /etc/modprobe.d/grml
 nosound                          Mute sound devices (notice: this does not deactivate loading of sound drivers!)
@@ -206,6 +164,64 @@ i915.modeset=0    nomodeset      Disable Kernel Mode Setting (KMS) for Intel dri
 nouveau.modeset=0 nomodeset      Disable Kernel Mode Setting (KMS) for Nouveau driver.
 cirrus.modeset=0  nomodeset      Disable Kernel Mode Setting (KMS) for Cirrus driver.
 mgag200.modeset=0 nomodeset      Disable Kernel Mode Setting (KMS) for MGAG200 driver.
+
+
+Settings valid up to Grml 2026.09:
+----------------------------------
+Grml 2026.XX switched the initramfs implementation from initramfs-tools to dracut.
+The following options are not supported going forward.
+
+persistence                      Enable persistency feature, more details available at
+                                 https://wiki.grml.org/doku.php?id=persistency
+dns=8.8.8.8,8.8.4.4              Set DNS resolvers during boot and for live system.
+nonetworking                     Do not create/overwrite /etc/network/interface during startup
+debnet                           Search through local partitions for file /etc/network/interfaces,
+                                 copy /etc/network to local system and restart networking then
+module=grml                      Instead of using the default "$name.module" another file can
+                                 be specified without the extension ".module"; it should be placed
+                                 on "/live" directory of the live medium
+                                 Useful for Multiboot USB pen, see
+                                 https://wiki.grml.org/doku.php?id=tips#multiboot_usb_pen
+bootid=mybootid                  Use specified argument as identifier for the ISO.
+                                 mybootid is specified in /conf/bootid.txt on the ISO.
+ignore_bootid                    Disable bootid verification.
+toram                            Copy the whole CD/medium to RAM and run from there
+toram=filename.squashfs          Copy the specified file to RAM and run from there
+                                 Usage example: grml toram=grml-medium.squashfs
+                                 Notice: grml2ram is an alias for this option which
+                                 corresponds with the grml flavour settings by default
+bootfrom=/dev/sda1               Use the squashfs file from directory 'live' of the specified device
+                                 Setup can be done by executing:
+                                   rsync -a --progress /run/live/medium/live /media/sda1/
+                                 NOTE: you can can also use bootfrom=/dev/disk/by-label/yourlabel
+                                 (adjust yourlabel as needed), which should prevent choosing the
+                                 wrong block device (e.g. if more than one disk is present).
+bootfrom=removable               Restrict search for the live media to removable type only.
+bootfrom=removable-usb           Restrict search for the live media to usb mass storage only.
+isofrom=[fs:][/device]/grml.iso  Use specified ISO image for booting.
+                                 Useful when booting as a rescue system from a different device.
+                                 If you want to load the image from a device different from the root device
+                                 specified through the bootloader, prefix its device path to the path, like
+                                 in "/dev/sda1/grml.iso".
+                                 Internally, the initrd will mount the given device, automatically detecting
+                                 the file system.
+                                 If needed, prefix the file system separated with a colon character to
+                                 override the automatic detection, like in "ext4:/dev/sda1/grml.iso".
+                                 As an example, boot the according grml kernel and initrd using the
+                                 bootoptions "boot=live isofrom=btrfs:/dev/vda40/path/to/grml.iso"
+                                 NOTE: "fromiso" does the same as "isofrom", it's just there
+                                 to prevent any typing errors
+                                 NOTE: you can can also use isofrom=/dev/disk/by-label/yourlabel
+                                 (adjust yourlabel as needed), which should prevent choosing the
+                                 wrong block device (e.g. if more than one disk is present).
+findiso=/grml-....iso            Look for the specified ISO file on all disks where it usually
+                                 looks for the .squashfs file (so you don't have to know the device name
+                                 as in isofrom=....).
+fetch=$IP/filename.squashfs      Download a squashfs image from a given url, copying to ram and booting it.
+live-media-path=/live/grml...    Sets the path to the live filesystem on the medium
+                                 By default, it is set to /live/$GRML_FLAVOUR/ (where $GRML_FLAVOUR
+                                 is corresponding to grml64-full, grml32-full, grml64-small,...
+                                 [Note: this parameter is mandatory]
 
 
 Additional notes:
