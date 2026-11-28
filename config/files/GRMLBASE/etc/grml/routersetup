@@ -11,7 +11,6 @@
 # OUTDEV='auto'                 # outgoing device [auto|default|eth0|...]
 
 # configuration for grml-bridge and grml-sniff:
-# BRCTL=/usr/sbin/brctl         # the brctl binary
 # BRIDGE_NAME='br0'             # name used for the bridge
 # BRIDGE_DEVICES='eth0 eth1'    # the devices used for bilding the bridge
 # BRIDGE_STP='on'               # enable STP (Spanning-Tree Protocol)? on|off

@@ -26,7 +26,6 @@ else
 fi
 
 # defaults if unconfigured
-[ -n "$BRCTL" ]          || BRCTL='brctl'
 [ -n "$BRIDGE_NAME" ]    || BRIDGE_NAME='br0'
 [ -n "$BRIDGE_DEVICES" ] || BRIDGE_DEVICES='eth0 eth1'
 
@@ -41,7 +40,7 @@ if ! check_devs ; then
   exit 1
 fi
 
-check4progs "$BRCTL" || exit 1
+check4progs "ip" "bridge" || exit 1
 
 case "$1" in
     start)
@@ -50,14 +49,24 @@ case "$1" in
         eindent
 
             einfo "Creating bridge device"
-            brctl addbr "$BRIDGE_NAME"
+            ip link add name "$BRIDGE_NAME" type bridge
             eend $?
 
-            einfo "Bringing network device in promiscuous mode up:"
+            einfo "Clearing any IP addresses: "
             eindent
                for i in $BRIDGE_DEVICES ; do
                    einfo "$i"
-                   ifconfig "$i" -arp promisc 0.0.0.0 up ; eend $?
+                   ip addr flush dev "$i"
+                   eend $?
+               done
+            eoutdent
+
+            einfo "Bringing network device up in promiscious mode: "
+            eindent
+               for i in $BRIDGE_DEVICES ; do
+                   einfo "$i"
+                   ip link set "$i" promisc on up
+                   eend $?
                done
             eoutdent
 
@@ -65,7 +74,8 @@ case "$1" in
             eindent
             for i in $BRIDGE_DEVICES ; do
                 einfo "$i"
-                brctl addif "$BRIDGE_NAME" "$i"  ; eend $?
+                ip link set "$i" master "$BRIDGE_NAME"
+                eend $?
             done
             eoutdent
 
@@ -83,7 +93,8 @@ case "$1" in
             eindent
                for i in $BRIDGE_DEVICES ; do
                    einfo "$i "
-                   brctl delif "$BRIDGE_NAME" "$i"  ; eend $?
+                   ip link set "$i" nomaster
+                   eend $?
                done
             eoutdent
 
@@ -91,16 +102,17 @@ case "$1" in
             eindent
                for i in $BRIDGE_DEVICES ; do
                    einfo "$i "
-                   ip link set "$i" promisc off ; eend $?
+                   ip link set "$i" promisc off
+                   eend $?
                done
             eoutdent
 
             einfo "Bringing bridge $BRIDGE_NAME down"
-            ip link set "$BRIDGE_NAME" down; eend $?
+            ip link set "$BRIDGE_NAME" down
+            eend $?
 
             einfo "Removing bridge device $BRIDGE_NAME"
-            ifconfig "$BRIDGE_NAME" down || /bin/true
-            brctl delbr "$BRIDGE_NAME"
+            ip link del "$BRIDGE_NAME"
             eend $?
 
         eoutdent
@@ -120,7 +132,7 @@ case "$1" in
    status)
         check4root || exit 1
         einfo "$0 - status:"
-        $BRCTL show ; eend $?
+        brctl link show "$BRIDGE_NAME" ; eend $?
    ;;
 
    *)
