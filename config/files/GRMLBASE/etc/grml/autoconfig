@@ -41,6 +41,7 @@ CONFIG_GPM='yes'
 # what you are doing!
 CONFIG_AUTOMOUNT='yes'        # automounting of device labeled GRMLCFG
 CONFIG_BLANKING='yes'         # check for bootoption noblank to disable console blanking
+CONFIG_CLOUDINIT='yes'        # cloud-init support
 CONFIG_CONFIG='yes'           # do we want config unpacking to work?
 CONFIG_DEBOOTSTRAP='yes'      # support automatic installation of Debian via grml-deboostrap
 CONFIG_DEBNET='yes'           # search for /etc/network/interfaces on partitions and set up network afterwards
